@@ -176,7 +176,6 @@ bool Socket::send(const ustring& data)
         return false;
     }
 
-    std::cout << msg.length() << std::endl;
     #ifdef DEBUG
     App->log << ">> " << data << std::flush;
     #endif
