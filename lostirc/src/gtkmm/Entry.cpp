@@ -120,7 +120,7 @@ bool Entry::onKeyPress(GdkEventKey* e)
         // Nick completion using Tab key
         ustring line = get_text();
         if (!line.empty()) {
-            ustring str, word;
+            ustring word;
             ustring::size_type pos = line.find_last_of(" ");
             if (pos == ustring::npos) {
                 pos = 0;
