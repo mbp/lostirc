@@ -564,7 +564,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             {
                 long idle = Util::stoi(getWord(param, 3));
                 std::ostringstream ss;
-                ss << idle / 3600 << ":" << (idle / 60) % 60 << ":" << idle % 60 << std::endl;
+                ss << idle / 3600 << ":" << (idle / 60) % 60 << ":" << idle % 60;
                 long date = std::atol(getWord(param, 4).c_str());
                 string time = std::ctime(&date);
                 _evts->emit(_evts->get(SERVMSG) << ss.str() + ",  " + time.substr(0, time.size() - 1) + " " + rest, "", _conn);
