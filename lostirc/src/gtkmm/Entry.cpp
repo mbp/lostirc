@@ -101,6 +101,7 @@ bool Entry::onKeyPress(GdkEventKey* e)
                   --i;
 
             set_text(*i);
+            set_position(-1);
 
         }
     } else if ((e->keyval == GDK_downarrow) || (e->keyval == GDK_Down)) {
@@ -111,6 +112,7 @@ bool Entry::onKeyPress(GdkEventKey* e)
                   i = _entries.begin();
 
             set_text(*i);
+            set_position(-1);
         }
     } else if ((e->keyval == GDK_Tab)) {
         // Nick completion using Tab key
