@@ -388,9 +388,9 @@ void MainWindow::setupMenus()
     group->add(Gtk::Action::create("ClearWindow", _("Clear Window")),
             sigc::mem_fun(_notebook, &MainNotebook::clearWindow));
     group->add(Gtk::Action::create("ClearAllWindows", _("Clear All Windows")),
-            Gtk::AccelKey("<control>w"),
             sigc::mem_fun(_notebook, &MainNotebook::clearAll));
     group->add(Gtk::Action::create("CloseCurrentTab", _("Close Current Tab")),
+            Gtk::AccelKey("<control>w"),
             sigc::mem_fun(*this, &MainWindow::closeCurrentTab));
     group->add(Gtk::Action::create("Quit", Gtk::Stock::QUIT),
             sigc::mem_fun(*this, &Gtk::Window::hide));

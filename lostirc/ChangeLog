@@ -1,6 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
 2004-05-13  Morten Brix Pedersen  <morten@wtf.dk>
+	* MainWindow.cpp: Move control-w shortcut to the right function :)
+
+2004-05-13  Morten Brix Pedersen  <morten@wtf.dk>
 	* configure.ac: Check for glibmm and gtkmm dependencies seperately.
 	* src/libirc/Makefile.am: Only use glibmm dependency.
 	* src/gtkmm/Makefile.am: Only use gtkmm dependency.
