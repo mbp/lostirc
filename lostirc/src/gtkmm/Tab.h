@@ -123,7 +123,7 @@ private:
     void onEntry();
     void printText(const string& msg);
     vector<string> _entries;
-    vector<string>::const_reverse_iterator i;
+    vector<string>::reverse_iterator i;
     Tab* _tab;
 
 };
