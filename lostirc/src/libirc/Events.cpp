@@ -32,9 +32,8 @@ struct {
     { 2, "action", ACTION },
     { 2, "action_highlight", ACTION_HIGHLIGHT },
     { 2, "dcc_receive", DCC_RECEIVE },
-    { 2, "servmsg1", SERVMSG1 },
-    { 2, "servmsg2", SERVMSG2 },
-    { 2, "servmsg3", SERVMSG3 },
+    { 2, "servermsg1", SERVERMSG1 },
+    { 2, "servermsg2", SERVERMSG2 },
     { 2, "clientmsg", CLIENTMSG },
     { 2, "ctcp", CTCP },
     { 2, "ctcp_multi", CTCP_MULTI },
@@ -85,11 +84,8 @@ string Tmpl::result()
             parsing_arg = true;
         } else if (isdigit(*i) && parsing_arg) {
             unsigned int num = ((*i) - '0') - 1;
-            if (num >= tokens.size()) {
-                std::cerr << "Fatal error, too many tokens! (" << num << " compared to " << tokens.size() << ")" << std::endl;
-            } else {
-                newstr += tokens[num];
-            }
+            if (tokens.size() > num)
+                  newstr += tokens[num];
             parsing_arg = false;
         } else {
             newstr += *i; 

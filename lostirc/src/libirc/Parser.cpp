@@ -179,7 +179,7 @@ void Parser::parseLine(string& data)
         else if (command == "ERROR")
               FE::emit(FE::get(ERROR) << param + " " + rest, FE::CURRENT, _conn);
         else
-              FE::emit(FE::get(SERVMSG1) << data, FE::CURRENT, _conn);
+              FE::emit(FE::get(SERVERMSG1) << data, FE::CURRENT, _conn);
     }
 
 }
@@ -294,7 +294,7 @@ void Parser::Ctcp(const string& from, const string& param, const string& rest)
             FE::emit(FE::get(DCC_RECEIVE) << findNick(from) << dcc_filename << n, FE::CURRENT);
 
         } else if (dcc_type == "CHAT") {
-            FE::emit(FE::get(SERVMSG2) << findNick(from) << rest, FE::CURRENT);
+            FE::emit(FE::get(SERVERMSG1) << findNick(from) << rest, FE::CURRENT);
             std::istringstream ss(dcc_address);
             unsigned long address;
             ss >> address;
@@ -324,7 +324,7 @@ void Parser::Notice(const string& from, const string& to, const string& rest)
         string::iterator i = remove(tmp.begin(), tmp.end(), '\001');
         string output(tmp.begin(), i);
 
-        FE::emit(FE::get(SERVMSG2) << findNick(from) << output, FE::CURRENT, _conn);
+        FE::emit(FE::get(SERVERMSG1) << findNick(from) << output, FE::CURRENT, _conn);
     } else {
         // Normal notice
         if (to == _conn->Session.nick)
@@ -700,7 +700,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 253: // RPL_LUSERUNKNOWN
         case 254: // RPL_LUSERCHANNELS
         case 255: // RPL_LUSERME
-            FE::emit(FE::get(SERVMSG1) << rest, FE::CURRENT, _conn);
+            FE::emit(FE::get(SERVERMSG1) << rest, FE::CURRENT, _conn);
             break;
 
         case 301: // RPL_AWAY
@@ -710,13 +710,13 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 305: // RPL_UNAWAY
             _conn->Session.isAway = false;
             App->fe->away(false, _conn);
-            FE::emit(FE::get(SERVMSG1) << rest, FE::CURRENT, _conn);
+            FE::emit(FE::get(SERVERMSG1) << rest, FE::CURRENT, _conn);
             break;
 
         case 306: // RPL_NOWAWAY
             _conn->Session.isAway = true;
             App->fe->away(true, _conn);
-            FE::emit(FE::get(SERVMSG1) << rest, FE::CURRENT, _conn);
+            FE::emit(FE::get(SERVERMSG1) << rest, FE::CURRENT, _conn);
             break;
 
         case 332: // RPL_TOPIC
@@ -734,11 +734,11 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 368: // RPL_END_OF_BANLIST
         case 372: // RPL_MOTD
         case 375: // RPL_MOTDSTART
-            FE::emit(FE::get(SERVMSG1) << rest, FE::CURRENT, _conn);
+            FE::emit(FE::get(SERVERMSG1) << rest, FE::CURRENT, _conn);
             break;
 
         case 376: // RPL_ENDOFMOTD
-            FE::emit(FE::get(SERVMSG1) << rest, FE::CURRENT, _conn);
+            FE::emit(FE::get(SERVERMSG1) << rest, FE::CURRENT, _conn);
             _conn->Session.endOfMotd = true;
             _conn->sendCmds();
             break;
@@ -751,7 +751,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             break;
 
         case 412: // ERR_NOTEXTTOSEND
-            FE::emit(FE::get(SERVMSG1) << rest, FE::CURRENT, _conn);
+            FE::emit(FE::get(SERVERMSG1) << rest, FE::CURRENT, _conn);
             break;
 
         case 422: // ERR_NOMOTD
@@ -800,7 +800,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
                     c->endOfNames = true;
                     App->fe->names(*c, _conn);
                 } else {
-                    FE::emit(FE::get(SERVMSG3) << getWord(param, 2) << rest, FE::CURRENT, _conn);
+                    FE::emit(FE::get(SERVERMSG2) << getWord(param, 2) << rest, FE::CURRENT, _conn);
                 }
             }
             break;
@@ -840,11 +840,11 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             break;
 
         case 421: // ERR_UNKNOWNCOMMAND
-            FE::emit(FE::get(SERVMSG3) << getWord(param, 2) << rest, FE::CURRENT, _conn);
+            FE::emit(FE::get(SERVERMSG2) << getWord(param, 2) << rest, FE::CURRENT, _conn);
             break;
 
         default:
-            FE::emit(FE::get(SERVMSG3) << skipFirstWord(param) << rest, FE::CURRENT, _conn);
+            FE::emit(FE::get(SERVERMSG2) << skipFirstWord(param) << rest, FE::CURRENT, _conn);
     }
 
 }

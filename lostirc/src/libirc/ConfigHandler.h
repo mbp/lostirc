@@ -89,9 +89,8 @@ public:
     Value<std::string> action;
     Value<std::string> action_highlight;
     Value<std::string> dcc_receive;
-    Value<std::string> servmsg1;
-    Value<std::string> servmsg2;
-    Value<std::string> servmsg3;
+    Value<std::string> servermsg1;
+    Value<std::string> servermsg2;
     Value<std::string> clientmsg;
     Value<std::string> ctcp;
     Value<std::string> ctcp_multi;
