@@ -49,6 +49,7 @@ public:
     ServerConnection*           getConn() const { return _conn; }
     const Glib::ustring&        getName() const { return _name; }
     Entry&                      getEntry() { return _entry; }
+    void                        setConn(ServerConnection *c) { _conn = c; }
 
     void setName(const Glib::ustring& str);
 

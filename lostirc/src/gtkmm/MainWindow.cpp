@@ -73,6 +73,7 @@ MainWindow::MainWindow(bool autoconnect)
     if (!_app.cfgservers.hasAutoConnects() || !autoconnect) {
         // Construct initial tab
         newServerTab();
+        openServerWindow();
     } else {
         // Auto-connect to servers.
         _app.autoConnect();
@@ -294,10 +295,18 @@ void MainWindow::newTab(ServerConnection *conn)
 {
     ustring name = _("server");
     conn->Session.servername = name;
-    Tab *tab = _notebook.addTab(Tab::SERVER, name, conn);
-    tab->setType(Tab::SERVER);
+    Tab *tab = 0;
+    Tab *currenttab = getNotebook().getCurrent();
+    if (currenttab != 0 && !currenttab->getConn()->Session.isConnected &&
+            currenttab->isType(Tab::SERVER)) {
+        tab = currenttab;
+        tab->setName(name);
+        tab->setConn(conn);
+    } else {
+        tab = _notebook.addTab(Tab::SERVER, name, conn);
+    }
 
-    tab->setInActive();
+    tab->setType(Tab::SERVER);
 }
 
 Tab* MainWindow::newServerTab()

@@ -146,6 +146,7 @@ void ServerWindow::connectEntry()
         Gtk::TreeModel::Row row = *iterrow;
         ServerConnection *conn = App->newServer(row[_columns.serverptr]);
         conn->connect();
+        hide();
     }
 }
 

@@ -1,6 +1,12 @@
 For a summary of changes between releases - see the NEWS file.
 
 2004-08-28  Morten Brix Pedersen  <morten@wtf.dk>
+	* src/gtkmm/ServerWindow.cpp: When connecting to a server, close the
+	server window.
+	* src/gtkmm/MainWindow.cpp: Open the server window on startup. And
+	if the current tab is not connected, use that to connect.
+
+2004-08-28  Morten Brix Pedersen  <morten@wtf.dk>
 	* src/gtkmm/ServerWindow.cpp: Marked a missing string translateable.
 	* po/POTFILES.in: Added missing ServerWindow files.
 	* po/da.po: Updated.
