@@ -1,0 +1,62 @@
+Summary:        A simple IRC client for X11
+Name:           @PACKAGE@
+Version:        @VERSION@
+Release:        1
+License:        GPL
+Group:          Applications/Communications
+Source0:        http://prdownloads.sourceforge.net/lostirc/lostirc-0.0.4.tar.gz
+URL:            http://lostirc.sourceforge.net/
+BuildRoot:      /var/tmp/%{name}-%{version}-root
+AutoReqProv:    no
+
+Requires:       gtkmm >= 1.2.5
+Requires:       libsigc++ >= 1.0.0
+
+BuildRequires:  gtkmm-devel
+BuildRequires:  libsigc++-devel
+
+%description
+LostIRC is a simple IRC client for X11. The goals of the first stable versions
+is to be relatively simple and keyboard controlled.
+
+%prep
+%setup
+
+%build
+%configure --bindir=%{_bindir} --libdir=%{_libdir} --mandir=%{_mandir} \
+           --datadir=%{_datadir} --sysconfdir=%{_sysconfdir}
+
+make
+
+%install
+rm -rf $RPM_BUILD_ROOT
+
+# If the configure macro is used above (which it is), there
+# is NO reason to use the makeinstall macro here, so don't.
+make DESTDIR=$RPM_BUILD_ROOT install
+
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/X11/applnk/Internet
+cat > $RPM_BUILD_ROOT%{_sysconfdir}/X11/applnk/Internet/LostIRC.desktop <<EOF
+[Desktop Entry]
+Name=LostIRC
+Comment=An IRC client
+TryExec=lostirc
+Exec=lostirc
+Icon=gnome-irc.png
+Terminal=0
+Type=Application
+EOF
+chmod 0644 $RPM_BUILD_ROOT%{_sysconfdir}/X11/applnk/Internet/LostIRC.desktop
+
+%post
+
+%postun
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%files
+%defattr(-, root, root)
+%doc AUTHORS COPYING ChangeLog README
+%config %{_sysconfdir}/X11/applnk/Internet/LostIRC.desktop
+%{_bindir}/%{name}

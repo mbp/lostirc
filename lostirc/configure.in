@@ -30,4 +30,4 @@ else
         CXXFLAGS="$CXXFLAGS -s"
 fi
 
-AC_OUTPUT(Makefile src/Makefile src/libirc/Makefile src/gtkmm/Makefile)
+AC_OUTPUT(lostirc.spec Makefile src/Makefile src/libirc/Makefile src/gtkmm/Makefile)
