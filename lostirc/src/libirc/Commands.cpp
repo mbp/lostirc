@@ -21,24 +21,25 @@
 #include "Utils.h"
 
 struct UserCommands cmds[] = {
+    { "SERVER",   Commands::Server,     0 },
     { "JOIN",     Commands::Join,       1 },
     { "WHOIS",    Commands::Whois,      1 },
     { "PART",     Commands::Part,       1 },
     { "QUIT",     Commands::Quit,       1 },
-    { "SERVER",   Commands::Server,     0 },
     { "NICK",     Commands::Nick,       1 },
     { "MODE",     Commands::Mode,       1 },
     { "CTCP",     Commands::Ctcp,       1 },
     { "AWAY",     Commands::Away,       1 },
     { "INVITE",   Commands::Invite,     1 },
-    { "BANLIST",   Commands::Banlist,   1 },
+    { "BANLIST",  Commands::Banlist,    1 },
+    { "MSG",      Commands::Msg,        1 },
     { 0,        0,                      0 }
 };
 
 
 bool Commands::send(ServerConnection *conn, string cmd, const string& params) {
 
-    for (int i = 0; cmds[i].cmd != 0; i++) {
+    for (int i = 0; cmds[i].cmd != 0; ++i) {
         if (cmds[i].cmd == Utils::toupper(cmd)) {
             if (!conn->Session.isConnected && cmds[i].reqConnected) {
                 error = "Must be connected";
@@ -103,13 +104,13 @@ bool Commands::Ctcp(ServerConnection *conn, const string& msg)
     ss >> action;
 
     if (action.length() == 0) {
-       error = "Required number of arguments not met.\nPlease supply at least 1 argument.\n";
-       return false;
+        error = "Required number of arguments not met.\nPlease supply at least 1 argument.\n";
+        return false;
     } else {
-       action = Utils::toupper(action);
+        action = Utils::toupper(action);
 
-       conn->sendCtcp(to, action);
-       return true;
+        conn->sendCtcp(to, action);
+        return true;
     }
 }
 
@@ -123,20 +124,36 @@ bool Commands::Banlist(ServerConnection *conn, const string& chan)
     conn->sendBanlist(chan);
 }
 
-bool Commands::Invite(ServerConnection *conn, const string& msg)
+bool Commands::Invite(ServerConnection *conn, const string& params)
 {
     string to, action;
-    stringstream ss(msg);
+    stringstream ss(params);
     ss >> to;
     ss >> action;
 
     if (action.length() == 0) {
-       error = "Please supply channel to invite user to.\n";
+        error = "Please supply channel to invite user to.\n";
+        return false;
+    } else {
+        action = Utils::toupper(action);
+
+        conn->sendInvite(to, action);
+        return true;
+    }
+}
+
+bool Commands::Msg(ServerConnection *conn, const string& params)
+{
+    string to, msg;
+    stringstream ss(params);
+    ss >> to;
+    ss >> msg;
+
+    if (msg.length() == 0) {
+       error = "Please supply a msg.\n";
        return false;
     } else {
-       action = Utils::toupper(action);
-
-       conn->sendInvite(to, action);
+       conn->sendMsg(to, msg);
        return true;
     }
 }
