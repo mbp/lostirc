@@ -43,7 +43,7 @@ namespace GuiCommands
     void Exit(ServerConnection *conn, const std::string& params);
     void SetFont(ServerConnection *conn, const std::string& params);
     void NewServer(ServerConnection *conn, const std::string& params);
-    void commands(ServerConnection *conn, const std::string& params);
+    void displayCommands(ServerConnection *conn, const std::string& params);
     std::vector<Glib::ustring> getCommands();
 
 }

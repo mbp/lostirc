@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <vector>
+#include <set>
 #include <Utils.h>
 #include "GuiCommands.h"
 #include "Tab.h"
@@ -40,7 +40,7 @@ const struct UserCommands guicmds[] = {
     { "VOICE",     GuiCommands::Voice,    true },
     { "DEVOICE",   GuiCommands::Devoice,  true },
     { "EXIT",      GuiCommands::Exit,     true },
-    { "COMMANDS",  GuiCommands::commands, false },
+    { "COMMANDS",  GuiCommands::displayCommands, false },
     { 0,        0, false                        }
 };
 
@@ -168,31 +168,36 @@ void Exit(ServerConnection *conn, const string& params)
     AppWin->hide();
 }
 
-void commands(ServerConnection *conn, const string& params)
+void displayCommands(ServerConnection *conn, const string& params)
 {
-    string cmds;
-    for (int i = 0; guicmds[i].cmd != 0; ++i) {
+    std::vector<Glib::ustring> commands = getCommands();
+
+    std::vector<Glib::ustring>::const_iterator i;
+
+    Glib::ustring cmds;
+    for (i = commands.begin(); i != commands.end(); ++i)
+    {
         cmds += " \00311[\0030";
-        cmds += guicmds[i].cmd;
+        cmds += *i;
         cmds += "\00311]";
     }
+
     FE::emit(FE::get(SERVMSG) << cmds, FE::CURRENT, conn);
-    Commands::commands(conn, params);
 }
 
 std::vector<Glib::ustring> getCommands()
 {
-    std::vector<Glib::ustring> commands;
+    std::set<string> commands;
 
     for (int i = 0; guicmds[i].cmd != 0; ++i) 
-        commands.push_back(guicmds[i].cmd);
+        commands.insert(guicmds[i].cmd);
 
-    std::vector<string> cmds;
-    Commands::getCommands(cmds);
+    Commands::getCommands(commands);
 
-    for (std::vector<string>::iterator i = cmds.begin(); i != cmds.end(); ++i)
-          commands.push_back(*i);
+    std::vector<Glib::ustring> cmds;
+    for (std::set<string>::const_iterator i = commands.begin(); i != commands.end(); ++i)
+          cmds.push_back(*i);
 
-    return commands;
+    return cmds;
 }
 }

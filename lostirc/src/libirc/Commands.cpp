@@ -51,7 +51,6 @@ const struct UserCommands cmds[] = {
     { "LIST",     Commands::List,       true },
     { "SET",      Commands::Set,        false },
     { "QUOTE",    Commands::Quote,      true },
-    { "COMMANDS", Commands::commands,   false },
     //{ "EXEC",     Commands::Exec,       false },
     { "OPER",     Commands::Oper,       true },
     { "KILL",     Commands::Kill,       true },
@@ -554,21 +553,10 @@ void Exec(ServerConnection *conn, const string& params)
 }
 */
 
-void commands(ServerConnection *conn, const string& params)
-{
-    string cmdss;
-    for (int i = 0; cmds[i].cmd != 0; ++i) {
-        cmdss += " \00311[\0030";
-        cmdss += cmds[i].cmd;
-        cmdss += "\00311]";
-    }
-    FE::emit(FE::get(SERVMSG) << cmdss, FE::CURRENT, conn);
-}
-
-void getCommands(std::vector<string>& commands)
+void getCommands(std::set<string>& commands)
 {
     for (int i = 0; cmds[i].cmd != 0; ++i)
-        commands.push_back(cmds[i].cmd);
+        commands.insert(cmds[i].cmd);
 }
 
 std::string assignModes(char sign, char mode, istringstream& ss)

@@ -1,5 +1,12 @@
 For a summary of changes between releases - see the NEWS file.
 
+2002-11-23  MorteN Brix Pedersen  <morten@wtf.dk>
+        
+        * GuiCommands.cpp/Commands.cpp: Use a set<> instead of a vector<> in
+          getCommands() to void duplicate command-entries.
+        * GuiCommands.cpp/Commands.cpp: rename commands() to displayCommands()
+          and make it use getCommands() to retrieve the commands.
+
 2002-11-23  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Create real ChangeLog. Rename old ChangeLog to NEWS.
