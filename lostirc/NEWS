@@ -1,5 +1,7 @@
 LostIRC (x.x.x)
   * You can now use PAGE UP/PAGE DOWN to scroll up/down in the text widget.
+  * After being reconnecting to a server, queries had a parentes around
+    them. Fixed.
   * Notices sent to channels are now displayed in the channel instead of in
     the current window.
   * Tabs are now scrollable instead of making the window larger when tabs

@@ -256,6 +256,15 @@ void MainWindow::connected(ServerConnection* conn)
 {
     notebook.updateStatus();
     notebook.updateTitle();
+
+    vector<Tab*> tabs;
+    vector<Tab*>::const_iterator i;
+
+    notebook.findTabs(conn, tabs);
+
+    for (i = tabs.begin(); i != tabs.end(); ++i)
+          if ((*i)->isQuery())
+                (*i)->setActive();
 }
 
 void MainWindow::disconnected(ServerConnection* conn)

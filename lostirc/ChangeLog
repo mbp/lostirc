@@ -2,6 +2,13 @@ For a summary of changes between releases - see the NEWS file.
 
 2002-12-23  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * MainWindow.cpp: After connecting, call setActive() on all queries,
+          to remove parentes.
+        * Tab.cpp: In setActive(), remove parentes if first character starts
+          with an '('.
+
+2002-12-23  Morten Brix Pedersen  <morten@wtf.dk>
+
         * Socket.cpp/Socket.h: Add extra 'int& received' argument to
           receive().
         * ServerConnection.cpp: Parse lines from server more efficiently/fast

@@ -65,15 +65,24 @@ Tab::~Tab()
 void Tab::setInActive()
 {
     if (isActive()) {
-        Gtk::Label *_label = AppWin->getNotebook().getLabel(this);
-        _label->set_text("(" + _label->get_text() + ")");
+        Gtk::Label *label = AppWin->getNotebook().getLabel(this);
+        label->set_text("(" + label->get_text() + ")");
         _isActive = false;
     }
 }
 
 void Tab::setActive()
 {
+    Gtk::Label *label = AppWin->getNotebook().getLabel(this);
+
+    if (label->get_text().at(0) == '(') {
+        // Remove the parentes.
+        Glib::ustring text = label->get_text();
+        label->set_text(text.substr(1, text.length() - 2));
+    }
+
     _isActive = true;
+
     if (_nicklist)
           _nicklist->setActive();
 }
