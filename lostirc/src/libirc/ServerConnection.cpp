@@ -144,6 +144,13 @@ bool ServerConnection::sendMsg(const string& to, const string& message)
     return _socket->send(msg);
 }
 
+bool ServerConnection::sendNotice(const string& to, const string& message)
+{
+    string msg("NOTICE " + to + " :" + message + "\r\n");
+
+    return _socket->send(msg);
+}
+
 bool ServerConnection::sendJoin(const string& chan)
 {
     string msg("JOIN " + chan + "\r\n");

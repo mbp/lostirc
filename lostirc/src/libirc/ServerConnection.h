@@ -39,6 +39,7 @@ public:
     bool sendNick(const string& nick);
     bool sendVersion(const string& to);
     bool sendMsg(const string& to, const string& msg);
+    bool sendNotice(const string& to, const string& msg);
     bool sendJoin(const string& chan);
     bool sendPart(const string& chan);
     bool sendKick(const string& nickandmsg);

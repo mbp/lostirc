@@ -50,6 +50,7 @@ public:
     static bool Invite(ServerConnection *conn, const string& cmd);
     static bool Banlist(ServerConnection *conn, const string& params);
     static bool Msg(ServerConnection *conn, const string& params);
+    static bool Notice(ServerConnection *conn, const string& params);
     static bool Me(ServerConnection *conn, const string& params);
 
     static string error;

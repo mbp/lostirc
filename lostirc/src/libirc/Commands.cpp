@@ -31,6 +31,7 @@ struct UserCommands cmds[] = {
     { "CTCP",     Commands::Ctcp,       1 },
     { "AWAY",     Commands::Away,       1 },
     { "INVITE",   Commands::Invite,     1 },
+    { "NOTICE",   Commands::Notice,     1 },
     { "BANLIST",  Commands::Banlist,    1 },
     { "MSG",      Commands::Msg,        1 },
     { "ME",       Commands::Me,         1 },
@@ -105,7 +106,7 @@ bool Commands::Ctcp(ServerConnection *conn, const string& msg)
     ss >> action;
 
     if (action.length() == 0) {
-        error = "Required number of arguments not met.\nPlease supply at least 1 argument.\n";
+        error = "/CTCP <nick> <message>, sends a CTCP message to a user";
         return false;
     } else {
         action = Utils::toupper(action);
@@ -133,7 +134,7 @@ bool Commands::Invite(ServerConnection *conn, const string& params)
     ss >> action;
 
     if (action.length() == 0) {
-        error = "Please supply channel to invite user to.\n";
+        error = "/INVITE <nick> <channel>, invites someone to a channel.";
         return false;
     } else {
         action = Utils::toupper(action);
@@ -150,11 +151,27 @@ bool Commands::Msg(ServerConnection *conn, const string& params)
     string msg = params.substr(pos1 + 1);
 
     if (msg.length() == 0) {
-       error = "Please supply a msg.\n";
+       error = "/MSG <nick/channel> <message>, sends a normal message.";
        return false;
     } else {
        conn->sendMsg(to, msg);
        return true;
+    }
+}
+
+bool Commands::Notice(ServerConnection *conn, const string& params)
+{
+    string::size_type pos1 = params.find_first_of(" ");
+    string to = params.substr(0, pos1 + 1);
+    string msg = params.substr(pos1 + 1);
+
+    if (msg.length() == 0) {
+       error = "/NOTICE <nick/channel> <message>, sends a notice.";
+       return false;
+    } else {
+       conn->sendNotice(to, msg);
+       error = "-- " + conn->Session.nick + " -> " + to + " : " + msg;
+       return false;
     }
 }
 
@@ -165,7 +182,7 @@ bool Commands::Me(ServerConnection *conn, const string& params)
     string msg = params.substr(pos1 + 1);
 
     if (msg.length() == 0) {
-       error = "Please supply a msg.\n";
+       error = "/ME <message>, sends the action to the current channel.)";
        return false;
     } else {
        conn->sendMe(to, msg);
