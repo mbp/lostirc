@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2002, 2003 Morten Brix Pedersen <morten@wtf.dk>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,26 +16,22 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include "StatusBar.h"
-#include <LostIRC.h>
+#ifndef LOSTIRC_H
+#define LOSTIRC_H
 
-StatusBar::StatusBar()
-    : Gtk::HBox(false, 1),
-    _label("", 0.5, 0.5)
-{
-    _frame.add(_label);
-    _notifyframe.add(_notifylabel);
-    //_statusbar.pack_end(_statuslabel);
-
-    //_frame.set_shadow_type(Gtk::SHADOW_IN);
-    _notifyframe.set_shadow_type(Gtk::SHADOW_IN);
-
-    pack_start(_frame);
-    pack_start(_notifyframe);
-
-    setText1(_("Not connected."));
-
-    show_all();
+#if defined(ENABLE_NLS) && !defined(_)
+#  include <libintl.h>
+#  define _(x) gettext(x)
+#  ifdef gettext_noop
+#    define N_(String) gettext_noop (String)
+#  else
+#    define N_(String) (String)
+#  endif
+#endif
+#if !defined(_)
+#  define N_(String) (String)
+#  define _(x) (x)
+#endif
 
 
-}
+#endif

@@ -16,8 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef INOUT_H
-#define INOUT_H
+#ifndef LOSTIRCAPP_H
+#define LOSTIRCAPP_H
 
 #include <vector>
 #include <sys/utsname.h>
@@ -29,20 +29,7 @@
 #include "Channel.h"
 #include "DCC.h"
 #include "FrontEnd.h"
-
-#if defined(ENABLE_NLS) && !defined(_)
-#  include <libintl.h>
-#  define _(x) gettext(x)
-#  ifdef gettext_noop
-#    define N_(String) gettext_noop (String)
-#  else
-#    define N_(String) (String)
-#  endif
-#endif
-#if !defined(_)
-#  define N_(String) (String)
-#  define _(x) (x)
-#endif
+#include "LostIRC.h"
 
 class ServerConnection;
 class FrontEnd;

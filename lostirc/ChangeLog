@@ -1,6 +1,11 @@
 For a summary of changes between releases - see the NEWS file.
 
 2003-01-03  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Add LostIRC.h which includes gettext includes.
+        * Remove gettext.h, just use libintl.h
+
+2003-01-03  Morten Brix Pedersen  <morten@wtf.dk>
         
         * Add po/lostirc.pot - a template file for future translations.
 

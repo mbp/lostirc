@@ -10,7 +10,8 @@ libirc_a_SOURCES = ServerConnection.cpp ServerConnection.h \
                        Channel.cpp Channel.h \
                        DCC.cpp DCC.h \
                        FrontEnd.cpp FrontEnd.h \
-                       irc_defines.h
+                       irc_defines.h \
+                       LostIRC.h
 
 libirc_a_LIBS = $(DEPS_LIBS)
 INCLUDES = $(DEPS_CFLAGS) -I$(top_srcdir)/intl

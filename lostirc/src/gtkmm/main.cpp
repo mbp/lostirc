@@ -19,7 +19,7 @@
 #include <config.h>
 #include <glibmm/ustring.h>
 #include "MainWindow.h"
-#include <gettext.h>
+#include <LostIRC.h>
 
 int main(int argc, char** argv)
 {
