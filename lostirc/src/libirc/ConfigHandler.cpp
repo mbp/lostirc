@@ -244,7 +244,7 @@ Options::Options(const char *filename)
     strip_colors(this, "strip_colors", true),
     strip_boldandunderline(this, "strip_boldandunderline", false),
     logging(this, "logging", false),
-    encoding(this, "encoding", "System default")
+    encoding(this, "encoding", "System")
 
 {
     readConfigFile();

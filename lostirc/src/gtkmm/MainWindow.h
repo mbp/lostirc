@@ -61,7 +61,7 @@ public:
     void disconnected(ServerConnection *conn);
     void newDCC(DCC *dcc);
     void dccStatusChanged(DCC *dcc);
-    void localeError();
+    void localeError(bool tried_custom_encoding);
 
     StatusBar statusbar;
 };

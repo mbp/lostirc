@@ -136,6 +136,12 @@ void MainNotebook::updateTitle(Tab *tab)
 void MainNotebook::closeCurrent()
 {
     Tab *tab = getCurrent();
+
+    if (tab->hasPrefs)
+          tab->closePrefs();
+    if (tab->hasDCCList)
+          tab->closeDCCList();
+
     if (countTabs(tab->getConn()) > 1) {
         pages().erase(get_current());
     } else {

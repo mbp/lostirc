@@ -89,21 +89,24 @@ Glib::ustring convert_to_utf8(const std::string& str)
 std::string convert_from_utf8(const Glib::ustring& str_utf8)
 {
     static bool displayed_message = false;
+    bool tried_custom_encoding = false;
 
     std::string str;
 
     try {
 
-        if (App->options.encoding == "System default")
-              str = Glib::locale_from_utf8(str_utf8);
-        else
-              str = Glib::convert(str_utf8, App->options.encoding().getString(), "UTF-8");
+        if (App->options.encoding == "System") {
+            str = Glib::locale_from_utf8(str_utf8);
+        } else {
+            tried_custom_encoding = true;
+            str = Glib::convert(str_utf8, App->options.encoding().getString(), "UTF-8");
+        }
 
     } catch (const Glib::ConvertError&) {
 
         if (!displayed_message) {
             displayed_message = true;
-            App->fe->localeError();
+            App->fe->localeError(tried_custom_encoding);
         }
 
     }

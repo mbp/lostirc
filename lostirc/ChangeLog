@@ -2,6 +2,14 @@ For a summary of changes between releases - see the NEWS file.
 
 2003-01-04  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * MainNotebook.cpp: Fix segfault when closing a tab with
+          CTRL-w and prefs and dcclist wasn't closed.
+        * Utils.cpp: THe default is actually, "System", not "System default".
+          Also differentiate from locale and encoding errors.
+        * MainWindow.cpp: Modified message for encoding errors.
+
+2003-01-04  Morten Brix Pedersen  <morten@wtf.dk>
+
         * More cleanups:
         * MainNotebook.cpp/.h: Remove <gtkmm/style.h> include, not needed.
           Implement getCurrent() as only one function with the first argument

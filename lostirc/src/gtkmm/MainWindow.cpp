@@ -318,14 +318,22 @@ void MainWindow::dccStatusChanged(DCC *dcc)
     dcclist->statusChange(dcc); 
 }
 
-void MainWindow::localeError()
+void MainWindow::localeError(bool tried_custom_encoding)
 {
-    Glib::ustring msg = _("Locale conversion error. An error occured while converting text from UTF-8 to your current locale.\n\nThis is most likely because your locale is set to a value which doesn't support the character(s) converting to.\n\nIf you believe this is a bug, please report it to the application author.");
+    Glib::ustring msg;
+    if (!tried_custom_encoding) {
+        msg = _("Locale conversion error. An error occured while converting text from UTF-8 to your current locale.\n\nThis is most likely because your locale is set to a value which doesn't support the character(s) converting to.\n\nIf you believe this is a bug, please report it to the application author.");
 
-    char *locale = std::getenv("LANG");
-    if (locale != NULL) {
-        msg += _("\n\nYour current locale (seems) to be: ");
-        msg += locale;
+        char *locale = std::getenv("LANG");
+        if (locale != NULL) {
+            msg += _("\n\nYour current locale (seems) to be: ");
+            msg += locale;
+        }
+    } else {
+        msg = _("Encoding conversion error. An error occured while converting text from UTF-8 to the user-defined encoding.\n\nThis is most likely because the encoding you have chosen doesn't support the character(s) converting to.\n\nIf you believe this is a bug, please report it to the application author.");
+
+        msg += _("\n\nI was trying to convert to: ");
+        msg += App->options.encoding;
     }
 
     msg += _("\n\n(Note: You'll only see this warning once per LostIRC session)");

@@ -94,7 +94,7 @@ public:
     virtual void disconnected(ServerConnection *conn) = 0;
     virtual void newDCC(DCC *dcc) = 0;
     virtual void dccStatusChanged(DCC *dcc) = 0;
-    virtual void localeError() = 0;
+    virtual void localeError(bool tried_custom_encoding) = 0;
 
 };
 
