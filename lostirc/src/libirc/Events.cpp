@@ -62,6 +62,7 @@ struct {
     { "evt_invited", INVITED },
     { "evt_connecting", CONNECTING },
     { "evt_names", NAMES },
+    { "evt_killed", KILLED },
     { 0, 0 }
 };
 

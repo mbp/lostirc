@@ -120,10 +120,13 @@ void Parser::parseLine(string& data)
               Privmsg(from, param, rest);
         else if (command == "JOIN")
               Join(from, rest);
-        else if (command == "QUIT")
-              Quit(from, rest);
         else if (command == "PART")
               Part(from, param, rest);
+        else if (command == "QUIT")
+              Quit(from, rest);
+        else if (command == "PONG")
+              // we received our lag check..
+              _conn->Session.sentLagCheck = false;
         else if (command == "MODE")
               Mode(from, param, rest);
         else if (command == "TOPIC")
@@ -138,9 +141,8 @@ void Parser::parseLine(string& data)
               Wallops(from, rest);
         else if (command == "INVITE")
               Invite(from, rest);
-        else if (command == "PONG")
-              // we received our lag check..
-              _conn->Session.sentLagCheck = false;
+        else if (command == "KILL")
+              Kill(from, rest);
         else
               FE::emit(FE::get(UNKNOWN) << data, FE::CURRENT, _conn);
 
@@ -405,9 +407,14 @@ void Parser::Nick(const string& from, const string& to)
 
 }
 
-void Parser::Invite(const string& from, const string& params)
+void Parser::Invite(const string& from, const string& rest)
 {
-    FE::emit(FE::get(INVITED) << findNick(from) << params, FE::CURRENT, _conn);
+    FE::emit(FE::get(INVITED) << findNick(from) << rest, FE::CURRENT, _conn);
+}
+
+void Parser::Kill(const string& from, const string& rest)
+{
+    FE::emit(FE::get(KILLED) << findNick(from) << rest, FE::CURRENT, _conn);
 }
 
 void Parser::Mode(const string& from, const string& param, const string& rest)

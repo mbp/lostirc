@@ -48,6 +48,7 @@ private:
     void Quit(const std::string& nick, const std::string& msg);
     void Nick(const std::string& from, const std::string& to);
     void Invite(const std::string& from, const std::string& to);
+    void Kill(const std::string& from, const std::string& to);
     void Kick(const std::string& from, const std::string& chan, const std::string& nickandmsg);
     void Names(const std::string& chan, const std::string& names);
     void Ctcp(const std::string& from, const std::string& param, const std::string& rest);

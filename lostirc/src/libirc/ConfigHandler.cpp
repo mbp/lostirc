@@ -286,6 +286,7 @@ bool ConfigHandler::setEvtDefaults()
     setEvtDefault("evt_invited", "$16-- $0%1$16 invites you to join %2");
     setEvtDefault("evt_connecting", "$16-- Connecting to$8 %1$16 on port$8 %2$16...");
     setEvtDefault("evt_names", "$0-- Names$11 %1$0:$16 %2");
+    setEvtDefault("evt_killed", "$16-- You were killed by $0%1$16 $15($9%2$15)");
 
     map<string, string>::iterator i = _events.begin();
 

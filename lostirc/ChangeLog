@@ -4,6 +4,8 @@ LostIRC (x.x.x)
   * Another 100% CPU usage bug has been fixed.
   * A problem where DNS-resolving wasnt working when starting the client,
     should now be fixed.
+  * KILL messages are now being parsed correctly (for those of you who get
+    killed often..)
 
 LostIRC (0.1.1) - Thu Jun 20th 2002
   * A bug where the client consumed 100% CPU has been fixed.
