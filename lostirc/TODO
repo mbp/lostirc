@@ -5,10 +5,11 @@ CRITICAL:
   * Should have a limit on the text-buffer, not go on forever.
   * When parting an empty channel where one has op, and joining the channel
     again, op is not shown.
-  * Reconnects after /QUIT?
 
 RANDOM:
 ------
+  * possibility to move nick-list so you can see long nicks.
+  * nicks overlaps status (@, + etc.) in nick-list.
   * strip all mIRC color-codes from ALL strings, don't show colors at all.
   * limited tab highlighting, don't mark a tab red when
     joining/parting/quitting
@@ -47,13 +48,6 @@ DESIGN:
      - ms
 --
 
-  * and about the command-system:
---
-    actually some servers implement some extra commands. I think 
-    it is good idea to write some kind of generic handler function
-    for commands, which are not mentioned in cmds[].
---
-
 BOOKMARK suggestion from Jim Winstead:
 -------------------------------------
 
@@ -62,5 +56,3 @@ BOOKMARK suggestion from Jim Winstead:
  in one channel and conversation is going on in another, i can latter
  come back to that channel, jump to where i left it, and then quickly
  catch up on what i missed.
-
-
