@@ -92,7 +92,6 @@ void Entry::sendMsg(const ustring& msg)
 
 bool Entry::onKeyPress(GdkEventKey* e)
 {
-    std::cout << "Entry::on_key_press_event" << std::endl;
     if ((e->keyval == GDK_uparrow) || (e->keyval == GDK_Up)) {
         if (!_entries.empty()) {
             // Use iterator to go to next element
@@ -126,21 +125,26 @@ bool Entry::onKeyPress(GdkEventKey* e)
                 word = line.substr(pos + 1);
             }
             if (line.at(0) == '/' && !word.empty() && pos == 0) {
+                std::cout << "Commandcompletetion" << std::endl;
                 // Command completion, could be prettier
                 string newstr = Glib::locale_from_utf8(str);
                 if (GuiCommands::commandCompletion(Glib::locale_from_utf8(word.substr(1)), newstr)) {
-                    set_text("/" + str + " ");
+                    set_text("/" + Glib::locale_to_utf8(newstr) + " ");
+                    set_position(-1);
                 }
 
             } else if (_tab->nickCompletion(word, str)) {
+                std::cout << "Nickcompletetion" << std::endl;
                 // Nick-completetion
                 if (pos == 0) {
                     set_text(str + AppWin->getApp().getCfg().getOpt("nickcompletion_character") + " ");
+                    set_position(-1);
                 } else {
                     set_text(line.substr(0, pos + 1) + str);
                 }
             } else {
-                *_tab << str;
+                std::cout << "text: '" << str << "'" << std::endl;
+                _tab->insertText(str);
             }
         }
     }

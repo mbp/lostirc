@@ -81,7 +81,7 @@ void Tab::setStyle() {
     // TODO: Should this go into a ressource file?
     Gdk::Color col1;
     col1.set_rgb(0, 0, 0);
-    
+
     // FIXME style->set_font(*_font);
     _textview.modify_base(Gtk::STATE_NORMAL, col1);
 }
@@ -157,6 +157,11 @@ void Tab::insertWithColor(int color, const ustring& str)
         Gtk::TextBuffer::iterator end = buffer->get_iter_at_line(buffer->get_line_count() - buffer_size);
         buffer->delete_text(start, end);
     }
+}
+
+void Tab::insertText(const ustring& str)
+{
+    insertWithColor(0, str);
 }
 
 void Tab::setAway()
@@ -330,12 +335,12 @@ bool TabChannel::nickCompletion(const ustring& word, ustring& str)
     int matches = 0;
     ustring nicks;
     // Convert it to lowercase so we can search ignoring the case
-    ustring lcword = Util::lower(word);
+    ustring lcword = word.casefold();
     while (i != _liststore->children().end())
     {
-        string nick = Util::lower(i->get_value(_columns.nick));
+        ustring nick = i->get_value(_columns.nick);
 
-        string lcnick = Util::lower(nick);
+        string lcnick = nick.casefold();
         if (lcword == lcnick.substr(0, lcword.length())) {
             str = nick;
             nicks += nick + " ";

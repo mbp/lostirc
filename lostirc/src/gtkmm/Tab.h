@@ -43,7 +43,6 @@ public:
     Tab(Gtk::Label *label, ServerConnection *conn);//, Gdk_Font *font);
     ~Tab();
 
-    Glib::RefPtr<Gtk::TextBuffer> getText() { return _textview.get_buffer(); }
     Gtk::Label*                 getLabel() { return _label; }
     Entry&                      getEntry() { return _entry; }
     ServerConnection*           getConn() { return _conn; }
@@ -61,6 +60,7 @@ public:
     Tab& operator<<(const char * str);
     Tab& operator<<(const std::string& str);
     Tab& operator<<(const Glib::ustring& str);
+    void insertText(const Glib::ustring& str);
     void setStyle();
     //void setFont(Gdk_Font *font);
     void setInActive() {
