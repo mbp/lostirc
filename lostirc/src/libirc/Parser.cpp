@@ -348,7 +348,6 @@ void Parser::CMode(const string& from, const string& param)
     while (ss >> buf)
           arguments.push_back(buf);
 
-    vector<string>::iterator arg_i = arguments.begin();
 
     if (arguments.empty()) {
           // Received a channel mode, like '#chan +n'
@@ -357,7 +356,7 @@ void Parser::CMode(const string& from, const string& param)
     }
 
     char sign;
-
+    vector<string>::iterator arg_i = arguments.begin();
     string::iterator i;
     vector<string> tmp;
     for (i = modes.begin(); i != modes.end(); ++i) {
@@ -374,34 +373,31 @@ void Parser::CMode(const string& from, const string& param)
                 sign = '-';
                 break;
             case 'o':
-                if (arg_i != arguments.begin())
-                      arg_i++;
-
                 if (sign == '+') {
                     tmp.push_back("@");
                 } else {
                     tmp.push_back(" ");
                 }
+                cout << "pushing back: " << *arg_i << endl;
                 tmp.push_back(*arg_i);
+                arg_i++;
                 break;
             case 'v':
-                if (arg_i != arguments.begin())
-                      arg_i++;
-
                 if (sign == '+') {
                     tmp.push_back("+");
                 } else {
                     tmp.push_back(" ");
                 }
+                cout << "pushing back: " << *arg_i << endl;
                 tmp.push_back(*arg_i);
+                arg_i++;
                 break;
         }
 
     }
-    if (!tmp.empty()) {
-        vecvec.push_back(tmp);
-        tmp.clear();
-    }
+
+    if (!tmp.empty())
+          vecvec.push_back(tmp);
 
     // Channel user mode
     _app->evtCUMode(findNick(from), chan, vecvec, _conn);
