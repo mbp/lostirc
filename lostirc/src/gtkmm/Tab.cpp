@@ -433,15 +433,16 @@ struct notPrefixedBy : public std::binary_function<ustring,ustring,bool>
 
 void findCommon(vector<ustring>& vec, const ustring& search, int& atchar)
 {
-
     if (atchar > search.length())
           return;
 
     for (vector<ustring>::const_iterator i = vec.begin(); i != vec.end(); ++i)
     {
-        if (atchar >= i->length() ||
-                search.substr(0, atchar).lowercase() != i->substr(0, atchar).lowercase())
-              return;
+        if (atchar > i->length() ||
+                search.substr(0, atchar).lowercase() != i->substr(0, atchar).lowercase()) {
+            atchar--;
+            return;
+        }
     }
     findCommon(vec, search, ++atchar);
 
@@ -460,7 +461,7 @@ std::pair<bool, ustring> findPartialString(vector<ustring>& vec, const ustring& 
         int atchar = 1;
         findCommon(vec, vec[0], atchar);
 
-        result.second = vec[0].substr(0, atchar - 1);
+        result.second = vec[0].substr(0, atchar);
 
         result.first = true;
     } else if (vec.size() == 1) {
