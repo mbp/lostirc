@@ -13,8 +13,6 @@ NICE-TO-HAVE:
   * /BAN command.
   * /EXEC
   * Virtual functions for Commands, to be overriden. Much more OO-like.
-  * Make nick-list only appear when joining a channel after connecting to a
-    server.
 
 RANDOM BUGS:
 ------------
