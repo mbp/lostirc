@@ -16,7 +16,13 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <algorithm>
+#include <sstream>
+#include <cctype>
 #include "Utils.h"
+
+using std::string;
+using std::vector;
 
 namespace Utils {
 
@@ -42,15 +48,26 @@ void Tokenize(const string& str,
 
 string toupper(string& str)
 {
-    transform(str.begin(), str.end(), str.begin(), ::toupper);
+    std::transform(str.begin(), str.end(), str.begin(), std::toupper);
     return str;
 }
 
 string tolower(string& str)
 {
-    transform(str.begin(), str.end(), str.begin(), ::tolower);
+    std::transform(str.begin(), str.end(), str.begin(), std::tolower);
     return str;
 }
 
+int stoi(const string& str)
+{
+    std::stringstream ss(str);
+    int i;
+    ss >> i;
+    if (ss.fail())
+          return -1;
+    else
+          return i;
+
+}
 
 }

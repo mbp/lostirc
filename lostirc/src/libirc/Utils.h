@@ -21,16 +21,15 @@
 
 #include <vector>
 #include <string> 
-#include <algorithm>
 #include <cctype>
 
-using namespace std;
 namespace Utils {
 
-    void Tokenize(const string& str, vector<string>& tokens,
-            const string& delimiters = " ");
+    void Tokenize(const std::string& str, std::vector<std::string>& tokens,
+            const std::string& delimiters = " ");
 
-    string toupper(string& str);
-    string tolower(string& str);
+    string toupper(std::string& str);
+    string tolower(std::string& str);
+    int stoi(const std::string& str);
 }
 #endif
