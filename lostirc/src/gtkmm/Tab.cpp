@@ -48,7 +48,7 @@ Tab::Tab(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font)
     _hbox->pack_start(_swin);
     pack_start(*_hbox);
     _hbox2 = new Gtk::HBox();
-    pack_start(*_hbox2, Gtk::PACK_EXPAND_WIDGET);
+    pack_start(*_hbox2, Gtk::PACK_SHRINK);
     _hbox2->pack_start(_entry);
 
     Gtk::Button *_button = manage(new Gtk::Button("Prefs"));
@@ -261,7 +261,7 @@ void Tab::endPrefs()
     remove(*p);
     Prefs::currentTab = 0;
     pack_start(*_hbox);
-    pack_start(*_hbox2, Gtk::PACK_EXPAND_WIDGET);
+    pack_start(*_hbox2, Gtk::PACK_SHRINK);
     _entry.grab_focus();
     hasPrefs = false;
 }
