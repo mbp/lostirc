@@ -17,12 +17,11 @@
  */
 
 #include <ctime>
+#include <algorithm>
+#include <sstream>
 #include <ServerConnection.h>
 #include <Utils.h>
 #include "Tab.h"
-#include <algorithm>
-#include <sstream>
-#include "GuiCommands.h"
 #include "Prefs.h"
 
 using std::vector;

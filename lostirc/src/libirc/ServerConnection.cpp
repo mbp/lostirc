@@ -24,8 +24,8 @@
 using std::string;
 using std::vector;
 
-ServerConnection::ServerConnection(LostIRCApp *app, const string& host, const string& nick, int port = 6667, bool connect = false)
-    : _app(app), _socket(new Socket()), _p(new Parser(_app,this))
+ServerConnection::ServerConnection(const string& host, const string& nick, int port = 6667, bool connect = false)
+    : _socket(new Socket()), _p(new Parser(App,this))
 {
     Session.nick = nick;
     Session.servername = host;
@@ -34,8 +34,9 @@ ServerConnection::ServerConnection(LostIRCApp *app, const string& host, const st
     Session.isConnected = false;
     Session.hasRegistered = false;
     Session.isAway = false;
+    Session.sentLagCheck = false;
 
-    _app->evtNewTab(this);
+    App->evtNewTab(this);
 
     if (connect)
           Connect();
@@ -60,7 +61,7 @@ bool ServerConnection::Connect(const string &host, int port = 6667, const string
 bool ServerConnection::Connect()
 {
 
-    _app->getEvts()->emit(_app->getEvts()->get(CONNECTING) << Session.host << Session.port, this);
+    FE::emit(FE::get(CONNECTING) << Session.host << Session.port, FE::CURRENT, this);
     
     try {
 
@@ -68,37 +69,65 @@ bool ServerConnection::Connect()
 
     } catch (SocketException &e) {
         Session.isConnected = false;
-        _app->getEvts()->emit(_app->getEvts()->get(SERVMSG2) << "Failed connecting:" << e.what(), this);
+        FE::emit(FE::get(SERVMSG2) << "Failed connecting:" << e.what(), FE::CURRENT, this);
         return false;
     }
 
     // we got connected
 
     Session.isConnected = true;
+    Session.hasRegistered = false;
+    Session.isAway = false;
+    Session.sentLagCheck = false;
 
     // This is a temporary watch to see when we can write, when we can
     // write - we are (hopefully) connected
     g_io_add_watch(g_io_channel_unix_new(_socket->getfd()),
                    GIOCondition (G_IO_OUT),
-                   &ServerConnection::write, this);
+                   &ServerConnection::onConnect, this);
 
     // This watch makes sure we read data when it's available
     // FIXME: should this be moved to ServerConnection::write?
     g_io_add_watch(g_io_channel_unix_new(_socket->getfd()),
                    GIOCondition (G_IO_IN | G_IO_ERR | G_IO_HUP | G_IO_NVAL),
-                   &ServerConnection::readdata, this);
+                   &ServerConnection::onReadData, this);
+
+    g_timeout_add(30000, &ServerConnection::connectionCheck, this);
 
     return true;
 }
 
-gboolean ServerConnection::auto_reconnect(gpointer data)
+gboolean ServerConnection::autoReconnect(gpointer data)
 {
     ServerConnection& conn = *(static_cast<ServerConnection*>(data));
     conn.Connect();
-    return (FALSE);
+    return FALSE;
 }
 
-gboolean ServerConnection::readdata(GIOChannel* io_channel, GIOCondition cond, gpointer data)
+gboolean ServerConnection::connectionCheck(gpointer data)
+{
+    ServerConnection& conn = *(static_cast<ServerConnection*>(data));
+
+    if (conn.Session.sentLagCheck) {
+        #ifdef DEBUG
+        std::cout << "connectionCheck().. disconnected" << std::endl;
+        #endif
+        // disconnected! last lag check was never replied to
+        conn.Connect();
+        // FIXME: we might need to disconnect properly as well!
+
+        return FALSE;
+    } else {
+        #ifdef DEBUG
+        std::cout << "connectionCheck().. still on" << std::endl;
+        #endif
+        conn.sendPing();
+        conn.Session.sentLagCheck = true;
+        return TRUE;
+    }
+}
+
+gboolean ServerConnection::onReadData(GIOChannel* io_channel, GIOCondition cond, gpointer data)
 {
     ServerConnection& conn = *(static_cast<ServerConnection*>(data));
 
@@ -127,7 +156,7 @@ gboolean ServerConnection::readdata(GIOChannel* io_channel, GIOCondition cond, g
                     // we reached the last line, but it was not ended with
                     // \n, lets buffer this
                     conn.tmpbuf = str.substr(lastPos);
-                    return (TRUE);
+                    return TRUE;
                 } else {
                     string tmp = str.substr(lastPos, pos - lastPos);
                     conn._p->parseLine(tmp);
@@ -136,17 +165,17 @@ gboolean ServerConnection::readdata(GIOChannel* io_channel, GIOCondition cond, g
                 pos = str.find_first_of("\n", lastPos);
             }
         }
-        return (TRUE);
+        return TRUE;
 
     } catch (SocketException &e) {
-        conn._app->getEvts()->emit(conn._app->getEvts()->get(SERVMSG) << e.what(), &conn);
+        FE::emit(FE::get(SERVMSG) << e.what(), FE::CURRENT, &conn);
         conn.Session.isConnected = false;
-        g_timeout_add(2000, &ServerConnection::auto_reconnect, &conn);
-        return (FALSE);
+        g_timeout_add(2000, &ServerConnection::autoReconnect, &conn);
+        return FALSE;
     }
 }
 
-gboolean ServerConnection::write(GIOChannel* io_channel, GIOCondition cond, gpointer data)
+gboolean ServerConnection::onConnect(GIOChannel* io_channel, GIOCondition cond, gpointer data)
 {
     // The only purpose of this function is to register us to the server
     // when we are able to write
@@ -162,12 +191,19 @@ gboolean ServerConnection::write(GIOChannel* io_channel, GIOCondition cond, gpoi
     conn.sendNick(conn.Session.nick);
     conn.sendUser(conn.Session.nick, hostname, conn.Session.host, conn.Session.realname);
 
-    return (FALSE);
+    return FALSE;
 }
 
 bool ServerConnection::sendPong(const string& crap)
 {
     string msg("PONG :" + crap + "\r\n");
+
+    return _socket->send(msg);
+}
+
+bool ServerConnection::sendPing(const string& crap = "")
+{
+    string msg("PING LAG" + crap + "\r\n");
 
     return _socket->send(msg);
 }
@@ -204,7 +240,7 @@ bool ServerConnection::sendPass(const string& pass)
 
 bool ServerConnection::sendVersion(const string& to)
 {
-    struct utsname uname = _app->getsysinfo();
+    struct utsname uname = App->getsysinfo();
     string s(uname.sysname);
     string r(uname.release);
     string m(uname.machine);

@@ -61,6 +61,8 @@ string lower(string& str)
 
 int stoi(const string& str)
 {
+    /* this function is implemented using atoi, only because stringstreams
+     * is broken on gcc 2.96 (redhat, mandrake) */
     return std::atoi(str.c_str());
 }
 

@@ -52,25 +52,25 @@ void GuiCommands::Query(ServerConnection *conn, const string& params)
     if (params.length() == 0) {
         throw CommandException("/QUERY <nick>, start a query(tab) with a user");
     } else {
-        mw->getNotebook()->addQueryTab(params, conn);
+        AppWin->getNotebook()->addQueryTab(params, conn);
     }
 }
 
 void GuiCommands::Me(ServerConnection *conn, const string& params)
 {
-    string to = mw->getNotebook()->getCurrent()->getLabel()->get_text();
+    string to = AppWin->getNotebook()->getCurrent()->getLabel()->get_text();
     string param = to + " " + params;
     return Commands::Me(conn, param);
 }
 
 void GuiCommands::SetFont(ServerConnection *conn, const string& params)
 {
-    mw->getNotebook()->setFont();
+    AppWin->getNotebook()->setFont();
 }
 
 void GuiCommands::NewServer(ServerConnection *conn, const string& params)
 {
-    mw->newServer();
+    AppWin->newServer();
 }
 
 void GuiCommands::commands(ServerConnection *conn, const string& params)
@@ -81,7 +81,7 @@ void GuiCommands::commands(ServerConnection *conn, const string& params)
         cmds += guicmds[i].cmd;
         cmds += "\00311]";
     }
-    Commands::app->getEvts()->emit(Commands::app->getEvts()->get(SERVMSG) << cmds, conn);
+    FE::emit(FE::get(SERVMSG) << cmds, FE::CURRENT, conn);
     Commands::commands(conn, params);
 }
 
@@ -101,5 +101,3 @@ bool GuiCommands::commandCompletion(const string& word, string& str)
     }
     return Commands::commandCompletion(word, str);
 }
-
-MainWindow* GuiCommands::mw;

@@ -34,7 +34,6 @@ class Parser
 {
     ServerConnection *_conn;
     Events *_evts;
-    LostIRCApp *_app;
 
 public:
     Parser(LostIRCApp *app, ServerConnection *conn);

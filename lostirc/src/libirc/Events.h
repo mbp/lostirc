@@ -22,10 +22,8 @@
 #include <string>
 #include <vector>
 #include <sstream>
-#include "LostIRCApp.h"
 #include "ServerConnection.h"
 
-class LostIRCApp;
 class ServerConnection;
 
 enum Event {
@@ -50,12 +48,12 @@ public:
     std::string result();
 };
 
-class Events
+namespace FE
 {
-    LostIRCApp *_app;
 
-public:
-    Events(LostIRCApp *app);
+    enum Dest {
+        CURRENT, ALL
+    };
 
     /* when we want to send a message to a channel */
     void emit(Tmpl& t, Channel& chan, ServerConnection *conn);
@@ -67,10 +65,10 @@ public:
     void emit(Tmpl& t, const std::string& nick, ServerConnection *conn);
 
     /* when we have no destination for our msg (frontend uses current tab) */
-    void emit(Tmpl& t, ServerConnection *conn);
+    void emit(Tmpl& t, Dest, ServerConnection *conn);
 
     Tmpl get(Event i);
-};
+}
 
 
 #endif

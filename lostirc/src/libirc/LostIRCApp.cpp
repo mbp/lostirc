@@ -25,13 +25,13 @@
 using std::string;
 using std::vector;
 
+LostIRCApp* App;
+
 LostIRCApp::LostIRCApp()
     : _cfg()
 {
-    Commands::app = this;
+    App = this;
     uname(&uname_info);
-
-    _evts = new Events(this);
 
     if (_cfg.getOpt("nick").empty()) {
         _cfg.setOpt("nick", getenv("USER"));
@@ -44,7 +44,6 @@ LostIRCApp::LostIRCApp()
 
 LostIRCApp::~LostIRCApp()
 {
-    delete _evts;
     vector<ServerConnection*>::iterator i;
 
     for (i = _servers.begin(); i != _servers.end();) {
@@ -75,14 +74,14 @@ int LostIRCApp::start()
 
 ServerConnection* LostIRCApp::newServer(const string& host, int port)
 {
-    ServerConnection *conn = new ServerConnection(this, host, _cfg.getOpt("nick"), port);
+    ServerConnection *conn = new ServerConnection(host, _cfg.getOpt("nick"), port);
     _servers.push_back(conn);
     return conn;
 }
 
 ServerConnection* LostIRCApp::newServer()
 {
-    ServerConnection *conn = new ServerConnection(this, "", _cfg.getOpt("nick"));
+    ServerConnection *conn = new ServerConnection("", _cfg.getOpt("nick"));
     conn->Session.realname = realname;
     _servers.push_back(conn);
     return conn;

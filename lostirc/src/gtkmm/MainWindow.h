@@ -50,7 +50,7 @@ public:
 
 private:
     // Events
-    void onDisplayMessage(const std::string& msg, ServerConnection *conn);
+    void onDisplayMessage(const std::string& msg, FE::Dest d, ServerConnection *conn);
     void onDisplayMessageInChan(const std::string& msg, Channel& to, ServerConnection *conn);
     void onDisplayMessageInQuery(const std::string& msg, const std::string& to, ServerConnection *conn);
     void onJoin(const std::string& nick, Channel& chan, ServerConnection *conn);
@@ -68,4 +68,7 @@ private:
     void onNewTab(ServerConnection *conn);
 
 };
+
+extern MainWindow* AppWin;
+
 #endif

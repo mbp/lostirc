@@ -24,11 +24,10 @@
 #include <sigc++/signal_system.h>
 #include <sys/utsname.h>
 #include "ConfigHandler.h"
-#include "Parser.h"
 #include "Channel.h"
+#include "Events.h"
 
 class ServerConnection;
-class Events;
 
 using namespace SigC;
 
@@ -48,7 +47,6 @@ public:
     ServerConnection* newServer();
 
     ConfigHandler& getCfg() { return _cfg; }
-    Events* getEvts() { return _evts; }
 
     // Signals 
     
@@ -74,7 +72,7 @@ public:
     Signal5<void, const std::string&, Channel&, const std::string&, const std::string&, ServerConnection*> evtKick;
 
     // Emitted when the frontend needs to diplay a message
-    Signal2<void, const std::string&, ServerConnection*> evtDisplayMessage;
+    Signal3<void, const std::string&, FE::Dest, ServerConnection*> evtDisplayMessage;
     Signal3<void, const std::string&, Channel&, ServerConnection*> evtDisplayMessageInChan;
     Signal3<void, const std::string&, const std::string&, ServerConnection*> evtDisplayMessageInQuery;
 
@@ -89,9 +87,10 @@ private:
     std::vector<ServerConnection*> _servers;
 
     ConfigHandler _cfg;
-    Events *_evts;
     struct utsname uname_info;
 
 };
+
+extern LostIRCApp* App;
 
 #endif

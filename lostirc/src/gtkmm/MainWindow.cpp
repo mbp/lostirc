@@ -23,10 +23,12 @@
 using std::vector;
 using std::string;
 
+MainWindow* AppWin;
+
 MainWindow::MainWindow()
 : Gtk::Window(GTK_WINDOW_TOPLEVEL)
 {
-    GuiCommands::mw = this;
+    AppWin = this;
     set_policy(1, 1, 0); // Policy for main window: user resizeable
     set_usize(400, 200);
     key_press_event.connect(slot(this, &MainWindow::on_key_press_event));
@@ -95,11 +97,13 @@ MainWindow::~MainWindow()
     delete _app;
 }
 
-void MainWindow::onDisplayMessage(const string& msg, ServerConnection *conn)
+void MainWindow::onDisplayMessage(const string& msg, FE::Dest d, ServerConnection *conn)
 {
-    Tab *tab = _nb->getCurrent(conn);
+    if (d == FE::CURRENT) {
+        Tab *tab = _nb->getCurrent(conn);
 
-    _nb->insert(tab, msg);
+        _nb->insert(tab, msg);
+    }
 }
 
 void MainWindow::onDisplayMessageInChan(const string& msg, Channel& chan, ServerConnection *conn)

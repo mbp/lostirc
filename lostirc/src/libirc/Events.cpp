@@ -18,6 +18,7 @@
 
 #include <cctype>
 #include "Events.h"
+#include "LostIRCApp.h"
 
 using std::string;
 
@@ -61,37 +62,27 @@ struct {
     { 0, 0 }
 };
 
-Events::Events(LostIRCApp *app)
-    : _app(app)
-{
-    /* replace all $ with \003 in our events */
-    for (int i = 0; event_map[i].s != 0; ++i) {
-        string msg = _app->getCfg().getEvt(event_map[i].s);
-        std::replace(msg.begin(), msg.end(), '$', '\003');
-        _app->getCfg().setEvt(event_map[i].s, msg);
-    }
+namespace FE {
 
-}
-
-void Events::emit(Tmpl& t, const string& nick, ServerConnection *conn)
+void emit(Tmpl& t, const string& nick, ServerConnection *conn)
 {
     string msg = t.result(); // FIXME: we shouldn't be doing this operation here
-    _app->evtDisplayMessageInQuery(msg, nick, conn);
+    App->evtDisplayMessageInQuery(msg, nick, conn);
 }
 
-void Events::emit(Tmpl& t, Channel& chan, ServerConnection *conn)
+void emit(Tmpl& t, Channel& chan, ServerConnection *conn)
 {
     string msg = t.result(); // FIXME: we shouldn't be doing this operation here
-    _app->evtDisplayMessageInChan(msg, chan, conn);
+    App->evtDisplayMessageInChan(msg, chan, conn);
 }
 
-void Events::emit(Tmpl& t, ServerConnection *conn)
+void emit(Tmpl& t, Dest d, ServerConnection *conn)
 {
     string msg = t.result();
-    _app->evtDisplayMessage(msg, conn);
+    App->evtDisplayMessage(msg, d, conn);
 }
 
-void Events::emit(Tmpl& t, const std::vector<Channel*>& to, ServerConnection *conn)
+void emit(Tmpl& t, const std::vector<Channel*>& to, ServerConnection *conn)
 {
     std::vector<Channel*>::const_iterator i;
     for (i = to.begin(); i != to.end(); ++i) {
@@ -99,12 +90,14 @@ void Events::emit(Tmpl& t, const std::vector<Channel*>& to, ServerConnection *co
     }
 }
 
-Tmpl Events::get(Event e)
+Tmpl get(Event e)
 {
     for (int i = 0; event_map[i].s != 0; ++i) {
         if (event_map[i].value == e)
-            return Tmpl(_app->getCfg().getEvt(event_map[i].s));
+            return Tmpl(App->getCfg().getEvt(event_map[i].s));
     }
+}
+
 }
 
 string Tmpl::result()

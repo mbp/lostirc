@@ -24,19 +24,19 @@
 #include <unistd.h>
 #include "Socket.h"
 #include "Parser.h"
-#include "LostIRCApp.h"
 #include "Channel.h"
 
 class ServerConnection
 {
 
 public:
-    ServerConnection(LostIRCApp *app, const std::string& host, const std::string& nick, int port = 6667, bool connect = false);
+    ServerConnection(const std::string& host, const std::string& nick, int port = 6667, bool connect = false);
     ~ServerConnection();
 
     bool Connect(const std::string& host, int port = 6667, const std::string& pass = "");
     bool Connect();
     bool sendPong(const std::string& crap);
+    bool sendPing(const std::string& crap = "");
     bool sendUser(const std::string& nick, const std::string& localhost, const std::string& remotehost, const std::string& name);
     bool sendNick(const std::string& nick);
     bool sendPass(const std::string& pass);
@@ -66,9 +66,10 @@ public:
     Channel* findChannel(const std::string& c);
     void sendCmds();
 
-    static gboolean readdata(GIOChannel *, GIOCondition, gpointer);
-    static gboolean write(GIOChannel *, GIOCondition, gpointer);
-    static gboolean auto_reconnect(gpointer);
+    static gboolean onReadData(GIOChannel *, GIOCondition, gpointer);
+    static gboolean onConnect(GIOChannel *, GIOCondition, gpointer);
+    static gboolean autoReconnect(gpointer);
+    static gboolean connectionCheck(gpointer);
 
     // Session struct for all ServerConnections
     struct {
@@ -79,6 +80,7 @@ public:
         bool hasRegistered;
         bool isAway;
         int port;
+        bool sentLagCheck;
         std::string servername;
         std::string host;
         std::vector<Channel*> channels;
@@ -86,7 +88,6 @@ public:
     } Session;
 
 private:
-    LostIRCApp *_app;
     Socket *_socket;
     Parser *_p;
     std::string tmpbuf;

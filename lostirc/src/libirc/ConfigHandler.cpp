@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include "Events.h"
 
 using std::string;
 using std::cout;
@@ -302,6 +303,14 @@ bool ConfigHandler::setEvtDefaults()
     setEvtDefault("evt_invited", "$16-- $0%1$16 invites you to join %2");
     setEvtDefault("evt_connecting", "$16-- Connecting to $8%1$16 on port$8 %2$16...");
     setEvtDefault("evt_names", "$16-- Names %1: %2");
+
+    map<string, string>::iterator i = _events.begin();
+
+    for (; i != _events.end(); ++i) {
+        string msg = i->second;
+        std::replace(msg.begin(), msg.end(), '$', '\003');
+        i->second = msg;
+    }
 
     return writeEvents();
 }

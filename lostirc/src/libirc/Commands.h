@@ -62,7 +62,6 @@ public:
 //    static void Exec(ServerConnection *conn, const std::string& params);
     static bool commandCompletion(const std::string& word, std::string& str);
 
-    static LostIRCApp *app;
 };
 
 class CommandException : public std::exception

@@ -16,12 +16,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <sstream>
+#include <gtk--/frame.h>
 #include <Utils.h>
 #include "Tab.h"
+#include "MainWindow.h"
 #include "Prefs.h"
-#include <sstream>
-#include "GuiCommands.h"
-#include <gtk--/frame.h>
 
 using std::vector;
 using std::string;
@@ -38,8 +38,7 @@ Prefs::Prefs()
     clist->select_row.connect(slot(this, &Prefs::onSelectRow));
     clist->unselect_row.connect(slot(this, &Prefs::onUnSelectRow));
 
-
-    vector<struct autoJoin*> servers = GuiCommands::mw->getApp()->getCfg().getServers();
+    vector<struct autoJoin*> servers = AppWin->getApp()->getCfg().getServers();
     vector<struct autoJoin*>::const_iterator i;
 
     for (i = servers.begin(); i != servers.end(); ++i) {
@@ -114,7 +113,7 @@ Prefs::Prefs()
 
     /* nickcompletion character */
     nickcompletionentry = manage(new Gtk::Entry(1));
-    nickcompletionentry->set_text(GuiCommands::mw->getApp()->getCfg().getOpt("nickcompletion_character"));
+    nickcompletionentry->set_text(AppWin->getApp()->getCfg().getOpt("nickcompletion_character"));
     Gtk::Frame *frame10 = manage(new Gtk::Frame("Nick-completion character"));
     frame10->add(*nickcompletionentry);
     prefsbox->pack_start(*frame10, 0, 0);
@@ -141,7 +140,7 @@ void Prefs::endPrefs()
 
 void Prefs::saveSettings()
 {
-    GuiCommands::mw->getApp()->getCfg().setOpt("nickcompletion_character", nickcompletionentry->get_text());
+    AppWin->getApp()->getCfg().setOpt("nickcompletion_character", nickcompletionentry->get_text());
 
 }
 
@@ -152,7 +151,7 @@ void Prefs::saveEntry()
         // we need to add a new one
         a = new autoJoin();
 
-        GuiCommands::mw->getApp()->getCfg().addServer(a);
+        AppWin->getApp()->getCfg().addServer(a);
 
         vector<string> v; // FIXME: ugly as hell.
         v.push_back(hostentry->get_text());
@@ -185,7 +184,7 @@ void Prefs::saveEntry()
     while (getline(ss, tmp))
           a->cmds.push_back(tmp);
 
-    GuiCommands::mw->getApp()->getCfg().writeServers();
+    AppWin->getApp()->getCfg().writeServers();
 
     clist->unselect_all();
     clist->select_row(clist->find_row_from_data(a));
@@ -223,8 +222,8 @@ void Prefs::removeEntry()
 {
     struct autoJoin *a = static_cast<struct autoJoin*>(clist->selection().front().get_data());
     clist->remove_row(clist->find_row_from_data(a));
-    GuiCommands::mw->getApp()->getCfg().removeServer(a);
-    GuiCommands::mw->getApp()->getCfg().writeServers();
+    AppWin->getApp()->getCfg().removeServer(a);
+    AppWin->getApp()->getCfg().writeServers();
 }
 
 void Prefs::addEntry()

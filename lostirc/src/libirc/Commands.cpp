@@ -185,7 +185,7 @@ void Commands::Set(ServerConnection *conn, const string& params)
     if (pos1 != string::npos)
           value = params.substr(pos1 + 1);
 
-    app->getCfg().setOpt(key, value);
+    App->getCfg().setOpt(key, value);
 }
 
 void Commands::Ctcp(ServerConnection *conn, const string& params)
@@ -261,7 +261,7 @@ void Commands::Msg(ServerConnection *conn, const string& params)
     } else {
         conn->sendMsg(to, msg);
         string sendgui = "Message to " + to + ": " + msg;
-        Commands::app->getEvts()->emit(Commands::app->getEvts()->get(SERVMSG) << sendgui, conn);
+        FE::emit(FE::get(SERVMSG) << sendgui, FE::CURRENT, conn);
     }
 }
 
@@ -278,7 +278,7 @@ void Commands::Notice(ServerConnection *conn, const string& params)
     } else {
         conn->sendNotice(to, msg);
         string sendgui = "Notice to " + to + ": " + msg;
-        Commands::app->getEvts()->emit(Commands::app->getEvts()->get(SERVMSG) << sendgui, conn);
+        FE::emit(FE::get(SERVMSG) << sendgui, FE::CURRENT, conn);
     }
 }
 
@@ -292,7 +292,7 @@ void Commands::Me(ServerConnection *conn, const string& params)
         throw CommandException("/ME <message>, sends the action to the current channel.");
     } else {
         conn->sendMe(to, msg);
-        Commands::app->getEvts()->emit(Commands::app->getEvts()->get(ACTION) << conn->Session.nick << msg, conn);
+        FE::emit(FE::get(ACTION) << conn->Session.nick << msg, FE::CURRENT, conn);
     }
 }
 
@@ -338,7 +338,7 @@ void Commands::commands(ServerConnection *conn, const string& params)
         cmdss += cmds[i].cmd;
         cmdss += "\00311]";
     }
-    Commands::app->getEvts()->emit(Commands::app->getEvts()->get(SERVMSG) << cmdss, conn);
+    FE::emit(FE::get(SERVMSG) << cmdss, FE::CURRENT, conn);
 }
 
 /*
@@ -391,5 +391,3 @@ bool Commands::commandCompletion(const string& word, string& str)
     }
     return false;
 }
-
-LostIRCApp* Commands::app;
