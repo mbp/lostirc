@@ -53,19 +53,17 @@ bool ServerConnection::Connect(const string &host, int port = 6667)
     if (_socket->connect(host, port)) {
         Session.isConnected = true;
 
-        /* Add a watch on our new server connection's file descriptor */
+        // This is a temporary watch to see when we can write, when we can
+        // write - we are (hopefull) connected
+        g_io_add_watch(g_io_channel_unix_new(_socket->getfd()),
+                       GIOCondition (G_IO_OUT),
+                       &ServerConnection::write, this);
+
+        // This watch makes sure we read data when it's available
         g_io_add_watch(g_io_channel_unix_new(_socket->getfd()),
                        GIOCondition (G_IO_IN | G_IO_ERR | G_IO_HUP | G_IO_NVAL),
                        &ServerConnection::readdata, this);
 
-        _socket->setNonBlocking();
-
-        char hostchar[256];
-        gethostname(hostchar, sizeof(hostchar) - 1);
-        string hostname(hostchar);
-
-        sendUser(Session.nick, hostname, Session.servername, Session.realname);
-        sendNick(Session.nick);
         return true;
     } else {
         Session.isConnected = false;
@@ -83,6 +81,23 @@ gboolean ServerConnection::readdata(GIOChannel* io_channel, GIOCondition cond, g
     } else {
         return (FALSE);
     }
+}
+
+gboolean ServerConnection::write(GIOChannel* io_channel, GIOCondition cond, gpointer data)
+{
+    // The only purpose of this function is to register us to the server
+    // when we are able to write
+    ServerConnection& conn = *(static_cast<ServerConnection*>(data));
+
+    char hostchar[256];
+    gethostname(hostchar, sizeof(hostchar) - 1);
+    string hostname(hostchar);
+
+    conn.sendUser(conn.Session.nick, hostname, conn.Session.servername, conn.Session.realname);
+    conn.sendNick(conn.Session.nick);
+
+    std::cout << "write avail" << std::endl;
+    return (FALSE);
 }
 
 bool ServerConnection::readsocket()

@@ -29,6 +29,7 @@
 class Socket
 {
     int fd;
+    std::string buf;
 
 public:
     Socket();
@@ -39,12 +40,11 @@ public:
     std::string receive();
     void setNonBlocking();
     void setBlocking();
-    int getfd();
+    int getfd() { return fd; }
     int close();
     std::string error;
 
     bool isBlocking;
-    std::string buf;
 
 };
 #endif

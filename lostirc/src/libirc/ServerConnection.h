@@ -63,6 +63,7 @@ public:
     Channel* findChannel(const std::string& c);
 
     static gboolean readdata(GIOChannel *, GIOCondition, gpointer);
+    static gboolean write(GIOChannel *, GIOCondition, gpointer);
 
     // Session struct for all ServerConnections
     struct {

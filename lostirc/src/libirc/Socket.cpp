@@ -27,8 +27,8 @@ using std::string;
 
 Socket::Socket()
 {
-    // Get us a file descriptor
     fd = socket(AF_INET, SOCK_STREAM, 0);
+    setNonBlocking();
 }
 
 Socket::~Socket()
@@ -50,12 +50,11 @@ bool Socket::connect(const string& host, int port)
     addr.sin_addr = *((struct in_addr *)he->h_addr);
     memset(&(addr.sin_zero), '\0', 8); // zero the rest of the struct
 
-    if (::connect(fd, (struct sockaddr *)&addr, sizeof(struct sockaddr)) < 0) {
-        error = strerror(errno);
-        return false;
+    if (::connect(fd, (struct sockaddr *)&addr, sizeof(struct sockaddr)) == 0 || errno == EINPROGRESS) {
+        return true;
     }
-
-    return true;
+    error = strerror(errno);
+    return false;
 }
 
 bool Socket::send(const string& data)
@@ -87,9 +86,7 @@ string Socket::receive()
     {
         char r;
 
-        int i = recv(fd, &r, 1, 0);
-
-        switch(i) {
+        switch(recv(fd, &r, 1, 0)) {
             case 0:
                 std::cerr << "0.. returning." << std::endl;
                 error = "Disconnected.";
@@ -101,7 +98,8 @@ string Socket::receive()
                     isBlocking = true;
                     return buf;
                 } else {
-                    error = "Disconnected.";
+                    error = "Disconnected: ";
+                    error += strerror(errno);
                     std::cerr << error << std::endl;
                     return "";
                 }
@@ -114,11 +112,6 @@ string Socket::receive()
     }
 }
 
-int Socket::getfd()
-{
-    return fd;
-}
-
 int Socket::close()
 {
     return ::close(fd);
@@ -127,9 +120,8 @@ int Socket::close()
 void Socket::setNonBlocking()
 {
     int flags = fcntl(fd, F_GETFL, 0);
-    if (flags != -1) {
-        fcntl(fd, F_SETFL, flags | O_NONBLOCK);
-    }
+    if (flags != -1)
+          fcntl(fd, F_SETFL, flags | O_NONBLOCK);
 }
 
 void Socket::setBlocking()
