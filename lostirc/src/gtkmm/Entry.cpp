@@ -45,7 +45,7 @@ void Entry::onEntry()
         }
 
         if(!GuiCommands::send(_tab->getConn(), msg.substr(1, pos - 1), params)) {
-            _tab->parseAndInsert(Commands::error + "\n");
+            _tab->parseAndInsert(Commands::error + '\n');
         }
 
     } else {
@@ -67,7 +67,7 @@ void Entry::onEntry()
 
 void Entry::printText(const string& msg)
 {
-    stringstream ss(msg);
+    std::istringstream ss(msg);
 
     if (ss.peek() == '\n')
           ss.ignore();
@@ -75,7 +75,7 @@ void Entry::printText(const string& msg)
     string line;
     while (getline(ss, line)) {
         _tab->getConn()->sendMsg(_tab->getLabel()->get_text(), line);
-        _tab->parseAndInsert("\0037<\0030" + _tab->getConn()->Session.nick + "\0037>\0030 " + line + "\n");
+        _tab->parseAndInsert("\0037<\0030" + _tab->getConn()->Session.nick + "\0037>\0030 " + line + '\n');
     }
 
 }
