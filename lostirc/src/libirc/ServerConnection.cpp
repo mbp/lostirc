@@ -234,7 +234,7 @@ bool ServerConnection::onReadData(Glib::IOCondition)
         return true;
 
     } catch (SocketException &e) {
-        FE::emit(FE::get(ERROR) << ustring("Failed to receive") + e.what(), FE::ALL, this);
+        FE::emit(FE::get(ERROR) << ustring("Failed to receive: ") + e.what(), FE::ALL, this);
         disconnect();
         addReconnectTimer();
         return false;

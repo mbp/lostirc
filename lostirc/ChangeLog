@@ -1,6 +1,11 @@
 For a summary of changes between releases - see the NEWS file.
 
 2002-12-16  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * ServerConnection.cpp: Add missing space and kolon before error
+          message.
+
+2002-12-16  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Utils.cpp/Utils.h: Add convert_from_utf8(), to convert to the
           current locale. If the conversion fails, show an error box.
