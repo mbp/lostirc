@@ -832,6 +832,13 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 319: // RPL_WHOISCHANNELS
             FE::emit(FE::get(WHOIS_CHANNELS) << getWord(param, 2) << rest, FE::CURRENT, _conn);
             break;
+        case 320: // NickServ (freenode.net only?) "foo is an identified user" reply.
+            FE::emit(FE::get(WHOIS_GENERIC) << getWord(param, 2) << rest, FE::CURRENT, _conn);
+            break;
+        case 330: // QuakeNet "foo is authed as" reply.
+            FE::emit(FE::get(WHOIS_GENERIC) << getWord(param, 2) << rest + getWord(param, 3), FE::CURRENT, _conn);
+            break;
+
         case 421: // ERR_UNKNOWNCOMMAND
             FE::emit(FE::get(SERVMSG3) << getWord(param, 2) << rest, FE::CURRENT, _conn);
             break;

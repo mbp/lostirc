@@ -279,7 +279,7 @@ Events::Events(const char *filename)
     noticepriv(this, "noticepriv", "$15-- $07NOTICE §$00%1§$07: %2"),
     noticepubl(this, "noticepubl", "$15-- $07NOTICE §$00%1§$07 (to §%2§$07): %3"),
     error(this, "error", "$15-- $04Error:$00 %1"),
-    away(this, "away", "$15-- $16User §$00%1§$03 is away $15($03%2$15)"),
+    away(this, "away", "$15-- $16User §$00%1§$00: is away $15($03%2$15)"),
     banlist(this, "banlist", "$15-- $16Ban: $03%1$16 set by: §$00%2"),
     unknown(this, "unknown", "$15-- $16Unknown message: $02%1"),
     join(this, "join", "$15-- §$00%1§ $15($03%3$15)$16 has joined §%2"),
@@ -303,10 +303,10 @@ Events::Events(const char *filename)
     connecting(this, "connecting", "$15-- $16Connecting to §$11%1§$16 on port §$11%2§$16..."),
     names(this, "names", "$15-- $16Names §%1§$00:$16 %2"),
     killed(this, "killed", "$15-- $16You were killed by §$00%1§$16 $15($03%2$15)"),
-    whois_user(this, "whois_user", "$15-- $16User info $15($00§%1§$15)$00: $03%2@%3$00 - %4"),
-    whois_channels(this, "whois_channels", "$15-- $16User info $15($00§%1§$15)$00: on channels §%2"),
-    whois_server(this, "whois_server", "$15-- $16User info $15($00§%1§$15)$00: on server %2 (%3)"),
-    whois_generic(this, "whois_generic", "$15-- $16User info $15($00§%1§$15)$00: %2")
+    whois_user(this, "whois_user", "$15-- $16User $00§%1§$00: $03%2@%3$00 - %4"),
+    whois_channels(this, "whois_channels", "$15-- $16User $00§%1§$00: on channels §%2"),
+    whois_server(this, "whois_server", "$15-- $16User $00§%1§$00: on server %2 (%3)"),
+    whois_generic(this, "whois_generic", "$15-- $16User $00§%1§$00: %2")
 {
     map<string, baseConfigValue*>::iterator i = configvalues.begin();
 

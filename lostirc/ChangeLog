@@ -1,6 +1,11 @@
 For a summary of changes between releases - see the NEWS file.
 
 2002-12-09  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * Parser.cpp: Recognize QuakeNet's "is authed as" and freenodes "is an
+          identified user" replies.
+
+2002-12-09  Morten Brix Pedersen  <morten@wtf.dk>
 
         * ConfigHandler.cpp/Parser.cpp: Add WHOIS_SERVER, WHOIS_USER,
           WHOIS_CHANNELS, WHOIS_GENERIC events and use them.
