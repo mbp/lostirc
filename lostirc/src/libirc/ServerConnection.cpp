@@ -51,6 +51,8 @@ bool ServerConnection::Connect(const string &host, int port = 6667, const string
     Session.servername = host;
     Session.password = pass;
 
+    _app->getEvts()->emit(_app->getEvts()->get(CONNECTING) << host << port, "", this);
+    
     if (_socket->connect(host, port)) {
         Session.isConnected = true;
 

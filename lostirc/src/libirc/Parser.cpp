@@ -34,10 +34,6 @@ Parser::Parser(LostIRCApp *app, ServerConnection *conn)
 
 void Parser::parseLine(string& data)
 {
-    #ifdef DEBUG
-    cout << "<< " + data;
-    #endif
-
     // Erase \r and \n, we dont need them when parsing the messages.
     data.erase(data.find_last_not_of("\r\n") + 1);
 

@@ -54,6 +54,7 @@ struct {
     { "evt_banned", BANNED },
     { "evt_unbanned", UNBANNED },
     { "evt_invited", INVITED },
+    { "evt_connecting", CONNECTING },
     { 0, 0 }
 };
 

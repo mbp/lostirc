@@ -107,8 +107,12 @@ string Socket::receive()
 
         buf += r;
 
-        if (r == '\n')
-              return buf;
+        if (r == '\n') {
+            #ifdef DEBUG
+            std::cout << "<< " << buf << std::endl;
+            #endif
+            return buf;
+        }
     }
 }
 

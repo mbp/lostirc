@@ -33,7 +33,7 @@ enum Event {
     SERVMSG2, CTCP, TOPICCHANGE, TOPICIS, TOPICTIME, NOTICEPRIV, NOTICEPUBL,
     ERROR, AWAY, BANLIST, UNKNOWN, JOIN, PART, QUIT, NICK, MODE, CMODE,
     WALLOPS, KICKED, OPPED, DEOPPED, VOICED, DEVOICED, BANNED, UNBANNED,
-    INVITED
+    INVITED, CONNECTING
 };
 
 class Tmpl
@@ -45,6 +45,7 @@ public:
     Tmpl(const std::string& str) : orig(str) { }
 
     Tmpl& operator<<(const std::string& str) { tokens.push_back(str); return *this; }
+    Tmpl& operator<<(int i) { stringstream ss; ss << i; tokens.push_back(ss.str()); return *this; }
 
     std::string result();
 };

@@ -117,6 +117,7 @@ bool ConfigHandler::setDefaults()
     setDefault("evt_banned", "$16-- $0%1$16 sets ban on %2");
     setDefault("evt_unbanned", "$16-- $0%1$16 unbans %2");
     setDefault("evt_invited", "$16-- $0%1$16 invites you to join %2");
+    setDefault("evt_connecting", "$16-- Connecting to $8%1$16 on port $8%2$16...");
 
     return writeConfig();
 }
