@@ -1,0 +1,30 @@
+AC_INIT(src/gtkmm/main.cpp)
+AM_INIT_AUTOMAKE(lostirc, 0.0.1)
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_INSTALL
+AM_PROG_LIBTOOL
+AM_PATH_GTKMM(1.2.5,,AC_MSG_ERROR([Cannot find gtkmm 1.2.5 or greater.]))
+AM_PATH_SIGC(1.0.0)
+AM_PATH_GLIB(1.2.0)
+LIBS="$LIBS `gtkmm-config --libs`"
+
+
+# Add ./configure --enable-debug
+AC_ARG_ENABLE(debug,
+        [  --enable-debug          compile with debugging (for development)],
+        debug=$enable_debug,
+        debug=no
+)
+AC_MSG_CHECKING(for debugging)
+if test "x$debug" = xyes; then
+        AC_MSG_RESULT(yes)
+        CFLAGS="$CFLAGS -g -DDEBUG"
+        CXXFLAGS="$CXXFLAGS -g -DDEBUG"
+else
+        AC_MSG_RESULT(no)
+        CFLAGS="$CFLAGS -s"
+        CXXFLAGS="$CXXFLAGS -s"
+fi
+
+AC_OUTPUT(Makefile src/Makefile src/libirc/Makefile src/gtkmm/Makefile)
