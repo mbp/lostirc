@@ -1,4 +1,4 @@
-LostIRC - (x.x.x)
+LostIRC - (0.4.2) - Wed Sep, 8th 2004
   * On start up without connecting to any servers automatically, open the
     server window.
   * The chosen colorscheme is now correctly remembered in the server window.
