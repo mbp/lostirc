@@ -91,8 +91,8 @@ void Socket::resolvehost(const ustring& host)
 
 bool Socket::on_host_resolve(Glib::IOCondition cond, int readpipe)
 {
-    int size_to_be_read = sizeof(int) + sizeof(struct in_addr);
-    char *buf = new char[size_to_be_read];
+    static const int size_to_be_read = sizeof(int) + sizeof(struct in_addr);
+    char buf[size_to_be_read];
 
     int bytes_read = read(readpipe, buf, size_to_be_read);
 
@@ -128,8 +128,6 @@ bool Socket::on_host_resolve(Glib::IOCondition cond, int readpipe)
 
         on_host_resolved();
     }
-
-    delete []buf;
 
     ::close(readpipe);
 

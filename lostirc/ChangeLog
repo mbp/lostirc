@@ -1,5 +1,14 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-01-08  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Utils.cpp: Fix foolish, foolish error. I removed the "go to next
+          word" part of the while loop before comitting, resulting in an
+          endless loop...
+
+        * Socket.cpp: The size_to_be_read is available at compile time, so
+          make it a static const variable.
+
 2003-01-06  Morten Brix Pedersen  <morten@wtf.dk>
         
         * Utils.cpp: Because we can't just use streams to tokenize on words,
