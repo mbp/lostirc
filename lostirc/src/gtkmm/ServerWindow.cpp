@@ -140,20 +140,6 @@ void ServerWindow::updateList()
     _column_signal = _liststore->signal_row_changed().connect(SigC::slot(*this, &ServerWindow::onColumnChanged));
 }
 
-void ServerWindow::addEntry()
-{
-    Server *server = new Server;
-
-    ServerEditDialog dialog(*this, server);
-    int result = dialog.run();
-    if (result == Gtk::RESPONSE_OK) {
-        App->cfgservers.addServer(server);
-        updateList();
-    } else {
-        delete server;
-    }
-}
-
 void ServerWindow::connectEntry()
 {
     Glib::RefPtr<Gtk::TreeSelection> selection = _treeview.get_selection();
@@ -163,6 +149,21 @@ void ServerWindow::connectEntry()
         Gtk::TreeModel::Row row = *iterrow;
         ServerConnection *conn = App->newServer(row[_columns.serverptr]);
         conn->connect();
+    }
+}
+
+void ServerWindow::addEntry()
+{
+    Server *server = new Server;
+
+    ServerEditDialog dialog(*this, server);
+    int result = dialog.run();
+    if (result == Gtk::RESPONSE_OK) {
+        App->cfgservers.addServer(server);
+        App->cfgservers.writeServersFile();
+        updateList();
+    } else {
+        delete server;
     }
 }
 

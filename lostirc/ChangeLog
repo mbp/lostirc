@@ -1,9 +1,15 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-09-28  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * MainWindow.h: Fix mysterious error when quitting LostIRC.
+        * ServerWindow.cpp: Make sure perform.conf is saved when we add new
+        servers.
+
 2003-09-20  Morten Brix Pedersen  <morten@wtf.dk>
 
-        * TextWidget: Add an extra menuitem to the TextView context menu, to
-        disable/enable the menubar.
+        * TextWidget.cpp: Add an extra menuitem to the TextView context menu,
+        to disable/enable the menubar.
 
 2003-09-20  Morten Brix Pedersen  <morten@wtf.dk>
 

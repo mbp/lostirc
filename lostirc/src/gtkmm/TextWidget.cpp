@@ -349,7 +349,7 @@ void TextWidget::populateMenu(Gtk::Menu *contextmenu)
 {
     Gtk::Menu::MenuList& menulist = contextmenu->items();
 
-    if (AppWin->_menubar.is_visible())
+    if (AppWin->getMenuBar().is_visible())
           menulist.push_back(Gtk::Menu_Helpers::MenuElem(
                       _("_Hide Menubar"),
                       Gtk::Menu::AccelKey("<control>m"),

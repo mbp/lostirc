@@ -42,6 +42,7 @@ class MainWindow : public Gtk::Window, public FrontEnd
     LostIRCApp _app;
     MainNotebook _notebook;
 
+    Gtk::MenuBar _menubar;
     Gtk::Menu _firstmenu;
     Gtk::Menu _viewmenu;
     Gtk::Menu _helpmenu;
@@ -93,9 +94,9 @@ public:
     void dccStatusChanged(DCC *dcc);
     void localeError(bool tried_custom_encoding);
     bool hasNickList() const { return _nickList; }
+    const Gtk::MenuBar& getMenuBar() const { return _menubar; }
 
     StatusBar _statusbar;
-    Gtk::MenuBar _menubar;
 };
 
 extern MainWindow* AppWin;
