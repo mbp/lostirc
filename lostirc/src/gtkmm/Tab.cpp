@@ -249,7 +249,7 @@ bool TabChannel::nickCompletion(const string& word, string& str)
 
 
 Entry::Entry(Tab* tab)
-    : Gtk::Entry(510), _tab(tab)
+    : Gtk::Entry(510), _tab(tab), i(_entries.rbegin())
 {
     key_press_event.connect(slot(this, &Entry::on_key_press_event));
     activate.connect(slot(this, &Entry::onEntry));
@@ -284,6 +284,7 @@ void Entry::onEntry()
     }
 
     _entries.push_back(msg);
+    i = _entries.rbegin();
     set_text("");
 }
 
@@ -303,7 +304,14 @@ gint Entry::on_key_press_event(GdkEventKey* e)
 {
     if ((e->keyval == GDK_uparrow) || (e->keyval == GDK_Up)) {
         if (!_entries.empty()) {
-            set_text(_entries.front());
+            // Use reverse iterator to go to next element
+            if (i == _entries.rend())
+                  i = _entries.rbegin();
+
+            set_text(*i);
+
+            if (i != _entries.rend())
+                  ++i;
         }
     }
 
