@@ -2,6 +2,11 @@ For a summary of changes between releases - see the NEWS file.
 
 2003-06-15  Morten Brix Pedersen  <morten@wtf.dk>
         
+        * ServerWindow: More reworking of window layout. Still a few bugs
+          left.
+
+2003-06-15  Morten Brix Pedersen  <morten@wtf.dk>
+        
         * ConfigHandler.cpp: Remove limited highlighting optino.
         * FrontEnd.cpp: Ditto.
         * Prefs.cpp: Ditto.

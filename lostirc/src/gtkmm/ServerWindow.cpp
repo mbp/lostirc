@@ -38,14 +38,10 @@ Gtk::Button* create_imagebutton(const Glib::ustring& str, const Gtk::StockID& st
 
 ServerWindow::ServerWindow(Gtk::Window& parent)
     : Gtk::Dialog(_("LostIRC Server Window"), parent),
-    auto_connect_button(_("_Connect automatically"), true),
     _columns(),
     _liststore(Gtk::ListStore::create(_columns)),
-    _treeview(_liststore),
-    _server_options_table(2, 4)
+    _treeview(_liststore)
 {
-    _server_options_table.set_row_spacings(6);
-    _server_options_table.set_col_spacings(12);
     set_border_width(5);
     get_vbox()->set_spacing(18);
 
@@ -54,18 +50,8 @@ ServerWindow::ServerWindow(Gtk::Window& parent)
     _treeview.append_column(_("Hostname"), _columns.servername);
     _treeview.append_column(_("Port"), _columns.port);
     _treeview.append_column(_("Auto-connect"), _columns.auto_connect);
-    _treeview.get_selection()->signal_changed().connect(slot(*this, &ServerWindow::onChangeRow));
 
-    vector<Server*> servers = App->cfgservers.getServers();
-    vector<Server*>::iterator i;
-
-    for (i = servers.begin(); i != servers.end(); ++i) {
-        Gtk::TreeModel::Row row = *_liststore->append();
-        row[_columns.servername] = (*i)->hostname;
-        row[_columns.port] = (*i)->port;
-        row[_columns.auto_connect] = (*i)->auto_connect;
-        row[_columns.autojoin] = *i;
-    }
+    updateList();
 
     // Button box.
     Gtk::HButtonBox *buttbox = manage(new Gtk::HButtonBox());
@@ -73,8 +59,11 @@ ServerWindow::ServerWindow(Gtk::Window& parent)
     Gtk::Button *addbutton = manage(new Gtk::Button(Gtk::Stock::ADD));
     addbutton->signal_clicked().connect(slot(*this, &ServerWindow::addEntry));
     Gtk::Button *modifybutton = manage(create_imagebutton(_("_Modify"), Gtk::Stock::PREFERENCES));
+    modifybutton->signal_clicked().connect(slot(*this, &ServerWindow::modifyEntry));
     Gtk::Button *deletebutton = manage(new Gtk::Button(Gtk::Stock::DELETE));
+    deletebutton->signal_clicked().connect(slot(*this, &ServerWindow::deleteEntry));
     Gtk::Button *closebutton = manage(new Gtk::Button(Gtk::Stock::CLOSE));
+    closebutton->signal_clicked().connect(slot(*this, &Gtk::Dialog::hide));
 
     buttbox->pack_end(*addbutton, Gtk::PACK_SHRINK);
     buttbox->pack_end(*modifybutton, Gtk::PACK_SHRINK);
@@ -84,13 +73,86 @@ ServerWindow::ServerWindow(Gtk::Window& parent)
     get_vbox()->pack_end(*buttbox, Gtk::PACK_SHRINK);
     get_vbox()->pack_end(*manage(new Gtk::HSeparator()), Gtk::PACK_EXPAND_PADDING);
     get_vbox()->pack_end(_treeview, Gtk::PACK_SHRINK);
+    show_all();
+}
 
-    serverinfobox = manage(new Gtk::VBox());
+void ServerWindow::updateList()
+{
+    _liststore->clear();
+    vector<Server*> servers = App->cfgservers.getServers();
+    vector<Server*>::const_iterator i;
+
+    for (i = servers.begin(); i != servers.end(); ++i) {
+        Gtk::TreeModel::Row row = *_liststore->append();
+        row[_columns.servername] = (*i)->hostname;
+        row[_columns.port] = (*i)->port;
+        row[_columns.auto_connect] = (*i)->auto_connect;
+        row[_columns.serverptr] = *i;
+    }
+}
+
+void ServerWindow::addEntry()
+{
+    Server *server = new Server;
+
+    ServerEditDialog dialog(*this, server);
+    int result = dialog.run();
+    if (result == Gtk::RESPONSE_OK) {
+        App->cfgservers.addServer(server);
+        updateList();
+    } else {
+        delete server;
+    }
+}
+
+void ServerWindow::modifyEntry()
+{
+    Glib::RefPtr<Gtk::TreeSelection> selection = _treeview.get_selection();
+    Gtk::TreeModel::iterator iterrow = selection->get_selected();
+
+    if (iterrow) {
+        Gtk::TreeModel::Row row = *iterrow;
+        ServerEditDialog dialog(*this, row[_columns.serverptr]);
+
+        int result = dialog.run();
+
+        if (result == Gtk::RESPONSE_OK)
+            updateList();
+    }
+}
+
+void ServerWindow::deleteEntry()
+{
+    Glib::RefPtr<Gtk::TreeSelection> selection = _treeview.get_selection();
+    Gtk::TreeModel::iterator iterrow = selection->get_selected();
+
+    if (iterrow) {
+        Gtk::TreeModel::Row row = *selection->get_selected();
+
+        Server *server = row[_columns.serverptr];
+        _liststore->erase(selection->get_selected());
+        App->cfgservers.removeServer(server);
+        App->cfgservers.writeServersFile();
+    }
+}
+
+ServerEditDialog::ServerEditDialog(Gtk::Window& parent, Server* server)
+    : Gtk::Dialog(_("LostIRC Server Edit"), parent),
+    auto_connect_button(_("_Connect automatically"), true),
+    _server_options_table(2, 4),
+    _server(server)
+{
+    add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+    add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
+    set_border_width(5);
+    get_vbox()->set_spacing(6);
+    _server_options_table.set_row_spacings(6);
+    _server_options_table.set_col_spacings(12);
 
     // auto connect
-    serverinfobox->pack_start(auto_connect_button, Gtk::PACK_SHRINK);
+    get_vbox()->pack_start(auto_connect_button, Gtk::PACK_SHRINK);
 
-    serverinfobox->pack_start(_server_options_table, Gtk::PACK_SHRINK);
+    get_vbox()->pack_start(_server_options_table, Gtk::PACK_SHRINK);
 
     int row = 1;
 
@@ -122,139 +184,57 @@ ServerWindow::ServerWindow(Gtk::Window& parent)
 
     // commmands
     cmdtext.set_editable(true);
-    Gtk::Label *label5 = manage(new Gtk::Label(_("Commmands to perform on connect:")));
-    serverinfobox->pack_start(*label5, Gtk::PACK_SHRINK);
-    serverinfobox->pack_start(cmdtext);
+    Gtk::Label *label5 = manage(new Gtk::Label(_("Commmands to perform when connected:")));
+    get_vbox()->pack_start(*label5, Gtk::PACK_SHRINK);
+    get_vbox()->pack_start(cmdtext);
 
-    // buttons
-    Gtk::Button *savebutton = manage(create_imagebutton(_("Save this entry"), Gtk::Stock::SAVE));
-    savebutton->signal_clicked().connect(slot(*this, &ServerWindow::saveEntry));
-    hboxserver.pack_end(*savebutton, Gtk::PACK_SHRINK);
-    serverinfobox->pack_end(hboxserver, Gtk::PACK_SHRINK);
+    // initialize.
 
-    get_vbox()->pack_start(*serverinfobox);
-
-    show_all();
-
-    serverinfobox->hide();
-}
-
-void ServerWindow::saveEntry()
-{
-    Server *autojoin;
-    Gtk::TreeModel::iterator iter;
-
-    // See whether no rows were selected.
-    if (!_treeview.get_selection()->get_selected()) {
-        // we need to add a new one
-        autojoin = new Server();
-
-        App->cfgservers.addServer(autojoin);
-
-        iter = _liststore->append();
-
-        ( *iter )[_columns.servername] = hostentry.get_text();
-        ( *iter )[_columns.autojoin] = autojoin;
-        ( *iter )[_columns.auto_connect] = true;
-
-    } else {
-        // we need to save the current selected one
-
-        Glib::RefPtr<Gtk::TreeSelection> selection = _treeview.get_selection();
-        iter = selection->get_selected();
-
-        autojoin = ( *iter )[_columns.autojoin];
-    }
-
-    autojoin->hostname = hostentry.get_text();
-    autojoin->password = passentry.get_text();
-    autojoin->nick = nickentry.get_text();
-    autojoin->auto_connect = auto_connect_button.get_active();
-    ( *iter )[_columns.auto_connect] = auto_connect_button.get_active();
-
-    int port;
-    if (portentry.get_text_length() == 0)
-          port = 6667;
-    else
-          port = Util::stoi(portentry.get_text());
-
-    autojoin->port = port;
+    hostentry.set_text(_server->hostname);
+    passentry.set_text(_server->password);
+    nickentry.set_text(_server->nick);
+    auto_connect_button.set_active(_server->auto_connect);
+    std::ostringstream ss;
+    ss << _server->port;
+    portentry.set_text(ss.str());
 
     Glib::RefPtr<Gtk::TextBuffer> textbuffer = cmdtext.get_buffer();
+    textbuffer->set_text("");
 
-    // push back commands, for each and every line 
-    std::istringstream ss(textbuffer->get_text(textbuffer->begin(), textbuffer->end(), true).raw());
-    autojoin->cmds.clear();
-
-    std::string tmp;
-    while (getline(ss, tmp))
-          autojoin->cmds.push_back(tmp);
-
-    App->cfgservers.writeServersFile();
-
-    _treeview.get_selection()->unselect_all();
-    _treeview.get_selection()->select(iter);
+    vector<Glib::ustring>::const_iterator i;
+    for (i = _server->cmds.begin(); i != _server->cmds.end(); ++i) {
+        Gtk::TextIter iter = textbuffer->end();
+        textbuffer->insert(iter, *i + '\n');
+    }
+    show_all();
 }
 
-void ServerWindow::onChangeRow()
+void ServerEditDialog::on_response(int response)
 {
-    Glib::RefPtr<Gtk::TreeSelection> selection = _treeview.get_selection();
-    Gtk::TreeModel::iterator iterrow = selection->get_selected();
+    if (response == Gtk::RESPONSE_OK) {
+        _server->hostname = hostentry.get_text();
+        _server->password = passentry.get_text();
+        _server->nick = nickentry.get_text();
+        _server->auto_connect = auto_connect_button.get_active();
 
-    if (iterrow) {
-        serverinfobox->show();
-        // Row selected
-        Gtk::TreeModel::Row row = *iterrow;
+        int port;
+        if (portentry.get_text_length() == 0)
+              port = 6667;
+        else
+              port = Util::stoi(portentry.get_text());
 
-        Server* a = row[_columns.autojoin];
-        hostentry.set_text(a->hostname);
-        passentry.set_text(a->password);
-        nickentry.set_text(a->nick);
-        auto_connect_button.set_active(a->auto_connect);
-        std::ostringstream ss;
-        ss << a->port;
-        portentry.set_text(ss.str());
+        _server->port = port;
 
         Glib::RefPtr<Gtk::TextBuffer> textbuffer = cmdtext.get_buffer();
-        textbuffer->set_text("");
 
-        vector<Glib::ustring>::const_iterator i;
-        for (i = a->cmds.begin(); i != a->cmds.end(); ++i) {
-            Gtk::TextIter iter = textbuffer->end();
-            textbuffer->insert(iter, *i + '\n');
-        }
-        show_all();
-    } else {
-        serverinfobox->hide();
-        // No row selected
-        clearEntries();
-        show_all();
+        // push back commands, for each and every line 
+        std::istringstream ss(textbuffer->get_text(textbuffer->begin(), textbuffer->end(), true).raw());
+        _server->cmds.clear();
+
+        std::string tmp;
+        while (getline(ss, tmp))
+              _server->cmds.push_back(tmp);
+
+        App->cfgservers.writeServersFile();
     }
-}
-
-void ServerWindow::removeEntry()
-{
-    Glib::RefPtr<Gtk::TreeSelection> selection = _treeview.get_selection();
-    Gtk::TreeModel::Row row = *selection->get_selected();
-
-    Server *autojoin = row[_columns.autojoin];
-    _liststore->erase(selection->get_selected());
-    App->cfgservers.removeServer(autojoin);
-    App->cfgservers.writeServersFile();
-}
-
-void ServerWindow::addEntry()
-{
-    clearEntries();
-    _treeview.get_selection()->unselect_all();
-    hostentry.grab_focus();
-}
-
-void ServerWindow::clearEntries()
-{
-    passentry.set_text("");
-    portentry.set_text("");
-    hostentry.set_text("");
-    nickentry.set_text("");
-    cmdtext.get_buffer()->set_text("");
 }

@@ -134,6 +134,7 @@ public:
 };
 
 struct Server {
+    Server() : port(6667), auto_connect(false) { }
     Glib::ustring hostname;
     int port;
     Glib::ustring nick;

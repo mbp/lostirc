@@ -37,23 +37,11 @@ public:
     virtual ~ServerWindow() { }
 
 private:
-    void saveEntry();
-    void removeEntry();
     void addEntry();
-    void onChangeRow();
-    void clearEntries();
-    virtual void on_response(int) { hide(); }
+    void modifyEntry();
+    void deleteEntry();
 
-    // Auto-join 
-    Gtk::Entry nickentry;
-    Gtk::Entry passentry;
-    Gtk::Entry portentry;
-    Gtk::Entry hostentry;
-    Gtk::TextView cmdtext;
-    Gtk::Notebook notebook;
-    Gtk::VBox *serverinfobox;
-
-    Gtk::CheckButton auto_connect_button;
+    void updateList();
 
     Gtk::HBox hboxserver;
 
@@ -63,15 +51,37 @@ private:
         Gtk::TreeModelColumn<bool> auto_connect;
         Gtk::TreeModelColumn<Glib::ustring> servername;
         Gtk::TreeModelColumn<int> port;
-        Gtk::TreeModelColumn<Server*> autojoin;
+        Gtk::TreeModelColumn<Server*> serverptr;
 
-        ModelColumns() { add(servername); add(port); add(auto_connect); add(autojoin); }
+        ModelColumns() { add(servername); add(port); add(auto_connect); add(serverptr); }
     };
 
     ModelColumns _columns;
     Glib::RefPtr<Gtk::ListStore> _liststore;
     Gtk::TreeView _treeview;
+};
+
+class ServerEditDialog : public Gtk::Dialog
+{
+public:
+    ServerEditDialog(Gtk::Window& parent, Server*);
+    virtual ~ServerEditDialog() { }
+
+    virtual void on_response(int);
+
+private:
+    Gtk::Entry nickentry;
+    Gtk::Entry passentry;
+    Gtk::Entry portentry;
+    Gtk::Entry hostentry;
+    Gtk::TextView cmdtext;
+    Gtk::VBox *serverinfobox;
+
+    Gtk::CheckButton auto_connect_button;
+
     Gtk::Table _server_options_table;
+
+    Server *_server;
 };
 
 #endif
