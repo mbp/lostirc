@@ -88,7 +88,6 @@ string ConfigHandler::getParam(const string& param)
           return (*i).second;
 
     return "";
-
 }
 
 bool ConfigHandler::setDefaults()
@@ -113,11 +112,12 @@ bool ConfigHandler::setDefaults()
     _settings["evt_part"] = "$16-- $0%1$16 $15($9%3$15)$16 has parted $11%2";
     _settings["evt_quit"] = "$16-- $0%1$16 has quit $11(%2)";
     _settings["evt_nick"] = "$16-- $0%1$16 changes nick to %2";
+    _settings["evt_mode"] = "$16-- $0%1$16 sets mode $5%2$16 %3";
+    _settings["evt_cmode"] = "$16-- $0%1$16 sets channel mode $5%2 %3$16 on %4";
     _settings["evt_wallops"] = "$2WALLOPS -: %1 :- %2";
     _settings["evt_kicked"] = "$16-- $0%1$16 was kicked from $11%2$16 by %3 $15($9%4$15)";
 
     return writeConfig();
-
 }
 
 bool ConfigHandler::writeConfig()

@@ -37,7 +37,6 @@ public:
 
     gint on_key_press_event(GdkEventKey* e);
     virtual gint on_key_press_event_impl(GdkEventKey* e) { }
-    bool isAway;
     MainNotebook* getNotebook() { return _nb; }
     void newServer();
 

@@ -24,7 +24,7 @@ using std::vector;
 using std::string;
 
 MainWindow::MainWindow()
-: Gtk::Window(GTK_WINDOW_TOPLEVEL), isAway(false)
+: Gtk::Window(GTK_WINDOW_TOPLEVEL)
 {
     GuiCommands::mw = this;
     set_policy(1, 1, 0); // Policy for main window: user resizeable
@@ -43,9 +43,7 @@ MainWindow::MainWindow()
     _app->evtQuit.connect(slot(this, &MainWindow::onQuit));
     _app->evtNick.connect(slot(this, &MainWindow::onNick));
     _app->evtNames.connect(slot(this, &MainWindow::onNames));
-    _app->evtMode.connect(slot(this, &MainWindow::onMode));
     _app->evtCUMode.connect(slot(this, &MainWindow::onCUMode));
-    _app->evtCMode.connect(slot(this, &MainWindow::onCMode));
     _app->evtAway.connect(slot(this, &MainWindow::onAway));
 
     _nb = manage(new MainNotebook(this));
@@ -158,23 +156,6 @@ void MainWindow::onNick(const string& nick, const string& to, ServerConnection *
 
     for (i = tabs.begin(); i != tabs.end(); ++i) {
         (*i)->renameUser(nick, to);
-    }
-}
-
-void MainWindow::onMode(const string& nick, const string& param, const string& mode, ServerConnection *conn)
-{
-    Tab *tab = _nb->getCurrent(conn);
-    _nb->insert(tab, "\00316-- \0030" + nick + "\00316 sets mode \0035" + mode + "\00316 " + param + "\n");
-
-}
-
-void MainWindow::onCMode(const string& nick, const string& chan, char sign, const string& modes, ServerConnection *conn)
-{
-    Tab *tab = _nb->findTab(chan, conn);
-
-    string::const_iterator i;
-    for (i = modes.begin(); i != modes.end(); ++i) {
-        _nb->insert(tab, "\00316-- \0030"  + nick + "\00316 sets channel mode \0035" + sign + *i + "\00316 on " + chan + "\n");
     }
 }
 

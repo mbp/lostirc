@@ -68,8 +68,9 @@ public:
     struct {
         std::string nick;
         std::string realname;
-        int isConnected;
-        int hasRegistered;
+        bool isConnected;
+        bool hasRegistered;
+        bool isAway;
         std::string servername;
         std::vector<Channel*> channels;
     } Session;

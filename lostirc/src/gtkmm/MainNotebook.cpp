@@ -114,7 +114,7 @@ void MainNotebook::switchPage(Gtk::Notebook_Helpers::Page *p, unsigned int n)
         tab->getLabel()->set_style(*style);
         tab->getEntry()->grab_focus();
         tab->is_highlighted = false;
-        if (_fe->isAway) {
+        if (tab->getConn()->Session.isAway) {
             _fe->set_title("LostIRC"VERSION" - " + nick + "[currently away] @ " + p->get_tab_text());
         } else {
             _fe->set_title("LostIRC"VERSION" - " + nick + " @ " + p->get_tab_text());

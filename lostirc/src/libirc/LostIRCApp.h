@@ -52,9 +52,7 @@ public:
     Signal3<void, const std::string&, const std::string&, ServerConnection*> evtQuit;
     Signal3<void, const std::string&, const std::string&, ServerConnection*> evtNick;
     Signal3<void, const std::string&, const std::vector<std::vector<std::string> >&, ServerConnection*> evtNames;
-    Signal4<void, const std::string&, const std::string&, const std::string&, ServerConnection*> evtMode;
     Signal4<void, const std::string&, const std::string&, const vector<vector<std::string> >&, ServerConnection*> evtCUMode;
-    Signal5<void, const std::string&, const std::string&, char, const std::string&, ServerConnection*> evtCMode;
     Signal5<void, const std::string&, const std::string&, const std::string&, const std::string&, ServerConnection*> evtKick;
 
     // Emitted when the frontend needs to diplay a message

@@ -357,9 +357,12 @@ void Parser::Mode(const string& from, const string& param, const string& rest)
     } else {
         // User mode message
         // We got line in the form: 'user +x'
-        _app->evtMode(findNick(from), param, rest, _conn);
+        vector<string> args;
+        args.push_back(findNick(from));
+        args.push_back(param);
+        args.push_back(rest);
+        _evts->emitEvent("mode", args, "", _conn);
     }
-        
 }
 
 void Parser::CMode(const string& from, const string& param)
@@ -383,9 +386,15 @@ void Parser::CMode(const string& from, const string& param)
 
 
     if (arguments.empty()) {
-          // Received a channel mode, like '#chan +n'
-          _app->evtCMode(findNick(from), chan, modes.at(0), modes, _conn);
-          return;
+        // Received a channel mode, like '#chan +n'
+        vector<string> args;
+        args.push_back(findNick(from));
+        args.push_back(modes.substr(0, 1));
+        args.push_back(modes);
+        args.push_back(chan);
+
+        _evts->emitEvent("cmode", args, chan, _conn);
+        return;
     }
 
     char sign;
@@ -583,11 +592,13 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
 
     case 305: // RPL_UNAWAY
         _app->evtAway(false, _conn);
+        _conn->Session.isAway = false;
         Selfaway(rest);
         break;
 
     case 306: // RPL_NOWAWAY
         _app->evtAway(true, _conn);
+        _conn->Session.isAway = true;
         Selfaway(rest);
         break;
 

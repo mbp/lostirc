@@ -35,8 +35,8 @@ ServerConnection::ServerConnection(LostIRCApp *app, const string& nick, const st
 {
     Session.nick = nick;
     Session.realname = realname;
-    Session.isConnected = 0;
-    Session.hasRegistered = 0;
+    Session.isConnected = false;
+    Session.hasRegistered = false;
 }
 
 ServerConnection::~ServerConnection()
@@ -50,7 +50,7 @@ bool ServerConnection::Connect(const string &host, int port = 6667)
     Session.servername = host;
 
     if (_socket->connect(host, port)) {
-        Session.isConnected = 1;
+        Session.isConnected = true;
 
         /* Add a watch on our new server connection's file descriptor */
         g_io_add_watch(g_io_channel_unix_new(_socket->getfd()),
@@ -67,7 +67,7 @@ bool ServerConnection::Connect(const string &host, int port = 6667)
         sendNick(Session.nick);
 
     } else {
-        Session.isConnected = 0;
+        Session.isConnected = false;
         _app->getEvts()->emitEvent("servmsg", "Failed connecting: " + _socket->error, "", this);
     }
 }
@@ -94,7 +94,7 @@ bool ServerConnection::readsocket()
         return true;
     } else {
         _app->getEvts()->emitEvent("servmsg", _socket->error, "", this);
-        Session.isConnected = 0;
+        Session.isConnected = false;
         return false;
     }
 
