@@ -231,13 +231,24 @@ void Entry::onEntry()
         if (!_tab->getConn()->Session.isConnected && msg.size() > 0) {
             _tab->getText()->insert("Not connected to server.\n");
         } else if (msg.size() > 0) {
-            _tab->getConn()->sendMsg(_tab->getLabel()->get_text(), msg);
-            _tab->getText()->insert("<" + _tab->getConn()->Session.nick + "> " + msg + "\n");
+            printText(msg);
         }
     }
 
     _entries.push_back(msg);
     set_text("");
+}
+
+void Entry::printText(const string& msg)
+{
+    stringstream ss(msg);
+
+    string line;
+    while (getline(ss, line)) {
+        _tab->getConn()->sendMsg(_tab->getLabel()->get_text(), line);
+        _tab->getText()->insert("<" + _tab->getConn()->Session.nick + "> " + line + "\n");
+    }
+
 }
 
 gint Entry::on_key_press_event(GdkEventKey* e)

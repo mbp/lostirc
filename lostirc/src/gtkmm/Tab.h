@@ -118,6 +118,7 @@ public:
     gint on_key_press_event(GdkEventKey* e);
 private:
     void onEntry();
+    void printText(const string& msg);
     vector<string> _entries;
     vector<string>::iterator i;
     Tab* _tab;
