@@ -73,7 +73,6 @@ class LostIRCApp
 public:
     LostIRCApp(FrontEnd *f);
     ~LostIRCApp();
-    struct utsname getsysinfo();
 
     // 'start' means 'auto-join servers' - it returns the number of servers
     // joined
@@ -91,13 +90,13 @@ public:
 
     FrontEnd* fe;
 
+    static struct utsname uname_info;
+
 private:
     std::vector<ServerConnection*> _servers;
 
     ConfigHandler _cfg;
     DCC_queue _dcc_queue;
-    struct utsname uname_info;
-
 };
 
 extern LostIRCApp* App;

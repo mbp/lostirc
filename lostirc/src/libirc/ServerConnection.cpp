@@ -350,10 +350,9 @@ bool ServerConnection::sendPass(const string& pass)
 
 bool ServerConnection::sendVersion(const string& to)
 {
-    struct utsname uname = App->getsysinfo();
-    string s(uname.sysname);
-    string r(uname.release);
-    string m(uname.machine);
+    string s(LostIRCApp::uname_info.sysname);
+    string r(LostIRCApp::uname_info.release);
+    string m(LostIRCApp::uname_info.machine);
     string vstring("LostIRC "VERSION" on " + s + " " + r + " [" + m + "]");
     string msg("NOTICE " + to + " :\001VERSION " + vstring + "\001\r\n");
 

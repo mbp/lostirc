@@ -93,7 +93,4 @@ ServerConnection* LostIRCApp::newServer()
     return conn;
 }
 
-struct utsname LostIRCApp::getsysinfo()
-{
-    return uname_info;
-}
+struct utsname LostIRCApp::uname_info;
