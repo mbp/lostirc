@@ -17,6 +17,7 @@
  */
 
 #include "StatusBar.h"
+#include <LostIRCApp.h>
 
 StatusBar::StatusBar()
     : Gtk::HBox(false, 1),
@@ -32,7 +33,7 @@ StatusBar::StatusBar()
     pack_start(_frame);
     pack_start(_notifyframe);
 
-    setText1("Not connected.");
+    setText1(_("Not connected."));
 
     show_all();
 

@@ -34,7 +34,7 @@ MainNotebook::MainNotebook()
 
 Tab* MainNotebook::addTab(const ustring& name, ServerConnection *conn)
 {
-    int pagenum = findPage("(server)", conn);
+    int pagenum = findPage(_("(server)"), conn);
 
     if (pagenum != -1) {
         // If we have a "server"-tab, reuse it
@@ -55,7 +55,7 @@ Tab* MainNotebook::addChannelTab(const ustring& name, ServerConnection *conn)
 {
     // First try to find out whether we have a "server"-tab for this
     // ServerConnection.
-    int pagenum = findPage("(server)", conn);
+    int pagenum = findPage(_("(server)"), conn);
 
     if (pagenum != -1) {
         // If we have a "server"-tab, reuse it as a channel-tab.
@@ -83,7 +83,7 @@ Tab* MainNotebook::addChannelTab(const ustring& name, ServerConnection *conn)
 
 Tab* MainNotebook::addQueryTab(const ustring& name, ServerConnection *conn)
 {
-    int pagenum = findPage("(server)", conn);
+    int pagenum = findPage(_("(server)"), conn);
 
     if (pagenum != -1) {
         // If we have a "server"-tab, reuse it
@@ -172,7 +172,7 @@ void MainNotebook::updateStatus(Tab *tab)
           tab = getCurrent();
 
     if (tab->getConn()->Session.isAway)
-          AppWin->statusbar.setText1(tab->getConn()->Session.nick + " <span foreground=\"red\">(away: " + tab->getConn()->Session.awaymsg + ")</span> - " + tab->getConn()->Session.servername);
+          AppWin->statusbar.setText1(tab->getConn()->Session.nick + _(" <span foreground=\"red\">(away: ") + tab->getConn()->Session.awaymsg + ")</span> - " + tab->getConn()->Session.servername);
     else
           AppWin->statusbar.setText1(tab->getConn()->Session.nick + " - " + tab->getConn()->Session.servername);
 
@@ -184,7 +184,7 @@ void MainNotebook::updateTitle(Tab *tab)
           tab = getCurrent();
 
     if (tab->getConn()->Session.isAway)
-          AppWin->set_title("LostIRC "VERSION" - " + getLabel(tab)->get_text() + " (currently away)");
+          AppWin->set_title("LostIRC "VERSION" - " + getLabel(tab)->get_text() + _(" (currently away)"));
     else
           AppWin->set_title("LostIRC "VERSION" - " + getLabel(tab)->get_text());
 }

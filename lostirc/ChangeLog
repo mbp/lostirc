@@ -1,5 +1,13 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-01-03  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * Add po/lostirc.pot - a template file for future translations.
+
+2003-01-03  Michael Kristensen  <tazz@wtf.dk>
+        
+        * Make strings in source translateable, by using _() around them.
+
 2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Added gettext support so LostIRC can be translated to different

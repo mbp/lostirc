@@ -61,7 +61,7 @@ MainWindow::MainWindow(bool autoconnect)
     if (!app.cfgservers.hasAutoConnects() || !autoconnect) {
         // Construct initial tab
         Tab *tab = newServer();
-        tab->getText() << "\0037\002Welcome to LostIRC "VERSION"!\002\n\nYou can now connect to a server using:\n    \0038/SERVER <hostname / ip>\n\n\0037...and then join a channel:\n    \0038/JOIN <channel-name>\n\n\0037A list of all commands are available with:\n    \0038/COMMANDS\0037\n\nAnd you should \002really\002 check out the list of key bindings:\n    \0038/KEYBINDINGS\n\n";
+        tab->getText() << _("\0037\002Welcome to LostIRC "VERSION"!\002\n\nYou can now connect to a server using:\n    \0038/SERVER <hostname / ip>\n\n\0037...and then join a channel:\n    \0038/JOIN <channel-name>\n\n\0037A list of all commands are available with:\n    \0038/COMMANDS\0037\n\nAnd you should \002really\002 check out the list of key bindings:\n    \0038/KEYBINDINGS\n\n");
     } else {
         // Auto-connect to servers.
         app.autoConnect();
@@ -283,7 +283,7 @@ void MainWindow::disconnected(ServerConnection* conn)
 
 void MainWindow::newTab(ServerConnection *conn)
 {
-    ustring name = "server";
+    ustring name = _("server");
     conn->Session.servername = name;
     Tab *tab = notebook.addTab(name, conn);
     notebook.show_all();
@@ -299,7 +299,7 @@ void MainWindow::newTab(ServerConnection *conn)
 
 Tab* MainWindow::newServer()
 {
-    ustring name = "server";
+    ustring name = _("server");
     ServerConnection *conn = app.newServer();
     conn->Session.servername = name;
     Tab *tab = notebook.addTab(name, conn);
@@ -320,15 +320,15 @@ void MainWindow::dccStatusChanged(DCC *dcc)
 
 void MainWindow::localeError()
 {
-    Glib::ustring msg = "Locale conversion error. An error occured while converting text from UTF-8 to your current locale.\n\nThis is most likely because your locale is set to a value which doesn't support the character(s) converting to.\n\nIf you believe this is a bug, please report it to the application author.";
+    Glib::ustring msg = _("Locale conversion error. An error occured while converting text from UTF-8 to your current locale.\n\nThis is most likely because your locale is set to a value which doesn't support the character(s) converting to.\n\nIf you believe this is a bug, please report it to the application author.");
 
     char *locale = std::getenv("LANG");
     if (locale != NULL) {
-        msg += "\n\nYour current locale (seems) to be: ";
+        msg += _("\n\nYour current locale (seems) to be: ");
         msg += locale;
     }
 
-    msg += "\n\n(Note: You'll only see this warning once per LostIRC session)";
+    msg += _("\n\n(Note: You'll only see this warning once per LostIRC session)");
 
 
     Gtk::MessageDialog mdialog(*this, msg, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_CLOSE);

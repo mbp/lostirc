@@ -168,7 +168,7 @@ void baseConfig::set(const ustring& key, const ustring& value)
     if (configvalues.find(key) != configvalues.end())
           *(configvalues[key]) = value;
     else
-        std::cerr << "Not found key, `" << key << "'" << std::endl;
+        std::cerr << _("Not found key, `") << key << "'" << std::endl;
 }
 
 Glib::ustring baseConfig::get(const ustring& key)
@@ -178,7 +178,7 @@ Glib::ustring baseConfig::get(const ustring& key)
     if (i != configvalues.end())
           return i->second->getString();
 
-    std::cerr << "Not found key, `" << key << "'" << std::endl;
+    std::cerr << _("Not found key, `") << key << "'" << std::endl;
     return "";
 }
 

@@ -58,10 +58,10 @@ LostIRCApp::LostIRCApp(FrontEnd *f)
 
     } else {
         if (options.nick->empty())
-              options.nick = "Somebody";
+              options.nick = _("Somebody");
 
         if (options.ircuser->empty())
-              options.ircuser = "unknown";
+              options.ircuser = _("unknown");
 
         if (options.realname->empty())
               options.realname = "";

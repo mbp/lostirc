@@ -51,10 +51,10 @@ void DCC_Send_In::go_ahead()
     sockaddr.sin_addr.s_addr = htonl(_address);
     memset(&(sockaddr.sin_zero), '\0', 8);
 
-    FE::emit(FE::get(CLIENTMSG) << "Receiving from:" << inet_ntoa(sockaddr.sin_addr), FE::CURRENT);
+    FE::emit(FE::get(CLIENTMSG) << _("Receiving from:") << inet_ntoa(sockaddr.sin_addr), FE::CURRENT);
 
     if (::connect(fd, reinterpret_cast<struct sockaddr *>(&sockaddr), sizeof(struct sockaddr)) < 0 && errno != EINPROGRESS) {
-        FE::emit(FE::get(CLIENTMSG) << "Couldn't connect:" << Util::convert_to_utf8(strerror(errno)), FE::CURRENT);
+        FE::emit(FE::get(CLIENTMSG) << _("Couldn't connect:") << Util::convert_to_utf8(strerror(errno)), FE::CURRENT);
         _status = ERROR;
         App->getDcc().statusChange(_number_in_queue);
     }
@@ -72,10 +72,10 @@ bool DCC_Send_In::onReadData(Glib::IOCondition cond)
     char buf[4096];
     int retval = recv(fd, buf, sizeof(buf), 0);
 
-    if (retval == 0) FE::emit(FE::get(CLIENTMSG) << "DCC connection closed.", FE::CURRENT);
+    if (retval == 0) FE::emit(FE::get(CLIENTMSG) << _("DCC connection closed."), FE::CURRENT);
     else if (retval == -1) {
         if (!(errno == EAGAIN || errno == EWOULDBLOCK)) {
-            FE::emit(FE::get(CLIENTMSG) << "Couldn't receive:" << Util::convert_to_utf8(strerror(errno)), FE::CURRENT);
+            FE::emit(FE::get(CLIENTMSG) << _("Couldn't receive:") << Util::convert_to_utf8(strerror(errno)), FE::CURRENT);
             _status = ERROR;
             App->getDcc().statusChange(_number_in_queue);
             return false;
@@ -99,7 +99,7 @@ bool DCC_Send_In::onReadData(Glib::IOCondition cond)
             App->log << "DCC_Send_In::onReadData(): done receiving!" << std::endl;
             #endif
             _outfile.close();
-            FE::emit(FE::get(CLIENTMSG) << "File received successfully:" << _filename, FE::CURRENT);
+            FE::emit(FE::get(CLIENTMSG) << _("File received successfully:") << _filename, FE::CURRENT);
             _status = DONE;
             App->getDcc().statusChange(_number_in_queue);
             return false;
@@ -131,7 +131,7 @@ DCC_Send_Out::DCC_Send_Out(const Glib::ustring& filename, const Glib::ustring& n
     struct stat st;
 
     if (stat(_filename.c_str(), &st) == -1) {
-        FE::emit(FE::get(CLIENTMSG) << "File not found:" << _filename, FE::CURRENT);
+        FE::emit(FE::get(CLIENTMSG) << _("File not found:") << _filename, FE::CURRENT);
         _status = ERROR;
         App->getDcc().statusChange(_number_in_queue);
     } else {
@@ -157,7 +157,7 @@ DCC_Send_Out::DCC_Send_Out(const Glib::ustring& filename, const Glib::ustring& n
         memset(&(sockaddr.sin_zero), '\0', 8);
 
         if (bind(fd, reinterpret_cast<struct sockaddr *>(&sockaddr), sizeof(struct sockaddr)) == -1) {
-            FE::emit(FE::get(CLIENTMSG) << "Couldn't bind:" << Util::convert_to_utf8(strerror(errno)), FE::CURRENT);
+            FE::emit(FE::get(CLIENTMSG) << _("Couldn't bind:") << Util::convert_to_utf8(strerror(errno)), FE::CURRENT);
             // FIXME: add dcc-done?
         } else {
             socklen_t add_len = sizeof(struct sockaddr_in);
@@ -175,7 +175,7 @@ DCC_Send_Out::DCC_Send_Out(const Glib::ustring& filename, const Glib::ustring& n
 
             listen(fd, 1);
 
-            FE::emit(FE::get(CLIENTMSG) << "DCC SEND request sent. Sending from:" << _localip, FE::CURRENT);
+            FE::emit(FE::get(CLIENTMSG) << _("DCC SEND request sent. Sending from:") << _localip, FE::CURRENT);
 
             Glib::signal_io().connect(
                     SigC::slot(*this, &DCC_Send_Out::onAccept),
@@ -194,7 +194,7 @@ bool DCC_Send_Out::onAccept(Glib::IOCondition cond)
     socklen_t size = sizeof(struct sockaddr_in);
     accept_fd = accept(fd, reinterpret_cast<struct sockaddr *>(&remoteaddr), &size);
 
-    FE::emit(FE::get(CLIENTMSG) << "Connection accepted.", FE::CURRENT);
+    FE::emit(FE::get(CLIENTMSG) << _("Connection accepted."), FE::CURRENT);
 
     Glib::signal_io().connect(
             SigC::slot(*this, &DCC_Send_Out::onSendData),
@@ -215,7 +215,7 @@ bool DCC_Send_Out::onSendData(Glib::IOCondition cond)
     int retval = send(accept_fd, buf, read_chars, 0);
     if (retval == -1) {
         if (!(errno == EAGAIN || errno == EWOULDBLOCK)) {
-            FE::emit(FE::get(CLIENTMSG) << "Couldn't send:" << Util::convert_to_utf8(strerror(errno)), FE::CURRENT);
+            FE::emit(FE::get(CLIENTMSG) << _("Couldn't send:") << Util::convert_to_utf8(strerror(errno)), FE::CURRENT);
             _status = ERROR;
             App->getDcc().statusChange(_number_in_queue);
             return false;
@@ -234,7 +234,7 @@ bool DCC_Send_Out::onSendData(Glib::IOCondition cond)
             App->log << "DCC_Send_Out::onSendData(): done sending!" << std::endl;
             #endif
             _infile.close();
-            FE::emit(FE::get(CLIENTMSG) << "File sent successfully:" << _filename, FE::CURRENT);
+            FE::emit(FE::get(CLIENTMSG) << _("File sent successfully:") << _filename, FE::CURRENT);
             _status = DONE;
             App->getDcc().statusChange(_number_in_queue);
             return false;

@@ -62,14 +62,14 @@ void Socket::resolvehost(const ustring& host)
         if ((he = gethostbyname(host.c_str())) == NULL) {
             int size = 0;
             if (write(thepipe[1], &size, sizeof(int)) == -1)
-                  std::cerr << "Error writing to pipe: " << strerror(errno) << std::endl;
+                  std::cerr << _("Error writing to pipe: ") << strerror(errno) << std::endl;
         } else {
             struct in_addr ia = *(struct in_addr *)he->h_addr_list[0];
 
             int size = sizeof(struct in_addr);
             if (write(thepipe[1], &size, sizeof(int)) == -1 ||
                     write(thepipe[1], &ia, sizeof(struct in_addr)) == -1)
-                  std::cerr << "Error writing to pipe: " << strerror(errno) << std::endl;
+                  std::cerr << _("Error writing to pipe: ") << strerror(errno) << std::endl;
 
         }
         ::close(thepipe[1]);
@@ -99,7 +99,7 @@ bool Socket::on_host_resolve(Glib::IOCondition cond, int readpipe)
     if (bytes_read == -1) {
         on_error(strerror(errno));
     } else if (buf[0] == 0) {
-        on_error("Unknown host");
+        on_error(_("Unknown host"));
     } else if (size_to_be_read != bytes_read) {
         sleep(1);
         int new_retval = read(readpipe, &buf[bytes_read], size_to_be_read - bytes_read);
@@ -107,7 +107,7 @@ bool Socket::on_host_resolve(Glib::IOCondition cond, int readpipe)
         if (new_retval != -1) {
             bytes_read += new_retval;
             if (bytes_read != size_to_be_read) {
-                on_error("An error occured while reading from pipe (Internal error 2)");
+                on_error(_("An error occured while reading from pipe (Internal error 2)"));
             } else {
                 // copy the struct we received into the sockaddr member
                 memcpy(static_cast<void*>(&sockaddr.sin_addr),
@@ -117,7 +117,7 @@ bool Socket::on_host_resolve(Glib::IOCondition cond, int readpipe)
                 on_host_resolved();
             }
         } else {
-            on_error("An error occured while reading from pipe (Internal error 3)");
+            on_error(_("An error occured while reading from pipe (Internal error 3)"));
         }
 
     } else {
@@ -172,7 +172,7 @@ bool Socket::send(const ustring& data)
     const std::string msg = Util::convert_from_utf8(data);
 
     if (msg.empty()) {
-        FE::emit(FE::get(ERROR) << "Message not sent because of locale problems", FE::CURRENT);
+        FE::emit(FE::get(ERROR) << _("Message not sent because of locale problems"), FE::CURRENT);
         return false;
     }
 

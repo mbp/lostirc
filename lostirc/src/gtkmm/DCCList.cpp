@@ -24,11 +24,11 @@ DCCList::DCCList()
 {
     set_model(_liststore);
 
-    append_column("Status", _columns.status);
-    append_column("Filename", _columns.filename);
-    append_column("Filesize", _columns.filesize);
-    append_column("Fileposition", _columns.fileposition);
-    append_column("From/To", _columns.nick);
+    append_column(_("Status"), _columns.status);
+    append_column(_("Filename"), _columns.filename);
+    append_column(_("Filesize"), _columns.filesize);
+    append_column(_("Fileposition"), _columns.fileposition);
+    append_column(_("From/To"), _columns.nick);
 
     show_all();
 }

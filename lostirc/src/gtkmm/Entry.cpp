@@ -75,9 +75,9 @@ void Entry::onEntry()
 void Entry::sendMsg(const ustring& msg)
 {
     if (!_tab->getConn()->Session.isConnected) {
-        _tab->getText() << "Not connected to server. Try `/SERVER <hostname / ip>'.\n";
+        _tab->getText() << _("Not connected to server. Try `/SERVER <hostname / ip>'.\n");
     } else if (!_tab->isActive()) {
-        _tab->getText() << "No channel joined. Try `/JOIN #channel-name'\n";
+        _tab->getText() << _("No channel joined. Try `/JOIN #channel-name'\n");
     } else {
         std::istringstream ss(msg.raw());
 
@@ -141,10 +141,10 @@ bool Entry::onKeyPress(GdkEventKey* e)
                 } else if (matches > 1) {
                     set_text("/" + word);
                     set_position(-1);
-                    AppWin->statusbar.setText2("<span foreground=\"blue\">Matches:</span> " + matches_str);
+                    AppWin->statusbar.setText2(_("<span foreground=\"blue\">Matches:</span> ") + matches_str);
 
                 } else {
-                    AppWin->statusbar.setText2("<span foreground=\"blue\">No matches.</span>");
+                    AppWin->statusbar.setText2(_("<span foreground=\"blue\">No matches.</span>"));
 
                 }
 
@@ -172,9 +172,9 @@ bool Entry::onKeyPress(GdkEventKey* e)
                         set_text(line.substr(0, pos + 1) + word);
                         set_position(-1);
                     }
-                    AppWin->statusbar.setText2("<span foreground=\"blue\">Matches:</span> " + matches_str);
+                    AppWin->statusbar.setText2(_("<span foreground=\"blue\">Matches:</span> ") + matches_str);
                 } else {
-                    AppWin->statusbar.setText2("<span foreground=\"blue\">No matches.</span>");
+                    AppWin->statusbar.setText2(("<span foreground=\"blue\">No matches.</span>"));
 
                 }
 

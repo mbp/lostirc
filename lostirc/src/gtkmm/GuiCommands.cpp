@@ -51,7 +51,7 @@ void send(ServerConnection *conn, ustring cmd, const ustring& params)
     for (int i = 0; guicmds[i].cmd != 0; ++i) {
         if (guicmds[i].cmd == cmd) {
             if (!conn->Session.isConnected && guicmds[i].reqConnected) {
-                throw CommandException("Must be connected.");
+                throw CommandException(_("Must be connected."));
             }
             guicmds[i].function(conn, params);
             return;
@@ -64,7 +64,7 @@ void send(ServerConnection *conn, ustring cmd, const ustring& params)
 void Query(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
-        throw CommandException("/QUERY <nick>, start a query(tab) with a user");
+        throw CommandException(_("/QUERY <nick>, start a query(tab) with a user"));
     } else {
         AppWin->getNotebook().addQueryTab(params, conn);
     }
@@ -109,7 +109,7 @@ void Topic(ServerConnection *conn, const ustring& params)
 void Kick(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
-        throw CommandException("/KICK <nick>, kick a user from a channel.");
+        throw CommandException(_("/KICK <nick>, kick a user from a channel."));
 
     } else {
         ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
@@ -126,7 +126,7 @@ void Banlist(ServerConnection *conn, const ustring& params)
 void Op(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
-        throw CommandException("/OP <nicks>, ops one or more users in the current channel.");
+        throw CommandException(_("/OP <nicks>, ops one or more users in the current channel."));
 
     } else {
         ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
@@ -138,7 +138,7 @@ void Op(ServerConnection *conn, const ustring& params)
 void Deop(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
-        throw CommandException("/DEOP <nicks>, deops one or more users in the current channel.");
+        throw CommandException(_("/DEOP <nicks>, deops one or more users in the current channel."));
 
     } else {
         ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
@@ -150,7 +150,7 @@ void Deop(ServerConnection *conn, const ustring& params)
 void Voice(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
-        throw CommandException("/VOICE <nicks>, voices one or more users in the current channel.");
+        throw CommandException(_("/VOICE <nicks>, voices one or more users in the current channel."));
 
     } else {
         ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
@@ -162,7 +162,7 @@ void Voice(ServerConnection *conn, const ustring& params)
 void Devoice(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
-        throw CommandException("/DEVOICE <nicks>, devoices one or more users in the current channel.");
+        throw CommandException(_("/DEVOICE <nicks>, devoices one or more users in the current channel."));
 
     } else {
         ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
@@ -211,7 +211,7 @@ std::vector<Glib::ustring> getCommands()
 }
 void displayKeybindings(ServerConnection *conn, const ustring& params)
 {
-        AppWin->getNotebook().getCurrent()->getText() << "\0037Available keybindings:\n    \0038CTRL-[1-9] - switch tabs from 1-9\n    CTRL-N - create new server tab\n    ALT-Left - navigate a tab to the left\n    ALT-Right - navigate a tab to the right\n    CTRL-W - close current window(tab)\n\n    Tab - nick-completion and command-completion\n\n    Page Up/Page Down - Scroll up or down in text box\n    CTRL-End/Home - go to bottom or top of text box\n    CTRL-H - Scroll back to previous highlight (if any)\n\n    CTRL-P - open preferences\n    CTRL-Q - quit LostIRC\n\n";
+        AppWin->getNotebook().getCurrent()->getText() << _("\0037Available keybindings:\n    \0038CTRL-[1-9] - switch tabs from 1-9\n    CTRL-N - create new server tab\n    ALT-Left - navigate a tab to the left\n    ALT-Right - navigate a tab to the right\n    CTRL-W - close current window(tab)\n\n    Tab - nick-completion and command-completion\n\n    Page Up/Page Down - Scroll up or down in text box\n    CTRL-End/Home - go to bottom or top of text box\n    CTRL-H - Scroll back to previous highlight (if any)\n\n    CTRL-P - open preferences\n    CTRL-Q - quit LostIRC\n\n");
 
 }
 }

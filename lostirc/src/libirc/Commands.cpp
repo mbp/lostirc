@@ -73,7 +73,7 @@ void send(ServerConnection *conn, ustring cmd, const ustring& params) {
     for (int i = 0; cmds[i].cmd != 0; ++i) {
         if (cmds[i].cmd == cmd) {
             if (!conn->Session.isConnected && cmds[i].reqConnected) {
-                throw CommandException("Must be connected.");
+                throw CommandException(_("Must be connected."));
             }
             cmds[i].function(conn, params);
             return;
@@ -90,7 +90,7 @@ void send(ServerConnection *conn, ustring cmd, const ustring& params) {
 void Join(ServerConnection *conn, const ustring& params)
 {
     if (params.length() == 0) {
-        throw CommandException("/JOIN <channel>, join a channel");
+        throw CommandException(_("/JOIN <channel>, join a channel"));
     } else {
         conn->sendJoin(params);
     }
@@ -99,7 +99,7 @@ void Join(ServerConnection *conn, const ustring& params)
 void Part(ServerConnection *conn, const ustring& params)
 {
     if (params.length() == 0) {
-        throw CommandException("/PART <channel> [msg], part a channel - optional with a part message");
+        throw CommandException(_("/PART <channel> [msg], part a channel - optional with a part message"));
     } else {
         ustring::size_type pos1 = params.find_first_of(" ");
         ustring chan = params.substr(0, pos1);
@@ -133,7 +133,7 @@ void Kick(ServerConnection *conn, const ustring& params)
     }
 
     if (params.empty() || chan.empty() || nick.empty()) {
-        throw CommandException("/KICK <channel> <nick> [msg], kick a user from a channel.");
+        throw CommandException(_("/KICK <channel> <nick> [msg], kick a user from a channel."));
     } else {
         conn->sendKick(chan, nick, msg);
     }
@@ -142,7 +142,7 @@ void Kick(ServerConnection *conn, const ustring& params)
 void Server(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
-        throw CommandException("/SERVER <host/ip> [port] [password], connect to an IRC server");
+        throw CommandException(_("/SERVER <host/ip> [port] [password], connect to an IRC server"));
     } else {
         ustring host, port, password;
         istringstream ss(params);
@@ -177,7 +177,7 @@ void Disconnect(ServerConnection *conn, const ustring& params)
 void Nick(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
-        throw CommandException("/NICK <nick>, change nick.");
+        throw CommandException(_("/NICK <nick>, change nick."));
     } else {
         if (conn->Session.isConnected) {
             conn->sendNick(params);
@@ -190,7 +190,7 @@ void Nick(ServerConnection *conn, const ustring& params)
 void Whois(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
-        throw CommandException("/WHOIS <nick>, whois nick.");
+        throw CommandException(_("/WHOIS <nick>, whois nick."));
     } else {
         conn->sendWhois(params);
     }
@@ -199,7 +199,7 @@ void Whois(ServerConnection *conn, const ustring& params)
 void Mode(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
-        throw CommandException("/MODE <channel> <modes>, set modes for a channel.");
+        throw CommandException(_("/MODE <channel> <modes>, set modes for a channel."));
     } else {
         conn->sendMode(params);
     }
@@ -225,7 +225,7 @@ void Ctcp(ServerConnection *conn, const ustring& params)
           action = params.substr(pos1 + 1);
 
     if (action.empty()) {
-        throw CommandException("/CTCP <nick> <message>, sends a CTCP message to a user");
+        throw CommandException(_("/CTCP <nick> <message>, sends a CTCP message to a user"));
     } else {
         action = Util::upper(action);
 
@@ -252,7 +252,7 @@ void Awayall(ServerConnection *conn, const ustring& params)
 void Banlist(ServerConnection *conn, const ustring& chan)
 {
     if (chan.empty()) {
-        throw CommandException("/BANLIST <channel>, see banlist for channel.");
+        throw CommandException(_("/BANLIST <channel>, see banlist for channel."));
     } else {
         conn->sendBanlist(chan);
     }
@@ -266,7 +266,7 @@ void Invite(ServerConnection *conn, const ustring& params)
     ss >> chan;
 
     if (chan.empty()) {
-        throw CommandException("/INVITE <nick> <channel>, invites someone to a channel.");
+        throw CommandException(_("/INVITE <nick> <channel>, invites someone to a channel."));
     } else {
         conn->sendInvite(to, chan);
     }
@@ -281,7 +281,7 @@ void Topic(ServerConnection *conn, const ustring& params)
           topic = params.substr(pos1 + 1);
 
     if (chan.empty()) {
-        throw CommandException("/TOPIC <channel> [topic], view or change topic for a channel.");
+        throw CommandException(_("/TOPIC <channel> [topic], view or change topic for a channel."));
     } else {
         conn->sendTopic(chan, topic);
     }
@@ -296,7 +296,7 @@ void Msg(ServerConnection *conn, const ustring& params)
           msg = params.substr(pos1 + 1);
 
     if (msg.empty()) {
-        throw CommandException("/MSG <nick/channel> <message>, sends a normal message.");
+        throw CommandException(_("/MSG <nick/channel> <message>, sends a normal message."));
     } else {
         conn->sendMsg(to, msg, false);
         ustring sendgui = "Message to " + to + ":";
@@ -313,10 +313,10 @@ void Notice(ServerConnection *conn, const ustring& params)
           msg = params.substr(pos1 + 1);
 
     if (msg.empty()) {
-        throw CommandException("/NOTICE <nick/channel> <message>, sends a notice.");
+        throw CommandException(_("/NOTICE <nick/channel> <message>, sends a notice."));
     } else {
         conn->sendNotice(to, msg);
-        ustring sendgui = "Notice to " + to + ":";
+        ustring sendgui = _("Notice to ") + to + ":";
         FE::emit(FE::get(CLIENTMSG) << sendgui << msg, FE::CURRENT, conn);
     }
 }
@@ -328,7 +328,7 @@ void Me(ServerConnection *conn, const ustring& params)
     ustring msg = params.substr(pos1 + 1);
 
     if (msg.empty()) {
-        throw CommandException("/ME <message>, sends the action to the current channel.");
+        throw CommandException(_("/ME <message>, sends the action to the current channel."));
     } else {
         conn->sendMe(to, msg);
     }
@@ -337,7 +337,7 @@ void Me(ServerConnection *conn, const ustring& params)
 void Who(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
-        throw CommandException("/WHO <mask> [o], search for mask on network, if o is supplied, only search for oppers.");
+        throw CommandException(_("/WHO <mask> [o], search for mask on network, if o is supplied, only search for opers."));
     } else {
         conn->sendWho(params);
     }
@@ -345,14 +345,14 @@ void Who(ServerConnection *conn, const ustring& params)
 
 void List(ServerConnection *conn, const ustring& params)
 {
-    //throw CommandException("/LIST [channels] [server], list channels on a network, if a channel is supplied, only list that channel. If a server is supplied, forward the request to that IRC server.");
+    //throw CommandException(_("/LIST [channels] [server], list channels on a network, if a channel is supplied, only list that channel. If a server is supplied, forward the request to that IRC server."));
     conn->sendList(params);
 }
 
 void Quote(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
-        throw CommandException("/QUOTE <text>, send raw text to server.");
+        throw CommandException(_("/QUOTE <text>, send raw text to server."));
     } else {
         conn->sendRaw(params);
     }
@@ -361,7 +361,7 @@ void Quote(ServerConnection *conn, const ustring& params)
 void Names(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
-        throw CommandException("/NAMES <channel>, see who's on a channel.");
+        throw CommandException(_("/NAMES <channel>, see who's on a channel."));
     } else {
         conn->sendNames(params);
     }
@@ -370,7 +370,7 @@ void Names(ServerConnection *conn, const ustring& params)
 void Oper(ServerConnection* conn, const ustring& params)
 {
     if (params.empty()) {
-       throw CommandException("/OPER <login> <password>, oper up.");
+       throw CommandException(_("/OPER <login> <password>, oper up."));
     } else {
        ustring login, password;
        istringstream ss(params);
@@ -378,7 +378,7 @@ void Oper(ServerConnection* conn, const ustring& params)
        ss >> password;
 
        if (login.empty() || password.empty())
-           throw CommandException( "/OPER <login> <password>, oper up.");
+           throw CommandException(_("/OPER <login> <password>, oper up."));
 
        conn->sendOper(login, password);
     }
@@ -393,7 +393,7 @@ void Kill(ServerConnection* conn, const ustring& params)
           reason = params.substr(pos1 + 1);
 
     if (nick.empty()) {
-       throw CommandException("/KILL <user> [reason], kill a user from the network.");
+       throw CommandException(_("/KILL <user> [reason], kill a user from the network."));
     } else {
 
        conn->sendKill(nick, reason);
@@ -403,7 +403,7 @@ void Kill(ServerConnection* conn, const ustring& params)
 void Wallops(ServerConnection* conn, const ustring& params)
 {
     if (params.empty()) {
-       throw CommandException("/WALLOPS <message>, send wallop message.");
+       throw CommandException(_("/WALLOPS <message>, send wallop message."));
     } else {
 
        conn->sendWallops(params);
@@ -413,7 +413,7 @@ void Wallops(ServerConnection* conn, const ustring& params)
 void DCC(ServerConnection* conn, const ustring& params)
 {
     if (params.empty()) {
-       throw CommandException("/DCC <actions>, perform a DCC action.");
+       throw CommandException(_("/DCC <actions>, perform a DCC action."));
     } else {
        ustring action, secondparam;
        istringstream ss(params);
@@ -423,7 +423,7 @@ void DCC(ServerConnection* conn, const ustring& params)
        action = Util::upper(action);
        if (action == "RECEIVE") {
            if (!App->getDcc().do_dcc(Util::stoi(secondparam)))
-                 throw CommandException("No DCC with that number");
+                 throw CommandException(_("No DCC with that number"));
        } else if (action == "SEND") {
            ustring filename;
            ss >> filename;
@@ -446,7 +446,7 @@ void Whowas(ServerConnection* conn, const ustring& params)
 void Op(ServerConnection* conn, const ustring& params)
 {
     if (params.empty()) {
-        throw CommandException("/OP <channel> <nicks>, give operator status to one or more nicks.");
+        throw CommandException(_("/OP <channel> <nicks>, give operator status to one or more nicks."));
     } else {
 
         ustring chan;
@@ -462,7 +462,7 @@ void Op(ServerConnection* conn, const ustring& params)
 void Deop(ServerConnection* conn, const ustring& params)
 {
     if (params.empty()) {
-        throw CommandException("/DEOP <channel> <nicks>, remove operator status from one or more nicks.");
+        throw CommandException(_("/DEOP <channel> <nicks>, remove operator status from one or more nicks."));
     } else {
 
         ustring chan;
@@ -478,7 +478,7 @@ void Deop(ServerConnection* conn, const ustring& params)
 void Voice(ServerConnection* conn, const ustring& params)
 {
     if (params.empty()) {
-        throw CommandException("/VOICE <channel> <nicks>, gives voice to one or more nicks.");
+        throw CommandException(_("/VOICE <channel> <nicks>, gives voice to one or more nicks."));
     } else {
 
         ustring chan;
@@ -494,7 +494,7 @@ void Voice(ServerConnection* conn, const ustring& params)
 void Devoice(ServerConnection* conn, const ustring& params)
 {
     if (params.empty()) {
-        throw CommandException("/DEVOICE <channel> <nicks>, removes voice from one or more nicks.");
+        throw CommandException(_("/DEVOICE <channel> <nicks>, removes voice from one or more nicks."));
     } else {
 
         ustring chan;

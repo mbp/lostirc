@@ -60,7 +60,7 @@ public:
         if (stat(_filename.c_str(), &st) == 0) {
             getUseableFilename(1);
         }
-        std::cout << "Logging to `" << _filename << "'." << std::endl;
+        std::cout << _("Logging to `") << _filename << "'." << std::endl;
         open(_filename.c_str());
         assert(good());
 
