@@ -26,9 +26,9 @@
 class ServerConnection;
 
 struct UserCommands {
-    char *cmd;
+    const char *cmd;
     void (*function)(ServerConnection *, const std::string&);
-    int reqConnected;
+    const int reqConnected;
 };
 
 namespace Commands

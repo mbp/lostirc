@@ -23,7 +23,7 @@
 
 using std::string;
 
-struct UserCommands guicmds[] = {
+const struct UserCommands guicmds[] = {
     { "QUERY",     GuiCommands::Query,    0 },
     { "CLEAR",     GuiCommands::Clear,    0 },
     { "CLEARALL",  GuiCommands::ClearAll, 0 },
