@@ -1,5 +1,4 @@
 SUBDIRS = src
-AUTOMAKE_OPTIONS = foreign
 
 EXTRA_DIST = lostirc.desktop \
              lostirc.1
