@@ -56,14 +56,8 @@ bool Socket::connect(const string& host, int port)
         error = strerror(errno);
         return false;
     }
-    /* FIXME Non-blocking code; doesn't seem to work properly
-    int flags = fcntl(fd, F_GETFL, 0);
-    if (flags != -1) {
-        fcntl(fd, F_SETFL, flags | O_NONBLOCK);
-    }*/
 
     return true;
-
 }
 
 bool Socket::send(const string& data)
@@ -84,8 +78,13 @@ bool Socket::send(const string& data)
 
 }
 
-bool Socket::receive(string& buf)
+string Socket::receive()
 {
+    if (isBlocking)
+          isBlocking = false;
+    else
+          buf = ""; // FIXME: why isn't there a clear()?
+
     while (1)
     {
         char r;
@@ -95,23 +94,25 @@ bool Socket::receive(string& buf)
         switch(i) {
             case 0:
                 cerr << "0.. returning." << endl;
-                return false;
+                return "";
             case -1:
                 if (errno == EAGAIN) {
-                    // It's just blocking.
-                    cout << "nonblocking" << endl;
-                    return true;
+                    // It's just blocking. Return false and set isBlocking
+                    // to true
+                    cout << "\t\tnonblocking" << endl;
+                    isBlocking = true;
+                    return buf;
                 } else {
                     error = "Disconnected.";
                     cerr << error << endl;
-                    return false;
+                    return "";
                 }
         }
 
         buf += r;
 
         if (r == '\n')
-              return true;
+              return buf;
     }
 }
 
@@ -127,7 +128,10 @@ void Socket::close()
 
 void Socket::setNonBlocking()
 {
-    fcntl(fd, F_SETFL, O_NONBLOCK);
+    int flags = fcntl(fd, F_GETFL, 0);
+    if (flags != -1) {
+        fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+    }
 }
 
 void Socket::setBlocking()

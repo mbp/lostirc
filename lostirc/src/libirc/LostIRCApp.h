@@ -23,20 +23,25 @@
 #include <string>
 #include <sigc++/signal_system.h>
 #include <sys/utsname.h>
+#include "ConfigHandler.h"
 
 class ServerConnection;
+class Events;
 
 using namespace SigC;
 
-class InOut
+class LostIRCApp
 {
 public:
-    InOut();
+    LostIRCApp();
     struct utsname getsysinfo();
 
     ServerConnection* newServer(const std::string& host, int port, const std::string& nick);
     ServerConnection* newServer(const std::string& nick, const std::string& realname);
     void quit();
+
+    ConfigHandler& getCfg() { return _cfg; }
+    Events* getEvts() { return _evts; }
 
     // Signals 
     Signal2<void, const std::string&, ServerConnection*> evtGenericError;
@@ -52,9 +57,12 @@ public:
     Signal3<void, const std::string&, const std::string&, ServerConnection*> evtDisplayMessage;
     Signal3<void, const std::vector<std::string>&, const std::string&, ServerConnection*> evtDisplayMessageMultiple;
 
+
 private:
     std::vector<ServerConnection*> _servers;
 
+    ConfigHandler _cfg;
+    Events *_evts;
     struct utsname uname_info;
 
 };

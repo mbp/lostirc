@@ -33,6 +33,8 @@ public:
     std::string getParam(const std::string& param);
 
 private:
+    bool setDefaults();
+    bool writeConfig();
     std::map<std::string, std::string> _settings;
 
 };

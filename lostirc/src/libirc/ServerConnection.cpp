@@ -17,18 +17,18 @@
  */
 
 #include "ServerConnection.h"
-#include "InOut.h"
+#include "LostIRCApp.h"
 
 using std::string;
 
-ServerConnection::ServerConnection(InOut *inout, const string& host, int port, const string& nick)
+ServerConnection::ServerConnection(LostIRCApp *inout, const string& host, int port, const string& nick)
     : _io(inout), _socket(new Socket()), _p(new Parser(_io,this))
 {
     Session.nick = nick;
     Connect(host, port);
 }
 
-ServerConnection::ServerConnection(InOut *inout, const string& nick, const string& realname)
+ServerConnection::ServerConnection(LostIRCApp *inout, const string& nick, const string& realname)
     : _io(inout), _socket(new Socket()), _p(new Parser(_io,this))
 
 {
@@ -64,7 +64,7 @@ bool ServerConnection::Connect(const string &host, int port = 6667)
         sendUser(Session.nick, hostname, Session.servername, Session.realname);
         sendNick(Session.nick);
 
-        //_socket->setNonBlocking();
+        _socket->setNonBlocking();
 
     } else {
         Session.isConnected = 0;
@@ -87,12 +87,13 @@ gboolean ServerConnection::readdata(GIOChannel* io_channel, GIOCondition cond, g
 
 bool ServerConnection::readsocket()
 {
-    string data;
-    if (_socket->receive(data)) {
-        if (!data.empty()) {
-            _p->parseLine(data);
-            return true;
-        }
+    string data = _socket->receive();
+
+    if (_socket->isBlocking) {
+        return true;
+    } else if (!data.empty()) {
+        _p->parseLine(data);
+        return true;
     } else {
         _io->evtGenericError(_socket->error, this);
         Session.isConnected = 0;

@@ -19,15 +19,17 @@
 #include "ServerConnection.h"
 #include "Utils.h"
 #include "Parser.h"
+#include "Events.h"
 
 using std::vector;
 using std::string;
 using std::stringstream;
 using std::cout;
 
-Parser::Parser(InOut *inout, ServerConnection *conn)
+Parser::Parser(LostIRCApp *inout, ServerConnection *conn)
     : _conn(conn), _io(inout), _evts(new Events(inout))
 {
+    _evts = _io->getEvts();
 
 }
 
@@ -138,7 +140,7 @@ void Parser::parseLine(string& data)
         else if (command == "ERROR")
               _evts->emitEvent("error", param + " " + rest, "", _conn);
         else
-              _evts->emitEvent("unknown", data, "", _conn);
+              _evts->emitEvent("servmsg", data, "", _conn);
     }
 
 }
@@ -282,8 +284,8 @@ void Parser::Part(const string& nick, const string& chan)
     args.push_back(findNick(nick));
     args.push_back(chan);
     args.push_back(findHost(nick));
-    _io->evtPart(findNick(nick), chan, _conn);
     _evts->emitEvent("part", args, chan, _conn);
+    _io->evtPart(findNick(nick), chan, _conn);
 }
 
 void Parser::Quit(const string& nick, const string& msg)
@@ -719,7 +721,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         break;
 
     default:
-        _evts->emitEvent("unknown", from + " " + param + " " + rest, "", _conn);
+        _evts->emitEvent("servmsg", from + " " + param + " " + rest, "", _conn);
     }
 
 }

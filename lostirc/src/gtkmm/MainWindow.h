@@ -24,9 +24,8 @@
 #include <gtk--/box.h>
 #include <gdk/gdkkeysyms.h>
 #include <vector>
-#include <ConfigHandler.h>
 #include <ServerConnection.h>
-#include <InOut.h>
+#include <LostIRCApp.h>
 #include "MainNotebook.h"
 
 class MainWindow : public Gtk::Window
@@ -61,8 +60,7 @@ private:
 
     /* Our 'In and Out' object, the backend to the client, controlling the
      * serverconnections and stuff.. but NOT the GUI. */
-    InOut *_io;
-    ConfigHandler _cfg;
+    LostIRCApp *_io;
 
 };
 #endif

@@ -23,17 +23,18 @@
 #include <vector>
 #include <sstream>
 #include <algorithm>
-#include "InOut.h"
-#include "Events.h"
+#include "LostIRCApp.h"
 
 // This class takes care of parsing incoming messages from the server
 
 class ServerConnection;
+class LostIRCApp;
+class Events;
 
 class Parser
 {
 public:
-    Parser(InOut *inout, ServerConnection *conn);
+    Parser(LostIRCApp *inout, ServerConnection *conn);
 
     void parseLine(std::string &data);
 
@@ -67,8 +68,8 @@ private:
     std::string findHost(const std::string& str);
 
     ServerConnection *_conn;
-    InOut *_io;
     Events *_evts;
+    LostIRCApp *_io;
 };
 
 #endif

@@ -19,34 +19,16 @@
 #include <cctype>
 #include "Events.h"
 
-Events::Events(InOut *inout)
+Events::Events(LostIRCApp *inout)
     : _io(inout)
 {
-    _events["privmsg"] = "$1<%1>$2 %2";
-    _events["privmsg_highlight"] = "$1<$4%1$1>$2 %2";
-    _events["servmsg"] = "-- : %1";
-    _events["servmsg2"] = "-- : %1 %2";
-    _events["ctcp"] = "$8-- CTCP %1 received from %2";
-    _events["topicchange"] = "$6-- %1 changes topic to: %2";
-    _events["topicis"] = "$6-- Topic for %1 is: %2";
-    _events["topictime"] = "$6-- Set by %1 on %2";
-    _events["action"] = "$3* %1 $1%2";
-    _events["noticepriv"] = "$7NOTICE %1 : %2";
-    _events["noticepubl"] = "$7NOTICE %1 (to %2): %3";
-    _events["error"] = "$4Error:$1 %1";
-    _events["away"] = "$3User %1 is away (%2)";
-    _events["banlist"] = "$2Ban: %1 set by: %2";
-    _events["unknown"] = "$3Unknown message: $2%1";
-    _events["join"] = "$8-- %1 (%3) has joined %2";
-    _events["part"] = "$8-- %1 (%3) has parted %2";
-    _events["wallops"] = "$2WALLOPS -: %1 :- %2";
-    _events["kicked"] = "$8-- %1 was kicked from %2 by %3 (%4)";
+
 }
 
 void Events::emitEvent(const string& name, vector<string>& args, const string& to, ServerConnection *conn)
 {
     string newmsg;
-    string msg = _events[name];
+    string msg = _io->getCfg().getParam("evt_" + name);
 
     bool parsing_arg;
     string::const_iterator i;
@@ -57,9 +39,9 @@ void Events::emitEvent(const string& name, vector<string>& args, const string& t
                 break;
             default:
                 if (isdigit(*i) && parsing_arg) {
-                    int num = atoi(&*i) - 1;
+                    int num = ((*i) - '0') - 1;
                     if (num >= args.size()) {
-                        cerr << "Fatal error, too many args!" << endl;
+                        cerr << "Fatal error, too many args!" << "[ " << num << " compared to " << args.size() << " ]" << endl;
                     } else {
                         newmsg += args[num];
                     }
@@ -68,7 +50,6 @@ void Events::emitEvent(const string& name, vector<string>& args, const string& t
                 }
                 newmsg += *i;
                 parsing_arg = false;
-                break;
         }
     }
 

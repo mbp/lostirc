@@ -27,15 +27,11 @@ using std::string;
 MainWindow::MainWindow()
 : Gtk::Window(GTK_WINDOW_TOPLEVEL), isAway(false)
 {
-    set_policy(1, 1, 0); // Policy for main window, is user resizeable
-    if (!_cfg.readConfig()) {
-        cout << "Fatal! Couldn't read config." << endl;
-    }
-
+    set_policy(1, 1, 0); // Policy for main window: user resizeable
     set_usize(400, 200);
     key_press_event.connect(slot(this, &MainWindow::on_key_press_event));
     
-    _io = new InOut();
+    _io = new LostIRCApp();
     Gtk::VBox *_vbox1 = manage(new Gtk::VBox(false, 0));
 
     // Signals for all server events
@@ -123,6 +119,7 @@ void MainWindow::onKick(const string& kicker, const string& chan, const string& 
     if (nick == conn->Session.nick) {
         // It's us who's been kicked
         tab->getLabel()->set_text("(" + chan + ")");
+        tab->is_on_channel = false;
     }
     tab->removeUser(nick);
 }
@@ -134,6 +131,7 @@ void MainWindow::onPart(const string& nick, const string& chan, ServerConnection
         if (nick == conn->Session.nick) {
             // It's us who's parting
             tab->getLabel()->set_text("(" + chan + ")");
+            tab->is_on_channel = false;
         }
         tab->removeUser(nick);
     }

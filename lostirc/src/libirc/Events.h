@@ -22,18 +22,22 @@
 #include <map>
 #include <string>
 #include <vector>
-#include "InOut.h"
+#include "LostIRCApp.h"
+#include "ServerConnection.h"
+
+class LostIRCApp;
+class ServerConnection;
 
 class Events
 {
 public:
-    Events(InOut *inout);
+    Events(LostIRCApp *inout);
 
-    void emitEvent(const string& name, vector<string>& args, const string& chan, ServerConnection *conn);
-    void emitEvent(const string& name, const string& arg, const string& chan, ServerConnection *conn);
+    void emitEvent(const std::string& name, std::vector<std::string>& args, const std::string& chan, ServerConnection *conn);
+    void emitEvent(const std::string& name, const std::string& arg, const std::string& chan, ServerConnection *conn);
 private:
     std::map<std::string, std::string> _events;
 
-    InOut *_io;
+    LostIRCApp *_io;
 };
 #endif

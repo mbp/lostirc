@@ -24,14 +24,14 @@
 #include <unistd.h>
 #include "Socket.h"
 #include "Parser.h"
-#include "InOut.h"
+#include "LostIRCApp.h"
 
 class ServerConnection
 {
 
 public:
-    ServerConnection(InOut *inout, const std::string& host, int port, const std::string& nick);
-    ServerConnection(InOut *inout, const std::string& nick, const std::string& realname);
+    ServerConnection(LostIRCApp *inout, const std::string& host, int port, const std::string& nick);
+    ServerConnection(LostIRCApp *inout, const std::string& nick, const std::string& realname);
     ~ServerConnection();
 
     bool Connect(const std::string &host, int port = 6667);
@@ -65,7 +65,7 @@ public:
         std::string servername;
     } Session;
 
-    InOut *_io;
+    LostIRCApp *_io;
 
 private:
     bool readsocket();

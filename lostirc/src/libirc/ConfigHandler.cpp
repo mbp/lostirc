@@ -62,6 +62,7 @@ bool ConfigHandler::readConfig()
         }
         
     }
+    setDefaults();
     return true;
 }
 
@@ -87,4 +88,42 @@ string ConfigHandler::getParam(const string& param)
 
     return "";
 
+}
+
+bool ConfigHandler::setDefaults()
+{
+    _settings["evt_privmsg"] = "$1<%1>$2 %2";
+    _settings["evt_privmsg_highlight"] = "$1<$4%1$1>$2 %2";
+    _settings["evt_servmsg"] = "-- : %1";
+    _settings["evt_servmsg2"] = "-- : %1 %2";
+    _settings["evt_ctcp"] = "$8-- CTCP %1 received from %2";
+    _settings["evt_topicchange"] = "$6-- %1 changes topic to: %2";
+    _settings["evt_topicis"] = "$6-- Topic for %1 is: %2";
+    _settings["evt_topictime"] = "$6-- Set by %1 on %2";
+    _settings["evt_action"] = "$3* %1 $1%2";
+    _settings["evt_noticepriv"] = "$7NOTICE %1 : %2";
+    _settings["evt_noticepubl"] = "$7NOTICE %1 (to %2): %3";
+    _settings["evt_error"] = "$4Error:$1 %1";
+    _settings["evt_away"] = "$3User %1 is away (%2)";
+    _settings["evt_banlist"] = "$2Ban: %1 set by: %2";
+    _settings["evt_unknown"] = "$3Unknown message: $2%1";
+    _settings["evt_join"] = "$8-- %1 (%3) has joined %2";
+    _settings["evt_part"] = "$8-- %1 (%3) has parted %2";
+    _settings["evt_wallops"] = "$2WALLOPS -: %1 :- %2";
+    _settings["evt_kicked"] = "$8-- %1 was kicked from %2 by %3 (%4)";
+
+    writeConfig();
+
+}
+
+bool ConfigHandler::writeConfig()
+{
+    string home(getenv("HOME"));
+    ofstream out(string(home + "/.lostircrc").c_str());
+
+    map<string, string>::const_iterator i;
+
+    for (i = _settings.begin(); i != _settings.end(); ++i) {
+        out << (*i).first << " = " << (*i).second << endl;
+    }
 }

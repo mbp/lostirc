@@ -36,12 +36,15 @@ public:
 
     bool connect(const std::string& host, int port);
     bool send(const std::string& data);
-    bool receive(std::string& data);
+    string receive();
     void setNonBlocking();
     void setBlocking();
     int getfd();
     void close();
     std::string error;
+
+    bool isBlocking;
+    std::string buf;
 
 };
 #endif

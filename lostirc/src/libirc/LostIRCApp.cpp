@@ -16,38 +16,43 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include "InOut.h"
+#include "LostIRCApp.h"
 #include "ServerConnection.h"
 #include "Parser.h"
+#include "Events.h"
 
 using std::string;
 using std::vector;
 
-InOut::InOut()
+LostIRCApp::LostIRCApp()
 {
+    _evts = new Events(this);
     uname(&uname_info);
+    if (!_cfg.readConfig())
+          cerr << "Failed reading config file ~/.lostircrc" << endl;
+
 }
 
-ServerConnection* InOut::newServer(const string& host, int port, const string& nick)
+ServerConnection* LostIRCApp::newServer(const string& host, int port, const string& nick)
 {
     ServerConnection *conn = new ServerConnection(this, host, port, nick);
     _servers.push_back(conn);
     return conn;
 }
 
-ServerConnection* InOut::newServer(const string& nick, const string& realname)
+ServerConnection* LostIRCApp::newServer(const string& nick, const string& realname)
 {
     ServerConnection *conn = new ServerConnection(this, nick, realname);
     _servers.push_back(conn);
     return conn;
 }
 
-struct utsname InOut::getsysinfo()
+struct utsname LostIRCApp::getsysinfo()
 {   
     return uname_info;
 }   
 
-void InOut::quit()
+void LostIRCApp::quit()
 {
     vector<ServerConnection*>::const_iterator i;
 

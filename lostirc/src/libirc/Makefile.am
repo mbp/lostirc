@@ -3,7 +3,7 @@ noinst_LIBRARIES = libirc.a
 libirc_a_SOURCES = ServerConnection.cpp \
                        Commands.cpp \
                        ConfigHandler.cpp \
-                       InOut.cpp \
+                       LostIRCApp.cpp \
                        Parser.cpp \
                        Socket.cpp \
                        Utils.cpp \
