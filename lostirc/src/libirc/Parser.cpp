@@ -119,7 +119,7 @@ void Parser::parseLine(string& data)
         else if (command == "PRIVMSG")
               Privmsg(from, param, rest);
         else if (command == "JOIN")
-              Join(from, rest);
+              Join(from, param, rest);
         else if (command == "PART")
               Part(from, param, rest);
         else if (command == "QUIT")
@@ -356,8 +356,16 @@ void Parser::Kick(const string& from, const string& param, const string& msg)
 
 }
 
-void Parser::Join(const string& nick, const string& chan)
+void Parser::Join(const string& nick, const string& param, const string& rest)
 {
+    string chan = param;
+
+    // Some clients/servers/bouncers might accidently send the channel name
+    // in the 'rest' string, a bug there, but we would like to avoid a
+    // segfault here. I noticed the same hack in the xchat sources.
+    if (chan.empty() && !rest.empty())
+        chan = getWord(rest, 1);
+
     Channel *c;
     if (findNick(nick) == _conn->Session.nick) {
         c = new Channel(chan);

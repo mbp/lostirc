@@ -14,6 +14,8 @@ LostIRC (x.x.x)
     Michael Kristensen)
   * The statusbar is now updated right after connecting to a server, and
     right after changing nick, and not only when switching tabs.
+  * Fix a segfault which appeared with bouncers/servers sending malformed
+    JOIN lines.
   * Old ChangeLog renamed to NEWS. The NEWS file is now the location of the
     summary of changes between releases while ChangeLog contains the notices
     of the real code changes.

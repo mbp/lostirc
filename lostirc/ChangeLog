@@ -1,6 +1,11 @@
 For a summary of changes between releases - see the NEWS file.
 
 2002-11-27  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * Parser.cpp: When the channel isn't found after the :, use the
+          parameter before that.
+
+2002-11-27  Morten Brix Pedersen  <morten@wtf.dk>
 
         * NickList.cpp/NickList.h: Seperate NickList code into its own class.
         * Tab.cpp/Tab.h: Remove TabChannel and TabQuery inheriting from Tab.

@@ -53,6 +53,8 @@ Tab::Tab(ServerConnection *conn, Pango::FontDescription font)
 Tab::~Tab()
 {
     delete _hpaned;
+    if (_nicklist)
+          delete _nicklist;
 }
 
 void Tab::setInActive()
@@ -69,7 +71,6 @@ void Tab::setActive()
     isOnChannel = true;
     if (_nicklist)
           _nicklist->setActive();
-
 }
 
 void Tab::setQuery(bool value)
@@ -84,7 +85,6 @@ void Tab::setChannel(bool value)
     _isChannel = value;
     _isQuery = !value;
     addOrRemoveNickList();
-
 }
 
 void Tab::addOrRemoveNickList()
