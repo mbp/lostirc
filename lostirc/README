@@ -12,7 +12,8 @@ chrash now and then, so use with caution.
 INSTALLATION
 --
 
-You need to have 'libgtkmm-dev' and 'libsigc++-dev' installed.
+You need to have 'libgtkmm-dev', 'libsigc++-dev' and 'libglib1.2-dev'
+installed.
 
 Then execute these commands:
   
