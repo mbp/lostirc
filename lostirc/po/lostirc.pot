@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-02 22:38+0100\n"
+"POT-Creation-Date: 2004-03-18 02:52+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -80,11 +80,11 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:288 src/gtkmm/MainWindow.cpp:304
+#: src/gtkmm/MainWindow.cpp:291 src/gtkmm/MainWindow.cpp:307
 msgid "server"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:327
+#: src/gtkmm/MainWindow.cpp:330
 msgid ""
 "Locale conversion error. An error occured while converting text from UTF-8 "
 "to your current locale.\n"
@@ -95,14 +95,14 @@ msgid ""
 "If you believe this is a bug, please report it to the application author."
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:331
+#: src/gtkmm/MainWindow.cpp:334
 msgid ""
 "\n"
 "\n"
 "Your current locale (seems) to be: "
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:335
+#: src/gtkmm/MainWindow.cpp:338
 msgid ""
 "Encoding conversion error. An error occured while converting text from UTF-8 "
 "to the user-defined encoding.\n"
@@ -113,73 +113,77 @@ msgid ""
 "If you believe this is a bug, please report it to the application author."
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:337
+#: src/gtkmm/MainWindow.cpp:340
 msgid ""
 "\n"
 "\n"
 "I was trying to convert to: "
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:341
+#: src/gtkmm/MainWindow.cpp:344
 msgid ""
 "\n"
 "\n"
 "(Note: You'll only see this warning once per LostIRC session)"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:379 src/gtkmm/TextWidget.cpp:354
-msgid "_Hide Menubar"
-msgstr ""
-
-#: src/gtkmm/MainWindow.cpp:386
+#: src/gtkmm/MainWindow.cpp:382
 msgid "New Server Tab"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:391
+#: src/gtkmm/MainWindow.cpp:387
 msgid "Clear Window"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:395
+#: src/gtkmm/MainWindow.cpp:391
 msgid "Clear All Windows"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:399
+#: src/gtkmm/MainWindow.cpp:395
 msgid "Close Current Tab"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:415
-msgid "User List"
+#: src/gtkmm/MainWindow.cpp:412
+msgid "_Menubar"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:420
-msgid "Server List"
+#: src/gtkmm/MainWindow.cpp:417
+msgid "Status_bar"
 msgstr ""
 
 #: src/gtkmm/MainWindow.cpp:424
-msgid "DCC Transfers"
+msgid "User _List"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:439
-msgid "_Introduction"
+#: src/gtkmm/MainWindow.cpp:429
+msgid "_Server List"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:444
-msgid "_About"
-msgstr ""
-
-#: src/gtkmm/MainWindow.cpp:447
-msgid "_LostIRC"
+#: src/gtkmm/MainWindow.cpp:433
+msgid "_DCC Transfers"
 msgstr ""
 
 #: src/gtkmm/MainWindow.cpp:448
+msgid "_Introduction"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:453
+msgid "_About"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:456
+msgid "_LostIRC"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:457
 msgid "_View"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:449
+#: src/gtkmm/MainWindow.cpp:458
 msgid "_Help"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:489
+#: src/gtkmm/MainWindow.cpp:507
 msgid ""
 "LostIRC Quick Introduction\n"
 "\n"
@@ -200,8 +204,12 @@ msgid ""
 "    /KEYBINDINGS"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:503
+#: src/gtkmm/MainWindow.cpp:521
 msgid "LostIRC "
+msgstr ""
+
+#: src/gtkmm/TextWidget.cpp:354
+msgid "_Hide Menubar"
 msgstr ""
 
 #: src/gtkmm/TextWidget.cpp:359
@@ -221,19 +229,19 @@ msgid "Not connected."
 msgstr ""
 
 #: src/gtkmm/DCCList.cpp:34
-msgid "Status"
+msgid "%"
 msgstr ""
 
 #: src/gtkmm/DCCList.cpp:35
-msgid "Filename"
+msgid "Status"
 msgstr ""
 
 #: src/gtkmm/DCCList.cpp:36
-msgid "Filesize"
+msgid "Filename"
 msgstr ""
 
 #: src/gtkmm/DCCList.cpp:37
-msgid "Progress"
+msgid "Size"
 msgstr ""
 
 #: src/gtkmm/DCCList.cpp:38
@@ -426,23 +434,23 @@ msgstr ""
 msgid "No DCC with that number"
 msgstr ""
 
-#: src/libirc/Commands.cpp:455
+#: src/libirc/Commands.cpp:458
 msgid "/OP <channel> <nicks>, give operator status to one or more nicks."
 msgstr ""
 
-#: src/libirc/Commands.cpp:471
+#: src/libirc/Commands.cpp:474
 msgid "/DEOP <channel> <nicks>, remove operator status from one or more nicks."
 msgstr ""
 
-#: src/libirc/Commands.cpp:487
+#: src/libirc/Commands.cpp:490
 msgid "/VOICE <channel> <nicks>, gives voice to one or more nicks."
 msgstr ""
 
-#: src/libirc/Commands.cpp:503
+#: src/libirc/Commands.cpp:506
 msgid "/DEVOICE <channel> <nicks>, removes voice from one or more nicks."
 msgstr ""
 
-#: src/libirc/ConfigHandler.cpp:170 src/libirc/ConfigHandler.cpp:180
+#: src/libirc/ConfigHandler.cpp:174 src/libirc/ConfigHandler.cpp:184
 msgid "Not found key, `"
 msgstr ""
 

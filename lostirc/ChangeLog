@@ -1,5 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
+2004-03-23  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * configure.ac: Bump version and release 0.3.3.
+
 2004-03-18  Morten Brix Pedersen  <morten@wtf.dk>
         
         * Update Copyright to 2004 in all source files.

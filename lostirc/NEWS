@@ -1,4 +1,4 @@
-LostIRC - (x.x.x)
+LostIRC - (0.3.3) - Tue Mar, 23rd 2004
   * It is now possible to hide the statusbar in the same way as you can hide
     the menubar and the user list.
   * You can now send files that contain spaces.
