@@ -1,6 +1,5 @@
 CRITICAL: 
 ---------
-  * Crashes when receiving out-of-bounds colors in Tab.cpp.
   * Implement reading in ServerConnection better (more efficiently)
   * Implement DCC CHAT
   * DCC SEND freezes the client until finished.
@@ -31,8 +30,6 @@ GTKMM2 STUFF:
   * URL highlight/clickable
   * Nick-list is not resorted on changes
   * Nick-list expands on long nicks
-  * Limited-highlighting is probably non-functional after
-    configuration-system changes.
 
 DCC:
 ---

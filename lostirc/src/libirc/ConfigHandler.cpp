@@ -220,7 +220,7 @@ Options::Options(const char *filename)
     dccip(this, "dccip"),
     highlight_words(this, "highlight_words"),
     font(this, "font"),
-    limited_highlighting(this, "limited_highlighting")
+    limited_highlighting(this, "limited_highlighting", false)
 
 {
     readConfigFile();
