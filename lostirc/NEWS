@@ -22,6 +22,8 @@ LostIRC (x.x.x)
     transfer is complete.
   * When switching tabs, any text in the input box would be selected and you
     had to unselect it before being able to type again. Fixed.
+  * Various standard GTK+2 icons are now used in the application to make the
+    user interface more clear.
   * Old ChangeLog renamed to NEWS. The NEWS file is now the location of the
     summary of changes between releases while ChangeLog contains the notices
     of the real code changes.

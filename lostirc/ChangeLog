@@ -1,5 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
+2002-11-28  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Prefs.cpp/Tab.cpp: Use stock icons instead of just text buttons.
+
 2002-11-27  Morten Brix Pedersen  <morten@wtf.dk>
 
         * MainNotebook.cpp: Save cursor position, and unselect any selected

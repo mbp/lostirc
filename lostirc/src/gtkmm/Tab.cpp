@@ -22,6 +22,8 @@
 #include <sstream>
 #include <ServerConnection.h>
 #include <Utils.h>
+#include <gtkmm/image.h>
+#include <gtkmm/stock.h>
 #include "Tab.h"
 #include "Prefs.h"
 #include "MainWindow.h"
@@ -42,9 +44,11 @@ Tab::Tab(ServerConnection *conn, Pango::FontDescription font)
 
     _vbox.pack_start(_hbox, Gtk::PACK_SHRINK);
 
-    Gtk::Button *_button = manage(new Gtk::Button("Prefs"));
-    _button->signal_clicked().connect(slot(*this, &Tab::startPrefs));
-    _hbox.pack_start(*_button, Gtk::PACK_SHRINK);
+    Gtk::Button *prefs_button = manage(new Gtk::Button());
+    Gtk::Image *prefsimage = manage(new Gtk::Image(Gtk::Stock::PREFERENCES, Gtk::ICON_SIZE_MENU));
+    prefs_button->add(*prefsimage);
+    prefs_button->signal_clicked().connect(slot(*this, &Tab::startPrefs));
+    _hbox.pack_start(*prefs_button, Gtk::PACK_SHRINK);
 
     _hpaned->pack1(_vbox, true, true);
     pack_start(*_hpaned);

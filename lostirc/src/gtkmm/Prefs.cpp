@@ -17,12 +17,26 @@
  */
 
 #include <sstream>
+#include <gtkmm/stock.h>
+#include <gtkmm/image.h>
 #include <gtkmm/frame.h>
 #include <Utils.h>
 #include "MainWindow.h"
 #include "Prefs.h"
 
 using std::vector;
+
+Gtk::Button* create_imagebutton(const Glib::ustring& str, const Gtk::StockID& stock_id)
+{
+    Gtk::Button *button = new Gtk::Button();
+
+    Gtk::HBox *hbox = manage(new Gtk::HBox());
+
+    hbox->pack_start(*manage(new Gtk::Image(stock_id, Gtk::ICON_SIZE_MENU)));
+    hbox->pack_start(*manage(new Gtk::Label(str)));
+    button->add(*hbox);
+    return button;
+}
 
 Prefs::Prefs()
     : Gtk::VBox(),
@@ -44,8 +58,8 @@ Prefs::Prefs()
 
     // Apply and Cancel buttons
     Gtk::HBox *hboxgeneral = manage(new Gtk::HBox());
-    Gtk::Button *buttgeneral1 = manage(new Gtk::Button("Apply settings"));
-    Gtk::Button *buttgeneral2 = manage(new Gtk::Button("Cancel"));
+    Gtk::Button *buttgeneral1 = manage(create_imagebutton("Apply settings", Gtk::Stock::APPLY));
+    Gtk::Button *buttgeneral2 = manage(create_imagebutton("Cancel", Gtk::Stock::CANCEL));
     buttgeneral1->signal_clicked().connect(slot(*this, &Prefs::applyGeneral));
     buttgeneral2->signal_clicked().connect(slot(*this, &Prefs::cancelGeneral));
     hboxgeneral->pack_end(*buttgeneral2, Gtk::PACK_SHRINK);
@@ -76,8 +90,8 @@ Prefs::Prefs()
 
     // Apply and Cancel buttons
     Gtk::HBox *hboxprefs = manage(new Gtk::HBox());
-    Gtk::Button *buttprefs1 = manage(new Gtk::Button("Apply settings"));
-    Gtk::Button *buttprefs2 = manage(new Gtk::Button("Cancel"));
+    Gtk::Button *buttprefs1 = manage(create_imagebutton("Apply settings", Gtk::Stock::APPLY));
+    Gtk::Button *buttprefs2 = manage(create_imagebutton("Cancel", Gtk::Stock::CANCEL));
     buttprefs1->signal_clicked().connect(slot(*this, &Prefs::applyPreferences));
     buttprefs2->signal_clicked().connect(slot(*this, &Prefs::cancelPreferences));
     hboxprefs->pack_end(*buttprefs2, Gtk::PACK_SHRINK);
@@ -129,8 +143,8 @@ Prefs::Prefs()
 
     // Apply and Cancel buttons
     Gtk::HBox *hboxfont = manage(new Gtk::HBox());
-    Gtk::Button *buttfont1 = manage(new Gtk::Button("Apply font"));
-    Gtk::Button *buttfont2 = manage(new Gtk::Button("Cancel"));
+    Gtk::Button *buttfont1 = manage(create_imagebutton("Apply font", Gtk::Stock::APPLY));
+    Gtk::Button *buttfont2 = manage(create_imagebutton("Cancel", Gtk::Stock::CANCEL));
     buttfont1->signal_clicked().connect(slot(*this, &Prefs::applyFont));
     buttfont2->signal_clicked().connect(slot(*this, &Prefs::cancelFont));
     hboxfont->pack_end(*buttfont2, Gtk::PACK_SHRINK);
@@ -192,7 +206,7 @@ Prefs::Prefs()
     serverinfobox->pack_start(*frame5);
 
     // buttons
-    Gtk::Button *savebutton = manage(new Gtk::Button("Save this entry"));
+    Gtk::Button *savebutton = manage(create_imagebutton("Save this entry", Gtk::Stock::SAVE));
     savebutton->signal_clicked().connect(slot(*this, &Prefs::saveEntry));
     hboxserver.pack_end(*savebutton, Gtk::PACK_SHRINK);
     serverinfobox->pack_end(hboxserver, Gtk::PACK_SHRINK);
@@ -210,11 +224,11 @@ Prefs::Prefs()
     notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*performbox, "Autojoin servers"));
 
     // Final Close button
-    Gtk::Button *closebutt = manage(new Gtk::Button("Close"));
-    closebutt->signal_clicked().connect(slot(*this, &Prefs::endPrefs));
+    Gtk::Button *close_button = manage(create_imagebutton("Close", Gtk::Stock::CLOSE));
+    close_button->signal_clicked().connect(slot(*this, &Prefs::endPrefs));
 
     Gtk::HBox *bottommenubox = manage(new Gtk::HBox());
-    bottommenubox->pack_end(*closebutt, Gtk::PACK_SHRINK);
+    bottommenubox->pack_end(*close_button, Gtk::PACK_SHRINK);
 
     pack_start(*bottommenubox, Gtk::PACK_SHRINK);
 
