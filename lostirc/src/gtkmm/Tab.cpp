@@ -33,8 +33,11 @@ Tab::Tab(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font)
     : Gtk::VBox(), isHighlighted(false), hasPrefs(false),
       isOnChannel(true), _label(label), _conn(conn), _entry(this)
 {
-    // Creating HBox; will contain 2 widgets, a scrollwindow and an entry
-    _hbox = new Gtk::HBox(false, 3); 
+    _vbox = new Gtk::VBox();
+    _hbox = new Gtk::HBox();
+    _hpaned = new Gtk::HPaned();
+
+    _hbox->pack_start(_entry);
 
     // Attaching Gtk::TextView to scollwindow
     
@@ -45,15 +48,13 @@ Tab::Tab(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font)
     _swin.set_size_request(0, -1);
     _swin.add(_textview);
 
-    _hbox->pack_start(_swin);
-    pack_start(*_hbox);
-    _hbox2 = new Gtk::HBox();
-    pack_start(*_hbox2, Gtk::PACK_SHRINK);
-    _hbox2->pack_start(_entry);
+    _vbox->pack_start(_swin);
+
+    _vbox->pack_start(*_hbox, Gtk::PACK_SHRINK);
 
     Gtk::Button *_button = manage(new Gtk::Button("Prefs"));
     _button->signal_clicked().connect(slot(*this, &Tab::startPrefs));
-    _hbox2->pack_start(*_button, Gtk::PACK_SHRINK);
+    _hbox->pack_start(*_button, Gtk::PACK_SHRINK);
 
     if (_conn->Session.isAway)
           setAway();
@@ -62,11 +63,12 @@ Tab::Tab(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font)
     setStyle();
 
     _textview.modify_font(font);
+    _hpaned->pack1(*_vbox, true, true);
+    pack_start(*_hpaned);
 }
 
 Tab::~Tab()
 {
-    delete _hbox2;
     delete _hbox;
 }
 
@@ -210,7 +212,7 @@ void Tab::setAway()
 
     Gtk::Box_Helpers::BoxList::iterator i;
 
-    for (i = _hbox2->children().begin(); i != _hbox2->children().end(); ++i) {
+    for (i = _hbox->children().begin(); i != _hbox->children().end(); ++i) {
         Gtk::Label *a = dynamic_cast<Gtk::Label*>(i->get_widget());
         if (a)
               away = true;
@@ -218,8 +220,8 @@ void Tab::setAway()
 
     if (!away) {
         Gtk::Label *a = manage(new Gtk::Label("Away (" + Glib::locale_to_utf8(_conn->Session.awaymsg) + ")"));
-        _hbox2->pack_start(*a);
-        _hbox2->show_all();
+        _hbox->pack_start(*a);
+        _hbox->show_all();
     }
 }
 
@@ -227,20 +229,19 @@ void Tab::setUnAway()
 {
     Gtk::Box_Helpers::BoxList::iterator i;
 
-    for (i = _hbox2->children().begin(); i != _hbox2->children().end();) {
+    for (i = _hbox->children().begin(); i != _hbox->children().end();) {
         Gtk::Label *a = dynamic_cast<Gtk::Label*>(i->get_widget());
         if (a)
-              i = _hbox2->children().erase(i);
+              i = _hbox->children().erase(i);
         else
               ++i;
     }
-    _hbox2->show_all();
+    _hbox->show_all();
 }
 
 void Tab::startPrefs()
 {
-    remove(*_hbox2);
-    remove(*_hbox);
+    remove(*_hpaned);
     Prefs *p = Prefs::Instance();
     if (Prefs::currentTab)
           p->endPrefs();
@@ -255,8 +256,7 @@ void Tab::endPrefs()
     Prefs *p = Prefs::Instance();
     remove(*p);
     Prefs::currentTab = 0;
-    pack_start(*_hbox);
-    pack_start(*_hbox2, Gtk::PACK_SHRINK);
+    pack_start(*_hpaned);
     _entry.grab_focus();
     hasPrefs = false;
 }
@@ -284,8 +284,8 @@ TabChannel::TabChannel(Gtk::Label *label, ServerConnection *conn, Pango::FontDes
     //_treeview.set_default_size(100, 100);
     swin->add(_treeview);
 
-    _hbox->pack_start(*_users, Gtk::PACK_SHRINK);
     _users->add(*swin);
+    _hpaned->pack2(*_users, false, true);
 }
 
 void TabChannel::updateUserNumber()

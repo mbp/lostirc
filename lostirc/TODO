@@ -16,8 +16,6 @@ NICE-TO-HAVE:
 
 RANDOM BUGS:
 ------------
-  * you can't see long nicks in nick-list, possibility to move the nick-list
-    as a user
   * check for EAGAIN on send()?
 
   * this has to be removed from 'configure' at release time:

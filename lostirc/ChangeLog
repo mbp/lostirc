@@ -1,4 +1,6 @@
 LostIRC (x.x.x)
+  * There is a now a seperator between the main text window and the nick list
+    which can be dragged to make the nick list smaller/bigger.
   * Fix a segfault which appeared with bouncers/servers sending malformed PART
     lines (they sent the channel _after_ the colon).
 

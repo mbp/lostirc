@@ -31,6 +31,7 @@
 #include <gtkmm/liststore.h>
 #include <gtkmm/treeview.h>
 #include <gtkmm/style.h>
+#include <gtkmm/paned.h>
 #include <gdk/gdkkeysyms.h>
 #include <irc_defines.h>
 #include "Entry.h"
@@ -87,7 +88,7 @@ private:
     Entry _entry;
     Gtk::ScrolledWindow _swin;
     Gtk::Label *_away;
-    Gtk::HBox *_hbox2;
+    Gtk::HBox *_hbox;
 
     std::map<int, Glib::RefPtr<Gtk::TextTag> > colorMap;
     Glib::RefPtr<Gtk::TextTag> underlinetag;
@@ -96,8 +97,9 @@ private:
     void helperInitializer(int i, const Glib::ustring& colorname);
 
 protected:
-    Gtk::HBox *_hbox;
+    Gtk::VBox *_vbox;
     Gtk::TextView _textview;
+    Gtk::HPaned *_hpaned;
 };
 
 class TabQuery : public Tab
