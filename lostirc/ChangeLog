@@ -1,5 +1,16 @@
 For a summary of changes between releases - see the NEWS file.
 
+2002-11-24  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Tab.cpp: Have an extra 'priority' column (not visible) which
+          internally decide which mode is supposed to higher than the other.
+          Rework TabChannel::sortFunc() to always sort correctly.
+        * Tab.cpp: Now uses Glib::ustring::compare() instead of strcmp(), so it uses
+          the locales sorting.
+        * Tab.cpp: Use int instead of gint as the sortFunc() return value,
+          since that's what it really is, and upstream gtkmm just changed to
+          this in CVS.
+
 2002-11-23  Morten Brix Pedersen  <morten@wtf.dk>
         
         * GuiCommmands.cpp: Remove SetFont() function which isn't used

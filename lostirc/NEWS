@@ -4,6 +4,10 @@ LostIRC (x.x.x)
   * /COMMANDS outputted some commands twice as well, fixed.
   * When queries containing special characters were created with /QUERY, the
     displayed name was wrong and the tab could not close again. Fixed.
+  * The nick-list now sorts properly, in the past it wasn't very stable in
+    its sorting.
+  * The nick-list now uses the current locales sorting when sorting nicks
+    instead of the C locale.
   * Old ChangeLog renamed to NEWS. The NEWS file is now the location of the
     summary of changes between releases while ChangeLog contains the notices
     of the real code changes.

@@ -263,8 +263,8 @@ TabChannel::TabChannel(Gtk::Label *label, ServerConnection *conn, Pango::FontDes
     _treeview.append_column("", _columns.status);
     _treeview.append_column("", _columns.nick);
     _treeview.get_selection()->set_mode(Gtk::SELECTION_NONE);
-    _liststore->set_sort_column_id(0, Gtk::SORT_ASCENDING);
-    _liststore->set_sort_func(0, SigC::slot(*this, &TabChannel::sortFunc));
+    _liststore->set_default_sort_func(SigC::slot(*this, &TabChannel::sortFunc));
+    _liststore->set_sort_column_id(Gtk::TreeSortable::DEFAULT_SORT_COLUMN_ID, Gtk::SORT_ASCENDING);
 
     /* FIXME: no set_column_width() like in the old days! */
 
@@ -290,25 +290,28 @@ void TabChannel::updateUserNumber()
 
 void TabChannel::insertUser(const ustring& nick, IRC::UserMode m)
 {
-    Glib::ustring sign;
+    Gtk::TreeModel::Row row = *_liststore->append();
+    row[_columns.nick] = nick;
+
     switch (m)
     {
         case IRC::OP:
-            sign = "@";
+            row[_columns.status] = "@";
+            row[_columns.priority] = 3;
             break;
         case IRC::VOICE:
-            sign = "+";
+            row[_columns.status] = "+";
+            row[_columns.priority] = 2;
             break;
         case IRC::HALFOP:
-            sign = "%";
+            row[_columns.status] = "%";
+            row[_columns.priority] = 1;
             break;
         case IRC::NONE:
-            sign = " ";
+            row[_columns.status] = " ";
+            row[_columns.priority] = 0;
     }
 
-    Gtk::TreeModel::Row row = *_liststore->append();
-    row[_columns.status] = sign;
-    row[_columns.nick] = nick;
     updateUserNumber();
 }
 
@@ -368,7 +371,7 @@ vector<ustring> TabChannel::getNicks()
     return nicks;
 }
 
-gint TabChannel::sortFunc(const Gtk::TreeModel::iterator& i1, const Gtk::TreeModel::iterator& i2)
+int TabChannel::sortFunc(const Gtk::TreeModel::iterator& i1, const Gtk::TreeModel::iterator& i2)
 {
     // Sort the nicklist. The status field has highest priority, nick has
     // second priority.
@@ -376,9 +379,12 @@ gint TabChannel::sortFunc(const Gtk::TreeModel::iterator& i1, const Gtk::TreeMod
     // This is not very readable, but it works, and it has to be fast when
     // joining huge channels.
 
-    return strcmp(i1->get_value(_columns.status).c_str(), i2->get_value(_columns.status).c_str())
-            <
-            strcmp(i1->get_value(_columns.nick).c_str(), i2->get_value(_columns.nick).c_str());
+    if (i1->get_value(_columns.priority) == i2->get_value(_columns.priority))
+        return i1->get_value(_columns.nick).compare(i2->get_value(_columns.nick));
+    else if (i1->get_value(_columns.priority) > i2->get_value(_columns.priority))
+          return -1;
+    else
+          return 1;
 
 }
 

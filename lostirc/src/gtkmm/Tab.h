@@ -141,15 +141,16 @@ public:
 
 private:
     void updateUserNumber();
-    gint sortFunc(const Gtk::TreeModel::iterator& i1, const Gtk::TreeModel::iterator& i2);
+    int sortFunc(const Gtk::TreeModel::iterator& i1, const Gtk::TreeModel::iterator& i2);
 
     /* what our columned-list contains */
     struct ModelColumns : public Gtk::TreeModel::ColumnRecord
     {
         Gtk::TreeModelColumn<Glib::ustring> status;
         Gtk::TreeModelColumn<Glib::ustring> nick;
+        Gtk::TreeModelColumn<int> priority;
 
-        ModelColumns() { add(status); add(nick); }
+        ModelColumns() { add(status); add(nick); add(priority); }
     };
 
 
