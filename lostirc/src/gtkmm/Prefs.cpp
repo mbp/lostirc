@@ -127,7 +127,7 @@ Prefs::Prefs()
     row++;
 
     // Buffer size for text
-    bufferspin.set_value(double(App->options.buffer_size()));
+    bufferspin.set_value(double(*App->options.buffer_size()));
     Gtk::Label *plabel4 = manage(new Gtk::Label(_("Maximium number of lines to cache:"), Gtk::ALIGN_LEFT));
     _prefs_table.attach(*plabel4, 0, 1, row, row + 1);
     _prefs_table.attach(bufferspin, 1, 2, row, row + 1);

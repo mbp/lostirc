@@ -1,5 +1,12 @@
 For a summary of changes between releases - see the NEWS file.
 
+2004-02-13  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * configure.ac: Version 0.3.3pre.
+        * Commands.cpp: You can now send files that contains spaces. Thanks
+        Thomas Johansson for the bug report.
+        * Prefs.cpp: FreeBSD compilation fix.
+
 2004-02-02  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Makefile.am: Add m4 to EXTRA_DIST

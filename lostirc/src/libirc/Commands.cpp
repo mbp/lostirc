@@ -431,8 +431,11 @@ void DCC(ServerConnection* conn, const ustring& params)
            if (!App->getDcc().start_dcc(Util::convert<int>(secondparam)))
                  throw CommandException(_("No DCC with that number"));
        } else if (action == "SEND") {
-           ustring filename;
-           ss >> filename;
+           std::string filename;
+           getline(ss, filename);
+           // Strip leading and ending whitespace.
+           filename = filename.substr(filename.find_first_not_of(' '));
+           filename = filename.substr(0, filename.find_last_not_of(' ')+1);
 
            App->getDcc().addDccSendOut(filename, secondparam, conn);
        }
