@@ -107,7 +107,7 @@ void MainWindow::onMsg(const string& to, const string& from, const string& msg, 
 {
     string::size_type pos = msg.find(conn->Session.nick);
 
-    Tab *tab = _nb->findTab(to, conn);
+    Tab *tab = _nb->findTab(from, conn);
 
     if (!tab) {
         // Create query tab if it doesn't exist already, we assume that
@@ -137,7 +137,7 @@ void MainWindow::onAction(const string& to, const string& from, const string& ms
 {
     string::size_type pos = msg.find(conn->Session.nick);
 
-    Tab *tab = _nb->findTab(to, conn);
+    Tab *tab = _nb->findTab(from, conn);
 
     if (!tab) {
         tab = _nb->addQueryTab(from, conn);
@@ -255,7 +255,7 @@ void MainWindow::onTopic(const string& nick, const string& chan, const string& t
 void MainWindow::onTopicTime(const string& chan, const string& nick, const string& time, ServerConnection *conn)
 {
     Tab *tab = _nb->findTab(chan, conn);
-    _nb->insert(tab, "$6--- set by " + nick + " on " + time + "\n");
+    _nb->insert(tab, "$6-- Set by " + nick + " on " + time + "\n");
 }
 
 void MainWindow::onMode(const string& nick, const string& chan, const string& rest, ServerConnection *conn)
