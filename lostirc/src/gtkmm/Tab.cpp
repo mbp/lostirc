@@ -423,7 +423,7 @@ void Tab::initializeColorMap()
 struct notPrefixedBy : public std::binary_function<ustring,ustring,bool> 
 {
     bool operator() (const ustring& str1, const ustring& str2) const {
-        if (str1.length() >= str2.length() && str2 == str1.substr(0, str2.length()))
+        if (str1.length() >= str2.length() && str2.lowercase() == str1.substr(0, str2.length()).lowercase())
               return false;
         else
               return true;
@@ -440,7 +440,7 @@ void findCommon(vector<ustring>& vec, const ustring& search, int& atchar)
     for (vector<ustring>::const_iterator i = vec.begin(); i != vec.end(); ++i)
     {
         if (atchar >= i->length() ||
-                search.substr(0, atchar) != i->substr(0, atchar))
+                search.substr(0, atchar).lowercase() != i->substr(0, atchar).lowercase())
               return;
     }
     findCommon(vec, search, ++atchar);
