@@ -736,8 +736,6 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 319: // RPL_WHOISCHANNELS
             // We need this find_first_of to omit the first word
             FE::emit(FE::get(SERVMSG2) << param.substr(param.find_first_of(" ") + 1) << rest, FE::CURRENT, _conn);
-            std::cout << "param: " << param << std::endl;
-            std::cout << "rest: " << rest << std::endl;
             break;
 
         default:
