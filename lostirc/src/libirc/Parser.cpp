@@ -375,7 +375,7 @@ void Parser::CMode(const string& from, const string& param)
     string modes = param.substr(pos1 + 1, (pos2 - pos1) - 1);
     string args = param.substr(pos2 + 1);
 
-    vector<vector<string> > vecvec;
+    vector<struct Mode> modesvec;
 
     // Get arguments
     vector<string> arguments;
@@ -397,50 +397,44 @@ void Parser::CMode(const string& from, const string& param)
         return;
     }
 
-    char sign;
+    bool sign = false; // Used to track whether we get a + or a -
     vector<string>::iterator arg_i = arguments.begin();
     string::iterator i;
-    vector<string> tmp;
     for (i = modes.begin(); i != modes.end(); ++i) {
-        if (!tmp.empty()) {
-            vecvec.push_back(tmp);
-            tmp.clear();
-        }
-
-        switch (*i) {
+        switch (*i)
+        {
             case '+':
-                sign = '+';
+                sign = true;
                 break;
             case '-':
-                sign = '-';
+                sign = false;
                 break;
             case 'o':
-                if (sign == '+') {
-                    tmp.push_back("@");
-                } else {
-                    tmp.push_back(" ");
-                }
-                tmp.push_back(*arg_i);
+                {
+                struct Mode m;
+                sign ? (m.mode = IRC::OP) : (m.mode = IRC::DEOP);
+                m.nick = *arg_i;
+
+                modesvec.push_back(m);
                 arg_i++;
+                }
                 break;
             case 'v':
-                if (sign == '+') {
-                    tmp.push_back("+");
-                } else {
-                    tmp.push_back(" ");
-                }
-                tmp.push_back(*arg_i);
+                {
+                struct Mode m;
+                sign ? (m.mode = IRC::VOICE) : (m.mode = IRC::DEVOICE);
+                m.nick = *arg_i;
+
+                modesvec.push_back(m);
                 arg_i++;
+                }
                 break;
         }
 
     }
 
-    if (!tmp.empty())
-          vecvec.push_back(tmp);
-
     // Channel user mode
-    _app->evtCUMode(findNick(from), chan, vecvec, _conn);
+    _app->evtCUMode(findNick(from), chan, modesvec, _conn);
 }
 
 void Parser::Topic(const string& param, const string& rest)

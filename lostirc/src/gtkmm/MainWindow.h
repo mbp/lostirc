@@ -59,7 +59,7 @@ private:
     void onNames(const string& chan, const vector<vector<string> >& users, ServerConnection *conn);
     void onMode(const string& nick, const string& chan, const string& topic, ServerConnection *conn);
     void onCMode(const string& nick, const string& chan, char, const string& modes, ServerConnection *conn);
-    void onCUMode(const string& nick, const string& chan, const vector<vector<string> >& users, ServerConnection *conn);
+    void onCUMode(const string& nick, const string& chan, const vector<struct Mode>& users, ServerConnection *conn);
     void onHighlight(const string& to, ServerConnection *conn);
     void onAway(bool away, ServerConnection *conn);
 

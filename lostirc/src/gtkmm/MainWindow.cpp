@@ -162,15 +162,28 @@ void MainWindow::onNick(const string& nick, const string& to, ServerConnection *
     }
 }
 
-void MainWindow::onCUMode(const string& nick, const string& chan, const vector<vector<string> >& users, ServerConnection *conn)
+void MainWindow::onCUMode(const string& nick, const string& chan, const vector<struct Mode>& users, ServerConnection *conn)
 {
     Tab *tab = _nb->findTab(chan, conn);
 
-    vector<vector<string> >::const_iterator i;
+    vector<struct Mode>::const_iterator i;
     for (i = users.begin(); i != users.end(); ++i) {
-        vector<string> vec = *i;
-        _nb->insert(tab, "\00316-- \0030"  + nick + "\00316 sets mode \0035" + vec[0] + "\0030 to " + vec[1] + "\n");
-        tab->removeUser(vec[1]);
+        switch (i->mode)
+        {
+            case IRC::OP:
+                _nb->insert(tab, "\00316-- \0030"  + nick + "\00316 gives channel operator status to " + (*i).nick + "\n");
+                break;
+            case IRC::DEOP:
+                _nb->insert(tab, "\00316-- \0030"  + nick + "\00316 removes channel operator status from " + (*i).nick + "\n");
+                break;
+            case IRC::VOICE:
+                _nb->insert(tab, "\00316-- \0030"  + nick + "\00316 gives voice to " + (*i).nick + "\n");
+                break;
+            case IRC::DEVOICE:
+                _nb->insert(tab, "\00316-- \0030"  + nick + "\00316 removes voice from " + (*i).nick + "\n");
+                break;
+        }
+        tab->removeUser(i->nick);
         tab->insertUser(*i);
     }
 }

@@ -24,10 +24,6 @@
 #include <set>
 #include <vector>
 
-enum Mode {
-    OP, VOICE, NONE
-};
-
 class Channel {
     std::string name;
     //std::map<int, std::pair<Mode, std::string> > users;

@@ -283,8 +283,6 @@ TabChannel::TabChannel(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font
 
 void TabChannel::insertUser(const vector<string>& users)
 {
-    vector<string>::const_iterator i;
-
     _clist->rows().push_back(users);
     size_t size = _clist->rows().size();
     stringstream ss;
@@ -302,6 +300,27 @@ void TabChannel::insertUser(const string& user)
     stringstream ss;
     ss << size;
     _users->set_text(ss.str() + " users");
+}
+
+void TabChannel::insertUser(const Mode& m)
+{
+    vector<string> tmp;
+
+    switch (m.mode)
+    {
+        case IRC::OP:
+            tmp.push_back("@");
+            break;
+        case IRC::VOICE:
+            tmp.push_back("+");
+            break;
+        default:
+            tmp.push_back(" ");
+    }
+
+    tmp.push_back(m.nick);
+    insertUser(tmp);
+
 }
 
 void TabChannel::removeUser(const string& nick)
