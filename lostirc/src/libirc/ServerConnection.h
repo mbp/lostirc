@@ -60,9 +60,9 @@ public:
     bool sendList(const std::string& params);
     bool sendRaw(const std::string& text);
 
-    void addChannel(const std::string& n);
+    Channel* addChannel(const std::string& n);
     void removeChannel(const std::string& n);
-    std::vector<std::string> findUser(const std::string& n);
+    std::vector<Channel*> findUser(const std::string& n);
     Channel* findChannel(const std::string& c);
     void sendCmds();
 

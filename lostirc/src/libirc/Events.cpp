@@ -73,18 +73,29 @@ Events::Events(LostIRCApp *app)
 
 }
 
-void Events::emit(Tmpl& t, const string& chan, ServerConnection *conn)
+void Events::emit(Tmpl& t, const string& nick, ServerConnection *conn)
 {
     string msg = t.result(); // FIXME: we shouldn't be doing this operation here
-    _app->evtDisplayMessage(msg, chan, conn);
+    _app->evtDisplayMessageInQuery(msg, nick, conn);
 }
 
-void Events::emit(Tmpl& t, const std::vector<string>& to, ServerConnection *conn)
+void Events::emit(Tmpl& t, Channel& chan, ServerConnection *conn)
 {
-    std::vector<string>::const_iterator i;
+    string msg = t.result(); // FIXME: we shouldn't be doing this operation here
+    _app->evtDisplayMessageInChan(msg, chan, conn);
+}
+
+void Events::emit(Tmpl& t, ServerConnection *conn)
+{
+    string msg = t.result();
+    _app->evtDisplayMessage(msg, conn);
+}
+
+void Events::emit(Tmpl& t, const std::vector<Channel*>& to, ServerConnection *conn)
+{
+    std::vector<Channel*>::const_iterator i;
     for (i = to.begin(); i != to.end(); ++i) {
-        string to = *i;
-        emit(t, to, conn);
+        emit(t, *(*i), conn);
     }
 }
 

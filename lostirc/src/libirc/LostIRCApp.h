@@ -55,10 +55,10 @@ public:
     Signal1<void, ServerConnection*> evtNewTab;
 
     // Emitted when a user joins a channel
-    Signal3<void, const std::string&, const std::string&, ServerConnection*> evtJoin;
+    Signal3<void, const std::string&, Channel&, ServerConnection*> evtJoin;
 
     // Emitted when a user parts a channel
-    Signal3<void, const std::string&, const std::string&, ServerConnection*> evtPart;
+    Signal3<void, const std::string&, Channel&, ServerConnection*> evtPart;
 
     // Emitted when a user quits a channel
     Signal3<void, const std::string&, const std::string&, ServerConnection*> evtQuit;
@@ -68,11 +68,13 @@ public:
 
     // Emitted when we receive all the names from the channel
     Signal2<void, Channel&, ServerConnection*> evtNames;
-    Signal4<void, const std::string&, const std::string&, const std::map<std::string, IRC::UserMode>&, ServerConnection*> evtCUMode;
-    Signal5<void, const std::string&, const std::string&, const std::string&, const std::string&, ServerConnection*> evtKick;
+    Signal4<void, const std::string&, Channel&, const std::map<std::string, IRC::UserMode>&, ServerConnection*> evtCUMode;
+    Signal5<void, const std::string&, Channel&, const std::string&, const std::string&, ServerConnection*> evtKick;
 
     // Emitted when the frontend needs to diplay a message
-    Signal3<void, const std::string&, const std::string&, ServerConnection*> evtDisplayMessage;
+    Signal2<void, const std::string&, ServerConnection*> evtDisplayMessage;
+    Signal3<void, const std::string&, Channel&, ServerConnection*> evtDisplayMessageInChan;
+    Signal3<void, const std::string&, const std::string&, ServerConnection*> evtDisplayMessageInQuery;
 
     // Emitted when a channel needs to be highlighted
     Signal2<void, const std::string&, ServerConnection*> evtHighlight;

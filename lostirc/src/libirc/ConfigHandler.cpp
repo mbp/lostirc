@@ -81,7 +81,6 @@ bool ConfigHandler::readEvents(const string& filename)
 
             ++i;
         }
-
     }
     return setDefaults();
 }

@@ -43,6 +43,8 @@ MainWindow::MainWindow()
     _app = new LostIRCApp();
     // Connect signals for all the backend events
     _app->evtDisplayMessage.connect(slot(this, &MainWindow::onDisplayMessage));
+    _app->evtDisplayMessageInChan.connect(slot(this, &MainWindow::onDisplayMessageInChan));
+    _app->evtDisplayMessageInQuery.connect(slot(this, &MainWindow::onDisplayMessageInQuery));
     _app->evtHighlight.connect(slot(this, &MainWindow::onHighlight));
     _app->evtJoin.connect(slot(this, &MainWindow::onJoin));
     _app->evtKick.connect(slot(this, &MainWindow::onKick));
@@ -91,15 +93,29 @@ MainWindow::~MainWindow()
     delete _app;
 }
 
-void MainWindow::onDisplayMessage(const string& msg, const string& to, ServerConnection *conn)
+void MainWindow::onDisplayMessage(const string& msg, ServerConnection *conn)
 {
     Tab *tab;
 
-    if (to.empty())
-          tab = _nb->getCurrent(conn);
-    else
-          tab = _nb->findTab(to, conn);
+    tab = _nb->getCurrent(conn);
 
+    _nb->insert(tab, msg);
+}
+
+void MainWindow::onDisplayMessageInChan(const string& msg, Channel& chan, ServerConnection *conn)
+{
+    Tab *tab;
+
+    tab = _nb->findTab(chan.getName(), conn);
+
+    _nb->insert(tab, msg);
+}
+
+void MainWindow::onDisplayMessageInQuery(const string& msg, const string& to, ServerConnection *conn)
+{
+    Tab *tab;
+
+    tab = _nb->findTab(to, conn);
 
     if (!tab)
           tab = _nb->addQueryTab(to, conn);
@@ -107,34 +123,34 @@ void MainWindow::onDisplayMessage(const string& msg, const string& to, ServerCon
     _nb->insert(tab, msg);
 }
 
-void MainWindow::onJoin(const string& nick, const string& chan, ServerConnection *conn)
+void MainWindow::onJoin(const string& nick, Channel& chan, ServerConnection *conn)
 {
-    Tab *tab = _nb->findTab(chan, conn);
+    Tab *tab = _nb->findTab(chan.getName(), conn);
     if (!tab) {
-        tab = _nb->addChannelTab(chan, conn);
+        tab = _nb->addChannelTab(chan.getName(), conn);
     } else {
         tab->insertUser(nick);
     }
 }
 
-void MainWindow::onKick(const string& kicker, const string& chan, const string& nick, const string& msg, ServerConnection *conn)
+void MainWindow::onKick(const string& kicker, Channel& chan, const string& nick, const string& msg, ServerConnection *conn)
 {
-    Tab *tab = _nb->findTab(chan, conn);
+    Tab *tab = _nb->findTab(chan.getName(), conn);
     if (nick == conn->Session.nick) {
         // It's us who's been kicked
-        tab->getLabel()->set_text("(" + chan + ")");
+        tab->getLabel()->set_text("(" + chan.getName() + ")");
         tab->is_on_channel = false;
     }
     tab->removeUser(nick);
 }
 
-void MainWindow::onPart(const string& nick, const string& chan, ServerConnection *conn)
+void MainWindow::onPart(const string& nick, Channel& chan, ServerConnection *conn)
 {
-    Tab *tab = _nb->findTab(chan, conn);
+    Tab *tab = _nb->findTab(chan.getName(), conn);
     if (tab) {
         if (nick == conn->Session.nick) {
             // It's us who's parting
-            tab->getLabel()->set_text("(" + chan + ")");
+            tab->getLabel()->set_text("(" + chan.getName() + ")");
             tab->is_on_channel = false;
         }
         tab->removeUser(nick);
@@ -165,9 +181,9 @@ void MainWindow::onNick(const string& nick, const string& to, ServerConnection *
     }
 }
 
-void MainWindow::onCUMode(const string& nick, const string& chan, const std::map<string, IRC::UserMode>& users, ServerConnection *conn)
+void MainWindow::onCUMode(const string& nick, Channel& chan, const std::map<string, IRC::UserMode>& users, ServerConnection *conn)
 {
-    Tab *tab = _nb->findTab(chan, conn);
+    Tab *tab = _nb->findTab(chan.getName(), conn);
 
     std::map<string, IRC::UserMode>::const_iterator i;
     for (i = users.begin(); i != users.end(); ++i) {

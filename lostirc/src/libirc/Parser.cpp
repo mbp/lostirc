@@ -106,7 +106,7 @@ void Parser::parseLine(string& data)
         else if (command == "INVITE")
               Invite(from, rest);
         else
-              _evts->emit(_evts->get(UNKNOWN) << data, "", _conn);
+              _evts->emit(_evts->get(UNKNOWN) << data, _conn);
 
     } else {
         // Parse string in form, eg. 'PING :23523525'
@@ -137,9 +137,9 @@ void Parser::parseLine(string& data)
         else if (command == "NOTICE")
               Notice(param + " :" + rest);
         else if (command == "ERROR")
-              _evts->emit(_evts->get(ERROR) << param + " " + rest, "", _conn);
+              _evts->emit(_evts->get(ERROR) << param + " " + rest, _conn);
         else
-              _evts->emit(_evts->get(SERVMSG) << data, "", _conn);
+              _evts->emit(_evts->get(SERVMSG) << data, _conn);
     }
 
 }
@@ -192,7 +192,7 @@ void Parser::Ctcp(const string& from, const string& param, const string& rest)
             _evts->emit(_evts->get(ACTION) << findNick(from) << rest_, findNick(nick), _conn);
         }
     } else {
-        _evts->emit(_evts->get(CTCP) << command << findNick(from), "", _conn);
+        _evts->emit(_evts->get(CTCP) << command << findNick(from), _conn);
     }
 
 }
@@ -205,10 +205,10 @@ void Parser::Notice(const string& from, const string& to, const string& rest)
         string::iterator i = remove(tmp.begin(), tmp.end(), '\001');
         string output(tmp.begin(), i);
 
-        _evts->emit(_evts->get(SERVMSG) << findNick(from) + " " + output, "", _conn);
+        _evts->emit(_evts->get(SERVMSG) << findNick(from) + " " + output, _conn);
     } else {
         // Normal notice
-        _evts->emit(_evts->get(NOTICEPUBL) << findNick(from) << to << rest, "", _conn);
+        _evts->emit(_evts->get(NOTICEPUBL) << findNick(from) << to << rest, _conn);
     }
 }
 
@@ -218,7 +218,7 @@ void Parser::Notice(const string& msg)
     string from = msg.substr(0, pos);
     string rest = msg.substr(pos + 1);
 
-    _evts->emit(_evts->get(NOTICEPRIV) << from << rest, "", _conn);
+    _evts->emit(_evts->get(NOTICEPRIV) << from << rest, _conn);
 }
 
 void Parser::Kick(const string& from, const string& param, const string& msg)
@@ -228,42 +228,46 @@ void Parser::Kick(const string& from, const string& param, const string& msg)
     ss >> chan;
     ss >> nick;
 
+    Channel *c = _conn->findChannel(chan);
+    _evts->emit(_evts->get(KICKED) << nick << chan << findNick(from) << msg, *c, _conn);
+    _app->evtKick(findNick(from), *c, nick, msg, _conn);
+
     if (nick == _conn->Session.nick) // We got kicked
           _conn->removeChannel(chan);
 
-    _evts->emit(_evts->get(KICKED) << nick << chan << findNick(from) << msg, chan, _conn);
-    _app->evtKick(findNick(from), chan, nick, msg, _conn);
 }
 
 void Parser::Join(const string& nick, const string& chan)
 {
-    if (findNick(nick) == _conn->Session.nick)
-          _conn->addChannel(chan);
-    else
-          _conn->findChannel(chan)->addUser(findNick(nick));
+    Channel *c;
+    if (findNick(nick) == _conn->Session.nick) {
+        c = _conn->addChannel(chan);
+    } else { 
+        c = _conn->findChannel(chan);
+        c->addUser(findNick(nick));
+    }
 
-    _app->evtJoin(findNick(nick), chan, _conn); // Send join to frontend
+    _app->evtJoin(findNick(nick), *c, _conn); // Send join to frontend
 
-    _evts->emit(_evts->get(JOIN) << findNick(nick) << chan << findHost(nick), chan, _conn);
+    _evts->emit(_evts->get(JOIN) << findNick(nick) << chan << findHost(nick), *c, _conn);
 }
 
 void Parser::Part(const string& nick, const string& chan)
 {
-    _conn->findChannel(chan)->removeUser(findNick(nick));
+    Channel *c = _conn->findChannel(chan);
+    c->removeUser(findNick(nick));
+
+    _evts->emit(_evts->get(PART) << findNick(nick) << chan << findHost(nick), *c, _conn);
+    _app->evtPart(findNick(nick), *c, _conn);
 
     if (findNick(nick) == _conn->Session.nick) {
-          _conn->removeChannel(chan); // Remove channel in ServerConn
-          if (_conn->Session.channels.empty())
-                _conn->sendQuit(""); // Quit the server if we are parting the last channel
+          _conn->removeChannel(chan);
     }
-
-    _evts->emit(_evts->get(PART) << findNick(nick) << chan << findHost(nick), chan, _conn);
-    _app->evtPart(findNick(nick), chan, _conn);
 }
 
 void Parser::Quit(const string& nick, const string& msg)
 {
-    vector<string> chans = _conn->findUser(findNick(nick));
+    vector<Channel*> chans = _conn->findUser(findNick(nick));
 
     _evts->emit(_evts->get(QUIT) << findNick(nick) << msg, chans, _conn);
     _app->evtQuit(findNick(nick), msg, _conn);
@@ -276,12 +280,12 @@ void Parser::Nick(const string& from, const string& to)
         _conn->Session.nick = to;
     }
 
-    vector<string>::iterator i;
-    vector<string> chans = _conn->findUser(findNick(from));
+    vector<Channel*>::const_iterator i;
+    vector<Channel*> chans = _conn->findUser(findNick(from));
 
     for (i = chans.begin(); i != chans.end(); ++i) {
-        _conn->findChannel(*i)->removeUser(findNick(from));
-        _conn->findChannel(*i)->addUser(to);
+        (*i)->removeUser(findNick(from));
+        (*i)->addUser(to);
     }
 
     _evts->emit(_evts->get(NICK) << findNick(from) << to, chans, _conn);
@@ -290,7 +294,7 @@ void Parser::Nick(const string& from, const string& to)
 
 void Parser::Invite(const string& from, const string& params)
 {
-    _evts->emit(_evts->get(INVITED) << findNick(from) << params, "", _conn);
+    _evts->emit(_evts->get(INVITED) << findNick(from) << params, _conn);
 }
 
 void Parser::Mode(const string& from, const string& param, const string& rest)
@@ -301,7 +305,7 @@ void Parser::Mode(const string& from, const string& param, const string& rest)
     } else {
         // User mode message
         // We got line in the form: 'user +x'
-        _evts->emit(_evts->get(MODE) << findNick(from) << param << rest, "", _conn);
+        _evts->emit(_evts->get(MODE) << findNick(from) << param << rest, _conn);
     }
 }
 
@@ -315,6 +319,8 @@ void Parser::CMode(const string& from, const string& param)
     string modes = param.substr(pos1 + 1, (pos2 - pos1) - 1);
     string args = param.substr(pos2 + 1);
 
+    Channel *c = _conn->findChannel(chan);
+
     //vector<struct Mode> modesmap;
     std::map<string, IRC::UserMode> modesmap;
 
@@ -327,12 +333,12 @@ void Parser::CMode(const string& from, const string& param)
 
     if (arguments.empty()) {
         // Received a channel mode, like '#chan +n'
-        _evts->emit(_evts->get(CMODE) << findNick(from) << modes.substr(0, 1) << modes << chan, chan, _conn);
+        _evts->emit(_evts->get(CMODE) << findNick(from) << modes.substr(0, 1) << modes << chan, *c, _conn);
         return;
     }
 
     bool sign = false; // Used to track whether we get a + or a -
-    vector<string>::iterator arg_i = arguments.begin();
+    vector<string>::const_iterator arg_i = arguments.begin();
     for (string::const_iterator i = modes.begin(); i != modes.end(); ++i) {
         switch (*i)
         {
@@ -351,7 +357,7 @@ void Parser::CMode(const string& from, const string& param)
                 string nick = *arg_i++;
 
                 modesmap.insert(make_pair(nick, u));
-                _evts->emit(_evts->get(e) << findNick(from) << nick, chan, _conn);
+                _evts->emit(_evts->get(e) << findNick(from) << nick, *c, _conn);
                 }
                 break;
             case 'v':
@@ -363,7 +369,7 @@ void Parser::CMode(const string& from, const string& param)
                 string nick = *arg_i++;
 
                 modesmap.insert(make_pair(nick, u));
-                _evts->emit(_evts->get(e) << findNick(from) << nick, chan, _conn);
+                _evts->emit(_evts->get(e) << findNick(from) << nick, *c, _conn);
                 }
                 break;
             case 'b':
@@ -371,7 +377,7 @@ void Parser::CMode(const string& from, const string& param)
                 Event e;
                 sign ? (e = BANNED) : (e = UNBANNED);
                 string nick = *arg_i++;
-                _evts->emit(_evts->get(e) << findNick(from) << nick, chan, _conn);
+                _evts->emit(_evts->get(e) << findNick(from) << nick, *c, _conn);
                 break;
                 }
         }
@@ -379,12 +385,13 @@ void Parser::CMode(const string& from, const string& param)
     }
 
     // Channel user mode
-    _app->evtCUMode(findNick(from), chan, modesmap, _conn);
+    _app->evtCUMode(findNick(from), *c, modesmap, _conn);
 }
 
-void Parser::Topic(const string& from, const string& to, const string& rest)
+void Parser::Topic(const string& from, const string& chan, const string& rest)
 {
-    _evts->emit(_evts->get(TOPICCHANGE) << findNick(from) << rest, to, _conn);
+    Channel *c = _conn->findChannel(chan);
+    _evts->emit(_evts->get(TOPICCHANGE) << findNick(from) << rest, *c, _conn);
 }
 
 void Parser::Topic(const string& param, const string& rest)
@@ -393,8 +400,9 @@ void Parser::Topic(const string& param, const string& rest)
     string::size_type pos2 = param.find_first_of(" ", pos1);
 
     string chan = param.substr(pos1, pos2 - pos1);
+    Channel *c = _conn->findChannel(chan);
 
-    _evts->emit(_evts->get(TOPICIS) << chan << rest, chan, _conn);
+    _evts->emit(_evts->get(TOPICIS) << chan << rest, *c, _conn);
 }
 
 void Parser::TopicTime(const string& param)
@@ -412,7 +420,9 @@ void Parser::TopicTime(const string& param)
     long date = std::atol(time.c_str());
     time = std::ctime(&date);
 
-    _evts->emit(_evts->get(TOPICTIME) << nick << time.substr(0, time.size() - 1), chan, _conn);
+    Channel *c = _conn->findChannel(chan);
+
+    _evts->emit(_evts->get(TOPICTIME) << nick << time.substr(0, time.size() - 1), *c, _conn);
 }
 
 void Parser::Away(const string& param, const string& rest)
@@ -427,7 +437,7 @@ void Parser::Away(const string& param, const string& rest)
 
 void Parser::Wallops(const string& from, const string& rest)
 {
-    _evts->emit(_evts->get(WALLOPS) << from << rest, "", _conn);
+    _evts->emit(_evts->get(WALLOPS) << from << rest, _conn);
 }
 
 void Parser::Banlist(const string& param)
@@ -443,7 +453,9 @@ void Parser::Banlist(const string& param)
     long date = std::atol(time.c_str());
     time = std::ctime(&date);
 
-    _evts->emit(_evts->get(BANLIST) << banmask << owner, chan, _conn);
+    Channel *c = _conn->findChannel(chan);
+
+    _evts->emit(_evts->get(BANLIST) << banmask << owner, *c, _conn);
 }
      
 void Parser::numeric(int n, const string& from, const string& param, const string& rest)
@@ -463,7 +475,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 253: // RPL_LUSERUNKNOWN
         case 254: // RPL_LUSERCHANNELS
         case 255: // RPL_LUSERME
-            _evts->emit(_evts->get(SERVMSG) << rest, "", _conn);
+            _evts->emit(_evts->get(SERVMSG) << rest, _conn);
             break;
 
         case 301: // RPL_AWAY
@@ -473,13 +485,13 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 305: // RPL_UNAWAY
             _app->evtAway(false, _conn);
             _conn->Session.isAway = false;
-            _evts->emit(_evts->get(SERVMSG) << rest, "", _conn);
+            _evts->emit(_evts->get(SERVMSG) << rest, _conn);
             break;
 
         case 306: // RPL_NOWAWAY
             _app->evtAway(true, _conn);
             _conn->Session.isAway = true;
-            _evts->emit(_evts->get(SERVMSG) << rest, "", _conn);
+            _evts->emit(_evts->get(SERVMSG) << rest, _conn);
             break;
 
         case 332: // RPL_TOPIC
@@ -497,11 +509,11 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 368: // RPL_END_OF_BANLIST
         case 372: // RPL_MOTD
         case 375: // RPL_MOTDSTART
-            _evts->emit(_evts->get(SERVMSG) << rest, "", _conn);
+            _evts->emit(_evts->get(SERVMSG) << rest, _conn);
             break;
 
         case 376: // RPL_ENDOFMOTD
-            _evts->emit(_evts->get(SERVMSG) << rest, "", _conn);
+            _evts->emit(_evts->get(SERVMSG) << rest, _conn);
             _conn->sendCmds();
             break;
 
@@ -509,11 +521,11 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 403: // ERR_NOSUCHCHANNEL
         case 404: // ERR_CANNOTSENDTOCHAN
         case 405: // ERR_TOOMANYCHANNELS
-            _evts->emit(_evts->get(ERROR) << param + " " + rest, "", _conn);
+            _evts->emit(_evts->get(ERROR) << param + ": " + rest, _conn);
             break;
 
         case 412: // ERR_NOTEXTTOSEND (or something)
-            _evts->emit(_evts->get(SERVMSG) << rest, "", _conn);
+            _evts->emit(_evts->get(SERVMSG) << rest, _conn);
             break;
 
         case 422: // ERR_NOMOTD
@@ -544,7 +556,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 491: // ERR_NOOPERHOST
         case 501: // ERR_UMODEUNKNOWNFLAG
         case 502: // ERR_USERSDONTMATCH
-            _evts->emit(_evts->get(ERROR) << param + " " + rest, "", _conn);
+            _evts->emit(_evts->get(ERROR) << param + " " + rest, _conn);
             break;
 
         case 353: // RPL_NAMREPLY
@@ -557,7 +569,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
                 if (c && !c->endOfNames)
                       c->endOfNames = true;
                 else
-                      _evts->emit(_evts->get(SERVMSG) << param + " " + rest, "", _conn);
+                      _evts->emit(_evts->get(SERVMSG) << param + " " + rest, _conn);
             }
             break; // Ignored.
         case 317: // RPL_WHOISIDLE
@@ -567,7 +579,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
                 ss << idle / 3600 << ":" << (idle / 60) % 60 << ":" << idle % 60;
                 long date = std::atol(getWord(param, 4).c_str());
                 string time = std::ctime(&date);
-                _evts->emit(_evts->get(SERVMSG) << ss.str() + ",  " + time.substr(0, time.size() - 1) + " " + rest, "", _conn);
+                _evts->emit(_evts->get(SERVMSG) << ss.str() + ",  " + time.substr(0, time.size() - 1) + " " + rest, _conn);
             }
                 break;
         case 311: // RPL_WHOISUSER
@@ -576,11 +588,11 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 318: // RPL_ENDOFWHOIS
         case 319: // RPL_WHOISCHANNELS
             // We need this find_first_of to omit the first word
-            _evts->emit(_evts->get(SERVMSG2) << param.substr(param.find_first_of(" ") + 1) << rest, "", _conn);
+            _evts->emit(_evts->get(SERVMSG2) << param.substr(param.find_first_of(" ") + 1) << rest, _conn);
             break;
 
         default:
-            _evts->emit(_evts->get(SERVMSG) << param + " " + rest, "", _conn);
+            _evts->emit(_evts->get(SERVMSG) << param + " " + rest, _conn);
     }
 
 }
@@ -613,7 +625,7 @@ void Parser::Names(const string& chan, const string& names)
 
         _app->evtNames(*c, _conn);
     } else {
-        _evts->emit(_evts->get(NAMES) << channel << names, "", _conn);
+        _evts->emit(_evts->get(NAMES) << channel << names, _conn);
     }
 }
 

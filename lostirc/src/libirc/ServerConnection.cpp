@@ -313,10 +313,11 @@ bool ServerConnection::sendRaw(const string& text)
     return _socket->send(msg);
 }
 
-void ServerConnection::addChannel(const string& n)
+Channel* ServerConnection::addChannel(const string& n)
 {
     Channel *c = new Channel(n);
     Session.channels.push_back(c);
+    return c;
 }
 
 void ServerConnection::removeChannel(const string& n)
@@ -331,14 +332,14 @@ void ServerConnection::removeChannel(const string& n)
     }
 }
 
-vector<string> ServerConnection::findUser(const string& n)
+vector<Channel*> ServerConnection::findUser(const string& n)
 {
-    vector<string> chans;
+    vector<Channel*> chans;
     vector<Channel*>::iterator i = Session.channels.begin();
 
     for (;i != Session.channels.end(); ++i) {
         if ((*i)->findUser(n)) {
-            chans.push_back((*i)->getName());
+            chans.push_back(*i);
         }
     }
     return chans;

@@ -134,7 +134,6 @@ void MainNotebook::closeCurrent()
     // Can't delete last page
     if (pages().size() > 1) {
         Gtk::Notebook::Page *p = get_current();
-        Tab *tab = dynamic_cast<Tab*>(p->get_child());
         pages().remove(p);
         draw(NULL); // Needed for redrawing the widget
     }

@@ -50,17 +50,19 @@ public:
 
 private:
     // Events
-    void onDisplayMessage(const std::string& msg, const std::string& to, ServerConnection *conn);
-    void onJoin(const std::string& nick, const std::string& chan, ServerConnection *conn);
-    void onPart(const std::string& nick, const std::string& chan, ServerConnection *conn);
+    void onDisplayMessage(const std::string& msg, ServerConnection *conn);
+    void onDisplayMessageInChan(const std::string& msg, Channel& to, ServerConnection *conn);
+    void onDisplayMessageInQuery(const std::string& msg, const std::string& to, ServerConnection *conn);
+    void onJoin(const std::string& nick, Channel& chan, ServerConnection *conn);
+    void onPart(const std::string& nick, Channel& chan, ServerConnection *conn);
     void onQuit(const std::string& nick, const std::string& chan, ServerConnection *conn);
     void onNick(const std::string& from, const std::string& to, ServerConnection *conn);
     void onNotice(const std::string& from, const std::string& to, const std::string& msg, ServerConnection *conn);
-    void onKick(const std::string& from, const std::string& chan, const std::string& kicker, const std::string& msg,  ServerConnection *conn);
+    void onKick(const std::string& from, Channel& chan, const std::string& kicker, const std::string& msg,  ServerConnection *conn);
     void onNames(Channel& c, ServerConnection *conn);
     void onMode(const std::string& nick, const std::string& chan, const std::string& topic, ServerConnection *conn);
     void onCMode(const std::string& nick, const std::string& chan, char, const std::string& modes, ServerConnection *conn);
-    void onCUMode(const std::string& nick, const std::string& chan, const std::map<std::string, IRC::UserMode>& users, ServerConnection *conn);
+    void onCUMode(const std::string& nick, Channel& chan, const std::map<std::string, IRC::UserMode>& users, ServerConnection *conn);
     void onHighlight(const std::string& to, ServerConnection *conn);
     void onAway(bool away, ServerConnection *conn);
     void onNewTab(ServerConnection *conn);
