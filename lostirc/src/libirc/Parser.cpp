@@ -373,15 +373,17 @@ void Parser::Join(const string& nick, const string& chan)
     FE::emit(FE::get(JOIN) << findNick(nick) << chan << findHost(nick), *c, _conn);
 }
 
-void Parser::Part(const string& nick, const string& param, const string& rest)
+void Parser::Part(const string& nick, const string& param, string& rest)
 {
     string chan = param;
 
     // Some clients/servers/bouncers might accidently send the channel name
     // in the 'rest' string, a bug there, but we would like to avoid a
     // segfault here. I noticed the same hack in the xchat sources.
-    if (chan.empty() && !rest.empty())
-          chan = getWord(rest, 1);
+    if (chan.empty() && !rest.empty()) {
+        chan = getWord(rest, 1);
+        rest.clear();
+    }
 
     Channel *c = _conn->findChannel(chan);
 
