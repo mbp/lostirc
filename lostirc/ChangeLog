@@ -1,5 +1,15 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-06-15  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * lostirc.desktop: Change description to follow the GNOME HIG
+          suggestions.
+        * MainWindow.cpp/MainNotebook.cpp: Remove version number from window
+          title, as described by GNOME HIG. Move "LostIRC" to the end of the
+          title instead of the beginning.
+        * Prefs.cpp: Make preferences a dialog window. Conform to GNOME HIG.
+        * DCCList.cpp: Make DCCList a dialog window. Conform to GNOME HIG.
+
 2003-06-09  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Commands.cpp: Add /RECONNECT command.

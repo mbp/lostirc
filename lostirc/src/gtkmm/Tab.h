@@ -51,10 +51,6 @@ public:
 
     void setName(const Glib::ustring& str);
     void startPrefs();
-    void closePrefs();
-
-    void startDCCList();
-    void closeDCCList();
 
     void insertUser(const Glib::ustring& user, IRC::UserMode m = IRC::NONE);
     void removeUser(const Glib::ustring& nick);
@@ -74,7 +70,6 @@ public:
     void removeHighlight();
 
     bool isHighlighted;
-    bool hasPrefs;
     bool hasDCCList;
 
 private:

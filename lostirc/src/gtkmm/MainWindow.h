@@ -20,12 +20,15 @@
 #define MAINWINDOW_H
 
 #include <vector>
+#include <memory>
 #include <gtkmm/main.h>
 #include <glibmm/main.h>
 #include <gtkmm/window.h>
 #include <ServerConnection.h>
 #include <LostIRCApp.h>
 #include <FrontEnd.h>
+#include "Prefs.h"
+#include "DCCList.h"
 #include "MainNotebook.h"
 #include "StatusBar.h"
 
@@ -62,8 +65,14 @@ public:
     void newDCC(DCC *dcc);
     void dccStatusChanged(DCC *dcc);
     void localeError(bool tried_custom_encoding);
+    void openPrefs();
+    void closePrefs();
+    void openDccWindow();
+    void closeDccWindow();
 
     StatusBar statusbar;
+    std::auto_ptr<Prefs> prefs;
+    std::auto_ptr<DCCWindow> dccwin;
 };
 
 extern MainWindow* AppWin;

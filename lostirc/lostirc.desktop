@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=LostIRC
-Comment=An IRC client
-Comment[da]=En IRC klient
+Comment=Chat on IRC-networks
+Comment[da]=Chat på IRC-netværk
 TryExec=lostirc
 Exec=lostirc
 Icon=lostirc.png

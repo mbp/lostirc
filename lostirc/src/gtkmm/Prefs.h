@@ -20,35 +20,24 @@
 #define PREFS_H
 
 #include <gtkmm/notebook.h>
+#include <gtkmm/dialog.h>
 #include <gtkmm/button.h>
 #include <gtkmm/combo.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/table.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/treeview.h>
+#include <gtkmm/textview.h>
 #include <gtkmm/fontselection.h>
-#include "Tab.h"
 #include "MainWindow.h"
 
-class Prefs : public Gtk::VBox
+class Prefs : public Gtk::Dialog
 {
 public:
-    static Prefs* Instance() {
-        static Prefs p;
-        return &p;
-    }
+    Prefs(Gtk::Window& parent);
+    virtual ~Prefs() { }
 
-    // this is an important variable, the Tab that currently has the prefs
-    // is defined here, so when we do endPrefs() we can call the right
-    // endPrefs() member function in the Tab class
-    static Tab* currentTab;
-    void closePrefs() { currentTab->closePrefs(); }
 private:
-    Prefs();
-    Prefs(const Prefs&);
-    Prefs& operator=(const Prefs&);
-    ~Prefs() { }
-
     void applyGeneral();
     void applyPreferences();
     void applyFont();
@@ -61,6 +50,8 @@ private:
     void addEntry();
     void onChangeRow();
     void clearEntries();
+    virtual void on_response(int) { hide(); }
+
     Gtk::VBox* addPage(const Glib::ustring& str);
 
     // General
@@ -110,6 +101,8 @@ private:
     ModelColumns _columns;
     Glib::RefPtr<Gtk::ListStore> _liststore;
     Gtk::TreeView _treeview;
+    Gtk::Table _general_table;
+    Gtk::Table _prefs_table;
     Gtk::Table _server_options_table;
 };
 

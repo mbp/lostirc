@@ -56,22 +56,32 @@ Gtk::Button* create_imagebutton(const Glib::ustring& str, const Gtk::StockID& st
     return button;
 }
 
-Prefs::Prefs()
-    : Gtk::VBox(),
-    highlightingbutton(_("Limited highlighting (don't mark tabs red on joins/parts etc.)")),
-    stripcolorsbutton(_("Strip color codes from incoming messages")),
-    stripothersbutton(_("Strip bold and underline codes from incoming messages")),
-    loggingbutton(_("Log to file")),
+Prefs::Prefs(Gtk::Window& parent)
+    : Gtk::Dialog(_("LostIRC Preferences"), parent),
+    highlightingbutton(_("Limited _highlighting (don't mark tabs red on joins/parts etc.)"), true),
+    stripcolorsbutton(_("Strip _color codes from incoming messages"), true),
+    stripothersbutton(_("Strip _bold and underline codes from incoming messages"), true),
+    loggingbutton(_("_Log conversations to disk"), true),
+    auto_connect_button(_("_Connect automatically"), true),
     _columns(),
     _liststore(Gtk::ListStore::create(_columns)),
     _treeview(_liststore),
-    _server_options_table(2, 5)
+    _general_table(2, 4),
+    _prefs_table(2, 5),
+    _server_options_table(2, 4)
 {
-    notebook.set_tab_pos(Gtk::POS_LEFT);
+    add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
+    notebook.set_tab_pos(Gtk::POS_TOP);
+    _general_table.set_row_spacings(6);
+    _general_table.set_col_spacings(12);
+    _prefs_table.set_row_spacings(6);
+    _prefs_table.set_col_spacings(12);
+    _server_options_table.set_row_spacings(6);
+    _server_options_table.set_col_spacings(12);
 
-    pack_start(notebook);
+    get_vbox()->pack_start(notebook);
 
-    Gtk::VBox *generalbox = addPage(_("General Settings"));
+    Gtk::VBox *generalbox = addPage(_("General"));
     Gtk::VBox *prefsbox = addPage(_("Preferences"));
     Gtk::VBox *fontbox = addPage(_("Font selection"));
     Gtk::VBox *performbox = addPage(_("Servers"));
@@ -88,31 +98,39 @@ Prefs::Prefs()
     hboxgeneral->pack_end(*buttgeneral1, Gtk::PACK_SHRINK);
     generalbox->pack_end(*hboxgeneral, Gtk::PACK_SHRINK);
 
+    int row = 1;
+
     // IRC nick
     ircnickentry.set_text(App->options.nick);
-    Gtk::Frame *frame20 = manage(new Gtk::Frame(_("Nickname")));
-    frame20->add(ircnickentry);
-    generalbox->pack_start(*frame20, Gtk::PACK_SHRINK);
+    Gtk::Label *glabel0 = manage(new Gtk::Label(_("Nickname:"), Gtk::ALIGN_LEFT));
+    _general_table.attach(*glabel0, 0, 1, row, row + 1);
+    _general_table.attach(ircnickentry, 1, 2, row, row + 1);
 
-    // IRC nick
+    row++;
+
+    // Real name
     realnameentry.set_text(App->options.realname);
-    Gtk::Frame *frame21 = manage(new Gtk::Frame(_("Real name")));
-    frame21->add(realnameentry);
-    generalbox->pack_start(*frame21, Gtk::PACK_SHRINK);
+    Gtk::Label *glabel1 = manage(new Gtk::Label(_("Real name:"), Gtk::ALIGN_LEFT));
+    _general_table.attach(*glabel1, 0, 1, row, row + 1);
+    _general_table.attach(realnameentry, 1, 2, row, row + 1);
 
-    // IRC nick
+    row++;
+
+    // IRC username
     ircuserentry.set_text(App->options.ircuser);
-    Gtk::Frame *frame22 = manage(new Gtk::Frame(_("IRC username (ident)")));
-    frame22->add(ircuserentry);
-    generalbox->pack_start(*frame22, Gtk::PACK_SHRINK);
+    Gtk::Label *glabel2 = manage(new Gtk::Label(_("IRC username (ident):"), Gtk::ALIGN_LEFT));
+    _general_table.attach(*glabel2, 0, 1, row, row + 1);
+    _general_table.attach(ircuserentry, 1, 2, row, row + 1);
 
-    notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*generalbox, _("General")));
+    row++;
+
+    generalbox->pack_start(_general_table, Gtk::PACK_SHRINK);
 
     // Encoding
     encodingcombo.set_popdown_strings(encodings);
-    Gtk::Frame *frame23 = manage(new Gtk::Frame(_("Encoding to use on IRC")));
-    frame23->add(encodingcombo);
-    generalbox->pack_start(*frame23, Gtk::PACK_SHRINK);
+    Gtk::Label *glabel3 = manage(new Gtk::Label(_("Encoding to use on IRC:"), Gtk::ALIGN_LEFT));
+    _general_table.attach(*glabel3, 0, 1, row, row + 1);
+    _general_table.attach(encodingcombo, 1, 2, row, row + 1);
 
     // Preferences-tab
 
@@ -126,66 +144,64 @@ Prefs::Prefs()
     hboxprefs->pack_end(*buttprefs1, Gtk::PACK_SHRINK);
     prefsbox->pack_end(*hboxprefs, Gtk::PACK_SHRINK);
 
+    row = 1;
+
     // nickcompletion character
     nickcompletionentry.set_max_length(1);
     nickcompletionentry.set_text(App->options.nickcompletion_char().getString());
-    Gtk::Frame *frame10 = manage(new Gtk::Frame(_("Nick-completion character")));
-    frame10->add(nickcompletionentry);
-    prefsbox->pack_start(*frame10, Gtk::PACK_SHRINK);
+    Gtk::Label *plabel0 = manage(new Gtk::Label(_("Nick-completion character:"), Gtk::ALIGN_LEFT));
+    _prefs_table.attach(*plabel0, 0, 1, row, row + 1);
+    _prefs_table.attach(nickcompletionentry, 1, 2, row, row + 1);
+
+    row++;
 
     // DCC ip
     dccipentry.set_text(App->options.dccip().getString());
-    Gtk::Frame *frame11 = manage(new Gtk::Frame(_("DCC IP-Address")));
-    frame11->add(dccipentry);
-    prefsbox->pack_start(*frame11, Gtk::PACK_SHRINK);
+    Gtk::Label *plabel1 = manage(new Gtk::Label(_("DCC IP address:"), Gtk::ALIGN_LEFT));
+    _prefs_table.attach(*plabel1, 0, 1, row, row + 1);
+    _prefs_table.attach(dccipentry, 1, 2, row, row + 1);
+
+    row++;
 
     // DCC port
     dccportentry.set_text(App->options.dccport().getString());
-    Gtk::Frame *frame15 = manage(new Gtk::Frame(_("DCC Port (0 = random)")));
-    frame15->add(dccportentry);
-    prefsbox->pack_start(*frame15, Gtk::PACK_SHRINK);
+    Gtk::Label *plabel2 = manage(new Gtk::Label(_("DCC Port (0 = random):"), Gtk::ALIGN_LEFT));
+    _prefs_table.attach(*plabel2, 0, 1, row, row + 1);
+    _prefs_table.attach(dccportentry, 1, 2, row, row + 1);
+
+    row++;
 
     // Highligted words
     highlightentry.set_text(App->options.highlight_words);
-    Gtk::Frame *frame12 = manage(new Gtk::Frame(_("Words to highlight on (space seperated)")));
-    frame12->add(highlightentry);
-    prefsbox->pack_start(*frame12, Gtk::PACK_SHRINK);
+    Gtk::Label *plabel3 = manage(new Gtk::Label(_("Words to highlight on (space seperated):"), Gtk::ALIGN_LEFT));
+    _prefs_table.attach(*plabel3, 0, 1, row, row + 1);
+    _prefs_table.attach(highlightentry, 1, 2, row, row + 1);
+
+    row++;
 
     // Buffer size for text
     bufferentry.set_text(App->options.buffer_size().getString());
-    Gtk::Frame *frame13 = manage(new Gtk::Frame(_("Maximum number of lines to save")));
-    frame13->add(bufferentry);
-    prefsbox->pack_start(*frame13, Gtk::PACK_SHRINK);
+    Gtk::Label *plabel4 = manage(new Gtk::Label(_("Maxmium number of lines to cache:"), Gtk::ALIGN_LEFT));
+    _prefs_table.attach(*plabel4, 0, 1, row, row + 1);
+    _prefs_table.attach(bufferentry, 1, 2, row, row + 1);
 
-    notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*prefsbox, _("Preferences")));
+    prefsbox->pack_start(_prefs_table, Gtk::PACK_SHRINK);
 
     // Limited tab highlighting
     highlightingbutton.set_active(App->options.limited_highlighting);
-
-    Gtk::Frame *frame14 = manage(new Gtk::Frame());
-    frame14->add(highlightingbutton);
-    prefsbox->pack_start(*frame14, Gtk::PACK_SHRINK);
+    prefsbox->pack_start(highlightingbutton, Gtk::PACK_SHRINK);
 
     // Strip colors
     stripcolorsbutton.set_active(App->options.strip_colors);
-
-    Gtk::Frame *frame16 = manage(new Gtk::Frame());
-    frame16->add(stripcolorsbutton);
-    prefsbox->pack_start(*frame16, Gtk::PACK_SHRINK);
+    prefsbox->pack_start(stripcolorsbutton, Gtk::PACK_SHRINK);
 
     // Strip bold and underline
     stripothersbutton.set_active(App->options.strip_boldandunderline);
-
-    Gtk::Frame *frame17 = manage(new Gtk::Frame());
-    frame17->add(stripothersbutton);
-    prefsbox->pack_start(*frame17, Gtk::PACK_SHRINK);
+    prefsbox->pack_start(stripothersbutton, Gtk::PACK_SHRINK);
 
     // Logging
     loggingbutton.set_active(App->options.logging);
-
-    Gtk::Frame *frame18 = manage(new Gtk::Frame());
-    frame18->add(loggingbutton);
-    prefsbox->pack_start(*frame18, Gtk::PACK_SHRINK);
+    prefsbox->pack_start(loggingbutton, Gtk::PACK_SHRINK);
 
     // Font selection
 
@@ -203,7 +219,6 @@ Prefs::Prefs()
     if (!App->options.font->empty())
           fontsel.set_font_name(App->options.font);
     fontbox->pack_start(fontsel);
-    notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*fontbox, _("Font selection")));
 
     // Autojoin/perform-tab
 
@@ -223,51 +238,45 @@ Prefs::Prefs()
         row[_columns.autojoin] = *i;
     }
     server_pane->pack1(_treeview);
-    Gtk::Frame *server_opt_frame = manage(new Gtk::Frame(_("Options")));
-    server_pane->pack2(*server_opt_frame);
     Gtk::VBox *serverinfobox = manage(new Gtk::VBox());
-    server_opt_frame->add(*serverinfobox);
+    server_pane->pack2(*serverinfobox);
+
+    // auto connect
+    serverinfobox->pack_start(auto_connect_button, Gtk::PACK_SHRINK);
 
     serverinfobox->pack_start(_server_options_table, Gtk::PACK_SHRINK);
 
-    int row = 1;
-
-    // auto connect
-    Gtk::Label *label0 = manage(new Gtk::Label(_("Connect automatically: "), Gtk::ALIGN_RIGHT));
-    _server_options_table.attach(*label0, 0, 1, row, row + 1);
-    _server_options_table.attach(auto_connect_button, 1, 2, row, row + 1);
-
-    row++;
+    row = 1;
 
     // hostname
-    Gtk::Label *label1 = manage(new Gtk::Label(_("Hostname: "), Gtk::ALIGN_RIGHT));
+    Gtk::Label *label1 = manage(new Gtk::Label(_("Hostname:"), Gtk::ALIGN_LEFT));
     _server_options_table.attach(*label1, 0, 1, row, row + 1);
     _server_options_table.attach(hostentry, 1, 2, row, row + 1);
 
     row++;
 
     // port
-    Gtk::Label *label2 = manage(new Gtk::Label(_("Port: "), Gtk::ALIGN_RIGHT));
+    Gtk::Label *label2 = manage(new Gtk::Label(_("Port:"), Gtk::ALIGN_LEFT));
     _server_options_table.attach(*label2, 0, 1, row, row + 1);
     _server_options_table.attach(portentry, 1, 2, row, row + 1);
 
     row++;
 
     // password
-    Gtk::Label *label3 = manage(new Gtk::Label(_("Password: "), Gtk::ALIGN_RIGHT));
+    Gtk::Label *label3 = manage(new Gtk::Label(_("Password:"), Gtk::ALIGN_LEFT));
     _server_options_table.attach(*label3, 0, 1, row, row + 1);
     _server_options_table.attach(passentry, 1, 2, row, row + 1);
 
     row++;
 
     // nick
-    Gtk::Label *label4 = manage(new Gtk::Label(_("Nick: "), Gtk::ALIGN_RIGHT));
+    Gtk::Label *label4 = manage(new Gtk::Label(_("Nick:"), Gtk::ALIGN_LEFT));
     _server_options_table.attach(*label4, 0, 1, row, row + 1);
     _server_options_table.attach(nickentry, 1, 2, row, row + 1);
 
     // commmands
     cmdtext.set_editable(true);
-    Gtk::Label *label5 = manage(new Gtk::Label(_("Commmands to perform on connect: ")));
+    Gtk::Label *label5 = manage(new Gtk::Label(_("Commmands to perform on connect:")));
     serverinfobox->pack_start(*label5, Gtk::PACK_SHRINK);
     serverinfobox->pack_start(cmdtext);
 
@@ -285,18 +294,7 @@ Prefs::Prefs()
     removebutton->signal_clicked().connect(slot(*this, &Prefs::removeEntry));
     hboxserver.pack_end(*removebutton, Gtk::PACK_SHRINK);
 
-
     performbox->pack_start(*server_pane);
-    notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*performbox, _("Servers")));
-
-    // Final Close button
-    Gtk::Button *close_button = manage(create_imagebutton(_("Close"), Gtk::Stock::CLOSE));
-    close_button->signal_clicked().connect(slot(*this, &Prefs::closePrefs));
-
-    Gtk::HBox *bottommenubox = manage(new Gtk::HBox());
-    bottommenubox->pack_end(*close_button, Gtk::PACK_SHRINK);
-
-    pack_start(*bottommenubox, Gtk::PACK_SHRINK);
 
     show_all();
     removebutton->hide();
@@ -482,16 +480,7 @@ void Prefs::clearEntries()
 Gtk::VBox* Prefs::addPage(const Glib::ustring& str)
 {
     Gtk::VBox *vbox = manage(new Gtk::VBox());
-
-    // label with frame
-    Gtk::Label *label = manage(new Gtk::Label(str));
-    Gtk::Frame *labelframe = manage(new Gtk::Frame());
-    labelframe->add(*label);
-    labelframe->set_shadow_type(Gtk::SHADOW_ETCHED_IN);
-
-    vbox->pack_start(*labelframe, Gtk::PACK_SHRINK);
+    vbox->set_border_width(12);
+    notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*vbox, str));
     return vbox;
 }
-
-Tab* Prefs::currentTab = 0;
-

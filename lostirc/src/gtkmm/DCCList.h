@@ -19,10 +19,11 @@
 #ifndef DCCLIST_H
 #define DCCLIST_H
 
+#include <gtkmm/stock.h>
+#include <gtkmm/dialog.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/treeview.h>
 #include <DCC.h>
-#include "Tab.h"
 
 class DCCList : public Gtk::TreeView
 {
@@ -31,13 +32,6 @@ public:
         static DCCList p;
         return &p;
     }
-
-    // this is an important variable, the Tab that currently has the dcclist
-    // is defined here, so when we do endDCCList() we can call the right
-    // endDCCList() member function in the Tab class
-    static Tab* currentTab;
-    void closeDCCList() { currentTab->closeDCCList(); }
-
     void add(DCC *dcc);
     void statusChange(DCC *dcc);
 
@@ -75,5 +69,21 @@ private:
     ModelColumns _columns;
     Glib::RefPtr<Gtk::ListStore> _liststore;
 };
+
+class DCCWindow : public Gtk::Dialog
+{
+public:
+    DCCWindow(Gtk::Window& parent)
+            : Gtk::Dialog("LostIRC DCC Transfers", parent)
+    {
+        add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
+        get_vbox()->pack_start(*DCCList::Instance());
+        show_all();
+    }
+    virtual ~DCCWindow() { }
+
+    virtual void on_response(int) { hide(); }
+};
+
 
 #endif

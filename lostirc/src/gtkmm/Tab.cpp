@@ -25,15 +25,13 @@
 #include <gtkmm/image.h>
 #include <gtkmm/stock.h>
 #include "Tab.h"
-#include "Prefs.h"
-#include "DCCList.h"
 #include "MainWindow.h"
 
 using std::vector;
 using Glib::ustring;
 
 Tab::Tab(ServerConnection *conn, Pango::FontDescription font, Gtk::Label *label)
-    : Gtk::VBox(), isHighlighted(false), hasPrefs(false),
+    : Gtk::VBox(), isHighlighted(false),
     _conn(conn), _nicklist(0), _textwidget(font), _isActive(true),
     _type(UNDEFINED), _entry(this), _label(label)
 {
@@ -169,43 +167,5 @@ std::vector<Glib::ustring> Tab::getNicks()
 
 void Tab::startPrefs()
 {
-    remove(*_hpaned);
-    Prefs *p = Prefs::Instance();
-    if (Prefs::currentTab)
-          p->closePrefs();
-
-    Prefs::currentTab = this;
-    pack_start(*p);
-    hasPrefs = true;
-}
-
-void Tab::closePrefs()
-{
-    Prefs *p = Prefs::Instance();
-    remove(*p);
-    Prefs::currentTab = 0;
-    pack_start(*_hpaned);
-    _entry.grab_focus();
-    hasPrefs = false;
-}
-
-void Tab::startDCCList()
-{
-    DCCList *dcc = DCCList::Instance();
-    if (DCCList::currentTab)
-          dcc->closeDCCList();
-
-    DCCList::currentTab = this;
-    _vbox.pack_end(*dcc);
-    hasDCCList = true;
-}
-
-void Tab::closeDCCList()
-{
-    DCCList *dcc = DCCList::Instance();
-    _vbox.remove(*dcc);
-    DCCList::currentTab = 0;
-    _entry.grab_focus();
-    hasDCCList = false;
-
+    AppWin->openPrefs();
 }

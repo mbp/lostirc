@@ -122,19 +122,14 @@ void MainNotebook::updateTitle(Tab *tab)
           tab = getCurrent();
 
     if (tab->getConn()->Session.isAway)
-          AppWin->set_title("LostIRC "VERSION" - " + tab->getName() + _(" (currently away)"));
+          AppWin->set_title(tab->getName() +  _(" (currently away)") + " LostIRC");
     else
-          AppWin->set_title("LostIRC "VERSION" - " + tab->getName());
+          AppWin->set_title(tab->getName() + " - LostIRC");
 }
 
 void MainNotebook::closeCurrent()
 {
     Tab *tab = getCurrent();
-
-    if (tab->hasPrefs)
-          tab->closePrefs();
-    if (tab->hasDCCList)
-          tab->closeDCCList();
 
     if (countTabs(tab->getConn()) > 1) {
         pages().erase(get_current());

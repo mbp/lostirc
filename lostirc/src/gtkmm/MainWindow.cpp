@@ -22,6 +22,7 @@
 #include <config.h>
 #include <gtkmm/box.h>
 #include <gtkmm/messagedialog.h>
+#include <gtkmm/stock.h>
 #include <gdk/gdkkeysyms.h>
 #include "DCCList.h"
 #include "MainWindow.h"
@@ -36,7 +37,7 @@ MainWindow::MainWindow(bool autoconnect)
     : Gtk::Window(), app(this)
 {
     AppWin = this;
-    set_title("LostIRC "VERSION);
+    set_title("LostIRC");
 
     int width = app.options.window_width;
     int height = app.options.window_height;
@@ -339,8 +340,45 @@ void MainWindow::localeError(bool tried_custom_encoding)
     msg += _("\n\n(Note: You'll only see this warning once per LostIRC session)");
 
 
-    Gtk::MessageDialog mdialog(*this, msg, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_CLOSE);
+    Gtk::MessageDialog mdialog(*this, msg, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK);
     mdialog.run();
+}
+
+void MainWindow::openPrefs()
+{
+    if (prefs.get()) {
+          prefs->present();
+    } else {
+        std::auto_ptr<Prefs> dialog(new Prefs(*this));
+
+        dialog->show();
+
+        prefs = dialog;
+    }
+}
+
+void MainWindow::openDccWindow()
+{
+    if (dccwin.get()) {
+          dccwin->present();
+    } else {
+        std::auto_ptr<DCCWindow> dialog(new DCCWindow(*this));
+
+        dialog->show();
+
+        dccwin = dialog;
+    }
+}
+
+
+void MainWindow::closePrefs()
+{
+
+}
+
+void MainWindow::closeDccWindow()
+{
+
 }
 
 bool MainWindow::on_key_press_event(GdkEventKey* e)
@@ -378,15 +416,9 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
             }
             notebook.closeCurrent();
         } else if (e->keyval == GDK_p) {
-            if (!notebook.getCurrent()->hasPrefs) 
-                  notebook.getCurrent()->startPrefs();
-            else 
-                  notebook.getCurrent()->closePrefs();
+            openPrefs();
         } else if (e->keyval == GDK_d) {
-            if (!notebook.getCurrent()->hasDCCList)
-                  notebook.getCurrent()->startDCCList();
-            else
-                  notebook.getCurrent()->closeDCCList();
+            openDccWindow();
         } else if (e->keyval == GDK_h) {
             // find highlight mark
             notebook.getCurrent()->getText().scrollToHighlightMark();

@@ -110,6 +110,3 @@ Glib::ustring DCCList::statusToStr(DCC::Status status)
     else
           return "";
 }
-
-
-Tab* DCCList::currentTab = 0;
