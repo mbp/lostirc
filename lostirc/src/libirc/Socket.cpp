@@ -170,7 +170,7 @@ bool Socket::send(const ustring& data)
     const std::string msg = Util::convert_from_utf8(data);
 
     if (msg.empty()) {
-        FE::emit(FE::get(ERROR) << _("Message not sent because of locale problems"), FE::CURRENT);
+        FE::emit(FE::get(ERRORMSG) << _("Message not sent because of locale problems"), FE::CURRENT);
         return false;
     }
 
