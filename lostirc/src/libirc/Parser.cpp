@@ -278,6 +278,12 @@ void Parser::Quit(const string& nick, const string& msg)
 
 void Parser::Nick(const string& from, const string& to)
 {
+    // When we receive an error that "nick change was too fast, to will be
+    // empty. just return if it is.
+
+    if (to.empty())
+          return;
+
     // Check whethers it's us who has changed nick
     if (findNick(from) == _conn->Session.nick) {
         _conn->Session.nick = to;
