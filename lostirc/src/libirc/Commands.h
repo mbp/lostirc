@@ -71,7 +71,6 @@ namespace Commands
     void Deop(ServerConnection* conn, const std::string& params);
     void Voice(ServerConnection* conn, const std::string& params);
     void Devoice(ServerConnection* conn, const std::string& params);
-    void commands(ServerConnection *conn, const std::string& params);
     void getCommands(std::set<std::string>& commands);
 
     std::string assignModes(char sign, char mode, std::istringstream& ss);
