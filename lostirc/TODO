@@ -2,7 +2,6 @@ CRITICAL:
 ---------
   * Implement DCC chat/send
   * Doesn't show in query when a user quits
-  * Away message appears in query on /whois
 
 RANDOM:
 ------
@@ -19,6 +18,7 @@ RANDOM:
   * ipv6 support
   * /part should part current channel when called without arguments
   * possibility to add user-defined highlights other than just the current nick
+  * crashes when connecting to irc.winbot.co.uk
 
 DONE:
 ----
@@ -26,3 +26,4 @@ DONE:
   * Add code to detect timeouts so we can reconnect and not let the user
     wait forever
   * Still connected to a server when closing last tab, should keep it open
+  * Away message appears in query on /whois

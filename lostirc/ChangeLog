@@ -1,4 +1,4 @@
-LostIRC (x.x.x)
+LostIRC (0.0.7) - Tue Apr 16th 2002
   * In the preferences window, you can now define a different nick
     completion character than the default (,).
   * Configuration files has been moved to the ~/.lostirc/ directory.
@@ -18,6 +18,8 @@ LostIRC (x.x.x)
   * When closing the last tab which belongs to a server-connection, the
     connection disconnects. Before the connection was still open but with no
     visible tabs.
+  * When /WHOIS'ing a user and he was away, his away message was shown in a
+    query tab instead of the current window.
 
 LostIRC (0.0.6) - Mon Apr 1st 2002
   * You can now tab-complete commands as well as nicks. /j<tab> becomes /JOIN.
