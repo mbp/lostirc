@@ -20,10 +20,12 @@
 #include <string>
 #include <cerrno>
 #include <cstdio>
+#ifndef WIN32
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <arpa/inet.h>
+#endif
 #include <glibmm/main.h>
 #include <glibmm/convert.h>
 #include "LostIRCApp.h"

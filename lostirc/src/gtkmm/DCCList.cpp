@@ -105,7 +105,7 @@ Glib::ustring DCCList::statusToStr(DCC::Status status)
           return "WAITING";
     else if (status == DCC::STOPPED)
           return "STOPPED";
-    else if (status == DCC::ERROR)
+    else if (status == DCC::FAIL)
           return "ERROR";
     else
           return "";

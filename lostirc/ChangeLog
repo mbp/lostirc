@@ -1,6 +1,23 @@
 For a summary of changes between releases - see the NEWS file.
 
 2003-03-16  Morten Brix Pedersen  <michael@wtf.dk>
+        
+        * First shot at Windows port.
+        * DCCList.cpp/DCC.h/DCC.cpp: Rename ERROR to FAIL, because it
+          conflicted with a Windows #define.
+        * ConfigHandler.cpp: Don't include pwd.h, it's not needed and Windows
+          doesn't have it.
+        * DCC.h: Include winsock.h when WIN32 is defined.
+        * Socket.h: Include winsock.h when WIN32 is defined.
+        * FrontEnd.cpp/FrontEnd.h: Rename ERROR to FAIL.
+        * LostIRCApp.cpp: Avoid calls to getpwuid(). Use Glib:: functions
+          instead.
+        * ServerConnection.cpp: Don't use uname struct to reply on VERSION.
+          Just output Windows.
+
+          More to come...
+
+2003-03-16  Morten Brix Pedersen  <michael@wtf.dk>
 
         * DCC.cpp: When sending a file, ensure that a file exists and its size
           > 0 before creating DCC_Send_Out object (This is to ensure that

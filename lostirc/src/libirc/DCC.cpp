@@ -55,7 +55,7 @@ void DCC_Send_In::go_ahead()
 
     if (::connect(fd, reinterpret_cast<struct sockaddr *>(&sockaddr), sizeof(struct sockaddr)) < 0 && errno != EINPROGRESS) {
         FE::emit(FE::get(CLIENTMSG) << _("Couldn't connect:") << Util::convert_to_utf8(strerror(errno)), FE::CURRENT);
-        _status = ERROR;
+        _status = FAIL;
         App->getDcc().statusChange(_number_in_queue);
     }
 
@@ -76,7 +76,7 @@ bool DCC_Send_In::onReadData(Glib::IOCondition cond)
     else if (retval == -1) {
         if (!(errno == EAGAIN || errno == EWOULDBLOCK)) {
             FE::emit(FE::get(CLIENTMSG) << _("Couldn't receive:") << Util::convert_to_utf8(strerror(errno)), FE::CURRENT);
-            _status = ERROR;
+            _status = FAIL;
             App->getDcc().statusChange(_number_in_queue);
             return false;
         }
@@ -211,7 +211,7 @@ bool DCC_Send_Out::onSendData(Glib::IOCondition cond)
     if (retval == -1) {
         if (!(errno == EAGAIN || errno == EWOULDBLOCK)) {
             FE::emit(FE::get(CLIENTMSG) << _("Couldn't send:") << Util::convert_to_utf8(strerror(errno)), FE::CURRENT);
-            _status = ERROR;
+            _status = FAIL;
             App->getDcc().statusChange(_number_in_queue);
             return false;
         }

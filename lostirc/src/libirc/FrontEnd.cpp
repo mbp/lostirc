@@ -42,7 +42,7 @@ struct {
     { 2, "topictime", TOPICTIME },
     { 2, "noticepriv", NOTICEPRIV },
     { 2, "noticepubl", NOTICEPUBL },
-    { 2, "error", ERROR },
+    { 2, "error", ERRORMSG },
     { 2, "away", AWAY },
     { 2, "banlist", BANLIST },
     { 1, "unknown", UNKNOWN },

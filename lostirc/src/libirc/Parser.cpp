@@ -174,8 +174,8 @@ void Parser::parseLine(ustring& data)
               Ping(rest);
         else if (command == "NOTICE")
               Notice(param + " :" + rest);
-        else if (command == "ERROR")
-              FE::emit(FE::get(ERROR) << param + " " + rest, FE::CURRENT, _conn);
+        else if (command == "ERRORMSG")
+              FE::emit(FE::get(ERRORMSG) << param + " " + rest, FE::CURRENT, _conn);
         else
               FE::emit(FE::get(SERVERMSG1) << data, FE::CURRENT, _conn);
     }
@@ -754,7 +754,7 @@ void Parser::numeric(int n, const ustring& from, const ustring& param, const ust
         case 403: // ERR_NOSUCHCHANNEL
         case 404: // ERR_CANNOTSENDTOCHAN
         case 405: // ERR_TOOMANYCHANNELS
-            FE::emit(FE::get(ERROR) << skipFirstWord(param) + ": " + rest, FE::CURRENT, _conn);
+            FE::emit(FE::get(ERRORMSG) << skipFirstWord(param) + ": " + rest, FE::CURRENT, _conn);
             break;
 
         case 412: // ERR_NOTEXTTOSEND
@@ -771,7 +771,7 @@ void Parser::numeric(int n, const ustring& from, const ustring& param, const ust
             if (!_conn->Session.endOfMotd)
                 _conn->sendNick(_conn->Session.nick += "_");
             else
-                FE::emit(FE::get(ERROR) << rest, FE::CURRENT, _conn);
+                FE::emit(FE::get(ERRORMSG) << rest, FE::CURRENT, _conn);
             break;
 
         case 438: // Nick change to fast
@@ -793,7 +793,7 @@ void Parser::numeric(int n, const ustring& from, const ustring& param, const ust
         case 491: // ERR_NOOPERHOST
         case 501: // ERR_UMODEUNKNOWNFLAG
         case 502: // ERR_USERSDONTMATCH
-            FE::emit(FE::get(ERROR) << skipFirstWord(param) + " " + rest, FE::CURRENT, _conn);
+            FE::emit(FE::get(ERRORMSG) << skipFirstWord(param) + " " + rest, FE::CURRENT, _conn);
             break;
 
         case 353: // RPL_NAMREPLY

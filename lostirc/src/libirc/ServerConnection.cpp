@@ -134,7 +134,7 @@ void ServerConnection::connect()
 
 void ServerConnection::on_error(const char *msg)
 {
-    FE::emit(FE::get(ERROR) << ustring(_("Failed connecting: ")) + Util::convert_to_utf8(msg), FE::CURRENT, this);
+    FE::emit(FE::get(ERRORMSG) << ustring(_("Failed connecting: ")) + Util::convert_to_utf8(msg), FE::CURRENT, this);
     disconnect();
 }
 
@@ -146,7 +146,7 @@ void ServerConnection::on_host_resolved()
         _socket.connect(Session.port);
 
     } catch (SocketException &e) {
-        FE::emit(FE::get(ERROR) << ustring(_("Failed connecting:")) + Util::convert_to_utf8(e.what()), FE::CURRENT, this);
+        FE::emit(FE::get(ERRORMSG) << ustring(_("Failed connecting:")) + Util::convert_to_utf8(e.what()), FE::CURRENT, this);
         disconnect();
         return;
     }
@@ -228,7 +228,7 @@ bool ServerConnection::onReadData(Glib::IOCondition)
         return true;
 
     } catch (SocketException &e) {
-        FE::emit(FE::get(ERROR) << ustring(_("Failed to receive: ")) + Util::convert_to_utf8(e.what()), FE::ALL, this);
+        FE::emit(FE::get(ERRORMSG) << ustring(_("Failed to receive: ")) + Util::convert_to_utf8(e.what()), FE::ALL, this);
         disconnect();
         addReconnectTimer();
         return false;
@@ -335,9 +335,15 @@ bool ServerConnection::sendPass(const ustring& pass)
 
 bool ServerConnection::sendVersion(const ustring& to)
 {
+    #ifndef WIN32
     ustring s(LostIRCApp::uname_info.sysname);
     ustring r(LostIRCApp::uname_info.release);
     ustring m(LostIRCApp::uname_info.machine);
+    #else
+    ustring s("Windows");
+    ustring r("");
+    ustring m("");
+    #endif
     ustring vstring("LostIRC "VERSION" on " + s + " " + r + " [" + m + "]");
     ustring msg("NOTICE " + to + " :\001VERSION " + vstring + "\001\r\n");
 

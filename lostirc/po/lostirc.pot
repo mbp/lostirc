@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-01-15 17:06+0100\n"
+"POT-Creation-Date: 2003-03-16 23:02+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,19 +15,19 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/gtkmm/Entry.cpp:78
+#: src/gtkmm/Entry.cpp:79
 msgid "Not connected to server. Try `/SERVER <hostname / ip>'.\n"
 msgstr ""
 
-#: src/gtkmm/Entry.cpp:80
+#: src/gtkmm/Entry.cpp:81
 msgid "No channel joined. Try `/JOIN #channel-name'\n"
 msgstr ""
 
-#: src/gtkmm/Entry.cpp:144 src/gtkmm/Entry.cpp:175
+#: src/gtkmm/Entry.cpp:145 src/gtkmm/Entry.cpp:176
 msgid "<span foreground=\"blue\">Matches:</span> "
 msgstr ""
 
-#: src/gtkmm/Entry.cpp:147
+#: src/gtkmm/Entry.cpp:148
 msgid "<span foreground=\"blue\">No matches.</span>"
 msgstr ""
 
@@ -160,23 +160,27 @@ msgstr ""
 msgid "Not connected."
 msgstr ""
 
-#: src/gtkmm/DCCList.cpp:28
+#: src/gtkmm/DCCList.cpp:34
 msgid "Status"
 msgstr ""
 
-#: src/gtkmm/DCCList.cpp:29
+#: src/gtkmm/DCCList.cpp:35
 msgid "Filename"
 msgstr ""
 
-#: src/gtkmm/DCCList.cpp:30
+#: src/gtkmm/DCCList.cpp:36
 msgid "Filesize"
 msgstr ""
 
-#: src/gtkmm/DCCList.cpp:31
+#: src/gtkmm/DCCList.cpp:37
 msgid "Fileposition"
 msgstr ""
 
-#: src/gtkmm/DCCList.cpp:32
+#: src/gtkmm/DCCList.cpp:38
+msgid "Progress"
+msgstr ""
+
+#: src/gtkmm/DCCList.cpp:39
 msgid "From/To"
 msgstr ""
 
@@ -434,31 +438,31 @@ msgstr ""
 msgid "/DEVOICE <channel> <nicks>, removes voice from one or more nicks."
 msgstr ""
 
-#: src/libirc/ConfigHandler.cpp:171 src/libirc/ConfigHandler.cpp:181
+#: src/libirc/ConfigHandler.cpp:170 src/libirc/ConfigHandler.cpp:180
 msgid "Not found key, `"
 msgstr ""
 
-#: src/libirc/Socket.cpp:65 src/libirc/Socket.cpp:72
+#: src/libirc/Socket.cpp:67 src/libirc/Socket.cpp:74
 msgid "Error writing to pipe: "
 msgstr ""
 
-#: src/libirc/Socket.cpp:108
+#: src/libirc/Socket.cpp:110
 msgid "An error occured while reading from pipe (Internal error 2)"
 msgstr ""
 
-#: src/libirc/Socket.cpp:118
+#: src/libirc/Socket.cpp:120
 msgid "An error occured while reading from pipe (Internal error 3)"
 msgstr ""
 
-#: src/libirc/Socket.cpp:171
+#: src/libirc/Socket.cpp:173
 msgid "Message not sent because of locale problems"
 msgstr ""
 
-#: src/libirc/Parser.cpp:817
+#: src/libirc/Parser.cpp:818
 msgid "idle: "
 msgstr ""
 
-#: src/libirc/Parser.cpp:821
+#: src/libirc/Parser.cpp:822
 msgid ", signon time: "
 msgstr ""
 
@@ -482,28 +486,36 @@ msgstr ""
 msgid "File received successfully:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:134
-msgid "File not found:"
-msgstr ""
-
-#: src/libirc/DCC.cpp:161
+#: src/libirc/DCC.cpp:156
 msgid "Couldn't bind:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:179
+#: src/libirc/DCC.cpp:174
 msgid "DCC SEND request sent. Sending from:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:198
+#: src/libirc/DCC.cpp:192
 msgid "Connection accepted."
 msgstr ""
 
-#: src/libirc/DCC.cpp:219
+#: src/libirc/DCC.cpp:213
 msgid "Couldn't send:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:238
+#: src/libirc/DCC.cpp:232
 msgid "File sent successfully:"
+msgstr ""
+
+#: src/libirc/DCC.cpp:256
+msgid "Incoming file has zero size. Sender:"
+msgstr ""
+
+#: src/libirc/DCC.cpp:275
+msgid "File not found:"
+msgstr ""
+
+#: src/libirc/DCC.cpp:278
+msgid "File has zero size:"
 msgstr ""
 
 #: src/libirc/ServerConnection.cpp:117
@@ -530,14 +542,6 @@ msgstr ""
 msgid "Connected. Logging in..."
 msgstr ""
 
-#: src/libirc/LostIRCApp.cpp:61
-msgid "Somebody"
-msgstr ""
-
-#: src/libirc/LostIRCApp.cpp:64
-msgid "unknown"
-msgstr ""
-
-#: src/libirc/LostIRCApp.h:50
+#: src/libirc/LostIRCApp.h:53
 msgid "Logging to `"
 msgstr ""

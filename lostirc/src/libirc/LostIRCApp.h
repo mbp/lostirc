@@ -19,10 +19,13 @@
 #ifndef LOSTIRCAPP_H
 #define LOSTIRCAPP_H
 
+#include <iostream>
 #include <vector>
+#ifndef WIN32
 #include <sys/utsname.h>
+#endif
+#include <glibmm/miscutils.h>
 #include <glibmm/ustring.h>
-#include <pwd.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include "ConfigHandler.h"
@@ -85,17 +88,16 @@ class LostIRCApp
     public:
         initobj(LostIRCApp* app) {
             App = app;
-            struct passwd *pwentry = getpwuid(getuid());
-
-            if (pwentry != NULL) {
-                App->home = pwentry->pw_dir;
-            } else {
-                App->home = getenv("HOME");
-            }
+            strcpy(App->home, Glib::get_home_dir().c_str());
+            std::cout << "home: " << App->home << std::endl;
 
             Glib::ustring configdir = Glib::ustring(App->home) + "/.lostirc/";
             App->logdir = Glib::ustring(App->home) + "/.lostirc/logs/";
+            #ifndef WIN32
             mkdir(configdir.c_str(), 0700);
+            #else
+            mkdir(configdir.c_str());
+            #endif
         }
     };
 
@@ -125,7 +127,9 @@ public:
     Colors colors;
     Servers cfgservers;
 
+    #ifndef WIN32
     static struct utsname uname_info;
+    #endif
     static char *home;
     static Glib::ustring logdir;
 

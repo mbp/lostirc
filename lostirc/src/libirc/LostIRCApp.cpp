@@ -34,39 +34,24 @@ LostIRCApp::LostIRCApp(FrontEnd *f)
     options("/.lostirc/options.conf"), events("/.lostirc/events.conf"),
     colors("/.lostirc/colors.conf"), cfgservers("/.lostirc/perform.conf")
 {
+#ifndef WIN32
     uname(&uname_info);
+#endif
 
-    struct passwd *pwentry = getpwuid(getuid());
+    ustring realname = Glib::get_real_name();
 
-    if (pwentry != NULL) {
+    // Only read until the first comma
+    if (realname.find(",") != ustring::npos)
+          realname = realname.substr(0, realname.find(","));
 
-        ustring realname = pwentry->pw_gecos;
+    if (options.nick->empty())
+          options.nick = Glib::get_user_name();
 
-        // Only read until the first comma
-        if (realname.find(",") != ustring::npos) {
-            realname = realname.substr(0, realname.find(","));
-        }
+    if (options.ircuser->empty())
+          options.ircuser = Glib::get_user_name();
 
-        if (options.nick->empty())
-              options.nick = pwentry->pw_name;
-
-        if (options.ircuser->empty())
-              options.ircuser = pwentry->pw_name;
-
-        if (options.realname->empty())
-              options.realname = realname;
-
-    } else {
-        if (options.nick->empty())
-              options.nick = _("Somebody");
-
-        if (options.ircuser->empty())
-              options.ircuser = _("unknown");
-
-        if (options.realname->empty())
-              options.realname = "";
-
-    }
+    if (options.realname->empty())
+          options.realname = realname;
 }
 
 LostIRCApp::~LostIRCApp()
@@ -114,6 +99,8 @@ ServerConnection* LostIRCApp::newServer()
     return conn;
 }
 
+#ifndef WIN32
 struct utsname LostIRCApp::uname_info;
+#endif
 char * LostIRCApp::home;
 Glib::ustring LostIRCApp::logdir;

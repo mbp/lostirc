@@ -23,6 +23,7 @@
 #include <fstream>
 #include <cerrno>
 #include <cstdio>
+#ifndef WIN32
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/types.h>
@@ -31,6 +32,9 @@
 #include <sys/stat.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#else
+#include <winsock.h>
+#endif
 #include <glibmm/main.h>
 #include <sigc++/sigc++.h>
 
@@ -40,7 +44,7 @@ class DCC : public SigC::Object {
 
 public:
 
-    enum Status { DONE, ONGOING, WAITING, STOPPED, ERROR };
+    enum Status { DONE, ONGOING, WAITING, STOPPED, FAIL };
 
     virtual void go_ahead() = 0;
 
