@@ -573,8 +573,11 @@ void Parser::CMode(const string& from, const string& param)
 void Parser::Topic(const string& from, const string& chan, const string& rest)
 {
     Channel *c = _conn->findChannel(chan);
-    assert(c);
-    FE::emit(FE::get(TOPICCHANGE) << findNick(from) << rest, *c, _conn);
+    if (c)
+          FE::emit(FE::get(TOPICCHANGE) << findNick(from) << rest, *c, _conn);
+    else
+          FE::emit(FE::get(TOPICCHANGE) << findNick(from) << rest, FE::CURRENT, _conn);
+
 }
 
 void Parser::Topic(const string& param, const string& rest)
