@@ -341,18 +341,20 @@ bool ServerConnection::sendVersion(const ustring& to)
     return _socket.send(msg);
 }
 
-bool ServerConnection::sendMsg(const ustring& to, const ustring& message)
+bool ServerConnection::sendMsg(const ustring& to, const ustring& message, bool sendToGui)
 {
     ustring msg("PRIVMSG " + to + " :" + message + "\r\n");
 
-    ChannelBase *chan = findChannel(to);
-    if (!chan)
-          chan = findQuery(to);
+    if (sendToGui) {
+        ChannelBase *chan = findChannel(to);
+        if (!chan)
+              chan = findQuery(to);
 
-    if (chan)
-          FE::emit(FE::get(PRIVMSG_SELF) << Session.nick << message, *chan, this);
-    else
-          FE::emit(FE::get(PRIVMSG_SELF) << Session.nick << message, FE::CURRENT, this);
+        if (chan)
+              FE::emit(FE::get(PRIVMSG_SELF) << Session.nick << message, *chan, this);
+        else
+              FE::emit(FE::get(PRIVMSG_SELF) << Session.nick << message, FE::CURRENT, this);
+    }
 
     return _socket.send(msg);
 }

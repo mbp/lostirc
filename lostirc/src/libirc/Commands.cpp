@@ -298,7 +298,7 @@ void Msg(ServerConnection *conn, const ustring& params)
     if (msg.empty()) {
         throw CommandException("/MSG <nick/channel> <message>, sends a normal message.");
     } else {
-        conn->sendMsg(to, msg);
+        conn->sendMsg(to, msg, false);
         ustring sendgui = "Message to " + to + ":";
         FE::emit(FE::get(CLIENTMSG) << sendgui << msg, FE::CURRENT, conn);
     }

@@ -2,6 +2,12 @@ For a summary of changes between releases - see the NEWS file.
 
 2002-12-24  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * ServerConnection.cpp: Add extra bool flag to sendMsg() whether or
+          not to send the message to the GUI as well, prevents a bug in /MSG
+          where the message was outputted to the current channel.
+
+2002-12-24  Morten Brix Pedersen  <morten@wtf.dk>
+
         * FrontEnd.cpp: Add timestamp here.
         * TextWidget.cpp: Don't add timestamp here.
         * TextWidget.h/TextWidget.cpp: Remove unused variable

@@ -47,7 +47,7 @@ public:
     bool sendNick(const Glib::ustring& nick);
     bool sendPass(const Glib::ustring& pass);
     bool sendVersion(const Glib::ustring& to);
-    bool sendMsg(const Glib::ustring& to, const Glib::ustring& msg);
+    bool sendMsg(const Glib::ustring& to, const Glib::ustring& msg, bool sendToGui = true);
     bool sendNotice(const Glib::ustring& to, const Glib::ustring& msg);
     bool sendJoin(const Glib::ustring& chan);
     bool sendPart(const Glib::ustring& chan, const Glib::ustring& msg);
