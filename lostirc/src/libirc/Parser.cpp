@@ -444,7 +444,7 @@ void Parser::Away(const string& param, const string& rest)
     ss >> param1;
     ss >> param2;
 
-    FE::emit(FE::get(AWAY) << param2 << rest, param2, _conn);
+    FE::emit(FE::get(AWAY) << param2 << rest, FE::CURRENT, _conn);
 }
 
 void Parser::Wallops(const string& from, const string& rest)
