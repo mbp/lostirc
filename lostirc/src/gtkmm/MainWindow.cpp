@@ -18,7 +18,9 @@
 
 #include <gtkmm/box.h>
 #include <algorithm>
+#include <gtkmm/messagedialog.h>
 #include <functional>
+#include <cstdlib>
 #include "Tab.h"
 #include "DCCList.h"
 #include "MainWindow.h"
@@ -300,6 +302,20 @@ void MainWindow::doneDCC(DCC *dcc)
 {
     DCCList *dcclist = DCCList::Instance();
     dcclist->markDone(dcc); 
+}
+
+void MainWindow::localeError()
+{
+    Glib::ustring msg = "Locale conversion error. An error occured while converting text from UTF-8 to your current locale.\n\nThis is most likely because your locale is set to a value which doesn't support the character(s) converting to.\n\nIf you believe this is a bug, please report it to the application author.";
+    
+    char *locale = std::getenv("LANG");
+    if (locale != NULL) {
+        msg += "\n\nYour current locale (seems) to be: ";
+        msg += locale;
+    }
+
+    Gtk::MessageDialog mdialog(*this, msg, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_CLOSE);
+    mdialog.run();
 }
 
 bool MainWindow::on_key_press_event(GdkEventKey* e)

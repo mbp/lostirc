@@ -2,6 +2,15 @@ For a summary of changes between releases - see the NEWS file.
 
 2002-12-16  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * Utils.cpp/Utils.h: Add convert_from_utf8(), to convert to the
+          current locale. If the conversion fails, show an error box.
+        * FrontEnd.cpp: Add localeError() method.
+        * MainWindow.cpp: Add localeError() method. Show an error
+          MessageDialog when locale conversion failed.
+        * Socket.cpp: Convert strings with convert_from_utf8().
+
+2002-12-16  Morten Brix Pedersen  <morten@wtf.dk>
+
         * Removed unneeded <string> includes.
 
 2002-12-16  Morten Brix Pedersen  <morten@wtf.dk>

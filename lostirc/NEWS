@@ -16,6 +16,8 @@ LostIRC (x.x.x)
     joining a channel after that, fixed.
   * The auto-connect feature in preferences has been improved GUI-wise. It's
     now also possible to disable/enable automatic connection to the servers.
+  * When using a mal-functioning locale, show an error to the screen when
+    conversion to the locale fails.
   * Man-page updated with a better description.
 
 LostIRC (0.2.2) - Sun Dec, 1st 2002

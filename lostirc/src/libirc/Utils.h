@@ -30,5 +30,6 @@ namespace Util {
     bool isDigit(const Glib::ustring& str);
 
     Glib::ustring convert_to_utf8(const std::string& str);
+    std::string convert_from_utf8(const Glib::ustring& str_utf8);
 }
 #endif

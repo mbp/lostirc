@@ -22,6 +22,7 @@
 #include <cctype>
 #include <cstdlib>
 #include "Utils.h"
+#include "LostIRCApp.h"
 
 using Glib::ustring;
 
@@ -64,14 +65,11 @@ Glib::ustring convert_to_utf8(const std::string& str)
     if (!str_utf8.validate()) { // invalid UTF-8?
         bool did_conversion = false;
 
-        if (!Glib::get_charset()) {// locale charset is not UTF-8?
-            try // ignore errors -- go on with the fallback if the conversion fails
-            {
+        if (!Glib::get_charset()) { // locale charset is not UTF-8?
+            try { // ignore errors -- go on with the fallback if the conversion fails
                 str_utf8 = Glib::locale_to_utf8(str);
                 did_conversion = true;
-            }
-            catch(const Glib::ConvertError&)
-            {}
+            } catch(const Glib::ConvertError&) {}
         }
 
         if (!did_conversion) {
@@ -86,6 +84,27 @@ Glib::ustring convert_to_utf8(const std::string& str)
     }
 
     return str_utf8;
+}
+
+std::string convert_from_utf8(const Glib::ustring& str_utf8)
+{
+    static bool displayed_message = false;
+
+    std::string str;
+
+    try {
+
+        str = Glib::locale_from_utf8(str_utf8);
+
+    } catch (const Glib::ConvertError&) {
+
+        if (!displayed_message) {
+            displayed_message = true;
+            App->fe->localeError();
+        }
+
+    }
+    return str;
 }
 
 }

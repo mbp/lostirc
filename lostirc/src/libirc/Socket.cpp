@@ -169,7 +169,7 @@ void Socket::disconnect()
 
 bool Socket::send(const ustring& data)
 {
-    const std::string msg = Glib::locale_from_utf8(data);
+    const std::string msg = Util::convert_from_utf8(data);
     #ifdef DEBUG
     App->log << ">> " << data << std::flush;
     #endif

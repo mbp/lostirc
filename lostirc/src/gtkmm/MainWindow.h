@@ -64,6 +64,7 @@ public:
     void disconnected(ServerConnection *conn);
     void newDCC(DCC *dcc);
     void doneDCC(DCC *dcc);
+    void localeError();
 
     StatusBar statusbar;
 };
