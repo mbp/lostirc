@@ -80,7 +80,7 @@ MainWindow::MainWindow()
     set_usize(600, 400);
     show_all();
     _nb->insert(tab, "Welcome to LostIRC!\n\nThis client is mainly keyboard oriented, so don't expect fancy menus and buttons for you to click on.\n\n$2Available commands:$
-$3/server <hostname> - connect to server.
+$3/SERVER <hostname> - connect to server.
 /JOIN <channel> - join channel.
 /PART <channel> - part channel.
 /WHOIS <nick> - whois a user.
