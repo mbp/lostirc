@@ -181,7 +181,7 @@ void Parser::CTCP(const string& from, const string& param, const string& rest)
         _evts->emitEvent("ctcp", args, "", _conn);
     } else if (command == "ACTION") {
 
-        string rest_ = rest.substr(pos + 1, (rest.length() - pos) - 1);
+        string rest_ = rest.substr(pos + 1, (rest.length() - pos) - 2);
         vector<string> args;
         args.push_back(findNick(from));
         args.push_back(rest_);
