@@ -31,10 +31,10 @@ DCCList::DCCList()
 {
     set_model(_liststore);
 
+    append_column(_("%"), _columns.progress);
     append_column(_("Status"), _columns.status);
     append_column(_("Filename"), _columns.filename);
-    append_column(_("Filesize"), _columns.filesize);
-    append_column(_("Progress"), _columns.progress);
+    append_column(_("Size"), _columns.filesize);
     append_column(_("User"), _columns.nick);
 
     show_all();

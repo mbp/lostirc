@@ -47,17 +47,17 @@ private:
     // what our columned-list contains
     struct ModelColumns : public Gtk::TreeModel::ColumnRecord
     {
+        Gtk::TreeModelColumn<unsigned long> progress;
         Gtk::TreeModelColumn<Glib::ustring> status;
         Gtk::TreeModelColumn<Glib::ustring> filename;
         Gtk::TreeModelColumn<unsigned long> filesize;
-        Gtk::TreeModelColumn<unsigned long> progress;
         Gtk::TreeModelColumn<Glib::ustring> nick;
 
         Gtk::TreeModelColumn<DCC*> dcc_ptr;
 
         ModelColumns() {
-            add(status); add(filename); add(filesize);
-            add(progress); add(nick); add(dcc_ptr);
+            add(progress); add(status); add(filename);
+            add(filesize); add(nick); add(dcc_ptr);
         }
     };
 
