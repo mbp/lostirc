@@ -1,6 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
 2002-12-01  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * MainNotebook.cpp: Use static_cast<> instead of dynamic_cast<>.
+
+2002-12-01  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Release 0.2.2
 
