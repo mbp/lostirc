@@ -1,5 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-01-05  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * Parser.cpp: Unwanted character set conversion happened when
+          retrieving the list of names because we used operator >>. Fixed.
+
 2003-01-04  Morten Brix Pedersen  <morten@wtf.dk>
 
         * MainNotebook.cpp: Fix segfault when closing a tab with

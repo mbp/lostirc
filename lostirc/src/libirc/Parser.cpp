@@ -867,20 +867,24 @@ void Parser::Names(const ustring& chan, const ustring& names)
     Channel *c = _conn->findChannel(channel);
     if (c && !c->endOfNames) {
 
-        std::istringstream ss(names);
-        ustring buf;
+        ustring::size_type lastPos = names.find_first_not_of(' ', 0);
+        ustring::size_type pos = names.find_first_of(' ', lastPos);
 
-        while (ss >> buf)
+        while (ustring::npos != pos || ustring::npos != lastPos)
         {
-            if (buf[0] == '@') {
-                c->addUser(buf.substr(1), IRC::OP);
-            } else if (buf[0] == '+') {
-                c->addUser(buf.substr(1), IRC::VOICE);
-            } else if (buf[0] == '%') {
-                c->addUser(buf.substr(1), IRC::HALFOP);
-            } else {
-                c->addUser(buf, IRC::NONE);
-            }
+            Glib::ustring nick = names.substr(lastPos, pos - lastPos);
+
+            if (nick[0] == '@')
+                  c->addUser(nick.substr(1), IRC::OP);
+            else if (nick[0] == '+')
+                  c->addUser(nick.substr(1), IRC::VOICE);
+            else if (nick[0] == '%')
+                  c->addUser(nick.substr(1), IRC::HALFOP);
+            else
+                  c->addUser(nick, IRC::NONE);
+
+            lastPos = names.find_first_not_of(' ', pos);
+            pos = names.find_first_of(' ', lastPos);
         }
 
     } else {

@@ -22,6 +22,7 @@ LostIRC (x.x.x)
     ISO-8859-1.
   * Gettext support added, making LostIRC translate-able to other languages
     than English (see po/ directory).
+  * A bug which caused non-UTF8 compatible nicknames to fail has been fixed.
 
 LostIRC (0.2.4) - Sun Dec, 29th 2002
   * The "Less bugs and more features for 2003" release.
