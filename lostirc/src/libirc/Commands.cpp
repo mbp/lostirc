@@ -369,4 +369,22 @@ void Commands::Exec(ServerConnection *conn, const string& params)
 }
 */
 
+
+bool Commands::commandCompletion(const string& word, string& str)
+{
+    string lcword = word;
+    lcword = Util::lower(lcword);
+    for (int i = 0; cmds[i].cmd != 0; ++i) {
+        string lccmd = cmds[i].cmd;
+        lccmd = Util::lower(lccmd);
+        if (lccmd.length() > lcword.length()) {
+            if (lcword == lccmd.substr(0, lcword.length())) {
+                str = cmds[i].cmd;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 LostIRCApp* Commands::app;

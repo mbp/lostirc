@@ -56,13 +56,11 @@ void Entry::onEntry()
         }
 
     } else {
-        if (!_tab->getConn()->Session.isConnected && msg.size() > 0) {
+        if (!_tab->getConn()->Session.isConnected) {
             _tab->parseAndInsert("Not connected to server.\n");
-        } else if (msg.size() > 0) {
-            if(!_tab->is_on_channel) {
-                  _tab->parseAndInsert("Not on any channel.\n");
-                  return;
-            }
+        } else if (!_tab->is_on_channel) {
+            _tab->parseAndInsert("Not on any channel.\n");
+        } else {
             printText(msg);
         }
     }
@@ -100,22 +98,28 @@ gint Entry::on_key_press_event(GdkEventKey* e)
             if (i != _entries.rend())
                   ++i;
         }
-    }
-
-    // Nick completion using Tab key
-    if ((e->keyval == GDK_Tab)) {
+    } else if ((e->keyval == GDK_Tab)) {
+        // Nick completion using Tab key
         string line = get_text();
-        if (line.length() > 0) {
-            string str;
+        if (!line.empty()) {
+            string str, word;
             string::size_type pos = line.find_last_of(" ");
-            string word;
             if (pos == string::npos) {
                 pos = 0;
                 word = line.substr(pos);
             } else {
                 word = line.substr(pos + 1);
             }
-            if (_tab->nickCompletion(word, str)) {
+            if (line.at(0) == '/' && !word.empty()) {
+                std::cout << "wee..." << std::endl;
+                // Command completion, could be prettier
+                if (GuiCommands::commandCompletion(word.substr(1), str)) {
+                    std::cout << "returned true.." << std::endl;
+                    set_text("/" + str + " ");
+                }
+
+            } else if (_tab->nickCompletion(word, str)) {
+                // Nick-completetion
                 if (pos == 0) {
                     set_text("");
                     append_text(str + ", ");

@@ -31,6 +31,7 @@ public:
     static void SetFont(ServerConnection *conn, const std::string& params);
     static void NewServer(ServerConnection *conn, const std::string& params);
     static void commands(ServerConnection *conn, const std::string& params);
+    static bool commandCompletion(const std::string& word, std::string& str);
 
     static MainWindow *mw;
 
