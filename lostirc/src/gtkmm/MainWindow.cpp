@@ -266,7 +266,7 @@ void MainWindow::newTab(ServerConnection *conn)
 {
     string name = "server";
     conn->Session.servername = name;
-    Tab *tab = notebook.addChannelTab(convert_to_utf8(name), conn);
+    Tab *tab = notebook.addTab(convert_to_utf8(name), conn);
     notebook.show_all();
 
     // XXX: this is a hack for a "bug" in the gtkmm code which makes the
@@ -283,7 +283,7 @@ Tab* MainWindow::newServer()
     string name = "server";
     ServerConnection *conn = app.newServer();
     conn->Session.servername = name;
-    Tab *tab = notebook.addChannelTab(convert_to_utf8(name), conn);
+    Tab *tab = notebook.addTab(convert_to_utf8(name), conn);
     tab->setInActive();
     return tab;
 }
@@ -322,13 +322,13 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
         notebook.set_current_page(8);
     }
     else if ((e->keyval == GDK_c) && (e->state & GDK_CONTROL_MASK)) {
-        TabChannel *tab = dynamic_cast<TabChannel*>(notebook.getCurrent());
-        if (tab && tab->getConn()->Session.isConnected && tab->isActive()) {
+        Tab *tab = notebook.getCurrent();
+        if (tab->isChannel() && tab->getConn()->Session.isConnected && tab->isActive()) {
             // It's a channel, so we need to part it
             tab->getConn()->sendPart(Glib::locale_from_utf8(notebook.getLabel(tab)->get_text()), "");
         } else {
             // Query
-            notebook.getCurrent()->getConn()->removeChannel(Glib::locale_from_utf8(notebook.getLabel(notebook.getCurrent())->get_text()));
+            tab->getConn()->removeChannel(Glib::locale_from_utf8(notebook.getLabel(tab)->get_text()));
         }
         notebook.closeCurrent();
     }

@@ -26,16 +26,15 @@
 #include <vector>
 
 class Tab;
-class TabChannel;
-class TabQuery;
 
 class MainNotebook : public Gtk::Notebook
 {
 public:
     MainNotebook();
 
-    TabChannel* addChannelTab(const Glib::ustring& name, ServerConnection *conn);
-    TabQuery* addQueryTab(const Glib::ustring& name, ServerConnection *conn);
+    Tab* addTab(const Glib::ustring& name, ServerConnection *conn);
+    Tab* addChannelTab(const Glib::ustring& name, ServerConnection *conn);
+    Tab* addQueryTab(const Glib::ustring& name, ServerConnection *conn);
     Tab* getCurrent(ServerConnection *conn);
     Tab* getCurrent();
     Gtk::Label* getLabel(Tab *tab);

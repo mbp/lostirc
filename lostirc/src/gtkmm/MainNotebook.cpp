@@ -31,7 +31,26 @@ MainNotebook::MainNotebook()
     signal_switch_page().connect(SigC::slot(*this, &MainNotebook::onSwitchPage));
 }
 
-TabChannel * MainNotebook::addChannelTab(const ustring& name, ServerConnection *conn)
+Tab* MainNotebook::addTab(const ustring& name, ServerConnection *conn)
+{
+    int pagenum = findPage("(server)", conn);
+
+    if (pagenum != -1) {
+        // If we have a "server"-tab, reuse it
+        Tab* tab = dynamic_cast<Tab*>(get_nth_page(pagenum));
+        getLabel(tab)->set_text(name);
+        tab->setActive();
+        show_all();
+        return tab;
+    } else {
+        Tab *tab = manage(new Tab(conn, fontdescription));
+        pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, name));
+        show_all();
+        return tab;
+    }
+}
+
+Tab* MainNotebook::addChannelTab(const ustring& name, ServerConnection *conn)
 {
     // First try to find out whether we have a "server"-tab for this
     // ServerConnection.
@@ -39,31 +58,47 @@ TabChannel * MainNotebook::addChannelTab(const ustring& name, ServerConnection *
 
     if (pagenum != -1) {
         // If we have a "server"-tab, reuse it as a channel-tab.
-        TabChannel* tab = dynamic_cast<TabChannel*>(get_nth_page(pagenum));
+        Tab* tab = dynamic_cast<Tab*>(get_nth_page(pagenum));
         getLabel(tab)->set_text(name);
         tab->setActive();
+        tab->setChannel(true);
         show_all();
         return tab;
     } else if (Tab *tab = findTab(name, conn, true)) {
-        // If we find an *inactive* channel-tab, lets reuse it.
+        // If we find an *inactive* tab, lets reuse it.
         tab->setActive();
+        tab->setChannel(true);
         getLabel(tab)->set_text(name);
-        return dynamic_cast<TabChannel*>(tab);
+        return tab;
     } else {
         // If not, create a new channel-tab.
-        TabChannel *tab = manage(new TabChannel(conn, fontdescription));
+        Tab *tab = manage(new Tab(conn, fontdescription));
+        tab->setChannel(true);
         pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, name));
         show_all();
         return tab;
     }
 }
 
-TabQuery * MainNotebook::addQueryTab(const ustring& name, ServerConnection *conn)
+Tab* MainNotebook::addQueryTab(const ustring& name, ServerConnection *conn)
 {
-    TabQuery *tab = manage(new TabQuery(conn, fontdescription));
-    pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, name));
-    show_all();
-    return tab;
+    int pagenum = findPage("(server)", conn);
+
+    if (pagenum != -1) {
+        // If we have a "server"-tab, reuse it
+        Tab* tab = dynamic_cast<Tab*>(get_nth_page(pagenum));
+        getLabel(tab)->set_text(name);
+        tab->setActive();
+        tab->setQuery(true);
+        show_all();
+        return tab;
+    } else {
+        Tab *tab = manage(new Tab(conn, fontdescription));
+        tab->setQuery(true);
+        pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, name));
+        show_all();
+        return tab;
+    }
 }
 
 Gtk::Label* MainNotebook::getLabel(Tab *tab)

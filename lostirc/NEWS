@@ -8,6 +8,8 @@ LostIRC (x.x.x)
     its sorting.
   * The nick-list now uses the current locales sorting when sorting nicks
     instead of the C locale.
+  * When starting the client, or connecting to a new server, the nicklist
+    appeared always. Now it only appears when actually joining a channel.
   * You can now specify a specific DCC port to use for DCC SEND. (thanks,
     Michael Kristensen)
   * The statusbar is now updated right after connecting to a server, and

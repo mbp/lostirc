@@ -1,5 +1,12 @@
 For a summary of changes between releases - see the NEWS file.
 
+2002-11-27  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * NickList.cpp/NickList.h: Seperate NickList code into its own class.
+        * Tab.cpp/Tab.h: Remove TabChannel and TabQuery inheriting from Tab.
+          Instead we identify the class with a bool member. Enabling us to
+          remove or add the nicklist dynamically.
+
 2002-11-25  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Move utf8-fallback code into its own function: convert_to_utf8().

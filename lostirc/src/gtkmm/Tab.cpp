@@ -31,8 +31,8 @@ using Glib::ustring;
 
 Tab::Tab(ServerConnection *conn, Pango::FontDescription font)
     : Gtk::VBox(), isHighlighted(false), hasPrefs(false),
-    isOnChannel(true), _conn(conn), _textwidget(font), 
-    _entry(this)
+    isOnChannel(true), _conn(conn), _nicklist(0), _textwidget(font),
+    _isChannel(false), _isQuery(false), _entry(this)
 {
     _hpaned = new Gtk::HPaned();
 
@@ -55,6 +55,90 @@ Tab::~Tab()
     delete _hpaned;
 }
 
+void Tab::setInActive()
+{
+    if (isActive()) {
+        Gtk::Label *_label = AppWin->getNotebook().getLabel(this);
+        _label->set_text("(" + _label->get_text() + ")");
+        isOnChannel = false;
+    }
+}
+
+void Tab::setActive()
+{
+    isOnChannel = true;
+    if (_nicklist)
+          _nicklist->setActive();
+
+}
+
+void Tab::setQuery(bool value)
+{
+    _isQuery = value;
+    _isChannel = !value;
+    addOrRemoveNickList();
+}
+
+void Tab::setChannel(bool value)
+{
+    _isChannel = value;
+    _isQuery = !value;
+    addOrRemoveNickList();
+
+}
+
+void addOrRemoveNickList()
+{
+    if (isChannel() && !_nicklist) {
+        _nicklist = new NickList;
+        _hpaned->pack2(*_nicklist, false, true);
+    } else if (isQuery() && _nicklist) {
+        _hpaned->remove(*_nicklist);
+        delete _nicklist;
+        _nicklist = 0;
+    }
+}
+
+void Tab::insertUser(const Glib::ustring& user, IRC::UserMode m)
+{
+    if (isChannel())
+          _nicklist->insertUser(user, m);
+}
+
+void Tab::removeUser(const Glib::ustring& nick)
+{
+    if (isChannel())
+          _nicklist->removeUser(nick);
+}
+
+void Tab::renameUser(const Glib::ustring& from, const Glib::ustring& to)
+{
+    if (isChannel())
+          _nicklist->renameUser(from, to);
+    else if (isQuery())
+          AppWin->getNotebook().getLabel(this)->set_text(to);
+}
+
+bool Tab::findUser(const Glib::ustring& nick)
+{
+    if (isChannel())
+          return _nicklist->findUser(nick);
+    else 
+          return (nick == AppWin->getNotebook().getLabel(this)->get_text());
+    
+}
+
+std::vector<Glib::ustring> Tab::getNicks()
+{
+    if (isChannel())
+          return _nicklist->getNicks();
+    else {
+        std::vector<Glib::ustring> vec;
+        vec.push_back(AppWin->getNotebook().getLabel(this)->get_text());
+        return vec;
+    }
+}
+
 void Tab::startPrefs()
 {
     remove(*_hpaned);
@@ -75,143 +159,4 @@ void Tab::endPrefs()
     pack_start(*_hpaned);
     _entry.grab_focus();
     hasPrefs = false;
-}
-
-TabChannel::TabChannel(ServerConnection *conn, Pango::FontDescription font)
-    : Tab(conn, font),
-    _columns(),
-    _liststore(Gtk::ListStore::create(_columns)),
-    _treeview(_liststore),
-    _users("Not on channel")
-{
-
-    Gtk::ScrolledWindow *swin = manage(new Gtk::ScrolledWindow());
-    swin->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
-
-    _treeview.append_column("", _columns.status);
-    _treeview.append_column("", _columns.nick);
-    _treeview.get_selection()->set_mode(Gtk::SELECTION_NONE);
-    _liststore->set_default_sort_func(SigC::slot(*this, &TabChannel::sortFunc));
-    _liststore->set_sort_column_id(Gtk::TreeSortable::DEFAULT_SORT_COLUMN_ID, Gtk::SORT_ASCENDING);
-
-    /* FIXME: no set_column_width() like in the old days! */
-
-    _treeview.set_headers_visible(false);
-    //_treeview.set_default_size(100, 100);
-    swin->add(_treeview);
-
-    _users.add(*swin);
-    _hpaned->pack2(_users, false, true);
-}
-
-void TabChannel::updateUserNumber()
-{
-    size_t size = _liststore->children().size();
-    if (size > 0) {
-        std::stringstream ss;
-        ss << size;
-        _users.set_label(ss.str() + " users");
-    } else {
-        _users.set_label("Not on channel");
-    }
-}
-
-void TabChannel::insertUser(const ustring& nick, IRC::UserMode m)
-{
-    Gtk::TreeModel::Row row = *_liststore->append();
-    row[_columns.nick] = nick;
-
-    switch (m)
-    {
-        case IRC::OP:
-            row[_columns.status] = "@";
-            row[_columns.priority] = 3;
-            break;
-        case IRC::VOICE:
-            row[_columns.status] = "+";
-            row[_columns.priority] = 2;
-            break;
-        case IRC::HALFOP:
-            row[_columns.status] = "%";
-            row[_columns.priority] = 1;
-            break;
-        case IRC::NONE:
-            row[_columns.status] = " ";
-            row[_columns.priority] = 0;
-    }
-
-    updateUserNumber();
-}
-
-void TabChannel::removeUser(const ustring& nick)
-{
-    Gtk::ListStore::iterator i = _liststore->children().begin();
-
-    while (i != _liststore->children().end())
-    {
-        if (i->get_value(_columns.nick) == nick)
-              i = _liststore->erase(i);
-        else
-              ++i;
-    }
-
-    updateUserNumber();
-}
-
-void TabChannel::renameUser(const ustring& from, const ustring& to)
-{
-    Gtk::ListStore::iterator i = _liststore->children().begin();
-
-    while (i != _liststore->children().end())
-    {
-        if (i->get_value(_columns.nick) == from) {
-            i->set_value(_columns.nick, to);
-            break;
-        }
-        i++;
-    }
-}
-
-bool TabChannel::findUser(const ustring& nick)
-{
-    Gtk::ListStore::iterator i = _liststore->children().begin();
-
-    while (i != _liststore->children().end())
-    {
-        if (i->get_value(_columns.nick) == nick)
-              return true;
-        i++;
-    }
-    return false;
-}
-
-vector<ustring> TabChannel::getNicks()
-{
-    vector<ustring> nicks;
-
-    Gtk::ListStore::iterator i = _liststore->children().begin();
-
-    for (i = _liststore->children().begin(); i != _liststore->children().end(); ++i)
-    {
-        nicks.push_back(i->get_value(_columns.nick));
-    }
-
-    return nicks;
-}
-
-int TabChannel::sortFunc(const Gtk::TreeModel::iterator& i1, const Gtk::TreeModel::iterator& i2)
-{
-    // Sort the nicklist. The status field has highest priority, nick has
-    // second priority.
-
-    // This is not very readable, but it works, and it has to be fast when
-    // joining huge channels.
-
-    if (i1->get_value(_columns.priority) == i2->get_value(_columns.priority))
-        return i1->get_value(_columns.nick).compare(i2->get_value(_columns.nick));
-    else if (i1->get_value(_columns.priority) > i2->get_value(_columns.priority))
-          return -1;
-    else
-          return 1;
-
 }

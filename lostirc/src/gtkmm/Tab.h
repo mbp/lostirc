@@ -34,6 +34,7 @@
 #include "MainWindow.h"
 #include "Entry.h"
 #include "TextWidget.h"
+#include "NickList.h"
 
 class ServerConnection;
 
@@ -49,22 +50,24 @@ public:
     void startPrefs();
     void endPrefs();
 
-    virtual void insertUser(const Glib::ustring& user, IRC::UserMode m = IRC::NONE) = 0;
-    virtual void removeUser(const Glib::ustring& nick) = 0;
-    virtual void renameUser(const Glib::ustring& from, const Glib::ustring& to) = 0;
-    virtual bool findUser(const Glib::ustring& nick) = 0;
-    virtual std::vector<Glib::ustring> getNicks() = 0;
+    void insertUser(const Glib::ustring& user, IRC::UserMode m = IRC::NONE);
+    void removeUser(const Glib::ustring& nick);
+    void renameUser(const Glib::ustring& from, const Glib::ustring& to);
+    bool findUser(const Glib::ustring& nick);
+    std::vector<Glib::ustring> getNicks();
     TextWidget& getText() { return _textwidget; }
-    void setInActive() {
-        if (isActive()) {
-            Gtk::Label *_label = AppWin->getNotebook().getLabel(this);
-            _label->set_text("(" + _label->get_text() + ")");
-            isOnChannel = false;
-        }
-    }
-    virtual void setActive() {
-        isOnChannel = true;
-    }
+    void setInActive();
+    void setActive();
+
+    void setQuery(bool value);
+
+    void setChannel(bool value);
+
+    bool isQuery() { return _isQuery; }
+    bool isChannel() { return _isChannel; }
+
+    void addOrRemoveNickList();
+            
     bool isActive() { return isOnChannel; }
     bool isHighlighted;
     bool hasPrefs;
@@ -74,71 +77,16 @@ private:
     ServerConnection *_conn;
     Gtk::ScrolledWindow _swin;
     Gtk::HBox _hbox;
+    NickList *_nicklist;
 
-protected:
     Gtk::VBox _vbox;
     Gtk::HPaned *_hpaned;
     TextWidget _textwidget;
+
+    bool _isChannel;
+    bool _isQuery;
+
     Entry _entry;
-};
-
-class TabQuery : public Tab
-{
-public:
-    TabQuery(ServerConnection *conn, Pango::FontDescription font)
-            : Tab(conn, font) { }
-
-    void insertUser(const Glib::ustring& user, IRC::UserMode i = IRC::NONE) {};
-    void removeUser(const Glib::ustring& nick) {};
-    void renameUser(const Glib::ustring& from, const Glib::ustring& to) {
-        AppWin->getNotebook().getLabel(this)->set_text(to);
-    }
-    bool findUser(const Glib::ustring& nick) {
-        if (nick == AppWin->getNotebook().getLabel(this)->get_text())
-              return true;
-        else
-              return false;
-    }
-    std::vector<Glib::ustring> getNicks() {
-        std::vector<Glib::ustring> vec; vec.push_back(AppWin->getNotebook().getLabel(this)->get_text()); return vec;
-    }
-};
-
-class TabChannel : public Tab
-{
-
-public:
-    TabChannel(ServerConnection *conn, Pango::FontDescription font);
-
-    void insertUser(const Glib::ustring& user, IRC::UserMode i = IRC::NONE);
-    void removeUser(const Glib::ustring& nick);
-    void renameUser(const Glib::ustring& from, const Glib::ustring& to);
-    bool findUser(const Glib::ustring& nick);
-    std::vector<Glib::ustring> getNicks();
-
-    void setActive() { _liststore->clear(); Tab::setActive(); }
-
-private:
-    void updateUserNumber();
-    int sortFunc(const Gtk::TreeModel::iterator& i1, const Gtk::TreeModel::iterator& i2);
-
-    /* what our columned-list contains */
-    struct ModelColumns : public Gtk::TreeModel::ColumnRecord
-    {
-        Gtk::TreeModelColumn<Glib::ustring> status;
-        Gtk::TreeModelColumn<Glib::ustring> nick;
-        Gtk::TreeModelColumn<int> priority;
-
-        ModelColumns() { add(status); add(nick); add(priority); }
-    };
-
-
-    ModelColumns _columns;
-    Glib::RefPtr<Gtk::ListStore> _liststore;
-    Gtk::TreeView _treeview;
-
-    Gtk::Frame _users;
-
 };
 
 #endif
