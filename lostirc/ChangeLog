@@ -1,3 +1,19 @@
+LostIRC (0.0.5) - Fri Mar 8th 2002
+  * An unwanted newline occuring in a /whois has been removed
+  * The nick-list is now properly sorted
+  * The TCP code has been improved severely; when receiving a lot of data, the
+    program will not feel as laggy as before.
+  * Fix lack of visible text which occured on gcc 2.96 systems (RedHat,
+    Mandrake, etc.)
+  * When having defined channels to autojoin on connect, a empty server tab
+    will not be created anymore.
+  * When creating a new server tab with 'alt + n', the program switched to the
+    first tab, fixed.
+  * When clicking in the message window, focus is no longer lost from the
+    inputfield
+  * You can now use tab to browse through the fields in preferences.
+  * The /LIST command now works without parameters
+
 LostIRC (0.0.4) - Sun Mar 3rd 2002
   * A "perform" feature has been implemented, alongside a new preferences
     window, here you can add new servers which should be auto-joined, and you
