@@ -2,6 +2,7 @@ CRITICAL:
 ---------
   * Implement reading in ServerConnection better (more efficiently)
   * Implement DCC CHAT
+  * DCC SEND freezes the client until finished.
 
 NICE-TO-HAVE:
 ------------
@@ -17,7 +18,6 @@ RANDOM BUGS:
   * you can't see long nicks in nick-list, possibility to move the nick-list
     as a user
   * nicks overlaps status (@, + etc.) in nick-list.
-  * strip all mIRC color-codes from ALL strings, don't show colors at all.
   * when away/unaway - title isn't updated until switch tab
   * on some systems, there is commas in the real name field (3 to be
     precise)
@@ -35,6 +35,7 @@ WAITING FOR GTKMM2:
   * Should have a limit on the text-buffer, not go on forever.
   * /CLEAR, /CLEARALL.
   * scrollbar has weird behaviour when resizing window
+  * strip all mIRC color-codes from ALL strings, don't show colors at all.
 
 DCC:
 ---
