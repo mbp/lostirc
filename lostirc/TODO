@@ -28,7 +28,6 @@ GTKMM2 STUFF:
   * strip all mIRC color-codes from ALL strings, don't show colors at all.
   * URLs clickable
   * Nick-list is not resorted on changes
-  * Nick-list expands on long nicks
 
 DCC:
 ---
