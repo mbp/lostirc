@@ -47,6 +47,7 @@ private:
     Gtk::Entry *passentry;
     Gtk::Entry *portentry;
     Gtk::Entry *hostentry;
+    Gtk::Entry *nickcompletionentry;
     Gtk::Entry *nickentry;
     Gtk::Text *cmdtext;
     Gtk::Button *closebutton;
@@ -57,6 +58,7 @@ private:
     Tab *tab;
 
     void saveEntry();
+    void saveSettings();
     void removeEntry();
     void addEntry();
     void onSelectRow(int row, int col, GdkEvent* e);

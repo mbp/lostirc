@@ -111,6 +111,19 @@ Prefs::Prefs()
 
     performbox->pack_start(*serverhbox, 1, 1);
     pages().push_back(Gtk::Notebook_Helpers::TabElem(*performbox, "Autojoin servers"));
+
+    /* nickcompletion character */
+    nickcompletionentry = manage(new Gtk::Entry(1));
+    nickcompletionentry->set_text(GuiCommands::mw->getApp()->getCfg().getOpt("nickcompletion_character"));
+    Gtk::Frame *frame10 = manage(new Gtk::Frame("Nick-completion character"));
+    frame10->add(*nickcompletionentry);
+    prefsbox->pack_start(*frame10, 0, 0);
+
+    /* save button */
+    Gtk::Button *savebutt = manage(new Gtk::Button("Save settings"));
+    savebutt->clicked.connect(slot(this, &Prefs::saveSettings));
+    prefsbox->pack_start(*savebutt, 0, 0);
+
     pages().push_back(Gtk::Notebook_Helpers::TabElem(*prefsbox, "Preferences"));
     show_all();
 }
@@ -124,6 +137,12 @@ Prefs::~Prefs()
 void Prefs::endPrefs()
 {
     currentTab->endPrefs();
+}
+
+void Prefs::saveSettings()
+{
+    GuiCommands::mw->getApp()->getCfg().setOpt("nickcompletion_character", nickcompletionentry->get_text());
+
 }
 
 void Prefs::saveEntry()
