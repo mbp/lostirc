@@ -4,7 +4,7 @@ Version:        @VERSION@
 Release:        1
 License:        GPL
 Group:          Applications/Communications
-Source0:        http://prdownloads.sourceforge.net/lostirc/lostirc-0.0.4.tar.gz
+Source:         http://prdownloads.sourceforge.net/lostirc/lostirc-@VERSION@.tar.gz
 URL:            http://lostirc.sourceforge.net/
 BuildRoot:      /var/tmp/%{name}-%{version}-root
 AutoReqProv:    no
