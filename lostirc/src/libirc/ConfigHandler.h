@@ -25,17 +25,15 @@
 #include <map>
 #include "Utils.h"
 
-using namespace std;
-
 class ConfigHandler {
 
 public:
     bool readConfig();
-    bool setParam(const string& param, const string& value);
-    string getParam(const string& param);
+    bool setParam(const std::string& param, const std::string& value);
+    std::string getParam(const std::string& param);
 
 private:
-    map<string, string> _settings;
+    std::map<std::string, std::string> _settings;
 
 };
 #endif

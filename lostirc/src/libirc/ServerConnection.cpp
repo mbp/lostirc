@@ -19,6 +19,8 @@
 #include "ServerConnection.h"
 #include "InOut.h"
 
+using std::string;
+
 ServerConnection::ServerConnection(InOut *inout, const string& host, int port, const string& nick)
     : _io(inout)
 {

@@ -20,6 +20,8 @@
 #include "ServerConnection.h"
 #include "Utils.h"
 
+using std::string;
+
 struct UserCommands cmds[] = {
     { "SERVER",   Commands::Server,     0 },
     { "JOIN",     Commands::Join,       1 },

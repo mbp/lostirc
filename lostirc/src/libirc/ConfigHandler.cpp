@@ -18,13 +18,20 @@
 
 #include "ConfigHandler.h"
 
+using std::string;
+using std::cout;
+using std::vector;
+using std::map;
+
 bool ConfigHandler::readConfig()
 {
     string home(getenv("HOME"));
     ifstream in(string(home + "/.lostircrc").c_str());
 
-    string str;
+    if (in.fail())
+          return false;
 
+    string str;
     while (getline(in, str)) {
         vector<string> vec;
         Utils::Tokenize(str, vec);
@@ -77,7 +84,6 @@ string ConfigHandler::getParam(const string& param)
 
     if (i != _settings.end())
           return (*i).second;
-
 
     return "";
 

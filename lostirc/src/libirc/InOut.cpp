@@ -20,19 +20,22 @@
 #include "ServerConnection.h"
 #include "Parser.h"
 
+using std::string;
+using std::vector;
+
 InOut::InOut()
 {
     uname(&uname_info);
 }
 
-ServerConnection * InOut::newServer(const string& host, int port, const string& nick)
+ServerConnection* InOut::newServer(const string& host, int port, const string& nick)
 {
     ServerConnection *conn = new ServerConnection(this, host, port, nick);
     _servers.push_back(conn);
     return conn;
 }
 
-ServerConnection * InOut::newServer(const string& nick, const string& realname)
+ServerConnection* InOut::newServer(const string& nick, const string& realname)
 {
     ServerConnection *conn = new ServerConnection(this, nick, realname);
     _servers.push_back(conn);

@@ -22,39 +22,37 @@
 #include <string>
 #include <sstream>
 
-using namespace std;
-
 class ServerConnection;
 
 struct UserCommands {
     char *cmd;
-    bool (*function)(ServerConnection *, const string&);
+    bool (*function)(ServerConnection *, const std::string&);
     int reqConnected;
 };
 
 class Commands
 {
 public:
-    static bool send(ServerConnection *conn, string cmd, const string& params);
+    static bool send(ServerConnection *conn, std::string cmd, const std::string& params);
 
-    static bool Join(ServerConnection *conn, const string& params);
-    static bool Part(ServerConnection *conn, const string& params);
-    static bool Quit(ServerConnection *conn, const string& params);
-    static bool Kick(ServerConnection *conn, const string& params);
-    static bool Server(ServerConnection *conn, const string& params);
-    static bool Nick(ServerConnection *conn, const string& params);
-    static bool Whois(ServerConnection *conn, const string& params);
-    static bool Mode(ServerConnection *conn, const string& params);
-    static bool Ctcp(ServerConnection *conn, const string& cmd);
-    static bool Away(ServerConnection *conn, const string& params);
-    static bool Invite(ServerConnection *conn, const string& cmd);
-    static bool Topic(ServerConnection *conn, const string& cmd);
-    static bool Banlist(ServerConnection *conn, const string& params);
-    static bool Msg(ServerConnection *conn, const string& params);
-    static bool Notice(ServerConnection *conn, const string& params);
-    static bool Me(ServerConnection *conn, const string& params);
+    static bool Join(ServerConnection *conn, const std::string& params);
+    static bool Part(ServerConnection *conn, const std::string& params);
+    static bool Quit(ServerConnection *conn, const std::string& params);
+    static bool Kick(ServerConnection *conn, const std::string& params);
+    static bool Server(ServerConnection *conn, const std::string& params);
+    static bool Nick(ServerConnection *conn, const std::string& params);
+    static bool Whois(ServerConnection *conn, const std::string& params);
+    static bool Mode(ServerConnection *conn, const std::string& params);
+    static bool Ctcp(ServerConnection *conn, const std::string& cmd);
+    static bool Away(ServerConnection *conn, const std::string& params);
+    static bool Invite(ServerConnection *conn, const std::string& cmd);
+    static bool Topic(ServerConnection *conn, const std::string& cmd);
+    static bool Banlist(ServerConnection *conn, const std::string& params);
+    static bool Msg(ServerConnection *conn, const std::string& params);
+    static bool Notice(ServerConnection *conn, const std::string& params);
+    static bool Me(ServerConnection *conn, const std::string& params);
 
-    static string error;
+    static std::string error;
 
 };
 #endif

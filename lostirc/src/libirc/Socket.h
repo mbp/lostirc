@@ -26,8 +26,6 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 class Socket
 {
     int fd;
@@ -36,14 +34,14 @@ public:
     Socket();
     ~Socket();
 
-    bool connect(const string& host, int port);
-    bool send(const string& data);
-    bool receive(string& data);
+    bool connect(const std::string& host, int port);
+    bool send(const std::string& data);
+    bool receive(std::string& data);
     void setNonBlocking();
     void setBlocking();
     int getfd();
     void close();
-    string error;
+    std::string error;
 
 };
 #endif

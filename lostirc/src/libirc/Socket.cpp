@@ -23,6 +23,9 @@
 #include <fcntl.h>
 #include "Socket.h"
 
+using std::string;
+using std::cerr;
+
 Socket::Socket()
 {
     // Get us a file descriptor

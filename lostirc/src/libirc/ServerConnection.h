@@ -30,38 +30,38 @@ class ServerConnection
 {
 
 public:
-    ServerConnection(InOut *inout, const string& host, int port, const string& nick);
-    ServerConnection(InOut *inout, const string& nick, const string& realname);
+    ServerConnection(InOut *inout, const std::string& host, int port, const std::string& nick);
+    ServerConnection(InOut *inout, const std::string& nick, const std::string& realname);
 
-    bool Connect(const string &host, int port = 6667);
-    bool sendPong(const string& crap);
-    bool sendUser(const string& nick, const string& localhost, const string& remotehost, const string& name);
-    bool sendNick(const string& nick);
-    bool sendVersion(const string& to);
-    bool sendMsg(const string& to, const string& msg);
-    bool sendNotice(const string& to, const string& msg);
-    bool sendJoin(const string& chan);
-    bool sendPart(const string& chan);
-    bool sendKick(const string& nickandmsg);
-    bool sendWhois(const string& params);
-    bool sendQuit(const string& quitmsg);
-    bool sendMode(const string& params);
-    bool sendCtcp(const string& to, const string& params);
-    bool sendTopic(const string& chan, const string& params);
-    bool sendAway(const string& params);
-    bool sendInvite(const string& to, const string& params);
-    bool sendBanlist(const string& chan);
-    bool sendMe(const string& to, const string& msg);
+    bool Connect(const std::string &host, int port = 6667);
+    bool sendPong(const std::string& crap);
+    bool sendUser(const std::string& nick, const std::string& localhost, const std::string& remotehost, const std::string& name);
+    bool sendNick(const std::string& nick);
+    bool sendVersion(const std::string& to);
+    bool sendMsg(const std::string& to, const std::string& msg);
+    bool sendNotice(const std::string& to, const std::string& msg);
+    bool sendJoin(const std::string& chan);
+    bool sendPart(const std::string& chan);
+    bool sendKick(const std::string& nickandmsg);
+    bool sendWhois(const std::string& params);
+    bool sendQuit(const std::string& quitmsg);
+    bool sendMode(const std::string& params);
+    bool sendCtcp(const std::string& to, const std::string& params);
+    bool sendTopic(const std::string& chan, const std::string& params);
+    bool sendAway(const std::string& params);
+    bool sendInvite(const std::string& to, const std::string& params);
+    bool sendBanlist(const std::string& chan);
+    bool sendMe(const std::string& to, const std::string& msg);
 
     static gboolean readdata(GIOChannel *, GIOCondition, gpointer);
 
     // Session struct for all ServerConnections
     struct {
-        string nick;
-        string realname;
+        std::string nick;
+        std::string realname;
         int isConnected;
         int hasRegistered;
-        string servername;
+        std::string servername;
     } Session;
 
     InOut *_io;
