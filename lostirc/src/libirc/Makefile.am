@@ -13,4 +13,4 @@ libirc_a_SOURCES = ServerConnection.cpp ServerConnection.h \
                        irc_defines.h
 
 libirc_a_LIBS = $(DEPS_LIBS)
-INCLUDES = $(DEPS_CFLAGS)
+INCLUDES = $(DEPS_CFLAGS) -I$(top_srcdir)/intl

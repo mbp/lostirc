@@ -2,6 +2,11 @@ For a summary of changes between releases - see the NEWS file.
 
 2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * Added gettext support so LostIRC can be translated to different
+          languages. Get ready to a ton of build problems...
+
+2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
+
         * MainWindow.cpp: Add ALT-Left and ALT-Right keybindings to move to
           the tab on the left/right.
         * GuiCommands.cpp: Document that in displayKeybindings().

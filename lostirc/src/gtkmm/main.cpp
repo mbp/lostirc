@@ -16,11 +16,16 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <config.h>
 #include <glibmm/ustring.h>
 #include "MainWindow.h"
+#include <gettext.h>
 
 int main(int argc, char** argv)
 {
+    bindtextdomain(PACKAGE, LOCALEDIR);
+    textdomain(PACKAGE);
+
     bool autoconnect = true;
 
     for (int i = 0; i < argc; ++i)

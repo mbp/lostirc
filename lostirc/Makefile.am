@@ -1,6 +1,6 @@
-SUBDIRS = src
+SUBDIRS = m4 intl po src
 
-EXTRA_DIST = lostirc.desktop \
+EXTRA_DIST = config.rpath  lostirc.desktop \
              lostirc.1
 
 dist-hook: lostirc.spec
@@ -17,3 +17,5 @@ Kde_DATA = lostirc.desktop
 endif
 
 man_MANS = lostirc.1
+
+ACLOCAL_AMFLAGS = -I m4

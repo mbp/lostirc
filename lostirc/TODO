@@ -12,7 +12,6 @@ NICE-TO-HAVE:
 
   * Some way to seperate tabs from each other, so they are server sorted.
   * Recognise URLs (and make them clickable?)
-  * Add gettext/.po support.
   * Add support for choosing which encoding to use. Now if a user has a
     UTF-8 locale, he will also send his text in UTF-8, causing most other
     locales (and Windows, mIRC) to fail reading the string.

@@ -31,7 +31,6 @@
 #include "MainNotebook.h"
 #include "StatusBar.h"
 
-
 class MainWindow : public Gtk::Window, public FrontEnd
 {
     virtual bool on_key_press_event(GdkEventKey* e);
