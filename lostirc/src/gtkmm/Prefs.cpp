@@ -244,7 +244,6 @@ void Prefs::cancelPreferences()
 
 void Prefs::cancelGeneral()
 {
-    std::cout << "cancelGeneral" << std::endl;
     realnameentry.set_text(App->getCfg().getOpt("realname"));
     ircuserentry.set_text(App->getCfg().getOpt("ircuser"));
     ircnickentry.set_text(App->getCfg().getOpt("nick"));
