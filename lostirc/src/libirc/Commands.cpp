@@ -144,7 +144,7 @@ bool Commands::Invite(ServerConnection *conn, const string& params)
     ss >> to;
     ss >> chan;
 
-    if (action.empty()) {
+    if (chan.empty()) {
         error = "/INVITE <nick> <channel>, invites someone to a channel.";
         return false;
     } else {
