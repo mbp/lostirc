@@ -1,5 +1,11 @@
 For a summary of changes between releases - see the NEWS file.
 
+2004-06-13  Morten Brix Pedersen  <morten@wtf.dk>
+	* po/fr.po: Added. Thanks to Bruno Dusausoy.
+
+2004-06-05  Morten Brix Pedersen  <morten@wtf.dk>
+        * configure.ac: Bump version and release 0.4.0.
+
 2004-06-05  Morten Brix Pedersen  <morten@wtf.dk>
 	* MainNotebook.cpp: Implement simple sorting of tabs, using bubble
 	sort.

@@ -1,4 +1,7 @@
 LostIRC - (x.x.x)
+  * French translation added (thanks, Bruno Dusausoy)
+
+LostIRC - (0.4.0) - Sun Jun, 6th 2004
   * Ported to gtkmm 2.4.
   * IRC messages that are larger than the window now wraps characters and
     words better.
