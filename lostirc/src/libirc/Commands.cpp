@@ -105,8 +105,13 @@ bool Commands::Whois(ServerConnection *conn, const string& params)
 
 bool Commands::Mode(ServerConnection *conn, const string& params)
 {
-    conn->sendMode(params);
-    return true;
+    if (params.empty()) {
+        error = "/MODE <channel> <modes>, set modes for a channel.";
+        return false;
+    } else {
+        conn->sendMode(params);
+        return true;
+    }
 }
 
 bool Commands::Ctcp(ServerConnection *conn, const string& msg)
@@ -135,8 +140,13 @@ bool Commands::Away(ServerConnection *conn, const string& params)
 
 bool Commands::Banlist(ServerConnection *conn, const string& chan)
 {
-    conn->sendBanlist(chan);
-    return true;
+    if (chan.empty()) {
+        error = "/BANLIST <channel>, see banlist for channel.";
+        return false;
+    } else {
+        conn->sendBanlist(chan);
+        return true;
+    }
 }
 
 bool Commands::Invite(ServerConnection *conn, const string& params)
