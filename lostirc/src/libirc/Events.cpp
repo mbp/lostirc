@@ -34,12 +34,13 @@ Events::Events(InOut *inout)
     _events["noticepriv"] = "$7NOTICE %1 : %2";
     _events["noticepubl"] = "$7NOTICE %1 (to %3): %4";
     _events["error"] = "$4Error:$1 %1";
-    _events["away"] = "$3User %1 is away %2";
+    _events["away"] = "$3User %1 is away (%2)";
     _events["banlist"] = "$2Ban: %1 set by: %2";
     _events["unknown"] = "$3Unknown message: $2%1";
     _events["join"] = "$8-- %1 has joined %2";
     _events["part"] = "$8-- %1 has parted %2";
     _events["wallops"] = "$2WALLOPS -: %1 :- %2";
+    _events["kicked"] = "$8-- %1 was kicked from %2 by %3 (%4)";
 }
 
 void Events::emitEvent(const string& name, vector<string>& args, const string& to, ServerConnection *conn)

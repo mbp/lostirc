@@ -40,7 +40,6 @@ MainWindow::MainWindow()
 
     // Signals for all server events
     _io->evtDisplayMessage.connect(slot(this, &MainWindow::onDisplayMessage));
-    _io->evtServNumeric.connect(slot(this, &MainWindow::onServNumeric));
     _io->evtJoin.connect(slot(this, &MainWindow::onJoin));
     _io->evtKick.connect(slot(this, &MainWindow::onKick));
     _io->evtPart.connect(slot(this, &MainWindow::onPart));
@@ -125,7 +124,6 @@ void MainWindow::onKick(const string& kicker, const string& chan, const string& 
         // It's us who's been kicked
         tab->getLabel()->set_text("(" + chan + ")");
     }
-    _nb->insert(tab, "-- " + nick + " was kicked from " + chan + " by " + kicker + " (" + msg + ")\n");
     tab->removeUser(nick);
 }
 
@@ -198,17 +196,6 @@ void MainWindow::onCUMode(const string& nick, const string& chan, const vector<v
         _nb->insert(tab, "$4-- "  + nick + " sets mode " + vec[0] + " to " + vec[1] + "\n");
         tab->removeUser(vec[1]);
         tab->insertUser(*i);
-    }
-}
-
-void MainWindow::onServNumeric(int n, const string& from, const string& to, const string& msg, ServerConnection *conn)
-{
-    switch (n)
-    {
-        case 433: // ERR_NICKNAMEINUSE
-            // Apply a _ to the nick
-            conn->sendNick(conn->Session.nick += "_");
-            break;
     }
 }
 

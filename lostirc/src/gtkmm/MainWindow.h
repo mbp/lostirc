@@ -43,7 +43,6 @@ public:
 private:
     // Events
     void onDisplayMessage(const string& msg, const string& to, ServerConnection *conn);
-    void onServNumeric(int n, const string& to, const string& from, const string& msg, ServerConnection *conn);
     void onJoin(const string& nick, const string& chan, ServerConnection *conn);
     void onPart(const string& nick, const string& chan, ServerConnection *conn);
     void onQuit(const string& nick, const string& chan, ServerConnection *conn);

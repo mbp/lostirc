@@ -181,7 +181,7 @@ void Parser::CTCP(const string& from, const string& param, const string& rest)
         _evts->emitEvent("ctcp", args, "", _conn);
     } else if (command == "ACTION") {
 
-        string rest_ = rest.substr(pos, (rest.length() - pos) - 1);
+        string rest_ = rest.substr(pos + 1, (rest.length() - pos) - 1);
         vector<string> args;
         args.push_back(findNick(from));
         args.push_back(rest_);
@@ -242,6 +242,13 @@ void Parser::Kick(const string& from, const string& param, const string& msg)
     ss >> chan;
     ss >> nick;
 
+    vector<string> args;
+    args.push_back(nick);
+    args.push_back(chan);
+    args.push_back(findNick(from));
+    args.push_back(msg);
+
+    _evts->emitEvent("kicked", args, chan, _conn);
     _io->evtKick(findNick(from), chan, nick, msg, _conn);
 }
 
@@ -436,7 +443,7 @@ void Parser::Away(const string& from, const string& param, const string& rest)
     ss >> param2;
 
     vector<string> args;
-    args.push_back(from);
+    args.push_back(param2);
     args.push_back(rest);
 
     _evts->emitEvent("away", args, param2, _conn);
@@ -583,12 +590,17 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         Errhandler(from, param, rest);
         break;
 
+    case 412: // ERR_NOTEXTTOSEND (or something)
+        ServMsg(from, param, rest);
+        break;
+
     case 422: // ERR_NOTONCHANNEL
         Errhandler(from, param, rest);
         break;
 
     case 433: // ERR_NICKNAMEINUSE
-        _io->evtServNumeric(n, from, param, rest, _conn);
+        // Apply a _ to the nickname - XXX: also send msg to frontend?
+        _conn->sendNick(_conn->Session.nick += "_");
         break;
         
     case 438: // Nick change to fast
