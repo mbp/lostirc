@@ -48,6 +48,7 @@ public:
     void highlight(Tab *tab);
     void insert(Tab *tab, const std::string& str);
     void setFont();
+    int countTabs(ServerConnection *conn);
 
 private:
     void switchPage(Gtk::Notebook_Helpers::Page *p, unsigned int n);

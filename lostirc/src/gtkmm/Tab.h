@@ -65,8 +65,10 @@ public:
     void setStyle();
     void setFont(Gdk_Font *font);
     void setInActive() {
-        _label->set_text("(" + _label->get_text() + ")");
-        is_on_channel = false;
+        if (isActive()) {
+            _label->set_text("(" + _label->get_text() + ")");
+            is_on_channel = false;
+        }
     }
     void setActive() {
         is_on_channel = true;

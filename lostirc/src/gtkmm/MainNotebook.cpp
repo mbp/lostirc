@@ -133,12 +133,18 @@ void MainNotebook::switchPage(Gtk::Notebook_Helpers::Page *p, unsigned int n)
 
 void MainNotebook::closeCurrent()
 {
+    Tab *tab = dynamic_cast<Tab*>(get_current_child());
     // Can't delete last page
-    if (pages().size() > 1) {
-        Gtk::Notebook::Page *p = get_current();
-        pages().remove(p);
-        draw(NULL); // Needed for redrawing the widget
+    if (countTabs(tab->getConn()) > 1) {
+        pages().remove(get_current());
+    } else {
+        if (tab->getConn()->Session.isConnected) {
+            tab->getConn()->sendQuit();
+            tab->getConn()->disconnect();
+        }
+        tab->setInActive();
     }
+    draw(NULL); // Needed for redrawing the widget
 }
 
 void MainNotebook::highlight(Tab *tab)
@@ -229,4 +235,18 @@ void MainNotebook::destroyFontSelection(Gtk::FontSelectionDialog *w)
 {
     // XXX: plain gtk+ code
     gtk_widget_destroy((GtkWidget*)w->gtkobj());
+}
+
+int MainNotebook::countTabs(ServerConnection *conn)
+{
+    int num = 0;
+
+    Gtk::Notebook_Helpers::PageList::iterator i;
+
+    for (i = pages().begin(); i != pages().end(); ++i) {
+        Tab *tab = dynamic_cast<Tab*>((*i)->get_child());
+        if (tab->getConn() == conn)
+              num++;
+    }
+    return num;
 }
