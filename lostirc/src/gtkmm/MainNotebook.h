@@ -48,7 +48,7 @@ public:
     void setFont(const Glib::ustring& str);
     int countTabs(ServerConnection *conn);
     void updateTitle(Tab *tab = 0);
-    void MainNotebook::updateStatus(Tab *tab = 0);
+    void updateStatus(Tab *tab = 0);
 
 private:
     void onSwitchPage(GtkNotebookPage *p, unsigned int n);
