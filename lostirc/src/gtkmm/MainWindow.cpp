@@ -139,9 +139,8 @@ void MainWindow::displayMessage(const string& msg, ChannelBase& chan, ServerConn
     // created on join) - there is also a hack here to ensure that it's not
     // a channel
     char p = chan.getName().at(0);
-    if (!tab && (p != '#' || p != '&' || p != '!' || p != '+')) {
+    if (!tab && (p != '#' && p != '&' && p != '!' && p != '+'))
         tab = notebook.addQueryTab(Glib::locale_to_utf8(chan.getName()), conn);
-    }
 
     if (tab) {
         *tab << msg;
