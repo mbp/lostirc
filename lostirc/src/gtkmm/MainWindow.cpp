@@ -313,5 +313,8 @@ gint MainWindow::on_key_press_event(GdkEventKey* e)
             gtk_signal_emit_stop_by_name(GTK_OBJECT(this->gtkobj()), "key_press_event");
         }
     }
+    else if ((e->keyval == GDK_f) && (e->state & GDK_MOD1_MASK)) {
+        _nb->setFont();
+    }
     return 0;
 }

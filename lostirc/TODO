@@ -2,20 +2,22 @@ CRITICAL:
 ---------
   * Doesn't show in query when a user quits
   * Still connected to a server when closing last tab, should keep it open
-  * should have tab-completion on commands
 
 RANDOM:
 ------
- * limited tab highlighting, don't mark a tab red when
- * joining/parting/quitting
- * when a op gets voice, his status is lost
- * does op-status work properly?
- * write away reason in "you are away"
- * when away/unaway - title isn't updated until switch tab
- * ability to choose which nick-completion character to use
- * implement /help, /help shortcuts and /help commands
- * shortcut to change the font
+  * limited tab highlighting, don't mark a tab red when
+  * joining/parting/quitting
+  * when a op gets voice, his status is lost
+  * does op-status work properly?
+  * write away reason in "you are away"
+  * when away/unaway - title isn't updated until switch tab
+  * ability to choose which nick-completion character to use
+  * implement /help, /help shortcuts and /help commands
 
- * remove this from 'configure' at release time:
-   +extern "C" void exit(int);
+  * remove this from 'configure' at release time:
+    +extern "C" void exit(int);
 
+DONE:
+----
+  * should have tab-completion on commands
+  * shortcut to change the font
