@@ -2,6 +2,12 @@ For a summary of changes between releases - see the NEWS file.
 
 2004-03-18  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * ConfigHandler.cpp: Fix segmentation fault when there is no space
+        efter the equal sign in perform.conf. Thanks to Thomas Johansson for
+        the bug report.
+
+2004-03-18  Morten Brix Pedersen  <morten@wtf.dk>
+
         * DCCList.cpp: Rename two columns in DCC window: Progress -> %,
         Filesize -> Size.
 

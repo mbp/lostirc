@@ -2,6 +2,7 @@ LostIRC - (x.x.x)
   * You can now send files that contain spaces.
   * The password field for IRC servers are now masked by asterixs.
   * Some minor tweaks to the DCC window.
+  * Fix very rare segmentation fault in perform.conf
   * A FreeBSD compilation fix.
 
 LostIRC - (0.3.2) - Mon Feb, 2nd 2004

@@ -66,7 +66,11 @@ bool Servers::readServersFile()
 
         if (pos1 != ustring::npos) {
             param = tmp.substr(0, pos1 - 1);
-            value = tmp.substr(pos1 + 2);
+            try {
+                value = tmp.substr(pos1 + 2);
+            } catch (std::out_of_range) {
+                value = tmp.substr(pos1 + 1);
+            }
 
             if (param == "hostname") {
                 if (!server.empty()) {
