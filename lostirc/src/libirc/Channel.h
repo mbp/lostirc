@@ -31,12 +31,15 @@ class Channel {
     //std::vector<std::string> users;
 
 public:
+    Channel(const std::string& n) { name = n; endOfNames = false; }
     void setName(const std::string& n) { name = n; }
     std::string getName() { return name; }
     void addUser(const std::string& n, IRC::UserMode i = IRC::NONE);
     void removeUser(const std::string& u);
     bool findUser(const std::string& u);
     std::map<std::string, IRC::UserMode> getUsers() { return users; }
+
+    bool endOfNames; // have we reached our 'ENDOFNAMES' on the channel join?
 };
 
 #endif

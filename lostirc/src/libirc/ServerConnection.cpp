@@ -315,8 +315,7 @@ bool ServerConnection::sendRaw(const string& text)
 
 void ServerConnection::addChannel(const string& n)
 {
-    Channel *c = new Channel;
-    c->setName(n);
+    Channel *c = new Channel(n);
     Session.channels.push_back(c);
 }
 
