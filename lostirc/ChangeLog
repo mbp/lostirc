@@ -9,6 +9,8 @@ LostIRC (x.x.x)
   * When other people are parting with a message, the message is now being
     shown (delete your old ~/.lostirc.events!)
   * When a user changes a channel mode, it now looks more sane
+  * When changing nick too fast, and the server gives an error - you no longer
+    end up with an empty nick.
 
 LostIRC (0.0.5) - Fri Mar 8th 2002
   * An unwanted newline occuring in a /whois has been removed
