@@ -3,28 +3,35 @@ CRITICAL:
   * Implement reading in ServerConncetion better (more efficiently)
   * Implement DCC CHAT
   * Should have a limit on the text-buffer, not go on forever.
+  * port to gtkmm2 when it's ready
 
-RANDOM:
-------
-  * possibility to move nick-list so you can see long nicks.
-  * nicks overlaps status (@, + etc.) in nick-list.
-  * strip all mIRC color-codes from ALL strings, don't show colors at all.
+NICE-TO-HAVE:
+------------
+  * half-op support
   * limited tab highlighting, don't mark a tab red when
     joining/parting/quitting
-  * when away/unaway - title isn't updated until switch tab
   * implement /help, /help shortcuts and /help commands
-
-  * remove this from 'configure' at release time:
-    +extern "C" void exit(int); (:g/extern "C" void exit/d)
   * ipv6 support
-  * /PART, /OP (to be added) and more should work with current channel.
+  * note when window has lost focus; then highlight front-tab
 
+RANDOM BUGS:
+------------
+  * you can't see long nicks in nick-list, possibility to move the nick-list
+    as a user
+  * nicks overlaps status (@, + etc.) in nick-list.
+  * strip all mIRC color-codes from ALL strings, don't show colors at all.
+  * when away/unaway - title isn't updated until switch tab
+  * /PART, /OP (to be added) and more should work with current channel.
+  * on some systems, there is commas in the real name field (3 to be
+    precise)
   * lostirc.desktop shouldn't be copied on non-GNOME systems.
   * lostirc.desktop should be distributed as KDE link as well.
-  * note when window has lost focus; then highlight front-tab
   * check for EAGAIN on send()?
   * nick-list mentions "0 users" instead of "Not on channel" when a channel
     has been parted with /PART.
+
+  * remove this from 'configure' at release time:
+    +extern "C" void exit(int); (:g/extern "C" void exit/d)
 
 DCC:
 ---
@@ -50,7 +57,6 @@ DESIGN:
 
 BOOKMARK suggestion from Jim Winstead:
 -------------------------------------
-
  i'd love some sort of 'bookmark' feature that would make it easy to jump
  back to the point where i last left a channel. so if i'm chatting away
  in one channel and conversation is going on in another, i can latter
