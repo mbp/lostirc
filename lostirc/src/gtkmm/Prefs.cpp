@@ -29,9 +29,8 @@ Prefs::Prefs()
     : Gtk::VBox()
 {
 
-    notebook = manage(new Gtk::Notebook());
     set_spacing(2);
-    pack_start(*notebook, 1, 1);
+    pack_start(notebook, 1, 1);
 
     Gtk::VBox *generalbox = manage(new Gtk::VBox());
     Gtk::VBox *performbox = manage(new Gtk::VBox());
@@ -40,52 +39,47 @@ Prefs::Prefs()
     // General options-tab
 
     // IRC nick
-    ircnickentry = manage(new Gtk::Entry());
-    ircnickentry->set_text(AppWin->getApp().getCfg().getOpt("nick"));
+    ircnickentry.set_text(AppWin->getApp().getCfg().getOpt("nick"));
     Gtk::Frame *frame20 = manage(new Gtk::Frame("Nickname"));
-    frame20->add(*ircnickentry);
+    frame20->add(ircnickentry);
     generalbox->pack_start(*frame20, 0, 0);
 
     // IRC nick
-    realnameentry = manage(new Gtk::Entry());
-    realnameentry->set_text(AppWin->getApp().getCfg().getOpt("realname"));
+    realnameentry.set_text(AppWin->getApp().getCfg().getOpt("realname"));
     Gtk::Frame *frame21 = manage(new Gtk::Frame("Real name"));
-    frame21->add(*realnameentry);
+    frame21->add(realnameentry);
     generalbox->pack_start(*frame21, 0, 0);
 
     // IRC nick
-    ircuserentry = manage(new Gtk::Entry());
-    ircuserentry->set_text(AppWin->getApp().getCfg().getOpt("ircuser"));
+    ircuserentry.set_text(AppWin->getApp().getCfg().getOpt("ircuser"));
     Gtk::Frame *frame22 = manage(new Gtk::Frame("IRC username (ident)"));
-    frame22->add(*ircuserentry);
+    frame22->add(ircuserentry);
     generalbox->pack_start(*frame22, 0, 0);
 
-    notebook->pages().push_back(Gtk::Notebook_Helpers::TabElem(*generalbox, "General"));
+    notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*generalbox, "General"));
 
     // Preferences-tab
 
     // nickcompletion character
-    nickcompletionentry = manage(new Gtk::Entry(1));
-    nickcompletionentry->set_text(AppWin->getApp().getCfg().getOpt("nickcompletion_character"));
+    nickcompletionentry.set_max_length(1);
+    nickcompletionentry.set_text(AppWin->getApp().getCfg().getOpt("nickcompletion_character"));
     Gtk::Frame *frame10 = manage(new Gtk::Frame("Nick-completion character"));
-    frame10->add(*nickcompletionentry);
+    frame10->add(nickcompletionentry);
     prefsbox->pack_start(*frame10, 0, 0);
 
     // DCC ip
-    dccipentry = manage(new Gtk::Entry());
-    dccipentry->set_text(AppWin->getApp().getCfg().getOpt("dccip"));
+    dccipentry.set_text(AppWin->getApp().getCfg().getOpt("dccip"));
     Gtk::Frame *frame11 = manage(new Gtk::Frame("DCC IP-Address"));
-    frame11->add(*dccipentry);
+    frame11->add(dccipentry);
     prefsbox->pack_start(*frame11, 0, 0);
 
     // Highligted words
-    highlightentry = manage(new Gtk::Entry());
-    highlightentry->set_text(AppWin->getApp().getCfg().getOpt("highlight_words"));
+    highlightentry.set_text(AppWin->getApp().getCfg().getOpt("highlight_words"));
     Gtk::Frame *frame12 = manage(new Gtk::Frame("Words to highlight on (space seperated)"));
-    frame12->add(*highlightentry);
+    frame12->add(highlightentry);
     prefsbox->pack_start(*frame12, 0, 0);
 
-    notebook->pages().push_back(Gtk::Notebook_Helpers::TabElem(*prefsbox, "Preferences"));
+    notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*prefsbox, "Preferences"));
 
     // Autojoin/perform-tab
 
@@ -110,45 +104,39 @@ Prefs::Prefs()
     serverhbox->pack_start(*serverinfobox);
 
     // hbox for buttons
-    savehbox = manage(new Gtk::HBox());
-    savehbox->set_spacing(5);
-    serverinfobox->pack_start(*savehbox, 0, 0);
+    savehbox.set_spacing(5);
+    serverinfobox->pack_start(savehbox, 0, 0);
 
     // hostname
-    hostentry = manage(new Gtk::Entry());
     Gtk::Frame *frame1 = manage(new Gtk::Frame("Hostname"));
-    frame1->add(*hostentry);
+    frame1->add(hostentry);
     serverinfobox->pack_start(*frame1, 0, 0);
 
     // port
-    portentry = manage(new Gtk::Entry());
     Gtk::Frame *frame2 = manage(new Gtk::Frame("Port"));
-    frame2->add(*portentry);
+    frame2->add(portentry);
     serverinfobox->pack_start(*frame2, 0, 0);
 
     // password
-    passentry = manage(new Gtk::Entry());
     Gtk::Frame *frame3 = manage(new Gtk::Frame("Password"));
-    frame3->add(*passentry);
+    frame3->add(passentry);
     serverinfobox->pack_start(*frame3, 0, 0);
 
     // nick
-    nickentry = manage(new Gtk::Entry());
     Gtk::Frame *frame4 = manage(new Gtk::Frame("Nick"));
-    frame4->add(*nickentry);
+    frame4->add(nickentry);
     serverinfobox->pack_start(*frame4, 0, 0);
 
     // nick
-    cmdtext = manage(new Gtk::Text());
-    cmdtext->set_editable(true);
+    cmdtext.set_editable(true);
     Gtk::Frame *frame5 = manage(new Gtk::Frame("Commands to perform on connect"));
-    frame5->add(*cmdtext);
+    frame5->add(cmdtext);
     serverinfobox->pack_start(*frame5, 0, 0);
 
     // save button
     Gtk::Button *savebutton = manage(new Gtk::Button("Save entry"));
     savebutton->clicked.connect(slot(this, &Prefs::saveEntry));
-    savehbox->pack_start(*savebutton, 0, 0);
+    savehbox.pack_start(*savebutton, 0, 0);
 
     removebutton = new Gtk::Button("Remove entry");
     removebutton->clicked.connect(slot(this, &Prefs::removeEntry));
@@ -157,7 +145,7 @@ Prefs::Prefs()
     addnewbutton->clicked.connect(slot(this, &Prefs::addEntry));
 
     performbox->pack_start(*serverhbox, 1, 1);
-    notebook->pages().push_back(Gtk::Notebook_Helpers::TabElem(*performbox, "Autojoin servers"));
+    notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*performbox, "Autojoin servers"));
 
     // Ok, Apply and Cancel buttons
     Gtk::Button *closebutt = manage(new Gtk::Button("Close"));
@@ -188,12 +176,12 @@ void Prefs::endPrefs()
 
 void Prefs::saveSettings()
 {
-    AppWin->getApp().getCfg().setOpt("nickcompletion_character", nickcompletionentry->get_text());
-    AppWin->getApp().getCfg().setOpt("dccip", dccipentry->get_text());
-    AppWin->getApp().getCfg().setOpt("highlight_words", highlightentry->get_text());
-    AppWin->getApp().getCfg().setOpt("realname", realnameentry->get_text());
-    AppWin->getApp().getCfg().setOpt("ircuser", ircuserentry->get_text());
-    AppWin->getApp().getCfg().setOpt("nick", ircnickentry->get_text());
+    AppWin->getApp().getCfg().setOpt("nickcompletion_character", nickcompletionentry.get_text());
+    AppWin->getApp().getCfg().setOpt("dccip", dccipentry.get_text());
+    AppWin->getApp().getCfg().setOpt("highlight_words", highlightentry.get_text());
+    AppWin->getApp().getCfg().setOpt("realname", realnameentry.get_text());
+    AppWin->getApp().getCfg().setOpt("ircuser", ircuserentry.get_text());
+    AppWin->getApp().getCfg().setOpt("nick", ircnickentry.get_text());
 }
 
 void Prefs::saveEntry()
@@ -206,7 +194,7 @@ void Prefs::saveEntry()
         AppWin->getApp().getCfg().addServer(a);
 
         vector<string> v; // FIXME: ugly as hell.
-        v.push_back(hostentry->get_text());
+        v.push_back(hostentry.get_text());
         clist->rows().push_back(v);
         clist->rows().back().set_data(a);
 
@@ -216,20 +204,20 @@ void Prefs::saveEntry()
         a = static_cast<struct autoJoin*>(clist->selection().front().get_data());
     }
 
-    a->hostname = hostentry->get_text();
-    a->password = passentry->get_text();
-    a->nick = nickentry->get_text();
+    a->hostname = hostentry.get_text();
+    a->password = passentry.get_text();
+    a->nick = nickentry.get_text();
 
     int port;
-    if (portentry->get_text_length() == 0)
+    if (portentry.get_text_length() == 0)
           port = 6667;
     else
-          port = Util::stoi(portentry->get_text());
+          port = Util::stoi(portentry.get_text());
 
     a->port = port;
 
     /* push back commands, for each and every line */
-    std::istringstream ss(cmdtext->get_chars(0, -1));
+    std::istringstream ss(cmdtext.get_chars(0, -1));
     a->cmds.clear();
 
     string tmp;
@@ -245,27 +233,27 @@ void Prefs::saveEntry()
 void Prefs::onSelectRow(int r, int col, GdkEvent *e)
 {
     struct autoJoin *a = static_cast<struct autoJoin*>(clist->row(r).get_data());
-    hostentry->set_text(a->hostname);
-    passentry->set_text(a->password);
-    nickentry->set_text(a->nick);
+    hostentry.set_text(a->hostname);
+    passentry.set_text(a->password);
+    nickentry.set_text(a->nick);
     std::ostringstream ss;
     ss << a->port;
-    portentry->set_text(ss.str());
+    portentry.set_text(ss.str());
 
-    cmdtext->delete_text(0, -1);
+    cmdtext.delete_text(0, -1);
     vector<string>::const_iterator i;
     for (i = a->cmds.begin(); i != a->cmds.end(); ++i) {
-        cmdtext->insert(*i + '\n');
+        cmdtext.insert(*i + '\n');
     }
-    savehbox->pack_start(*removebutton, 0, 0);
-    savehbox->pack_start(*addnewbutton, 0, 0);
+    savehbox.pack_start(*removebutton, 0, 0);
+    savehbox.pack_start(*addnewbutton, 0, 0);
     show_all();
 }
 
 void Prefs::onUnSelectRow(int r, int col, GdkEvent *e)
 {
-    savehbox->remove(*removebutton);
-    savehbox->remove(*addnewbutton);
+    savehbox.remove(*removebutton);
+    savehbox.remove(*addnewbutton);
     clearEntries();
     show_all();
 }
@@ -282,16 +270,16 @@ void Prefs::addEntry()
 {
     clearEntries();
     clist->unselect_all();
-    hostentry->grab_focus();
+    hostentry.grab_focus();
 }
 
 void Prefs::clearEntries()
 {
-    passentry->set_text("");
-    portentry->set_text("");
-    hostentry->set_text("");
-    nickentry->set_text("");
-    cmdtext->delete_text(0, -1);
+    passentry.set_text("");
+    portentry.set_text("");
+    hostentry.set_text("");
+    nickentry.set_text("");
+    cmdtext.delete_text(0, -1);
 }
 
 Tab* Prefs::currentTab = 0;

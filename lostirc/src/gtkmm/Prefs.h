@@ -44,26 +44,6 @@ private:
     Prefs& operator=(const Prefs&);
     ~Prefs();
 
-    Gtk::CList *clist;
-    Gtk::Entry *passentry;
-    Gtk::Entry *portentry;
-    Gtk::Entry *hostentry;
-    Gtk::Entry *nickcompletionentry;
-    Gtk::Entry *ircnickentry;
-    Gtk::Entry *realnameentry;
-    Gtk::Entry *ircuserentry;
-    Gtk::Entry *dccipentry;
-    Gtk::Entry *highlightentry;
-    Gtk::Entry *nickentry;
-    Gtk::Text *cmdtext;
-    Gtk::Button *closebutton;
-    Gtk::Button *savebutton;
-    Gtk::Button *removebutton;
-    Gtk::Button *addnewbutton;
-    Gtk::HBox *savehbox;
-    Gtk::Notebook *notebook;
-    Tab *tab;
-
     void saveEntry();
     void saveSettings();
     void removeEntry();
@@ -72,6 +52,24 @@ private:
     void onUnSelectRow(int row, int col, GdkEvent* e);
     void clearEntries();
 
+    Gtk::CList *clist;
+
+    Gtk::Entry passentry;
+    Gtk::Entry portentry;
+    Gtk::Entry hostentry;
+    Gtk::Entry nickcompletionentry;
+    Gtk::Entry ircnickentry;
+    Gtk::Entry realnameentry;
+    Gtk::Entry ircuserentry;
+    Gtk::Entry dccipentry;
+    Gtk::Entry highlightentry;
+    Gtk::Entry nickentry;
+    Gtk::Text cmdtext;
+    Gtk::HBox savehbox;
+    Gtk::Notebook notebook;
+
+    Gtk::Button *removebutton;
+    Gtk::Button *addnewbutton;
 };
 
 #endif
