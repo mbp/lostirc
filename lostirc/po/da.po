@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: LostIRC 0.2.5pre\n"
-"POT-Creation-Date: 2003-01-03 20:27+0100\n"
+"POT-Creation-Date: 2003-01-12 12:54+0100\n"
 "PO-Revision-Date: 2003-01-03 19:25+0100\n"
 "Last-Translator: Michael Kristensen <tazz@wtf.dk>\n"
 "Language-Team: Danish\n"
@@ -102,11 +102,11 @@ msgstr ""
 "    CTRL-Q - afslut LostIRC\n"
 "\n"
 
-#: src/gtkmm/MainWindow.cpp:64
+#: src/gtkmm/MainWindow.cpp:65
 msgid "7Welcome to LostIRC "
 msgstr "7Velkommen til LostIRC "
 
-#: src/gtkmm/MainWindow.cpp:64
+#: src/gtkmm/MainWindow.cpp:65
 msgid ""
 "!\n"
 "\n"
@@ -138,7 +138,7 @@ msgstr ""
 "    8/KEYBINDINGS\n"
 "\n"
 
-#: src/gtkmm/MainWindow.cpp:286 src/gtkmm/MainWindow.cpp:303
+#: src/gtkmm/MainWindow.cpp:284 src/gtkmm/MainWindow.cpp:301
 msgid "server"
 msgstr "server"
 
@@ -171,6 +171,32 @@ msgstr ""
 "Dit nuværende locale (ser ud til) at være: "
 
 #: src/gtkmm/MainWindow.cpp:333
+#, fuzzy
+msgid ""
+"Encoding conversion error. An error occured while converting text from UTF-8 "
+"to the user-defined encoding.\n"
+"\n"
+"This is most likely because the encoding you have chosen doesn't support the "
+"character(s) converting to.\n"
+"\n"
+"If you believe this is a bug, please report it to the application author."
+msgstr ""
+"Locale konverteringsfejl. En fejl opstod, ved at konvertere tekst fra UTF-8 "
+"til dit nuværende locale.\n"
+"\n"
+"Dette er højt sandsynligt pga. dit locale er sat til en værdi, der ikke "
+"understøtter bogstaverne, der konverteres til.\n"
+"\n"
+"Hvis du tror dette er en fejl, raportér det venligst til programmets ejer."
+
+#: src/gtkmm/MainWindow.cpp:335
+msgid ""
+"\n"
+"\n"
+"I was trying to convert to: "
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:339
 msgid ""
 "\n"
 "\n"
@@ -180,11 +206,11 @@ msgstr ""
 "\n"
 "(OBS: Du vil kun se denne advarsel en gang per LostIRC session)"
 
-#: src/gtkmm/MainNotebook.cpp:166
+#: src/gtkmm/MainNotebook.cpp:113
 msgid " <span foreground=\"red\">(away: "
 msgstr " <span foreground=\"red\">(væk: "
 
-#: src/gtkmm/MainNotebook.cpp:178
+#: src/gtkmm/MainNotebook.cpp:125
 msgid " (currently away)"
 msgstr " (væk i øjeblikket)"
 
@@ -350,11 +376,11 @@ msgstr "Fjern element"
 msgid "Close"
 msgstr "Luk"
 
-#: src/gtkmm/NickList.cpp:56
+#: src/gtkmm/NickList.cpp:57
 msgid " user"
 msgstr ""
 
-#: src/gtkmm/NickList.cpp:56
+#: src/gtkmm/NickList.cpp:57
 msgid " users"
 msgstr ""
 
@@ -480,27 +506,23 @@ msgstr "Ingen nøgle fundet, `"
 msgid "Error writing to pipe: "
 msgstr "Fejl ved skrivning til rør: "
 
-#: src/libirc/Socket.cpp:102
-msgid "Unknown host"
-msgstr "Ukendt vært"
-
-#: src/libirc/Socket.cpp:110
+#: src/libirc/Socket.cpp:108
 msgid "An error occured while reading from pipe (Internal error 2)"
 msgstr "En fejl opstod, ved at læse fra rør (Intern fejl 2)"
 
-#: src/libirc/Socket.cpp:120
+#: src/libirc/Socket.cpp:118
 msgid "An error occured while reading from pipe (Internal error 3)"
 msgstr "En fejl opstod, ved at læse fra rør (Intern fejl 3)"
 
-#: src/libirc/Socket.cpp:175
+#: src/libirc/Socket.cpp:171
 msgid "Message not sent because of locale problems"
 msgstr "Besked ikke sendt, pga. locale problemer"
 
-#: src/libirc/Parser.cpp:820
+#: src/libirc/Parser.cpp:817
 msgid "idle: "
 msgstr "ubenyttet: "
 
-#: src/libirc/Parser.cpp:824
+#: src/libirc/Parser.cpp:821
 msgid ", signon time: "
 msgstr ", login tid: "
 
@@ -583,6 +605,3 @@ msgstr "ukendt"
 #: src/libirc/LostIRCApp.h:50
 msgid "Logging to `"
 msgstr "Logger til `"
-
-#~ msgid "(server)"
-#~ msgstr "(server)"

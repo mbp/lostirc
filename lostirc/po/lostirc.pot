@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-01-03 20:27+0100\n"
+"POT-Creation-Date: 2003-01-12 12:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,11 +79,11 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:64
+#: src/gtkmm/MainWindow.cpp:65
 msgid "7Welcome to LostIRC "
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:64
+#: src/gtkmm/MainWindow.cpp:65
 msgid ""
 "!\n"
 "\n"
@@ -101,7 +101,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:286 src/gtkmm/MainWindow.cpp:303
+#: src/gtkmm/MainWindow.cpp:284 src/gtkmm/MainWindow.cpp:301
 msgid "server"
 msgstr ""
 
@@ -125,16 +125,34 @@ msgstr ""
 
 #: src/gtkmm/MainWindow.cpp:333
 msgid ""
+"Encoding conversion error. An error occured while converting text from UTF-8 "
+"to the user-defined encoding.\n"
+"\n"
+"This is most likely because the encoding you have chosen doesn't support the "
+"character(s) converting to.\n"
+"\n"
+"If you believe this is a bug, please report it to the application author."
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:335
+msgid ""
+"\n"
+"\n"
+"I was trying to convert to: "
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:339
+msgid ""
 "\n"
 "\n"
 "(Note: You'll only see this warning once per LostIRC session)"
 msgstr ""
 
-#: src/gtkmm/MainNotebook.cpp:166
+#: src/gtkmm/MainNotebook.cpp:113
 msgid " <span foreground=\"red\">(away: "
 msgstr ""
 
-#: src/gtkmm/MainNotebook.cpp:178
+#: src/gtkmm/MainNotebook.cpp:125
 msgid " (currently away)"
 msgstr ""
 
@@ -298,11 +316,11 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: src/gtkmm/NickList.cpp:56
+#: src/gtkmm/NickList.cpp:57
 msgid " user"
 msgstr ""
 
-#: src/gtkmm/NickList.cpp:56
+#: src/gtkmm/NickList.cpp:57
 msgid " users"
 msgstr ""
 
@@ -424,27 +442,23 @@ msgstr ""
 msgid "Error writing to pipe: "
 msgstr ""
 
-#: src/libirc/Socket.cpp:102
-msgid "Unknown host"
-msgstr ""
-
-#: src/libirc/Socket.cpp:110
+#: src/libirc/Socket.cpp:108
 msgid "An error occured while reading from pipe (Internal error 2)"
 msgstr ""
 
-#: src/libirc/Socket.cpp:120
+#: src/libirc/Socket.cpp:118
 msgid "An error occured while reading from pipe (Internal error 3)"
 msgstr ""
 
-#: src/libirc/Socket.cpp:175
+#: src/libirc/Socket.cpp:171
 msgid "Message not sent because of locale problems"
 msgstr ""
 
-#: src/libirc/Parser.cpp:820
+#: src/libirc/Parser.cpp:817
 msgid "idle: "
 msgstr ""
 
-#: src/libirc/Parser.cpp:824
+#: src/libirc/Parser.cpp:821
 msgid ", signon time: "
 msgstr ""
 
