@@ -1,6 +1,6 @@
 AC_INIT
 AC_CONFIG_SRCDIR([src/gtkmm/main.cpp])
-AM_INIT_AUTOMAKE(lostirc, 0.3.1)
+AM_INIT_AUTOMAKE(lostirc, 0.3.2pre)
 AM_CONFIG_HEADER(config.h)
 AC_PROG_CXX
 AC_PROG_INSTALL
@@ -16,14 +16,14 @@ CXXFLAGS="$CXXFLAGS -Wall"
 
 # Add ./configure --enable-logdebug
 AC_ARG_ENABLE(logdebug,
-        [  --enable-logdebug       compile with log-debugging to stdout],
+        [  --enable-logdebug       compile with log-debugging to a file],
         logdebug=$enable_logdebug,
         logdebug=no
 )
 AC_MSG_CHECKING(whether to log debug info to stdout)
 if test "x$logdebug" = xyes; then
         AC_MSG_RESULT(yes)
-        AC_DEFINE(DEBUG, [], whether to log log debug info to stdout)
+        AC_DEFINE(DEBUG, [], whether to log debug info to a file)
 else
         AC_MSG_RESULT(no)
 fi
@@ -59,7 +59,7 @@ else
 fi
 
 dnl Check for socklen_t (it should be int on Windows). Taken from gaim
-dnl configure.in.
+dnl configure.ac.
 AC_MSG_CHECKING(for socklen_t)
 AC_TRY_COMPILE([
         #include <sys/types.h>

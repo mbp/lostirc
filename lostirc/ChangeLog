@@ -2,6 +2,12 @@ For a summary of changes between releases - see the NEWS file.
 
 2003-12-26  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * configure.ac: Version 0.3.2pre.
+                        Modify text for --enable-logdebug option.
+        * po/da.po: Update Danish translation.
+
+2003-12-26  Morten Brix Pedersen  <morten@wtf.dk>
+
         * configure.ac: Bump version and release 0.3.1.
 
 2003-12-26  Morten Brix Pedersen  <morten@wtf.dk>
