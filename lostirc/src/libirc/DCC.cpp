@@ -161,7 +161,7 @@ DCC_Send_Out::DCC_Send_Out(const Glib::ustring& filename, const Glib::ustring& n
         #endif
 
         std::ostringstream ss;
-        ss << "DCC SEND " << _filename << " " << ntohl(inet_addr(_localip.c_str())) << " " << ntohs(sockaddr.sin_port) << " " << _size;
+        ss << "DCC SEND " << stripPath(_filename) << " " << ntohl(inet_addr(_localip.c_str())) << " " << ntohs(sockaddr.sin_port) << " " << _size;
         conn->sendCtcp(nick, ss.str());
 
         _infile.open(_filename.c_str());
@@ -279,4 +279,9 @@ Glib::ustring expandHome(const Glib::ustring& str)
         return new_str;
     }
     return str;
+}
+
+Glib::ustring stripPath(const Glib::ustring& str)
+{
+    return str.substr(str.find_last_of('/') + 1);
 }

@@ -5,6 +5,9 @@ LostIRC (x.x.x)
     removed (thanks, Michael Kristensen)
   * When a tilde (~) is used in /DCC SEND, it's now expanded to the users
     home directory.
+  * DCC sending wasn't functional when sending files with full paths,
+    because the path was being sent. Now the path is being stripped before
+    sending the filename to the remote user.
 
 LostIRC (0.2.4) - Sun Dec, 29th 2002
   * The "Less bugs and more features for 2003" release.
