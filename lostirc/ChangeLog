@@ -1,6 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
 2004-09-08  Morten Brix Pedersen  <morten@wtf.dk>
+	* configure.ac: Bump version and release 0.4.2.
+
+2004-09-08  Morten Brix Pedersen  <morten@wtf.dk>
  	* src/gtkmm/GuiCommands.cpp: List a few more keybindings in
 	/KEYBINDINGS.
 	* src/libirc/Parser.cpp: Remove some old +q code, I noticed that it
