@@ -9,6 +9,8 @@ LostIRC (x.x.x)
   * When a channel was parted with /PART, or the user was disconnected, a
     rejoin to the channel would make the nick-list reuse nicks from the
     previous session
+  * A bug where the client would reconnect to the server endlessly has been
+    fixed.
 
 LostIRC (0.1.1) - Thu Jun 20th 2002
   * A bug where the client consumed 100% CPU has been fixed.
