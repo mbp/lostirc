@@ -33,6 +33,7 @@ public:
     void clearText1() { _label.set_text(""); }
 
     void setText2(const Glib::ustring& str) { _notifylabel.set_markup(str);
+        signal_timeout.disconnect();
         signal_timeout = Glib::signal_timeout().connect(
                 SigC::slot(*this, &StatusBar::onText2Timeout),
                 5000);
