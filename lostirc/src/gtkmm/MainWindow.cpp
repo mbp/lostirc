@@ -302,7 +302,6 @@ Tab* MainWindow::newServer()
     ServerConnection *conn = _app.newServer();
     conn->Session.servername = name;
     Tab *tab = _notebook.addTab(Tab::SERVER, name, conn);
-    tab->setType(Tab::SERVER);
     tab->setInActive();
     return tab;
 }

@@ -43,14 +43,6 @@ Tab::Tab(ServerConnection *conn, Pango::FontDescription font, Gtk::Label *label)
 
     _vbox.pack_start(_hbox, Gtk::PACK_SHRINK);
 
-    /* FIXME :
-    Gtk::Button *prefs_button = manage(new Gtk::Button());
-    Gtk::Image *prefsimage = manage(new Gtk::Image(Gtk::Stock::PREFERENCES, Gtk::ICON_SIZE_MENU));
-    prefs_button->add(*prefsimage);
-    prefs_button->signal_clicked().connect(slot(*this, &Tab::startPrefs));
-    _hbox.pack_start(*prefs_button, Gtk::PACK_SHRINK);
-    */
-
     _hpaned->pack1(_vbox, true, true);
     _hpaned->pack2(_nicklist, false, true);
     pack_start(*_hpaned);
@@ -117,10 +109,10 @@ void Tab::removeHighlight()
 
 void Tab::toggleNickList()
 {
-    if (isType(QUERY) || isType(SERVER) || !AppWin->hasNickList())
-          _nicklist.hide();
-    else if (AppWin->hasNickList())
+    if (isType(CHANNEL) && AppWin->hasNickList())
           _nicklist.show();
+    else 
+          _nicklist.hide();
 }
 
 void Tab::insertUser(const Glib::ustring& user, IRC::UserMode m)

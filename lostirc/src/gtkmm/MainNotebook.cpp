@@ -46,11 +46,12 @@ Tab* MainNotebook::addTab(Tab::Type type, const ustring& name, ServerConnection 
         tab = manage(new Tab(conn, _fontdesc, label));
         pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, *label));
     }
+    show_all();
+
     tab->setActive();
     tab->setType(type);
     tab->setName(name);
 
-    show_all();
     return tab;
 }
 
