@@ -41,6 +41,7 @@ public:
     Value<std::string> nick;
     Value<std::string> ircuser;
     Value<std::string> dccip;
+    Value<int> dccport;
     Value<std::string> highlight_words;
     Value<std::string> font;
     Value<bool> limited_highlighting;

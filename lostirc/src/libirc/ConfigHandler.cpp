@@ -219,6 +219,7 @@ Options::Options(const char *filename)
     nick(this, "nick"),
     ircuser(this, "ircuser"),
     dccip(this, "dccip"),
+    dccport(this, "dccport", 0),
     highlight_words(this, "highlight_words"),
     font(this, "font"),
     limited_highlighting(this, "limited_highlighting", false)

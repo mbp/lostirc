@@ -15,3 +15,5 @@ LostIRC author(s) and contributors
 * Daniel Elstner
         Patch to fix UTF-8 and locales problem.
 
+* Michael Kristensen
+        Lots of feedback, various patches.

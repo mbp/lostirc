@@ -1,5 +1,20 @@
 For a summary of changes between releases - see the NEWS file.
 
+2002-11-24  Michael Kristensen <tazz@wtf.dk>
+
+        * DCC.cpp: Sat a option a the DCC-send-socket, so that the same port
+          can be reused just after the last use, so that the same port can be
+          used continually
+
+2002-11-24  Michael Kristensen <tazz@wtf.dk>
+
+        * Prefs.cpp/Prefs.h: Added an option, for the user to choose which
+          port DCC will use.
+        * ConfigHandler.cpp/ConfigHandler.h: Added dccport to use with the new
+          option in the preferences-window (default is 0 (random)).
+        * DCC.cpp: The port, which LostIRC will use when DCC-sending, changed
+          to use whatever one specified in the preferences-window.
+
 2002-11-24  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Tab.cpp/TextWidget.cpp: Move implementation of the TextView to its

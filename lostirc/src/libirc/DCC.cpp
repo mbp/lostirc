@@ -140,8 +140,11 @@ DCC_Send_Out::DCC_Send_Out(const std::string& filename, const std::string& nick,
 
         fd = socket(AF_INET, SOCK_STREAM, 0);
 
+        int yes = 1;
+        setsockopt(fd,SOL_SOCKET,SO_REUSEADDR,&yes,sizeof(int));
+
         sockaddr.sin_family = AF_INET;
-        sockaddr.sin_port = htons(0);
+        sockaddr.sin_port = htons(App->options.dccport);
         sockaddr.sin_addr.s_addr = htonl(INADDR_ANY);
         memset(&(sockaddr.sin_zero), '\0', 8);
 

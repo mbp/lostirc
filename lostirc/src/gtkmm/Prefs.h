@@ -69,6 +69,7 @@ private:
     // Preferences
     Gtk::Entry nickcompletionentry;
     Gtk::Entry dccipentry;
+    Gtk::Entry dccportentry;
     Gtk::Entry highlightentry;
     Gtk::Entry bufferentry;
     Gtk::CheckButton highlightingbutton;

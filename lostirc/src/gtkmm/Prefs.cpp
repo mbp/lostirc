@@ -97,6 +97,12 @@ Prefs::Prefs()
     frame11->add(dccipentry);
     prefsbox->pack_start(*frame11, Gtk::PACK_SHRINK);
 
+    // DCC port
+    dccportentry.set_text(App->options.dccport().getString());
+    Gtk::Frame *frame15 = manage(new Gtk::Frame("DCC Port (0 = random)"));
+    frame15->add(dccportentry);
+    prefsbox->pack_start(*frame15, Gtk::PACK_SHRINK);
+
     // Highligted words
     highlightentry.set_text(Glib::locale_to_utf8(App->options.highlight_words));
     Gtk::Frame *frame12 = manage(new Gtk::Frame("Words to highlight on (space seperated)"));
@@ -226,6 +232,7 @@ void Prefs::applyPreferences()
 {
     App->options.nickcompletion_char = Glib::locale_from_utf8(nickcompletionentry.get_text());
     App->options.dccip = dccipentry.get_text();
+    App->options.dccport = dccportentry.get_text();
     App->options.highlight_words = Glib::locale_from_utf8(highlightentry.get_text());
     App->options.buffer_size = Glib::locale_from_utf8(bufferentry.get_text());
 
@@ -252,6 +259,7 @@ void Prefs::cancelPreferences()
 {
     nickcompletionentry.set_text(Glib::locale_to_utf8(App->options.nickcompletion_char().getString()));
     dccipentry.set_text(Glib::locale_to_utf8(App->options.dccip));
+    dccportentry.set_text(Glib::locale_to_utf8(App->options.dccport().getString()));
     highlightentry.set_text(Glib::locale_to_utf8(App->options.highlight_words));
     bufferentry.set_text(Glib::locale_to_utf8(App->options.buffer_size().getString()));
 

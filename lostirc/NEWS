@@ -8,6 +8,8 @@ LostIRC (x.x.x)
     its sorting.
   * The nick-list now uses the current locales sorting when sorting nicks
     instead of the C locale.
+  * You can now specify a specific DCC port to use for DCC SEND. (thanks,
+    Michael Kristensen)
   * Old ChangeLog renamed to NEWS. The NEWS file is now the location of the
     summary of changes between releases while ChangeLog contains the notices
     of the real code changes.
