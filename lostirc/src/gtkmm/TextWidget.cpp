@@ -131,13 +131,13 @@ TextWidget& TextWidget::operator<<(const ustring& line)
         _textview.scroll_to_mark(buffer->create_mark(buffer->end()), 0.0);
     }
 
-    removeBuffer();
+    removeTopBuffer();
 
     return *this;
 }
 
 
-void TextWidget::removeBuffer()
+void TextWidget::removeTopBuffer()
 {
     // Remove X number of lines from top of the buffer which we don't want.
     Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
