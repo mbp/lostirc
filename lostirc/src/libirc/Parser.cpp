@@ -452,18 +452,18 @@ void Parser::CMode(const string& from, const string& param)
     if (pos1 == string::npos)
           return;
 
-    string chan = param.substr(0, pos1);
+    string channel = param.substr(0, pos1);
     string modes = param.substr(pos1 + 1, (pos2 - pos1) - 1);
     string args = param.substr(pos2 + 1);
 
-    Channel *c = _conn->findChannel(chan);
+    Channel *chan = _conn->findChannel(channel);
 
     // Channel not found? Not sane to continue. 
     // This happened on a proxy/bouncer where no channel was mentioned in
     // MODE, just this:
     //   :nick!ident@host.com MODE nick +iw
     // Note the lack of ':' before +iw.
-    if (!c)
+    if (!chan)
           return;
 
     // Get arguments
@@ -473,9 +473,17 @@ void Parser::CMode(const string& from, const string& param)
     while (ss >> buf)
           arguments.push_back(buf);
 
+    if (arguments.empty()) {
+        // There were no further arguments, eg. MODE #channel +n
+        FE::emit(FE::get(CMODE) << findNick(from) << modes << channel, *chan, _conn);
+        return;
+    }
+
     std::vector<User> modesvec;
     bool sign = false; // Used to track whether we get a + or a -
+
     vector<string>::const_iterator arg_i = arguments.begin();
+
     for (string::const_iterator i = modes.begin(); i != modes.end(); ++i) {
         switch (*i)
         {
@@ -492,11 +500,11 @@ void Parser::CMode(const string& from, const string& param)
                 sign ? (e = OPPED) : (e = DEOPPED);
                 string nick = *arg_i++;
 
-                User *user = c->getUser(nick);
+                User *user = chan->getUser(nick);
                 sign ? (user->setMode(mode)) : (user->removeMode(mode));
 
                 modesvec.push_back(*user);
-                FE::emit(FE::get(e) << findNick(from) << nick, *c, _conn);
+                FE::emit(FE::get(e) << findNick(from) << nick, *chan, _conn);
                 }
                 break;
             case 'v':
@@ -506,12 +514,12 @@ void Parser::CMode(const string& from, const string& param)
                 sign ? (e = VOICED) : (e = DEVOICED);
                 string nick = *arg_i++;
 
-                User *user = c->getUser(nick);
+                User *user = chan->getUser(nick);
 
                 sign ? (user->setMode(mode)) : (user->removeMode(mode));
 
                 modesvec.push_back(*user);
-                FE::emit(FE::get(e) << findNick(from) << nick, *c, _conn);
+                FE::emit(FE::get(e) << findNick(from) << nick, *chan, _conn);
                 }
                 break;
             case 'h':
@@ -521,11 +529,11 @@ void Parser::CMode(const string& from, const string& param)
                 sign ? (e = HALFOPPED) : (e = HALFDEOPPED);
                 string nick = *arg_i++;
 
-                User *user = c->getUser(nick);
+                User *user = chan->getUser(nick);
                 sign ? (user->setMode(mode)) : (user->removeMode(mode));
 
                 modesvec.push_back(*user);
-                FE::emit(FE::get(e) << findNick(from) << nick, *c, _conn);
+                FE::emit(FE::get(e) << findNick(from) << nick, *chan, _conn);
                 }
                 break;
             case 'b':
@@ -534,30 +542,32 @@ void Parser::CMode(const string& from, const string& param)
                 sign ? (e = BANNED) : (e = UNBANNED);
 
                 string nick = *arg_i++;
-                FE::emit(FE::get(e) << findNick(from) << nick, *c, _conn);
+                FE::emit(FE::get(e) << findNick(from) << nick, *chan, _conn);
                 break;
+                }
+            default:
+                {
+                // none of the above modes, just display a default
+                // "foo set mode +X user" message. or alternatively
+                // MODE #chan +l 500
+                char modebuf[3];
+                if (sign)
+                      modebuf[0] = '+';
+                else
+                      modebuf[0] = '-';
+
+                modebuf[1] = (*i);
+                modebuf[2] = '\0';
+
+                string nick = *arg_i++;
+                FE::emit(FE::get(MODE) << findNick(from) << modebuf << nick, *chan, _conn);
                 }
         }
 
     }
 
     // Channel user mode
-    App->fe->CUMode(findNick(from), *c, modesvec, _conn);
-
-    // This can look funny; so explanation:
-    // arg_i was set to arguments.begin() before, and while parsing user
-    // modes it was incremented. This checks whether it *wasnt* incremented,
-    // and if it wasnt, then we simply did not have a user mode change but a
-    // channel mode change. like: '#chan +n'
-    if (arg_i == arguments.begin()) {
-        if (arguments.empty()) {
-            // No further arguments to the mode.
-            FE::emit(FE::get(CMODE) << findNick(from) << modes << chan, *c, _conn);
-        } else {
-            // Arguments to the mode. eg. '#chan +l 500'
-            FE::emit(FE::get(CMODE) << findNick(from) << modes + " " + arguments.front() << chan, *c, _conn);
-        }
-    }
+    App->fe->CUMode(findNick(from), *chan, modesvec, _conn);
 }
 
 void Parser::Topic(const string& from, const string& chan, const string& rest)
