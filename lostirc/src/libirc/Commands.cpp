@@ -214,7 +214,7 @@ void Set(ServerConnection *conn, const string& params)
     if (pos1 != string::npos)
           value = params.substr(pos1 + 1);
 
-    App->getCfg().setOpt(key, value);
+    App->options.set(key, value);
 }
 
 void Ctcp(ServerConnection *conn, const string& params)

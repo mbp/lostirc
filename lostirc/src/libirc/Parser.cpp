@@ -844,7 +844,7 @@ bool Parser::shouldHighlight(const string& str)
     if (str.find(_conn->Session.nick) != string::npos)
           return true;
 
-    std::istringstream ss(App->getCfg().getOpt("highlight_words"));
+    std::istringstream ss(App->options.highlight_words);
 
     string tmp;
     while (ss >> tmp)

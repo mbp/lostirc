@@ -1,5 +1,6 @@
 CRITICAL: 
 ---------
+  * Crashes when receiving out-of-bounds colors in Tab.cpp.
   * Implement reading in ServerConnection better (more efficiently)
   * Implement DCC CHAT
   * DCC SEND freezes the client until finished.
@@ -29,6 +30,8 @@ GTKMM2 STUFF:
   * strip all mIRC color-codes from ALL strings, don't show colors at all.
   * URL highlight/clickable
   * Notebook should use Glib::ustring and convert to utf8
+  * Nick-list is not resorted on changes
+  * Nick-list expands on long nicks
 
 DCC:
 ---

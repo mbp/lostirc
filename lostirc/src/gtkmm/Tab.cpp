@@ -148,7 +148,7 @@ void Tab::insertWithColor(int color, const ustring& str)
           _textview.scroll_to_mark(buffer->create_mark("e", buffer->end()), 0.0);
 
     // FIXME: possible performance critical
-    int buffer_size = Util::stoi(App->getCfg().getOpt("buffer_size"));
+    int buffer_size = App->options.buffer_size;
     if (buffer_size && buffer->get_line_count() > buffer_size) {
         Gtk::TextBuffer::iterator start = buffer->get_iter_at_line(0);
         Gtk::TextBuffer::iterator end = buffer->get_iter_at_line(buffer->get_line_count() - buffer_size);

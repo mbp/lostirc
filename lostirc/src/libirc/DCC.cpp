@@ -26,7 +26,7 @@ DCC_Send_In::DCC_Send_In(const std::string& filename, unsigned long address, uns
 : _outfile(), _filename(filename), _address(address), _port(port),
   _size(size), _pos(0)
 {
-    _downloaddir = App->getCfg().home + "/.lostirc/downloads/";
+    _downloaddir = std::string(App->home) + "/.lostirc/downloads/";
     mkdir(_downloaddir.c_str(), 0700);
 
     _filename = _downloaddir + _filename;
@@ -130,10 +130,10 @@ DCC_Send_Out::DCC_Send_Out(const std::string& filename, const std::string& nick,
         // FIXME: add dcc-done?
     } else {
         _size = st.st_size;
-        if (App->getCfg().getOpt("dccip").empty()) {
+        if (App->options.dccip->empty()) {
             _localip = conn->getLocalIP();
         } else {
-            _localip = App->getCfg().getOpt("dccip");
+            _localip = App->options.dccip;
         }
 
 

@@ -19,9 +19,6 @@
 #include "LostIRCApp.h"
 #include "ServerConnection.h"
 #include "Commands.h"
-#include <pwd.h>
-#include <unistd.h>
-#include <sys/types.h>
 
 using std::string;
 using std::vector;
@@ -33,9 +30,9 @@ LostIRCApp::LostIRCApp(FrontEnd *f)
 #ifdef DEBUG
     log(),
 #endif
-    fe(f), _cfg(), _dcc_queue()
+    init(this), fe(f),
+    options("/.lostirc/options.conf"), events("/.lostirc/events.conf")
 {
-    App = this;
     uname(&uname_info);
 
     struct passwd *pwentry = getpwuid(getuid());
@@ -49,24 +46,25 @@ LostIRCApp::LostIRCApp(FrontEnd *f)
             realname = realname.substr(0, realname.find(","));
         }
 
-        if (_cfg.getOpt("nick").empty())
-              _cfg.setOpt("nick", pwentry->pw_name);
+        if (options.nick->empty())
+              options.nick = pwentry->pw_name;
 
-        if (_cfg.getOpt("ircuser").empty())
-              _cfg.setOpt("ircuser", pwentry->pw_name);
+        if (options.ircuser->empty())
+              options.ircuser = pwentry->pw_name;
 
-        if (_cfg.getOpt("realname").empty())
-              _cfg.setOpt("realname", realname);
+        if (options.realname->empty())
+              options.realname = realname;
 
     } else {
-        if (_cfg.getOpt("nick").empty())
-              _cfg.setOpt("nick", "Somebody");
+        if (options.nick->empty())
+              options.nick = "Somebody";
 
-        if (_cfg.getOpt("ircuser").empty())
-              _cfg.setOpt("ircuser", "unknown");
+        if (options.ircuser->empty())
+              options.ircuser = "unknown";
 
-        if (_cfg.getOpt("realname").empty())
-              _cfg.setOpt("realname", "");
+        if (options.realname->empty())
+              options.realname = "";
+
     }
 }
 
@@ -85,7 +83,7 @@ LostIRCApp::~LostIRCApp()
 
 int LostIRCApp::start()
 {
-    vector<struct autoJoin*> servers = _cfg.getServers();
+    vector<struct autoJoin*> servers = cfgservers.getServers();
     vector<struct autoJoin*>::iterator i;
 
     for (i = servers.begin(); i != servers.end(); ++i) {
@@ -102,16 +100,17 @@ int LostIRCApp::start()
 
 ServerConnection* LostIRCApp::newServer(const string& host, int port)
 {
-    ServerConnection *conn = new ServerConnection(host, _cfg.getOpt("nick"), port);
+    ServerConnection *conn = new ServerConnection(host, options.nick, port);
     _servers.push_back(conn);
     return conn;
 }
 
 ServerConnection* LostIRCApp::newServer()
 {
-    ServerConnection *conn = new ServerConnection("", _cfg.getOpt("nick"));
+    ServerConnection *conn = new ServerConnection("", options.nick);
     _servers.push_back(conn);
     return conn;
 }
 
 struct utsname LostIRCApp::uname_info;
+char * LostIRCApp::home;

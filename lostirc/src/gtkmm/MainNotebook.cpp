@@ -26,7 +26,7 @@ MainNotebook::MainNotebook()
     : Gtk::Notebook()
 {
     set_tab_pos(Gtk::POS_BOTTOM);
-    fontdescription = Pango::FontDescription(App->getCfg().getOpt("font"));
+    fontdescription = Pango::FontDescription(Glib::locale_to_utf8(App->options.font));
     signal_switch_page().connect(SigC::slot(*this, &MainNotebook::onSwitchPage));
 }
 

@@ -53,19 +53,19 @@ Prefs::Prefs()
     generalbox->pack_end(*hboxgeneral, Gtk::FILL);
 
     // IRC nick
-    ircnickentry.set_text(App->getCfg().getOpt("nick"));
+    ircnickentry.set_text(Glib::locale_to_utf8(App->options.nick));
     Gtk::Frame *frame20 = manage(new Gtk::Frame("Nickname"));
     frame20->add(ircnickentry);
     generalbox->pack_start(*frame20, Gtk::SHRINK);
 
     // IRC nick
-    realnameentry.set_text(App->getCfg().getOpt("realname"));
+    realnameentry.set_text(Glib::locale_to_utf8(App->options.realname));
     Gtk::Frame *frame21 = manage(new Gtk::Frame("Real name"));
     frame21->add(realnameentry);
     generalbox->pack_start(*frame21, Gtk::SHRINK);
 
     // IRC nick
-    ircuserentry.set_text(App->getCfg().getOpt("ircuser"));
+    ircuserentry.set_text(Glib::locale_to_utf8(App->options.ircuser));
     Gtk::Frame *frame22 = manage(new Gtk::Frame("IRC username (ident)"));
     frame22->add(ircuserentry);
     generalbox->pack_start(*frame22, Gtk::SHRINK);
@@ -86,25 +86,25 @@ Prefs::Prefs()
 
     // nickcompletion character
     nickcompletionentry.set_max_length(1);
-    nickcompletionentry.set_text(App->getCfg().getOpt("nickcompletion_character"));
+    nickcompletionentry.set_text(Glib::locale_to_utf8(App->options.nickcompletion_char().getString()));
     Gtk::Frame *frame10 = manage(new Gtk::Frame("Nick-completion character"));
     frame10->add(nickcompletionentry);
     prefsbox->pack_start(*frame10, Gtk::SHRINK);
 
     // DCC ip
-    dccipentry.set_text(App->getCfg().getOpt("dccip"));
+    dccipentry.set_text(App->options.dccip().getString());
     Gtk::Frame *frame11 = manage(new Gtk::Frame("DCC IP-Address"));
     frame11->add(dccipentry);
     prefsbox->pack_start(*frame11, Gtk::SHRINK);
 
     // Highligted words
-    highlightentry.set_text(App->getCfg().getOpt("highlight_words"));
+    highlightentry.set_text(Glib::locale_to_utf8(App->options.highlight_words));
     Gtk::Frame *frame12 = manage(new Gtk::Frame("Words to highlight on (space seperated)"));
     frame12->add(highlightentry);
     prefsbox->pack_start(*frame12, Gtk::SHRINK);
 
     // Buffer size for text
-    bufferentry.set_text(App->getCfg().getOpt("buffer_size"));
+    bufferentry.set_text(App->options.buffer_size().getString());
     Gtk::Frame *frame13 = manage(new Gtk::Frame("Maximum number of lines to save"));
     frame13->add(bufferentry);
     prefsbox->pack_start(*frame13, Gtk::SHRINK);
@@ -112,7 +112,7 @@ Prefs::Prefs()
     notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*prefsbox, "Preferences"));
 
     // Limited tab highlighting
-    if (!App->getCfg().getOpt("limited_highlighting").empty())
+    if (App->options.limited_highlighting)
           highlightingbutton.set_active(true);
 
     Gtk::Frame *frame14 = manage(new Gtk::Frame());
@@ -132,8 +132,8 @@ Prefs::Prefs()
     fontbox->pack_end(*hboxfont, Gtk::FILL);
 
     fontsel.set_preview_text("<" + ircnickentry.get_text() + "> Hello World!");
-    if (!App->getCfg().getOpt("font").empty())
-          fontsel.set_font_name(App->getCfg().getOpt("font"));
+    if (!App->options.font->empty())
+          fontsel.set_font_name(Glib::locale_to_utf8(App->options.font));
     fontbox->pack_start(fontsel);
     notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*fontbox, "Font selection"));
 
@@ -146,7 +146,7 @@ Prefs::Prefs()
     _treeview.set_headers_visible(false);
     _treeview.get_selection()->signal_changed().connect(slot(*this, &Prefs::onChangeRow));
 
-    vector<struct autoJoin*> servers = App->getCfg().getServers();
+    vector<struct autoJoin*> servers = App->cfgservers.getServers();
     vector<struct autoJoin*>::iterator i;
 
     for (i = servers.begin(); i != servers.end(); ++i) {
@@ -224,39 +224,39 @@ void Prefs::endPrefs()
 
 void Prefs::applyPreferences()
 {
-    App->getCfg().setOpt("nickcompletion_character", nickcompletionentry.get_text());
-    App->getCfg().setOpt("dccip", dccipentry.get_text());
-    App->getCfg().setOpt("highlight_words", highlightentry.get_text());
-    App->getCfg().setOpt("buffer_size", bufferentry.get_text());
+    App->options.nickcompletion_char = Glib::locale_from_utf8(nickcompletionentry.get_text());
+    App->options.dccip = dccipentry.get_text();
+    App->options.highlight_words = Glib::locale_from_utf8(highlightentry.get_text());
+    App->options.buffer_size = Glib::locale_from_utf8(bufferentry.get_text());
 
     if (highlightingbutton.get_active())
-        App->getCfg().setOpt("limited_highlighting", "true");
+        App->options.limited_highlighting = true;
     else
-        App->getCfg().setOpt("limited_highlighting", "");
+        App->options.limited_highlighting = false;
 }
 
 void Prefs::applyGeneral()
 {
-    App->getCfg().setOpt("realname", realnameentry.get_text());
-    App->getCfg().setOpt("ircuser", ircuserentry.get_text());
-    App->getCfg().setOpt("nick", ircnickentry.get_text());
+    App->options.realname = Glib::locale_from_utf8(realnameentry.get_text());
+    App->options.ircuser = Glib::locale_from_utf8(ircuserentry.get_text());
+    App->options.nick = Glib::locale_from_utf8(ircnickentry.get_text());
 }
 
 void Prefs::applyFont()
 {
-    App->getCfg().setOpt("font", fontsel.get_font_name());
+    App->options.font = fontsel.get_font_name();
     AppWin->getNotebook().setFont(fontsel.get_font_name());
 }
 
 void Prefs::cancelPreferences()
 {
-    nickcompletionentry.set_text(App->getCfg().getOpt("nickcompletion_character"));
-    dccipentry.set_text(App->getCfg().getOpt("dccip"));
-    highlightentry.set_text(App->getCfg().getOpt("highlight_words"));
-    bufferentry.set_text(App->getCfg().getOpt("buffer_size"));
+    nickcompletionentry.set_text(Glib::locale_to_utf8(App->options.nickcompletion_char().getString()));
+    dccipentry.set_text(Glib::locale_to_utf8(App->options.dccip));
+    highlightentry.set_text(Glib::locale_to_utf8(App->options.highlight_words));
+    bufferentry.set_text(Glib::locale_to_utf8(App->options.buffer_size().getString()));
 
     // Limited tab highlighting
-    if (!App->getCfg().getOpt("limited_highlighting").empty())
+    if (App->options.limited_highlighting)
           highlightingbutton.set_active(true);
     else 
           highlightingbutton.set_active(false);
@@ -264,15 +264,15 @@ void Prefs::cancelPreferences()
 
 void Prefs::cancelGeneral()
 {
-    realnameentry.set_text(App->getCfg().getOpt("realname"));
-    ircuserentry.set_text(App->getCfg().getOpt("ircuser"));
-    ircnickentry.set_text(App->getCfg().getOpt("nick"));
+    realnameentry.set_text(Glib::locale_to_utf8(App->options.realname));
+    ircuserentry.set_text(Glib::locale_to_utf8(App->options.ircuser));
+    ircnickentry.set_text(Glib::locale_to_utf8(App->options.nick));
 }
 
 void Prefs::cancelFont()
 {
-    if (!App->getCfg().getOpt("font").empty())
-          fontsel.set_font_name(App->getCfg().getOpt("font"));
+    if (!App->options.font->empty())
+          fontsel.set_font_name(Glib::locale_to_utf8(App->options.font));
 }
 
 void Prefs::saveEntry()
@@ -285,7 +285,7 @@ void Prefs::saveEntry()
         // we need to add a new one
         autojoin = new autoJoin();
 
-        App->getCfg().addServer(autojoin);
+        App->cfgservers.addServer(autojoin);
 
         iter = _liststore->append();
 
@@ -323,7 +323,7 @@ void Prefs::saveEntry()
     while (getline(ss, tmp))
           autojoin->cmds.push_back(tmp);
 
-    App->getCfg().writeServers();
+    App->cfgservers.writeServers();
 
     _treeview.get_selection()->unselect_all();
     _treeview.get_selection()->select(iter);
@@ -371,8 +371,8 @@ void Prefs::removeEntry()
 
     struct autoJoin *autojoin = row[_columns.autojoin];
     _liststore->erase(selection->get_selected());
-    App->getCfg().removeServer(autojoin);
-    App->getCfg().writeServers();
+    App->cfgservers.removeServer(autojoin);
+    App->cfgservers.writeServers();
 }
 
 void Prefs::addEntry()

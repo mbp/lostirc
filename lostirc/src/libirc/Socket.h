@@ -34,7 +34,7 @@ class Socket : public SigC::Object
     struct sockaddr_in sockaddr;
     pid_t resolve_pid;
     struct sockaddr_in localaddr;
-    string hostname;
+    std::string hostname;
 
 public:
     Socket();

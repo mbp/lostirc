@@ -22,6 +22,9 @@
 #include <vector>
 #include <string>
 #include <sys/utsname.h>
+#include <pwd.h>
+#include <unistd.h>
+#include <sys/types.h>
 #include "ConfigHandler.h"
 #include "Channel.h"
 #include "DCC.h"
@@ -67,8 +70,36 @@ private:
 };
 #endif
 
+
+class LostIRCApp;
+extern LostIRCApp* App;
+
 class LostIRCApp
 {
+    std::vector<ServerConnection*> _servers;
+
+    // This is a dummy class used for initialization
+    class initobj
+    {
+    public:
+        initobj(LostIRCApp* app) {
+            App = app;
+            struct passwd *pwentry = getpwuid(getuid());
+
+            if (pwentry != NULL) {
+                App->home = pwentry->pw_dir;
+            } else {
+                App->home = getenv("HOME");
+            }
+
+            std::string configdir = std::string(App->home) + "/.lostirc/";
+            mkdir(configdir.c_str(), 0700);
+        }
+    };
+
+    initobj init;
+    DCC_queue _dcc_queue;
+
 
 public:
     LostIRCApp(FrontEnd *f);
@@ -80,7 +111,6 @@ public:
     ServerConnection* newServer(const std::string& host, int port);
     ServerConnection* newServer();
 
-    ConfigHandler& getCfg() { return _cfg; }
     DCC_queue& getDcc() { return _dcc_queue; }
     const std::vector<ServerConnection*>& getServers() { return _servers; }
 
@@ -90,15 +120,13 @@ public:
 
     FrontEnd* fe;
 
+    Options options;
+    Events events;
+    Servers cfgservers;
+
     static struct utsname uname_info;
+    static char *home;
 
-private:
-    std::vector<ServerConnection*> _servers;
-
-    ConfigHandler _cfg;
-    DCC_queue _dcc_queue;
 };
-
-extern LostIRCApp* App;
 
 #endif

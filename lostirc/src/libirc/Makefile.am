@@ -2,7 +2,7 @@ noinst_LIBRARIES = libirc.a
 
 libirc_a_SOURCES = ServerConnection.cpp ServerConnection.h \
                        Commands.cpp Commands.h \
-                       ConfigHandler.cpp ConfigHandler.h \
+                       ConfigHandler.cpp ConfigHandler.h ConfigValue.h \
                        LostIRCApp.cpp LostIRCApp.h \
                        Parser.cpp Parser.h \
                        Socket.cpp Socket.h \

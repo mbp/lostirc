@@ -33,7 +33,7 @@ void emit(Tmpl& t, ChannelBase& chan, ServerConnection *conn)
 
     // If the user has limited_highligthing enabled, only highlight if the
     // priority is above 1
-    if (!App->getCfg().getOpt("limited_highlighting").empty() && t.priority < 2) {
+    if (App->options.limited_highlighting && t.priority < 2) {
         App->fe->displayMessage(msg, chan, conn, false);
     } else {
         App->fe->displayMessage(msg, chan, conn);
@@ -54,7 +54,7 @@ void emit(Tmpl& t, Destination d, ServerConnection *conn)
     
     // If the user has limited_highligthing enabled, only highlight if the
     // priority is above 1
-    if (!App->getCfg().getOpt("limited_highlighting").empty() && t.priority < 2) {
+    if (App->options.limited_highlighting && t.priority < 2) {
         App->fe->displayMessage(msg, d, conn, false);
     } else {
         App->fe->displayMessage(msg, d, conn);
@@ -67,7 +67,7 @@ void emit(Tmpl& t, Destination d)
     
     // If the user has limited_highligthing enabled, only highlight if the
     // priority is above 1
-    if (!App->getCfg().getOpt("limited_highlighting").empty() && t.priority < 2) {
+    if (App->options.limited_highlighting && t.priority < 2) {
         App->fe->displayMessage(msg, d, false);
     } else {
         App->fe->displayMessage(msg, d);
@@ -78,7 +78,7 @@ Tmpl get(Event e)
 {
     for (int i = 0; event_map[i].name != 0; ++i) {
         if (event_map[i].value == e)
-            return Tmpl(App->getCfg().getEvt(event_map[i].name), event_map[i].priority);
+            return Tmpl(App->events.get(event_map[i].name), event_map[i].priority);
     }
 }
 
