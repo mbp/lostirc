@@ -67,10 +67,7 @@ namespace FE
     void emit(Tmpl& t, const std::vector<ChannelBase*>& to, ServerConnection *conn);
 
     /* when we have no destination for our msg (frontend uses current tab) */
-    void emit(Tmpl& t, Destination, ServerConnection *conn);
-
-    /* when our message has no specific server (eg. DCC) */
-    void emit(Tmpl& t, Destination);
+    void emit(Tmpl& t, Destination, ServerConnection *conn = 0);
 
     Tmpl get(Event i);
 }
@@ -79,8 +76,7 @@ namespace FE
 class FrontEnd
 {
 public:
-    virtual void displayMessage(const Glib::ustring& msg, FE::Destination d, bool shouldHighlight = true) = 0;
-    virtual void displayMessage(const Glib::ustring& msg, FE::Destination d, ServerConnection *conn, bool shouldHighlight = true) = 0;
+    virtual void displayMessage(const Glib::ustring& msg, FE::Destination d, ServerConnection *conn = 0, bool shouldHighlight = true) = 0;
     virtual void displayMessage(const Glib::ustring& msg, ChannelBase& to, ServerConnection *conn, bool shouldHighlight = true) = 0;
     virtual void highlight(ChannelBase& chan, ServerConnection *conn) = 0;
     virtual void join(const Glib::ustring& nick, Channel& chan, ServerConnection *conn) = 0;

@@ -33,13 +33,12 @@ public:
     Tab* addTab(Tab::Type type, const Glib::ustring& name, ServerConnection *conn);
     Tab* getCurrent(ServerConnection *conn = 0);
     Tab* findTab(const Glib::ustring& name, ServerConnection *conn, bool findInActive = false);
-    Tab* findTab(Tab::Type type, ServerConnection *conn, bool findInActive = false);
+    Tab* findTab(Tab::Type type, ServerConnection *conn);
 
-    void findTabs(const Glib::ustring& nick, ServerConnection *conn, std::vector<Tab*>& vec);
-    void findTabs(ServerConnection *conn, std::vector<Tab*>& vec);
+    void findTabs(const Glib::ustring& nick, std::vector<Tab*>& vec, ServerConnection *conn = 0);
+    void findTabs(std::vector<Tab*>& vec, ServerConnection *conn = 0);
     void clearWindow();
     void clearAll();
-    void Tabs(std::vector<Tab*>& vec);
     void closeCurrent();
     void setFont(const Glib::ustring& str);
     int countTabs(ServerConnection *conn);

@@ -82,7 +82,7 @@ Tab* MainNotebook::getCurrent(ServerConnection *conn)
     Tab *tab = static_cast<Tab*>(get_nth_page(get_current_page()));
 
     if (conn && tab->getConn() != conn)
-          tab = findTab("", conn);
+          tab = findTab("", conn, true);
 
     return tab;
 }
@@ -96,23 +96,22 @@ Tab * MainNotebook::findTab(const ustring& name, ServerConnection *conn, bool fi
         Tab *tab = static_cast<Tab*>(i->get_child());
         if (tab->getConn() == conn) {
             ustring tab_name = tab->getName();
-            if ((Util::lower(tab_name) == Util::lower(n)) || n.empty()) {
-                if ((!tab->isActive() && findInActive) || tab->isActive())
-                  return tab;
-            }
+            if ((Util::lower(tab_name) == Util::lower(n)) || n.empty())
+                  if ((!tab->isActive() && findInActive) || tab->isActive())
+                        return tab;
         }
     }
     return 0;
 }
 
-Tab * MainNotebook::findTab(Tab::Type type, ServerConnection *conn, bool findInActive)
+Tab * MainNotebook::findTab(Tab::Type type, ServerConnection *conn)
 {
     Gtk::Notebook_Helpers::PageList::iterator i;
             
     for (i = pages().begin(); i != pages().end(); ++i) {
         Tab *tab = static_cast<Tab*>(i->get_child());
         if (tab->getConn() == conn && tab->isType(type))
-              return static_cast<Tab*>(get_nth_page(i->get_page_num()));
+              return tab;
     }
     return 0;
 }
@@ -173,7 +172,7 @@ void MainNotebook::closeCurrent()
     queue_draw();
 }
 
-void MainNotebook::findTabs(const ustring& nick, ServerConnection *conn, vector<Tab*>& vec)
+void MainNotebook::findTabs(const ustring& nick, vector<Tab*>& vec, ServerConnection *conn)
 {
     Gtk::Notebook_Helpers::PageList::iterator i;
             
@@ -185,25 +184,17 @@ void MainNotebook::findTabs(const ustring& nick, ServerConnection *conn, vector<
     }
 }
 
-void MainNotebook::findTabs(ServerConnection *conn, vector<Tab*>& vec)
+void MainNotebook::findTabs(vector<Tab*>& vec, ServerConnection *conn)
 {
     Gtk::Notebook_Helpers::PageList::iterator i;
             
     for (i = pages().begin(); i != pages().end(); ++i) {
         Tab *tab = static_cast<Tab*>(i->get_child());
-        if (tab->getConn() == conn) {
+        if (conn && tab->getConn() == conn) {
+            vec.push_back(tab);
+        } else if (!conn) {
             vec.push_back(tab);
         }
-    }
-}
-
-void MainNotebook::Tabs(vector<Tab*>& vec)
-{
-    Gtk::Notebook_Helpers::PageList::iterator i;
-            
-    for (i = pages().begin(); i != pages().end(); ++i) {
-        Tab *tab = static_cast<Tab*>(i->get_child());
-        vec.push_back(tab);
     }
 }
 

@@ -82,8 +82,7 @@ public:
     Glib::ustring background_color;
 
     // Methods implemented for the abstract base class 'FrontEnd' 
-    void displayMessage(const Glib::ustring& msg, FE::Destination d, bool shouldHighlight = true);
-    void displayMessage(const Glib::ustring& msg, FE::Destination d, ServerConnection *conn, bool shouldHighlight = true);
+    void displayMessage(const Glib::ustring& msg, FE::Destination d, ServerConnection *conn = 0, bool shouldHighlight = true);
     void displayMessage(const Glib::ustring& msg, ChannelBase& to, ServerConnection *conn, bool shouldHighlight = true);
     void join(const Glib::ustring& nick, Channel& chan, ServerConnection *conn);
     void part(const Glib::ustring& nick, Channel& chan, ServerConnection *conn);

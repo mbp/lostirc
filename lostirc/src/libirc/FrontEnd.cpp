@@ -105,13 +105,6 @@ void emit(Tmpl& t, Destination d, ServerConnection *conn)
     App->fe->displayMessage(msg, d, conn);
 }
 
-void emit(Tmpl& t, Destination d)
-{
-    Glib::ustring msg = t.result();
-    
-    App->fe->displayMessage(msg, d);
-}
-
 Tmpl get(Event e)
 {
     for (int i = 0; event_map[i].name != 0; ++i) {

@@ -1,6 +1,20 @@
 For a summary of changes between releases - see the NEWS file.
 
 2004-10-14  Morten Brix Pedersen  <morten@wtf.dk>
+	* MainNotebook.cpp:
+	  - Fix a bug when auto-connecting to multiple server and text was
+	  only being displayed in the first tab.
+	  - Remove an unnecessary static_cast.
+	  - Remove the Tabs() function. Instead implement it by findTabs and
+	  setting the ServerConnection to 0. Less code.
+	* MainWindow.cpp:
+	  - Get rid of an almost duplicated function with 10 lines of code.
+	  Again fix the duplication by allowing ServerConnection set to 0,
+	  which means "no server specified".
+	* FrontEnd.cpp:
+	  - Ditto.
+	  
+2004-10-14  Morten Brix Pedersen  <morten@wtf.dk>
 	* Parser.cpp: Fix problem where MODE #chan +mv user was causing a
 	segmentation fault.
 	* ServerConnection.cpp: Add a default value for chanmodes.

@@ -102,37 +102,8 @@ MainWindow::~MainWindow()
     AppWin = 0;
 }
 
-void MainWindow::displayMessage(const ustring& msg, FE::Destination d, bool shouldHighlight)
-{
-
-    if (d == FE::CURRENT) {
-        Tab *tab = _notebook.getCurrent();
-
-        if (tab) {
-            tab->getText() << msg;
-
-            if (shouldHighlight)
-                  tab->highlightActivity();
-        }
-
-    } else if (d == FE::ALL) {
-        vector<Tab*> tabs;
-        vector<Tab*>::const_iterator i;
-        _notebook.Tabs(tabs);
-
-        for (i = tabs.begin(); i != tabs.end(); ++i) {
-            (*i)->getText() << msg;
-
-            if (shouldHighlight)
-                  (*i)->highlightActivity();
-        }
-    
-    }
-}
-
 void MainWindow::displayMessage(const ustring& msg, FE::Destination d, ServerConnection *conn, bool shouldHighlight)
 {
-
     if (d == FE::CURRENT) {
         Tab *tab = _notebook.getCurrent(conn);
 
@@ -146,7 +117,7 @@ void MainWindow::displayMessage(const ustring& msg, FE::Destination d, ServerCon
     } else if (d == FE::ALL) {
         vector<Tab*> tabs;
         vector<Tab*>::const_iterator i;
-        _notebook.findTabs(conn, tabs);
+        _notebook.findTabs(tabs, conn);
 
         for (i = tabs.begin(); i != tabs.end(); ++i) {
             (*i)->getText() << msg;
@@ -275,7 +246,7 @@ void MainWindow::connected(ServerConnection* conn)
     vector<Tab*> tabs;
     vector<Tab*>::const_iterator i;
 
-    _notebook.findTabs(conn, tabs);
+    _notebook.findTabs(tabs, conn);
 
     for (i = tabs.begin(); i != tabs.end(); ++i)
           if ((*i)->isType(Tab::QUERY))
@@ -286,7 +257,7 @@ void MainWindow::disconnected(ServerConnection* conn)
 {
     vector<Tab*> tabs;
 
-    _notebook.findTabs(conn, tabs);
+    _notebook.findTabs(tabs, conn);
 
     std::for_each(tabs.begin(), tabs.end(), std::mem_fun(&Tab::setInActive));
 }
@@ -478,7 +449,7 @@ void MainWindow::hideNickList()
     _app.options.hidenicklist = !_app.options.hidenicklist;
     vector<Tab*> tabs;
 
-    _notebook.Tabs(tabs);
+    _notebook.findTabs(tabs);
     std::for_each(tabs.begin(), tabs.end(), std::mem_fun(&Tab::toggleNickList));
 }
 
