@@ -42,6 +42,7 @@ Tab::Tab(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font)
     _textview.unset_flags(Gtk::CAN_FOCUS);
     _textview.set_editable(false);
     _swin.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+    _swin.set_size_request(0, -1);
     _swin.add(_textview);
 
     _hbox->pack_start(_swin);
