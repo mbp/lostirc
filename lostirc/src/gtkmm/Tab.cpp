@@ -77,8 +77,7 @@ void Tab::setFont(const Pango::FontDescription& font)
 
 void Tab::setStyle() {
     // TODO: Should this go into a ressource file?
-    Gdk::Color col1;
-    col1.set_rgb(0, 0, 0);
+    Gdk::Color col1(Glib::locale_to_utf8(App->colors.bgcolor));
 
     _textview.modify_base(Gtk::STATE_NORMAL, col1);
 }
@@ -367,7 +366,8 @@ bool TabChannel::nickCompletion(const ustring& word, ustring& str)
 
 gint TabChannel::sortFunc(const Gtk::TreeModel::iterator& i1, const Gtk::TreeModel::iterator& i2)
 {
-    // Sort the nicklist. The status field has highest priority, nick has second priority.
+    // Sort the nicklist. The status field has highest priority, nick has
+    // second priority.
 
     // This is not very readable, but it works, and it has to be fast when
     // joining huge channels.
@@ -378,7 +378,7 @@ gint TabChannel::sortFunc(const Gtk::TreeModel::iterator& i1, const Gtk::TreeMod
 
 }
 
-void Tab::helperInitializer(int i, const char * colorname)
+void Tab::helperInitializer(int i, const Glib::ustring& colorname)
 {
     Glib::RefPtr<Gtk::TextTag> texttag = Gtk::TextTag::create();
     Glib::PropertyProxy_WriteOnly<Glib::ustring> fg = texttag->property_foreground();
@@ -389,24 +389,24 @@ void Tab::helperInitializer(int i, const char * colorname)
 
 void Tab::initializeColorMap()
 {
-    helperInitializer(0, "#FFFFFF");
-    helperInitializer(1, "#000000");
-    helperInitializer(2, "#0000CC");
-    helperInitializer(3, "#00CC00");
-    helperInitializer(4, "#DD0000");
-    helperInitializer(5, "#AA0000");
-    helperInitializer(6, "#BB00BB");
-    helperInitializer(7, "#FFAA00");
-    helperInitializer(8, "#EEDD22");
-    helperInitializer(9, "#33DE55");
-    helperInitializer(10, "#00CCCC");
-    helperInitializer(11, "#33DDEE");
-    helperInitializer(12, "#0000FF");
-    helperInitializer(13, "#EE22EE");
-    helperInitializer(14, "#777777");
-    helperInitializer(15, "#999999");
-    helperInitializer(16, "#BEBEBE");
-    helperInitializer(17, "#000000");
-    helperInitializer(18, "#FFFFFF");
-    helperInitializer(19, "#000000");
+    helperInitializer(0, Glib::locale_to_utf8(App->colors.color0));
+    helperInitializer(1, Glib::locale_to_utf8(App->colors.color1));
+    helperInitializer(2, Glib::locale_to_utf8(App->colors.color2));
+    helperInitializer(3, Glib::locale_to_utf8(App->colors.color3));
+    helperInitializer(4, Glib::locale_to_utf8(App->colors.color4));
+    helperInitializer(5, Glib::locale_to_utf8(App->colors.color5));
+    helperInitializer(6, Glib::locale_to_utf8(App->colors.color6));
+    helperInitializer(7, Glib::locale_to_utf8(App->colors.color7));
+    helperInitializer(8, Glib::locale_to_utf8(App->colors.color8));
+    helperInitializer(9, Glib::locale_to_utf8(App->colors.color9));
+    helperInitializer(10, Glib::locale_to_utf8(App->colors.color10));
+    helperInitializer(11, Glib::locale_to_utf8(App->colors.color11));
+    helperInitializer(12, Glib::locale_to_utf8(App->colors.color12));
+    helperInitializer(13, Glib::locale_to_utf8(App->colors.color13));
+    helperInitializer(14, Glib::locale_to_utf8(App->colors.color14));
+    helperInitializer(15, Glib::locale_to_utf8(App->colors.color15));
+    helperInitializer(16, Glib::locale_to_utf8(App->colors.color16));
+    helperInitializer(17, Glib::locale_to_utf8(App->colors.color17));
+    helperInitializer(18, Glib::locale_to_utf8(App->colors.color18));
+    helperInitializer(19, Glib::locale_to_utf8(App->colors.color19));
 }

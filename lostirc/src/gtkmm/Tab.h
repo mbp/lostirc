@@ -91,7 +91,7 @@ private:
     std::map<int, Glib::RefPtr<Gtk::TextTag> > colorMap;
 
     void initializeColorMap();
-    void helperInitializer(int i, const char *colorname);
+    void helperInitializer(int i, const Glib::ustring& colorname);
 
 protected:
     Gtk::HBox *_hbox;

@@ -32,11 +32,11 @@ using std::cout;
 using std::vector;
 using std::map;
 
-Servers::Servers()
+Servers::Servers(const char *file)
 {
-    home = App->home;
-
-    readServers(home + "/.lostirc/perform.conf");
+    filename = App->home;
+    filename += file;
+    readServersFile();
 }
 
 Servers::~Servers()
@@ -49,7 +49,7 @@ Servers::~Servers()
     }
 }
 
-bool Servers::readServers(const string& filename)
+bool Servers::readServersFile()
 {
     std::ifstream in(filename.c_str());
 
@@ -109,9 +109,9 @@ bool Servers::readServers(const string& filename)
     return true;
 }
 
-bool Servers::writeServers()
+bool Servers::writeServersFile()
 {
-    std::ofstream out(string(home + "/.lostirc/perform.conf").c_str());
+    std::ofstream out(filename.c_str());
 
     if (!out)
           return false;
@@ -132,6 +132,7 @@ bool Servers::writeServers()
     }
     return true;
 }
+
 void Servers::removeServer(struct autoJoin *a)
 {
     vector<struct autoJoin*>::iterator i = std::find(_servers.begin(), _servers.end(), a);
@@ -221,6 +222,35 @@ Options::Options(const char *filename)
     highlight_words(this, "highlight_words"),
     font(this, "font"),
     limited_highlighting(this, "limited_highlighting", false)
+
+{
+    readConfigFile();
+    writeConfigFile();
+}
+
+Colors::Colors(const char *filename)
+    : baseConfig(filename),
+    bgcolor(this, "bgcolor", "#000000"),
+    color0(this, "color0", "#FFFFFF"),
+    color1(this, "color1", "#000000"),
+    color2(this, "color2", "#0000CC"),
+    color3(this, "color3", "#00CC00"),
+    color4(this, "color4", "#DD0000"),
+    color5(this, "color5", "#AA0000"),
+    color6(this, "color6", "#BB00BB"),
+    color7(this, "color7", "#FFAA00"),
+    color8(this, "color8", "#EEDD22"),
+    color9(this, "color9", "#33DE55"),
+    color10(this, "color10", "#00CCCC"),
+    color11(this, "color11", "#33DDEE"),
+    color12(this, "color12", "#0000FF"),
+    color13(this, "color13", "#EE22EE"),
+    color14(this, "color14", "#777777"),
+    color15(this, "color15", "#999999"),
+    color16(this, "color16", "#BEBEBE"),
+    color17(this, "color17", "#000000"),
+    color18(this, "color18", "#FFFFFF"),
+    color19(this, "color19", "#000000")
 
 {
     readConfigFile();

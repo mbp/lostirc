@@ -25,6 +25,7 @@
 #include "Utils.h"
 #include "ConfigValue.h"
 
+// General LostIRC options.
 class Options : public baseConfig
 {
 public:
@@ -43,6 +44,36 @@ public:
     Value<bool> limited_highlighting;
 };
 
+// Color definitions used by frontend.
+class Colors : public baseConfig
+{
+public:
+    Colors(const char *filename);
+
+    Value<std::string> bgcolor;
+    Value<std::string> color0;
+    Value<std::string> color1;
+    Value<std::string> color2;
+    Value<std::string> color3;
+    Value<std::string> color4;
+    Value<std::string> color5;
+    Value<std::string> color6;
+    Value<std::string> color7;
+    Value<std::string> color8;
+    Value<std::string> color9;
+    Value<std::string> color10;
+    Value<std::string> color11;
+    Value<std::string> color12;
+    Value<std::string> color13;
+    Value<std::string> color14;
+    Value<std::string> color15;
+    Value<std::string> color16;
+    Value<std::string> color17;
+    Value<std::string> color18;
+    Value<std::string> color19;
+};
+
+// The different events which can occur.
 class Events : public baseConfig
 {
 public:
@@ -97,16 +128,14 @@ struct autoJoin {
     std::vector<std::string> cmds;
 };
 
+// The "auto-join servers" configuration interface.
 class Servers {
-    std::map<std::string, std::string> _events;
-    std::map<std::string, std::string> _options;
     std::vector<struct autoJoin*> _servers;
 
 public:
-    Servers();
+    Servers(const char *file);
     ~Servers();
 
-    /* ~/.lostirc/perform.conf */
     void addServer(struct autoJoin* a) { _servers.push_back(a); }
     void removeServer(struct autoJoin* a);
 
@@ -114,12 +143,12 @@ public:
     const std::vector<struct autoJoin*>& getServers() { return _servers; }
 
     /* write server list */
-    bool writeServers();
-
-    std::string home;
+    bool writeServersFile();
 
 private:
-    bool readServers(const std::string& filename);
+    bool readServersFile();
+
+    std::string filename;
 
 };
 #endif

@@ -30,6 +30,8 @@ LostIRC (x.x.x)
   * There is now an "Limited highlighting" feature which can be used if you
     don't want to mark tabs red on joins/parts etc. but only on talk in a
     channel.
+  * Colors used by text-window are no longer hard-coded into the code, they
+    are now read from ~/.lostirc/colors.conf and can be changed by hand.
 
 LostIRC (0.1.4) - Sat Jul 13th 2002
   * A segfault which appeared when the enviroment variable USER wasn't set,

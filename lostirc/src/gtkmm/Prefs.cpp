@@ -323,7 +323,7 @@ void Prefs::saveEntry()
     while (getline(ss, tmp))
           autojoin->cmds.push_back(tmp);
 
-    App->cfgservers.writeServers();
+    App->cfgservers.writeServersFile();
 
     _treeview.get_selection()->unselect_all();
     _treeview.get_selection()->select(iter);
@@ -372,7 +372,7 @@ void Prefs::removeEntry()
     struct autoJoin *autojoin = row[_columns.autojoin];
     _liststore->erase(selection->get_selected());
     App->cfgservers.removeServer(autojoin);
-    App->cfgservers.writeServers();
+    App->cfgservers.writeServersFile();
 }
 
 void Prefs::addEntry()

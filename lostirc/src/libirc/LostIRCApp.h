@@ -122,6 +122,7 @@ public:
 
     Options options;
     Events events;
+    Colors colors;
     Servers cfgservers;
 
     static struct utsname uname_info;
