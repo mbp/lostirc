@@ -63,6 +63,7 @@ public:
     void removeChannel(const std::string& n);
     std::vector<std::string> findUser(const std::string& n);
     Channel* findChannel(const std::string& c);
+    void sendCmds();
 
     static gboolean readdata(GIOChannel *, GIOCondition, gpointer);
     static gboolean write(GIOChannel *, GIOCondition, gpointer);
@@ -77,6 +78,7 @@ public:
         bool isAway;
         std::string servername;
         std::vector<Channel*> channels;
+        std::vector<std::string> cmds;
     } Session;
 
 private:

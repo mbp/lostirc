@@ -19,6 +19,7 @@
 #include "ServerConnection.h"
 #include "LostIRCApp.h"
 #include "Events.h"
+#include "Commands.h"
 
 using std::string;
 using std::vector;
@@ -347,4 +348,14 @@ Channel* ServerConnection::findChannel(const string& c)
               return *i;
     }
     return 0;
+}
+
+void ServerConnection::sendCmds()
+{
+    vector<string>::iterator i;
+    for (i = Session.cmds.begin(); i != Session.cmds.end(); ++i) {
+        string::size_type pos = i->find_first_of(" ");
+        string params = i->substr(pos + 1);
+        Commands::send(this, i->substr(1, pos - 1), params);
+    }
 }

@@ -125,7 +125,7 @@ bool ConfigHandler::readServers(const string& filename)
     if (!server.empty()) {
         struct autoJoin j;
         j.hostname = server;
-        j.port = port;
+        j.port = port ? port : 6667;
         j.password = password;
         j.cmds = tmpcmds;
         j.nick = nick;

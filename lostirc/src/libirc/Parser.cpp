@@ -528,10 +528,16 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             break;
 
         case 372: // RPL_MOTD
+            ServMsg(from, param, rest);
+            break;
+
         case 375: // RPL_MOTDSTART
+            ServMsg(from, param, rest);
+            break;
+
         case 376: // RPL_ENDOFMOTD
             ServMsg(from, param, rest);
-            //_conn->startPerform();
+            _conn->sendCmds();
             break;
 
         case 401: // ERR_NOSUCNICK
@@ -546,7 +552,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             break;
 
         case 422: // ERR_NOMOTD
-            //_conn->startPerform();
+            _conn->sendCmds();
             break;
 
         case 433: // ERR_NICKNAMEINUSE
