@@ -96,7 +96,7 @@ Tab& Tab::operator<<(const std::string& str)
 
 Tab& Tab::operator<<(const ustring& line)
 {
-    // Add timestamp 
+    // Add timestamp
     time_t timeval = time(0);
     char tim[11];
     strftime(tim, 10, "%H:%M:%S ", localtime(&timeval));
@@ -109,7 +109,7 @@ Tab& Tab::operator<<(const ustring& line)
     ustring::size_type pos = line.find_first_of("\003", lastPos);
 
     while (ustring::npos != pos || ustring::npos != lastPos)
-    {   
+    {
         // Check for digits
         if (Util::isDigit(line.substr(lastPos, 2))) {
             int color = Util::stoi(line.substr(lastPos, 2));
@@ -128,11 +128,11 @@ Tab& Tab::operator<<(const ustring& line)
 }
 
 void Tab::insertWithColor(int color, const ustring& str)
-{   
+{
     // see if the scrollbar is located in the bottom, then we need to scroll
-    // after insert 
+    // after insert
     bool scroll = false;
-    if (_swin.get_vadjustment()->get_value() >= (_swin.get_vadjustment()->get_upper() - _swin.get_vadjustment()->get_page_size() - 1e-12))                                                  
+    if (_swin.get_vadjustment()->get_value() >= (_swin.get_vadjustment()->get_upper() - _swin.get_vadjustment()->get_page_size() - 1e-12))
           scroll = true;
 
     // FIXME: temp hack.
@@ -140,8 +140,8 @@ void Tab::insertWithColor(int color, const ustring& str)
         color = colorMap.size() - 1;
 
     // Insert the text
+    realInsert(color, str);
     Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
-    buffer->insert_with_tag(buffer->end(), str, colorMap[color]);
 
     if (scroll)
           _textview.scroll_to_mark(buffer->create_mark("e", buffer->end()), 0.0);
@@ -152,6 +152,45 @@ void Tab::insertWithColor(int color, const ustring& str)
         Gtk::TextBuffer::iterator start = buffer->get_iter_at_line(0);
         Gtk::TextBuffer::iterator end = buffer->get_iter_at_line(buffer->get_line_count() - buffer_size);
         buffer->delete_text(start, end);
+    }
+}
+
+void Tab::realInsert(int color, const ustring& line)
+{
+    // This function has the purpose to insert the line - but first check to
+    // see whether we have an URL.
+    Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
+
+    ustring::size_type pos1;
+
+    pos1 = line.find("http:");
+
+    if (pos1 == ustring::npos)
+          pos1 = line.find("www.");
+
+    if (pos1 == ustring::npos)
+          pos1 = line.find("ftp.");
+
+    if (pos1 == ustring::npos)
+          pos1 = line.find("ftp:");
+
+    if (pos1 != ustring::npos) {
+        // Found an URL - insert the front and end of the line, and insert
+        // the URL with special markup.
+        ustring::size_type pos2 = line.find(" ", pos1 + 1);
+
+        // What's before the URL
+        buffer->insert_with_tag(buffer->end(), line.substr(0, pos1), colorMap[color]);
+
+        // The URL
+        buffer->insert_with_tag(buffer->end(), line.substr(pos1, pos2 - pos1), underlinetag);
+
+        // After the URL
+        if (pos2 != ustring::npos)
+              buffer->insert_with_tag(buffer->end(), line.substr(pos2), colorMap[color]);
+    } else {
+        // Just insert the line, no URLs were found
+        buffer->insert_with_tag(buffer->end(), line, colorMap[color]);
     }
 }
 
@@ -409,4 +448,12 @@ void Tab::initializeColorMap()
     helperInitializer(17, Glib::locale_to_utf8(App->colors.color17));
     helperInitializer(18, Glib::locale_to_utf8(App->colors.color18));
     helperInitializer(19, Glib::locale_to_utf8(App->colors.color19));
+
+    // Create a underlined-tag.
+    underlinetag = Gtk::TextTag::create();
+    Glib::PropertyProxy<Pango::Underline> underline = underlinetag->property_underline();
+    underline = Pango::UNDERLINE_SINGLE;
+    Glib::PropertyProxy_WriteOnly<Glib::ustring> fg = underlinetag->property_foreground();
+    fg.set_value(Glib::locale_to_utf8(App->colors.color0));
+    _textview.get_buffer()->get_tag_table()->add(underlinetag);
 }

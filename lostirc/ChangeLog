@@ -40,6 +40,7 @@ LostIRC (x.x.x)
   * When using a bouncer and being on multiple channels, channel names like
     '#u~#foo' appeared - the nick-list were never filled on these channels,
     fixed.
+  * URLs are now underlined.
 
 LostIRC (0.1.4) - Sat Jul 13th 2002
   * A segfault which appeared when the enviroment variable USER wasn't set,

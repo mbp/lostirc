@@ -79,6 +79,7 @@ public:
 
 private:
     void insertWithColor(int color, const Glib::ustring& str);
+    void realInsert(int color, const Glib::ustring& str);
 
     bool isOnChannel;
     Gtk::Label *_label;
@@ -89,6 +90,7 @@ private:
     Gtk::HBox *_hbox2;
 
     std::map<int, Glib::RefPtr<Gtk::TextTag> > colorMap;
+    Glib::RefPtr<Gtk::TextTag> underlinetag;
 
     void initializeColorMap();
     void helperInitializer(int i, const Glib::ustring& colorname);
