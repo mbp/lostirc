@@ -896,7 +896,7 @@ string stripColors(const string& str)
     string newstr;
     bool color = false;
     int numbercount = 0;
-    for (int i = 0; i < str.length(); ++i)
+    for (string::size_type i = 0; i < str.length(); ++i)
     {
         if (str[i] == '\003') {
             color = true;
