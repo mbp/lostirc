@@ -33,23 +33,23 @@ class MainNotebook : public Gtk::Notebook
 public:
     MainNotebook(MainWindow *frontend);
 
-    TabChannel* addChannelTab(const string& name, ServerConnection *conn);
-    TabQuery* addQueryTab(const string& name, ServerConnection *conn);
+    TabChannel* addChannelTab(const std::string& name, ServerConnection *conn);
+    TabQuery* addQueryTab(const std::string& name, ServerConnection *conn);
     Tab* getCurrent(ServerConnection *conn);
     Tab* getCurrent();
-    Tab* findTab(const string& name, ServerConnection *conn);
-    Gtk::Notebook_Helpers::Page * findPage(const string& name, ServerConnection *conn);
+    Tab* findTab(const std::string& name, ServerConnection *conn);
+    Gtk::Notebook_Helpers::Page* findPage(const std::string& name, ServerConnection *conn);
 
-    void findTabsContaining(const string& nick, vector<Tab*>& vec);
+    void findTabs(const std::string& nick, ServerConnection *conn, std::vector<Tab*>& vec);
     void closeCurrent();
     void highlight(Tab *tab);
-    void insert(Tab *tab, const string& str);
+    void insert(Tab *tab, const std::string& str);
     void setFont();
 
 private:
     void switchPage(Gtk::Notebook_Helpers::Page *p, unsigned int n);
-    void parseAndInsert(const string& str, Gtk::Text *text);
-    void insertWithColor(int color, Gtk::Text *text, const string& str);
+    void parseAndInsert(const std::string& str, Gtk::Text *text);
+    void insertWithColor(int color, Gtk::Text *text, const std::string& str);
     void fontSelectionOk();
     void destroyFontSelection(Gtk::FontSelectionDialog *w);
 

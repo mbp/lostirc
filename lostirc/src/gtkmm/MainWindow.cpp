@@ -21,6 +21,9 @@
 #include <pwd.h>
 #include <sys/types.h>
 
+using std::vector;
+using std::string;
+
 MainWindow::MainWindow()
 : Gtk::Window(GTK_WINDOW_TOPLEVEL), isAway(false)
 {
@@ -216,7 +219,7 @@ void MainWindow::onQuit(const string& nick, const string& msg, ServerConnection 
     vector<Tab*> tabs;
     vector<Tab*>::const_iterator i;
 
-    _nb->findTabsContaining(nick, tabs);
+    _nb->findTabs(nick, conn, tabs);
 
     for (i = tabs.begin(); i != tabs.end(); ++i) {
         _nb->insert(*i, "$5-- " + nick + " has quit (" + msg + ")\n");
@@ -224,20 +227,20 @@ void MainWindow::onQuit(const string& nick, const string& msg, ServerConnection 
     }
 }
 
-void MainWindow::onNick(const string& from, const string& to, ServerConnection *conn)
+void MainWindow::onNick(const string& nick, const string& to, ServerConnection *conn)
 {
     // Check whethers it's us who has changed nick
-    if (from == conn->Session.nick) {
+    if (nick == conn->Session.nick) {
         conn->Session.nick = to;
     }
     vector<Tab*> tabs;
     vector<Tab*>::const_iterator i;
 
-    _nb->findTabsContaining(from, tabs);
+    _nb->findTabs(nick, conn, tabs);
 
     for (i = tabs.begin(); i != tabs.end(); ++i) {
-        _nb->insert(*i, "$6-- " + from + " changes nick to " + to + "\n");
-        (*i)->renameUser(from, to);
+        _nb->insert(*i, "$6-- " + nick + " changes nick to " + to + "\n");
+        (*i)->renameUser(nick, to);
     }
 }
 
@@ -270,10 +273,10 @@ void MainWindow::onTopicTime(const string& chan, const string& nick, const strin
     _nb->insert(tab, "$6-- Set by " + nick + " on " + time + "\n");
 }
 
-void MainWindow::onMode(const string& nick, const string& chan, const string& rest, ServerConnection *conn)
+void MainWindow::onMode(const string& nick, const string& param, const string& mode, ServerConnection *conn)
 {
-    Tab *tab = _nb->findTab(chan, conn);
-    _nb->insert(tab, "$7-- " + nick + " sets mode " + rest + "\n");
+    Tab *tab = _nb->getCurrent(conn);
+    _nb->insert(tab, "$7-- " + nick + " sets mode " + mode + " " + param + "\n");
 
 }
 

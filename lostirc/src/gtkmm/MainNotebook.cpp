@@ -20,6 +20,9 @@
 #include "MainWindow.h"
 #include "GuiCommands.h"
 
+using std::string;
+using std::vector;
+
 MainNotebook::MainNotebook(MainWindow *frontend)
     : Gtk::Notebook(), _fe(frontend)
 {
@@ -89,10 +92,10 @@ Gtk::Notebook_Helpers::Page * MainNotebook::findPage(const string& name, ServerC
     Gtk::Notebook_Helpers::PageList::iterator i;
             
     for (i = pages().begin(); i != pages().end(); ++i) {
-        string tab_name = (*i)->get_tab_text();
-        if (Utils::tolower(tab_name) == Utils::tolower(n)) {
-            Tab *tab = dynamic_cast<Tab*>((*i)->get_child());
-            if (tab->getConn() == conn) {
+        Tab *tab = dynamic_cast<Tab*>((*i)->get_child());
+        if (tab->getConn() == conn) {
+            string tab_name = (*i)->get_tab_text();
+            if ((Utils::tolower(tab_name) == Utils::tolower(n)) || n.empty()) {
                 return (*i);
             }
         }
@@ -150,13 +153,13 @@ void MainNotebook::insert(Tab *tab, const string& str)
     tab->parseAndInsert(str);
 }
 
-void MainNotebook::findTabsContaining(const string& nick, vector<Tab*>& vec)
+void MainNotebook::findTabs(const string& nick, ServerConnection *conn, vector<Tab*>& vec)
 {
     Gtk::Notebook_Helpers::PageList::iterator i;
             
     for (i = pages().begin(); i != pages().end(); ++i) {
         Tab *tab = dynamic_cast<Tab*>((*i)->get_child());
-        if (tab->findUser(nick)) {
+        if (tab->getConn() == conn && tab->findUser(nick)) {
             vec.push_back(tab);
         }
     }
