@@ -88,8 +88,7 @@ class LostIRCApp
     public:
         initobj(LostIRCApp* app) {
             App = app;
-            strcpy(App->home, Glib::get_home_dir().c_str());
-            std::cout << "home: " << App->home << std::endl;
+            App->home = Glib::get_home_dir();
 
             Glib::ustring configdir = Glib::ustring(App->home) + "/.lostirc/";
             App->logdir = Glib::ustring(App->home) + "/.lostirc/logs/";
@@ -130,7 +129,7 @@ public:
     #ifndef WIN32
     static struct utsname uname_info;
     #endif
-    static char *home;
+    static Glib::ustring home;
     static Glib::ustring logdir;
 
 };

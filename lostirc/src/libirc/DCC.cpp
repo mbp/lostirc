@@ -27,7 +27,11 @@ DCC_Send_In::DCC_Send_In(const Glib::ustring& filename, const Glib::ustring& nic
     _port(port), _size(size), _pos(0), _status(WAITING)
 {
     _downloaddir = Glib::ustring(App->home) + "/.lostirc/downloads/";
+    #ifndef WIN32
     mkdir(_downloaddir.c_str(), 0700);
+    #else
+    mkdir(_downloaddir.c_str());
+    #endif
 
     _filename = _downloaddir + _filename;
 

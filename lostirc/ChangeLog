@@ -2,6 +2,10 @@ For a summary of changes between releases - see the NEWS file.
 
 2003-03-17  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * LostIRCApp.cpp: Fix segfault on startup.
+
+2003-03-17  Morten Brix Pedersen  <morten@wtf.dk>
+
         * Second shot at Windows port.
         * configure.in: Add check for socklen_t, define it to int on Windows.
         * Socket.cpp: Implement resolvehost() differently on Windows, since

@@ -102,5 +102,5 @@ ServerConnection* LostIRCApp::newServer()
 #ifndef WIN32
 struct utsname LostIRCApp::uname_info;
 #endif
-char * LostIRCApp::home;
+Glib::ustring LostIRCApp::home;
 Glib::ustring LostIRCApp::logdir;
