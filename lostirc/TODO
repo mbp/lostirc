@@ -16,6 +16,11 @@ NICE-TO-HAVE:
 
 RANDOM BUGS:
 ------------
+  * When text is in the input box, and you switch from one tab to another,
+  * going back to the tab with text in the input box, will make the text
+  * get selected, thus making it harder to append text to the already
+  * written text.
+
   * Color-parsing might be slow, since it inserts one character at the time.
     Need to look into optimizing it.
 
