@@ -15,13 +15,13 @@ NICE-TO-HAVE:
   * /BAN command.
   * /EXIT command so you can specify a quit message for all servers and then
     quit the client
+  * /EXEC
 
 RANDOM BUGS:
 ------------
   * you can't see long nicks in nick-list, possibility to move the nick-list
     as a user
   * nicks overlaps status (@, + etc.) in nick-list.
-  * when away/unaway - title isn't updated until switch tab
   * lostirc.desktop shouldn't be copied on non-GNOME systems.
   * lostirc.desktop should be distributed as KDE link as well.
   * check for EAGAIN on send()?

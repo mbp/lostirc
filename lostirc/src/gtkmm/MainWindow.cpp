@@ -214,6 +214,7 @@ void MainWindow::away(bool away, ServerConnection* conn)
     } else {
         std::for_each(tabs.begin(), tabs.end(), std::mem_fun(&Tab::setUnAway));
     }
+    notebook.updateTitle();
 }
 
 void MainWindow::disconnected(ServerConnection* conn)
@@ -235,7 +236,6 @@ void MainWindow::newTab(ServerConnection *conn)
     // XXX: this is a hack for a "bug" in the gtkmm code which makes the
     // application crash in the start when no pages exists, even though we
     // added one above... doing set_current_page(0) will somehow add it fully.
-    // TODO: fixed in gtkmm2?
     if (notebook.get_current_page() == -1) {
         notebook.set_current_page(0);
     }
