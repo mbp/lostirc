@@ -94,7 +94,7 @@ Tab& Tab::operator<<(const std::string& str)
     return operator<<(Glib::locale_to_utf8(str));
 }
 
-Tab& Tab::operator<<(const ustring& str)
+Tab& Tab::operator<<(const ustring& line)
 {
     AppWin->getNotebook().onInserted(this);
 
@@ -104,12 +104,11 @@ Tab& Tab::operator<<(const ustring& str)
     strftime(tim, 10, "%H:%M:%S ", localtime(&timeval));
 
     insertWithColor(0, ustring(tim));
-    ustring line(str);
+
+    // FIXME: can be done prettier and better with TextBuffer marks
 
     ustring::size_type lastPos = line.find_first_not_of("\003", 0);
     ustring::size_type pos = line.find_first_of("\003", lastPos);
-
-    // FIXME: can be done prettier and better with TextBuffer marks
 
     while (ustring::npos != pos || ustring::npos != lastPos)
     {   
