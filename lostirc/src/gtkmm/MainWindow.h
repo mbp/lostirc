@@ -60,7 +60,6 @@ class MainWindow : public Gtk::Window, public FrontEnd
     void hideHelpIntro(int response);
     void openAboutWindow();
     void hideAboutWindow(int response);
-    void newServerTab();
     void setupMenus();
     void closeCurrentTab();
     void hideNickList();
@@ -70,10 +69,11 @@ public:
     virtual ~MainWindow();
 
     MainNotebook& getNotebook() { return _notebook; }
-    Tab* newServer();
+    const Gtk::MenuBar& getMenuBar() const { return _menubar; }
+    Tab* newServerTab();
     void hideMenu();
-    void clearWindow();
-    void clearAllWindows();
+
+    StatusBar _statusbar;
 
 
     // Methods implemented for the abstract base class 'FrontEnd' 
@@ -95,9 +95,6 @@ public:
     void newDCC(DCC *dcc);
     void dccStatusChanged(DCC *dcc);
     void localeError(bool tried_custom_encoding);
-    const Gtk::MenuBar& getMenuBar() const { return _menubar; }
-
-    StatusBar _statusbar;
 };
 
 extern MainWindow* AppWin;

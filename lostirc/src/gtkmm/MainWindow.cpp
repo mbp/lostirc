@@ -22,6 +22,7 @@
 #include <config.h>
 #include <gtkmm/box.h>
 #include <gdk/gdkkeysyms.h>
+#include <sigc++/retype_return.h>
 #include "DCCList.h"
 #include "MainWindow.h"
 #include "Tab.h"
@@ -65,7 +66,7 @@ MainWindow::MainWindow(bool autoconnect)
 
     if (!_app.cfgservers.hasAutoConnects() || !autoconnect) {
         // Construct initial tab
-        newServer();
+        newServerTab();
     } else {
         // Auto-connect to servers.
         _app.autoConnect();
@@ -298,7 +299,7 @@ void MainWindow::newTab(ServerConnection *conn)
     tab->setInActive();
 }
 
-Tab* MainWindow::newServer()
+Tab* MainWindow::newServerTab()
 {
     ustring name = _("server");
     ServerConnection *conn = _app.newServer();
@@ -384,15 +385,15 @@ void MainWindow::setupMenus()
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(
                     _("New Server Tab"),
                     Gtk::Menu::AccelKey("<control>n"),
-                    SigC::slot(*this, &MainWindow::newServerTab)));
+                    SigC::hide_return(SigC::slot(*this, &MainWindow::newServerTab))));
 
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(
                     _("Clear Window"),
-                    SigC::slot(*this, &MainWindow::clearWindow)));
+                    SigC::slot(_notebook, &MainNotebook::clearWindow)));
 
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(
                     _("Clear All Windows"),
-                    SigC::slot(*this, &MainWindow::clearAllWindows)));
+                    SigC::slot(_notebook, &MainNotebook::clearAll)));
 
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(
                     _("Close Current Tab"),
@@ -518,11 +519,6 @@ void MainWindow::hideAboutWindow(int response)
     _aboutwin->hide();
 }
 
-void MainWindow::newServerTab()
-{
-    newServer();
-}
-
 void MainWindow::closeCurrentTab()
 {
     Tab *tab = _notebook.getCurrent();
@@ -534,16 +530,6 @@ void MainWindow::closeCurrentTab()
         tab->getConn()->removeChannel(tab->getName());
     }
     _notebook.closeCurrent();
-}
-
-void MainWindow::clearWindow()
-{
-    _notebook.getCurrent()->getText().clearText();
-}
-
-void MainWindow::clearAllWindows()
-{
-    _notebook.clearAll();
 }
 
 bool MainWindow::on_key_press_event(GdkEventKey* e)

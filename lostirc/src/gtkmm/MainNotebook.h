@@ -37,6 +37,7 @@ public:
 
     void findTabs(const Glib::ustring& nick, ServerConnection *conn, std::vector<Tab*>& vec);
     void findTabs(ServerConnection *conn, std::vector<Tab*>& vec);
+    void clearWindow();
     void clearAll();
     void Tabs(std::vector<Tab*>& vec);
     void closeCurrent();

@@ -79,17 +79,17 @@ void Me(ServerConnection *conn, const ustring& params)
 
 void Clear(ServerConnection *conn, const ustring& params)
 {
-    AppWin->clearWindow();
+    AppWin->getNotebook().clearWindow();
 }
 
 void ClearAll(ServerConnection *conn, const ustring& params)
 {
-    AppWin->clearAllWindows();
+    AppWin->getNotebook().clearAll();
 }
 
 void NewServer(ServerConnection *conn, const ustring& params)
 {
-    AppWin->newServer();
+    AppWin->newServerTab();
 }
 
 void Part(ServerConnection *conn, const ustring& params)

@@ -1,6 +1,13 @@
 For a summary of changes between releases - see the NEWS file.
 
 2004-02-01  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * MainNotebook.cpp: Implement clearWindow() function.
+        * MainWindow.cpp: Remove unneeded newServer() function.
+                          Remove unneeded clearWindow() function.
+                          Remove unneeded clearAllWindows() function.
+
+2004-02-01  Morten Brix Pedersen  <morten@wtf.dk>
         
         * Remove update-potfile.sh: Unneeded.
 

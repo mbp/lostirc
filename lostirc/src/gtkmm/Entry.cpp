@@ -214,7 +214,7 @@ void findCommon(vector<ustring>& vec, const ustring& search, unsigned int& atcha
 
 int autoCompletion(ustring& search, ustring& matches_str, vector<ustring> full_list)
 {
-    full_list.erase(remove_if(full_list.begin(), full_list.end(), std::bind2nd(notPrefixedBy(), search)), full_list.end());;
+    full_list.erase(remove_if(full_list.begin(), full_list.end(), std::bind2nd(notPrefixedBy(), search)), full_list.end());
 
     if (full_list.size() == 1) {
         // Match!
@@ -235,4 +235,3 @@ int autoCompletion(ustring& search, ustring& matches_str, vector<ustring> full_l
 
     return full_list.size();
 }
-

@@ -194,6 +194,11 @@ int MainNotebook::countTabs(ServerConnection *conn)
     return num;
 }
 
+void MainNotebook::clearWindow()
+{
+    getCurrent()->getText().clearText();
+}
+
 void MainNotebook::clearAll()
 {
     Gtk::Notebook_Helpers::PageList::iterator i;
