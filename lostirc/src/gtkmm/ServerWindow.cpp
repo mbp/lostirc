@@ -260,6 +260,7 @@ ServerEditDialog::ServerEditDialog(Gtk::Window& parent, Server* server)
     _server_options_table.attach(nickentry, 1, 2, row, row + 1);
 
     // commmands
+    cmdtext.set_size_request(400, 120);
     cmdtext.set_editable(true);
     Gtk::Label *label5 = manage(new Gtk::Label(_("Commands to perform when connected:")));
     get_vbox()->pack_start(*label5, Gtk::PACK_SHRINK);
@@ -267,7 +268,7 @@ ServerEditDialog::ServerEditDialog(Gtk::Window& parent, Server* server)
     Gtk::ScrolledWindow *swin = manage(new Gtk::ScrolledWindow());
     swin->set_shadow_type(Gtk::SHADOW_IN);
     swin->add(cmdtext);
-    swin->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+    swin->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     get_vbox()->pack_start(*swin);
 
     // initialize.

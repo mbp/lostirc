@@ -2,6 +2,12 @@ For a summary of changes between releases - see the NEWS file.
 
 2004-02-01  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * ServerWindow.cpp: Apply patch from Thomas Johannsson making the
+        text-field in the server edit dialog slightly bigger, and horizontal
+        scrollbar support.
+
+2004-02-01  Morten Brix Pedersen  <morten@wtf.dk>
+
         * MainWindow.cpp: Add Ctrl-PgUp/PgDn as alternative keys to browse
         tabs.
         * Prefs.cpp: A compilation fix for FreeBSD (hopefully...)
