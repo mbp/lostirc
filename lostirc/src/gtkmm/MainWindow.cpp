@@ -66,27 +66,7 @@ MainWindow::MainWindow()
         conn->Session.servername = name;
         TabChannel *tab = _nb->addChannelTab(name, conn);
         tab->setInActive();
-        _nb->insert(tab, "\00311Welcome to LostIRC!\n\nThis client is mainly keyboard oriented, so don't expect fancy menus and buttons for you to click on.
-
-\0037Available commands:
-\0038/SERVER <hostname> - connect to server.
-/JOIN <channel> - join channel.
-/PART <channel> - part channel.
-/WHOIS <nick> - whois a user.
-/NICK <nick> - change nick.
-/CTCP <nick> <request> - send CTCP requests.
-/AWAY <msg> - go away.
-/QUIT <msg> - quit IRC with <msg>.
-
-\0037Available GUI commands:
-\0038/QUERY <nick> - start query with <nick>.
-
-\0037Available keybindings:
-\0038Alt + [1-9] - switch tabs from 1-9.
-Alt + n - create new server tab.
-Alt + c - close current tab.
-Tab - nickcomplete.
-");
+        *tab << "\00311Welcome to LostIRC!\n\nThis client is mainly keyboard oriented, so don't expect fancy menus and buttons for you to click on.\n\n\0037Available commands:\n\0038/SERVER <hostname> - connect to server.\n/JOIN <channel> - join channel.\n/PART <channel> - part channel.\n/WHOIS <nick> - whois a user.\n/NICK <nick> - change nick.\n/CTCP <nick> <request> - send CTCP requests.\n/AWAY <msg> - go away.\n/QUIT <msg> - quit IRC with <msg>.\n \n\0037Available GUI commands:\n\0038/QUERY <nick> - start query with <nick>.\n \n\0037Available keybindings:\n\0038Alt + [1-9] - switch tabs from 1-9.\nAlt + n - create new server tab.\nAlt + c - close current tab.\nTab - nick-completion and command-completion.\n";
     }
     show_all();
 }
@@ -102,14 +82,14 @@ void MainWindow::onDisplayMessage(const string& msg, FE::Dest d, ServerConnectio
     if (d == FE::CURRENT) {
         Tab *tab = _nb->getCurrent(conn);
 
-        _nb->insert(tab, msg);
+        *tab << msg;
     } else if (d == FE::ALL) {
         vector<Tab*> tabs;
         vector<Tab*>::const_iterator i;
         _nb->findTabs(conn, tabs);
 
         for (i = tabs.begin(); i != tabs.end(); ++i) {
-            _nb->insert(*i, msg);
+            *(*i) << msg;
         }
     }
 }
@@ -121,7 +101,7 @@ void MainWindow::onDisplayMessageInChan(const string& msg, Channel& chan, Server
     // does the channel exist? if not, we probably did a 'closeCurrent() and
     // parted it...
     if (tab)
-          _nb->insert(tab, msg);
+          *tab << msg;
 }
 
 void MainWindow::onDisplayMessageInQuery(const string& msg, const string& to, ServerConnection *conn)
@@ -131,7 +111,7 @@ void MainWindow::onDisplayMessageInQuery(const string& msg, const string& to, Se
     if (!tab)
           tab = _nb->addQueryTab(to, conn);
 
-    _nb->insert(tab, msg);
+    *tab << msg;
 }
 
 void MainWindow::onJoin(const string& nick, Channel& chan, ServerConnection *conn)

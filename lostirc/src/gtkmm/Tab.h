@@ -32,9 +32,7 @@
 #include "Entry.h"
 #include <Parser.h>
 
-class MainNotebook;
 class ServerConnection;
-class Prefs;
 
 class Tab : public Gtk::VBox
 {
@@ -60,7 +58,7 @@ public:
     virtual void renameUser(const std::string& from, const std::string& to) = 0;
     virtual bool findUser(const std::string& nick) = 0;
     virtual bool nickCompletion(const std::string& word, std::string& str) = 0;
-    void parseAndInsert(const std::string& str);
+    Tab& operator<<(const std::string& str);
     void insertWithColor(int color, const std::string& str);
     void setStyle();
     void setFont(Gdk_Font *font);

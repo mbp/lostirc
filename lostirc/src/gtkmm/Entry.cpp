@@ -51,15 +51,15 @@ void Entry::onEntry()
 
         } catch (CommandException& ce) {
 
-            _tab->parseAndInsert(string(ce.what()) + string("\n"));
+            *_tab << string(ce.what()) + string("\n");
 
         }
 
     } else {
         if (!_tab->getConn()->Session.isConnected) {
-            _tab->parseAndInsert("Not connected to server.\n");
+            *_tab << "Not connected to server.\n";
         } else if (!_tab->isActive()) {
-            _tab->parseAndInsert("Not on any channel.\n");
+            *_tab << "Not on any channel.\n";
         } else {
             printText(msg);
         }
@@ -80,7 +80,7 @@ void Entry::printText(const string& msg)
     string line;
     while (getline(ss, line)) {
         _tab->getConn()->sendMsg(_tab->getLabel()->get_text(), line);
-        _tab->parseAndInsert("\0037<\0030" + _tab->getConn()->Session.nick + "\0037>\0030 " + line + '\n');
+        *_tab << "\0037<\0030" + _tab->getConn()->Session.nick + "\0037>\0030 " + line + '\n';
     }
 }
 

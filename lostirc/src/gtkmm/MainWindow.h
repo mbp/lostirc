@@ -30,10 +30,7 @@
 
 class MainWindow : public Gtk::Window
 {
-    MainNotebook* _nb;
 
-    /* Our LostIRCApp object, the backend to the client, controlling the
-     * serverconnections and stuff.. but NOT the GUI. */
     LostIRCApp *_app;
 
 public:
@@ -47,6 +44,8 @@ public:
     MainNotebook* getNotebook() { return _nb; }
     LostIRCApp* getApp() { return _app; }
     void newServer();
+
+    MainNotebook* _nb;
 
 private:
     // Events
@@ -66,7 +65,6 @@ private:
     void onHighlight(const std::string& to, ServerConnection *conn);
     void onAway(bool away, ServerConnection *conn);
     void onNewTab(ServerConnection *conn);
-
 };
 
 extern MainWindow* AppWin;

@@ -158,7 +158,7 @@ void MainNotebook::highlight(Tab *tab)
     }
 }
 
-void MainNotebook::insert(Tab *tab, const string& str)
+void MainNotebook::onInserted(Tab *tab)
 {   
     if (tab != getCurrent() && !tab->is_highlighted) {
         Gdk_Color color("red");
@@ -166,7 +166,6 @@ void MainNotebook::insert(Tab *tab, const string& str)
         style->set_fg(GTK_STATE_NORMAL, color);
         tab->getLabel()->set_style(*style);
     }
-    tab->parseAndInsert(str);
 }
 
 void MainNotebook::findTabs(const string& nick, ServerConnection *conn, vector<Tab*>& vec)

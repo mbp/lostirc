@@ -46,7 +46,7 @@ public:
     void Tabs(ServerConnection *conn, std::vector<Tab*>& vec);
     void closeCurrent();
     void highlight(Tab *tab);
-    void insert(Tab *tab, const std::string& str);
+    void onInserted(Tab *tab);
     void setFont();
     int countTabs(ServerConnection *conn);
 

@@ -23,6 +23,7 @@
 #include <Utils.h>
 #include "Tab.h"
 #include "Prefs.h"
+#include "MainWindow.h"
 
 using std::vector;
 using std::string;
@@ -122,8 +123,10 @@ void Tab::setStyle() {
     _text->set_style(*style);
 }
 
-void Tab::parseAndInsert(const string& str)
+Tab& Tab::operator<<(const string& str)
 {
+    AppWin->_nb->onInserted(this);
+
     // Add timestamp 
     time_t timeval = time(0);
     char tim[11];
