@@ -48,7 +48,7 @@ public:
     int countTabs(ServerConnection *conn);
 
 private:
-    virtual void on_switch_page(GtkNotebookPage *p, unsigned int n);
+    void onSwitchPage(GtkNotebookPage *p, unsigned int n);
 
     Pango::FontDescription fontdescription;
 };

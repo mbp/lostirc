@@ -27,6 +27,7 @@ MainNotebook::MainNotebook()
 {
     set_tab_pos(Gtk::POS_BOTTOM);
     fontdescription = Pango::FontDescription(App->getCfg().getOpt("font"));
+    signal_switch_page().connect(SigC::slot(*this, &MainNotebook::onSwitchPage));
 }
 
 TabChannel * MainNotebook::addChannelTab(const string& name, ServerConnection *conn)
@@ -109,7 +110,7 @@ int MainNotebook::findPage(const string& name, ServerConnection *conn, bool find
     return -1;
 }
 
-void MainNotebook::on_switch_page(GtkNotebookPage *p, unsigned int n)
+void MainNotebook::onSwitchPage(GtkNotebookPage *p, unsigned int n)
 {
     Tab *tab = static_cast<Tab*>(get_nth_page(n));
 
@@ -122,7 +123,6 @@ void MainNotebook::on_switch_page(GtkNotebookPage *p, unsigned int n)
     } else {
         AppWin->set_title("LostIRC "VERSION" - " + tab->getConn()->Session.nick + ": " + tab->getLabel()->get_text());
     }
-    Notebook::on_switch_page(p, n);
 }
 
 void MainNotebook::closeCurrent()
