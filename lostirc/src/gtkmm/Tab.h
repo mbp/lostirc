@@ -45,14 +45,14 @@ public:
     Entry*                      getEntry();
     ServerConnection*           getConn();
 
-    virtual void insertUser(const vector<string>& users) = 0;
-    virtual void insertUser(const string& user) = 0;
-    virtual void removeUser(const string& nick) = 0;
-    virtual void renameUser(const string& from, const string& to) = 0;
-    virtual bool findUser(const string& nick) = 0;
-    virtual bool nickCompletion(const string& word, string& str) = 0;
-    void parseAndInsert(const string& str);
-    void insertWithColor(int color, const string& str);
+    virtual void insertUser(const std::vector<std::string>& users) = 0;
+    virtual void insertUser(const std::string& user) = 0;
+    virtual void removeUser(const std::string& nick) = 0;
+    virtual void renameUser(const std::string& from, const std::string& to) = 0;
+    virtual bool findUser(const std::string& nick) = 0;
+    virtual bool nickCompletion(const std::string& word, std::string& str) = 0;
+    void parseAndInsert(const std::string& str);
+    void insertWithColor(int color, const std::string& str);
     void setStyle();
     void setFont(Gdk_Font *font);
     bool is_highlighted;
@@ -76,17 +76,17 @@ public:
 
     Gtk::CList*         getCList() { return 0; }
 
-    void insertUser(const vector<string>& users) {};
-    void insertUser(const string& user) {};
-    void removeUser(const string& nick) {};
-    void renameUser(const string& from, const string& to) {
+    void insertUser(const std::vector<std::string>& users) {};
+    void insertUser(const std::string& user) {};
+    void removeUser(const std::string& nick) {};
+    void renameUser(const std::string& from, const std::string& to) {
         getLabel()->set_text(to);
     }
-    bool findUser(const string& nick) {
+    bool findUser(const std::string& nick) {
         if (nick == getLabel()->get_text())
               return true;
     }
-    bool nickCompletion(const string& word, string& str) {
+    bool nickCompletion(const std::string& word, std::string& str) {
         str = getLabel()->get_text(); return true;
     }
 };
@@ -98,14 +98,14 @@ public:
 
     Gtk::CList*         getCList();
 
-    void insertUser(const vector<string>& users);
-    void insertUser(const string& user);
-    void removeUser(const string& nick);
-    void renameUser(const string& from, const string& to) {
+    void insertUser(const std::vector<string>& users);
+    void insertUser(const std::string& user);
+    void removeUser(const std::string& nick);
+    void renameUser(const std::string& from, const std::string& to) {
         removeUser(from); insertUser(to);
     }
-    bool findUser(const string& nick);
-    bool nickCompletion(const string& word, string& str);
+    bool findUser(const std::string& nick);
+    bool nickCompletion(const std::string& word, std::string& str);
 
 private:
     Gtk::CList *_clist;

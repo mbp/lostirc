@@ -21,6 +21,9 @@
 #include <Utils.h>
 #include "Tab.h"
 
+using std::vector;
+using std::string;
+
 Tab::Tab(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
     : Gtk::VBox(), _label(label), _conn(conn), is_highlighted(false), _font(font)
 {
