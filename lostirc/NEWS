@@ -1,4 +1,4 @@
-LostIRC (x.x.x)
+LostIRC (0.2.5) - Thu Jan, 16th 2003
   * When the window was resized, the scrollbar moved unwanted away from the
     bottom of the text box. Fixed (thanks, Jonathan James Taylor)
   * When being away from the client for a long while, and seeing yourself
