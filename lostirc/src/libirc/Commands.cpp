@@ -93,14 +93,24 @@ bool Commands::Server(ServerConnection *conn, const string& params)
 
 bool Commands::Nick(ServerConnection *conn, const string& params)
 {
-    conn->sendNick(params);
-    return true;
+    if (params.empty()) {
+        error = "/NICK <nick>, change nick.";
+        return false;
+    } else {
+        conn->sendNick(params);
+        return true;
+    }
 }
 
 bool Commands::Whois(ServerConnection *conn, const string& params)
 {
-    conn->sendWhois(params);
-    return true;
+    if (params.empty()) {
+        error = "/WHOIS <nick>, whois nick.";
+        return false;
+    } else {
+        conn->sendWhois(params);
+        return true;
+    }
 }
 
 bool Commands::Mode(ServerConnection *conn, const string& params)
