@@ -2,6 +2,13 @@ For a summary of changes between releases - see the NEWS file.
 
 2003-09-20  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * Tab.cpp: Only enable the NickList on channels. Never queries.
+        * MainWindow.cpp: Remove redundant Tab::setType() call.
+        * MainNotebook.cpp: Move show_all() before setType() call, to ensure
+        that we don't show() the NickList.
+
+2003-09-20  Morten Brix Pedersen  <morten@wtf.dk>
+
         * ServerWindow.cpp: Toggling the "auto-connect" column now works.
 
 2003-08-23  Morten Brix Pedersen  <morten@wtf.dk>
