@@ -16,6 +16,8 @@ LostIRC (x.x.x)
     right after changing nick, and not only when switching tabs.
   * Fix a segfault which appeared with bouncers/servers sending malformed
     JOIN lines.
+  * When receiving a file by DCC, the client no longer freezes until the
+    transfer is complete.
   * Old ChangeLog renamed to NEWS. The NEWS file is now the location of the
     summary of changes between releases while ChangeLog contains the notices
     of the real code changes.

@@ -61,7 +61,7 @@ void DCC_Send_In::go_ahead()
     Glib::signal_io().connect(
             SigC::slot(*this, &DCC_Send_In::onReadData),
             fd,
-            Glib::IO_IN | Glib::IO_OUT | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL);
+            Glib::IO_IN | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL);
 }
 
 bool DCC_Send_In::onReadData(Glib::IOCondition cond)
