@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LostIRC 0.3.2pre\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-02 03:31+0100\n"
+"POT-Creation-Date: 2004-01-02 03:54+0100\n"
 "PO-Revision-Date: 2004-01-01 19:25+0100\n"
 "Last-Translator: Morten Brix Pedersen <morten@wtf.dk>\n"
 "Language-Team: Danish <dansk@¿lid.dk>\n"
@@ -336,35 +336,35 @@ msgstr "DCC"
 msgid "IRC username (ident):"
 msgstr "IRC brugernavn (ident):"
 
-#: src/gtkmm/Prefs.cpp:89
+#: src/gtkmm/Prefs.cpp:90
 msgid "Encoding to use on IRC:"
 msgstr "Tegnsæt der skal bruges på IRC:"
 
-#: src/gtkmm/Prefs.cpp:100
+#: src/gtkmm/Prefs.cpp:101
 msgid "Browse..."
 msgstr "Gennemse..."
 
-#: src/gtkmm/Prefs.cpp:104
+#: src/gtkmm/Prefs.cpp:105
 msgid "Main window font:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:114
+#: src/gtkmm/Prefs.cpp:115
 msgid "Nick-completion character:"
 msgstr "Navnefærdiggørelsesbogstav:"
 
-#: src/gtkmm/Prefs.cpp:122
+#: src/gtkmm/Prefs.cpp:123
 msgid "Words to highlight on (space seperated):"
 msgstr "Ord der skal anmærkes på (mellemrumssepareret):"
 
-#: src/gtkmm/Prefs.cpp:130
+#: src/gtkmm/Prefs.cpp:131
 msgid "Maximium number of lines to cache:"
 msgstr "Maksimum linier, der skal gemmes:"
 
-#: src/gtkmm/Prefs.cpp:152
+#: src/gtkmm/Prefs.cpp:153
 msgid "DCC IP address:"
 msgstr "DCC IP-adresse:"
 
-#: src/gtkmm/Prefs.cpp:160
+#: src/gtkmm/Prefs.cpp:161
 msgid "DCC Port (0 = random):"
 msgstr "DCC Port (0 = tilfældig):"
 

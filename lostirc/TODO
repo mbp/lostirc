@@ -1,17 +1,7 @@
-NEW STUFF:
----------
- - need to make "colors" work (or just #ifdef 0 them until then)
-
-HIG:
-
-instant apply in prefs - correctly yet?
-password popup window?
-dcc port 0 = insensitive?
-text fields = access key?
-
-CRITICAL: 
----------
-  * Implement DCC CHAT
+REALLY USEFUL FEATURES: 
+-----------------------
+  * Implement "colorschemes", so you don't have to use a black background.
+  * Some way to seperate tabs from each other, so they are server sorted.
 
 NICE-TO-HAVE:
 ------------
@@ -20,12 +10,14 @@ NICE-TO-HAVE:
   * When window has lost its focus, then highlight the front tab too.
   * /BAN and /EXEC command.
   * Virtual functions for Commands, to be overriden. Much more OO-like.
-
-  * Some way to seperate tabs from each other, so they are server sorted.
+  * Implement DCC CHAT
   * Recognise URLs (and make them clickable?)
 
-WIN32:
-  * Doesn't fork() when using gethostbyname(), it should.
+
+SMALL NICETIES:
+---------------
+  * A more userfriendly way for choosing a random DCC port (at the moment,
+    you must enter '0').
 
 RANDOM BUGS:
 ------------
@@ -37,38 +29,24 @@ RANDOM BUGS:
   * Color-parsing might be slow, since it inserts one character at the time.
     Need to look into optimizing it.
 
-  * Check whether there are more bugs with implicit character set conversion
-    with operator << and operator >>
-
   * Wrapping of text in the text widget is done character wise, it would
     be nice if it could be done word-wise. But when using WRAP_WORD, a bug
     in GTK+ causes the window to be resized when the new text is inserted.
 
     This can be solved when gtkmm 2.4 gets released, which has WRAP_WORD_CHAR.
 
-  * This has to be removed from 'configure' at release time, or else the
-    configure script fails on Red Hat/Mandrake:
-    +extern "C" void exit(int); (:g/extern "C" void exit/d)
+  * Should we check for EAGAIN on send()? It seems to always succeed anyway.
+  * Is there an access key for all text entries in preferences?
 
-    (is still still the issue with 8.0/9.0?)
+WIN32 TODO:
+-----------
+  * Doesn't fork() when using gethostbyname(), it should.
 
-  * Should we check for EAGAIN on send()? It seems to always suceeed anyway.
 
 DCC:
----
+----
   * DCC port ranges.
   * Ability to cancel a DCC send.
   * DCCs should use their own events instead of just CLIENTMSG.
   * DCC objects should timeout when no response has been given
   * Show to the user which ip is being sent
-
-BOOKMARK suggestion from Jim Winstead:
--------------------------------------
- i'd love some sort of 'bookmark' feature that would make it easy to jump
- back to the point where i last left a channel. so if i'm chatting away
- in one channel and conversation is going on in another, i can latter
- come back to that channel, jump to where i left it, and then quickly
- catch up on what i missed.
-
- My comments: When coming back to a channel, use CTRL-b to scroll to the
- point where one left it.

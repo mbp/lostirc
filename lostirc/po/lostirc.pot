@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-02 03:31+0100\n"
+"POT-Creation-Date: 2004-01-02 03:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -276,35 +276,35 @@ msgstr ""
 msgid "IRC username (ident):"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:89
+#: src/gtkmm/Prefs.cpp:90
 msgid "Encoding to use on IRC:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:100
+#: src/gtkmm/Prefs.cpp:101
 msgid "Browse..."
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:104
+#: src/gtkmm/Prefs.cpp:105
 msgid "Main window font:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:114
+#: src/gtkmm/Prefs.cpp:115
 msgid "Nick-completion character:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:122
+#: src/gtkmm/Prefs.cpp:123
 msgid "Words to highlight on (space seperated):"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:130
+#: src/gtkmm/Prefs.cpp:131
 msgid "Maximium number of lines to cache:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:152
+#: src/gtkmm/Prefs.cpp:153
 msgid "DCC IP address:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:160
+#: src/gtkmm/Prefs.cpp:161
 msgid "DCC Port (0 = random):"
 msgstr ""
 

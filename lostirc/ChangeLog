@@ -2,6 +2,10 @@ For a summary of changes between releases - see the NEWS file.
 
 2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * TODO: Update.
+
+2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
+
         * Prefs.cpp: Fix problem where the choosen encoding wouldn't be
         remembered.
         * MainWindow.cpp: Rename "Nick List" to "User List".
