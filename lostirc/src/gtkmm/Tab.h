@@ -52,7 +52,7 @@ public:
     virtual void removeUser(const string& nick) = 0;
     virtual void renameUser(const string& from, const string& to) = 0;
     virtual bool findUser(const string& nick) = 0;
-
+    virtual bool nickCompletion(const string& word, string& str) = 0;
     bool is_highlighted;
 
 private:
@@ -81,7 +81,10 @@ public:
     virtual bool findUser(const string& nick) {
         if (nick == getLabel()->get_text())
               return true;
-    };
+    }
+    virtual bool nickCompletion(const string& word, string& str) {
+        return getLabel();
+    }
 };
 
 class TabChannel : public Tab
@@ -98,6 +101,7 @@ public:
         removeUser(from); insertUser(to);
     }
     virtual bool findUser(const string& nick);
+    virtual bool nickCompletion(const string& word, string& str);
 
 private:
     Gtk::CList *_clist;
@@ -113,7 +117,6 @@ public:
 
     gint on_key_press_event(GdkEventKey* e);
 private:
-    bool nickCompletion(const string& word, string& str);
     void onEntry();
     vector<string> _entries;
     vector<string>::iterator i;

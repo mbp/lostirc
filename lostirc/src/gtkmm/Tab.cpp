@@ -164,6 +164,41 @@ Gtk::CList* TabChannel::getCList()
     return _clist;
 }
 
+bool TabChannel::nickCompletion(const string& word, string& str)
+{
+    Gtk::CList_Helpers::RowIterator i = getCList()->rows().begin();
+
+    int matches = 0;
+    string nicks;
+    // Convert it to lowercase so we can search ignoring the case
+    string lcword = word;
+    lcword = Utils::tolower(lcword);
+    while(i != getCList()->rows().end())
+    {
+        int row = i->get_row_num();
+        string nick = getCList()->cell(row, 1).get_text();
+
+        // Lower case again
+        string lcnick = nick;
+        lcnick = Utils::tolower(lcnick);
+        if (lcword == lcnick.substr(0, lcword.length())) {
+            str = nick;
+            nicks += nick + " ";
+            matches++;
+        }
+        i++;
+    }
+    if (matches == 1) {
+        return true;
+    } else if (matches > 1) {
+        str = nicks + "\n";
+        return false;
+    } else if (matches == 0) {
+        str = "";
+        return false;
+    }
+}
+
 
 Entry::Entry(Tab* tab)
     : Gtk::Entry(510), _tab(tab)
@@ -225,7 +260,7 @@ gint Entry::on_key_press_event(GdkEventKey* e)
         } else {
             word = line.substr(pos + 1);
         }
-        if (nickCompletion(word, str)) {
+        if (_tab->nickCompletion(word, str)) {
             if (pos == 0) {
                 set_text("");
                 append_text(str + ", ");
@@ -236,40 +271,5 @@ gint Entry::on_key_press_event(GdkEventKey* e)
         } else {
             _tab->getText()->insert(str);
         }
-    }
-}
-
-bool Entry::nickCompletion(const string& word, string& str)
-{
-    Gtk::CList_Helpers::RowIterator i = _tab->getCList()->rows().begin();
-
-    int matches = 0;
-    string nicks;
-    // Convert it to lowercase so we can search ignoring the case
-    string lcword = word;
-    lcword = Utils::tolower(lcword);
-    while(i != _tab->getCList()->rows().end())
-    {
-        int row = i->get_row_num();
-        string nick = _tab->getCList()->cell(row, 1).get_text();
-
-        // Lower case again
-        string lcnick = nick;
-        lcnick = Utils::tolower(lcnick);
-        if (lcword == lcnick.substr(0, lcword.length())) {
-            str = nick;
-            nicks += nick + " ";
-            matches++;
-        }
-        i++;
-    }
-    if (matches == 1) {
-        return true;
-    } else if (matches > 1) {
-        str = nicks + "\n";
-        return false;
-    } else if (matches == 0) {
-        str = "";
-        return false;
     }
 }
