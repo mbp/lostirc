@@ -136,6 +136,7 @@ void ServerConnection::on_error(const char *msg)
 
 void ServerConnection::on_host_resolved()
 {
+    FE::emit(FE::get(SERVMSG) << "Resolved host. Connecting..", FE::CURRENT, this);
     try {
 
         _socket->connect(Session.port);
@@ -153,7 +154,7 @@ void ServerConnection::on_host_resolved()
     // This is a temporary watch to see when we can write, when we can
     // write - we are (hopefully) connected
     _writeid = g_io_add_watch(g_io_channel_unix_new(_socket->getfd()),
-                   GIOCondition (G_IO_OUT),
+                   GIOCondition (G_IO_OUT | G_IO_IN | G_IO_ERR | G_IO_HUP | G_IO_PRI | G_IO_NVAL),
                    &ServerConnection::onConnect, this);
 
 }
@@ -235,7 +236,7 @@ gboolean ServerConnection::onReadData(GIOChannel* io_channel, GIOCondition cond,
         return TRUE;
 
     } catch (SocketException &e) {
-        FE::emit(FE::get(SERVMSG) << e.what(), FE::ALL, &conn);
+        FE::emit(FE::get(SERVMSG3) << "Failed to receive" << e.what(), FE::ALL, &conn);
         conn.disconnect();
         conn.addReconnectTimer();
         return FALSE;
@@ -251,15 +252,18 @@ gboolean ServerConnection::onConnect(GIOChannel* io_channel, GIOCondition cond, 
     // The only purpose of this function is to register us to the server
     // when we are able to write
     ServerConnection& conn = *(static_cast<ServerConnection*>(data));
+    FE::emit(FE::get(SERVMSG) << "Connected. Logging in...", FE::CURRENT, &conn);
 
-    char hostname[256];
-    gethostname(hostname, sizeof(hostname) - 1);
+    if (cond & G_IO_OUT) {
+        char hostname[256];
+        gethostname(hostname, sizeof(hostname) - 1);
 
-    if (!conn.Session.password.empty())
-          conn.sendPass(conn.Session.password);
+        if (!conn.Session.password.empty())
+              conn.sendPass(conn.Session.password);
 
-    conn.sendNick(conn.Session.nick);
-    conn.sendUser(App->getCfg().getOpt("ircuser"), hostname, conn.Session.host, conn.Session.realname);
+        conn.sendNick(conn.Session.nick);
+        conn.sendUser(App->getCfg().getOpt("ircuser"), hostname, conn.Session.host, conn.Session.realname);
+    }
 
     // Watch for incoming data from now on
     conn._watchid = g_io_add_watch(g_io_channel_unix_new(conn._socket->getfd()),

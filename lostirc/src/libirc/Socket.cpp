@@ -58,16 +58,17 @@ void Socket::resolvehost(const string& host)
         if ((he = gethostbyname(host.c_str())) == NULL) {
             int size = 0;
             if (write(thepipe[1], &size, sizeof(int)) == -1)
-                  on_error(strerror(errno));
+                  std::cerr << "Error writing to pipe: " << strerror(errno) << std::endl;
         } else {
             struct in_addr ia = *(struct in_addr *)he->h_addr_list[0];
 
             int size = sizeof(struct in_addr);
             if (write(thepipe[1], &size, sizeof(int)) == -1 ||
                     write(thepipe[1], &ia, sizeof(struct in_addr)) == -1)
-                  on_error(strerror(errno));
+                  std::cerr << "Error writing to pipe: " << strerror(errno) << std::endl;
 
         }
+        ::close(thepipe[1]);
         _exit(0);
     } else if (resolve_pid > 0) {
         // parent
@@ -93,24 +94,25 @@ gboolean Socket::on_host_resolve(GIOChannel* iochannel, GIOCondition cond, gpoin
 
     GIOError result = g_io_channel_read(iochannel, buf, size_to_be_read, &bytes_read);
 
-    bool error = false;
     if (result != G_IO_ERROR_NONE) {
         socket.on_error("An error occured while reading from pipe");
-        error = true;
     } else if (buf[0] == 0) {
         socket.on_error("Unknown host");
-        error = true;
+    } else if (size_to_be_read != bytes_read) {
+        std::cerr << "on_host_resolve(): size_to_be_read != bytes_read" << std::endl;
     } else {
         // copy the struct we received into the sockaddr member
         memcpy(static_cast<void*>(&socket.sockaddr.sin_addr),
                 static_cast<void*>(&buf[sizeof(int)]),
                 sizeof(struct in_addr));
+
+        socket.on_host_resolved();
     }
 
     delete []buf;
 
-    if (!error)
-          socket.on_host_resolved();
+    if (iochannel != NULL)
+          g_io_channel_close(iochannel);
 
     // wait for our child to exit (it probably already exit'ed, but we need
     // this to avoid defunct childs).
@@ -149,16 +151,13 @@ void Socket::disconnect()
 bool Socket::send(const string& data)
 {
     #ifdef DEBUG
-    std::cout << ">> " << data;
+    std::cout << ">> " << data << std::flush;
     #endif
     if (::send(fd, data.c_str(), data.length(), 0) > 0) {
-        #ifdef DEBUG
-        std::cout << " // success" << std::endl;
-        #endif
         return true;
     } else {
         #ifdef DEBUG
-        std::cout << " // failed (" << strerror(errno) << ")" << std::endl;
+        std::cout << " -- send failed! (" << strerror(errno) << ")" << std::endl;
         #endif
         return false;
     }
@@ -196,8 +195,11 @@ int Socket::close()
 void Socket::setNonBlocking()
 {
     int flags = fcntl(fd, F_GETFL, 0);
-    if (flags != -1)
-          fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+    if (flags == -1)
+          on_error(strerror(errno));
+    else
+          if (fcntl(fd, F_SETFL, flags | O_NONBLOCK) == -1)
+                on_error(strerror(errno));
 }
 
 void Socket::setBlocking()
