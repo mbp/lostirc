@@ -318,19 +318,36 @@ Gtk::CList* TabChannel::getCList()
 
 void Tab::setAway()
 {
-    //if (!_away) {
-        _away = manage(new Gtk::Label("You are away"));
-        _hbox2->pack_start(*_away);
+    bool away = false;
+
+    Gtk::Box_Helpers::BoxList::iterator i;
+
+    for (i = _hbox2->children().begin(); i != _hbox2->children().end(); ++i) {
+        Gtk::Label *a = dynamic_cast<Gtk::Label*>((*i)->get_widget());
+        if (a)
+              away = true;
+    }
+
+    if (!away) {
+        Gtk::Label *a = manage(new Gtk::Label("You are away"));
+        _hbox2->pack_start(*a);
         _hbox2->show_all();
-    //}
+    }
 }
 
 void Tab::setUnAway()
 {
-    if (_away) {
-        _hbox2->children().remove(*_away);
-        _hbox2->show_all();
+    Gtk::Box_Helpers::BoxList::iterator i;
+
+    for (i = _hbox2->children().begin(); i != _hbox2->children().end();) {
+        Gtk::Label *a = dynamic_cast<Gtk::Label*>((*i)->get_widget());
+        if (a) {
+            i = _hbox2->children().erase(i);
+        } else {
+            ++i;
+        }
     }
+    _hbox2->show_all();
 }
 
 bool TabChannel::nickCompletion(const string& word, string& str)
