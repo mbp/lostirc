@@ -1,3 +1,7 @@
+LostIRC (x.x.x)
+  * Title in window wasn't updated after succesfull connection to server and
+    joining a channel after that, fixed.
+
 LostIRC (0.2.2) - Sun Dec, 1st 2002
   * Tabs are no longer closed with CTRL-c (which can now be used for
     copying instead). CTRL-w is the new shortcut ("close window(tab)").

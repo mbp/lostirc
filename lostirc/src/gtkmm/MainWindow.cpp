@@ -162,6 +162,7 @@ void MainWindow::join(const string& nick, Channel& chan, ServerConnection *conn)
     Tab *tab = notebook.findTab(convert_to_utf8(chan.getName()), conn);
     if (!tab) {
         tab = notebook.addChannelTab(convert_to_utf8(chan.getName()), conn);
+        notebook.updateTitle();
         return;
     }
     tab->insertUser(convert_to_utf8(nick));
@@ -251,6 +252,7 @@ void MainWindow::away(bool away, ServerConnection* conn)
 void MainWindow::connected(ServerConnection* conn)
 {
     notebook.updateStatus();
+    notebook.updateTitle();
 }
 
 void MainWindow::disconnected(ServerConnection* conn)

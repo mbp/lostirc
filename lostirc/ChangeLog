@@ -1,5 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
+2002-12-02  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * MainWindow.cpp: updateTitle() when connected.
+
 2002-12-01  Morten Brix Pedersen  <morten@wtf.dk>
         
         * MainNotebook.cpp: Use static_cast<> instead of dynamic_cast<>.
