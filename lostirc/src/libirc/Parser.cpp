@@ -38,8 +38,9 @@ void Parser::parseLine(string& data)
     #ifdef DEBUG
     cout << "<< " + data;
     #endif
+
     // Erase \r and \n, we dont need them when parsing the messages.
-    data.erase(data.rfind("\r\n"), strlen("\r\n"));
+    data.erase(data.find_last_not_of("\r\n") + 1);
 
     if (data[0] == ':') {
         /*
