@@ -391,6 +391,12 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
         } else if (e->keyval == GDK_Home) {
             notebook.getCurrent()->getText().scrollToTop();
         }
+    } else if (e->state & GDK_MOD1_MASK) {
+        // ALT key.
+        if (e->keyval == GDK_Left)
+              notebook.prev_page();
+        else if (e->keyval == GDK_Right)
+              notebook.next_page();
     }
     if (e->keyval == GDK_Page_Up) {
         // scroll up text widget

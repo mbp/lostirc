@@ -6,6 +6,8 @@ LostIRC (x.x.x)
     to the previous highlight instead of finding it manually.
   * CTRL-Home and CTRL-End can now be used to scroll to the top and bottom
     in the text box.
+  * ALT-Left and ALT-Right can now be used to navigate to the left or right
+    tab.
   * When no real name was set, some IRC servers refused the user to connect.
     Now real name is set to the users nick if not specified.
   * When only one user is on a channel, the plural s from "users" is now

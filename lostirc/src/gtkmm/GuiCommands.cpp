@@ -211,7 +211,7 @@ std::vector<Glib::ustring> getCommands()
 }
 void displayKeybindings(ServerConnection *conn, const ustring& params)
 {
-        AppWin->getNotebook().getCurrent()->getText() << "\0037Available keybindings:\n    \0038CTRL-[1-9] - switch tabs from 1-9\n    CTRL-N - create new server tab\n    CTRL-W - close current window(tab)\n\n    Tab - nick-completion and command-completion\n\n    Page Up/Page Down - Scroll up or down in text box\n    CTRL-End/Home - go to bottom or top of text box\n    CTRL-H - Scroll back to previous highlight (if any)\n\n    CTRL-P - open preferences\n    CTRL-Q - quit LostIRC\n\n";
+        AppWin->getNotebook().getCurrent()->getText() << "\0037Available keybindings:\n    \0038CTRL-[1-9] - switch tabs from 1-9\n    CTRL-N - create new server tab\n    ALT-Left - navigate a tab to the left\n    ALT-Right - navigate a tab to the right\n    CTRL-W - close current window(tab)\n\n    Tab - nick-completion and command-completion\n\n    Page Up/Page Down - Scroll up or down in text box\n    CTRL-End/Home - go to bottom or top of text box\n    CTRL-H - Scroll back to previous highlight (if any)\n\n    CTRL-P - open preferences\n    CTRL-Q - quit LostIRC\n\n";
 
 }
 }

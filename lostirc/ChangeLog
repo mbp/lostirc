@@ -1,6 +1,12 @@
 For a summary of changes between releases - see the NEWS file.
 
 2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * MainWindow.cpp: Add ALT-Left and ALT-Right keybindings to move to
+          the tab on the left/right.
+        * GuiCommands.cpp: Document that in displayKeybindings().
+
+2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
         
         * GuiCommands.cpp: Add displayKeybindings() to display all key
           bindings.
