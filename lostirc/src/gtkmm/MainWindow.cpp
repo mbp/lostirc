@@ -77,6 +77,7 @@ MainWindow::MainWindow(bool autoconnect)
         // Auto-connect to servers.
         _app.autoConnect();
     }
+    _notebook.getCurrent()->getEntry().grab_focus();
 }
 
 MainWindow::~MainWindow()
@@ -296,12 +297,6 @@ void MainWindow::newTab(ServerConnection *conn)
     Tab *tab = _notebook.addTab(Tab::SERVER, name, conn);
     tab->setType(Tab::SERVER);
 
-    // XXX: this is a hack for a "bug" in the gtkmm code which makes the
-    // application crash in the start when no pages exists, even though we
-    // added one above... doing set_current_page(0) will somehow add it fully.
-    if (_notebook.get_current_page() == -1) {
-        _notebook.set_current_page(0);
-    }
     tab->setInActive();
 }
 

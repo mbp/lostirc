@@ -48,6 +48,7 @@ public:
     TextWidget&                 getText() { return _textwidget; }
     ServerConnection*           getConn() const { return _conn; }
     const Glib::ustring&        getName() const { return _name; }
+    Entry&                      getEntry() { return _entry; }
 
     void setName(const Glib::ustring& str);
 

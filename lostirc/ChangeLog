@@ -1,6 +1,11 @@
 For a summary of changes between releases - see the NEWS file.
 
 2004-08-02  Morten Brix Pedersen  <morten@wtf.dk>
+	* MainWindow.cpp: Remove old tab hack which apparently isn't needed for
+	gtkmm 2.4.
+	* MainWindow.cpp: Grab focus on Entry on startup.
+
+2004-08-02  Morten Brix Pedersen  <morten@wtf.dk>
 	* Prefs.cpp, MainWindow.cpp: Enable changing colorschemes.
 	* ConfigHandler.cpp: Add second (black on white) colorscheme.
 
