@@ -22,8 +22,6 @@ RANDOM BUGS:
     as a user
   * nicks overlaps status (@, + etc.) in nick-list.
   * when away/unaway - title isn't updated until switch tab
-  * on some systems there are commas in the real name field (3 to be
-    precise)
   * lostirc.desktop shouldn't be copied on non-GNOME systems.
   * lostirc.desktop should be distributed as KDE link as well.
   * check for EAGAIN on send()?
