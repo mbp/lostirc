@@ -21,7 +21,6 @@
 
 #include <gtkmm/notebook.h>
 #include <gtkmm/style.h>
-#include <gtkmm/fontselection.h>
 #include <ServerConnection.h>
 #include <vector>
 #include "Tab.h"
@@ -45,15 +44,12 @@ public:
     void closeCurrent();
     void highlight(Tab *tab);
     void onInserted(Tab *tab);
-    //void setFont();
+    void setFont(const Glib::ustring& str);
     int countTabs(ServerConnection *conn);
 
 private:
-    void switchPage(GtkNotebookPage *p, unsigned int n);
-    //void fontSelectionOk();
-    //void destroyFontSelection(Gtk::FontSelectionDialog *w);
+    virtual void on_switch_page(GtkNotebookPage *p, unsigned int n);
 
-    //Gtk::FontSelectionDialog *fontdialog;
-    //Gdk_Font _font;
+    Pango::FontDescription fontdescription;
 };
 #endif

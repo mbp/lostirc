@@ -24,7 +24,9 @@
 #include <gtkmm/entry.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/treeview.h>
+#include <gtkmm/fontselection.h>
 #include "Tab.h"
+#include "MainWindow.h"
 
 class Prefs : public Gtk::VBox
 {
@@ -52,6 +54,7 @@ private:
     void onSelectRow(bool start_editing);
     void onUnSelectRow();
     void clearEntries();
+    void onFontApply();
 
     // General
     Gtk::Entry ircnickentry;
@@ -63,6 +66,10 @@ private:
     Gtk::Entry dccipentry;
     Gtk::Entry highlightentry;
     Gtk::Entry bufferentry;
+
+    // Font selection
+    Gtk::FontSelection fontsel;
+
 
     // Auto-join 
     Gtk::Entry nickentry;

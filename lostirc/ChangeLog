@@ -1,10 +1,19 @@
 LostIRC (x.x.x)
   * Ported to gtkmm2, now depends on sigc++ 1.1 and gtkmm1.3.
+    Noteable features with gtkmm2:
+      * UTF-8 support
+      * Improved fonts, e.g. anti aliased fonts when 'GDK_USE_XFT' is set
+        (try `export GDK_USE_XFT=1`)
+      * Cleaner and more attractive default interface
+      * Double-buffering in widgets which prevents flickering
+
   * There is now a limit of 500 lines in the text windows - this can be
     specified using preferences. This makes sure the client doesn't use a huge
     amount of RAM.
   * /CLEAR and /CLEARALL is implemented to clear all text from the current
     window and all windows.
+  * The font selection dialog is no longer opened using ALT+F, it is now
+    located in preferences and its behaviour has been improved a lot.
 
 LostIRC (0.1.4) - Sat Jul 13th 2002
   * A segfault which appeared when the enviroment variable USER wasn't set,

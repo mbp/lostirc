@@ -30,7 +30,7 @@ using std::vector;
 using std::string;
 using Glib::ustring;
 
-Tab::Tab(Gtk::Label *label, ServerConnection *conn) //, Gdk_Font *font)
+Tab::Tab(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font)
     : Gtk::VBox(), isHighlighted(false), hasPrefs(false),
       isOnChannel(true), _label(label), _conn(conn), _entry(this)
 {
@@ -61,6 +61,7 @@ Tab::Tab(Gtk::Label *label, ServerConnection *conn) //, Gdk_Font *font)
     initializeColorMap();
     setStyle();
 
+    _textview.modify_font(font);
 }
 
 Tab::~Tab()
@@ -69,20 +70,16 @@ Tab::~Tab()
     delete _hbox;
 }
 
-
-/*
-void Tab::setFont(Gdk_Font *font)
+void Tab::setFont(const Pango::FontDescription& font)
 {
-    _font = font;
+    _textview.modify_font(font);
 }
 
-*/
 void Tab::setStyle() {
     // TODO: Should this go into a ressource file?
     Gdk::Color col1;
     col1.set_rgb(0, 0, 0);
 
-    // FIXME style->set_font(*_font);
     _textview.modify_base(Gtk::STATE_NORMAL, col1);
 }
 
@@ -100,7 +97,6 @@ Tab& Tab::operator<<(const string& str)
 
 Tab& Tab::operator<<(const ustring& str)
 {
-
     AppWin->getNotebook().onInserted(this);
 
     // Add timestamp 
@@ -116,7 +112,7 @@ Tab& Tab::operator<<(const ustring& str)
 
     // FIXME: can be done prettier and better with TextBuffer marks
 
-    while (string::npos != pos || string::npos != lastPos)
+    while (ustring::npos != pos || ustring::npos != lastPos)
     {   
         // Check for digits
         if (Util::isDigit(line.substr(lastPos, 2))) {
@@ -151,7 +147,7 @@ void Tab::insertWithColor(int color, const ustring& str)
           _textview.scroll_to_mark(buffer->create_mark("e", buffer->end()), 0.0);
 
     // FIXME: possible performance critical
-    int buffer_size = Util::stoi(AppWin->getApp().getCfg().getOpt("buffer_size"));
+    int buffer_size = Util::stoi(App->getCfg().getOpt("buffer_size"));
     if (buffer_size && buffer->get_line_count() > buffer_size) {
         Gtk::TextBuffer::iterator start = buffer->get_iter_at_line(0);
         Gtk::TextBuffer::iterator end = buffer->get_iter_at_line(buffer->get_line_count() - buffer_size);
@@ -232,14 +228,14 @@ void Tab::endPrefs()
 }
 
 
-TabQuery::TabQuery(Gtk::Label *label, ServerConnection *conn) //, Gdk_Font *font)
-    : Tab(label, conn) //, font)
+TabQuery::TabQuery(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font)
+    : Tab(label, conn, font)
 {
 
 }
 
-TabChannel::TabChannel(Gtk::Label *label, ServerConnection *conn) //, Gdk_Font *font)
-    : Tab(label, conn), //, font),
+TabChannel::TabChannel(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font)
+    : Tab(label, conn, font),
     _columns(),
     _liststore(Gtk::ListStore::create(_columns)),
     _treeview(_liststore)
@@ -273,7 +269,7 @@ void TabChannel::updateUserNumber()
     _users->set_label(ss.str() + " users");
 }
 
-void TabChannel::insertUser(const string& nick, IRC::UserMode m)
+void TabChannel::insertUser(const ustring& nick, IRC::UserMode m)
 {
     Glib::ustring sign;
     switch (m)
@@ -297,7 +293,7 @@ void TabChannel::insertUser(const string& nick, IRC::UserMode m)
     updateUserNumber();
 }
 
-void TabChannel::removeUser(const string& nick)
+void TabChannel::removeUser(const ustring& nick)
 {
     Gtk::ListStore::iterator i = _liststore->children().begin();
 
@@ -312,7 +308,7 @@ void TabChannel::removeUser(const string& nick)
     updateUserNumber();
 }
 
-void TabChannel::renameUser(const string& from, const string& to)
+void TabChannel::renameUser(const ustring& from, const ustring& to)
 {
     Gtk::ListStore::iterator i = _liststore->children().begin();
 
@@ -325,7 +321,7 @@ void TabChannel::renameUser(const string& from, const string& to)
     }
 }
 
-bool TabChannel::findUser(const string& nick)
+bool TabChannel::findUser(const ustring& nick)
 {
     Gtk::ListStore::iterator i = _liststore->children().begin();
 
@@ -349,7 +345,7 @@ bool TabChannel::nickCompletion(const ustring& word, ustring& str)
     {
         ustring nick = i->get_value(_columns.nick);
 
-        string lcnick = nick.casefold();
+        ustring lcnick = nick.casefold();
         if (lcword == lcnick.substr(0, lcword.length())) {
             str = nick;
             nicks += nick + " ";

@@ -129,7 +129,7 @@ void MainWindow::join(const string& nick, Channel& chan, ServerConnection *conn)
         tab = notebook.addChannelTab(chan.getName(), conn);
         return;
     }
-    tab->insertUser(nick);
+    tab->insertUser(Glib::locale_to_utf8(nick));
 }
 
 void MainWindow::part(const string& nick, Channel& chan, ServerConnection *conn)
@@ -140,7 +140,7 @@ void MainWindow::part(const string& nick, Channel& chan, ServerConnection *conn)
             // It's us who's parting
             tab->setInActive();
         }
-        tab->removeUser(nick);
+        tab->removeUser(Glib::locale_to_utf8(nick));
     }
 }
 
@@ -151,7 +151,7 @@ void MainWindow::kick(const string& kicker, Channel& chan, const string& nick, c
         // It's us who's been kicked
         tab->setInActive();
     }
-    tab->removeUser(nick);
+    tab->removeUser(Glib::locale_to_utf8(nick));
 }
 
 
@@ -161,7 +161,7 @@ void MainWindow::quit(const string& nick, vector<ChannelBase*> chans, ServerConn
 
     for (i = chans.begin(); i != chans.end(); ++i) {
         if (Tab *tab = notebook.findTab((*i)->getName(), conn))
-            tab->removeUser(nick);
+            tab->removeUser(Glib::locale_to_utf8(nick));
     }
 }
 
@@ -171,7 +171,7 @@ void MainWindow::nick(const string& nick, const string& to, vector<ChannelBase*>
 
     for (i = chans.begin(); i != chans.end(); ++i) {
         if (Tab *tab = notebook.findTab((*i)->getName(), conn))
-              tab->renameUser(nick, to);
+              tab->renameUser(Glib::locale_to_utf8(nick), Glib::locale_to_utf8(to));
     }
 }
 
@@ -181,8 +181,8 @@ void MainWindow::CUMode(const string& nick, Channel& chan, const std::vector<Use
 
     std::vector<User>::const_iterator i;
     for (i = users.begin(); i != users.end(); ++i) {
-        tab->removeUser(i->nick);
-        tab->insertUser(i->nick, i->getMode());
+        tab->removeUser(Glib::locale_to_utf8(i->nick));
+        tab->insertUser(Glib::locale_to_utf8(i->nick), i->getMode());
     }
 }
 
@@ -194,7 +194,7 @@ void MainWindow::names(Channel& c, ServerConnection *conn)
     std::vector<User*>::const_iterator i;
 
     for (i = users.begin(); i != users.end(); ++i) {
-        tab->insertUser((*i)->nick, (*i)->getMode());
+        tab->insertUser(Glib::locale_to_utf8((*i)->nick), (*i)->getMode());
     }
 }
 
@@ -310,9 +310,6 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
     }
     else if ((e->keyval == GDK_q) && (e->state & GDK_MOD1_MASK)) {
         Gtk::Main::quit();
-    }
-    else if ((e->keyval == GDK_f) && (e->state & GDK_MOD1_MASK)) {
-        //notebook.setFont();
     }
     Gtk::Window::on_key_press_event(e);
     return false;

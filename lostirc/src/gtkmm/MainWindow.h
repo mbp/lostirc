@@ -41,7 +41,6 @@ public:
     virtual bool on_key_press_event(GdkEventKey* e);
     
     MainNotebook& getNotebook() { return notebook; }
-    LostIRCApp& getApp() { return app; }
     Tab* newServer();
 
     // Methods implemented for the abstract base class 'FrontEnd' 

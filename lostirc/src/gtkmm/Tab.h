@@ -40,7 +40,7 @@ class ServerConnection;
 class Tab : public Gtk::VBox
 {
 public:
-    Tab(Gtk::Label *label, ServerConnection *conn);//, Gdk_Font *font);
+    Tab(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font);
     ~Tab();
 
     Gtk::Label*                 getLabel() { return _label; }
@@ -52,17 +52,17 @@ public:
     void startPrefs();
     void endPrefs();
 
-    virtual void insertUser(const std::string& user, IRC::UserMode m = IRC::NONE) = 0;
-    virtual void removeUser(const std::string& nick) = 0;
-    virtual void renameUser(const std::string& from, const std::string& to) = 0;
-    virtual bool findUser(const std::string& nick) = 0;
+    virtual void insertUser(const Glib::ustring& user, IRC::UserMode m = IRC::NONE) = 0;
+    virtual void removeUser(const Glib::ustring& nick) = 0;
+    virtual void renameUser(const Glib::ustring& from, const Glib::ustring& to) = 0;
+    virtual bool findUser(const Glib::ustring& nick) = 0;
     virtual bool nickCompletion(const Glib::ustring& word, Glib::ustring& str) = 0;
     Tab& operator<<(const char * str);
     Tab& operator<<(const std::string& str);
     Tab& operator<<(const Glib::ustring& str);
     void insertText(const Glib::ustring& str);
     void setStyle();
-    //void setFont(Gdk_Font *font);
+    void setFont(const Pango::FontDescription& font);
     void setInActive() {
         if (isActive()) {
             _label->set_text("(" + _label->get_text() + ")");
@@ -85,7 +85,6 @@ private:
     ServerConnection *_conn;
     Entry _entry;
     Gtk::ScrolledWindow _swin;
-    //Gdk_Font *_font;
     Gtk::Label *_away;
     Gtk::HBox *_hbox2;
 
@@ -102,14 +101,14 @@ protected:
 class TabQuery : public Tab
 {
 public:
-    TabQuery(Gtk::Label *label, ServerConnection *conn); //, Gdk_Font *font);
+    TabQuery(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font);
 
-    void insertUser(const std::string& user, IRC::UserMode i = IRC::NONE) {};
-    void removeUser(const std::string& nick) {};
-    void renameUser(const std::string& from, const std::string& to) {
+    void insertUser(const Glib::ustring& user, IRC::UserMode i = IRC::NONE) {};
+    void removeUser(const Glib::ustring& nick) {};
+    void renameUser(const Glib::ustring& from, const Glib::ustring& to) {
         getLabel()->set_text(to);
     }
-    bool findUser(const std::string& nick) {
+    bool findUser(const Glib::ustring& nick) {
         if (nick == getLabel()->get_text())
               return true;
         else
@@ -125,12 +124,12 @@ class TabChannel : public Tab
     Gtk::Frame *_users;
 
 public:
-    TabChannel(Gtk::Label *label, ServerConnection *conn); //, Gdk_Font *font);
+    TabChannel(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font);
 
-    void insertUser(const std::string& user, IRC::UserMode i = IRC::NONE);
-    void removeUser(const std::string& nick);
-    void renameUser(const std::string& from, const std::string& to);
-    bool findUser(const std::string& nick);
+    void insertUser(const Glib::ustring& user, IRC::UserMode i = IRC::NONE);
+    void removeUser(const Glib::ustring& nick);
+    void renameUser(const Glib::ustring& from, const Glib::ustring& to);
+    bool findUser(const Glib::ustring& nick);
     bool nickCompletion(const Glib::ustring& word, Glib::ustring& str);
 
 private:

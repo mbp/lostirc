@@ -26,10 +26,7 @@ MainNotebook::MainNotebook()
     : Gtk::Notebook()
 {
     set_tab_pos(Gtk::POS_BOTTOM);
-    signal_switch_page().connect(slot(*this, &MainNotebook::switchPage));
-    //_font = Gdk_Font("-b&h-lucidatypewriter-medium-r-normal-*-*-120-*-*-m-*-*-*");
-    //_font = Gdk_Font("-*-fixed-medium-r-normal-*-14-*-*-*-c-*-*-*");
-    show_all();
+    fontdescription = Pango::FontDescription(App->getCfg().getOpt("font"));
 }
 
 TabChannel * MainNotebook::addChannelTab(const string& name, ServerConnection *conn)
@@ -53,7 +50,7 @@ TabChannel * MainNotebook::addChannelTab(const string& name, ServerConnection *c
     } else {
         // If not, create a new channel-tab.
         Gtk::Label *label = manage(new Gtk::Label(name));
-        TabChannel *tab = manage(new TabChannel(label, conn)); //, &_font));
+        TabChannel *tab = manage(new TabChannel(label, conn, fontdescription));
         pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, *label));
         show_all();
         return tab;
@@ -63,7 +60,7 @@ TabChannel * MainNotebook::addChannelTab(const string& name, ServerConnection *c
 TabQuery * MainNotebook::addQueryTab(const string& name, ServerConnection *conn)
 {
     Gtk::Label *label = manage(new Gtk::Label(name));
-    TabQuery *tab = manage(new TabQuery(label, conn)); //, &_font));
+    TabQuery *tab = manage(new TabQuery(label, conn, fontdescription));
     pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, *label));
     show_all();
     return tab;
@@ -112,13 +109,11 @@ int MainNotebook::findPage(const string& name, ServerConnection *conn, bool find
     return -1;
 }
 
-//void MainNotebook::switchPage(Gtk::Notebook_Helpers::Page *p, unsigned int n)
-void MainNotebook::switchPage(GtkNotebookPage *p, unsigned int n)
+void MainNotebook::on_switch_page(GtkNotebookPage *p, unsigned int n)
 {
     Tab *tab = static_cast<Tab*>(get_nth_page(n));
 
-    Gdk::Color color("black");
-    tab->getLabel()->modify_fg(Gtk::STATE_NORMAL, color);
+    tab->getLabel()->modify_fg(Gtk::STATE_NORMAL, Gdk::Color("black"));
     tab->getEntry().grab_focus();
     tab->isHighlighted = false;
 
@@ -127,6 +122,7 @@ void MainNotebook::switchPage(GtkNotebookPage *p, unsigned int n)
     } else {
         AppWin->set_title("LostIRC "VERSION" - " + tab->getConn()->Session.nick + ": " + tab->getLabel()->get_text());
     }
+    Notebook::on_switch_page(p, n);
 }
 
 void MainNotebook::closeCurrent()
@@ -150,8 +146,7 @@ void MainNotebook::closeCurrent()
 void MainNotebook::highlight(Tab *tab)
 {
     if (tab != getCurrent()) {
-        Gdk::Color color("blue");
-        tab->getLabel()->modify_fg(Gtk::STATE_NORMAL, color);
+        tab->getLabel()->modify_fg(Gtk::STATE_NORMAL, Gdk::Color("blue"));
         tab->isHighlighted = true;
     }
 }
@@ -159,8 +154,7 @@ void MainNotebook::highlight(Tab *tab)
 void MainNotebook::onInserted(Tab *tab)
 {   
     if (tab != getCurrent() && !tab->isHighlighted) {
-        Gdk::Color color("red");
-        tab->getLabel()->modify_fg(Gtk::STATE_NORMAL, color);
+        tab->getLabel()->modify_fg(Gtk::STATE_NORMAL, Gdk::Color("red"));
     }
 }
 
@@ -170,7 +164,7 @@ void MainNotebook::findTabs(const string& nick, ServerConnection *conn, vector<T
             
     for (i = pages().begin(); i != pages().end(); ++i) {
         Tab *tab = static_cast<Tab*>(i->get_child());
-        if (tab->getConn() == conn && tab->findUser(nick)) {
+        if (tab->getConn() == conn && tab->findUser(Glib::locale_to_utf8(nick))) {
             vec.push_back(tab);
         }
     }
@@ -222,37 +216,14 @@ void MainNotebook::clearAll()
     }
 }
 
-/* FIXME
-void MainNotebook::setFont()
+void MainNotebook::setFont(const Glib::ustring& str)
 {
-    fontdialog = manage(new Gtk::FontSelectionDialog("Font Selection Dialog"));
-    fontdialog->get_ok_button()->clicked.connect(slot(this, &MainNotebook::fontSelectionOk));
-    fontdialog->get_cancel_button()->clicked.connect(bind(slot(this, &MainNotebook::destroyFontSelection), fontdialog));
-    fontdialog->destroy.connect(bind(slot(this, &MainNotebook::destroyFontSelection), fontdialog));
-    fontdialog->set_preview_text("<John> Hello World!");
-    fontdialog->show();
-}
+    fontdescription = Pango::FontDescription(str);
 
-void MainNotebook::fontSelectionOk()
-{
-    _font = fontdialog->get_font();
+    Gtk::Notebook_Helpers::PageList::iterator i;
 
-    if (_font) {
-        Gtk::Notebook_Helpers::PageList::iterator i;
-                
-        for (i = pages().begin(); i != pages().end(); ++i) {
-            Tab *tab = static_cast<Tab*>(i->get_child());
-            tab->setFont(&_font);
-            tab->setStyle();
-        }
+    for (i = pages().begin(); i != pages().end(); ++i) {
+        Tab *tab = static_cast<Tab*>(i->get_child());
+        tab->setFont(fontdescription);
     }
-    destroyFontSelection(fontdialog);
 }
-
-void MainNotebook::destroyFontSelection(Gtk::FontSelectionDialog *w)
-{
-    // XXX: plain gtk+ code
-    gtk_widget_destroy((GtkWidget*)w->gtkobj());
-}
-*/
-
