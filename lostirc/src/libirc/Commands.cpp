@@ -24,6 +24,7 @@
 
 using std::string;
 using std::stringstream;
+using std::istringstream;
 
 struct UserCommands cmds[] = {
     { "SERVER",   Commands::Server,     0 },
