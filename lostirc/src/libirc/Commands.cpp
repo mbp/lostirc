@@ -433,6 +433,10 @@ void DCC(ServerConnection* conn, const ustring& params)
        } else if (action == "SEND") {
            std::string filename;
            getline(ss, filename);
+
+           if (filename.empty())
+                 throw CommandException(_("Missing filename"));
+
            // Strip leading and ending whitespace.
            filename = filename.substr(filename.find_first_not_of(' '));
            filename = filename.substr(0, filename.find_last_not_of(' ')+1);

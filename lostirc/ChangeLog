@@ -1,5 +1,8 @@
 For a summary of changes between releases - see the NEWS file.
 
+2004-05-16  Morten Brix Pedersen  <morten@wtf.dk>
+	* Commands.cpp: Don't crash on /DCC SEND.
+
 2004-05-13  Morten Brix Pedersen  <morten@wtf.dk>
 	* MainWindow.cpp: Move control-w shortcut to the right function :)
 
