@@ -1,5 +1,5 @@
-LostIRC (x.x.x)
-  * Ported to gtkmm2, now depends on sigc++ 1.1 and gtkmm1.3.
+LostIRC (0.2.0)
+  * Ported to gtkmm2, now depends on sigc++ 1.2 and gtkmm2.
     Noteable features with gtkmm2:
       * UTF-8 support
       * Improved fonts, e.g. anti aliased fonts when 'GDK_USE_XFT' is set
