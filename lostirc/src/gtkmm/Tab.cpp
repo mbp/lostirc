@@ -390,7 +390,7 @@ bool TabChannel::nickCompletion(const ustring& word, ustring& str)
     if (matches == 1) {
         return true;
     } else if (matches > 1) {
-        str = nicks + '\n';
+        str = nicks;
         return false;
     } else {
         str = "";

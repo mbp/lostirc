@@ -116,6 +116,7 @@ void MainNotebook::onSwitchPage(GtkNotebookPage *p, unsigned int n)
     tab->getLabel()->modify_fg(Gtk::STATE_NORMAL, Gdk::Color("black"));
     tab->getEntry().grab_focus();
     tab->isHighlighted = false;
+    AppWin->statusbar.setText1(tab->getConn()->Session.nick + " - " + tab->getConn()->Session.servername);
     updateTitle(tab);
 }
 

@@ -6,7 +6,8 @@ lostirc_SOURCES =  main.cpp \
                    Tab.h Tab.cpp \
                    Prefs.h Prefs.cpp \
                    GuiCommands.h GuiCommands.cpp \
-                   Entry.cpp Entry.h
+                   Entry.cpp Entry.h \
+                   StatusBar.cpp StatusBar.h
 
 lostirc_LDADD = ../libirc/libirc.a
 

@@ -144,7 +144,7 @@ bool Entry::onKeyPress(GdkEventKey* e)
                     set_position(-1);
                 }
             } else {
-                _tab->insertText(str);
+                AppWin->statusbar.setText2(str);
             }
         }
     }

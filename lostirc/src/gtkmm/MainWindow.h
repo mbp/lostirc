@@ -29,6 +29,7 @@
 #include <LostIRCApp.h>
 #include <FrontEnd.h>
 #include "MainNotebook.h"
+#include "StatusBar.h"
 
 class MainWindow : public Gtk::Window, public FrontEnd
 {
@@ -59,6 +60,8 @@ public:
     void away(bool away, ServerConnection *conn);
     void newTab(ServerConnection *conn);
     void disconnected(ServerConnection *conn);
+
+    StatusBar statusbar;
 };
 
 extern MainWindow* AppWin;

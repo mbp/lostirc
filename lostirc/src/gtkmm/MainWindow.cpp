@@ -46,7 +46,12 @@ MainWindow::MainWindow()
     if (x && y)
           move(x, y);
     
-    add(notebook);
+    Gtk::VBox *vbox = manage(new Gtk::VBox());
+
+    vbox->pack_start(notebook, Gtk::PACK_EXPAND_WIDGET);
+    vbox->pack_start(statusbar, Gtk::PACK_SHRINK);
+
+    add(*vbox);
     show_all();
 
     if (app.cfgservers.getServers().empty()) {
