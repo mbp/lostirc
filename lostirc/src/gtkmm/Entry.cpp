@@ -49,7 +49,7 @@ void Entry::onEntry()
 
             GuiCommands::send(_tab->getConn(), msg.substr(1, pos - 1), params);
 
-        } catch (CommandException &ce) {
+        } catch (CommandException& ce) {
 
             _tab->parseAndInsert(string(ce.what()) + string("\n"));
 
@@ -82,7 +82,6 @@ void Entry::printText(const string& msg)
         _tab->getConn()->sendMsg(_tab->getLabel()->get_text(), line);
         _tab->parseAndInsert("\0037<\0030" + _tab->getConn()->Session.nick + "\0037>\0030 " + line + '\n');
     }
-
 }
 
 gint Entry::on_key_press_event(GdkEventKey* e)
@@ -110,11 +109,9 @@ gint Entry::on_key_press_event(GdkEventKey* e)
             } else {
                 word = line.substr(pos + 1);
             }
-            if (line.at(0) == '/' && !word.empty()) {
-                std::cout << "wee..." << std::endl;
+            if (line.at(0) == '/' && !word.empty() && pos == 0) {
                 // Command completion, could be prettier
                 if (GuiCommands::commandCompletion(word.substr(1), str)) {
-                    std::cout << "returned true.." << std::endl;
                     set_text("/" + str + " ");
                 }
 
