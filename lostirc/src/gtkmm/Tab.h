@@ -77,16 +77,16 @@ public:
 private:
     void addOrRemoveNickList();
             
-    bool _isActive;
     ServerConnection *_conn;
-    Gtk::ScrolledWindow _swin;
-    Gtk::HBox _hbox;
-    NickList *_nicklist;
 
     Gtk::VBox _vbox;
+    Gtk::HBox _hbox;
     Gtk::HPaned *_hpaned;
+
+    NickList *_nicklist;
     TextWidget _textwidget;
 
+    bool _isActive;
     bool _isChannel;
     bool _isQuery;
 

@@ -34,7 +34,7 @@ using Glib::ustring;
 
 Tab::Tab(ServerConnection *conn, Pango::FontDescription font)
     : Gtk::VBox(), isHighlighted(false), hasPrefs(false),
-    _isActive(true), _conn(conn), _nicklist(0), _textwidget(font),
+    _conn(conn), _nicklist(0), _textwidget(font), _isActive(true),
     _isChannel(false), _isQuery(false), _entry(this)
 {
     _hpaned = new Gtk::HPaned();
