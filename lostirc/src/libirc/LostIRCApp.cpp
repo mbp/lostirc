@@ -57,7 +57,7 @@ LostIRCApp::~LostIRCApp()
     }
 }
 
-void LostIRCApp::start()
+int LostIRCApp::start()
 {
     vector<struct autoJoin*> servers = _cfg.getServers();
     vector<struct autoJoin*>::iterator i;
@@ -68,6 +68,7 @@ void LostIRCApp::start()
         if (!(*i)->nick.empty())
               conn->Session.nick = (*i)->nick;
     }
+    return servers.size();
 }
 
 ServerConnection* LostIRCApp::newServer(const string& host, int port)

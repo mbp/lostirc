@@ -41,7 +41,9 @@ public:
     ~LostIRCApp();
     struct utsname getsysinfo();
 
-    void start();
+    // 'start' means 'auto-join servers' - it returns the number of servers
+    // joined
+    int start();
     ServerConnection* newServer(const std::string& host, int port);
     ServerConnection* newServer();
 

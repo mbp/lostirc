@@ -56,15 +56,15 @@ MainWindow::MainWindow()
     _app->evtAway.connect(slot(this, &MainWindow::onAway));
     _app->evtNewTab.connect(slot(this, &MainWindow::onNewTab));
 
-    _app->start();
-    // Construct initial tab
-    string name = "<server>";
-    ServerConnection *conn = _app->newServer();
-    conn->Session.servername = name;
-    TabChannel *tab = _nb->addChannelTab(name, conn);
-    tab->is_on_channel = false;
-    show_all();
-    _nb->insert(tab, "\00311Welcome to LostIRC!\n\nThis client is mainly keyboard oriented, so don't expect fancy menus and buttons for you to click on.
+    int num_of_servers = _app->start();
+    if (num_of_servers == 0) {
+        // Construct initial tab
+        string name = "<server>";
+        ServerConnection *conn = _app->newServer();
+        conn->Session.servername = name;
+        TabChannel *tab = _nb->addChannelTab(name, conn);
+        tab->is_on_channel = false;
+        _nb->insert(tab, "\00311Welcome to LostIRC!\n\nThis client is mainly keyboard oriented, so don't expect fancy menus and buttons for you to click on.
 
 \0037Available commands:
 \0038/SERVER <hostname> - connect to server.
@@ -85,6 +85,8 @@ Alt + n - create new server tab.
 Alt + c - close current tab.
 Tab - nickcomplete.
 ");
+    }
+    show_all();
 }
 
 MainWindow::~MainWindow()
@@ -95,27 +97,24 @@ MainWindow::~MainWindow()
 
 void MainWindow::onDisplayMessage(const string& msg, ServerConnection *conn)
 {
-    Tab *tab;
-
-    tab = _nb->getCurrent(conn);
+    Tab *tab = _nb->getCurrent(conn);
 
     _nb->insert(tab, msg);
 }
 
 void MainWindow::onDisplayMessageInChan(const string& msg, Channel& chan, ServerConnection *conn)
 {
-    Tab *tab;
+    Tab *tab = _nb->findTab(chan.getName(), conn);
 
-    tab = _nb->findTab(chan.getName(), conn);
-
-    _nb->insert(tab, msg);
+    // does the channel exist? if not, we probably did a 'closeCurrent() and
+    // parted it...
+    if (tab)
+          _nb->insert(tab, msg);
 }
 
 void MainWindow::onDisplayMessageInQuery(const string& msg, const string& to, ServerConnection *conn)
 {
-    Tab *tab;
-
-    tab = _nb->findTab(to, conn);
+    Tab *tab = _nb->findTab(to, conn);
 
     if (!tab)
           tab = _nb->addQueryTab(to, conn);
@@ -236,7 +235,12 @@ void MainWindow::onNewTab(ServerConnection *conn)
     conn->Session.servername = name;
     Tab *tab = _nb->addChannelTab(name, conn);
     _nb->show_all();
-    _nb->set_page(0);
+    // XXX: this is a hack for a "bug" in the gtkmm code which makes the
+    // application crash in the start when no pages exists, even though we
+    // added one above... doing set_page(0) will somehow add it fully.
+    if (_nb->get_current_page_num() == -1) {
+        _nb->set_page(0);
+    }
     tab->is_on_channel = false;
 }
 
