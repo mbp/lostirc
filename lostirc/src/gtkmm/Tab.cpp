@@ -185,19 +185,6 @@ void Tab::parseAndInsert(const string& str)
 
 void Tab::insertWithColor(int color, const string& str)
 {   
-/*
-    Gdk_Color colors[10];
-
-    colors[0] = Gdk_Color("#C5C2C5");
-    colors[1] = Gdk_Color("#FFFFFF");
-    colors[2] = Gdk_Color("#FFABCF");
-    colors[3] = Gdk_Color("#9AAB4F");
-    colors[4] = Gdk_Color("#f9ef25");
-    colors[5] = Gdk_Color("#ea6b6b");
-    colors[6] = Gdk_Color("#6bdde5");
-    colors[7] = Gdk_Color("#6b8ae5");
-    colors[8] = Gdk_Color("#4aff4a");
-    colors[9] = Gdk_Color("#5ea524");*/
 
     // Find out whether we need to scroll this widget auto
     float vscroll = _text->get_vadjustment()->get_value();
@@ -281,13 +268,22 @@ TabChannel::TabChannel(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font
     v->pack_start(*swin, 1, 1, 0);
 }
 
-void TabChannel::insertUser(const vector<string>& users)
+void TabChannel::updateUserNumber()
 {
-    _clist->rows().push_back(users);
     size_t size = _clist->rows().size();
     stringstream ss;
     ss << size;
     _users->set_text(ss.str() + " users");
+}
+
+void TabChannel::insertUser(const vector<string>& users)
+{
+    /* only add him if he doesn't exist already, this could probably be made
+     * more effecient */
+    if (!findUser(users[1])) {
+        _clist->rows().push_back(users);
+        updateUserNumber();
+    }
 }
 
 void TabChannel::insertUser(const string& nick, IRC::UserMode m = IRC::NONE)
@@ -325,10 +321,7 @@ void TabChannel::removeUser(const string& nick)
         }
         i++;
     }
-    size_t size = _clist->rows().size();
-    stringstream ss;
-    ss << size;
-    _users->set_text(ss.str() + " users");
+    updateUserNumber();
 }
 
 void TabChannel::renameUser(const string& from, const string& to)

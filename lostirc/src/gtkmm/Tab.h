@@ -102,6 +102,9 @@ public:
 
 class TabChannel : public Tab
 {
+    Gtk::CList *_clist;
+    Gtk::Label *_users;
+
 public:
     TabChannel(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font);
 
@@ -115,8 +118,7 @@ public:
     bool nickCompletion(const std::string& word, std::string& str);
 
 private:
-    Gtk::CList *_clist;
-    Gtk::Label *_users;
+    void updateUserNumber();
 
 };
 
