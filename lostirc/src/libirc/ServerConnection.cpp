@@ -112,7 +112,7 @@ void ServerConnection::disconnect()
 
     doCleanup();
 
-    FE::emit(FE::get(SERVMSG) << "Disconnected.", FE::ALL, this);
+    FE::emit(FE::get(CLIENTMSG) << "Disconnected.", FE::ALL, this);
     App->fe->disconnected(this);
 }
 
@@ -132,19 +132,19 @@ void ServerConnection::connect()
 
 void ServerConnection::on_error(const char *msg)
 {
-    FE::emit(FE::get(SERVMSG2) << "Failed connecting:" << msg, FE::CURRENT, this);
+    FE::emit(FE::get(ERROR) << string("Failed connecting: ") + msg, FE::CURRENT, this);
     disconnect();
 }
 
 void ServerConnection::on_host_resolved()
 {
-    FE::emit(FE::get(SERVMSG) << "Resolved host. Connecting..", FE::CURRENT, this);
+    FE::emit(FE::get(CLIENTMSG) << "Resolved host. Connecting..", FE::CURRENT, this);
     try {
 
         _socket.connect(Session.port);
 
     } catch (SocketException &e) {
-        FE::emit(FE::get(SERVMSG2) << "Failed connecting:" << e.what(), FE::CURRENT, this);
+        FE::emit(FE::get(ERROR) << string("Failed connecting:") + e.what(), FE::CURRENT, this);
         disconnect();
         return;
     }
@@ -235,7 +235,7 @@ bool ServerConnection::onReadData(Glib::IOCondition)
         return true;
 
     } catch (SocketException &e) {
-        FE::emit(FE::get(SERVMSG3) << "Failed to receive" << e.what(), FE::ALL, this);
+        FE::emit(FE::get(ERROR) << string("Failed to receive") + e.what(), FE::ALL, this);
         disconnect();
         addReconnectTimer();
         return false;
@@ -250,7 +250,7 @@ bool ServerConnection::onConnect(Glib::IOCondition cond)
 {
     // The only purpose of this function is to register us to the server
     // when we are able to write
-    FE::emit(FE::get(SERVMSG) << "Connected. Logging in...", FE::CURRENT, this);
+    FE::emit(FE::get(CLIENTMSG) << "Connected. Logging in...", FE::CURRENT, this);
 
     if (cond & Glib::IO_OUT) {
         char hostname[256];
@@ -620,7 +620,7 @@ void ServerConnection::sendCmds()
 
             } catch (CommandException& ce) {
 
-                FE::emit(FE::get(SERVMSG) << ce.what(), FE::CURRENT, this);
+                FE::emit(FE::get(CLIENTMSG) << ce.what(), FE::CURRENT, this);
             }
         }
     }

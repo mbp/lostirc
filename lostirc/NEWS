@@ -9,6 +9,8 @@ LostIRC (x.x.x)
     them off in preferences.
   * Before, a number in the ident would make the line get colored. Fixed.
     (You need to remove ~/.lostirc/events.conf first).
+  * The default colors for messages and events has been changed. You'll need
+    to remove ~/.lostirc/events.conf first to get the new ones.
   * Title in window wasn't updated after succesfull connection to server and
     joining a channel after that, fixed.
   * Man-page updated with a better description.

@@ -179,7 +179,7 @@ void Parser::parseLine(string& data)
         else if (command == "ERROR")
               FE::emit(FE::get(ERROR) << param + " " + rest, FE::CURRENT, _conn);
         else
-              FE::emit(FE::get(SERVMSG) << data, FE::CURRENT, _conn);
+              FE::emit(FE::get(SERVMSG1) << data, FE::CURRENT, _conn);
     }
 
 }
@@ -324,10 +324,13 @@ void Parser::Notice(const string& from, const string& to, const string& rest)
         string::iterator i = remove(tmp.begin(), tmp.end(), '\001');
         string output(tmp.begin(), i);
 
-        FE::emit(FE::get(SERVMSG) << findNick(from) + " " + output, FE::CURRENT, _conn);
+        FE::emit(FE::get(SERVMSG2) << findNick(from) << output, FE::CURRENT, _conn);
     } else {
         // Normal notice
-        FE::emit(FE::get(NOTICEPUBL) << findNick(from) << to << rest, FE::CURRENT, _conn);
+        if (to == _conn->Session.nick)
+              FE::emit(FE::get(NOTICEPRIV) << findNick(from) << rest, FE::CURRENT, _conn);
+        else
+              FE::emit(FE::get(NOTICEPUBL) << findNick(from) << to << rest, FE::CURRENT, _conn);
     }
 }
 
@@ -697,7 +700,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 253: // RPL_LUSERUNKNOWN
         case 254: // RPL_LUSERCHANNELS
         case 255: // RPL_LUSERME
-            FE::emit(FE::get(SERVMSG) << rest, FE::CURRENT, _conn);
+            FE::emit(FE::get(SERVMSG1) << rest, FE::CURRENT, _conn);
             break;
 
         case 301: // RPL_AWAY
@@ -707,13 +710,13 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 305: // RPL_UNAWAY
             _conn->Session.isAway = false;
             App->fe->away(false, _conn);
-            FE::emit(FE::get(SERVMSG) << rest, FE::CURRENT, _conn);
+            FE::emit(FE::get(SERVMSG1) << rest, FE::CURRENT, _conn);
             break;
 
         case 306: // RPL_NOWAWAY
             _conn->Session.isAway = true;
             App->fe->away(true, _conn);
-            FE::emit(FE::get(SERVMSG) << rest, FE::CURRENT, _conn);
+            FE::emit(FE::get(SERVMSG1) << rest, FE::CURRENT, _conn);
             break;
 
         case 332: // RPL_TOPIC
@@ -731,11 +734,11 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 368: // RPL_END_OF_BANLIST
         case 372: // RPL_MOTD
         case 375: // RPL_MOTDSTART
-            FE::emit(FE::get(SERVMSG) << rest, FE::CURRENT, _conn);
+            FE::emit(FE::get(SERVMSG1) << rest, FE::CURRENT, _conn);
             break;
 
         case 376: // RPL_ENDOFMOTD
-            FE::emit(FE::get(SERVMSG) << rest, FE::CURRENT, _conn);
+            FE::emit(FE::get(SERVMSG1) << rest, FE::CURRENT, _conn);
             _conn->Session.endOfMotd = true;
             _conn->sendCmds();
             break;
@@ -748,7 +751,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             break;
 
         case 412: // ERR_NOTEXTTOSEND
-            FE::emit(FE::get(SERVMSG) << rest, FE::CURRENT, _conn);
+            FE::emit(FE::get(SERVMSG1) << rest, FE::CURRENT, _conn);
             break;
 
         case 422: // ERR_NOMOTD

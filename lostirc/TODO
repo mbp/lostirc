@@ -25,6 +25,8 @@ RANDOM BUGS:
     configure script fails on Red Hat/Mandrake:
     +extern "C" void exit(int); (:g/extern "C" void exit/d)
 
+    (is still still the issue with 8.0/9.0?)
+
   * Color-parsing might be slow, since it inserts one character at the time.
     Need to look into optimizing it.
 

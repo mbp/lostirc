@@ -69,7 +69,7 @@ bool DCC_Send_In::onReadData(Glib::IOCondition cond)
     char buf[4096];
     int retval = recv(fd, buf, sizeof(buf), 0);
 
-    if (retval == 0) FE::emit(FE::get(SERVMSG) << "DCC connection closed.", FE::CURRENT);
+    if (retval == 0) FE::emit(FE::get(SERVMSG1) << "DCC connection closed.", FE::CURRENT);
     else if (retval == -1) {
         if (!(errno == EAGAIN || errno == EWOULDBLOCK)) {
             FE::emit(FE::get(SERVMSG2) << "Couldn't receive:" << strerror(errno), FE::CURRENT);
@@ -182,7 +182,7 @@ bool DCC_Send_Out::onAccept(Glib::IOCondition cond)
     socklen_t size = sizeof(struct sockaddr_in);
     accept_fd = accept(fd, reinterpret_cast<struct sockaddr *>(&remoteaddr), &size);
 
-    FE::emit(FE::get(SERVMSG) << "Connection accepted.", FE::CURRENT);
+    FE::emit(FE::get(SERVMSG1) << "Connection accepted.", FE::CURRENT);
 
     Glib::signal_io().connect(
             SigC::slot(*this, &DCC_Send_Out::onSendData),

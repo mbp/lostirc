@@ -1,6 +1,14 @@
 For a summary of changes between releases - see the NEWS file.
 
 2002-12-09  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * Events.h, Events.cpp: Add CLIENTMSG. Rename SERVMSG to SERVMSG1.
+        * Parser.cpp, ServerConnection.cpp, Commands.cpp: Use CLIENTMSG
+          instead of SERVMSG.
+        * ConfigHandler.cpp: Change the default colors, and parse bold too.
+        * Parser.cpp: Use NOTICEPRIV when notice is private.
+
+2002-12-09  Morten Brix Pedersen  <morten@wtf.dk>
 
         * ConfigHandler.cpp: Prefix number values with zero, to avoid next
           character to get colored when it's a digit.

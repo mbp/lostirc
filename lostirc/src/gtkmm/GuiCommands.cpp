@@ -190,7 +190,7 @@ void displayCommands(ServerConnection *conn, const ustring& params)
         cmds += "\00311]";
     }
 
-    FE::emit(FE::get(SERVMSG) << cmds, FE::CURRENT, conn);
+    FE::emit(FE::get(CLIENTMSG) << cmds, FE::CURRENT, conn);
 }
 
 std::vector<Glib::ustring> getCommands()

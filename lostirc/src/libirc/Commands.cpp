@@ -299,8 +299,8 @@ void Msg(ServerConnection *conn, const string& params)
         throw CommandException("/MSG <nick/channel> <message>, sends a normal message.");
     } else {
         conn->sendMsg(to, msg);
-        string sendgui = "Message to " + to + ": " + msg;
-        FE::emit(FE::get(SERVMSG) << sendgui, FE::CURRENT, conn);
+        string sendgui = "Message to " + to + ": ";
+        FE::emit(FE::get(SERVMSG2) << sendgui << msg, FE::CURRENT, conn);
     }
 }
 
@@ -316,8 +316,8 @@ void Notice(ServerConnection *conn, const string& params)
         throw CommandException("/NOTICE <nick/channel> <message>, sends a notice.");
     } else {
         conn->sendNotice(to, msg);
-        string sendgui = "Notice to " + to + ": " + msg;
-        FE::emit(FE::get(SERVMSG) << sendgui, FE::CURRENT, conn);
+        string sendgui = "Notice to " + to + ": ";
+        FE::emit(FE::get(SERVMSG2) << sendgui << msg, FE::CURRENT, conn);
     }
 }
 
@@ -534,7 +534,7 @@ void Exec(ServerConnection *conn, const string& params)
         fread(buf, 1, 4028, f);
 
         std::cout << "output: \n" << buf << std::endl;
-        FE::emit(FE::get(SERVMSG) << buf, FE::CURRENT, conn);
+        FE::emit(FE::get(SERVMSG1) << buf, FE::CURRENT, conn);
 
     } else if (!params.empty()) {
         FILE* f = popen(rest.c_str(), "r");
@@ -544,7 +544,7 @@ void Exec(ServerConnection *conn, const string& params)
         fread(buf, 1, 4028, f);
 
         std::cout << "output: \n" << buf << std::endl;
-        FE::emit(FE::get(SERVMSG) << buf, FE::CURRENT, conn);
+        FE::emit(FE::get(SERVMSG1) << buf, FE::CURRENT, conn);
 
         string str(buf);
     } else {
