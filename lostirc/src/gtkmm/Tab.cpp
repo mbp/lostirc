@@ -154,7 +154,7 @@ Tab& Tab::operator<<(const string& str)
         lastPos = line.find_first_not_of("\003", pos);
         pos = line.find_first_of("\003", lastPos);
     }
-
+    return *this;
 }
 
 void Tab::insertWithColor(int color, const string& str)
