@@ -1,3 +1,15 @@
+NEW STUFF:
+---------
+ - need to add a new option to the context menu, so the menu can come back.
+ - need to save the setting for menu hidden and nicklist hidden.
+
+HIG:
+
+instant apply in prefs - correctly yet?
+password popup window?
+dcc port 0 = insensitive?
+text fields = access key?
+
 CRITICAL: 
 ---------
   * Segfaults on CTRL-W. (Seems to be the re-occuring gtkmm/g++-3.3 bug)

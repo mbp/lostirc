@@ -25,6 +25,7 @@
 #include <glibmm/main.h>
 #include <gtkmm/window.h>
 #include <gtkmm/menubar.h>
+#include <gtkmm/messagedialog.h>
 #include <ServerConnection.h>
 #include <LostIRCApp.h>
 #include <FrontEnd.h>
@@ -49,10 +50,12 @@ class MainWindow : public Gtk::Window, public FrontEnd
     std::auto_ptr<Prefs> _prefswin;
     std::auto_ptr<DCCWindow> _dccwin;
     std::auto_ptr<ServerWindow> _serverwin;
+    std::auto_ptr<Gtk::Dialog> _helpwin;
 
     void openPrefs();
     void openDccWindow();
     void openServerWindow();
+    void openHelpIntro();
     void newServerTab();
     void hideMenu();
     void setupMenus();

@@ -1,5 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-09-20  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * ServerWindow.cpp: Toggling the "auto-connect" column now works.
+
 2003-08-23  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Prefs.cpp: Add a new tab, "Colours". Not at all done yet.

@@ -21,7 +21,6 @@
 #include <cstdlib>
 #include <config.h>
 #include <gtkmm/box.h>
-#include <gtkmm/messagedialog.h>
 #include <gdk/gdkkeysyms.h>
 #include "DCCList.h"
 #include "MainWindow.h"
@@ -63,8 +62,7 @@ MainWindow::MainWindow(bool autoconnect)
 
     if (!_app.cfgservers.hasAutoConnects() || !autoconnect) {
         // Construct initial tab
-        Tab *tab = newServer();
-        tab->getText() << _("\0037\002Welcome to LostIRC "VERSION"!\002\n\nYou can now connect to a server using:\n    \0038/SERVER <hostname / ip>\n\n\0037...and then join a channel:\n    \0038/JOIN <channel-name>\n\n\0037A list of all commands are available with:\n    \0038/COMMANDS\0037\n\nAnd you should \002really\002 check out the list of key bindings:\n    \0038/KEYBINDINGS\n\n");
+        newServer();
     } else {
         // Auto-connect to servers.
         _app.autoConnect();
@@ -434,6 +432,12 @@ void MainWindow::setupMenus()
 
     { // Help menu.
         Gtk::Menu::MenuList& menulist = _helpmenu.items();
+
+        menulist.push_back(Gtk::Menu_Helpers::MenuElem(
+                    _("_Introduction"), SigC::slot(*this, &MainWindow::openHelpIntro)));
+
+        menulist.push_back(Gtk::Menu_Helpers::SeparatorElem::SeparatorElem());
+
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(
                     _("_About")));
     }
@@ -455,8 +459,6 @@ void MainWindow::hideMenu()
 
 void MainWindow::hideNickList()
 {
-    // FIXME
-    #warning IMPLEMENT ME hideNickList()
     _nickList = !_nickList;
     vector<Tab*> tabs;
 
@@ -474,6 +476,20 @@ void MainWindow::openServerWindow()
         dialog->show();
 
         _serverwin = dialog;
+    }
+}
+
+void MainWindow::openHelpIntro()
+{
+    if (_helpwin.get()) {
+          _helpwin->present();
+    } else {
+        //std::auto_ptr<Gtk::Dialog> dialog(new Gtk::Dialog(_("LostIRC Quick Introduction"), *this, false));
+        std::auto_ptr<Gtk::MessageDialog> dialog(new Gtk::MessageDialog(_("LostIRC Quick Introduction\n\nThis help window is a quick guide to get you going with LostIRC.\nMove this window away from the LostIRC window, and use it as a quick reference window until you know the general idea.\n\nYou can connect to a server using:\n    /SERVER <hostname / ip>\n\n...and then join a channel:\n    /JOIN <channel-name>\n\nA list of all commands are available with:\n    /COMMANDS\n\nAnd you should really check out the list of key bindings:\n    /KEYBINDINGS"), Gtk::MESSAGE_INFO, Gtk::BUTTONS_CLOSE, false));
+
+        dialog->show();
+
+        _helpwin = dialog;
     }
 }
 

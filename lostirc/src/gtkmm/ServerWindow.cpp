@@ -123,6 +123,8 @@ bool ServerWindow::focusChangeEvent(GdkEventFocus* event)
 
 void ServerWindow::updateList()
 {
+    _column_signal.disconnect();
+
     _liststore->clear();
     vector<Server*> servers = App->cfgservers.getServers();
     vector<Server*>::const_iterator i;
@@ -134,6 +136,8 @@ void ServerWindow::updateList()
         row[_columns.auto_connect] = (*i)->auto_connect;
         row[_columns.serverptr] = *i;
     }
+
+    _column_signal = _liststore->signal_row_changed().connect(SigC::slot(*this, &ServerWindow::onColumnChanged));
 }
 
 void ServerWindow::addEntry()
@@ -198,6 +202,17 @@ void ServerWindow::deleteEntry()
             App->cfgservers.removeServer(server);
             App->cfgservers.writeServersFile();
         }
+    }
+}
+
+void ServerWindow::onColumnChanged(const Gtk::TreeModel::Path&, const Gtk::TreeModel::iterator& iterrow)
+{
+    if (iterrow) {
+        Gtk::TreeModel::Row row = *iterrow;
+        Server *server = row[_columns.serverptr];
+
+        server->auto_connect = row[_columns.auto_connect];
+        App->cfgservers.writeServersFile();
     }
 }
 

@@ -42,6 +42,8 @@ private:
     void modifyEntry();
     void deleteEntry();
 
+    void onColumnChanged(const Gtk::TreeModel::Path&, const Gtk::TreeModel::iterator&);
+
     bool focusChangeEvent(GdkEventFocus* event);
     void updateList();
 
@@ -65,6 +67,8 @@ private:
     Gtk::Table _pref_table;
     Gtk::Entry ircnickentry;
     Gtk::Entry realnameentry;
+
+    SigC::Connection _column_signal;
 };
 
 class ServerEditDialog : public Gtk::Dialog
