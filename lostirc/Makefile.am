@@ -7,7 +7,7 @@ dist-hook: lostirc.spec
 	cp lostirc.spec $(distdir)
 
 if GNOME
-Gnomedir = $(datadir)/gnome/apps/Internet
+Gnomedir = $(datadir)/applications
 Gnome_DATA = lostirc.desktop
 endif
 

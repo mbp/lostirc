@@ -1,5 +1,12 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-02-06  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Makefile.am: Supply lostirc.desktop to /usr/share/applications
+          instead of /usr/share/gnome/apps/Internet/.
+        * lostirc.desktop: Insert "Categories=Application;Network;" line.
+        * configure.in: Bump to 0.2.6pre.
+
 2003-01-16  Morten Brix Pedersen  <morten@wtf.dk>
 
         * configure.in: Bump version to 0.2.5 and release.
