@@ -121,4 +121,5 @@ gint Entry::on_key_press_event(GdkEventKey* e)
             }
         }
     }
+    return 0;
 }

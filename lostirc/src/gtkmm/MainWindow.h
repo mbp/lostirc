@@ -43,7 +43,7 @@ public:
     gint delete_event_impl(GdkEventAny*) { Gtk::Main::quit(); return 0; }
 
     gint on_key_press_event(GdkEventKey* e);
-    virtual gint on_key_press_event_impl(GdkEventKey* e) { }
+    virtual gint on_key_press_event_impl(GdkEventKey* e) { return 0; }
     MainNotebook* getNotebook() { return _nb; }
     LostIRCApp* getApp() { return _app; }
     void newServer();
