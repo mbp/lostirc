@@ -62,23 +62,16 @@ private:
     bool shouldHighlight(const std::string& str);
 };
 
-std::string findNick(const std::string& str)
-{
-    return str.substr(0, str.find_first_of("!"));
-}
+inline
+std::string findNick(const std::string& str);
 
-std::string findHost(const std::string& str)
-{
-    return str.substr(str.find_first_of("!") + 1);
-}
+inline
+std::string findHost(const std::string& str);
 
-string skipFirstWord(const string& str)
-{
-    return str.substr(str.find_first_of(" ") + 1);
-}
+inline
+std::string skipFirstWord(const std::string& str);
 
 std::string getWord(const std::string& str, int n);
-std::string skipFirstWord(const std::string& str, int n);
 std::string stripColors(const std::string& str);
 
 #endif

@@ -913,7 +913,7 @@ string getWord(const string& str, int n)
 }
 
 // Strip mIRC colors. Spec at: http://www.mirc.co.uk/help/color.txt
-// Only strips color-strings right now. Not bold and underline.
+// Only strips color-strings. Not bold and underline.
 string stripColors(const string& str)
 {
     string newstr;
@@ -943,4 +943,19 @@ string stripColors(const string& str)
         }
     }
     return newstr;
+}
+
+std::string findNick(const std::string& str)
+{
+    return str.substr(0, str.find_first_of("!"));
+}
+
+std::string findHost(const std::string& str)
+{
+    return str.substr(str.find_first_of("!") + 1);
+}
+
+std::string skipFirstWord(const std::string& str)
+{
+    return str.substr(str.find_first_of(" ") + 1);
 }
