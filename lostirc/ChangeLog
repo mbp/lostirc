@@ -1,5 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
+2002-12-01  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Release 0.2.2
+
 2002-11-28  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Prefs.cpp/Tab.cpp: Use stock icons instead of just text buttons.
