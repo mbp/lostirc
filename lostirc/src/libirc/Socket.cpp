@@ -30,7 +30,7 @@
 using std::string;
 
 Socket::Socket()
-    : resolve_pid(-1)
+    : fd(-1), resolve_pid(-1)
 {
 }
 
@@ -77,8 +77,6 @@ void Socket::resolvehost(const string& host)
                 thepipe[0],
                 Glib::IO_IN | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL);
 
-        std::cout << "(" << hostname << ") " << "thepipe[0]: " << thepipe[0] << " (" << this << ")" <<std::endl;
-
     } else {
         on_error(strerror(errno));
     }
@@ -89,8 +87,6 @@ bool Socket::on_host_resolve(Glib::IOCondition cond)
 {
     int size_to_be_read = sizeof(int) + sizeof(struct in_addr);
     char *buf = new char[size_to_be_read];
-
-    std::cout << "(" << hostname << ") " << "thepipe[0]: " << thepipe[0] << " (" << this << ")" <<std::endl;
 
     int bytes_read = read(thepipe[0], buf, size_to_be_read);
 
@@ -204,9 +200,14 @@ bool Socket::receive(char *buf, int len)
     return true;
 }
 
+// FIXME: the return value of this function is always 0.
 int Socket::close()
 {
-    return ::close(fd);
+    if (fd != -1) {
+        ::close(fd);
+        fd = -1;
+    }
+    return 0;
 }
 
 void Socket::setNonBlocking()
