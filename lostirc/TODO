@@ -6,13 +6,14 @@ CRITICAL:
 RANDOM:
 ------
   * limited tab highlighting, don't mark a tab red when
-  * joining/parting/quitting
+    joining/parting/quitting
   * when a op gets voice, his status is lost
-  * does op-status work properly?
   * write away reason in "you are away"
   * when away/unaway - title isn't updated until switch tab
   * ability to choose which nick-completion character to use
   * implement /help, /help shortcuts and /help commands
+  * /oper command
+  * tab class should use operator << for output
 
   * remove this from 'configure' at release time:
     +extern "C" void exit(int);
