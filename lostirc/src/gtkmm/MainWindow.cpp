@@ -126,7 +126,8 @@ void MainWindow::displayMessage(const string& msg, ChannelBase& chan, ServerConn
     // if the channel doesn't exist, it's probably a query. (the channel is
     // created on join) - there is also a hack here to ensure that it's not
     // a channel
-    if (!tab && chan.getName().at(0) != '#') {
+    char p = chan.getName().at(0);
+    if (!tab && (p != '#' || p != '&' || p != '!' || p != '+')) {
         tab = notebook.addQueryTab(Glib::locale_to_utf8(chan.getName()), conn);
     }
 

@@ -582,7 +582,7 @@ void Parser::Topic(const string& from, const string& chan, const string& rest)
 
 void Parser::Topic(const string& param, const string& rest)
 {
-    string::size_type pos1 = param.find_first_of("#");
+    string::size_type pos1 = param.find_first_of("#&+!");
     string::size_type pos2 = param.find_first_of(" ", pos1);
 
     string chan = param.substr(pos1, pos2 - pos1);
@@ -597,7 +597,7 @@ void Parser::Topic(const string& param, const string& rest)
 void Parser::TopicTime(const string& param)
 {
     // Find channel
-    string::size_type pos1 = param.find_first_of("#");
+    string::size_type pos1 = param.find_first_of("#&+!");
     string::size_type pos2 = param.find_first_of(" ", pos1);
     string chan = param.substr(pos1, pos2 - pos1);
 
@@ -801,7 +801,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
 void Parser::Names(const string& chan, const string& names)
 {
     // Find channel from a string like 'nick = #chan'
-    string::size_type pos = chan.find_last_of("#");
+    string::size_type pos = chan.find_last_of("#&+!");
     string channel = chan.substr(pos);
 
     Channel *c = _conn->findChannel(channel);

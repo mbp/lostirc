@@ -35,6 +35,8 @@ LostIRC (x.x.x)
   * The client registered the name with a space in front of it, fixed.
   * When a topic was received for a channel the user was currently not on -
     the client aborted, fixed.
+  * Unexpected behaviour when joining channels with different prefixes than #,
+    fixed.
 
 LostIRC (0.1.4) - Sat Jul 13th 2002
   * A segfault which appeared when the enviroment variable USER wasn't set,
