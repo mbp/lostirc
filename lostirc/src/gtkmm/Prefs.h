@@ -45,7 +45,7 @@ private:
     Prefs();
     Prefs(const Prefs&);
     Prefs& operator=(const Prefs&);
-    ~Prefs();
+    ~Prefs() { }
 
     void applyGeneral();
     void applyPreferences();
@@ -57,8 +57,7 @@ private:
     void saveEntry();
     void removeEntry();
     void addEntry();
-    void onSelectRow();
-    void onUnSelectRow();
+    void onChangeRow();
     void clearEntries();
     Gtk::VBox* addPage(const Glib::ustring& str);
 

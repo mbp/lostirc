@@ -133,8 +133,7 @@ Prefs::Prefs()
 
     _treeview.append_column("", _columns.servername);
     _treeview.set_headers_visible(false);
-    _treeview.signal_cursor_changed().connect(slot(*this, &Prefs::onSelectRow));
-    _treeview.signal_toggle_cursor_row().connect(slot(*this, &Prefs::onUnSelectRow));
+    _treeview.get_selection()->signal_changed().connect(slot(*this, &Prefs::onChangeRow));
 
     vector<struct autoJoin*> servers = App->getCfg().getServers();
     vector<struct autoJoin*>::iterator i;
@@ -173,19 +172,22 @@ Prefs::Prefs()
     cmdtext.set_editable(true);
     Gtk::Frame *frame5 = manage(new Gtk::Frame("Commands to perform on connect"));
     frame5->add(cmdtext);
-    serverinfobox->pack_start(*frame5, Gtk::SHRINK);
+    serverinfobox->pack_start(*frame5);
 
     // buttons
-    Gtk::Button *savebutton = manage(new Gtk::Button("Save entry"));
+    Gtk::Button *savebutton = manage(new Gtk::Button("Save this entry"));
     savebutton->signal_clicked().connect(slot(*this, &Prefs::saveEntry));
     hboxserver.pack_end(*savebutton, Gtk::SHRINK);
-    serverinfobox->pack_end(hboxserver, Gtk::FILL);
+    serverinfobox->pack_end(hboxserver, Gtk::SHRINK);
 
-    removebutton = new Gtk::Button("Remove entry");
-    removebutton->signal_clicked().connect(slot(*this, &Prefs::removeEntry));
-
-    addnewbutton = new Gtk::Button("Add new entry");
+    addnewbutton = manage(new Gtk::Button("Add new entry"));
     addnewbutton->signal_clicked().connect(slot(*this, &Prefs::addEntry));
+    hboxserver.pack_end(*addnewbutton, Gtk::SHRINK);
+
+    removebutton = manage(new Gtk::Button("Remove entry"));
+    removebutton->signal_clicked().connect(slot(*this, &Prefs::removeEntry));
+    hboxserver.pack_end(*removebutton, Gtk::SHRINK);
+
 
     performbox->pack_start(*serverhbox);
     notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*performbox, "Autojoin servers"));
@@ -200,12 +202,8 @@ Prefs::Prefs()
     pack_start(*bottommenubox, Gtk::FILL);
 
     show_all();
-}
-
-Prefs::~Prefs()
-{
-    delete removebutton;
-    delete addnewbutton;
+    removebutton->hide();
+    addnewbutton->hide();
 }
 
 void Prefs::endPrefs()
@@ -310,40 +308,39 @@ void Prefs::saveEntry()
     _treeview.get_selection()->select(iter);
 }
 
-void Prefs::onSelectRow()
+void Prefs::onChangeRow()
 {
-    std::cout << "onSelectRow" << std::endl;
     Glib::RefPtr<Gtk::TreeSelection> selection = _treeview.get_selection();
-    Gtk::TreeModel::Row row = *selection->get_selected();
+    Gtk::TreeModel::iterator iterrow = selection->get_selected();
 
-    struct autoJoin* a = row[_columns.autojoin];
-    hostentry.set_text(a->hostname);
-    passentry.set_text(a->password);
-    nickentry.set_text(a->nick);
-    std::ostringstream ss;
-    ss << a->port;
-    portentry.set_text(ss.str());
+    if (iterrow) {
+        // Row selected
+        Gtk::TreeModel::Row row = *iterrow;
 
-    Glib::RefPtr<Gtk::TextBuffer> textbuffer = cmdtext.get_buffer();
-    textbuffer->set_text("");
+        struct autoJoin* a = row[_columns.autojoin];
+        hostentry.set_text(a->hostname);
+        passentry.set_text(a->password);
+        nickentry.set_text(a->nick);
+        std::ostringstream ss;
+        ss << a->port;
+        portentry.set_text(ss.str());
 
-    vector<string>::const_iterator i;
-    for (i = a->cmds.begin(); i != a->cmds.end(); ++i) {
-        Gtk::TextIter iter = textbuffer->get_iter_at_offset(0);
-        textbuffer->insert(iter, *i + '\n');
+        Glib::RefPtr<Gtk::TextBuffer> textbuffer = cmdtext.get_buffer();
+        textbuffer->set_text("");
+
+        vector<string>::const_iterator i;
+        for (i = a->cmds.begin(); i != a->cmds.end(); ++i) {
+            Gtk::TextIter iter = textbuffer->get_iter_at_offset(0);
+            textbuffer->insert(iter, *i + '\n');
+        }
+        show_all();
+    } else {
+        // No row selected
+        clearEntries();
+        show_all();
+        removebutton->hide();
+        addnewbutton->hide();
     }
-    hboxserver.pack_end(*removebutton, Gtk::SHRINK);
-    hboxserver.pack_end(*addnewbutton, Gtk::SHRINK);
-    show_all();
-}
-
-void Prefs::onUnSelectRow()
-{
-    std::cout << "onUnSelectRow()" << std::endl;
-    hboxserver.remove(*removebutton);
-    hboxserver.remove(*addnewbutton);
-    clearEntries();
-    show_all();
 }
 
 void Prefs::removeEntry()
