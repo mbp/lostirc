@@ -46,7 +46,7 @@ public:
     bool sendJoin(const std::string& chan);
     bool sendPart(const std::string& chan);
     bool sendNames(const std::string& chan);
-    bool sendKick(const std::string& nickandmsg);
+    bool sendKick(const std::string& chan, const std::string& nick, const std::string& msg);
     bool sendWhois(const std::string& params);
     bool sendQuit(const std::string& quitmsg);
     bool sendMode(const std::string& params);

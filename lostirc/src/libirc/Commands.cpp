@@ -90,11 +90,24 @@ bool Commands::Quit(ServerConnection *conn, const string& params)
 
 bool Commands::Kick(ServerConnection *conn, const string& params)
 {
-    if (params.empty()) {
+    string chan, nick, msg;
+    string::size_type pos1 = params.find_first_of(" ");
+    chan = params.substr(0, pos1);
+    if (pos1 != string::npos) {
+        string::size_type pos2 = params.find_first_of(" ", pos1 + 1);
+
+        nick = params.substr(pos1 + 1, (pos2 - 1) - pos1);
+
+        if (pos2 != string::npos) {
+            msg = params.substr(pos2 + 1);
+        }
+    }
+
+    if (params.empty() || chan.empty() || nick.empty()) {
         error = "/KICK <channel> <nick> [msg], kick a user from a channel.";
         return false;
     } else {
-        conn->sendKick(params);
+        conn->sendKick(chan, nick, msg);
         return true;
     }
 }

@@ -202,9 +202,9 @@ bool ServerConnection::sendPart(const string& chan)
     return _socket->send(msg);
 }
 
-bool ServerConnection::sendKick(const string& nickandmsg)
+bool ServerConnection::sendKick(const string& chan, const string& nick, const string& kickmsg)
 {
-    string msg("KICK " + nickandmsg + "\r\n");
+    string msg("KICK " + chan + " " + nick + " :" + kickmsg + "\r\n");
 
     return _socket->send(msg);
 }
@@ -265,7 +265,7 @@ bool ServerConnection::sendTopic(const string& chan, const string& topic)
     if (topic.empty()) {
         msg = "TOPIC " + chan + "\r\n";
     } else {
-        msg = "TOPIC " + chan + " " + topic + "\r\n";
+        msg = "TOPIC " + chan + " :" + topic + "\r\n";
     }
 
     return _socket->send(msg);

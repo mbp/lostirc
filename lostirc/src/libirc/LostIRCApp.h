@@ -50,7 +50,10 @@ public:
 
     // Signals 
     
+    // When a new server connection is created, we instruct the frontend to
+    // create a new "tab".
     Signal1<void, ServerConnection*> evtNewTab;
+
     // Emitted when a user joins a channel
     Signal3<void, const std::string&, const std::string&, ServerConnection*> evtJoin;
 
