@@ -26,6 +26,24 @@
 
 using std::vector;
 
+static const char *encodings[]=
+{
+    "System default",
+    "UTF-8",
+    "ISO-8859-1 (Western Europe)",
+    "ISO-8859-2 (Central Europe)",
+    "ISO-8859-7 (Greek)",
+    "ISO-8859-8 (Hebrew)",
+    "ISO-8859-9 (Turkish)",
+    "ISO-8859-15 (Western Europe, but with Euro)",
+    "CP1251 (Cyrillic)",
+    "CP1256 (Arabic)",
+    "GB18030 (Chinese)",
+    "SJIS (Japanese)",
+    NULL
+};
+
+
 Gtk::Button* create_imagebutton(const Glib::ustring& str, const Gtk::StockID& stock_id)
 {
     Gtk::Button *button = new Gtk::Button();
@@ -89,6 +107,12 @@ Prefs::Prefs()
     generalbox->pack_start(*frame22, Gtk::PACK_SHRINK);
 
     notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*generalbox, _("General")));
+
+    // Encoding
+    encodingcombo.set_popdown_strings(encodings);
+    Gtk::Frame *frame23 = manage(new Gtk::Frame(_("Encoding to use on IRC")));
+    frame23->add(encodingcombo);
+    generalbox->pack_start(*frame23, Gtk::PACK_SHRINK);
 
     // Preferences-tab
 
@@ -298,6 +322,8 @@ void Prefs::applyGeneral()
     App->options.realname = realnameentry.get_text();
     App->options.ircuser = ircuserentry.get_text();
     App->options.nick = ircnickentry.get_text();
+    Glib::ustring encoding = encodingcombo.get_entry()->get_text();
+    App->options.encoding = encoding.substr(0, encoding.find_first_of(' '));
 }
 
 void Prefs::applyFont()

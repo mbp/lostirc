@@ -21,6 +21,7 @@
 
 #include <gtkmm/notebook.h>
 #include <gtkmm/button.h>
+#include <gtkmm/combo.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/table.h>
 #include <gtkmm/liststore.h>
@@ -66,6 +67,7 @@ private:
     Gtk::Entry ircnickentry;
     Gtk::Entry realnameentry;
     Gtk::Entry ircuserentry;
+    Gtk::Combo encodingcombo;
 
     // Preferences
     Gtk::Entry nickcompletionentry;

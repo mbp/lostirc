@@ -12,14 +12,15 @@ NICE-TO-HAVE:
 
   * Some way to seperate tabs from each other, so they are server sorted.
   * Recognise URLs (and make them clickable?)
-  * Add support for choosing which encoding to use. Now if a user has a
-    UTF-8 locale, he will also send his text in UTF-8, causing most other
-    locales (and Windows, mIRC) to fail reading the string.
 
 RANDOM BUGS:
 ------------
   * Color-parsing might be slow, since it inserts one character at the time.
     Need to look into optimizing it.
+
+  * Wrapping of text in the text widget is done character wise, it would
+    be nice if it could be done word-wise. But when using WRAP_WORD, a bug
+    in GTK+ causes the window to be resized when the new text is inserted.
 
   * This has to be removed from 'configure' at release time, or else the
     configure script fails on Red Hat/Mandrake:
@@ -34,20 +35,6 @@ DCC:
   * DCCs should use their own events instead of just CLIENTMSG.
   * DCC objects should timeout when no response has been given
   * Show to the user which ip is being sent
-
-DESIGN:
--------
-  * Comments from Martin Scholl about key_press_event system:
---
-     maybe we should parametrize this a little bit
-     via an arry of struct { <KEY>, <MOD>, <FUNC> }.
-     doing so it would be very easy to implement new
-     keystrokes. or better, we objectify this and
-     in later revisions we implement an mechanism to
-     register / customize key bindings via an configuration
-     file.
-     - ms
---
 
 BOOKMARK suggestion from Jim Winstead:
 -------------------------------------

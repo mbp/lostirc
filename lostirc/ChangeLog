@@ -2,6 +2,14 @@ For a summary of changes between releases - see the NEWS file.
 
 2003-01-03  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * ConfigHandler.cpp/.h: Add encoding member, defaults to "System
+          default"
+        * Utils.cpp: In convert_from_utf8(), when encoding is not set to
+          "System default", convert to the selected encoding.
+        * Prefs.cpp: Add Gtk::Combo to hold possible encodings.
+
+2003-01-03  Morten Brix Pedersen  <morten@wtf.dk>
+
         * Add LostIRC.h which includes gettext includes.
         * Remove gettext.h, just use libintl.h
 

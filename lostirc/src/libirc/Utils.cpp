@@ -94,7 +94,10 @@ std::string convert_from_utf8(const Glib::ustring& str_utf8)
 
     try {
 
-        str = Glib::locale_from_utf8(str_utf8);
+        if (App->options.encoding == "System default")
+              str = Glib::locale_from_utf8(str_utf8);
+        else
+              str = Glib::convert(str_utf8, App->options.encoding().getString(), "UTF-8");
 
     } catch (const Glib::ConvertError&) {
 

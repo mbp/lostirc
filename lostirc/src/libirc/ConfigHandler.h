@@ -47,6 +47,7 @@ public:
     Value<bool> strip_colors;
     Value<bool> strip_boldandunderline;
     Value<bool> logging;
+    Value<Glib::ustring> encoding;
 };
 
 // Color definitions used by frontend.
