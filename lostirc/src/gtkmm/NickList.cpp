@@ -17,6 +17,7 @@
  */
 
 #include <sstream>
+#include <LostIRC.h>
 #include "NickList.h"
 
 using std::vector;
@@ -52,7 +53,7 @@ void NickList::updateUserNumber()
     size_t size = _liststore->children().size();
     if (size > 0) {
         std::stringstream ss;
-        ss << size << (size == 1 ? " user" : " users");
+        ss << size << (size == 1 ? _(" user") : _(" users"));
         set_label(ss.str());
     } else {
         set_label("Not on channel");

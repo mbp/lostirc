@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-01-03 12:14+0100\n"
+"POT-Creation-Date: 2003-01-03 20:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -101,11 +101,11 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:286 src/gtkmm/MainWindow.cpp:302
+#: src/gtkmm/MainWindow.cpp:286 src/gtkmm/MainWindow.cpp:303
 msgid "server"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:323
+#: src/gtkmm/MainWindow.cpp:325
 msgid ""
 "Locale conversion error. An error occured while converting text from UTF-8 "
 "to your current locale.\n"
@@ -116,30 +116,25 @@ msgid ""
 "If you believe this is a bug, please report it to the application author."
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:327
+#: src/gtkmm/MainWindow.cpp:329
 msgid ""
 "\n"
 "\n"
 "Your current locale (seems) to be: "
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:331
+#: src/gtkmm/MainWindow.cpp:333
 msgid ""
 "\n"
 "\n"
 "(Note: You'll only see this warning once per LostIRC session)"
 msgstr ""
 
-#: src/gtkmm/MainNotebook.cpp:37 src/gtkmm/MainNotebook.cpp:58
-#: src/gtkmm/MainNotebook.cpp:86
-msgid "(server)"
-msgstr ""
-
-#: src/gtkmm/MainNotebook.cpp:175
+#: src/gtkmm/MainNotebook.cpp:166
 msgid " <span foreground=\"red\">(away: "
 msgstr ""
 
-#: src/gtkmm/MainNotebook.cpp:187
+#: src/gtkmm/MainNotebook.cpp:178
 msgid " (currently away)"
 msgstr ""
 
@@ -147,156 +142,168 @@ msgstr ""
 msgid "Not connected."
 msgstr ""
 
-#: src/gtkmm/DCCList.cpp:27
+#: src/gtkmm/DCCList.cpp:28
 msgid "Status"
 msgstr ""
 
-#: src/gtkmm/DCCList.cpp:28
+#: src/gtkmm/DCCList.cpp:29
 msgid "Filename"
 msgstr ""
 
-#: src/gtkmm/DCCList.cpp:29
+#: src/gtkmm/DCCList.cpp:30
 msgid "Filesize"
 msgstr ""
 
-#: src/gtkmm/DCCList.cpp:30
+#: src/gtkmm/DCCList.cpp:31
 msgid "Fileposition"
 msgstr ""
 
-#: src/gtkmm/DCCList.cpp:31
+#: src/gtkmm/DCCList.cpp:32
 msgid "From/To"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:43
+#: src/gtkmm/Prefs.cpp:61
 msgid "Limited highlighting (don't mark tabs red on joins/parts etc.)"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:44
+#: src/gtkmm/Prefs.cpp:62
 msgid "Strip color codes from incoming messages"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:45
+#: src/gtkmm/Prefs.cpp:63
 msgid "Strip bold and underline codes from incoming messages"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:46
+#: src/gtkmm/Prefs.cpp:64
 msgid "Log to file"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:56
+#: src/gtkmm/Prefs.cpp:74
 msgid "General Settings"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:57 src/gtkmm/Prefs.cpp:136
+#: src/gtkmm/Prefs.cpp:75 src/gtkmm/Prefs.cpp:160
 msgid "Preferences"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:58 src/gtkmm/Prefs.cpp:182
+#: src/gtkmm/Prefs.cpp:76 src/gtkmm/Prefs.cpp:206
 msgid "Font selection"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:59 src/gtkmm/Prefs.cpp:189 src/gtkmm/Prefs.cpp:266
+#: src/gtkmm/Prefs.cpp:77 src/gtkmm/Prefs.cpp:213 src/gtkmm/Prefs.cpp:290
 msgid "Servers"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:65 src/gtkmm/Prefs.cpp:97
+#: src/gtkmm/Prefs.cpp:83 src/gtkmm/Prefs.cpp:121
 msgid "Apply settings"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:66 src/gtkmm/Prefs.cpp:98 src/gtkmm/Prefs.cpp:171
+#: src/gtkmm/Prefs.cpp:84 src/gtkmm/Prefs.cpp:122 src/gtkmm/Prefs.cpp:195
 msgid "Cancel"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:75
+#: src/gtkmm/Prefs.cpp:93
 msgid "Nickname"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:81
+#: src/gtkmm/Prefs.cpp:99
 msgid "Real name"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:87
+#: src/gtkmm/Prefs.cpp:105
 msgid "IRC username (ident)"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:91
+#: src/gtkmm/Prefs.cpp:109
 msgid "General"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:108
-msgid "Nick-completion character"
-msgstr ""
-
-#: src/gtkmm/Prefs.cpp:114
-msgid "DCC IP-Address"
-msgstr ""
-
-#: src/gtkmm/Prefs.cpp:120
-msgid "DCC Port (0 = random)"
-msgstr ""
-
-#: src/gtkmm/Prefs.cpp:126
-msgid "Words to highlight on (space seperated)"
+#: src/gtkmm/Prefs.cpp:113
+msgid "Encoding to use on IRC"
 msgstr ""
 
 #: src/gtkmm/Prefs.cpp:132
+msgid "Nick-completion character"
+msgstr ""
+
+#: src/gtkmm/Prefs.cpp:138
+msgid "DCC IP-Address"
+msgstr ""
+
+#: src/gtkmm/Prefs.cpp:144
+msgid "DCC Port (0 = random)"
+msgstr ""
+
+#: src/gtkmm/Prefs.cpp:150
+msgid "Words to highlight on (space seperated)"
+msgstr ""
+
+#: src/gtkmm/Prefs.cpp:156
 msgid "Maximum number of lines to save"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:170
+#: src/gtkmm/Prefs.cpp:194
 msgid "Apply font"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:178
+#: src/gtkmm/Prefs.cpp:202
 msgid "> Hello World!"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:188
+#: src/gtkmm/Prefs.cpp:212
 msgid "Auto"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:202
+#: src/gtkmm/Prefs.cpp:226
 msgid "Options"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:212
+#: src/gtkmm/Prefs.cpp:236
 msgid "Connect automatically: "
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:219
+#: src/gtkmm/Prefs.cpp:243
 msgid "Hostname: "
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:226
+#: src/gtkmm/Prefs.cpp:250
 msgid "Port: "
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:233
+#: src/gtkmm/Prefs.cpp:257
 msgid "Password: "
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:240
+#: src/gtkmm/Prefs.cpp:264
 msgid "Nick: "
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:246
+#: src/gtkmm/Prefs.cpp:270
 msgid "Commmands to perform on connect: "
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:251
+#: src/gtkmm/Prefs.cpp:275
 msgid "Save this entry"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:256
+#: src/gtkmm/Prefs.cpp:280
 msgid "Add entry"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:260
+#: src/gtkmm/Prefs.cpp:284
 msgid "Remove entry"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:269
+#: src/gtkmm/Prefs.cpp:293
 msgid "Close"
+msgstr ""
+
+#: src/gtkmm/NickList.cpp:56
+msgid " user"
+msgstr ""
+
+#: src/gtkmm/NickList.cpp:56
+msgid " users"
 msgstr ""
 
 #: src/libirc/Commands.cpp:93
