@@ -20,11 +20,9 @@
 #define TAB_H
 
 #include <vector>
-#include <map>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/box.h>
-#include <gtkmm/label.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/textbuffer.h>
 #include <gtkmm/textview.h>
@@ -32,8 +30,8 @@
 #include <gtkmm/treeview.h>
 #include <gtkmm/style.h>
 #include <gtkmm/paned.h>
-#include <gdk/gdkkeysyms.h>
 #include <irc_defines.h>
+#include "MainWindow.h"
 #include "Entry.h"
 #include "TextWidget.h"
 
@@ -42,10 +40,9 @@ class ServerConnection;
 class Tab : public Gtk::VBox
 {
 public:
-    Tab(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font);
+    Tab(ServerConnection *conn, Pango::FontDescription font);
     ~Tab();
 
-    Gtk::Label*                 getLabel() { return _label; }
     Entry&                      getEntry() { return _entry; }
     ServerConnection*           getConn() { return _conn; }
 
@@ -60,6 +57,7 @@ public:
     TextWidget& getText() { return _textwidget; }
     void setInActive() {
         if (isActive()) {
+            Gtk::Label *_label = AppWin->getNotebook().getLabel(this);
             _label->set_text("(" + _label->get_text() + ")");
             isOnChannel = false;
         }
@@ -73,7 +71,6 @@ public:
 
 private:
     bool isOnChannel;
-    Gtk::Label *_label;
     ServerConnection *_conn;
     Gtk::ScrolledWindow _swin;
     Gtk::HBox _hbox;
@@ -88,22 +85,22 @@ protected:
 class TabQuery : public Tab
 {
 public:
-    TabQuery(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font)
-            : Tab(label, conn, font) { }
+    TabQuery(ServerConnection *conn, Pango::FontDescription font)
+            : Tab(conn, font) { }
 
     void insertUser(const Glib::ustring& user, IRC::UserMode i = IRC::NONE) {};
     void removeUser(const Glib::ustring& nick) {};
     void renameUser(const Glib::ustring& from, const Glib::ustring& to) {
-        getLabel()->set_text(to);
+        AppWin->getNotebook().getLabel(this)->set_text(to);
     }
     bool findUser(const Glib::ustring& nick) {
-        if (nick == getLabel()->get_text())
+        if (nick == AppWin->getNotebook().getLabel(this)->get_text())
               return true;
         else
               return false;
     }
     std::vector<Glib::ustring> getNicks() {
-        std::vector<Glib::ustring> vec; vec.push_back(getLabel()->get_text()); return vec;
+        std::vector<Glib::ustring> vec; vec.push_back(AppWin->getNotebook().getLabel(this)->get_text()); return vec;
     }
 };
 
@@ -111,7 +108,7 @@ class TabChannel : public Tab
 {
 
 public:
-    TabChannel(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font);
+    TabChannel(ServerConnection *conn, Pango::FontDescription font);
 
     void insertUser(const Glib::ustring& user, IRC::UserMode i = IRC::NONE);
     void removeUser(const Glib::ustring& nick);

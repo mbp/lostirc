@@ -71,7 +71,7 @@ void Query(ServerConnection *conn, const ustring& params)
 
 void Me(ServerConnection *conn, const ustring& params)
 {
-    ustring to = AppWin->getNotebook().getCurrent()->getLabel()->get_text();
+    ustring to = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
     ustring param = to + " " + params;
     return Commands::Me(conn, Glib::locale_from_utf8(param));
 }
@@ -93,14 +93,14 @@ void NewServer(ServerConnection *conn, const ustring& params)
 
 void Part(ServerConnection *conn, const ustring& params)
 {
-    ustring channel = AppWin->getNotebook().getCurrent()->getLabel()->get_text();
+    ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
     ustring param = channel + " " + params;
     Commands::Part(conn, Glib::locale_from_utf8(param));
 }
 
 void Topic(ServerConnection *conn, const ustring& params)
 {
-    ustring channel = AppWin->getNotebook().getCurrent()->getLabel()->get_text();
+    ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
     ustring param = channel + " " + params;
     Commands::Topic(conn, Glib::locale_from_utf8(param));
 }
@@ -111,7 +111,7 @@ void Kick(ServerConnection *conn, const ustring& params)
         throw CommandException("/KICK <nick>, kick a user from a channel.");
 
     } else {
-        ustring channel = AppWin->getNotebook().getCurrent()->getLabel()->get_text();
+        ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
         ustring param = channel + " " + params;
         Commands::Kick(conn, Glib::locale_from_utf8(param));
     }
@@ -119,7 +119,7 @@ void Kick(ServerConnection *conn, const ustring& params)
 
 void Banlist(ServerConnection *conn, const ustring& params)
 {
-    Commands::Banlist(conn, Glib::locale_from_utf8(AppWin->getNotebook().getCurrent()->getLabel()->get_text()));
+    Commands::Banlist(conn, Glib::locale_from_utf8(AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text()));
 }
 
 void Op(ServerConnection *conn, const ustring& params)
@@ -128,7 +128,7 @@ void Op(ServerConnection *conn, const ustring& params)
         throw CommandException("/OP <nicks>, ops one or more users in the current channel.");
 
     } else {
-        ustring channel = AppWin->getNotebook().getCurrent()->getLabel()->get_text();
+        ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
         ustring param = channel + " " + params;
         Commands::Op(conn, Glib::locale_from_utf8(param));
     }
@@ -140,7 +140,7 @@ void Deop(ServerConnection *conn, const ustring& params)
         throw CommandException("/DEOP <nicks>, deops one or more users in the current channel.");
 
     } else {
-        ustring channel = AppWin->getNotebook().getCurrent()->getLabel()->get_text();
+        ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
         ustring param = channel + " " + params;
         Commands::Deop(conn, Glib::locale_from_utf8(param));
     }
@@ -152,7 +152,7 @@ void Voice(ServerConnection *conn, const ustring& params)
         throw CommandException("/VOICE <nicks>, voices one or more users in the current channel.");
 
     } else {
-        ustring channel = AppWin->getNotebook().getCurrent()->getLabel()->get_text();
+        ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
         ustring param = channel + " " + params;
         Commands::Voice(conn, Glib::locale_from_utf8(param));
     }
@@ -164,7 +164,7 @@ void Devoice(ServerConnection *conn, const ustring& params)
         throw CommandException("/DEVOICE <nicks>, devoices one or more users in the current channel.");
 
     } else {
-        ustring channel = AppWin->getNotebook().getCurrent()->getLabel()->get_text();
+        ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
         ustring param = channel + " " + params;
         Commands::Devoice(conn, Glib::locale_from_utf8(param));
     }

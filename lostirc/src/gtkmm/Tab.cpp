@@ -29,9 +29,9 @@
 using std::vector;
 using Glib::ustring;
 
-Tab::Tab(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font)
+Tab::Tab(ServerConnection *conn, Pango::FontDescription font)
     : Gtk::VBox(), isHighlighted(false), hasPrefs(false),
-    isOnChannel(true), _label(label), _conn(conn), _textwidget(font), 
+    isOnChannel(true), _conn(conn), _textwidget(font), 
     _entry(this)
 {
     _hpaned = new Gtk::HPaned();
@@ -77,8 +77,8 @@ void Tab::endPrefs()
     hasPrefs = false;
 }
 
-TabChannel::TabChannel(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font)
-    : Tab(label, conn, font),
+TabChannel::TabChannel(ServerConnection *conn, Pango::FontDescription font)
+    : Tab(conn, font),
     _columns(),
     _liststore(Gtk::ListStore::create(_columns)),
     _treeview(_liststore),

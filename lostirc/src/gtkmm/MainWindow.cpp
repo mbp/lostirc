@@ -323,10 +323,10 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
         TabChannel *tab = dynamic_cast<TabChannel*>(notebook.getCurrent());
         if (tab && tab->getConn()->Session.isConnected && tab->isActive()) {
             // It's a channel, so we need to part it
-            tab->getConn()->sendPart(Glib::locale_from_utf8(tab->getLabel()->get_text()), "");
+            tab->getConn()->sendPart(Glib::locale_from_utf8(notebook.getLabel(tab)->get_text()), "");
         } else {
             // Query
-            notebook.getCurrent()->getConn()->removeChannel(Glib::locale_from_utf8(notebook.getCurrent()->getLabel()->get_text()));
+            notebook.getCurrent()->getConn()->removeChannel(Glib::locale_from_utf8(notebook.getLabel(notebook.getCurrent())->get_text()));
         }
         notebook.closeCurrent();
     }

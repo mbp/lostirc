@@ -18,6 +18,7 @@
 
 #include "MainNotebook.h"
 #include "MainWindow.h"
+#include "Tab.h"
 
 using Glib::ustring;
 using std::vector;
@@ -39,20 +40,19 @@ TabChannel * MainNotebook::addChannelTab(const ustring& name, ServerConnection *
     if (pagenum != -1) {
         // If we have a "server"-tab, reuse it as a channel-tab.
         TabChannel* tab = dynamic_cast<TabChannel*>(get_nth_page(pagenum));
-        tab->getLabel()->set_text(name);
+        getLabel(tab)->set_text(name);
         tab->setActive();
         show_all();
         return tab;
     } else if (Tab *tab = findTab(name, conn, true)) {
         // If we find an *inactive* channel-tab, lets reuse it.
         tab->setActive();
-        tab->getLabel()->set_text(name);
+        getLabel(tab)->set_text(name);
         return dynamic_cast<TabChannel*>(tab);
     } else {
         // If not, create a new channel-tab.
-        Gtk::Label *label = manage(new Gtk::Label(name));
-        TabChannel *tab = manage(new TabChannel(label, conn, fontdescription));
-        pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, *label));
+        TabChannel *tab = manage(new TabChannel(conn, fontdescription));
+        pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, name));
         show_all();
         return tab;
     }
@@ -60,11 +60,15 @@ TabChannel * MainNotebook::addChannelTab(const ustring& name, ServerConnection *
 
 TabQuery * MainNotebook::addQueryTab(const ustring& name, ServerConnection *conn)
 {
-    Gtk::Label *label = manage(new Gtk::Label(name));
-    TabQuery *tab = manage(new TabQuery(label, conn, fontdescription));
-    pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, *label));
+    TabQuery *tab = manage(new TabQuery(conn, fontdescription));
+    pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, name));
     show_all();
     return tab;
+}
+
+Gtk::Label* MainNotebook::getLabel(Tab *tab)
+{
+    return dynamic_cast<Gtk::Label*>(get_tab_label(*tab));
 }
 
 Tab* MainNotebook::getCurrent(ServerConnection *conn)
@@ -113,7 +117,7 @@ void MainNotebook::onSwitchPage(GtkNotebookPage *p, unsigned int n)
 {
     Tab *tab = static_cast<Tab*>(get_nth_page(n));
 
-    tab->getLabel()->modify_fg(Gtk::STATE_NORMAL, Gdk::Color("black"));
+    getLabel(tab)->modify_fg(Gtk::STATE_NORMAL, Gdk::Color("black"));
     tab->getEntry().grab_focus();
     tab->isHighlighted = false;
 
@@ -140,9 +144,9 @@ void MainNotebook::updateTitle(Tab *tab)
           tab = getCurrent();
 
     if (tab->getConn()->Session.isAway)
-          AppWin->set_title("LostIRC "VERSION" - " + tab->getLabel()->get_text() + " (currently away)");
+          AppWin->set_title("LostIRC "VERSION" - " + getLabel(tab)->get_text() + " (currently away)");
     else
-          AppWin->set_title("LostIRC "VERSION" - " + tab->getLabel()->get_text());
+          AppWin->set_title("LostIRC "VERSION" - " + getLabel(tab)->get_text());
 }
 
 void MainNotebook::closeCurrent()
@@ -166,7 +170,7 @@ void MainNotebook::closeCurrent()
 void MainNotebook::highlightNick(Tab *tab)
 {
     if (tab != getCurrent()) {
-        tab->getLabel()->modify_fg(Gtk::STATE_NORMAL, Gdk::Color("blue"));
+        getLabel(tab)->modify_fg(Gtk::STATE_NORMAL, Gdk::Color("blue"));
         tab->isHighlighted = true;
     }
 }
@@ -174,7 +178,7 @@ void MainNotebook::highlightNick(Tab *tab)
 void MainNotebook::highlightActivity(Tab *tab)
 {   
     if (tab != getCurrent() && !tab->isHighlighted) {
-        tab->getLabel()->modify_fg(Gtk::STATE_NORMAL, Gdk::Color("red"));
+        getLabel(tab)->modify_fg(Gtk::STATE_NORMAL, Gdk::Color("red"));
     }
 }
 

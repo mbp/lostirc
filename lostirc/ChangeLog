@@ -1,6 +1,12 @@
 For a summary of changes between releases - see the NEWS file.
 
 2002-11-25  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * There was no real good reason for the label to be created manually.
+          No longer part of the Tab class, but access through the notebook
+          widget using the new method MainNotebook::getLabel().
+
+2002-11-25  Morten Brix Pedersen  <morten@wtf.dk>
 
         * ServerConnection.h: Make copy ctr and operator= private to avoid
           copying/pass-by-value.

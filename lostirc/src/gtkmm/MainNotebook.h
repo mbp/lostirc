@@ -24,7 +24,10 @@
 #include <glibmm/ustring.h>
 #include <ServerConnection.h>
 #include <vector>
-#include "Tab.h"
+
+class Tab;
+class TabChannel;
+class TabQuery;
 
 class MainNotebook : public Gtk::Notebook
 {
@@ -35,6 +38,7 @@ public:
     TabQuery* addQueryTab(const Glib::ustring& name, ServerConnection *conn);
     Tab* getCurrent(ServerConnection *conn);
     Tab* getCurrent();
+    Gtk::Label* getLabel(Tab *tab);
     Tab* findTab(const Glib::ustring& name, ServerConnection *conn, bool findInActive = false);
     int findPage(const Glib::ustring& name, ServerConnection *conn, bool findInActive = false);
 
