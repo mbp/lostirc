@@ -19,23 +19,25 @@
 #ifndef SOCKET_H
 #define SOCKET_H
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <iostream>
+#include <netdb.h>
 #include <string>
 #include <exception>
+#include <sigc++/signal_system.h>
 
-class Socket
+class Socket : public SigC::Object
 {
     int fd;
+    struct sockaddr_in sockaddr;
+    pid_t resolve_pid;
+    struct sockaddr_in localaddr;
 
 public:
     Socket();
     ~Socket();
 
-    void connect(const std::string& host, int port);
+    void resolvehost(const std::string& host);
+    void connect(int port);
+    static gboolean on_host_resolve(GIOChannel* iochannel, GIOCondition cond, gpointer data);
     void disconnect();
     bool send(const std::string& data);
     bool receive(char *buf, int len);
@@ -43,7 +45,10 @@ public:
     void setBlocking();
     int getfd() { return fd; }
     int close();
-    std::string error;
+    const char * getLocalIP();
+
+    SigC::Signal0<void> on_host_resolved;
+    SigC::Signal1<void, const char *> on_error;
 };
 
 class SocketException : public std::exception
@@ -54,6 +59,8 @@ public:
     const char * what() const throw() {
         return error;
     }
-
 };
+
+class SocketDisconnected : public std::exception { };
+
 #endif

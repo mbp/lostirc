@@ -19,12 +19,13 @@
 #ifndef PREFS_H
 #define PREFS_H
 
+#include <gtk--/notebook.h>
 #include <gtk--/button.h>
 #include <gtk--/entry.h>
 #include <gtk--/clist.h>
 #include "Tab.h"
 
-class Prefs : public Gtk::Notebook
+class Prefs : public Gtk::VBox
 {
 public:
     static Prefs* Instance() {
@@ -48,6 +49,11 @@ private:
     Gtk::Entry *portentry;
     Gtk::Entry *hostentry;
     Gtk::Entry *nickcompletionentry;
+    Gtk::Entry *ircnickentry;
+    Gtk::Entry *realnameentry;
+    Gtk::Entry *ircuserentry;
+    Gtk::Entry *dccipentry;
+    Gtk::Entry *highlightentry;
     Gtk::Entry *nickentry;
     Gtk::Text *cmdtext;
     Gtk::Button *closebutton;
@@ -55,6 +61,7 @@ private:
     Gtk::Button *removebutton;
     Gtk::Button *addnewbutton;
     Gtk::HBox *savehbox;
+    Gtk::Notebook *notebook;
     Tab *tab;
 
     void saveEntry();

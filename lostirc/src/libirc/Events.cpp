@@ -16,9 +16,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <iostream>
 #include <cctype>
 #include "Events.h"
-#include "LostIRCApp.h"
 
 using std::string;
 
@@ -30,9 +30,12 @@ struct {
     { "evt_privmsg_highlight", PRIVMSG_HIGHLIGHT },
     { "evt_action", ACTION },
     { "evt_action_highlight", ACTION_HIGHLIGHT },
+    { "evt_dcc_receive", DCC_RECEIVE },
     { "evt_servmsg", SERVMSG },
     { "evt_servmsg2", SERVMSG2 },
+    { "evt_servmsg3", SERVMSG3 },
     { "evt_ctcp", CTCP },
+    { "evt_ctcp_multi", CTCP_MULTI },
     { "evt_topicchange", TOPICCHANGE },
     { "evt_topicis", TOPICIS },
     { "evt_topictime", TOPICTIME },
@@ -62,67 +65,25 @@ struct {
     { 0, 0 }
 };
 
-namespace FE {
-
-void emit(Tmpl& t, const string& nick, ServerConnection *conn)
-{
-    string msg = t.result(); // FIXME: we shouldn't be doing this operation here
-    App->evtDisplayMessageInQuery(msg, nick, conn);
-}
-
-void emit(Tmpl& t, Channel& chan, ServerConnection *conn)
-{
-    string msg = t.result(); // FIXME: we shouldn't be doing this operation here
-    App->evtDisplayMessageInChan(msg, chan, conn);
-}
-
-void emit(Tmpl& t, Dest d, ServerConnection *conn)
-{
-    string msg = t.result();
-    App->evtDisplayMessage(msg, d, conn);
-}
-
-void emit(Tmpl& t, const std::vector<Channel*>& to, ServerConnection *conn)
-{
-    std::vector<Channel*>::const_iterator i;
-    for (i = to.begin(); i != to.end(); ++i) {
-        emit(t, *(*i), conn);
-    }
-}
-
-Tmpl get(Event e)
-{
-    for (int i = 0; event_map[i].s != 0; ++i) {
-        if (event_map[i].value == e)
-            return Tmpl(App->getCfg().getEvt(event_map[i].s));
-    }
-}
-
-}
-
 string Tmpl::result()
 {
     string newstr;
     bool parsing_arg = false;
     string::const_iterator i;
     for (i = orig.begin(); i != orig.end(); ++i) {
-        switch (*i) {
-            case '%':
-                parsing_arg = true;
-                break;
-            default:
-                if (isdigit(*i) && parsing_arg) {
-                    unsigned int num = ((*i) - '0') - 1;
-                    if (num >= tokens.size()) {
-                        std::cerr << "Fatal error, too many tokens! [ " << num << " compared to " << tokens.size() << " ]" << std::endl;
-                    } else {
-                        newstr += tokens[num];
-                    }
-                    parsing_arg = false;
-                } else {
-                    newstr += *i; 
-                    parsing_arg = false;
-                }
+        if (*i == '%') {
+            parsing_arg = true;
+        } else if (isdigit(*i) && parsing_arg) {
+            unsigned int num = ((*i) - '0') - 1;
+            if (num >= tokens.size()) {
+                std::cerr << "Fatal error, too many tokens! (" << num << " compared to " << tokens.size() << ")" << std::endl;
+            } else {
+                newstr += tokens[num];
+            }
+            parsing_arg = false;
+        } else {
+            newstr += *i; 
+            parsing_arg = false;
         }
     }
 

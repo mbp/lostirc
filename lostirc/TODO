@@ -1,29 +1,66 @@
 CRITICAL: 
 ---------
-  * Implement DCC chat/send
-  * Doesn't show in query when a user quits
+  * Implement reading in ServerConncetion better (more efficiently)
+  * Implement DCC CHAT
+  * Should have a limit on the text-buffer, not go on forever.
+  * When parting an empty channel where one has op, and joining the channel
+    again, op is not shown.
+  * Reconnects after /QUIT?
 
 RANDOM:
 ------
+  * strip all mIRC color-codes from ALL strings, don't show colors at all.
   * limited tab highlighting, don't mark a tab red when
     joining/parting/quitting
-  * when a op gets voice, his status is lost
-  * write away reason in "you are away"
   * when away/unaway - title isn't updated until switch tab
   * implement /help, /help shortcuts and /help commands
-  * /oper command
 
   * remove this from 'configure' at release time:
     +extern "C" void exit(int); (:g/extern "C" void exit/d)
   * ipv6 support
-  * /part should part current channel when called without arguments
-  * possibility to add user-defined highlights other than just the current nick
-  * crashes when connecting to irc.winbot.co.uk
+  * /PART, /OP (to be added) and more should work with current channel.
 
-DONE:
-----
-  * ability to choose which nick-completion character to use
-  * Add code to detect timeouts so we can reconnect and not let the user
-    wait forever
-  * Still connected to a server when closing last tab, should keep it open
-  * Away message appears in query on /whois
+  * lostirc.desktop shouldn't be copied on non-GNOME systems.
+  * lostirc.desktop should be distributed as KDE link as well.
+  * note when window has lost focus; then highlight front-tab
+  * check for EAGAIN on send()?
+
+DCC:
+---
+  * Add more events for DCCs (eg. don't use SERVMSG2 that much)
+  * DCC objects should timeot when no response has been given
+  * Possibility to define a different outgoing ip-address
+  * Show to the user, which ip is being sent
+  * Possibility to track progress of DCCs
+
+DESIGN:
+-------
+  * Comments from Martin Scholl about key_press_event system:
+--
+     maybe we should parametrize this a little bit
+     via an arry of struct { <KEY>, <MOD>, <FUNC> }.
+     doing so it would be very easy to implement new
+     keystrokes. or better, we objectify this and
+     in later revisions we implement an mechanism to
+     register / customize key bindings via an configuration
+     file.
+     - ms
+--
+
+  * and about the command-system:
+--
+    actually some servers implement some extra commands. I think 
+    it is good idea to write some kind of generic handler function
+    for commands, which are not mentioned in cmds[].
+--
+
+BOOKMARK suggestion from Jim Winstead:
+-------------------------------------
+
+ i'd love some sort of 'bookmark' feature that would make it easy to jump
+ back to the point where i last left a channel. so if i'm chatting away
+ in one channel and conversation is going on in another, i can latter
+ come back to that channel, jump to where i left it, and then quickly
+ catch up on what i missed.
+
+

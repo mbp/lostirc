@@ -19,18 +19,17 @@
 #ifndef TAB_H
 #define TAB_H
 
+#include <vector>
 #include <gtk--/scrolledwindow.h>
-#include <gtk--/notebook.h>
 #include <gtk--/entry.h>
 #include <gtk--/box.h>
 #include <gtk--/label.h>
 #include <gtk--/text.h>
 #include <gtk--/clist.h>
 #include <gtk--/style.h>
-#include <vector>
 #include <gdk/gdkkeysyms.h>
+#include <irc_defines.h>
 #include "Entry.h"
-#include <Parser.h>
 
 class ServerConnection;
 
@@ -41,7 +40,6 @@ public:
     ~Tab();
 
     Gtk::Text*                  getText() { return _text; }
-    Gtk::HBox*                  getHBox() { return _hbox; }
     Gtk::Label*                 getLabel() { return _label; }
     virtual Gtk::CList*         getCList() { return 0; }
     Entry*                      getEntry() { return _entry; }
@@ -59,35 +57,39 @@ public:
     virtual bool findUser(const std::string& nick) = 0;
     virtual bool nickCompletion(const std::string& word, std::string& str) = 0;
     Tab& operator<<(const std::string& str);
-    void insertWithColor(int color, const std::string& str);
     void setStyle();
     void setFont(Gdk_Font *font);
     void setInActive() {
         if (isActive()) {
             _label->set_text("(" + _label->get_text() + ")");
-            is_on_channel = false;
+            isOnChannel = false;
         }
     }
     void setActive() {
-        is_on_channel = true;
+        isOnChannel = true;
     }
-    bool isActive() { return is_on_channel; }
-    void setName(const std::string& str) { _label->set_text(str); }
-    bool is_highlighted;
-    bool is_on_channel;
+    bool isActive() { return isOnChannel; }
+    bool isHighlighted;
     bool hasPrefs;
 
 private:
+    void insertWithColor(int color, const std::string& str);
+
+    bool isOnChannel;
     Gtk::Label *_label;
     Entry *_entry;
-    Gtk::Text *_text;
-    Gtk::HBox *_hbox;
     ServerConnection *_conn;
     Gtk::ScrolledWindow *_scrollwindow;
     Gtk::Text::Context *_current_cx;
     Gdk_Font *_font;
     Gtk::Label *_away;
     Gtk::HBox *_hbox2;
+
+protected:
+    Gtk::HBox *_hbox;
+    Gtk::Text *_text;
+
+
 };
 
 class TabQuery : public Tab

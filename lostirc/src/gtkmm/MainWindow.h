@@ -19,19 +19,19 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <vector>
 #include <gtk--/main.h>
 #include <gtk--/window.h>
-#include <gtk--/box.h>
 #include <gdk/gdkkeysyms.h>
-#include <vector>
 #include <ServerConnection.h>
 #include <LostIRCApp.h>
+#include <FrontEnd.h>
 #include "MainNotebook.h"
 
-class MainWindow : public Gtk::Window
+class MainWindow : public Gtk::Window, public FrontEnd
 {
-
     LostIRCApp *_app;
+    MainNotebook* _nb;
 
 public:
     MainWindow();
@@ -45,26 +45,21 @@ public:
     LostIRCApp* getApp() { return _app; }
     Tab* newServer();
 
-    MainNotebook* _nb;
-
-private:
-    // Events
-    void onDisplayMessage(const std::string& msg, FE::Dest d, ServerConnection *conn);
-    void onDisplayMessageInChan(const std::string& msg, Channel& to, ServerConnection *conn);
-    void onDisplayMessageInQuery(const std::string& msg, const std::string& to, ServerConnection *conn);
-    void onJoin(const std::string& nick, Channel& chan, ServerConnection *conn);
-    void onPart(const std::string& nick, Channel& chan, ServerConnection *conn);
-    void onQuit(const std::string& nick, const std::string& chan, ServerConnection *conn);
-    void onNick(const std::string& from, const std::string& to, ServerConnection *conn);
-    void onDisconnected(ServerConnection *conn);
-    void onKick(const std::string& from, Channel& chan, const std::string& kicker, const std::string& msg,  ServerConnection *conn);
-    void onNames(Channel& c, ServerConnection *conn);
-    void onMode(const std::string& nick, const std::string& chan, const std::string& topic, ServerConnection *conn);
-    void onCMode(const std::string& nick, const std::string& chan, char, const std::string& modes, ServerConnection *conn);
-    void onCUMode(const std::string& nick, Channel& chan, const std::map<std::string, IRC::UserMode>& users, ServerConnection *conn);
-    void onHighlight(const std::string& to, ServerConnection *conn);
-    void onAway(bool away, ServerConnection *conn);
-    void onNewTab(ServerConnection *conn);
+    // Methods implemented for the abstract base class 'FrontEnd' 
+    void displayMessage(const std::string& msg, FE::Destination d);
+    void displayMessage(const std::string& msg, FE::Destination d, ServerConnection *conn);
+    void displayMessage(const std::string& msg, ChannelBase& to, ServerConnection *conn);
+    void join(const std::string& nick, Channel& chan, ServerConnection *conn);
+    void part(const std::string& nick, Channel& chan, ServerConnection *conn);
+    void kick(const std::string& from, Channel& chan, const std::string& kicker, const std::string& msg,  ServerConnection *conn);
+    void quit(const std::string& nick, std::vector<ChannelBase*> chans, ServerConnection *conn);
+    void nick(const std::string& from, const std::string& to, std::vector<ChannelBase*> chans, ServerConnection *conn);
+    void CUMode(const std::string& nick, Channel& chan, const std::vector<User>& users, ServerConnection *conn);
+    void names(Channel& c, ServerConnection *conn);
+    void highlight(ChannelBase& chan, ServerConnection *conn);
+    void away(bool away, ServerConnection *conn);
+    void newTab(ServerConnection *conn);
+    void disconnected(ServerConnection *conn);
 };
 
 extern MainWindow* AppWin;

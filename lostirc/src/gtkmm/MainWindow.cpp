@@ -16,17 +16,19 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <gtk--/box.h>
+#include <algorithm>
+#include <functional>
 #include "Tab.h"
 #include "MainWindow.h"
-#include "GuiCommands.h"
 
 using std::vector;
 using std::string;
 
-MainWindow* AppWin;
+MainWindow* AppWin = 0;
 
 MainWindow::MainWindow()
-: Gtk::Window(GTK_WINDOW_TOPLEVEL)
+: Gtk::Window(GTK_WINDOW_TOPLEVEL), _app (new LostIRCApp(this)), _nb(new MainNotebook())
 {
     AppWin = this;
     set_policy(1, 1, 0); // Policy for main window: user resizeable
@@ -36,27 +38,9 @@ MainWindow::MainWindow()
     
     Gtk::VBox *_vbox1 = manage(new Gtk::VBox());
 
-    _nb = new MainNotebook();
     _vbox1->pack_start(*_nb, 1, 1);
 
     add(*_vbox1);
-
-    _app = new LostIRCApp();
-    // Connect signals for all the backend events
-    _app->evtDisplayMessage.connect(slot(this, &MainWindow::onDisplayMessage));
-    _app->evtDisplayMessageInChan.connect(slot(this, &MainWindow::onDisplayMessageInChan));
-    _app->evtDisplayMessageInQuery.connect(slot(this, &MainWindow::onDisplayMessageInQuery));
-    _app->evtHighlight.connect(slot(this, &MainWindow::onHighlight));
-    _app->evtJoin.connect(slot(this, &MainWindow::onJoin));
-    _app->evtKick.connect(slot(this, &MainWindow::onKick));
-    _app->evtPart.connect(slot(this, &MainWindow::onPart));
-    _app->evtQuit.connect(slot(this, &MainWindow::onQuit));
-    _app->evtNick.connect(slot(this, &MainWindow::onNick));
-    _app->evtNames.connect(slot(this, &MainWindow::onNames));
-    _app->evtCUMode.connect(slot(this, &MainWindow::onCUMode));
-    _app->evtAway.connect(slot(this, &MainWindow::onAway));
-    _app->evtNewTab.connect(slot(this, &MainWindow::onNewTab));
-    _app->evtDisconnected.connect(slot(this, &MainWindow::onDisconnected));
 
     int num_of_servers = _app->start();
     if (num_of_servers == 0) {
@@ -71,9 +55,30 @@ MainWindow::~MainWindow()
 {
     delete _nb;
     delete _app;
+
+    AppWin = 0;
 }
 
-void MainWindow::onDisplayMessage(const string& msg, FE::Dest d, ServerConnection *conn)
+void MainWindow::displayMessage(const string& msg, FE::Destination d)
+{
+
+    if (d == FE::CURRENT) {
+        Tab *tab = _nb->getCurrent();
+
+        *tab << msg;
+    } else if (d == FE::ALL) {
+        vector<Tab*> tabs;
+        vector<Tab*>::const_iterator i;
+        _nb->Tabs(tabs);
+
+        for (i = tabs.begin(); i != tabs.end(); ++i) {
+            *(*i) << msg;
+        }
+    
+    }
+}
+
+void MainWindow::displayMessage(const string& msg, FE::Destination d, ServerConnection *conn)
 {
     if (d == FE::CURRENT) {
         Tab *tab = _nb->getCurrent(conn);
@@ -90,27 +95,22 @@ void MainWindow::onDisplayMessage(const string& msg, FE::Dest d, ServerConnectio
     }
 }
 
-void MainWindow::onDisplayMessageInChan(const string& msg, Channel& chan, ServerConnection *conn)
+void MainWindow::displayMessage(const string& msg, ChannelBase& chan, ServerConnection *conn)
 {
     Tab *tab = _nb->findTab(chan.getName(), conn);
 
-    // does the channel exist? if not, we probably did a 'closeCurrent() and
-    // parted it...
+    // if the channel doesn't exist, it's probably a query. (the channel is
+    // created on join) - there is also a hack here to ensure that it's not
+    // a channel
+    if (!tab && chan.getName().at(0) != '#') {
+        tab = _nb->addQueryTab(chan.getName(), conn);
+    }
+
     if (tab)
-          *tab << msg;
+        *tab << msg;
 }
 
-void MainWindow::onDisplayMessageInQuery(const string& msg, const string& to, ServerConnection *conn)
-{
-    Tab *tab = _nb->findTab(to, conn);
-
-    if (!tab)
-          tab = _nb->addQueryTab(to, conn);
-
-    *tab << msg;
-}
-
-void MainWindow::onJoin(const string& nick, Channel& chan, ServerConnection *conn)
+void MainWindow::join(const string& nick, Channel& chan, ServerConnection *conn)
 {
     Tab *tab = _nb->findTab(chan.getName(), conn, true);
     if (!tab) {
@@ -118,22 +118,12 @@ void MainWindow::onJoin(const string& nick, Channel& chan, ServerConnection *con
         return;
     } else if (!tab->isActive()) {
         tab->setActive();
-        tab->setName(chan.getName());
+        tab->getLabel()->set_text(chan.getName());
     }
     tab->insertUser(nick);
 }
 
-void MainWindow::onKick(const string& kicker, Channel& chan, const string& nick, const string& msg, ServerConnection *conn)
-{
-    Tab *tab = _nb->findTab(chan.getName(), conn);
-    if (nick == conn->Session.nick) {
-        // It's us who's been kicked
-        tab->setInActive();
-    }
-    tab->removeUser(nick);
-}
-
-void MainWindow::onPart(const string& nick, Channel& chan, ServerConnection *conn)
+void MainWindow::part(const string& nick, Channel& chan, ServerConnection *conn)
 {
     Tab *tab = _nb->findTab(chan.getName(), conn);
     if (tab) {
@@ -145,91 +135,90 @@ void MainWindow::onPart(const string& nick, Channel& chan, ServerConnection *con
     }
 }
 
-void MainWindow::onQuit(const string& nick, const string& msg, ServerConnection *conn)
+void MainWindow::kick(const string& kicker, Channel& chan, const string& nick, const string& msg, ServerConnection *conn)
 {
-    vector<Tab*> tabs;
-    vector<Tab*>::const_iterator i;
+    Tab *tab = _nb->findTab(chan.getName(), conn);
+    if (nick == conn->Session.nick) {
+        // It's us who's been kicked
+        tab->setInActive();
+    }
+    tab->removeUser(nick);
+}
 
-    _nb->findTabs(nick, conn, tabs);
 
-    for (i = tabs.begin(); i != tabs.end(); ++i) {
-        (*i)->removeUser(nick);
+void MainWindow::quit(const string& nick, vector<ChannelBase*> chans, ServerConnection *conn)
+{
+    vector<ChannelBase*>::const_iterator i;
+
+    for (i = chans.begin(); i != chans.end(); ++i) {
+        if (Tab *tab = _nb->findTab((*i)->getName(), conn))
+            tab->removeUser(nick);
     }
 }
 
-void MainWindow::onNick(const string& nick, const string& to, ServerConnection *conn)
+void MainWindow::nick(const string& nick, const string& to, vector<ChannelBase*> chans, ServerConnection *conn)
 {
-    vector<Tab*> tabs;
-    vector<Tab*>::const_iterator i;
+    vector<ChannelBase*>::const_iterator i;
 
-    _nb->findTabs(nick, conn, tabs);
-
-    for (i = tabs.begin(); i != tabs.end(); ++i) {
-        (*i)->renameUser(nick, to);
+    for (i = chans.begin(); i != chans.end(); ++i) {
+        if (Tab *tab = _nb->findTab((*i)->getName(), conn))
+              tab->renameUser(nick, to);
     }
 }
 
-void MainWindow::onCUMode(const string& nick, Channel& chan, const std::map<string, IRC::UserMode>& users, ServerConnection *conn)
+void MainWindow::CUMode(const string& nick, Channel& chan, const std::vector<User>& users, ServerConnection *conn)
 {
     Tab *tab = _nb->findTab(chan.getName(), conn);
 
-    std::map<string, IRC::UserMode>::const_iterator i;
+    std::vector<User>::const_iterator i;
     for (i = users.begin(); i != users.end(); ++i) {
-        tab->removeUser(i->first);
-        tab->insertUser(i->first, i->second);
+        tab->removeUser(i->nick);
+        tab->insertUser(i->nick, i->getMode());
     }
 }
 
-void MainWindow::onNames(Channel& c, ServerConnection *conn)
+void MainWindow::names(Channel& c, ServerConnection *conn)
 {
     Tab *tab = _nb->findTab(c.getName(), conn);
 
-    std::map<string, IRC::UserMode> users = c.getUsers();
-    std::map<string, IRC::UserMode>::const_iterator i;
+    std::vector<User*> users = c.getUsers();
+    std::vector<User*>::const_iterator i;
 
     for (i = users.begin(); i != users.end(); ++i) {
-        tab->insertUser(i->first, i->second);
+        tab->insertUser((*i)->nick, (*i)->getMode());
     }
 }
 
-void MainWindow::onHighlight(const string& to, ServerConnection* conn)
+void MainWindow::highlight(ChannelBase& chan, ServerConnection* conn)
 {
-    Tab *tab = _nb->findTab(to, conn);
+    Tab *tab = _nb->findTab(chan.getName(), conn);
 
     if (tab)
           _nb->highlight(tab);
-
 }
 
-void MainWindow::onAway(bool away, ServerConnection* conn)
-{
-    vector<Tab*>::iterator i;
-    vector<Tab*> vec;
-
-    _nb->Tabs(conn, vec);
-    if (away) {
-        for (i = vec.begin(); i != vec.end(); ++i) {
-            (*i)->setAway();
-        }
-    } else {
-        for (i = vec.begin(); i != vec.end(); ++i) {
-            (*i)->setUnAway();
-        }
-    }
-}
-
-void MainWindow::onDisconnected(ServerConnection* conn)
+void MainWindow::away(bool away, ServerConnection* conn)
 {
     vector<Tab*> tabs;
-    vector<Tab*>::const_iterator i;
-    _nb->findTabs(conn, tabs);
 
-    for (i = tabs.begin(); i != tabs.end(); ++i) {
-        (*i)->setInActive();
+    _nb->findTabs(conn, tabs);
+    if (away) {
+        std::for_each(tabs.begin(), tabs.end(), std::mem_fun(&Tab::setAway));
+    } else {
+        std::for_each(tabs.begin(), tabs.end(), std::mem_fun(&Tab::setUnAway));
     }
 }
 
-void MainWindow::onNewTab(ServerConnection *conn)
+void MainWindow::disconnected(ServerConnection* conn)
+{
+    vector<Tab*> tabs;
+
+    _nb->findTabs(conn, tabs);
+
+    std::for_each(tabs.begin(), tabs.end(), std::mem_fun(&Tab::setInActive));
+}
+
+void MainWindow::newTab(ServerConnection *conn)
 {
     string name = "server";
     conn->Session.servername = name;
@@ -292,6 +281,9 @@ gint MainWindow::on_key_press_event(GdkEventKey* e)
         if (tab && tab->getConn()->Session.isConnected && tab->isActive()) {
             // It's a channel, so we need to part it
             tab->getConn()->sendPart(tab->getLabel()->get_text(), "");
+        } else {
+            // Query
+            _nb->getCurrent()->getConn()->removeChannel(_nb->getCurrent()->getLabel()->get_text());
         }
         _nb->closeCurrent();
     }

@@ -19,7 +19,6 @@
 #include <sstream>
 #include <gtk--/frame.h>
 #include <Utils.h>
-#include "Tab.h"
 #include "MainWindow.h"
 #include "Prefs.h"
 
@@ -27,11 +26,69 @@ using std::vector;
 using std::string;
 
 Prefs::Prefs()
-    : Gtk::Notebook()
+    : Gtk::VBox()
 {
 
+    notebook = manage(new Gtk::Notebook());
+    set_spacing(2);
+    pack_start(*notebook, 1, 1);
+
+    Gtk::VBox *generalbox = manage(new Gtk::VBox());
     Gtk::VBox *performbox = manage(new Gtk::VBox());
     Gtk::VBox *prefsbox = manage(new Gtk::VBox());
+
+    // General options-tab
+
+    // IRC nick
+    ircnickentry = manage(new Gtk::Entry());
+    ircnickentry->set_text(AppWin->getApp()->getCfg().getOpt("nick"));
+    Gtk::Frame *frame20 = manage(new Gtk::Frame("Nickname"));
+    frame20->add(*ircnickentry);
+    generalbox->pack_start(*frame20, 0, 0);
+
+    // IRC nick
+    realnameentry = manage(new Gtk::Entry());
+    realnameentry->set_text(AppWin->getApp()->getCfg().getOpt("realname"));
+    Gtk::Frame *frame21 = manage(new Gtk::Frame("Real name"));
+    frame21->add(*realnameentry);
+    generalbox->pack_start(*frame21, 0, 0);
+
+    // IRC nick
+    ircuserentry = manage(new Gtk::Entry());
+    ircuserentry->set_text(AppWin->getApp()->getCfg().getOpt("ircuser"));
+    Gtk::Frame *frame22 = manage(new Gtk::Frame("IRC username (ident)"));
+    frame22->add(*ircuserentry);
+    generalbox->pack_start(*frame22, 0, 0);
+
+    notebook->pages().push_back(Gtk::Notebook_Helpers::TabElem(*generalbox, "General"));
+
+    // Preferences-tab
+
+    // nickcompletion character
+    nickcompletionentry = manage(new Gtk::Entry(1));
+    nickcompletionentry->set_text(AppWin->getApp()->getCfg().getOpt("nickcompletion_character"));
+    Gtk::Frame *frame10 = manage(new Gtk::Frame("Nick-completion character"));
+    frame10->add(*nickcompletionentry);
+    prefsbox->pack_start(*frame10, 0, 0);
+
+    // DCC ip
+    dccipentry = manage(new Gtk::Entry());
+    dccipentry->set_text(AppWin->getApp()->getCfg().getOpt("dccip"));
+    Gtk::Frame *frame11 = manage(new Gtk::Frame("DCC IP-Address"));
+    frame11->add(*dccipentry);
+    prefsbox->pack_start(*frame11, 0, 0);
+
+    // Highligted words
+    highlightentry = manage(new Gtk::Entry());
+    highlightentry->set_text(AppWin->getApp()->getCfg().getOpt("highlight_words"));
+    Gtk::Frame *frame12 = manage(new Gtk::Frame("Words to highlight on (space seperated)"));
+    frame12->add(*highlightentry);
+    prefsbox->pack_start(*frame12, 0, 0);
+
+    notebook->pages().push_back(Gtk::Notebook_Helpers::TabElem(*prefsbox, "Preferences"));
+
+    // Autojoin/perform-tab
+
     Gtk::HBox *serverhbox = manage(new Gtk::HBox());
     Gtk::Frame *frame = manage(new Gtk::Frame("Available servers"));
     clist = manage(new Gtk::CList(1));
@@ -52,52 +109,43 @@ Prefs::Prefs()
     Gtk::VBox *serverinfobox = manage(new Gtk::VBox());
     serverhbox->pack_start(*serverinfobox);
 
-    /* hbox for buttons */
+    // hbox for buttons
     savehbox = manage(new Gtk::HBox());
     savehbox->set_spacing(5);
     serverinfobox->pack_start(*savehbox, 0, 0);
 
-    /* hostname */
+    // hostname
     hostentry = manage(new Gtk::Entry());
     Gtk::Frame *frame1 = manage(new Gtk::Frame("Hostname"));
     frame1->add(*hostentry);
     serverinfobox->pack_start(*frame1, 0, 0);
 
-    /* port */
+    // port
     portentry = manage(new Gtk::Entry());
     Gtk::Frame *frame2 = manage(new Gtk::Frame("Port"));
     frame2->add(*portentry);
     serverinfobox->pack_start(*frame2, 0, 0);
 
-    /* password */
+    // password
     passentry = manage(new Gtk::Entry());
     Gtk::Frame *frame3 = manage(new Gtk::Frame("Password"));
     frame3->add(*passentry);
     serverinfobox->pack_start(*frame3, 0, 0);
 
-    /* nick */
+    // nick
     nickentry = manage(new Gtk::Entry());
     Gtk::Frame *frame4 = manage(new Gtk::Frame("Nick"));
     frame4->add(*nickentry);
     serverinfobox->pack_start(*frame4, 0, 0);
 
-    /* nick */
+    // nick
     cmdtext = manage(new Gtk::Text());
     cmdtext->set_editable(true);
     Gtk::Frame *frame5 = manage(new Gtk::Frame("Commands to perform on connect"));
     frame5->add(*cmdtext);
     serverinfobox->pack_start(*frame5, 0, 0);
 
-    /* lower hbox */
-    Gtk::HBox *bottomhbox = manage(new Gtk::HBox());
-    serverinfobox->pack_end(*bottomhbox, 0, 0);
-
-    /* close prefs button */
-    closebutton = manage(new Gtk::Button("Close prefs"));
-    closebutton->clicked.connect(slot(this, &Prefs::endPrefs));
-    bottomhbox->pack_end(*closebutton, 0, 0);
-
-    /* save button */
+    // save button
     Gtk::Button *savebutton = manage(new Gtk::Button("Save entry"));
     savebutton->clicked.connect(slot(this, &Prefs::saveEntry));
     savehbox->pack_start(*savebutton, 0, 0);
@@ -109,21 +157,21 @@ Prefs::Prefs()
     addnewbutton->clicked.connect(slot(this, &Prefs::addEntry));
 
     performbox->pack_start(*serverhbox, 1, 1);
-    pages().push_back(Gtk::Notebook_Helpers::TabElem(*performbox, "Autojoin servers"));
+    notebook->pages().push_back(Gtk::Notebook_Helpers::TabElem(*performbox, "Autojoin servers"));
 
-    /* nickcompletion character */
-    nickcompletionentry = manage(new Gtk::Entry(1));
-    nickcompletionentry->set_text(AppWin->getApp()->getCfg().getOpt("nickcompletion_character"));
-    Gtk::Frame *frame10 = manage(new Gtk::Frame("Nick-completion character"));
-    frame10->add(*nickcompletionentry);
-    prefsbox->pack_start(*frame10, 0, 0);
-
-    /* save button */
+    // Ok, Apply and Cancel buttons
+    Gtk::Button *closebutt = manage(new Gtk::Button("Close"));
     Gtk::Button *savebutt = manage(new Gtk::Button("Save settings"));
-    savebutt->clicked.connect(slot(this, &Prefs::saveSettings));
-    prefsbox->pack_start(*savebutt, 0, 0);
 
-    pages().push_back(Gtk::Notebook_Helpers::TabElem(*prefsbox, "Preferences"));
+    savebutt->clicked.connect(slot(this, &Prefs::saveSettings));
+    closebutt->clicked.connect(slot(this, &Prefs::endPrefs));
+
+    Gtk::HBox *bottommenubox = manage(new Gtk::HBox());
+    bottommenubox->pack_end(*savebutt, 0, 0);
+    bottommenubox->pack_end(*closebutt, 0, 0);
+
+    pack_start(*bottommenubox, 0, 1);
+
     show_all();
 }
 
@@ -141,7 +189,11 @@ void Prefs::endPrefs()
 void Prefs::saveSettings()
 {
     AppWin->getApp()->getCfg().setOpt("nickcompletion_character", nickcompletionentry->get_text());
-
+    AppWin->getApp()->getCfg().setOpt("dccip", dccipentry->get_text());
+    AppWin->getApp()->getCfg().setOpt("highlight_words", highlightentry->get_text());
+    AppWin->getApp()->getCfg().setOpt("realname", realnameentry->get_text());
+    AppWin->getApp()->getCfg().setOpt("ircuser", ircuserentry->get_text());
+    AppWin->getApp()->getCfg().setOpt("nick", ircnickentry->get_text());
 }
 
 void Prefs::saveEntry()

@@ -19,10 +19,9 @@
 #ifndef CONFIGHANDLER_H
 #define CONFIGHANDLER_H
 
-#include <fstream>
 #include <string>
-#include <iostream>
 #include <map>
+#include <vector>
 #include "Utils.h"
 
 struct autoJoin {
@@ -57,7 +56,7 @@ public:
     void removeServer(struct autoJoin* a);
 
     /* return "auto-join list" */
-    std::vector<struct autoJoin*> getServers() { return _servers; }
+    const std::vector<struct autoJoin*>& getServers() { return _servers; }
 
     /* write server list */
     bool writeServers();

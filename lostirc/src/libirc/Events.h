@@ -22,16 +22,13 @@
 #include <string>
 #include <vector>
 #include <sstream>
-#include "ServerConnection.h"
-
-class ServerConnection;
 
 enum Event {
-    PRIVMSG = 0, PRIVMSG_HIGHLIGHT, ACTION, ACTION_HIGHLIGHT, SERVMSG,
-    SERVMSG2, CTCP, TOPICCHANGE, TOPICIS, TOPICTIME, NOTICEPRIV, NOTICEPUBL,
-    ERROR, AWAY, BANLIST, UNKNOWN, JOIN, PART, QUIT, NICK, MODE, CMODE,
-    WALLOPS, KICKED, OPPED, DEOPPED, VOICED, DEVOICED, BANNED, UNBANNED,
-    INVITED, CONNECTING, NAMES
+    PRIVMSG = 0, PRIVMSG_HIGHLIGHT, ACTION, ACTION_HIGHLIGHT, DCC_RECEIVE,
+    SERVMSG, SERVMSG2, SERVMSG3, CTCP, CTCP_MULTI, TOPICCHANGE, TOPICIS,
+    TOPICTIME, NOTICEPRIV, NOTICEPUBL, ERROR, AWAY, BANLIST, UNKNOWN, JOIN,
+    PART, QUIT, NICK, MODE, CMODE, WALLOPS, KICKED, OPPED, DEOPPED, VOICED,
+    DEVOICED, BANNED, UNBANNED, INVITED, CONNECTING, NAMES
 };
 
 class Tmpl
@@ -47,28 +44,5 @@ public:
 
     std::string result();
 };
-
-namespace FE
-{
-
-    enum Dest {
-        CURRENT, ALL
-    };
-
-    /* when we want to send a message to a channel */
-    void emit(Tmpl& t, Channel& chan, ServerConnection *conn);
-
-    /* when we want to send a message to multiple channels */
-    void emit(Tmpl& t, const std::vector<Channel*>& to, ServerConnection *conn);
-
-    /* when we want to send a message to a query */
-    void emit(Tmpl& t, const std::string& nick, ServerConnection *conn);
-
-    /* when we have no destination for our msg (frontend uses current tab) */
-    void emit(Tmpl& t, Dest, ServerConnection *conn);
-
-    Tmpl get(Event i);
-}
-
 
 #endif

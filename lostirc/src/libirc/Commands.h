@@ -31,38 +31,44 @@ struct UserCommands {
     int reqConnected;
 };
 
-class Commands
+namespace Commands
 {
-public:
-    static void send(ServerConnection *conn, std::string cmd, const std::string& params);
 
-    static void Join(ServerConnection *conn, const std::string& params);
-    static void Part(ServerConnection *conn, const std::string& params);
-    static void Quit(ServerConnection *conn, const std::string& params);
-    static void Kick(ServerConnection *conn, const std::string& params);
-    static void Server(ServerConnection *conn, const std::string& params);
-    static void Disconnect(ServerConnection *conn, const std::string& params);
-    static void Nick(ServerConnection *conn, const std::string& params);
-    static void Whois(ServerConnection *conn, const std::string& params);
-    static void Mode(ServerConnection *conn, const std::string& params);
-    static void Ctcp(ServerConnection *conn, const std::string& cmd);
-    static void Away(ServerConnection *conn, const std::string& params);
-    static void Names(ServerConnection *conn, const std::string& params);
-    static void Invite(ServerConnection *conn, const std::string& cmd);
-    static void Topic(ServerConnection *conn, const std::string& cmd);
-    static void Banlist(ServerConnection *conn, const std::string& params);
-    static void Msg(ServerConnection *conn, const std::string& params);
-    static void Notice(ServerConnection *conn, const std::string& params);
-    static void Me(ServerConnection *conn, const std::string& params);
-    static void Who(ServerConnection *conn, const std::string& params);
-    static void List(ServerConnection *conn, const std::string& params);
-    static void Set(ServerConnection *conn, const std::string& params);
-    static void Quote(ServerConnection *conn, const std::string& params);
-    static void commands(ServerConnection *conn, const std::string& params);
-//    static void Exec(ServerConnection *conn, const std::string& params);
-    static bool commandCompletion(const std::string& word, std::string& str);
+    void send(ServerConnection *conn, std::string cmd, const std::string& params);
+    void Join(ServerConnection *conn, const std::string& params);
+    void Part(ServerConnection *conn, const std::string& params);
+    void Quit(ServerConnection *conn, const std::string& params);
+    void Kick(ServerConnection *conn, const std::string& params);
+    void Server(ServerConnection *conn, const std::string& params);
+    void Disconnect(ServerConnection *conn, const std::string& params);
+    void Nick(ServerConnection *conn, const std::string& params);
+    void Whois(ServerConnection *conn, const std::string& params);
+    void Mode(ServerConnection *conn, const std::string& params);
+    void Ctcp(ServerConnection *conn, const std::string& cmd);
+    void Away(ServerConnection *conn, const std::string& params);
+    void Awayall(ServerConnection *conn, const std::string& params);
+    void Names(ServerConnection *conn, const std::string& params);
+    void Invite(ServerConnection *conn, const std::string& cmd);
+    void Topic(ServerConnection *conn, const std::string& cmd);
+    void Banlist(ServerConnection *conn, const std::string& params);
+    void Msg(ServerConnection *conn, const std::string& params);
+    void Notice(ServerConnection *conn, const std::string& params);
+    void Me(ServerConnection *conn, const std::string& params);
+    void Who(ServerConnection *conn, const std::string& params);
+    void List(ServerConnection *conn, const std::string& params);
+    void Set(ServerConnection *conn, const std::string& params);
+    void Quote(ServerConnection *conn, const std::string& params);
+    void commands(ServerConnection *conn, const std::string& params);
+    //    void Exec(ServerConnection *conn, const std::string& params);
+    void Oper(ServerConnection* conn, const std::string& params);
+    void Kill(ServerConnection* conn, const std::string& params);
+    void Wallops(ServerConnection* conn, const std::string& params);
+    void DCC(ServerConnection* conn, const std::string& params);
+    void Admin(ServerConnection* conn, const std::string& params);
+    void Whowas(ServerConnection* conn, const std::string& params);
+    bool commandCompletion(const std::string& word, std::string& str);
 
-};
+}
 
 class CommandException : public std::exception
 {

@@ -20,23 +20,17 @@
 #define PARSER_H
 
 #include <string>
-#include <vector>
-#include <algorithm>
-#include "irc_defines.h"
 
 // This class takes care of parsing incoming messages from the server
 
 class ServerConnection;
-class LostIRCApp;
-class Events;
 
 class Parser
 {
     ServerConnection *_conn;
-    Events *_evts;
 
 public:
-    Parser(LostIRCApp *app, ServerConnection *conn);
+    Parser(ServerConnection *conn);
 
     void parseLine(std::string &data);
 
@@ -71,7 +65,10 @@ private:
     std::string findHost(const std::string& str) {
         return str.substr(str.find_first_of("!") + 1);
     }
-    std::string getWord(const std::string& str, int n);
+
+    bool shouldHighlight(const std::string& str);
 };
+
+std::string getWord(const std::string& str, int n);
 
 #endif

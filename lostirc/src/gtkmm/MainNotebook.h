@@ -43,7 +43,7 @@ public:
 
     void findTabs(const std::string& nick, ServerConnection *conn, std::vector<Tab*>& vec);
     void findTabs(ServerConnection *conn, std::vector<Tab*>& vec);
-    void Tabs(ServerConnection *conn, std::vector<Tab*>& vec);
+    void Tabs(std::vector<Tab*>& vec);
     void closeCurrent();
     void highlight(Tab *tab);
     void onInserted(Tab *tab);
@@ -52,8 +52,6 @@ public:
 
 private:
     void switchPage(Gtk::Notebook_Helpers::Page *p, unsigned int n);
-    void parseAndInsert(const std::string& str, Gtk::Text *text);
-    void insertWithColor(int color, Gtk::Text *text, const std::string& str);
     void fontSelectionOk();
     void destroyFontSelection(Gtk::FontSelectionDialog *w);
 

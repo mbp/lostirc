@@ -18,6 +18,7 @@
 
 #include <sstream>
 #include "GuiCommands.h"
+#include "Tab.h"
 #include "Entry.h"
 
 using std::vector;
@@ -35,19 +36,22 @@ void Entry::onEntry()
     if (get_text().length() == 0)
           return;
 
-    string msg(get_text());
-    if (msg.at(0) == '/') {
+    string msg = get_text();
+
+    // If the line is prefixed by two slashes, just send it as a msg.
+    if (msg.length() > 1 && (msg.at(0) == '/' && msg.at(1) == '/')) {
+        sendMsg(msg.substr(1));
+    } else if (msg.at(0) == '/') {
 
         string::size_type pos = msg.find_first_of(" ");
 
         string params;
-        if (pos != string::npos) {
-            params = msg.substr(pos + 1);
-        }
+        if (pos != string::npos)
+              params = msg.substr(pos + 1);
 
         try {
 
-            GuiCommands::send(_tab->getConn(), msg.substr(1, pos - 1), params);
+            GuiCommands::send(_tab->getConn(), Util::upper(msg.substr(1, pos - 1)), params);
 
         } catch (CommandException& ce) {
 
@@ -56,13 +60,7 @@ void Entry::onEntry()
         }
 
     } else {
-        if (!_tab->getConn()->Session.isConnected) {
-            *_tab << "Not connected to server.\n";
-        } else if (!_tab->isActive()) {
-            *_tab << "Not on any channel.\n";
-        } else {
-            printText(msg);
-        }
+        sendMsg(msg);
     }
 
     _entries.push_back(msg);
@@ -70,17 +68,23 @@ void Entry::onEntry()
     set_text("");
 }
 
-void Entry::printText(const string& msg)
+void Entry::sendMsg(const string& msg)
 {
-    std::istringstream ss(msg);
+    if (!_tab->getConn()->Session.isConnected) {
+        *_tab << "Not connected to server.\n";
+    } else if (!_tab->isActive()) {
+        *_tab << "Not on any channel.\n";
+    } else {
+        std::istringstream ss(msg);
 
-    if (ss.peek() == '\n')
-          ss.ignore();
+        if (ss.peek() == '\n')
+              ss.ignore();
 
-    string line;
-    while (getline(ss, line)) {
-        _tab->getConn()->sendMsg(_tab->getLabel()->get_text(), line);
-        *_tab << "\0037<\0030" + _tab->getConn()->Session.nick + "\0037>\0030 " + line + '\n';
+        string line;
+        while (getline(ss, line)) {
+            _tab->getConn()->sendMsg(_tab->getLabel()->get_text(), line);
+            *_tab << "\0037<\0030" + _tab->getConn()->Session.nick + "\0037>\0030 " + line + '\n';
+        }
     }
 }
 

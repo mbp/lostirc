@@ -9,6 +9,8 @@ libirc_a_SOURCES = ServerConnection.cpp ServerConnection.h \
                        Utils.cpp Utils.h \
                        Events.cpp Events.h \
                        Channel.cpp Channel.h \
+                       DCC.cpp DCC.h \
+                       FrontEnd.cpp FrontEnd.h \
                        irc_defines.h
 
 libirc_a_LIBS = @SIGC_LIBS@ @GLIB_LIBS@

@@ -1,3 +1,56 @@
+LostIRC (x.x.x)
+  * Implement /KILL and /WALLOPS. 
+  * Improve appearence of some messages (remove ~/.lostirc/events.conf to
+    enable them)
+  * When joining a channel with > 1000 users, the client was extremely slow.
+  * The actual away message is now being shown instead of just "You are away"
+  * When an unknown command is used, the command is now being sent to the
+    IRC-server. For example, /PASS now works for bouncers even though the
+    command isn't implemented in LostIRC.
+  * In preferences, it's now possible to set nick, realname and irc-user.
+  * A new command, /AWAYALL has been implemented - using this option you can
+    go away on all connected servers instead of just one at the time with
+    /AWAY.
+  * In preferences, you can now define which words to highlight on.
+
+LostIRC (0.1.0) - Fri May 31st 2002
+  * The client now supports DCC SEND.
+  * When connecting to a new server and doing a hostname lookup, the client
+    froze until the lookup was finished, fixed.
+  * Typing two slashes as the first characters will now make the message to be
+    sent anyway, eg. '//hello world' sends a message with the text '/hello
+    world'.
+  * LostIRC now provides a manpage.
+  * When someone changed the channel limit (eg. +l 50), it wasn't shown in the
+    client at all. Fixed.
+  * When changing nick, and the nick was taken, a _ would be appended
+    automatically no matter what. The error message is now shown instead.
+  * When a CTCP is sent to a channel and not the user only, the message will
+    implicitly note that.
+  * Fix crash when connecting to some Unreal ircd servers
+    (eg. irc.linuxfromscratch.org and irc.winbot.co.uk)
+  * Fix crash when using /NAMES for a channel you are not currently on.
+  * /ADMIN and /WHOWAS commands implemented.
+
+LostIRC (0.0.8) - Sat May 11th 2002
+  * gcc-3.1 fixes (thanks, Mads Martin Jørgensen)
+  * When disconnected from a server, the last tab belonging to that
+    server-connecting could not be removed.
+  * Replies are now sent upon CTCP PING from other clients.
+  * When a user quits and a query exists with him, the quit-message is now
+    mentioned in the query.
+  * When on a network connection where identd lookups took over 30 seconds,
+    the connection timed out before the connection with the server had been
+    established.. fixed.
+  * Implement /OPER command and other code-contributions (thanks, Martin
+    Scholl)
+  * You can now change nick before connecting to the server using /NICK.
+  * When auto-reconnecting is going on, you can now stop it by implictly
+    calling /DISCONNECT.
+  * When a user had voice and op, his voice wasn't shown after deopping him.
+  * The client crashed if any invalid commands/text was written in perform,
+    fixed.
+
 LostIRC (0.0.7) - Tue Apr 16th 2002
   * In the preferences window, you can now define a different nick
     completion character than the default (,).

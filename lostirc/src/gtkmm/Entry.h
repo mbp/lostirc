@@ -21,7 +21,6 @@
 
 #include <vector>
 #include <string>
-#include "Tab.h"
 
 class Tab;
 
@@ -34,7 +33,7 @@ public:
     gint on_key_press_event(GdkEventKey* e);
 private:
     void onEntry();
-    void printText(const std::string& msg);
+    void sendMsg(const std::string& msg);
     std::vector<std::string> _entries;
     Tab* _tab;
     std::vector<std::string>::iterator i;

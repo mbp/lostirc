@@ -20,25 +20,59 @@
 #define CHANNEL_H
 
 #include <string>
-#include <map>
-#include <set>
 #include <vector>
 #include "irc_defines.h"
 
-class Channel {
-    std::string name;
-    std::map<std::string, IRC::UserMode> users;
-    //std::vector<std::string> users;
+class User {
+public:
+    User() : opped(false), voiced(false) { }
+    std::string nick;
+    // a max of 2 usermodes: op and voiced
+    bool opped;
+    bool voiced;
+    IRC::UserMode getMode() const;
+};
+
+class ChannelBase {
+public:
+    virtual ~ChannelBase() { }
+    virtual std::string getName() = 0;
+    virtual bool findUser(const std::string& n) = 0;
+    virtual void renameUser(const std::string& from, const std::string& to) = 0;
+
+};
+
+class Channel : public ChannelBase {
+    std::string _name;
+    std::vector<User*> _users;
 
 public:
-    Channel(const std::string& n) { name = n; endOfNames = false; }
-    std::string getName() { return name; }
+    Channel(const std::string& n) : _name(n), endOfNames(false) { }
+    std::string getName() { return _name; }
+    bool findUser(const std::string& u);
+    void renameUser(const std::string& from, const std::string& to);
+
     void addUser(const std::string& n, IRC::UserMode i = IRC::NONE);
     void removeUser(const std::string& u);
-    bool findUser(const std::string& u);
-    std::map<std::string, IRC::UserMode> getUsers() { return users; }
+    const std::vector<User*>& getUsers() { return _users; }
 
-    bool endOfNames; // have we reached our 'ENDOFNAMES' on the channel join?
+    User* getUser(const std::string& n);
+
+    bool endOfNames; // have we reached our 'ENDOFNAMES' on channel join?
+};
+
+class Query : public ChannelBase {
+    std::string _name;
+
+public:
+    Query(const std::string& n) : _name(n) { }
+
+    std::string getName() { return _name; }
+    bool findUser(const std::string& n) { return (n == _name); }
+    void renameUser(const std::string& from, const std::string& to) {
+        if (_name == from) _name = to;
+    }
+
 };
 
 #endif

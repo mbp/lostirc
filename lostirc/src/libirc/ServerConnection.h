@@ -21,21 +21,25 @@
 
 #include <string>
 #include <glib.h>
-#include <unistd.h>
 #include "Socket.h"
 #include "Parser.h"
 #include "Channel.h"
 
-class ServerConnection
+class ServerConnection : public SigC::Object
 {
 
 public:
     ServerConnection(const std::string& host, const std::string& nick, int port = 6667, bool doconnect = false);
     ~ServerConnection();
 
-    bool connect(const std::string& host, int port = 6667, const std::string& pass = "");
-    bool connect();
+    void connect(const std::string& host, int port = 6667, const std::string& pass = "");
+    void connect();
+    void on_error(const char *msg);
+    void on_host_resolved();
     void disconnect();
+    void addConnectionTimerCheck();
+    void addReconnectTimer();
+    bool removeReconnectTimer();
     bool sendPong(const std::string& crap);
     bool sendPing(const std::string& crap = "");
     bool sendUser(const std::string& nick, const std::string& localhost, const std::string& remotehost, const std::string& name);
@@ -52,20 +56,31 @@ public:
     bool sendQuit(const std::string& quitmsg = "");
     bool sendMode(const std::string& params);
     bool sendCtcp(const std::string& to, const std::string& params);
+    bool sendCtcpNotice(const std::string& to, const std::string& params);
     bool sendTopic(const std::string& chan, const std::string& params);
     bool sendAway(const std::string& params);
+    bool sendAdmin(const std::string& params);
+    bool sendWhowas(const std::string& params);
     bool sendInvite(const std::string& to, const std::string& params);
     bool sendBanlist(const std::string& chan);
     bool sendMe(const std::string& to, const std::string& msg);
     bool sendWho(const std::string& mask);
     bool sendList(const std::string& params);
+    bool sendOper(const std::string& login, const std::string& password);
+    bool sendKill(const std::string& nick, const std::string& reason);
+    bool sendWallops(const std::string& message);
     bool sendRaw(const std::string& text);
 
-    Channel* addChannel(const std::string& n);
+    void addChannel(const std::string& n);
+    void addQuery(const std::string &n);
+    void removeQuery(const std::string &n);
     bool removeChannel(const std::string& n);
-    std::vector<Channel*> findUser(const std::string& n);
+    std::vector<ChannelBase*> findUser(const std::string& n);
     Channel* findChannel(const std::string& c);
+    Query* findQuery(const std::string& c);
     void sendCmds();
+
+    const char * getLocalIP() { return _socket->getLocalIP(); }
 
     static gboolean onReadData(GIOChannel *, GIOCondition, gpointer);
     static gboolean onConnect(GIOChannel *, GIOCondition, gpointer);
@@ -77,25 +92,30 @@ public:
         std::string nick;
         std::string realname;
         std::string password;
+        std::string awaymsg;
         bool isConnected;
         bool hasRegistered;
         bool isAway;
+        bool endOfMotd;
         int port;
         bool sentLagCheck;
         std::string servername;
         std::string host;
-        std::vector<Channel*> channels;
+        std::vector<ChannelBase*> channels;
         std::vector<std::string> cmds;
     } Session;
 
 private:
     Socket *_socket;
-    Parser *_p;
+    Parser *_parser;
     std::string tmpbuf;
+
+    void doCleanup();
 
     guint _writeid;
     guint _watchid;
     guint _connectioncheckid;
+    guint _autoreconnectid;
 };
 
 #endif

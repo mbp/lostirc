@@ -56,8 +56,8 @@ GdkColor colors[] = {
 };
 
 Tab::Tab(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
-    : Gtk::VBox(), is_highlighted(false), is_on_channel(true),
-      hasPrefs(false), _label(label), _conn(conn), _font(font)
+    : Gtk::VBox(), isHighlighted(false), hasPrefs(false),
+      isOnChannel(true), _label(label), _conn(conn), _font(font)
 {
     // To hold current context (colors) for Text widget
     _current_cx = new Gtk::Text::Context;
@@ -125,7 +125,7 @@ void Tab::setStyle() {
 
 Tab& Tab::operator<<(const string& str)
 {
-    AppWin->_nb->onInserted(this);
+    AppWin->getNotebook()->onInserted(this);
 
     // Add timestamp 
     time_t timeval = time(0);
@@ -183,6 +183,8 @@ void Tab::insertWithColor(int color, const string& str)
 
 void Tab::setAway()
 {
+    setUnAway();
+
     bool away = false;
 
     Gtk::Box_Helpers::BoxList::iterator i;
@@ -194,7 +196,7 @@ void Tab::setAway()
     }
 
     if (!away) {
-        Gtk::Label *a = manage(new Gtk::Label("You are away"));
+        Gtk::Label *a = manage(new Gtk::Label("Away (" + _conn->Session.awaymsg + ")"));
         _hbox2->pack_start(*a);
         _hbox2->show_all();
     }
@@ -238,7 +240,7 @@ TabChannel::TabChannel(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font
     _clist->set_usize(100, 100);
     swin->add(*_clist);
 
-    getHBox()->pack_start(*v, 0, 0, 0);
+    _hbox->pack_start(*v, 0, 0, 0);
     v->pack_start(*_users, 0, 0, 0);
     v->pack_start(*swin, 1, 1, 0);
 }
@@ -261,7 +263,7 @@ void TabChannel::insertUser(const vector<string>& users)
     }
 }
 
-void TabChannel::insertUser(const string& nick, IRC::UserMode m = IRC::NONE)
+void TabChannel::insertUser(const string& nick, IRC::UserMode m)
 {
     vector<string> tmp;
 
@@ -346,15 +348,13 @@ bool TabChannel::nickCompletion(const string& word, string& str)
     int matches = 0;
     string nicks;
     // Convert it to lowercase so we can search ignoring the case
-    string lcword = word;
-    lcword = Util::lower(lcword);
+    string lcword = Util::lower(word);
     while(i != getCList()->rows().end())
     {
         string nick = getCList()->cell(i->get_row_num(), 1).get_text();
 
         // Lower case again
-        string lcnick = nick;
-        lcnick = Util::lower(lcnick);
+        string lcnick = Util::lower(nick);
         if (lcword == lcnick.substr(0, lcword.length())) {
             str = nick;
             nicks += nick + " ";
@@ -367,7 +367,7 @@ bool TabChannel::nickCompletion(const string& word, string& str)
     } else if (matches > 1) {
         str = nicks + '\n';
         return false;
-    } else if (matches == 0) {
+    } else {
         str = "";
         return false;
     }

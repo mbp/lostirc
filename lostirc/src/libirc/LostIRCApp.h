@@ -21,22 +21,20 @@
 
 #include <vector>
 #include <string>
-#include <sigc++/signal_system.h>
 #include <sys/utsname.h>
 #include "ConfigHandler.h"
 #include "Channel.h"
-#include "Events.h"
+#include "DCC.h"
+#include "FrontEnd.h"
 
 class ServerConnection;
-
-using namespace SigC;
+class FrontEnd;
 
 class LostIRCApp
 {
-    std::string realname;
 
 public:
-    LostIRCApp();
+    LostIRCApp(FrontEnd *f);
     ~LostIRCApp();
     struct utsname getsysinfo();
 
@@ -47,48 +45,16 @@ public:
     ServerConnection* newServer();
 
     ConfigHandler& getCfg() { return _cfg; }
+    DCC_queue& getDcc() { return _dcc_queue; }
+    const std::vector<ServerConnection*>& getServers() { return _servers; }
 
-    // Signals 
-    
-    // When a new server connection is created, we instruct the frontend to
-    // create a new "tab".
-    Signal1<void, ServerConnection*> evtNewTab;
-
-    // Emitted when a user joins a channel
-    Signal3<void, const std::string&, Channel&, ServerConnection*> evtJoin;
-
-    // Emitted when a user parts a channel
-    Signal3<void, const std::string&, Channel&, ServerConnection*> evtPart;
-
-    // Emitted when a user quits a channel
-    Signal3<void, const std::string&, const std::string&, ServerConnection*> evtQuit;
-
-    // Emitted when a user changes nick
-    Signal3<void, const std::string&, const std::string&, ServerConnection*> evtNick;
-
-    // Emitted when we receive all the names from the channel
-    Signal2<void, Channel&, ServerConnection*> evtNames;
-    Signal4<void, const std::string&, Channel&, const std::map<std::string, IRC::UserMode>&, ServerConnection*> evtCUMode;
-    Signal5<void, const std::string&, Channel&, const std::string&, const std::string&, ServerConnection*> evtKick;
-
-    // Emitted when the frontend needs to diplay a message
-    Signal3<void, const std::string&, FE::Dest, ServerConnection*> evtDisplayMessage;
-    Signal3<void, const std::string&, Channel&, ServerConnection*> evtDisplayMessageInChan;
-    Signal3<void, const std::string&, const std::string&, ServerConnection*> evtDisplayMessageInQuery;
-
-    // Emitted when a channel needs to be highlighted
-    Signal2<void, const std::string&, ServerConnection*> evtHighlight;
-
-    // Emitted when the user is going away
-    Signal2<void, bool, ServerConnection*> evtAway;
-
-    Signal1<void, ServerConnection*> evtDisconnected;
-
+    FrontEnd* fe;
 
 private:
     std::vector<ServerConnection*> _servers;
 
     ConfigHandler _cfg;
+    DCC_queue _dcc_queue;
     struct utsname uname_info;
 
 };

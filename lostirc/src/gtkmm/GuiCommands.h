@@ -22,16 +22,16 @@
 #include <Commands.h>
 #include "MainWindow.h"
 
-class GuiCommands : public Commands
+namespace GuiCommands
 {
-public:
-    static void send(ServerConnection *conn, std::string cmd, const std::string &params);
-    static void Query(ServerConnection *conn, const std::string& params);
-    static void Me(ServerConnection *conn, const std::string& params);
-    static void SetFont(ServerConnection *conn, const std::string& params);
-    static void NewServer(ServerConnection *conn, const std::string& params);
-    static void commands(ServerConnection *conn, const std::string& params);
-    static bool commandCompletion(const std::string& word, std::string& str);
 
-};
+    void send(ServerConnection *conn, std::string cmd, const std::string &params);
+    void Query(ServerConnection *conn, const std::string& params);
+    void Me(ServerConnection *conn, const std::string& params);
+    void SetFont(ServerConnection *conn, const std::string& params);
+    void NewServer(ServerConnection *conn, const std::string& params);
+    void commands(ServerConnection *conn, const std::string& params);
+    bool commandCompletion(const std::string& word, std::string& str);
+
+}
 #endif

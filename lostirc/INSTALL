@@ -12,7 +12,7 @@ For CVS versions, you need to create the configure script with autogen.sh.
 To do this, you must have additional packages installed: autoconf, automake,
 libtool.
 
-Then execute these commands:
+Finally, execute these commands:
   
    $ ./configure
    $ make
@@ -20,7 +20,3 @@ Then execute these commands:
    $ make install
    $ exit
    $ lostirc
-
-LostIRC is developed mainly with g++ 2.95.4 in mind - g++ 3 is not guaranteed
-to work. Especially if your gtkmm is compiled with g++ 2.95.4, and you're
-trying to compile LostIRC with g++ 3, it simply won't work.

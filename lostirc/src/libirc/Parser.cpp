@@ -16,18 +16,49 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <iostream>
 #include <sstream>
+#include <vector>
+#include <algorithm>
 #include "Parser.h"
 #include "Utils.h"
 #include "Channel.h"
-#include "Events.h"
+#include "FrontEnd.h"
 #include "LostIRCApp.h"
 #include "ServerConnection.h"
+#include "DCC.h"
 
 using std::vector;
 using std::string;
 
-Parser::Parser(LostIRCApp *app, ServerConnection *conn)
+/* different functions used in for_each */
+namespace algo
+{
+
+  struct removeUser : public std::unary_function<ChannelBase*, void>
+  {
+      removeUser(const std::string& n) : nick(n) { }
+      void operator() (ChannelBase* x) {
+          Channel *c = dynamic_cast<Channel*>(x);
+          if (c)
+                c->removeUser(nick);
+      }
+      std::string nick;
+  };
+
+  struct renameUser : public std::unary_function<ChannelBase*, void>
+  {
+      renameUser(const std::string& f, const std::string& t) : from(f), to(t) { }
+      void operator() (ChannelBase* x) {
+          x->renameUser(from, to);
+      }
+      std::string from;
+      std::string to;
+  };
+
+}
+
+Parser::Parser(ServerConnection *conn)
     : _conn(conn)
 {
 }
@@ -162,15 +193,26 @@ void Parser::Privmsg(const string& from, const string& param, const string& rest
         Ctcp(from, param, rest);
     } else {
         // Normal privmsg 
-        string nick = param;
-        if (param == _conn->Session.nick)
-              nick = from;
 
-        if (rest.find(_conn->Session.nick) != string::npos) {
-            FE::emit(FE::get(PRIVMSG_HIGHLIGHT) << findNick(from) << rest, findNick(nick), _conn);
-            App->evtHighlight(findNick(nick), _conn);
+        ChannelBase *c;
+
+        if (param == _conn->Session.nick) {
+            // The message was intended for *us*, so its a query.
+            c = _conn->findQuery(findNick(from));
+            if (!c) {
+                c = new Query(findNick(from));
+                _conn->Session.channels.push_back(c);
+            }
+
         } else {
-            FE::emit(FE::get(PRIVMSG) << findNick(from) << rest, findNick(nick), _conn);
+            c = _conn->findChannel(param);
+        }
+
+        if (shouldHighlight(rest)) {
+            FE::emit(FE::get(PRIVMSG_HIGHLIGHT) << findNick(from) << rest, *c, _conn);
+            App->fe->highlight(*c, _conn);
+        } else {
+            FE::emit(FE::get(PRIVMSG) << findNick(from) << rest, *c, _conn);
         }
     }
 }
@@ -182,23 +224,81 @@ void Parser::Ctcp(const string& from, const string& param, const string& rest)
 
     if (command == "VERSION") {
         _conn->sendVersion(findNick(from));
-        FE::emit(FE::get(CTCP) << command << findNick(from), "", _conn);
+
     } else if (command == "ACTION") {
         string rest_ = rest.substr(pos + 1, (rest.length() - pos) - 2);
 
-        string nick = param;
-        if (param == _conn->Session.nick)
-              nick = from;
+        ChannelBase *c;
 
-        if (rest_.find(_conn->Session.nick) != string::npos) {
-            FE::emit(FE::get(ACTION_HIGHLIGHT) << findNick(from) << rest_, findNick(nick), _conn);
-            App->evtHighlight(findNick(nick), _conn);
+        if (param == _conn->Session.nick) {
+            // The message was intended for *us*, so its a query.
+            c = _conn->findQuery(findNick(from));
+            if (!c) {
+                c = new Query(findNick(from));
+                _conn->Session.channels.push_back(c);
+            }
+
         } else {
-            FE::emit(FE::get(ACTION) << findNick(from) << rest_, findNick(nick), _conn);
+            c = _conn->findChannel(param);
         }
-    } else {
-        FE::emit(FE::get(CTCP) << command << findNick(from), FE::CURRENT, _conn);
+
+        if (shouldHighlight(rest)) {
+            FE::emit(FE::get(ACTION_HIGHLIGHT) << findNick(from) << rest_, *c, _conn);
+            App->fe->highlight(*c, _conn);
+        } else {
+            FE::emit(FE::get(ACTION) << findNick(from) << rest_, *c, _conn);
+        }
+        return;
+
+    } else if (command == "PING") {
+        // Reply to the client with the same timestamp they sent us.
+        string rest_ = rest.substr(pos + 1, (rest.length() - pos) - 2);
+        _conn->sendCtcpNotice(findNick(from), "PING " + rest_);
+
+    } else if (command == "DCC") {
+        string dcc_type = getWord(rest, 2);
+        string dcc_address = getWord(rest, 4);
+        string dcc_port = getWord(rest, 5);
+
+        if (dcc_type == "SEND") {
+            string dcc_size = getWord(rest, 6);
+            string dcc_filename = getWord(rest, 3);
+
+            std::istringstream ss(dcc_address);
+            unsigned long address;
+            ss >> address;
+
+            std::istringstream ss2(dcc_port);
+            unsigned short port;
+            ss2 >> port;
+
+            std::istringstream ss3(dcc_size);
+            unsigned long size;
+            ss3 >> size;
+
+            int n = App->getDcc().addDccSendIn(dcc_filename, address, port, size);
+            FE::emit(FE::get(DCC_RECEIVE) << findNick(from) << dcc_filename << n, FE::CURRENT);
+
+        } else if (dcc_type == "CHAT") {
+            FE::emit(FE::get(SERVMSG2) << findNick(from) << rest, FE::CURRENT);
+            std::istringstream ss(dcc_address);
+            unsigned long address;
+            ss >> address;
+
+            std::istringstream ss2(dcc_port);
+            unsigned short port;
+            ss2 >> port;
+
+            //DCC d(findNick(from), address, port);
+        }
+        return;
+
     }
+
+    if (param == _conn->Session.nick)
+          FE::emit(FE::get(CTCP) << command << findNick(from), FE::CURRENT, _conn);
+    else
+          FE::emit(FE::get(CTCP_MULTI) << command << findNick(from) << param, FE::CURRENT, _conn);
 
 }
 
@@ -236,7 +336,7 @@ void Parser::Kick(const string& from, const string& param, const string& msg)
     Channel *c = _conn->findChannel(chan);
     c->removeUser(findNick(nick));
     FE::emit(FE::get(KICKED) << nick << chan << findNick(from) << msg, *c, _conn);
-    App->evtKick(findNick(from), *c, nick, msg, _conn);
+    App->fe->kick(findNick(from), *c, nick, msg, _conn);
 
     if (nick == _conn->Session.nick) // We got kicked
           _conn->removeChannel(chan);
@@ -247,13 +347,14 @@ void Parser::Join(const string& nick, const string& chan)
 {
     Channel *c;
     if (findNick(nick) == _conn->Session.nick) {
-        c = _conn->addChannel(chan);
+        c = new Channel(chan);
+        _conn->Session.channels.push_back(c);
     } else { 
         c = _conn->findChannel(chan);
         c->addUser(findNick(nick));
     }
 
-    App->evtJoin(findNick(nick), *c, _conn); // Send join to frontend
+    App->fe->join(findNick(nick), *c, _conn);
 
     FE::emit(FE::get(JOIN) << findNick(nick) << chan << findHost(nick), *c, _conn);
 }
@@ -264,7 +365,7 @@ void Parser::Part(const string& nick, const string& chan, const string& rest)
     c->removeUser(findNick(nick));
 
     FE::emit(FE::get(PART) << findNick(nick) << chan << findHost(nick) << rest, *c, _conn);
-    App->evtPart(findNick(nick), *c, _conn);
+    App->fe->part(findNick(nick), *c, _conn);
 
     if (findNick(nick) == _conn->Session.nick) {
           _conn->removeChannel(chan);
@@ -273,15 +374,17 @@ void Parser::Part(const string& nick, const string& chan, const string& rest)
 
 void Parser::Quit(const string& nick, const string& msg)
 {
-    vector<Channel*> chans = _conn->findUser(findNick(nick));
+    vector<ChannelBase*> chans = _conn->findUser(findNick(nick));
 
+    for_each(chans.begin(), chans.end(), algo::removeUser(nick));
+
+    App->fe->quit(findNick(nick), chans, _conn);
     FE::emit(FE::get(QUIT) << findNick(nick) << msg, chans, _conn);
-    App->evtQuit(findNick(nick), msg, _conn);
 }
 
 void Parser::Nick(const string& from, const string& to)
 {
-    // When we receive an error that "nick change was too fast, to will be
+    // When we receive an error that "nick change was too fast, 'to' will be
     // empty. just return if it is.
 
     if (to.empty())
@@ -292,16 +395,14 @@ void Parser::Nick(const string& from, const string& to)
         _conn->Session.nick = to;
     }
 
-    vector<Channel*>::const_iterator i;
-    vector<Channel*> chans = _conn->findUser(findNick(from));
+    vector<ChannelBase*> chans = _conn->findUser(findNick(from));
 
-    for (i = chans.begin(); i != chans.end(); ++i) {
-        (*i)->removeUser(findNick(from));
-        (*i)->addUser(to);
-    }
+    App->fe->nick(findNick(from), to, chans, _conn);
+
+    for_each(chans.begin(), chans.end(), algo::renameUser(findNick(from), to));
 
     FE::emit(FE::get(NICK) << findNick(from) << to, chans, _conn);
-    App->evtNick(findNick(from), to, _conn);
+
 }
 
 void Parser::Invite(const string& from, const string& params)
@@ -327,14 +428,15 @@ void Parser::CMode(const string& from, const string& param)
     string::size_type pos1 = param.find_first_of(" ");
     string::size_type pos2 = param.find_first_of(" ", pos1 + 1);
 
+    // No real modes? No reason to continue.
+    if (pos1 == string::npos)
+          return;
+
     string chan = param.substr(0, pos1);
     string modes = param.substr(pos1 + 1, (pos2 - pos1) - 1);
     string args = param.substr(pos2 + 1);
 
     Channel *c = _conn->findChannel(chan);
-
-    //vector<struct Mode> modesmap;
-    std::map<string, IRC::UserMode> modesmap;
 
     // Get arguments
     vector<string> arguments;
@@ -343,12 +445,7 @@ void Parser::CMode(const string& from, const string& param)
     while (ss >> buf)
           arguments.push_back(buf);
 
-    if (arguments.empty()) {
-        // Received a channel mode, like '#chan +n'
-        FE::emit(FE::get(CMODE) << findNick(from) << modes << chan, *c, _conn);
-        return;
-    }
-
+    std::vector<User> modesvec;
     bool sign = false; // Used to track whether we get a + or a -
     vector<string>::const_iterator arg_i = arguments.begin();
     for (string::const_iterator i = modes.begin(); i != modes.end(); ++i) {
@@ -368,7 +465,10 @@ void Parser::CMode(const string& from, const string& param)
                 sign ? (e = OPPED) : (e = DEOPPED);
                 string nick = *arg_i++;
 
-                modesmap.insert(make_pair(nick, u));
+                User *user = c->getUser(nick);
+                sign ? (user->opped = true) : (user->opped = false);
+
+                modesvec.push_back(*user);
                 FE::emit(FE::get(e) << findNick(from) << nick, *c, _conn);
                 }
                 break;
@@ -380,7 +480,10 @@ void Parser::CMode(const string& from, const string& param)
                 sign ? (e = VOICED) : (e = DEVOICED);
                 string nick = *arg_i++;
 
-                modesmap.insert(make_pair(nick, u));
+                User *user = c->getUser(nick);
+                sign ? (user->voiced = true) : (user->voiced = false);
+
+                modesvec.push_back(*user);
                 FE::emit(FE::get(e) << findNick(from) << nick, *c, _conn);
                 }
                 break;
@@ -388,6 +491,7 @@ void Parser::CMode(const string& from, const string& param)
                 {
                 Event e;
                 sign ? (e = BANNED) : (e = UNBANNED);
+
                 string nick = *arg_i++;
                 FE::emit(FE::get(e) << findNick(from) << nick, *c, _conn);
                 break;
@@ -397,7 +501,22 @@ void Parser::CMode(const string& from, const string& param)
     }
 
     // Channel user mode
-    App->evtCUMode(findNick(from), *c, modesmap, _conn);
+    App->fe->CUMode(findNick(from), *c, modesvec, _conn);
+
+    // This can look funny; so explanation:
+    // arg_i was set to arguments.begin() before, and while parsing user
+    // modes it was incremented. This checks whether it *wasnt* incremented,
+    // and if it wasnt, then we simply did not have a user mode change but a
+    // channel mode change. like: '#chan +n'
+    if (arg_i == arguments.begin()) {
+        if (arguments.empty()) {
+            // No further arguments to the mode.
+            FE::emit(FE::get(CMODE) << findNick(from) << modes << chan, *c, _conn);
+        } else {
+            // Arguments to the mode. eg. '#chan +l 500'
+            FE::emit(FE::get(CMODE) << findNick(from) << modes + " " + arguments.front() << chan, *c, _conn);
+        }
+    }
 }
 
 void Parser::Topic(const string& from, const string& chan, const string& rest)
@@ -449,7 +568,7 @@ void Parser::Away(const string& param, const string& rest)
 
 void Parser::Wallops(const string& from, const string& rest)
 {
-    FE::emit(FE::get(WALLOPS) << from << rest, FE::CURRENT, _conn);
+    FE::emit(FE::get(WALLOPS) << findNick(from) << rest, FE::CURRENT, _conn);
 }
 
 void Parser::Banlist(const string& param)
@@ -478,6 +597,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             _conn->Session.servername = from;
             _conn->Session.hasRegistered = 1;
             _conn->Session.nick = param;
+            _conn->addConnectionTimerCheck();
         case 2:   // RPL_YOURHOST
         case 3:   // RPL_CREATED
         case 4:   // RPL_MYINFO
@@ -495,13 +615,13 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             break;
 
         case 305: // RPL_UNAWAY
-            App->evtAway(false, _conn);
+            App->fe->away(false, _conn);
             _conn->Session.isAway = false;
             FE::emit(FE::get(SERVMSG) << rest, FE::CURRENT, _conn);
             break;
 
         case 306: // RPL_NOWAWAY
-            App->evtAway(true, _conn);
+            App->fe->away(true, _conn);
             _conn->Session.isAway = true;
             FE::emit(FE::get(SERVMSG) << rest, FE::CURRENT, _conn);
             break;
@@ -526,6 +646,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
 
         case 376: // RPL_ENDOFMOTD
             FE::emit(FE::get(SERVMSG) << rest, FE::CURRENT, _conn);
+            _conn->Session.endOfMotd = true;
             _conn->sendCmds();
             break;
 
@@ -536,7 +657,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             FE::emit(FE::get(ERROR) << param + ": " + rest, FE::CURRENT, _conn);
             break;
 
-        case 412: // ERR_NOTEXTTOSEND (or something)
+        case 412: // ERR_NOTEXTTOSEND
             FE::emit(FE::get(SERVMSG) << rest, FE::CURRENT, _conn);
             break;
 
@@ -545,8 +666,12 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             break;
 
         case 433: // ERR_NICKNAMEINUSE
-            // Apply a _ to the nickname - XXX: also send msg to frontend?
-            _conn->sendNick(_conn->Session.nick += "_");
+            // Apply a _ to the nickname if we havn't received MOTD
+            // XXX: also send msg to frontend?
+            if (!_conn->Session.endOfMotd)
+                _conn->sendNick(_conn->Session.nick += "_");
+            else
+                FE::emit(FE::get(ERROR) << rest, FE::CURRENT, _conn);
             break;
 
         case 438: // Nick change to fast
@@ -578,12 +703,14 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 366: // RPL_ENDOFNAMES
             {
                 Channel *c = _conn->findChannel(getWord(param, 2));
-                if (c && !c->endOfNames)
-                      c->endOfNames = true;
-                else
-                      FE::emit(FE::get(SERVMSG) << param + " " + rest, FE::CURRENT, _conn);
+                if (c && !c->endOfNames) {
+                    c->endOfNames = true;
+                    App->fe->names(*c, _conn);
+                } else {
+                    FE::emit(FE::get(SERVMSG3) << getWord(param, 2) << rest, FE::CURRENT, _conn);
+                }
             }
-            break; // Ignored.
+            break;
         case 317: // RPL_WHOISIDLE
             {
                 long idle = Util::stoi(getWord(param, 3));
@@ -591,9 +718,9 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
                 ss << idle / 3600 << ":" << (idle / 60) % 60 << ":" << idle % 60;
                 long date = std::atol(getWord(param, 4).c_str());
                 string time = std::ctime(&date);
-                FE::emit(FE::get(SERVMSG) << ss.str() + ",  " + time.substr(0, time.size() - 1) + " " + rest, FE::CURRENT, _conn);
+                FE::emit(FE::get(SERVMSG3) << ss.str() + ",  " + time.substr(0, time.size() - 1) << rest, FE::CURRENT, _conn);
             }
-                break;
+            break;
         case 311: // RPL_WHOISUSER
         case 312: // RPL_WHOISSERVER
         case 313: // RPL_WHOISOPERATOR
@@ -601,10 +728,12 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 319: // RPL_WHOISCHANNELS
             // We need this find_first_of to omit the first word
             FE::emit(FE::get(SERVMSG2) << param.substr(param.find_first_of(" ") + 1) << rest, FE::CURRENT, _conn);
+            std::cout << "param: " << param << std::endl;
+            std::cout << "rest: " << rest << std::endl;
             break;
 
         default:
-            FE::emit(FE::get(SERVMSG) << param + " " + rest, FE::CURRENT, _conn);
+            FE::emit(FE::get(SERVMSG3) << param << rest, FE::CURRENT, _conn);
     }
 
 }
@@ -616,32 +745,28 @@ void Parser::Names(const string& chan, const string& names)
     string channel = chan.substr(pos);
 
     Channel *c = _conn->findChannel(channel);
-    if (!c->endOfNames) {
+    if (c && !c->endOfNames) {
 
         std::istringstream ss(names);
         string buf;
 
-        while(ss >> buf)
+        while (ss >> buf)
         {
             if (buf[0] == '@') {
-                if (c)
-                      c->addUser(buf.substr(1), IRC::OP);
+                c->addUser(buf.substr(1), IRC::OP);
             } else if (buf[0] == '+') {
-                if (c)
-                      c->addUser(buf.substr(1), IRC::VOICE);
+                c->addUser(buf.substr(1), IRC::VOICE);
             } else {
-                if (c)
-                      c->addUser(buf, IRC::NONE);
+                c->addUser(buf, IRC::NONE);
             }
         }
 
-        App->evtNames(*c, _conn);
     } else {
         FE::emit(FE::get(NAMES) << channel << names, FE::CURRENT, _conn);
     }
 }
 
-string Parser::getWord(const string& str, int n)
+string getWord(const string& str, int n)
 {
     int count = 0;
     string::size_type lastPos = str.find_first_not_of(" ", 0);
@@ -657,5 +782,19 @@ string Parser::getWord(const string& str, int n)
         count++;
     }
     return "";
+}
 
+bool Parser::shouldHighlight(const string& str)
+{
+    if (str.find(_conn->Session.nick) != string::npos)
+          return true;
+
+    std::istringstream ss(App->getCfg().getOpt("highlight_words"));
+
+    string tmp;
+    while (ss >> tmp)
+          if (str.find(tmp) != string::npos)
+                return true;
+
+    return false;
 }

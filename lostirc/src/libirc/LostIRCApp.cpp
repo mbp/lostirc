@@ -18,7 +18,6 @@
 
 #include "LostIRCApp.h"
 #include "ServerConnection.h"
-#include "Events.h"
 #include "Commands.h"
 #include <pwd.h>
 
@@ -27,8 +26,8 @@ using std::vector;
 
 LostIRCApp* App;
 
-LostIRCApp::LostIRCApp()
-    : _cfg()
+LostIRCApp::LostIRCApp(FrontEnd *f)
+    : fe(f), _cfg(), _dcc_queue()
 {
     App = this;
     uname(&uname_info);
@@ -37,9 +36,13 @@ LostIRCApp::LostIRCApp()
         _cfg.setOpt("nick", getenv("USER"));
     }
 
-    struct passwd *p = getpwnam(_cfg.getOpt("nick").c_str());
-    if (p != NULL)
-          realname = p->pw_gecos;
+    if (_cfg.getOpt("ircuser").empty()) {
+        _cfg.setOpt("ircuser", getenv("USER"));
+    }
+
+    struct passwd *p = getpwnam(getenv("USER"));
+    if (p != NULL && _cfg.getOpt("realname").empty())
+          _cfg.setOpt("realname", p->pw_gecos);
 }
 
 LostIRCApp::~LostIRCApp()
@@ -82,7 +85,6 @@ ServerConnection* LostIRCApp::newServer(const string& host, int port)
 ServerConnection* LostIRCApp::newServer()
 {
     ServerConnection *conn = new ServerConnection("", _cfg.getOpt("nick"));
-    conn->Session.realname = realname;
     _servers.push_back(conn);
     return conn;
 }

@@ -16,6 +16,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <iostream>
+#include <functional>
+#include <algorithm>
+#include <unistd.h>
 #include "ServerConnection.h"
 #include "LostIRCApp.h"
 #include "Events.h"
@@ -24,8 +28,22 @@
 using std::string;
 using std::vector;
 
-ServerConnection::ServerConnection(const string& host, const string& nick, int port = 6667, bool doconnect = false)
-    : _socket(new Socket()), _p(new Parser(App,this)), _writeid(0), _watchid(0), _connectioncheckid(0)
+namespace algo
+{
+
+  struct deletePointer : public std::unary_function<ChannelBase*, void>
+  {
+      deletePointer() { }
+      void operator() (ChannelBase* x) {
+          delete x;
+      }
+  };
+
+}
+
+ServerConnection::ServerConnection(const string& host, const string& nick, int port, bool doconnect)
+    : _socket(new Socket()), _parser(new Parser(this)), _writeid(0),
+    _watchid(0), _connectioncheckid(0), _autoreconnectid(0)
 {
     Session.nick = nick;
     Session.servername = host;
@@ -34,9 +52,14 @@ ServerConnection::ServerConnection(const string& host, const string& nick, int p
     Session.isConnected = false;
     Session.hasRegistered = false;
     Session.isAway = false;
+    Session.endOfMotd = false;
     Session.sentLagCheck = false;
+    Session.realname = App->getCfg().getOpt("realname");
 
-    App->evtNewTab(this);
+    _socket->on_host_resolved.connect(SigC::slot(this, &ServerConnection::on_host_resolved));
+    _socket->on_error.connect(SigC::slot(this, &ServerConnection::on_error));
+
+    App->fe->newTab(this);
 
     if (doconnect)
           connect();
@@ -45,24 +68,29 @@ ServerConnection::ServerConnection(const string& host, const string& nick, int p
 ServerConnection::~ServerConnection()
 {
     delete _socket;
-    delete _p;
+    delete _parser;
+    
+    for_each(Session.channels.begin(), Session.channels.end(), algo::deletePointer());
 }
 
-bool ServerConnection::connect(const string &host, int port = 6667, const string& pass = "")
+void ServerConnection::connect(const string &host, int port, const string& pass)
 {
     Session.servername = host;
     Session.host = host;
     Session.password = pass;
     Session.port = port;
 
-    return connect();
+    connect();
 }
 
-void ServerConnection::disconnect()
+void ServerConnection::doCleanup()
 {
+    // called when we get disconnected or connect to a new server, need to
+    // clean various things up.
     Session.isConnected = false;
     Session.hasRegistered = false;
     Session.isAway = false;
+    Session.endOfMotd = false;
 
     if (_writeid > 0) {
         g_source_remove(_writeid);
@@ -76,34 +104,51 @@ void ServerConnection::disconnect()
         g_source_remove(_connectioncheckid);
         _connectioncheckid = 0;
     }
+    for_each(Session.channels.begin(), Session.channels.end(), algo::deletePointer());
+    Session.channels.clear();
 
     _socket->disconnect();
-    FE::emit(FE::get(SERVMSG) << "Disconnected.", FE::ALL, this);
-    App->evtDisconnected(this);
-
 }
 
-bool ServerConnection::connect()
+void ServerConnection::disconnect()
 {
+    doCleanup();
+
+    FE::emit(FE::get(SERVMSG) << "Disconnected.", FE::ALL, this);
+    App->fe->disconnected(this);
+}
+
+void ServerConnection::connect()
+{
+    doCleanup();
 
     FE::emit(FE::get(CONNECTING) << Session.host << Session.port, FE::CURRENT, this);
-    
+
+    _socket->resolvehost(Session.host);
+}
+
+
+void ServerConnection::on_error(const char *msg)
+{
+    FE::emit(FE::get(SERVMSG2) << "Failed connecting:" << msg, FE::CURRENT, this);
+    disconnect();
+}
+
+void ServerConnection::on_host_resolved()
+{
     try {
 
-        _socket->connect(Session.host, Session.port);
+        _socket->connect(Session.port);
 
     } catch (SocketException &e) {
         FE::emit(FE::get(SERVMSG2) << "Failed connecting:" << e.what(), FE::CURRENT, this);
         disconnect();
-        return false;
+        return;
     }
 
     // we got connected
 
     Session.isConnected = true;
-    Session.hasRegistered = false;
-    Session.isAway = false;
-    Session.sentLagCheck = false;
 
     // This is a temporary watch to see when we can write, when we can
     // write - we are (hopefully) connected
@@ -111,17 +156,13 @@ bool ServerConnection::connect()
                    GIOCondition (G_IO_OUT),
                    &ServerConnection::onConnect, this);
 
-    // This watch makes sure we read data when it's available
-    // FIXME: should this be moved to ServerConnection::onConnect?
-    _watchid = g_io_add_watch(g_io_channel_unix_new(_socket->getfd()),
-                   GIOCondition (G_IO_IN | G_IO_ERR | G_IO_HUP | G_IO_NVAL),
-                   &ServerConnection::onReadData, this);
-
-    return true;
 }
 
 gboolean ServerConnection::autoReconnect(gpointer data)
 {
+    #ifdef DEBUG
+    std::cout << "ServerConnection::autoReconnect(): reconnecting." << std::endl;
+    #endif
     ServerConnection& conn = *(static_cast<ServerConnection*>(data));
     conn.connect();
     return FALSE;
@@ -133,9 +174,8 @@ gboolean ServerConnection::connectionCheck(gpointer data)
 
     if (conn.Session.sentLagCheck) {
         // disconnected! last lag check was never replied to
-        // FIXME: we might need to disconnect properly as well!
         #ifdef DEBUG
-        std::cout << "connectionCheck().. disconnected" << std::endl;
+        std::cout << "ServerConnection::connectionCheck(): disconnected." << std::endl;
         #endif
         conn.disconnect();
         conn.connect();
@@ -143,7 +183,7 @@ gboolean ServerConnection::connectionCheck(gpointer data)
         return FALSE;
     } else {
         #ifdef DEBUG
-        std::cout << "connectionCheck().. still on" << std::endl;
+        std::cout << "ServerConnection::connectionCheck(): still on" << std::endl;
         #endif
         conn.sendPing();
         conn.Session.sentLagCheck = true;
@@ -154,6 +194,9 @@ gboolean ServerConnection::connectionCheck(gpointer data)
 gboolean ServerConnection::onReadData(GIOChannel* io_channel, GIOCondition cond, gpointer data)
 {
     ServerConnection& conn = *(static_cast<ServerConnection*>(data));
+    #ifdef DEBUG
+    std::cout << "ServerConnection::onReadData(): reading.." << std::endl;
+    #endif
 
     try {
 
@@ -183,7 +226,7 @@ gboolean ServerConnection::onReadData(GIOChannel* io_channel, GIOCondition cond,
                     return TRUE;
                 } else {
                     string tmp = str.substr(lastPos, pos - lastPos);
-                    conn._p->parseLine(tmp);
+                    conn._parser->parseLine(tmp);
                 }
                 lastPos = str.find_first_not_of("\n", pos);
                 pos = str.find_first_of("\n", lastPos);
@@ -194,7 +237,11 @@ gboolean ServerConnection::onReadData(GIOChannel* io_channel, GIOCondition cond,
     } catch (SocketException &e) {
         FE::emit(FE::get(SERVMSG) << e.what(), FE::ALL, &conn);
         conn.disconnect();
-        g_timeout_add(2000, &ServerConnection::autoReconnect, &conn);
+        conn.addReconnectTimer();
+        return FALSE;
+    } catch (SocketDisconnected &e) {
+        conn.disconnect();
+        conn.addReconnectTimer();
         return FALSE;
     }
 }
@@ -205,20 +252,45 @@ gboolean ServerConnection::onConnect(GIOChannel* io_channel, GIOCondition cond, 
     // when we are able to write
     ServerConnection& conn = *(static_cast<ServerConnection*>(data));
 
-    char hostchar[256];
-    gethostname(hostchar, sizeof(hostchar) - 1);
-    string hostname(hostchar);
+    char hostname[256];
+    gethostname(hostname, sizeof(hostname) - 1);
 
     if (!conn.Session.password.empty())
           conn.sendPass(conn.Session.password);
 
     conn.sendNick(conn.Session.nick);
-    conn.sendUser(conn.Session.nick, hostname, conn.Session.host, conn.Session.realname);
+    conn.sendUser(App->getCfg().getOpt("ircuser"), hostname, conn.Session.host, conn.Session.realname);
 
-    conn._connectioncheckid = g_timeout_add(30000, &ServerConnection::connectionCheck, &conn);
+    // Watch for incoming data from now on
+    conn._watchid = g_io_add_watch(g_io_channel_unix_new(conn._socket->getfd()),
+                   GIOCondition (G_IO_IN | G_IO_ERR | G_IO_HUP | G_IO_NVAL),
+                   &ServerConnection::onReadData, &conn);
 
     return FALSE;
 }
+
+void ServerConnection::addConnectionTimerCheck()
+{
+    _connectioncheckid = g_timeout_add(30000, &ServerConnection::connectionCheck, this);
+}
+
+void ServerConnection::addReconnectTimer()
+{
+    if (_autoreconnectid == 0) {
+        _autoreconnectid = g_timeout_add(2000, &ServerConnection::autoReconnect, this);
+    }
+}
+
+bool ServerConnection::removeReconnectTimer()
+{
+    if (_autoreconnectid > 0) {
+        g_source_remove(_autoreconnectid);
+        _autoreconnectid = 0;
+        return true;
+    }
+    return false;
+}
+
 
 bool ServerConnection::sendPong(const string& crap)
 {
@@ -227,7 +299,7 @@ bool ServerConnection::sendPong(const string& crap)
     return _socket->send(msg);
 }
 
-bool ServerConnection::sendPing(const string& crap = "")
+bool ServerConnection::sendPing(const string& crap)
 {
     string msg("PING LAG" + crap + "\r\n");
 
@@ -330,7 +402,7 @@ bool ServerConnection::sendList(const string& params)
     return _socket->send(msg);
 }
 
-bool ServerConnection::sendQuit(const string& quitmsg = "")
+bool ServerConnection::sendQuit(const string& quitmsg)
 {
     if (Session.isConnected) {
         string msg;
@@ -359,9 +431,31 @@ bool ServerConnection::sendCtcp(const string& to, const string& params)
     return _socket->send(msg);
 }
 
+bool ServerConnection::sendCtcpNotice(const string& to, const string& params)
+{
+    string msg("NOTICE " + to + " :\001" + params + "\001\r\n");
+
+    return _socket->send(msg);
+}
+
 bool ServerConnection::sendAway(const string& params)
 {
     string msg("AWAY :" + params + "\r\n");
+    Session.awaymsg = params;
+
+    return _socket->send(msg);
+}
+
+bool ServerConnection::sendAdmin(const string& params)
+{
+    string msg("ADMIN " + params + "\r\n");
+
+    return _socket->send(msg);
+}
+
+bool ServerConnection::sendWhowas(const string& params)
+{
+    string msg("WHOWAS " + params + "\r\n");
 
     return _socket->send(msg);
 }
@@ -413,6 +507,27 @@ bool ServerConnection::sendNames(const string& chan)
     return _socket->send(msg);
 }
 
+bool ServerConnection::sendOper(const string& login, const string& password)
+{
+    string msg("OPER " + login + ' ' + password + "\r\n" );
+
+    return _socket->send(msg);
+}
+
+bool ServerConnection::sendWallops(const string& message)
+{
+    string msg("WALLOPS :" + message + "\r\n" );
+
+    return _socket->send(msg);
+}
+
+bool ServerConnection::sendKill(const string& nick, const string& reason)
+{
+    string msg("KILL " + nick + ' ' + reason + "\r\n" );
+
+    return _socket->send(msg);
+}
+
 bool ServerConnection::sendRaw(const string& text)
 {
     string msg(text + "\r\n");
@@ -420,19 +535,26 @@ bool ServerConnection::sendRaw(const string& text)
     return _socket->send(msg);
 }
 
-Channel* ServerConnection::addChannel(const string& n)
+void ServerConnection::addChannel(const string& n)
 {
     Channel *c = new Channel(n);
     Session.channels.push_back(c);
-    return c;
+}
+
+void ServerConnection::addQuery(const string& n)
+{
+    Query *c = new Query(n);
+    Session.channels.push_back(c);
 }
 
 bool ServerConnection::removeChannel(const string& n)
 {
-    vector<Channel*>::iterator i = Session.channels.begin();
+    vector<ChannelBase*>::iterator i = Session.channels.begin();
 
+    string chan = Util::lower(n);
     for (;i != Session.channels.end(); ++i) {
-        if (n == (*i)->getName()) {
+        string name = Util::lower((*i)->getName());
+        if (name == chan) {
             Session.channels.erase(i);
             return true;
         }
@@ -440,10 +562,11 @@ bool ServerConnection::removeChannel(const string& n)
     return false;
 }
 
-vector<Channel*> ServerConnection::findUser(const string& n)
+
+vector<ChannelBase*> ServerConnection::findUser(const string& n)
 {
-    vector<Channel*> chans;
-    vector<Channel*>::iterator i = Session.channels.begin();
+    vector<ChannelBase*> chans;
+    vector<ChannelBase*>::iterator i = Session.channels.begin();
 
     for (;i != Session.channels.end(); ++i) {
         if ((*i)->findUser(n)) {
@@ -455,12 +578,24 @@ vector<Channel*> ServerConnection::findUser(const string& n)
 
 Channel* ServerConnection::findChannel(const string& c)
 {
-    string chan = c;
-    vector<Channel*>::iterator i = Session.channels.begin();
+    string chan = Util::lower(c);
+    vector<ChannelBase*>::iterator i = Session.channels.begin();
     for (;i != Session.channels.end(); ++i) {
-        string name = (*i)->getName();
-        if (Util::lower(name) == Util::lower(chan))
-              return *i;
+        string name = Util::lower((*i)->getName());
+        if (name == chan)
+              return dynamic_cast<Channel*>(*i);
+    }
+    return 0;
+}
+
+Query* ServerConnection::findQuery(const string& c)
+{
+    string chan = Util::lower(c);
+    vector<ChannelBase*>::iterator i = Session.channels.begin();
+    for (;i != Session.channels.end(); ++i) {
+        string name = Util::lower((*i)->getName());
+        if (name == chan)
+              return dynamic_cast<Query*>(*i);
     }
     return 0;
 }
@@ -469,8 +604,23 @@ void ServerConnection::sendCmds()
 {
     vector<string>::iterator i;
     for (i = Session.cmds.begin(); i != Session.cmds.end(); ++i) {
-        string::size_type pos = i->find_first_of(" ");
-        string params = i->substr(pos + 1);
-        Commands::send(this, i->substr(1, pos - 1), params);
+        if (i->at(0) == '/') {
+
+            string::size_type pos = i->find_first_of(" ");
+
+            string params;
+            if (pos != string::npos) {
+                params = i->substr(pos + 1);
+            }
+
+            try {
+
+                Commands::send(this, Util::upper(i->substr(1, pos - 1)), params);
+
+            } catch (CommandException& ce) {
+
+                FE::emit(FE::get(SERVMSG) << ce.what(), FE::CURRENT, this);
+            }
+        }
     }
 }

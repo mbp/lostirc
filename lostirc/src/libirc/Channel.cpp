@@ -16,35 +16,83 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include "Channel.h"
 #include <algorithm>
+#include <functional>
+#include "Channel.h"
 
 using std::string;
-using std::map;
-using std::pair;
 using std::vector;
 
-typedef std::map<std::string, IRC::UserMode> uMap;
-
-void Channel::addUser(const string& n, IRC::UserMode i = IRC::NONE)
+namespace algo
 {
-    users.insert(make_pair(n, i));
+  struct isUser : public std::unary_function<User*, void>
+  {
+      isUser(const std::string& n) : nick(n) { }
+      bool operator() (User* u) {
+          if (u->nick == nick)
+                return true;
+          else
+                return false;
+      }
+      std::string nick;
+  };
+}
+
+IRC::UserMode User::getMode() const
+{
+    if (opped)
+          return IRC::OP;
+    else if (voiced)
+          return IRC::VOICE;
+    else
+          return IRC::NONE;
+}
+
+
+void Channel::addUser(const string& n, IRC::UserMode i)
+{
+    User *u = new User();
+    u->nick = n;
+    if (i == IRC::OP)
+          u->opped = true;
+    else if (i == IRC::VOICE)
+          u->voiced = true;
+
+    _users.push_back(u);
 }
 
 void Channel::removeUser(const string& u)
 {
-    uMap::iterator i = users.find(u);
+    vector<User*>::iterator i = std::find_if(_users.begin(), _users.end(), algo::isUser(u));
 
-    if (i != users.end())
-          users.erase(i);
+    if (i != _users.end()) {
+        delete (*i);
+        _users.erase(i);
+    }
 }
 
 bool Channel::findUser(const string& u)
 {
-    uMap::const_iterator i = users.find(u);
+    vector<User*>::iterator i = std::find_if(_users.begin(), _users.end(), algo::isUser(u));
 
-    if (i != users.end())
+    if (i != _users.end())
           return true;
 
     return false;
+}
+
+void Channel::renameUser(const string& from, const string& to)
+{
+    vector<User*>::iterator i = std::find_if(_users.begin(), _users.end(), algo::isUser(from));
+
+    if (i != _users.end()) {
+        (*i)->nick = to;
+    }
+}
+
+User* Channel::getUser(const string& u)
+{
+    vector<User*>::iterator i = std::find_if(_users.begin(), _users.end(), algo::isUser(u));
+
+    return *i;
 }

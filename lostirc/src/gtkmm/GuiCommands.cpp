@@ -16,10 +16,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <vector>
+#include <Utils.h>
 #include "GuiCommands.h"
 #include "Tab.h"
-#include <Utils.h>
-#include <vector>
 
 using std::string;
 
@@ -32,10 +32,12 @@ struct UserCommands guicmds[] = {
     { 0,        0, 0                        }
 };
 
-void GuiCommands::send(ServerConnection *conn, string cmd, const string& params)
+namespace GuiCommands {
+
+void send(ServerConnection *conn, string cmd, const string& params)
 {
     for (int i = 0; guicmds[i].cmd != 0; ++i) {
-        if (guicmds[i].cmd == Util::upper(cmd)) {
+        if (guicmds[i].cmd == cmd) {
             if (!conn->Session.isConnected && guicmds[i].reqConnected) {
                 throw CommandException("Must be connected.");
             }
@@ -47,7 +49,7 @@ void GuiCommands::send(ServerConnection *conn, string cmd, const string& params)
     Commands::send(conn, cmd, params);
 }
 
-void GuiCommands::Query(ServerConnection *conn, const string& params)
+void Query(ServerConnection *conn, const string& params)
 {
     if (params.length() == 0) {
         throw CommandException("/QUERY <nick>, start a query(tab) with a user");
@@ -56,24 +58,24 @@ void GuiCommands::Query(ServerConnection *conn, const string& params)
     }
 }
 
-void GuiCommands::Me(ServerConnection *conn, const string& params)
+void Me(ServerConnection *conn, const string& params)
 {
     string to = AppWin->getNotebook()->getCurrent()->getLabel()->get_text();
     string param = to + " " + params;
     return Commands::Me(conn, param);
 }
 
-void GuiCommands::SetFont(ServerConnection *conn, const string& params)
+void SetFont(ServerConnection *conn, const string& params)
 {
     AppWin->getNotebook()->setFont();
 }
 
-void GuiCommands::NewServer(ServerConnection *conn, const string& params)
+void NewServer(ServerConnection *conn, const string& params)
 {
     AppWin->newServer();
 }
 
-void GuiCommands::commands(ServerConnection *conn, const string& params)
+void commands(ServerConnection *conn, const string& params)
 {
     string cmds;
     for (int i = 0; guicmds[i].cmd != 0; ++i) {
@@ -85,10 +87,9 @@ void GuiCommands::commands(ServerConnection *conn, const string& params)
     Commands::commands(conn, params);
 }
 
-bool GuiCommands::commandCompletion(const string& word, string& str)
+bool commandCompletion(const string& word, string& str)
 {
-    string lcword = word;
-    lcword = Util::lower(lcword);
+    string lcword = Util::lower(word);
     for (int i = 0; guicmds[i].cmd != 0; ++i) {
         string lccmd = guicmds[i].cmd;
         lccmd = Util::lower(lccmd);
@@ -100,4 +101,5 @@ bool GuiCommands::commandCompletion(const string& word, string& str)
         }
     }
     return Commands::commandCompletion(word, str);
+}
 }

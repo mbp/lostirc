@@ -1,5 +1,5 @@
 AC_INIT(src/gtkmm/main.cpp)
-AM_INIT_AUTOMAKE(lostirc, 0.0.8pre)
+AM_INIT_AUTOMAKE(lostirc, 0.1.1pre)
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
@@ -26,8 +26,8 @@ if test "x$debug" = xyes; then
         CXXFLAGS="$CXXFLAGS -g -Wall"
 else
         AC_MSG_RESULT(no)
-        CFLAGS="$CFLAGS -s"
-        CXXFLAGS="$CXXFLAGS -s"
+        CFLAGS="$CFLAGS -s -Wall"
+        CXXFLAGS="$CXXFLAGS -s -Wall"
 fi
 
 AC_OUTPUT(lostirc.spec Makefile src/Makefile src/libirc/Makefile src/gtkmm/Makefile)

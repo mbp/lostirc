@@ -16,10 +16,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include "ConfigHandler.h"
 #include <algorithm>
+#include <fstream>
+#include <iostream>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include "ConfigHandler.h"
 #include "Events.h"
 
 using std::string;
@@ -84,33 +86,11 @@ bool ConfigHandler::readIniFile(const string& filename, map<string, string> & th
     /* FIXME: too many nested while loops below */
     string str;
     while (getline(in, str)) {
-        vector<string> vec;
-        Util::Tokenize(str, vec);
-        vector<string>::const_iterator i = vec.begin();
+        string::size_type pos = str.find(" = ");
+        string param = str.substr(0, pos);
+        string value = str.substr(pos + 3);
 
-        string _tmpparam;
-        string _tmpvalue;
-        /* parse a string in the form 'value = param param param' */
-        while (i != vec.end())
-        {
-            if (*i == "=") {
-                ++i;
-                while (i != vec.end())
-                {
-                    _tmpvalue += *i + " ";
-                    ++i;
-                }
-                if (!_tmpvalue.empty()) {
-                    _tmpvalue = _tmpvalue.substr(0, _tmpvalue.size() - 1);
-                }
-                themap.insert(make_pair(_tmpparam, _tmpvalue));
-                break;
-            } else {
-                _tmpparam = *i;
-            }
-
-            ++i;
-        }
+        themap.insert(make_pair(param, value));
     }
     return false;
 }
@@ -229,7 +209,7 @@ bool ConfigHandler::writeServers()
 bool ConfigHandler::setEvt(const string& key, const string& value)
 {
     #ifdef DEBUG
-    std::cout << "trying to set '" + key + "' to: '" + value + "'" << std::endl;
+    std::cout << "ConfigHandler::setEvt(): Setting '" + key + "' to: '" + value + "'" << std::endl;
     #endif
     _events[key] = value;
 
@@ -250,7 +230,7 @@ string ConfigHandler::getEvt(const string& param)
 bool ConfigHandler::setOpt(const string& key, const string& value)
 {
     #ifdef DEBUG
-    std::cout << "trying to set '" + key + "' to: '" + value + "'" << std::endl;
+    std::cout << "ConfigHandler::setOpt(): Setting '" + key + "' to: '" + value + "'" << std::endl;
     #endif
     _options[key] = value;
 
@@ -274,9 +254,12 @@ bool ConfigHandler::setEvtDefaults()
     setEvtDefault("evt_privmsg_highlight", "$2<$8%1$2>$0 %2");
     setEvtDefault("evt_action", "$7* %1$0 %2");
     setEvtDefault("evt_action_highlight", "$8* %1$0 %2");
+    setEvtDefault("evt_dcc_receive", "$16-- DCC SEND from %1 (%2), use /DCC RECEIVE %3 to accept the file transfer.");
     setEvtDefault("evt_servmsg", "$0-- : %1");
     setEvtDefault("evt_servmsg2", "$0-- : %1 %2");
-    setEvtDefault("evt_ctcp", "$16-- CTCP %1 received from $0%2");
+    setEvtDefault("evt_servmsg3", "$0-- %1:$16 %2");
+    setEvtDefault("evt_ctcp", "$16-- CTCP$9 %1$16 received from $0%2");
+    setEvtDefault("evt_ctcp_multi", "$16-- CTCP$9 %1$16 received from $0%2$16 (to$9 %3$16)");
     setEvtDefault("evt_topicchange", "$16-- $0%1$16 changes topic to:$15 %2");
     setEvtDefault("evt_topicis", "$16-- Topic for $11%1$16 is:$0 %2");
     setEvtDefault("evt_topictime", "$16-- Set by $0%1$16 on $9%2");
@@ -291,8 +274,8 @@ bool ConfigHandler::setEvtDefaults()
     setEvtDefault("evt_quit", "$16-- $0%1$16 has quit $11(%2)");
     setEvtDefault("evt_nick", "$16-- $0%1$16 changes nick to %2");
     setEvtDefault("evt_mode", "$16-- $0%1$16 sets mode $5%2$16 %3");
-    setEvtDefault("evt_cmode", "$16-- $0%1$16 sets channel mode $5%2$16 on %3");
-    setEvtDefault("evt_wallops", "$2WALLOPS -: %1 :- %2");
+    setEvtDefault("evt_cmode", "$16-- $0%1$16 sets channel mode $9%2$16 on %3");
+    setEvtDefault("evt_wallops", "$8WALLOPS/<$0%1$8>$9 %2");
     setEvtDefault("evt_kicked", "$16-- $0%1$16 was kicked from $11%2$16 by %3 $15($9%4$15)");
     setEvtDefault("evt_opped", "$16-- $0%1$16 gives channel operator status to %2");
     setEvtDefault("evt_deopped", "$16-- $0%1$16 removes channel operator status from %2");
@@ -301,8 +284,8 @@ bool ConfigHandler::setEvtDefaults()
     setEvtDefault("evt_banned", "$16-- $0%1$16 sets ban on %2");
     setEvtDefault("evt_unbanned", "$16-- $0%1$16 unbans %2");
     setEvtDefault("evt_invited", "$16-- $0%1$16 invites you to join %2");
-    setEvtDefault("evt_connecting", "$16-- Connecting to $8%1$16 on port$8 %2$16...");
-    setEvtDefault("evt_names", "$16-- Names %1: %2");
+    setEvtDefault("evt_connecting", "$16-- Connecting to$8 %1$16 on port$8 %2$16...");
+    setEvtDefault("evt_names", "$0-- Names$11 %1$0:$16 %2");
 
     map<string, string>::iterator i = _events.begin();
 
