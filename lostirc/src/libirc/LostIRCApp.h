@@ -31,6 +31,7 @@ class ServerConnection;
 class FrontEnd;
 
 #ifdef DEBUG
+#include <iostream>
 class Log : public std::ofstream
 {
     std::string _filename;
