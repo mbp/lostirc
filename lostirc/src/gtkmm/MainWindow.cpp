@@ -16,12 +16,13 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <config.h>
-#include <gtkmm/box.h>
 #include <algorithm>
-#include <gtkmm/messagedialog.h>
 #include <functional>
 #include <cstdlib>
+#include <config.h>
+#include <gtkmm/box.h>
+#include <gtkmm/messagedialog.h>
+#include <gdk/gdkkeysyms.h>
 #include "DCCList.h"
 #include "MainWindow.h"
 #include "Tab.h"

@@ -58,8 +58,7 @@ Tab::Tab(ServerConnection *conn, Pango::FontDescription font, Gtk::Label *label)
 Tab::~Tab()
 {
     delete _hpaned;
-    if (_nicklist)
-          delete _nicklist;
+    delete _nicklist;
 }
 
 void Tab::setInActive()

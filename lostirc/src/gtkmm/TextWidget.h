@@ -28,10 +28,10 @@
 #include <gtkmm/style.h>
 #include "TextWidget.h"
 
-struct TextProperties;
 
 class TextWidget : public Gtk::ScrolledWindow
 {
+    struct TextProperties;
 public:
     TextWidget(Pango::FontDescription font);
 
@@ -73,27 +73,27 @@ private:
     std::vector<Glib::RefPtr<Gtk::TextBuffer::Mark> > highlight_marks;
     std::vector<Glib::RefPtr<Gtk::TextBuffer::Mark> >::reverse_iterator highlight_mark_pos;
 
-};
-
-struct TextProperties
-{
-    bool fgcolor;
-    bool bgcolor;
-    bool bold;
-    bool underline;
-    int numbercount;
-    Glib::ustring fgnumber;
-    Glib::ustring bgnumber;
-    void clear()
+    struct TextProperties
     {
-        bgcolor = false;
-        fgcolor = false;
-        bold = false;
-        underline = false;
-        numbercount = 0;
-        fgnumber.clear();
-        bgnumber.clear();
-    }
+        bool fgcolor;
+        bool bgcolor;
+        bool bold;
+        bool underline;
+        int numbercount;
+        Glib::ustring fgnumber;
+        Glib::ustring bgnumber;
+        void clear()
+        {
+            bgcolor = false;
+            fgcolor = false;
+            bold = false;
+            underline = false;
+            numbercount = 0;
+            fgnumber.clear();
+            bgnumber.clear();
+        }
+    };
+
 };
 
 

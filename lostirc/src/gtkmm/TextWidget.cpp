@@ -18,6 +18,7 @@
 
 #include <gtkmm/scrollbar.h>
 #include <gtkmm/adjustment.h>
+#include <gtkmm/style.h>
 #include "TextWidget.h"
 #include "MainWindow.h"
 

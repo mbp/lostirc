@@ -19,11 +19,10 @@
 #ifndef MAINNOTEBOOK_H
 #define MAINNOTEBOOK_H
 
+#include <vector>
 #include <gtkmm/notebook.h>
-#include <gtkmm/style.h>
 #include <glibmm/ustring.h>
 #include <ServerConnection.h>
-#include <vector>
 #include "Tab.h"
 
 class MainNotebook : public Gtk::Notebook
@@ -32,8 +31,7 @@ public:
     MainNotebook();
 
     Tab* addTab(Tab::Type type, const Glib::ustring& name, ServerConnection *conn);
-    Tab* getCurrent(ServerConnection *conn);
-    Tab* getCurrent();
+    Tab* getCurrent(ServerConnection *conn = 0);
     Tab* findTab(const Glib::ustring& name, ServerConnection *conn, bool findInActive = false);
     Tab* findTab(Tab::Type type, ServerConnection *conn, bool findInActive = false);
 
@@ -50,6 +48,6 @@ public:
 private:
     void onSwitchPage(GtkNotebookPage *p, unsigned int n);
 
-    Pango::FontDescription fontdescription;
+    Pango::FontDescription _fontdesc;
 };
 #endif

@@ -27,7 +27,7 @@ MainNotebook::MainNotebook()
 {
     set_tab_pos(Gtk::POS_BOTTOM);
     set_scrollable(true);
-    fontdescription = Pango::FontDescription(App->options.font);
+    _fontdesc = Pango::FontDescription(App->options.font);
     signal_switch_page().connect(SigC::slot(*this, &MainNotebook::onSwitchPage));
 }
 
@@ -43,7 +43,7 @@ Tab* MainNotebook::addTab(Tab::Type type, const ustring& name, ServerConnection 
         // no-op if statement
     } else {
         Gtk::Label *label = manage(new Gtk::Label());
-        tab = manage(new Tab(conn, fontdescription, label));
+        tab = manage(new Tab(conn, _fontdesc, label));
         pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, *label));
     }
     tab->setActive();
@@ -56,15 +56,12 @@ Tab* MainNotebook::addTab(Tab::Type type, const ustring& name, ServerConnection 
 
 Tab* MainNotebook::getCurrent(ServerConnection *conn)
 {
-    Tab *tab = getCurrent();
-    if (tab->getConn() != conn)
-          tab = findTab("", conn);
-    return tab;
-}
+    Tab *tab = static_cast<Tab*>(get_nth_page(get_current_page()));
 
-Tab* MainNotebook::getCurrent()
-{
-    return static_cast<Tab*>(get_nth_page(get_current_page()));
+    if (conn && tab->getConn() != conn)
+          tab = findTab("", conn);
+
+    return tab;
 }
 
 Tab * MainNotebook::findTab(const ustring& name, ServerConnection *conn, bool findInActive)
@@ -214,12 +211,12 @@ void MainNotebook::clearAll()
 
 void MainNotebook::setFont(const Glib::ustring& str)
 {
-    fontdescription = Pango::FontDescription(str);
+    _fontdesc = Pango::FontDescription(str);
 
     Gtk::Notebook_Helpers::PageList::iterator i;
 
     for (i = pages().begin(); i != pages().end(); ++i) {
         Tab *tab = static_cast<Tab*>(i->get_child());
-        tab->getText().setFont(fontdescription);
+        tab->getText().setFont(_fontdesc);
     }
 }

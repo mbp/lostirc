@@ -1,5 +1,19 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-01-04  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * More cleanups:
+        * MainNotebook.cpp/.h: Remove <gtkmm/style.h> include, not needed.
+          Implement getCurrent() as only one function with the first argument
+          having a default value 0.
+        * MainWindow.cpp/.h: Move some includes around, remove unneeded
+          includes.
+        * NickList.cpp/.h: ditto.
+        * TextWidget.cpp/.h: ditto.
+          Move struct TextProperties inside TextWidget class declaration.
+        * Tab.cpp: No need to check for boolean value of _nicklist before
+          deleting, delete 0 will work fine.
+
 2003-01-03  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Minor bugfix to previous changes:

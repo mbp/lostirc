@@ -17,6 +17,7 @@
  */
 
 #include <sstream>
+#include <gtkmm/scrolledwindow.h>
 #include <LostIRC.h>
 #include "NickList.h"
 

@@ -20,8 +20,6 @@
 #define NICKLIST_H
 
 #include <vector>
-#include <gtkmm/scrolledwindow.h>
-#include <gtkmm/entry.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/treeview.h>
