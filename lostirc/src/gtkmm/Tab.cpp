@@ -314,9 +314,10 @@ void TabChannel::renameUser(const ustring& from, const ustring& to)
     while (i != _liststore->children().end())
     {
         if (i->get_value(_columns.nick) == from) {
-            i->set_value(_columns.nick, Glib::ustring(to));
+            i->set_value(_columns.nick, to);
             break;
         }
+        i++;
     }
 }
 
@@ -328,6 +329,7 @@ bool TabChannel::findUser(const ustring& nick)
     {
         if (i->get_value(_columns.nick) == nick)
               return true;
+        i++;
     }
     return false;
 }
