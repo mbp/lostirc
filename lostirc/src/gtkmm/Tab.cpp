@@ -38,7 +38,7 @@ Tab::Tab(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font)
 
     // Attaching Gtk::TextView to scollwindow
     
-    _textview.set_wrap_mode(Gtk::WRAP_CHAR);
+    _textview.set_wrap_mode(Gtk::WRAP_WORD);
     _textview.unset_flags(Gtk::CAN_FOCUS);
     _textview.set_editable(false);
     _swin.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
