@@ -20,6 +20,8 @@
 #include "ServerConnection.h"
 #include "Commands.h"
 #include <pwd.h>
+#include <unistd.h>
+#include <sys/types.h>
 
 using std::string;
 using std::vector;
@@ -36,17 +38,16 @@ LostIRCApp::LostIRCApp(FrontEnd *f)
     App = this;
     uname(&uname_info);
 
-    if (_cfg.getOpt("nick").empty()) {
-        _cfg.setOpt("nick", getenv("USER"));
-    }
+    struct passwd *pwentry = getpwuid(getuid());
 
-    if (_cfg.getOpt("ircuser").empty()) {
-        _cfg.setOpt("ircuser", getenv("USER"));
-    }
+    if (_cfg.getOpt("nick").empty())
+          _cfg.setOpt("nick", pwentry->name);
 
-    struct passwd *p = getpwnam(getenv("USER"));
-    if (p != NULL && _cfg.getOpt("realname").empty())
-          _cfg.setOpt("realname", p->pw_gecos);
+    if (_cfg.getOpt("ircuser").empty())
+          _cfg.setOpt("ircuser", pwentry->name);
+
+    if (_cfg.getOpt("realname").empty())
+          _cfg.setOpt("realname", pwentry->pw_gecos);
 }
 
 LostIRCApp::~LostIRCApp()
