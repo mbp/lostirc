@@ -180,8 +180,6 @@ bool baseConfig::readConfigFile()
 
         if (configvalues.find(param.c_str()) != configvalues.end())
               *(configvalues[param.c_str()]) = value;
-        else 
-            std::cerr << "Not recognized, `" << param.c_str() << "' => " << value << std::endl;
     }
     return true;
 }
