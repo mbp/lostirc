@@ -125,5 +125,6 @@ private:
     void updateUserNumber();
 
 };
+gint sortFunc(GtkCList *clist, gconstpointer ptr1, gconstpointer ptr2);
 
 #endif

@@ -229,7 +229,8 @@ TabChannel::TabChannel(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font
     _clist = manage(new Gtk::CList(2));
     _clist->set_column_width(0, 10);
     _clist->set_auto_sort(1);
-    _clist->set_sort_type(GTK_SORT_DESCENDING);
+    _clist->set_compare_func(&sortFunc);
+
     _clist->set_usize(100, 100);
     swin->add(*_clist);
 
@@ -382,4 +383,19 @@ void Tab::endPrefs(Prefs *p)
     remove(*p);
     pack_start(*_hbox);
     pack_start(*_hbox2, 0, 1);
+}
+
+gint sortFunc(GtkCList *clist, gconstpointer ptr1, gconstpointer ptr2)
+{
+    gchar* row0_cell0 = GTK_CELL_TEXT(((GtkCListRow*)ptr1)->cell[0])->text;
+    gchar* row1_cell0 = GTK_CELL_TEXT(((GtkCListRow*)ptr2)->cell[0])->text;
+
+    gchar* row0_cell1 = GTK_CELL_TEXT(((GtkCListRow*)ptr1)->cell[1])->text;
+    gchar* row1_cell1 = GTK_CELL_TEXT(((GtkCListRow*)ptr2)->cell[1])->text;
+
+    if (strcmp(row0_cell0, row1_cell0) == 0) {
+        return strcmp(row0_cell1, row1_cell1);
+    } else {
+        return -strcmp(row0_cell0, row1_cell0);
+    }
 }
