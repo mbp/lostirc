@@ -245,13 +245,8 @@ void Parser::Mode(const string& from, const string& param, const string& rest)
         CMode(from, param);
     } else {
         // User mode message
-        // Parse line in the form: 'user +x'
-        string chan, rest2;
-        stringstream ss(param);
-        ss >> chan;
-        ss >> rest2;
-
-        _io->evtMode(findNick(from), chan, rest2, _conn);
+        // We got line in the form: 'user +x'
+        _io->evtMode(findNick(from), param, rest, _conn);
     }
         
 }
