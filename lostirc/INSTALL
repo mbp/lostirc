@@ -8,6 +8,8 @@ In order to compile LostIRC, you need have at least these things installed:
  * libsigc++-dev (development files for lib sigc++)
  * libglib1.2-dev (development files for glib 1.2)
 
+For CVS versions, you need to create the configure script with autogen.sh.
+
 Then execute these commands:
   
    $ ./configure
