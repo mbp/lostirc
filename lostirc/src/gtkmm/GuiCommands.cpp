@@ -94,9 +94,11 @@ void NewServer(ServerConnection *conn, const ustring& params)
 
 void Part(ServerConnection *conn, const ustring& params)
 {
-    ustring channel = AppWin->getNotebook().getCurrent()->getName();
-    ustring param = channel + " " + params;
-    Commands::Part(conn, param);
+    if (AppWin->getNotebook().getCurrent()->isType(Tab::CHANNEL)) {
+        ustring channel = AppWin->getNotebook().getCurrent()->getName();
+        ustring param = channel + " " + params;
+        Commands::Part(conn, param);
+    }
 }
 
 void Topic(ServerConnection *conn, const ustring& params)

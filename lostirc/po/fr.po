@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LostIRC 4.0.0CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-08 19:10+0200\n"
+"POT-Creation-Date: 2004-10-15 15:41+0200\n"
 "PO-Revision-Date: 2004-06-13 15:41+0200\n"
 "Last-Translator: Bruno Dusausoy <bdusauso@beeznest.net>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -109,11 +109,11 @@ msgstr ""
 "    CTRL-Q - Quitter LostIRC\n"
 "\n"
 
-#: src/gtkmm/MainWindow.cpp:296 src/gtkmm/MainWindow.cpp:316
+#: src/gtkmm/MainWindow.cpp:267 src/gtkmm/MainWindow.cpp:287
 msgid "server"
 msgstr "serveur"
 
-#: src/gtkmm/MainWindow.cpp:339
+#: src/gtkmm/MainWindow.cpp:310
 msgid ""
 "Locale conversion error. An error occured while converting text from UTF-8 "
 "to your current locale.\n"
@@ -132,7 +132,7 @@ msgstr ""
 "Si vous pensez que c'est un bug, veuillez le rapporter à l'auteur de "
 "l'application."
 
-#: src/gtkmm/MainWindow.cpp:343
+#: src/gtkmm/MainWindow.cpp:314
 msgid ""
 "\n"
 "\n"
@@ -142,7 +142,7 @@ msgstr ""
 "\n"
 "Votre locale courante semble être : "
 
-#: src/gtkmm/MainWindow.cpp:347
+#: src/gtkmm/MainWindow.cpp:318
 msgid ""
 "Encoding conversion error. An error occured while converting text from UTF-8 "
 "to the user-defined encoding.\n"
@@ -161,7 +161,7 @@ msgstr ""
 "Si vous pensez que c'est un bug, veuillez le rapporter à l'auteur du "
 "programme."
 
-#: src/gtkmm/MainWindow.cpp:349
+#: src/gtkmm/MainWindow.cpp:320
 msgid ""
 "\n"
 "\n"
@@ -171,7 +171,7 @@ msgstr ""
 "\n"
 "J'essayais de convertir vers: "
 
-#: src/gtkmm/MainWindow.cpp:353
+#: src/gtkmm/MainWindow.cpp:324
 msgid ""
 "\n"
 "\n"
@@ -181,65 +181,65 @@ msgstr ""
 "\n"
 "(Note: Vous ne verrez cet avertissement qu'une fois par session LostIRC)"
 
-#: src/gtkmm/MainWindow.cpp:391
+#: src/gtkmm/MainWindow.cpp:362
 msgid "_LostIRC"
 msgstr "_LostIRC"
 
-#: src/gtkmm/MainWindow.cpp:392
+#: src/gtkmm/MainWindow.cpp:363
 #, fuzzy
 msgid "_New Server Tab"
 msgstr "Nouvel Onglet  de Serveur"
 
-#: src/gtkmm/MainWindow.cpp:395
+#: src/gtkmm/MainWindow.cpp:366
 msgid "Clear Window"
 msgstr "Effacer la fenêtre"
 
-#: src/gtkmm/MainWindow.cpp:397
+#: src/gtkmm/MainWindow.cpp:368
 msgid "Clear All Windows"
 msgstr "Effacer Toutes les Fenêtres"
 
-#: src/gtkmm/MainWindow.cpp:399
+#: src/gtkmm/MainWindow.cpp:370
 msgid "Close Current Tab"
 msgstr "Fermer l'Onglet Courant"
 
-#: src/gtkmm/MainWindow.cpp:405
+#: src/gtkmm/MainWindow.cpp:376
 msgid "_View"
 msgstr "_Affichage"
 
-#: src/gtkmm/MainWindow.cpp:406
+#: src/gtkmm/MainWindow.cpp:377
 msgid "_Menubar"
 msgstr "_Barre de menu"
 
-#: src/gtkmm/MainWindow.cpp:407
+#: src/gtkmm/MainWindow.cpp:378
 msgid "Status_bar"
 msgstr "_Barre de Status"
 
-#: src/gtkmm/MainWindow.cpp:408
+#: src/gtkmm/MainWindow.cpp:379
 #, fuzzy
 msgid "_User List"
 msgstr "Liste des _Utilisateurs"
 
-#: src/gtkmm/MainWindow.cpp:409
+#: src/gtkmm/MainWindow.cpp:380
 msgid "_Server List"
 msgstr "_Liste des Serveurs"
 
-#: src/gtkmm/MainWindow.cpp:410
+#: src/gtkmm/MainWindow.cpp:381
 msgid "_DCC Transfers"
 msgstr "_Transferts DCC"
 
-#: src/gtkmm/MainWindow.cpp:413
+#: src/gtkmm/MainWindow.cpp:384
 msgid "_Help"
 msgstr "_Aide"
 
-#: src/gtkmm/MainWindow.cpp:414
+#: src/gtkmm/MainWindow.cpp:385
 msgid "_Introduction"
 msgstr "_Introduction"
 
-#: src/gtkmm/MainWindow.cpp:415
+#: src/gtkmm/MainWindow.cpp:386
 msgid "_About"
 msgstr "_A Propos"
 
-#: src/gtkmm/MainWindow.cpp:503
+#: src/gtkmm/MainWindow.cpp:474
 msgid ""
 "LostIRC Quick Introduction\n"
 "\n"
@@ -278,15 +278,15 @@ msgstr ""
 "Nous vous invitons à consulter la liste des raccourcis claviers:\n"
 "    /KEYBINDINGS"
 
-#: src/gtkmm/MainWindow.cpp:517
+#: src/gtkmm/MainWindow.cpp:488
 msgid "LostIRC "
 msgstr "LostIRC "
 
-#: src/gtkmm/MainNotebook.cpp:136
+#: src/gtkmm/MainNotebook.cpp:133
 msgid " <span foreground=\"red\">(away: "
 msgstr "<span foreground=\"red\">(absent "
 
-#: src/gtkmm/MainNotebook.cpp:148
+#: src/gtkmm/MainNotebook.cpp:144
 msgid " (currently away)"
 msgstr " (absent pour le moment)"
 
@@ -626,11 +626,11 @@ msgstr ""
 msgid "An error occured while reading from pipe (Internal error 3)"
 msgstr ""
 
-#: src/libirc/Parser.cpp:838
+#: src/libirc/Parser.cpp:876
 msgid "idle: "
 msgstr "inactif: "
 
-#: src/libirc/Parser.cpp:842
+#: src/libirc/Parser.cpp:880
 msgid ", signon time: "
 msgstr ""
 

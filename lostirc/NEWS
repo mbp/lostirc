@@ -1,4 +1,8 @@
 LostIRC - (x.x.x)
+  * /PART does no longer work in queries. Before it tried to part a channel
+    with the user name.
+
+LostIRC - (0.4.3) - Fri Oct, 15th 2004
   * It is now possible to show/hide the Menubar by using the context menu on
     the main chat window.
   * Some messages sent by the IRC-server on connect was being stripped so
