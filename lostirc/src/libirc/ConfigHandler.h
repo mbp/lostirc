@@ -48,6 +48,9 @@ public:
     /* return "auto-join list" */
     std::vector<struct autoJoin*> getServers() { return _servers; }
 
+    /* write server list */
+    bool writeServers();
+
 private:
     bool readEvents(const std::string& filename);
     bool readServers(const std::string& filename);

@@ -75,6 +75,22 @@ bool ConfigHandler::readEvents(const string& filename)
     return setDefaults();
 }
 
+bool ConfigHandler::writeEvents()
+{
+    string home(getenv("HOME"));
+    std::ofstream out(string(home + "/.lostirc.events").c_str());
+
+    if (!out)
+          return false;
+
+    map<string, string>::const_iterator i;
+
+    for (i = _settings.begin(); i != _settings.end(); ++i) {
+        out << i->first << " = " << i->second << std::endl;
+    }
+    return true;
+}
+
 bool ConfigHandler::readServers(const string& filename)
 {
     std::ifstream in(filename.c_str());
@@ -132,6 +148,31 @@ bool ConfigHandler::readServers(const string& filename)
 
         _servers.push_back(j);
     } 
+    return true;
+}
+
+bool ConfigHandler::writeServers()
+{
+    string home(getenv("HOME"));
+    std::ofstream out(string(home + "/.lostirc.perform").c_str());
+
+    if (!out)
+          return false;
+
+    vector<struct autoJoin*>::const_iterator i;
+    vector<string>::const_iterator ivec;
+
+    for (i = _servers.begin(); i != _servers.end(); ++i) {
+        out << "hostname = " << (*i)->hostname << std::endl;
+        out << "port = " << (*i)->port << std::endl;
+        out << "password = " << (*i)->password << std::endl;
+        out << "nick = " << (*i)->nick << std::endl;
+
+        for (ivec = (*i)->cmds.begin(); ivec != (*i)->cmds.end(); ++ivec) {
+            out << "cmd = " << *ivec << std::endl;
+        }
+        out << std::endl;
+    }
     return true;
 }
 
@@ -203,18 +244,3 @@ void ConfigHandler::setDefault(const string& key, const string& value)
           _settings[key] = value;
 }
 
-bool ConfigHandler::writeEvents()
-{
-    string home(getenv("HOME"));
-    std::ofstream out(string(home + "/.lostirc.events").c_str());
-
-    if (!out)
-          return false;
-
-    map<string, string>::const_iterator i;
-
-    for (i = _settings.begin(); i != _settings.end(); ++i) {
-        out << (*i).first << " = " << (*i).second << std::endl;
-    }
-    return true;
-}
