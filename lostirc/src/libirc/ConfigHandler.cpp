@@ -26,42 +26,111 @@ using std::map;
 bool ConfigHandler::readConfig()
 {
     string home(getenv("HOME"));
-    std::ifstream in(string(home + "/.lostircrc").c_str());
+    readEvents(home + "/.lostircrc");
+    readServers(home + "/.lostirc.perform");
+    return true; // FIXME
+}
 
-    if (in) {
-        string str;
-        while (getline(in, str)) {
-            vector<string> vec;
-            Utils::Tokenize(str, vec);
-            vector<string>::const_iterator i = vec.begin();
+bool ConfigHandler::readEvents(const string& filename)
+{
+    std::ifstream in(filename.c_str());
 
-            string _tmpparam;
-            string _tmpvalue;
-            /* parse a string in the form 'value = param param param' */
-            while (i != vec.end())
-            {
-                if (*i == "=") {
-                    ++i;
-                    while (i != vec.end())
-                    {
-                        _tmpvalue += *i + " ";
-                        ++i;
-                    }
-                    if (_tmpvalue.size() > 0) {
-                        _tmpvalue = _tmpvalue.substr(0, _tmpvalue.size() - 1);
-                    }
-                    _settings.insert(make_pair(_tmpparam, _tmpvalue));
-                    break;
-                } else {
-                    _tmpparam = *i;
-                }
+    if (!in)
+          return false;
 
+    /* FIXME: too many nested while loops below */
+    string str;
+    while (getline(in, str)) {
+        vector<string> vec;
+        Utils::Tokenize(str, vec);
+        vector<string>::const_iterator i = vec.begin();
+
+        string _tmpparam;
+        string _tmpvalue;
+        /* parse a string in the form 'value = param param param' */
+        while (i != vec.end())
+        {
+            if (*i == "=") {
                 ++i;
+                while (i != vec.end())
+                {
+                    _tmpvalue += *i + " ";
+                    ++i;
+                }
+                if (!_tmpvalue.empty()) {
+                    _tmpvalue = _tmpvalue.substr(0, _tmpvalue.size() - 1);
+                }
+                _settings.insert(make_pair(_tmpparam, _tmpvalue));
+                break;
+            } else {
+                _tmpparam = *i;
             }
-            
+
+            ++i;
         }
+
     }
     return setDefaults();
+}
+
+bool ConfigHandler::readServers(const string& filename)
+{
+    std::ifstream in(filename.c_str());
+
+    if (!in)
+          return false;
+
+    vector<string> tmpcmds;
+    string server, tmp, nick, password;
+    int port = 0;
+    while (getline(in, tmp)) {
+        string::size_type pos1 = tmp.find_first_of("=");
+        string param;
+        string value;
+
+        if (pos1 != string::npos) {
+            param = tmp.substr(0, pos1 - 1);
+            value = tmp.substr(pos1 + 2);
+
+            if (param == "hostname") {
+                if (!server.empty()) {
+                    struct autoJoin j;
+                    j.hostname = server;
+                    j.port = port ? port : 6667;
+                    j.password = password;
+                    j.cmds = tmpcmds;
+                    j.nick = nick;
+
+                    port = 0;
+                    password = "";
+                    nick = "";
+
+                    _servers.push_back(j);
+                    tmpcmds.clear();
+                } 
+                server = value;
+            } else if (param == "cmd") {
+                tmpcmds.push_back(value);
+            } else if (param == "port") {
+                port = Utils::stoi(value);
+            } else if (param == "password") {
+                password = value;
+            } else if (param == "nick") {
+                nick = value;
+            }
+        }
+    }
+    if (!server.empty()) {
+        struct autoJoin j;
+        j.hostname = server;
+        j.port = port;
+        j.password = password;
+        j.cmds = tmpcmds;
+        j.nick = nick;
+
+        _servers.push_back(j);
+    } 
+    return true;
 }
 
 bool ConfigHandler::setParam(const string& key, const string& value)

@@ -25,18 +25,35 @@
 #include <map>
 #include "Utils.h"
 
+struct autoJoin {
+    std::string hostname;
+    int port;
+    std::string nick;
+    std::string password;
+    std::vector<std::string> cmds;
+};
+
 class ConfigHandler {
+    std::map<std::string, std::string> _settings;
+    std::vector<struct autoJoin> _servers;
 
 public:
+    /* read all configuration files */
     bool readConfig();
+
+    /* set and get a parameter in ~/.lostircrc */
     bool setParam(const std::string& key, const std::string& value);
     std::string getParam(const std::string& param);
 
+    /* return "auto-join list" */
+    std::vector<struct autoJoin> getServers() { return _servers; }
+
 private:
+    bool readEvents(const std::string& filename);
+    bool readServers(const std::string& filename);
     bool setDefaults();
-    void ConfigHandler::setDefault(const string& key, const string& value);
+    void setDefault(const std::string& key, const std::string& value);
     bool writeConfig();
-    std::map<std::string, std::string> _settings;
 
 };
 #endif

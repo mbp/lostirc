@@ -45,7 +45,7 @@ public:
     Tmpl(const std::string& str) : orig(str) { }
 
     Tmpl& operator<<(const std::string& str) { tokens.push_back(str); return *this; }
-    Tmpl& operator<<(int i) { stringstream ss; ss << i; tokens.push_back(ss.str()); return *this; }
+    Tmpl& operator<<(int i) { std::stringstream ss; ss << i; tokens.push_back(ss.str()); return *this; }
 
     std::string result();
 };
