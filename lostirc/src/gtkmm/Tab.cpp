@@ -31,7 +31,7 @@ using Glib::ustring;
 
 Tab::Tab(ServerConnection *conn, Pango::FontDescription font)
     : Gtk::VBox(), isHighlighted(false), hasPrefs(false),
-    isOnChannel(true), _conn(conn), _nicklist(0), _textwidget(font),
+    _isActive(true), _conn(conn), _nicklist(0), _textwidget(font),
     _isChannel(false), _isQuery(false), _entry(this)
 {
     _hpaned = new Gtk::HPaned();
@@ -62,13 +62,13 @@ void Tab::setInActive()
     if (isActive()) {
         Gtk::Label *_label = AppWin->getNotebook().getLabel(this);
         _label->set_text("(" + _label->get_text() + ")");
-        isOnChannel = false;
+        _isActive = false;
     }
 }
 
 void Tab::setActive()
 {
-    isOnChannel = true;
+    _isActive = true;
     if (_nicklist)
           _nicklist->setActive();
 }

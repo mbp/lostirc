@@ -45,6 +45,7 @@ public:
     ~Tab();
 
     Entry&                      getEntry() { return _entry; }
+    TextWidget&                 getText() { return _textwidget; }
     ServerConnection*           getConn() { return _conn; }
 
     void startPrefs();
@@ -55,25 +56,24 @@ public:
     void renameUser(const Glib::ustring& from, const Glib::ustring& to);
     bool findUser(const Glib::ustring& nick);
     std::vector<Glib::ustring> getNicks();
-    TextWidget& getText() { return _textwidget; }
+
     void setInActive();
     void setActive();
 
     void setQuery(bool value);
-
     void setChannel(bool value);
 
     bool isQuery() { return _isQuery; }
     bool isChannel() { return _isChannel; }
+    bool isActive() { return _isActive; }
 
-    void addOrRemoveNickList();
-            
-    bool isActive() { return isOnChannel; }
     bool isHighlighted;
     bool hasPrefs;
 
 private:
-    bool isOnChannel;
+    void addOrRemoveNickList();
+            
+    bool _isActive;
     ServerConnection *_conn;
     Gtk::ScrolledWindow _swin;
     Gtk::HBox _hbox;
