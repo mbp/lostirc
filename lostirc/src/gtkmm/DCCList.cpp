@@ -36,6 +36,7 @@ DCCList::DCCList()
 void DCCList::add(DCC *dcc)
 {
     Gtk::TreeModel::Row row = *_liststore->append();
+    row[_columns.status] = statusToStr(dcc->getStatus());
     row[_columns.filename] = dcc->getFilename();
     row[_columns.filesize] = dcc->getSize();
     row[_columns.fileposition] = dcc->getPosition();
@@ -52,10 +53,11 @@ void DCCList::add(DCC *dcc)
     }
 }
 
-void DCCList::markDone(DCC *dcc)
+void DCCList::statusChange(DCC *dcc)
 {
     // TODO: add code to mark dcc_ptr done.
-    _activeDccs--;
+    if (dcc->getStatus() == DCC::DONE)
+          _activeDccs--;
 
     updateDccData();
 
@@ -72,6 +74,7 @@ bool DCCList::updateDccData()
 
         DCC *dcc = row[_columns.dcc_ptr];
         if (dcc) {
+            row[_columns.status] = statusToStr(dcc->getStatus());
             row[_columns.filename] = dcc->getFilename();
             row[_columns.filesize] = dcc->getSize();
             row[_columns.fileposition] = dcc->getPosition();
@@ -80,6 +83,22 @@ bool DCCList::updateDccData()
     }
 
     return true;
+}
+
+Glib::ustring DCCList::statusToStr(DCC::Status status)
+{
+    if (status == DCC::DONE)
+          return "DONE";
+    else if (status == DCC::ONGOING)
+          return "ONGOING";
+    else if (status == DCC::WAITING)
+          return "WAITING";
+    else if (status == DCC::STOPPED)
+          return "STOPPED";
+    else if (status == DCC::ERROR)
+          return "ERROR";
+    else
+          return "";
 }
 
 

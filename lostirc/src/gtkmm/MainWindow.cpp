@@ -307,10 +307,10 @@ void MainWindow::newDCC(DCC *dcc)
     dcclist->add(dcc); 
 }
 
-void MainWindow::doneDCC(DCC *dcc)
+void MainWindow::dccStatusChanged(DCC *dcc)
 {
     DCCList *dcclist = DCCList::Instance();
-    dcclist->markDone(dcc); 
+    dcclist->statusChange(dcc); 
 }
 
 void MainWindow::localeError()

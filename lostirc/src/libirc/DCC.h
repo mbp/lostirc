@@ -37,13 +37,18 @@
 class ServerConnection;
 
 class DCC : public SigC::Object {
+
 public:
+
+    enum Status { DONE, ONGOING, WAITING, STOPPED, ERROR };
+
     virtual void go_ahead() = 0;
 
-    virtual Glib::ustring getFilename() = 0;
-    virtual unsigned long getSize() = 0;
-    virtual unsigned long getPosition() = 0;
-    virtual Glib::ustring getNick() = 0;
+    virtual Glib::ustring getFilename() const = 0;
+    virtual unsigned long getSize() const = 0;
+    virtual unsigned long getPosition() const = 0;
+    virtual Glib::ustring getNick() const = 0;
+    virtual Status getStatus() const = 0;
 };
 
 class DCC_Send_In : public DCC {
@@ -55,10 +60,11 @@ public:
     bool onReadData(Glib::IOCondition cond);
     void getUseableFilename(int i);
 
-    virtual Glib::ustring getFilename() { return _filename; }
-    virtual unsigned long getSize() { return _size; }
-    virtual unsigned long getPosition() { return _pos; }
-    virtual Glib::ustring getNick() { return _nick; }
+    virtual Glib::ustring getFilename() const { return _filename; }
+    virtual unsigned long getSize() const { return _size; }
+    virtual unsigned long getPosition() const { return _pos; }
+    virtual Glib::ustring getNick() const { return _nick; }
+    virtual Status getStatus() const { return _status; }
 
     int _number_in_queue;
 
@@ -71,6 +77,8 @@ private:
     unsigned short _port;
     unsigned long _size;
     unsigned long _pos;
+
+    Status _status;
 
     int fd;
     struct sockaddr_in sockaddr;
@@ -87,10 +95,11 @@ public:
 
     int _number_in_queue;
 
-    virtual Glib::ustring getFilename() { return _filename; }
-    virtual unsigned long getSize() { return _size; }
-    virtual unsigned long getPosition() { return _pos; }
-    virtual Glib::ustring getNick() { return _nick; }
+    virtual Glib::ustring getFilename() const { return _filename; }
+    virtual unsigned long getSize() const { return _size; }
+    virtual unsigned long getPosition() const { return _pos; }
+    virtual Glib::ustring getNick() const { return _nick; }
+    virtual Status getStatus() const { return _status; }
 
 private:
     std::ifstream _infile;
@@ -104,6 +113,8 @@ private:
     struct sockaddr_in remoteaddr;
     unsigned long _pos;
     unsigned long _size;
+
+    Status _status;
 };
 
 class DCC_queue {
@@ -122,7 +133,7 @@ public:
     int addDccSendIn(const Glib::ustring& filename, const Glib::ustring& nick, unsigned long address, unsigned short port, unsigned long size);
     int addDccSendOut(const Glib::ustring& filename, const Glib::ustring& nick, ServerConnection *conn);
 
-    void dccDone(int n);
+    void statusChange(int n);
 
 };
 

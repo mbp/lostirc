@@ -39,7 +39,7 @@ public:
     void closeDCCList() { currentTab->closeDCCList(); }
 
     void add(DCC *dcc);
-    void markDone(DCC *dcc);
+    void statusChange(DCC *dcc);
 
 private:
     DCCList();
@@ -65,6 +65,8 @@ private:
             add(fileposition); add(nick); add(dcc_ptr);
         }
     };
+
+    Glib::ustring statusToStr(DCC::Status s);
 
     int _activeDccs;
     SigC::Connection signal_timeout;

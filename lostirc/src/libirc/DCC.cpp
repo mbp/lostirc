@@ -24,7 +24,7 @@
 
 DCC_Send_In::DCC_Send_In(const Glib::ustring& filename, const Glib::ustring& nick, unsigned long address, unsigned short port, unsigned long size)
 : _outfile(), _filename(filename), _nick(nick), _address(address),
-    _port(port), _size(size), _pos(0)
+    _port(port), _size(size), _pos(0), _status(WAITING)
 {
     _downloaddir = Glib::ustring(App->home) + "/.lostirc/downloads/";
     mkdir(_downloaddir.c_str(), 0700);
@@ -55,13 +55,16 @@ void DCC_Send_In::go_ahead()
 
     if (::connect(fd, reinterpret_cast<struct sockaddr *>(&sockaddr), sizeof(struct sockaddr)) < 0 && errno != EINPROGRESS) {
         FE::emit(FE::get(CLIENTMSG) << "Couldn't connect:" << strerror(errno), FE::CURRENT);
-        App->getDcc().dccDone(_number_in_queue);
+        _status = ERROR;
+        App->getDcc().statusChange(_number_in_queue);
     }
 
     Glib::signal_io().connect(
             SigC::slot(*this, &DCC_Send_In::onReadData),
             fd,
             Glib::IO_IN | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL);
+
+    _status = ONGOING;
 }
 
 bool DCC_Send_In::onReadData(Glib::IOCondition cond)
@@ -73,7 +76,8 @@ bool DCC_Send_In::onReadData(Glib::IOCondition cond)
     else if (retval == -1) {
         if (!(errno == EAGAIN || errno == EWOULDBLOCK)) {
             FE::emit(FE::get(CLIENTMSG) << "Couldn't receive:" << strerror(errno), FE::CURRENT);
-            App->getDcc().dccDone(_number_in_queue);
+            _status = ERROR;
+            App->getDcc().statusChange(_number_in_queue);
             return false;
         }
     } else {
@@ -96,7 +100,8 @@ bool DCC_Send_In::onReadData(Glib::IOCondition cond)
             #endif
             _outfile.close();
             FE::emit(FE::get(CLIENTMSG) << "File received successfully:" << _filename, FE::CURRENT);
-            App->getDcc().dccDone(_number_in_queue);
+            _status = DONE;
+            App->getDcc().statusChange(_number_in_queue);
             return false;
         }
     }
@@ -119,7 +124,7 @@ void DCC_Send_In::getUseableFilename(int i)
 }
 
 DCC_Send_Out::DCC_Send_Out(const Glib::ustring& filename, const Glib::ustring& nick, ServerConnection *conn)
-    : _infile(), _filename(filename), _nick(nick), _pos(0)
+    : _infile(), _filename(filename), _nick(nick), _pos(0), _status(WAITING)
 {
     _filename = expandHome(_filename);
 
@@ -127,7 +132,8 @@ DCC_Send_Out::DCC_Send_Out(const Glib::ustring& filename, const Glib::ustring& n
 
     if (stat(_filename.c_str(), &st) == -1) {
         FE::emit(FE::get(CLIENTMSG) << "File not found:" << _filename, FE::CURRENT);
-        // FIXME: add dcc-done?
+        _status = ERROR;
+        App->getDcc().statusChange(_number_in_queue);
     } else {
         _size = st.st_size;
         if (App->options.dccip->empty())
@@ -176,6 +182,8 @@ DCC_Send_Out::DCC_Send_Out(const Glib::ustring& filename, const Glib::ustring& n
                     fd,
                     Glib::IO_IN | Glib::IO_ERR | Glib::IO_OUT | Glib::IO_HUP | Glib::IO_NVAL);
 
+            _status = ONGOING;
+
         }
     }
 
@@ -208,7 +216,8 @@ bool DCC_Send_Out::onSendData(Glib::IOCondition cond)
     if (retval == -1) {
         if (!(errno == EAGAIN || errno == EWOULDBLOCK)) {
             FE::emit(FE::get(CLIENTMSG) << "Couldn't send:" << strerror(errno), FE::CURRENT);
-            App->getDcc().dccDone(_number_in_queue);
+            _status = ERROR;
+            App->getDcc().statusChange(_number_in_queue);
             return false;
         }
     } else {
@@ -226,7 +235,8 @@ bool DCC_Send_Out::onSendData(Glib::IOCondition cond)
             #endif
             _infile.close();
             FE::emit(FE::get(CLIENTMSG) << "File sent successfully:" << _filename, FE::CURRENT);
-            App->getDcc().dccDone(_number_in_queue);
+            _status = DONE;
+            App->getDcc().statusChange(_number_in_queue);
             return false;
         }
 
@@ -263,15 +273,11 @@ int DCC_queue::addDccSendOut(const Glib::ustring& filename, const Glib::ustring&
     return _count;
 }
 
-void DCC_queue::dccDone(int n)
+void DCC_queue::statusChange(int n)
 {
     std::map<int, DCC*>::iterator i = _dccs.find(n);
-    if (i != _dccs.end()) {
-        App->fe->doneDCC(i->second);
-        delete i->second;
-        i->second = 0;
-        _dccs.erase(i);
-    }
+    if (i != _dccs.end())
+          App->fe->dccStatusChanged(i->second);
 }
 
 Glib::ustring expandHome(const Glib::ustring& str)

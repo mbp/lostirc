@@ -63,7 +63,7 @@ public:
     void newTab(ServerConnection *conn);
     void disconnected(ServerConnection *conn);
     void newDCC(DCC *dcc);
-    void doneDCC(DCC *dcc);
+    void dccStatusChanged(DCC *dcc);
     void localeError();
 
     StatusBar statusbar;
