@@ -1,3 +1,10 @@
+LostIRC (x.x.x)
+  * You can now tab-complete commands as well as nicks. /j<tab> becomes /JOIN.
+  * ALT+P didn't start preferences when in a query tab, fixed.
+  * When using ALT+P and the preferences window is open, it will now get
+    closed.
+  * ALT+F can now be used for setting the font, same result as /SETFONT
+
 LostIRC (0.0.5) - Fri Mar 8th 2002
   * An unwanted newline occuring in a /whois has been removed
   * The nick-list is now properly sorted
