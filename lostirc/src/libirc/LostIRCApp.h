@@ -21,6 +21,7 @@
 
 #include <iostream>
 #include <vector>
+#include <cassert>
 #ifndef WIN32
 #include <sys/utsname.h>
 #endif
