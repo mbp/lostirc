@@ -28,7 +28,7 @@ using Glib::ustring;
 TextWidget::TextWidget(Pango::FontDescription font)
     : highlight_mark_pos(highlight_marks.rend())
 {
-    _textview.set_wrap_mode(Gtk::WRAP_CHAR);
+    _textview.set_wrap_mode(Gtk::WRAP_WORD_CHAR);
     _textview.unset_flags(Gtk::CAN_FOCUS);
     _textview.set_editable(false);
 
@@ -40,13 +40,13 @@ TextWidget::TextWidget(Pango::FontDescription font)
     _textview.modify_font(font);
     Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
     pos = buffer->create_mark(buffer->end());
-    get_vscrollbar()->signal_size_allocate().connect(SigC::slot(*this, &TextWidget::onResize));
-    get_vscrollbar()->signal_value_changed().connect(SigC::slot(*this, &TextWidget::onScroll));
+    get_vscrollbar()->signal_size_allocate().connect(sigc::mem_fun(*this, &TextWidget::onResize));
+    get_vscrollbar()->signal_value_changed().connect(sigc::mem_fun(*this, &TextWidget::onScroll));
 
-    _textview.signal_populate_popup().connect(SigC::slot(*this, &TextWidget::populateMenu));
+    _textview.signal_populate_popup().connect(sigc::mem_fun(*this, &TextWidget::populateMenu));
 }
 
-void TextWidget::onResize(GtkAllocation *alloc)
+void TextWidget::onResize(Gtk::Allocation& alloc)
 {
     _textview.scroll_to_mark(pos, 0.0);
 }
@@ -74,7 +74,7 @@ void TextWidget::scrollToHighlightMark()
         if (highlight_mark_pos == highlight_marks.rend())
               highlight_mark_pos = highlight_marks.rbegin();
 
-        _textview.scroll_to_mark(*highlight_mark_pos, 0.1, 0.0, 1.0);
+        _textview.scroll_to_mark(*highlight_mark_pos, 0.1);
     }
 }
 
@@ -352,12 +352,12 @@ void TextWidget::populateMenu(Gtk::Menu *contextmenu)
     if (AppWin->getMenuBar().is_visible())
           menulist.push_back(Gtk::Menu_Helpers::MenuElem(
                       _("_Hide Menubar"),
-                      Gtk::Menu::AccelKey("<control>m"),
-                      SigC::slot(*AppWin, &MainWindow::hideMenu)));
+                      Gtk::AccelKey("<control>m"),
+                      sigc::mem_fun(*AppWin, &MainWindow::hideMenu)));
     else
           menulist.push_back(Gtk::Menu_Helpers::MenuElem(
                       _("_Show Menubar"),
-                      Gtk::Menu::AccelKey("<control>m"),
-                      SigC::slot(*AppWin, &MainWindow::hideMenu)));
+                      Gtk::AccelKey("<control>m"),
+                      sigc::mem_fun(*AppWin, &MainWindow::hideMenu)));
 
 }

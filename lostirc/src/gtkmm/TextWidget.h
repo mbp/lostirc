@@ -53,7 +53,7 @@ private:
     void populateMenu(Gtk::Menu*);
     void setStyle();
 
-    void onResize(GtkAllocation *alloc);
+    void onResize(Gtk::Allocation& alloc);
     void onScroll();
 
     void removeTopBuffer();

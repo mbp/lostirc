@@ -99,7 +99,7 @@ Prefs::Prefs()
     fontentry.set_sensitive(false);
     Gtk::HBox *fontbox = manage(new Gtk::HBox());
     Gtk::Button *fontbutton = manage(new Gtk::Button(_("Browse...")));
-    fontbutton->signal_clicked().connect(slot(*this, &Prefs::openFontWindow));
+    fontbutton->signal_clicked().connect(sigc::mem_fun(*this, &Prefs::openFontWindow));
     fontbox->pack_start(fontentry, Gtk::PACK_EXPAND_WIDGET);
     fontbox->pack_start(*fontbutton, Gtk::PACK_SHRINK);
     Gtk::Label *glabel4 = manage(new Gtk::Label(_("Main window font:"), Gtk::ALIGN_LEFT));
@@ -175,10 +175,10 @@ Prefs::Prefs()
         Gtk::Menu::MenuList& menulist = colorschemes->items();
 
         menulist.push_back( Gtk::Menu_Helpers::MenuElem("White on black",
-                    SigC::slot(*this, &Prefs::saveSettings) ) );
+                    sigc::mem_fun(*this, &Prefs::saveSettings) ) );
 
         menulist.push_back( Gtk::Menu_Helpers::MenuElem("Black on white",
-                    SigC::slot(*this, &Prefs::saveSettings) ) );
+                    sigc::mem_fun(*this, &Prefs::saveSettings) ) );
 
     }
 
@@ -191,7 +191,7 @@ Prefs::Prefs()
     // Final setup
     Gtk::HBox *closehbox = manage(new Gtk::HBox());
     Gtk::Button *closebutton = manage(new Gtk::Button(Gtk::Stock::CLOSE));
-    closebutton->signal_clicked().connect(slot(*this, &Prefs::onClose));
+    closebutton->signal_clicked().connect(sigc::mem_fun(*this, &Prefs::onClose));
     closehbox->pack_end(*closebutton, Gtk::PACK_SHRINK);
     mainvbox.pack_start(*closehbox);
 

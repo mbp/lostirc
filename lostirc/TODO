@@ -21,12 +21,6 @@ RANDOM BUGS:
   * Color-parsing might be slow, since it inserts one character at the time.
     Need to look into optimizing it.
 
-  * Wrapping of text in the text widget is done character wise, it would
-    be nice if it could be done word-wise. But when using WRAP_WORD, a bug
-    in GTK+ causes the window to be resized when the new text is inserted.
-
-    This can be solved when gtkmm 2.4 gets released, which has WRAP_WORD_CHAR.
-
   * The window expands very wide when a lot of text is inserted into the
     statusbar. This doesn't happen when we use the Gtk::StatusBar widget,
     but unfortunately it doesn't support pango markup.

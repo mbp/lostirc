@@ -68,7 +68,7 @@ private:
     Gtk::Entry ircnickentry;
     Gtk::Entry realnameentry;
 
-    SigC::Connection _column_signal;
+    sigc::connection _column_signal;
 };
 
 class ServerEditDialog : public Gtk::Dialog

@@ -44,9 +44,9 @@ DCC_Send_In::DCC_Send_In(const Glib::ustring& filename, const Glib::ustring& nic
     _port(port), _size(size), _pos(0)
 {
     setStatus(WAITING);
-    _socket.on_connected.connect(SigC::slot(*this, &DCC_Send_In::on_connected));
-    _socket.on_error.connect(SigC::slot(*this, &DCC_Send_In::on_connection_failed));
-    _socket.on_data_pending.connect(SigC::slot(*this, &DCC_Send_In::onReadData));
+    _socket.on_connected.connect(sigc::mem_fun(*this, &DCC_Send_In::on_connected));
+    _socket.on_error.connect(sigc::mem_fun(*this, &DCC_Send_In::on_connection_failed));
+    _socket.on_data_pending.connect(sigc::mem_fun(*this, &DCC_Send_In::onReadData));
     _downloaddir = Glib::ustring(App->home) + "/.lostirc/downloads/";
     #ifndef WIN32
     mkdir(_downloaddir.c_str(), 0700);
@@ -151,9 +151,9 @@ DCC_Send_Out::DCC_Send_Out(const Glib::ustring& filename, const Glib::ustring& n
     : _infile(), _filename(filename), _nick(nick), _pos(0)
 {
     setStatus(WAITING);
-    _socket.on_error.connect(SigC::slot(*this, &DCC_Send_Out::on_bind_failed));
-    _socket.on_accepted_connection.connect(SigC::slot(*this, &DCC_Send_Out::onAccept));
-    _socket.on_can_send_data.connect(SigC::slot(*this, &DCC_Send_Out::onSendData));
+    _socket.on_error.connect(sigc::mem_fun(*this, &DCC_Send_Out::on_bind_failed));
+    _socket.on_accepted_connection.connect(sigc::mem_fun(*this, &DCC_Send_Out::onAccept));
+    _socket.on_can_send_data.connect(sigc::mem_fun(*this, &DCC_Send_Out::onSendData));
     Glib::ustring localip;
 
     struct stat st;

@@ -35,7 +35,7 @@ public:
     void setText2(const Glib::ustring& str) { _notifylabel.set_markup(str);
         signal_timeout.disconnect();
         signal_timeout = Glib::signal_timeout().connect(
-                SigC::slot(*this, &StatusBar::onText2Timeout),
+                sigc::mem_fun(*this, &StatusBar::onText2Timeout),
                 5000);
     }
     void clearText2() { _notifylabel.set_text(""); }
@@ -51,7 +51,7 @@ public:
         // Then add new one.
         _statusbar.push(str);
         signal_timeout = Glib::signal_timeout().connect(
-                SigC::slot(*this, &StatusBar::onText2Timeout),
+                sigc::mem_fun(*this, &StatusBar::onText2Timeout),
                 5000);
     }
 
@@ -69,7 +69,7 @@ private:
     Gtk::Label _label;
     Gtk::Label _notifylabel;
 
-    SigC::Connection signal_timeout;
+    sigc::connection signal_timeout;
 };
 
 #endif

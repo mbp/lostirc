@@ -344,7 +344,7 @@ void MainWindow::localeError(bool tried_custom_encoding)
     msg += _("\n\n(Note: You'll only see this warning once per LostIRC session)");
 
 
-    Gtk::MessageDialog mdialog(*this, msg, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK);
+    Gtk::MessageDialog mdialog(*this, msg, false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK);
     mdialog.run();
 }
 
@@ -379,29 +379,29 @@ void MainWindow::setupMenus()
         Gtk::Menu::MenuList& menulist = _firstmenu.items();
 
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-                    _("New Server Tab"),
-                    Gtk::Menu::AccelKey("<control>n"),
-                    SigC::hide_return(SigC::slot(*this, &MainWindow::newServerTab))));
+                    _("_New Server Tab"),
+                    Gtk::AccelKey("<control>n"),
+                    sigc::hide_return(sigc::mem_fun(*this, &MainWindow::newServerTab))));
 
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(
                     _("Clear Window"),
-                    SigC::slot(_notebook, &MainNotebook::clearWindow)));
+                    sigc::mem_fun(_notebook, &MainNotebook::clearWindow)));
 
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(
                     _("Clear All Windows"),
-                    SigC::slot(_notebook, &MainNotebook::clearAll)));
+                    sigc::mem_fun(_notebook, &MainNotebook::clearAll)));
 
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(
                     _("Close Current Tab"),
-                    Gtk::Menu::AccelKey("<control>w"),
-                    SigC::slot(*this, &MainWindow::closeCurrentTab)));
+                    Gtk::AccelKey("<control>w"),
+                    sigc::mem_fun(*this, &MainWindow::closeCurrentTab)));
 
 
         menulist.push_back(Gtk::Menu_Helpers::SeparatorElem::SeparatorElem());
         menulist.push_back(
                 Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::QUIT,
-                    Gtk::Menu::AccelKey("<control>q"),
-                    SigC::slot(*this, &Gtk::Window::hide)));
+                    Gtk::AccelKey("<control>q"),
+                    sigc::mem_fun(*this, &Gtk::Window::hide)));
     }
 
     { // View menu.
@@ -410,33 +410,33 @@ void MainWindow::setupMenus()
 
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(
                     _("_Menubar"),
-                    Gtk::Menu::AccelKey("<control>m"),
-                    SigC::slot(*this, &MainWindow::hideMenu)));
+                    Gtk::AccelKey("<control>m"),
+                    sigc::mem_fun(*this, &MainWindow::hideMenu)));
 
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(
                     _("Status_bar"),
-                    Gtk::Menu::AccelKey("<control>b"),
-                    SigC::slot(*this, &MainWindow::hideStatusbar)));
+                    Gtk::AccelKey("<control>b"),
+                    sigc::mem_fun(*this, &MainWindow::hideStatusbar)));
 
         menulist.push_back(Gtk::Menu_Helpers::SeparatorElem::SeparatorElem());
 
         menulist.push_back(Gtk::Menu_Helpers::CheckMenuElem(
                     _("User _List"),
-                    Gtk::Menu::AccelKey("<control>l"),
-                    SigC::slot(*this, &MainWindow::hideNickList)));
+                    Gtk::AccelKey("<control>l"),
+                    sigc::mem_fun(*this, &MainWindow::hideNickList)));
 
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(
                     _("_Server List"),
-                    Gtk::Menu::AccelKey("<control>s"),
-                    SigC::slot(*this, &MainWindow::openServerWindow)));
+                    Gtk::AccelKey("<control>s"),
+                    sigc::mem_fun(*this, &MainWindow::openServerWindow)));
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(
                     _("_DCC Transfers"),
-                    Gtk::Menu::AccelKey("<control>d"),
-                    SigC::slot(*this, &MainWindow::openDccWindow)));
+                    Gtk::AccelKey("<control>d"),
+                    sigc::mem_fun(*this, &MainWindow::openDccWindow)));
         menulist.push_back(
                 Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::PREFERENCES,
-                    Gtk::Menu::AccelKey("<control>p"),
-                    SigC::slot(*this, &MainWindow::openPrefs)));
+                    Gtk::AccelKey("<control>p"),
+                    sigc::mem_fun(*this, &MainWindow::openPrefs)));
 
 
     }
@@ -445,12 +445,12 @@ void MainWindow::setupMenus()
         Gtk::Menu::MenuList& menulist = _helpmenu.items();
 
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-                    _("_Introduction"), SigC::slot(*this, &MainWindow::openHelpIntro)));
+                    _("_Introduction"), sigc::mem_fun(*this, &MainWindow::openHelpIntro)));
 
         menulist.push_back(Gtk::Menu_Helpers::SeparatorElem::SeparatorElem());
 
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-                    _("_About"), SigC::slot(*this, &MainWindow::openAboutWindow)));
+                    _("_About"), sigc::mem_fun(*this, &MainWindow::openAboutWindow)));
     }
 
     _menubar.items().push_back(Gtk::Menu_Helpers::MenuElem(_("_LostIRC"), _firstmenu));
@@ -504,9 +504,9 @@ void MainWindow::openHelpIntro()
     if (_helpwin.get()) {
           _helpwin->present();
     } else {
-        std::auto_ptr<Gtk::MessageDialog> dialog(new Gtk::MessageDialog(_("LostIRC Quick Introduction\n\nThis help window is a quick guide to get you going with LostIRC.\nMove this window away from the LostIRC window, and use it as a quick reference window until you know the general idea.\n\nYou can connect to a server using:\n    /SERVER <hostname / ip>\n\n...and then join a channel:\n    /JOIN <channel-name>\n\nA list of all commands are available with:\n    /COMMANDS\n\nAnd you should really check out the list of key bindings:\n    /KEYBINDINGS"), Gtk::MESSAGE_INFO, Gtk::BUTTONS_CLOSE, false));
+        std::auto_ptr<Gtk::MessageDialog> dialog(new Gtk::MessageDialog(_("LostIRC Quick Introduction\n\nThis help window is a quick guide to get you going with LostIRC.\nMove this window away from the LostIRC window, and use it as a quick reference window until you know the general idea.\n\nYou can connect to a server using:\n    /SERVER <hostname / ip>\n\n...and then join a channel:\n    /JOIN <channel-name>\n\nA list of all commands are available with:\n    /COMMANDS\n\nAnd you should really check out the list of key bindings:\n    /KEYBINDINGS"), false, Gtk::MESSAGE_INFO, Gtk::BUTTONS_CLOSE, false));
 
-        dialog->signal_response().connect(slot(*this, &MainWindow::hideHelpIntro));
+        dialog->signal_response().connect(sigc::mem_fun(*this, &MainWindow::hideHelpIntro));
         dialog->show();
 
         _helpwin = dialog;
@@ -518,9 +518,9 @@ void MainWindow::openAboutWindow()
     if (_aboutwin.get()) {
           _aboutwin->present();
     } else {
-        std::auto_ptr<Gtk::MessageDialog> dialog(new Gtk::MessageDialog(_("LostIRC "VERSION), Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, false));
+        std::auto_ptr<Gtk::MessageDialog> dialog(new Gtk::MessageDialog(_("LostIRC "VERSION), false, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, false));
 
-        dialog->signal_response().connect(slot(*this, &MainWindow::hideAboutWindow));
+        dialog->signal_response().connect(sigc::mem_fun(*this, &MainWindow::hideAboutWindow));
         dialog->show();
 
         _aboutwin = dialog;

@@ -64,7 +64,7 @@ private:
     Glib::ustring statusToStr(DCC::Status s);
 
     int _activeDccs;
-    SigC::Connection signal_timeout;
+    sigc::connection signal_timeout;
 
     ModelColumns _columns;
     Glib::RefPtr<Gtk::ListStore> _liststore;

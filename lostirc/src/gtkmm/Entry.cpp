@@ -31,8 +31,8 @@ int autoCompletion(ustring& search, ustring& matches_str, vector<ustring> full_l
 Entry::Entry(Tab* tab)
     : Gtk::Entry(), _tab(tab), i(_entries.begin())
 {
-    signal_key_press_event().connect(slot(*this, &Entry::onKeyPress));
-    signal_activate().connect(slot(*this, &Entry::onEntry));
+    signal_key_press_event().connect(sigc::mem_fun(*this, &Entry::onKeyPress));
+    signal_activate().connect(sigc::mem_fun(*this, &Entry::onEntry));
 }
 
 void Entry::onEntry()

@@ -56,10 +56,10 @@ ServerConnection::ServerConnection(const ustring& host, const ustring& nick, int
     Session.sentLagCheck = false;
     Session.realname = App->options.realname;
 
-    _socket.on_host_resolved.connect(SigC::slot(*this, &ServerConnection::on_host_resolved));
-    _socket.on_connected.connect(SigC::slot(*this, &ServerConnection::on_connected));
-    _socket.on_data_pending.connect(SigC::slot(*this, &ServerConnection::onReadData));
-    _socket.on_error.connect(SigC::slot(*this, &ServerConnection::on_error));
+    _socket.on_host_resolved.connect(sigc::mem_fun(*this, &ServerConnection::on_host_resolved));
+    _socket.on_connected.connect(sigc::mem_fun(*this, &ServerConnection::on_connected));
+    _socket.on_data_pending.connect(sigc::mem_fun(*this, &ServerConnection::onReadData));
+    _socket.on_error.connect(sigc::mem_fun(*this, &ServerConnection::on_error));
 
     App->fe->newTab(this);
 
@@ -242,7 +242,7 @@ bool ServerConnection::connectionCheck()
 void ServerConnection::addConnectionTimerCheck()
 {
     signal_connection = Glib::signal_timeout().connect(
-            SigC::slot(*this, &ServerConnection::connectionCheck),
+            sigc::mem_fun(*this, &ServerConnection::connectionCheck),
             30000);
 }
 
@@ -250,7 +250,7 @@ void ServerConnection::addReconnectTimer()
 {
     if (!signal_autoreconnect.connected())
           signal_autoreconnect = Glib::signal_timeout().connect(
-                  SigC::slot(*this, &ServerConnection::autoReconnect),
+                  sigc::mem_fun(*this, &ServerConnection::autoReconnect),
                   2000);
 }
 

@@ -28,7 +28,7 @@ MainNotebook::MainNotebook()
     set_tab_pos(Gtk::POS_BOTTOM);
     set_scrollable(true);
     _fontdesc = Pango::FontDescription(App->options.font);
-    signal_switch_page().connect(SigC::slot(*this, &MainNotebook::onSwitchPage));
+    signal_switch_page().connect(sigc::mem_fun(*this, &MainNotebook::onSwitchPage));
 }
 
 Tab* MainNotebook::addTab(Tab::Type type, const ustring& name, ServerConnection *conn)

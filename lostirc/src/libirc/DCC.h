@@ -29,10 +29,11 @@
 
 class ServerConnection;
 
-class DCC : public SigC::Object {
+class DCC : public sigc::trackable {
 
 public:
     enum Status { DONE, ONGOING, WAITING, STOPPED, FAIL };
+    virtual ~DCC() { }
 
     virtual void start() = 0;
     virtual void cancel() = 0;

@@ -55,7 +55,7 @@ void DCCList::add(DCC *dcc)
 
     if (!signal_timeout.connected()) {
         signal_timeout = Glib::signal_timeout().connect(
-                SigC::slot(*this, &DCCList::updateDccData),
+                sigc::mem_fun(*this, &DCCList::updateDccData),
                 500);
     }
 }

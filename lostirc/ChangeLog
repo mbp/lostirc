@@ -1,5 +1,14 @@
 For a summary of changes between releases - see the NEWS file.
 
+2004-04-29  Morten Brix Pedersen  <morten@wtf.dk>
+        * DCCList.cpp, DCCList.h, Entry.cpp, MainNotebook.cpp, MainWindow.cpp,
+        NickList.cpp, Prefs.cpp, ServerWindow.cpp, ServerWindow.h,
+        StatusBar.h, TextWidget.cpp, TextWidget.h:
+        Update gtkmm, glibmm and libsigc++ API code to respectively 2.4, 2.4
+        and 2.0.
+        * configure.ac: Bump version to 0.4.0-pre.
+                        Bump gettext requirement from 0.13.1 to 0.14.1.
+
 2004-03-23  Morten Brix Pedersen  <morten@wtf.dk>
         
         * configure.ac: Bump version and release 0.3.3.

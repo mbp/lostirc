@@ -26,7 +26,7 @@
 #include "Parser.h"
 #include "Channel.h"
 
-class ServerConnection : public SigC::Object
+class ServerConnection : public sigc::trackable
 {
 
 public:
@@ -115,8 +115,8 @@ private:
 
     void doCleanup();
 
-    SigC::Connection signal_connection;
-    SigC::Connection signal_autoreconnect;
+    sigc::connection signal_connection;
+    sigc::connection signal_autoreconnect;
 
     // Copy-ctr private to avoid copying.
     ServerConnection(const ServerConnection&);

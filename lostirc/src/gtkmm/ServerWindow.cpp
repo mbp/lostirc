@@ -63,8 +63,8 @@ ServerWindow::ServerWindow(Gtk::Window& parent)
     _pref_table.attach(*glabel1, 0, 1, row, row + 1);
     _pref_table.attach(realnameentry, 1, 2, row, row + 1);
 
-    realnameentry.signal_focus_out_event().connect(slot(*this, &ServerWindow::focusChangeEvent));
-    ircnickentry.signal_focus_out_event().connect(slot(*this, &ServerWindow::focusChangeEvent));
+    realnameentry.signal_focus_out_event().connect(sigc::mem_fun(*this, &ServerWindow::focusChangeEvent));
+    ircnickentry.signal_focus_out_event().connect(sigc::mem_fun(*this, &ServerWindow::focusChangeEvent));
 
 
     Gtk::ScrolledWindow *swin = manage(new Gtk::ScrolledWindow());
@@ -82,15 +82,15 @@ ServerWindow::ServerWindow(Gtk::Window& parent)
     // Button box.
     Gtk::HButtonBox *buttbox = manage(new Gtk::HButtonBox(Gtk::BUTTONBOX_END, 6));
     Gtk::Button *connectbutton = manage(create_imagebutton(_("_Connect"), Gtk::Stock::JUMP_TO));
-    connectbutton->signal_clicked().connect(slot(*this, &ServerWindow::connectEntry));
+    connectbutton->signal_clicked().connect(sigc::mem_fun(*this, &ServerWindow::connectEntry));
     Gtk::Button *addbutton = manage(new Gtk::Button(Gtk::Stock::ADD));
-    addbutton->signal_clicked().connect(slot(*this, &ServerWindow::addEntry));
+    addbutton->signal_clicked().connect(sigc::mem_fun(*this, &ServerWindow::addEntry));
     Gtk::Button *modifybutton = manage(create_imagebutton(_("_Modify"), Gtk::Stock::PREFERENCES));
-    modifybutton->signal_clicked().connect(slot(*this, &ServerWindow::modifyEntry));
+    modifybutton->signal_clicked().connect(sigc::mem_fun(*this, &ServerWindow::modifyEntry));
     Gtk::Button *deletebutton = manage(new Gtk::Button(Gtk::Stock::DELETE));
-    deletebutton->signal_clicked().connect(slot(*this, &ServerWindow::deleteEntry));
+    deletebutton->signal_clicked().connect(sigc::mem_fun(*this, &ServerWindow::deleteEntry));
     Gtk::Button *closebutton = manage(new Gtk::Button(Gtk::Stock::CLOSE));
-    closebutton->signal_clicked().connect(slot(*this, &Gtk::Dialog::hide));
+    closebutton->signal_clicked().connect(sigc::mem_fun(*this, &Gtk::Dialog::hide));
 
     buttbox->pack_end(*manage(new Gtk::VBox()), Gtk::PACK_EXPAND_WIDGET);
     buttbox->pack_end(*connectbutton, Gtk::PACK_SHRINK);
@@ -134,7 +134,7 @@ void ServerWindow::updateList()
         row[_columns.serverptr] = *i;
     }
 
-    _column_signal = _liststore->signal_row_changed().connect(SigC::slot(*this, &ServerWindow::onColumnChanged));
+    _column_signal = _liststore->signal_row_changed().connect(sigc::mem_fun(*this, &ServerWindow::onColumnChanged));
 }
 
 void ServerWindow::connectEntry()
@@ -187,7 +187,7 @@ void ServerWindow::deleteEntry()
 
     if (iterrow) {
         // Ask the user whether he/she is sure.
-        Gtk::MessageDialog dialog("Are you sure you want to delete this server?", Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO);
+        Gtk::MessageDialog dialog("Are you sure you want to delete this server?", false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO);
 
         int result = dialog.run();
 

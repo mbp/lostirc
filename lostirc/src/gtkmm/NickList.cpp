@@ -37,7 +37,7 @@ NickList::NickList()
     _treeview.append_column("", _columns.status);
     _treeview.append_column("", _columns.nick);
     _treeview.get_selection()->set_mode(Gtk::SELECTION_NONE);
-    _liststore->set_default_sort_func(SigC::slot(*this, &NickList::sortFunc));
+    _liststore->set_default_sort_func(sigc::mem_fun(*this, &NickList::sortFunc));
     _liststore->set_sort_column_id(Gtk::TreeSortable::DEFAULT_SORT_COLUMN_ID, Gtk::SORT_ASCENDING);
 
     /* FIXME: no set_column_width() like in the old days! */

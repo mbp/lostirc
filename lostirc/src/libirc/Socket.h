@@ -32,7 +32,7 @@
 #include <sigc++/sigc++.h>
 #include <glibmm/main.h>
 
-class Socket : public SigC::Object
+class Socket : public sigc::trackable
 {
     // Data
     #ifndef WIN32
@@ -58,8 +58,8 @@ class Socket : public SigC::Object
     bool can_send_data(Glib::IOCondition);
 
     // Signal connections
-    SigC::Connection signal_write;
-    SigC::Connection signal_read;
+    sigc::connection signal_write;
+    sigc::connection signal_read;
 
 public:
     Socket();
@@ -89,12 +89,12 @@ public:
     const char*  getRemoteIP();  
 
     // Signals
-    SigC::Signal0<void> on_host_resolved;
-    SigC::Signal0<void> on_data_pending;
-    SigC::Signal0<void> on_can_send_data;
-    SigC::Signal0<void> on_accepted_connection;
-    SigC::Signal1<void, Glib::IOCondition> on_connected;
-    SigC::Signal1<void, const char *> on_error;
+    sigc::signal<void> on_host_resolved;
+    sigc::signal<void> on_data_pending;
+    sigc::signal<void> on_can_send_data;
+    sigc::signal<void> on_accepted_connection;
+    sigc::signal<void, Glib::IOCondition> on_connected;
+    sigc::signal<void, const char *> on_error;
 };
 
 class SocketException : public std::exception

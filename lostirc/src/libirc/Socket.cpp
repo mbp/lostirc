@@ -35,14 +35,13 @@
 #include "Socket.h"
 
 using Glib::ustring;
-using SigC::slot;
 
 Socket::Socket()
 #ifndef WIN32
     : fd(-1), resolve_pid(0)
 #endif 
 {
-    on_host_resolved.connect(SigC::slot(*this, &Socket::host_resolved));
+    on_host_resolved.connect(sigc::mem_fun(*this, &Socket::host_resolved));
 
     #ifdef WIN32
     WORD sockversion = MAKEWORD(2, 0);
@@ -186,7 +185,7 @@ bool Socket::connected(Glib::IOCondition cond)
 
     // Watch for incoming data from now on
     signal_read = Glib::signal_io().connect(
-            SigC::slot(*this, &Socket::data_pending),
+            sigc::mem_fun(*this, &Socket::data_pending),
             fd,
             Glib::IO_IN | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL);
 
@@ -234,7 +233,7 @@ void Socket::host_resolved()
         // This is a temporary watch to see when we can write, when we can
         // write - we are (hopefully) connected
         Glib::signal_io().connect(
-                SigC::slot(*this, &Socket::connected),
+                sigc::mem_fun(*this, &Socket::connected),
                 fd,
                 Glib::IO_OUT | Glib::IO_IN | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_PRI | Glib::IO_NVAL);
     } else {
@@ -256,7 +255,7 @@ bool Socket::accepted_connection(Glib::IOCondition cond)
     fd = accept_fd;
 
     signal_write = Glib::signal_io().connect(
-                SigC::slot(*this, &Socket::can_send_data),
+                sigc::mem_fun(*this, &Socket::can_send_data),
                 fd,
                 Glib::IO_OUT | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL);
 
@@ -300,7 +299,7 @@ void Socket::resolvehost(const ustring& host)
         ::close(thepipe[1]); // close write-pipe
 
         Glib::signal_io().connect(
-                SigC::bind(slot(*this, &Socket::on_host_resolve), thepipe[0]),
+                sigc::bind(sigc::mem_fun(*this, &Socket::on_host_resolve), thepipe[0]),
                 thepipe[0],
                 Glib::IO_IN | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL);
 
@@ -385,7 +384,7 @@ bool Socket::bind(int p)
         listen(fd, 1);
 
         Glib::signal_io().connect(
-                SigC::slot(*this, &Socket::accepted_connection), fd,
+                sigc::mem_fun(*this, &Socket::accepted_connection), fd,
                 Glib::IO_IN | Glib::IO_ERR | Glib::IO_OUT | Glib::IO_HUP | Glib::IO_NVAL);
 
         return true;
