@@ -82,21 +82,22 @@ LostIRCApp::~LostIRCApp()
     }
 }
 
-int LostIRCApp::start()
+void LostIRCApp::autoConnect()
 {
-    vector<struct autoJoin*> servers = cfgservers.getServers();
-    vector<struct autoJoin*>::iterator i;
+    vector<Server*> servers = cfgservers.getServers();
+    vector<Server*>::iterator i;
 
     for (i = servers.begin(); i != servers.end(); ++i) {
-        ServerConnection *conn = newServer((*i)->hostname, (*i)->port);
-        conn->Session.cmds = (*i)->cmds;
-        if (!(*i)->password.empty())
-              conn->Session.password = (*i)->password;
-        if (!(*i)->nick.empty())
-              conn->Session.nick = (*i)->nick;
-        conn->connect();
+        if ((*i)->auto_connect) {
+            ServerConnection *conn = newServer((*i)->hostname, (*i)->port);
+            conn->Session.cmds = (*i)->cmds;
+            if (!(*i)->password.empty())
+                  conn->Session.password = (*i)->password;
+            if (!(*i)->nick.empty())
+                  conn->Session.nick = (*i)->nick;
+            conn->connect();
+        }
     }
-    return servers.size();
 }
 
 ServerConnection* LostIRCApp::newServer(const string& host, int port)

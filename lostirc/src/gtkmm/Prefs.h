@@ -22,6 +22,7 @@
 #include <gtkmm/notebook.h>
 #include <gtkmm/button.h>
 #include <gtkmm/entry.h>
+#include <gtkmm/table.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/treeview.h>
 #include <gtkmm/fontselection.h>
@@ -89,6 +90,7 @@ private:
 
     Gtk::Button *removebutton;
     Gtk::Button *addnewbutton;
+    Gtk::CheckButton auto_connect_button;
 
     Gtk::HBox hboxserver;
 
@@ -96,14 +98,16 @@ private:
     struct ModelColumns : public Gtk::TreeModel::ColumnRecord
     {
         Gtk::TreeModelColumn<Glib::ustring> servername;
-        Gtk::TreeModelColumn<struct autoJoin*> autojoin;
+        Gtk::TreeModelColumn<bool> auto_connect;
+        Gtk::TreeModelColumn<Server*> autojoin;
 
-        ModelColumns() { add(servername); add(autojoin); }
+        ModelColumns() { add(servername); add(auto_connect); add(autojoin); }
     };
 
     ModelColumns _columns;
     Glib::RefPtr<Gtk::ListStore> _liststore;
     Gtk::TreeView _treeview;
+    Gtk::Table _server_options_table;
 };
 
 #endif

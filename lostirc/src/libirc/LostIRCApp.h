@@ -105,9 +105,7 @@ public:
     LostIRCApp(FrontEnd *f);
     ~LostIRCApp();
 
-    // 'start' means 'auto-join servers' - it returns the number of servers
-    // joined
-    int start();
+    void autoConnect();
     ServerConnection* newServer(const std::string& host, int port);
     ServerConnection* newServer();
 

@@ -14,6 +14,8 @@ LostIRC (x.x.x)
     to remove ~/.lostirc/events.conf first to get the new ones.
   * Title in window wasn't updated after succesfull connection to server and
     joining a channel after that, fixed.
+  * The auto-connect feature in preferences has been improved GUI-wise. It's
+    now also possible to disable/enable automatic connection to the servers.
   * Man-page updated with a better description.
 
 LostIRC (0.2.2) - Sun Dec, 1st 2002

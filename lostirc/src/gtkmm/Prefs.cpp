@@ -45,7 +45,8 @@ Prefs::Prefs()
     stripothersbutton("Strip bold and underline codes from incoming messages"),
     _columns(),
     _liststore(Gtk::ListStore::create(_columns)),
-    _treeview(_liststore)
+    _treeview(_liststore),
+    _server_options_table(2, 5)
 {
     notebook.set_tab_pos(Gtk::POS_LEFT);
 
@@ -54,7 +55,7 @@ Prefs::Prefs()
     Gtk::VBox *generalbox = addPage("General Settings");
     Gtk::VBox *prefsbox = addPage("Preferences");
     Gtk::VBox *fontbox = addPage("Font selection");
-    Gtk::VBox *performbox = addPage("Autojoin servers");
+    Gtk::VBox *performbox = addPage("Servers");
 
     // General options-tab
 
@@ -174,51 +175,69 @@ Prefs::Prefs()
 
     // Autojoin/perform-tab
 
-    Gtk::HBox *serverhbox = manage(new Gtk::HBox());
-    Gtk::Frame *frame = manage(new Gtk::Frame("Available servers"));
+    Gtk::HPaned *server_pane = manage(new Gtk::HPaned());
 
-    _treeview.append_column("", _columns.servername);
-    _treeview.set_headers_visible(false);
+    _treeview.append_column("Auto", _columns.auto_connect);
+    _treeview.append_column("Servers", _columns.servername);
     _treeview.get_selection()->signal_changed().connect(slot(*this, &Prefs::onChangeRow));
 
-    vector<struct autoJoin*> servers = App->cfgservers.getServers();
-    vector<struct autoJoin*>::iterator i;
+    vector<Server*> servers = App->cfgservers.getServers();
+    vector<Server*>::iterator i;
 
     for (i = servers.begin(); i != servers.end(); ++i) {
         Gtk::TreeModel::Row row = *_liststore->append();
+        row[_columns.auto_connect] = (*i)->auto_connect;
         row[_columns.servername] = (*i)->hostname;
         row[_columns.autojoin] = *i;
     }
-    frame->add(_treeview);
-    serverhbox->pack_start(*frame);
+    server_pane->pack1(_treeview);
+    Gtk::Frame *server_opt_frame = manage(new Gtk::Frame("Options"));
+    server_pane->pack2(*server_opt_frame);
     Gtk::VBox *serverinfobox = manage(new Gtk::VBox());
-    serverhbox->pack_start(*serverinfobox);
+    server_opt_frame->add(*serverinfobox);
+
+    serverinfobox->pack_start(_server_options_table, Gtk::PACK_SHRINK);
+
+    int row = 1;
+
+    // auto connect
+    Gtk::Label *label0 = manage(new Gtk::Label("Connect automatically: ", Gtk::ALIGN_RIGHT));
+    _server_options_table.attach(*label0, 0, 1, row, row + 1);
+    _server_options_table.attach(auto_connect_button, 1, 2, row, row + 1);
+
+    row++;
 
     // hostname
-    Gtk::Frame *frame1 = manage(new Gtk::Frame("Hostname"));
-    frame1->add(hostentry);
-    serverinfobox->pack_start(*frame1, Gtk::PACK_SHRINK);
+    Gtk::Label *label1 = manage(new Gtk::Label("Hostname: ", Gtk::ALIGN_RIGHT));
+    _server_options_table.attach(*label1, 0, 1, row, row + 1);
+    _server_options_table.attach(hostentry, 1, 2, row, row + 1);
+
+    row++;
 
     // port
-    Gtk::Frame *frame2 = manage(new Gtk::Frame("Port"));
-    frame2->add(portentry);
-    serverinfobox->pack_start(*frame2, Gtk::PACK_SHRINK);
+    Gtk::Label *label2 = manage(new Gtk::Label("Port: ", Gtk::ALIGN_RIGHT));
+    _server_options_table.attach(*label2, 0, 1, row, row + 1);
+    _server_options_table.attach(portentry, 1, 2, row, row + 1);
+
+    row++;
 
     // password
-    Gtk::Frame *frame3 = manage(new Gtk::Frame("Password"));
-    frame3->add(passentry);
-    serverinfobox->pack_start(*frame3, Gtk::PACK_SHRINK);
+    Gtk::Label *label3 = manage(new Gtk::Label("Password: ", Gtk::ALIGN_RIGHT));
+    _server_options_table.attach(*label3, 0, 1, row, row + 1);
+    _server_options_table.attach(passentry, 1, 2, row, row + 1);
+
+    row++;
 
     // nick
-    Gtk::Frame *frame4 = manage(new Gtk::Frame("Nick"));
-    frame4->add(nickentry);
-    serverinfobox->pack_start(*frame4, Gtk::PACK_SHRINK);
+    Gtk::Label *label4 = manage(new Gtk::Label("Nick: ", Gtk::ALIGN_RIGHT));
+    _server_options_table.attach(*label4, 0, 1, row, row + 1);
+    _server_options_table.attach(nickentry, 1, 2, row, row + 1);
 
-    // nick
+    // commmands
     cmdtext.set_editable(true);
-    Gtk::Frame *frame5 = manage(new Gtk::Frame("Commands to perform on connect"));
-    frame5->add(cmdtext);
-    serverinfobox->pack_start(*frame5);
+    Gtk::Label *label5 = manage(new Gtk::Label("Commmands to perform on connect: "));
+    serverinfobox->pack_start(*label5, Gtk::PACK_SHRINK);
+    serverinfobox->pack_start(cmdtext);
 
     // buttons
     Gtk::Button *savebutton = manage(create_imagebutton("Save this entry", Gtk::Stock::SAVE));
@@ -235,8 +254,8 @@ Prefs::Prefs()
     hboxserver.pack_end(*removebutton, Gtk::PACK_SHRINK);
 
 
-    performbox->pack_start(*serverhbox);
-    notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*performbox, "Autojoin servers"));
+    performbox->pack_start(*server_pane);
+    notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*performbox, "Servers"));
 
     // Final Close button
     Gtk::Button *close_button = manage(create_imagebutton("Close", Gtk::Stock::CLOSE));
@@ -306,13 +325,13 @@ void Prefs::cancelFont()
 
 void Prefs::saveEntry()
 {
-    struct autoJoin *autojoin;
+    Server *autojoin;
     Gtk::TreeModel::iterator iter;
 
     // See whether no rows were selected.
     if (!_treeview.get_selection()->get_selected()) {
         // we need to add a new one
-        autojoin = new autoJoin();
+        autojoin = new Server();
 
         App->cfgservers.addServer(autojoin);
 
@@ -320,6 +339,7 @@ void Prefs::saveEntry()
 
         ( *iter )[_columns.servername] = hostentry.get_text();
         ( *iter )[_columns.autojoin] = autojoin;
+        ( *iter )[_columns.auto_connect] = true;
 
     } else {
         // we need to save the current selected one
@@ -333,6 +353,8 @@ void Prefs::saveEntry()
     autojoin->hostname = hostentry.get_text();
     autojoin->password = passentry.get_text();
     autojoin->nick = nickentry.get_text();
+    autojoin->auto_connect = auto_connect_button.get_active();
+    ( *iter )[_columns.auto_connect] = auto_connect_button.get_active();
 
     int port;
     if (portentry.get_text_length() == 0)
@@ -367,10 +389,11 @@ void Prefs::onChangeRow()
         // Row selected
         Gtk::TreeModel::Row row = *iterrow;
 
-        struct autoJoin* a = row[_columns.autojoin];
+        Server* a = row[_columns.autojoin];
         hostentry.set_text(a->hostname);
         passentry.set_text(a->password);
         nickentry.set_text(a->nick);
+        auto_connect_button.set_active(a->auto_connect);
         std::ostringstream ss;
         ss << a->port;
         portentry.set_text(ss.str());
@@ -398,7 +421,7 @@ void Prefs::removeEntry()
     Glib::RefPtr<Gtk::TreeSelection> selection = _treeview.get_selection();
     Gtk::TreeModel::Row row = *selection->get_selected();
 
-    struct autoJoin *autojoin = row[_columns.autojoin];
+    Server *autojoin = row[_columns.autojoin];
     _liststore->erase(selection->get_selected());
     App->cfgservers.removeServer(autojoin);
     App->cfgservers.writeServersFile();

@@ -40,7 +40,7 @@ Servers::Servers(const char *file)
 
 Servers::~Servers()
 {
-    vector<struct autoJoin*>::iterator i;
+    vector<Server*>::iterator i;
 
     for (i = _servers.begin(); i != _servers.end();) {
         delete (*i);
@@ -58,6 +58,7 @@ bool Servers::readServersFile()
     vector<string> tmpcmds;
     string server, tmp, nick, password;
     int port = 0;
+    int auto_connect = 1;
     while (getline(in, tmp)) {
         string::size_type pos1 = tmp.find_first_of("=");
         string param;
@@ -69,16 +70,18 @@ bool Servers::readServersFile()
 
             if (param == "hostname") {
                 if (!server.empty()) {
-                    struct autoJoin *j = new autoJoin;
+                    Server *j = new Server;
                     j->hostname = server;
                     j->port = port ? port : 6667;
                     j->password = password;
                     j->cmds = tmpcmds;
                     j->nick = nick;
+                    j->auto_connect = auto_connect;
 
                     port = 0;
-                    password = "";
-                    nick = "";
+                    auto_connect = 1;
+                    password.erase();
+                    nick.erase();
 
                     _servers.push_back(j);
                     tmpcmds.clear();
@@ -92,16 +95,19 @@ bool Servers::readServersFile()
                 password = value;
             } else if (param == "nick") {
                 nick = value;
+            } else if (param == "auto_connect") {
+                auto_connect = Util::stoi(value);
             }
         }
     }
     if (!server.empty()) {
-        struct autoJoin *j = new autoJoin;
+        Server *j = new Server;
         j->hostname = server;
         j->port = port ? port : 6667;
         j->password = password;
         j->cmds = tmpcmds;
         j->nick = nick;
+        j->auto_connect = auto_connect;
 
         _servers.push_back(j);
     } 
@@ -115,7 +121,7 @@ bool Servers::writeServersFile()
     if (!out)
           return false;
 
-    vector<struct autoJoin*>::const_iterator i;
+    vector<Server*>::const_iterator i;
     vector<string>::const_iterator ivec;
 
     for (i = _servers.begin(); i != _servers.end(); ++i) {
@@ -123,18 +129,29 @@ bool Servers::writeServersFile()
         out << "port = " << (*i)->port << std::endl;
         out << "password = " << (*i)->password << std::endl;
         out << "nick = " << (*i)->nick << std::endl;
+        out << "auto_connect = " << static_cast<int>((*i)->auto_connect) << std::endl;
 
-        for (ivec = (*i)->cmds.begin(); ivec != (*i)->cmds.end(); ++ivec) {
-            out << "cmd = " << *ivec << std::endl;
-        }
+        for (ivec = (*i)->cmds.begin(); ivec != (*i)->cmds.end(); ++ivec)
+              out << "cmd = " << *ivec << std::endl;
+
         out << std::endl;
     }
     return true;
 }
 
-void Servers::removeServer(struct autoJoin *a)
+bool Servers::hasAutoConnects()
 {
-    vector<struct autoJoin*>::iterator i = std::find(_servers.begin(), _servers.end(), a);
+    vector<Server*>::const_iterator i;
+    for (i = _servers.begin(); i != _servers.end(); ++i)
+          if ((*i)->auto_connect)
+                return true;
+
+    return false;
+}
+
+void Servers::removeServer(Server *a)
+{
+    vector<Server*>::iterator i = std::find(_servers.begin(), _servers.end(), a);
     _servers.erase(i);
     delete a;
 }

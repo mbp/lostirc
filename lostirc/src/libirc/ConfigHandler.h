@@ -132,29 +132,32 @@ public:
     Value<std::string> whois_generic;
 };
 
-struct autoJoin {
+struct Server {
     std::string hostname;
     int port;
     std::string nick;
     std::string password;
     std::vector<std::string> cmds;
+    bool auto_connect;
 };
 
 // The "auto-join servers" configuration interface.
 class Servers {
-    std::vector<struct autoJoin*> _servers;
+    std::vector<Server*> _servers;
 
 public:
     Servers(const char *file);
     ~Servers();
 
-    void addServer(struct autoJoin* a) { _servers.push_back(a); }
-    void removeServer(struct autoJoin* a);
+    void addServer(Server* a) { _servers.push_back(a); }
+    void removeServer(Server* a);
 
-    /* return "auto-join list" */
-    const std::vector<struct autoJoin*>& getServers() { return _servers; }
+    // return "auto-join list"
+    const std::vector<Server*>& getServers() { return _servers; }
 
-    /* write server list */
+    bool hasAutoConnects();
+
+    // write server list
     bool writeServersFile();
 
 private:

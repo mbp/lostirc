@@ -1,5 +1,18 @@
 For a summary of changes between releases - see the NEWS file.
 
+2002-12-16  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * ConfigHandler.cpp/ConfigHandler.h: Rename autoJoin server to Server.
+          Add code to disable automatically connection on startup.
+          Add hasAutoConnects() method to see whether any auto connect servers
+          are available.
+        * LostIRCApp.cpp: Rename start() to autoConnect();
+        * MainWindow.cpp: Use hasAutoConnects() instead of checking whether a
+          vector is empty(). Call autoConnect() instead of start();
+        * Prefs.cpp: Improve server-list. Added column to list, ordered entry
+          boxes better inside a table. Added feature to disable/enable
+          automatically connection on startup.
+
 2002-12-14  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Events.cpp/Events.h: Removed.
