@@ -26,7 +26,6 @@ GTKMM2 STUFF:
   * scrollbar has weird behaviour when resizing window
   * strip all mIRC color-codes from ALL strings, don't show colors at all.
   * URLs clickable
-  * Nick-list is not resorted on changes
 
 DCC:
 ---
