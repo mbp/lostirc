@@ -60,23 +60,25 @@ string tolower(string& str)
 
 int stoi(const string& str)
 {
-    std::stringstream ss(str);
+    std::stringstream ss;
+
     int i;
-    while (ss >> i);
-    if (ss.eof() && i >= 0)
-          return i;
-    else
+    if (!(ss << str) || !(ss >> i) ||
+            !(ss >> std::ws).eof())
           return -1;
+
+    return i;
 
 }
 
 bool isDigit(const string& str)
 {
     string::const_iterator i;
-    for (i = str.begin(); i != str.end(); ++i) {
-        if (isdigit(*i) == 0)
-              return false;
-    }
+    for (i = str.begin(); i != str.end(); ++i)
+          if (isdigit(*i) == 0)
+                return false;
+
+
     return true;
 }
 

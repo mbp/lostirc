@@ -140,18 +140,6 @@ void Tab::setStyle() {
     _text->set_style(*style);
 }
 
-
-bool isDigit(const string& str)
-{
-    std::stringstream ss(str);
-    int i;
-    ss >> i;
-    if (ss.fail())
-          return false;
-    else
-          return true;
-}
-
 void Tab::parseAndInsert(const string& str)
 {
     // Add timestamp 
