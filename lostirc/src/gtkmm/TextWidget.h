@@ -46,6 +46,8 @@ public:
 
     void scrollUpPage();
     void scrollDownPage();
+    void scrollToBottom();
+    void scrollToTop();
 
 private:
     void insertText(const TextProperties& tp, const Glib::ustring& str);

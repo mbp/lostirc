@@ -100,6 +100,20 @@ void TextWidget::scrollDownPage()
     vadj->set_value(value);
 }
 
+void TextWidget::scrollToBottom()
+{
+    Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
+    Gtk::TextIter iter = buffer->end();
+    _textview.scroll_to_iter(iter, 0.0);
+}
+
+void TextWidget::scrollToTop()
+{
+    Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
+    Gtk::TextIter iter = buffer->begin();
+    _textview.scroll_to_iter(iter, 0.0);
+}
+
 void TextWidget::setStyle() {
     // TODO: Should this go into a ressource file?
     Gdk::Color col1(App->colors.bgcolor);

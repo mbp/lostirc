@@ -386,6 +386,10 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
         } else if (e->keyval == GDK_q) {
             // hide() here will quit the application
             hide();
+        } else if (e->keyval == GDK_End) {
+            notebook.getCurrent()->getText().scrollToBottom();
+        } else if (e->keyval == GDK_Home) {
+            notebook.getCurrent()->getText().scrollToTop();
         }
     }
     if (e->keyval == GDK_Page_Up) {

@@ -2,6 +2,13 @@ For a summary of changes between releases - see the NEWS file.
 
 2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * TextWidget.h/TextWidget.cpp: Implement scrollToBottom() and
+          scrollToTop();
+        * MainWindow.cpp: Make CTRL-Home and CTRL-End scroll the text widget
+          to the top and bottom.
+
+2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
+
         * TextWidget.h: Make onScroll() and onResize() private.
         * TextWidget.h: Create setHighlightMark() and scrollToHighlightMark(),
           create member which holds a vector of marks.
