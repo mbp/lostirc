@@ -23,7 +23,7 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <arpa/inet.h>
-#include <glib.h>
+#include <glibmm/main.h>
 #include "LostIRCApp.h"
 #include "Socket.h"
 
@@ -41,10 +41,10 @@ Socket::~Socket()
 
 void Socket::resolvehost(const string& host)
 {
-    int thepipe[2];
+    hostname = host;
     if (pipe(thepipe) == -1) {
-        perror("pipe");
-        exit(0);
+        on_error(strerror(errno));
+        return;
     }
 
     resolve_pid = fork();
@@ -72,9 +72,12 @@ void Socket::resolvehost(const string& host)
         // parent
         ::close(thepipe[1]); // close write-pipe
 
-        g_io_add_watch(g_io_channel_unix_new(thepipe[0]),
-                GIOCondition (G_IO_IN | G_IO_ERR | G_IO_HUP | G_IO_NVAL),
-                &Socket::on_host_resolve, this);
+        Glib::signal_io().connect(
+                SigC::slot(*this, &Socket::on_host_resolve),
+                thepipe[0],
+                Glib::IO_IN | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL);
+
+        std::cout << "(" << hostname << ") " << "thepipe[0]: " << thepipe[0] << " (" << this << ")" <<std::endl;
 
     } else {
         on_error(strerror(errno));
@@ -82,63 +85,60 @@ void Socket::resolvehost(const string& host)
 
 }
 
-gboolean Socket::on_host_resolve(GIOChannel* iochannel, GIOCondition cond, gpointer data)
+bool Socket::on_host_resolve(Glib::IOCondition cond)
 {
-    Socket& socket = *(static_cast<Socket*>(data));
-
-    guint size_to_be_read = sizeof(int) + sizeof(struct in_addr);
+    int size_to_be_read = sizeof(int) + sizeof(struct in_addr);
     char *buf = new char[size_to_be_read];
-    guint bytes_read = 0;
 
-    GIOError result = g_io_channel_read(iochannel, buf, size_to_be_read, &bytes_read);
+    std::cout << "(" << hostname << ") " << "thepipe[0]: " << thepipe[0] << " (" << this << ")" <<std::endl;
 
-    if (result != G_IO_ERROR_NONE) {
-        socket.on_error("An error occured while reading from pipe (Internal error 1)");
+    int bytes_read = read(thepipe[0], buf, size_to_be_read);
+
+    if (bytes_read == -1) {
+        on_error(strerror(errno));
     } else if (buf[0] == 0) {
-        socket.on_error("Unknown host");
+        on_error("Unknown host");
     } else if (size_to_be_read != bytes_read) {
         sleep(1);
-        guint bytes_read2;
-        result = g_io_channel_read(iochannel, &buf[bytes_read], size_to_be_read - bytes_read, &bytes_read2);
-        if (result == G_IO_ERROR_NONE) {
-            bytes_read += bytes_read2;
+        int new_retval = read(thepipe[0], &buf[bytes_read], size_to_be_read - bytes_read);
+
+        if (new_retval != -1) {
+            bytes_read += new_retval;
             if (bytes_read != size_to_be_read) {
-                socket.on_error("An error occured while reading from pipe (Internal error 2)");
+                on_error("An error occured while reading from pipe (Internal error 2)");
             } else {
                 // copy the struct we received into the sockaddr member
-                memcpy(static_cast<void*>(&socket.sockaddr.sin_addr),
+                memcpy(static_cast<void*>(&sockaddr.sin_addr),
                         static_cast<void*>(&buf[sizeof(int)]),
                         sizeof(struct in_addr));
 
-                socket.on_host_resolved();
-
+                on_host_resolved();
             }
         } else {
-            socket.on_error("An error occured while reading from pipe (Internal error 3)");
+            on_error("An error occured while reading from pipe (Internal error 3)");
         }
 
     } else {
         // copy the struct we received into the sockaddr member
-        memcpy(static_cast<void*>(&socket.sockaddr.sin_addr),
+        memcpy(static_cast<void*>(&sockaddr.sin_addr),
                 static_cast<void*>(&buf[sizeof(int)]),
                 sizeof(struct in_addr));
 
-        socket.on_host_resolved();
+        on_host_resolved();
     }
 
     delete []buf;
 
-    if (iochannel != NULL)
-          g_io_channel_close(iochannel);
+    ::close(thepipe[0]);
 
     // wait for our child to exit (it probably already exit'ed, but we need
     // this to avoid defunct childs).
-    if (socket.resolve_pid != -1) {
-        waitpid(socket.resolve_pid, NULL, 0);
-        socket.resolve_pid = -1;
+    if (resolve_pid != -1) {
+        waitpid(resolve_pid, NULL, 0);
+        resolve_pid = -1;
     }
 
-    return FALSE;
+    return false;
 }
 
 void Socket::connect(int port)
