@@ -65,7 +65,7 @@ TabQuery * MainNotebook::addQueryTab(const string& name, ServerConnection *conn)
 Tab* MainNotebook::getCurrent(ServerConnection *conn)
 {
     Tab *tab = dynamic_cast<Tab*>(get_current()->get_child());
-    if(tab->getConn() != conn) {
+    if (tab->getConn() != conn) {
         tab = findTab("", conn);
     }
     return tab;
@@ -84,9 +84,8 @@ Tab * MainNotebook::findTab(const string& name, ServerConnection *conn)
     if (p) {
         Tab* tab = dynamic_cast<Tab*>(p->get_child());
         return tab;
-    } else {
-        return 0;
     }
+    return 0;
 }
 
 Gtk::Notebook_Helpers::Page * MainNotebook::findPage(const string& name, ServerConnection *conn)
@@ -103,7 +102,6 @@ Gtk::Notebook_Helpers::Page * MainNotebook::findPage(const string& name, ServerC
             }
         }
     }
-
     return 0;
 }
 

@@ -107,7 +107,12 @@ void MainWindow::onMsg(const string& to, const string& from, const string& msg, 
 {
     string::size_type pos = msg.find(conn->Session.nick);
 
-    Tab *tab = _nb->findTab(from, conn);
+    string search(from);
+    if (to != conn->Session.nick) {
+        search = to;
+    }
+
+    Tab *tab = _nb->findTab(search, conn);
 
     if (!tab) {
         // Create query tab if it doesn't exist already, we assume that
