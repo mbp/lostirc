@@ -87,7 +87,7 @@ void Tab::setChannel(bool value)
 
 }
 
-void addOrRemoveNickList()
+void Tab::addOrRemoveNickList()
 {
     if (isChannel() && !_nicklist) {
         _nicklist = new NickList;
