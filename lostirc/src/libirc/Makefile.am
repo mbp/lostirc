@@ -7,7 +7,8 @@ libirc_a_SOURCES = ServerConnection.cpp \
                        Parser.cpp \
                        Socket.cpp \
                        Utils.cpp \
-                       Events.cpp
+                       Events.cpp \
+                       Channel.cpp
 
 libirc_a_LIBS = @SIGC_LIBS@ @GLIB_LIBS@
 INCLUDES = @SIGC_CFLAGS@ @GLIB_CFLAGS@

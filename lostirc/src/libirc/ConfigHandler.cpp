@@ -111,6 +111,8 @@ bool ConfigHandler::setDefaults()
     _settings["evt_unknown"] = "$16-- Unknown message: $2%1";
     _settings["evt_join"] = "$16-- $0%1$11 $15($9%3$15)$16 has joined $11%2";
     _settings["evt_part"] = "$16-- $0%1$16 $15($9%3$15)$16 has parted $11%2";
+    _settings["evt_quit"] = "$16-- $0%1$16 has quit $11(%2)";
+    _settings["evt_nick"] = "$16-- $0%1$16 changes nick to %2";
     _settings["evt_wallops"] = "$2WALLOPS -: %1 :- %2";
     _settings["evt_kicked"] = "$16-- $0%1$16 was kicked from $11%2$16 by %3 $15($9%4$15)";
 

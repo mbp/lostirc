@@ -145,24 +145,18 @@ void MainWindow::onQuit(const string& nick, const string& msg, ServerConnection 
     _nb->findTabs(nick, conn, tabs);
 
     for (i = tabs.begin(); i != tabs.end(); ++i) {
-        _nb->insert(*i, "\00316-- \0030" + nick + "\00316 has quit \00315(\0039" + msg + "\00315)\n");
         (*i)->removeUser(nick);
     }
 }
 
 void MainWindow::onNick(const string& nick, const string& to, ServerConnection *conn)
 {
-    // Check whethers it's us who has changed nick
-    if (nick == conn->Session.nick) {
-        conn->Session.nick = to;
-    }
     vector<Tab*> tabs;
     vector<Tab*>::const_iterator i;
 
     _nb->findTabs(nick, conn, tabs);
 
     for (i = tabs.begin(); i != tabs.end(); ++i) {
-        _nb->insert(*i, "\00316-- \0030" + nick + "\00316 changes nick to " + to + "\n");
         (*i)->renameUser(nick, to);
     }
 }

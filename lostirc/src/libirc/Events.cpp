@@ -53,6 +53,9 @@ void Events::emitEvent(const string& name, vector<string>& args, const string& t
                 parsing_arg = false;
         }
     }
+    if (to.empty()) {
+        cerr << "chrash and burn" << endl;
+    }
 
     newmsg += '\n';
 
@@ -65,4 +68,28 @@ void Events::emitEvent(const string& name, const string& arg, const string& to, 
     args.push_back(arg);
 
     emitEvent(name, args, to, conn);
+}
+
+void Events::emitEvent(const string& name, const string& arg, const vector<string>& to, ServerConnection *conn) {
+
+    vector<string> args;
+    args.push_back(arg);
+    vector<string>::const_iterator i;
+
+    for (i = to.begin(); i != to.end(); ++i) {
+        cout << "to: " << *i << endl;
+        string to = *i;
+        emitEvent(name, args, to, conn);
+    }
+}
+
+void Events::emitEvent(const string& name, vector<string>& arg, const vector<string>& to, ServerConnection *conn) {
+
+    vector<string>::const_iterator i;
+
+    for (i = to.begin(); i != to.end(); ++i) {
+        cout << "to: " << *i << endl;
+        string to = *i;
+        emitEvent(name, arg, to, conn);
+    }
 }

@@ -37,7 +37,6 @@ ServerConnection::ServerConnection(LostIRCApp *app, const string& nick, const st
     Session.realname = realname;
     Session.isConnected = 0;
     Session.hasRegistered = 0;
-
 }
 
 ServerConnection::~ServerConnection()
@@ -58,20 +57,19 @@ bool ServerConnection::Connect(const string &host, int port = 6667)
                        GIOCondition (G_IO_IN | G_IO_ERR | G_IO_HUP | G_IO_NVAL),
                        &ServerConnection::readdata, this);
 
+        _socket->setNonBlocking();
+
         char hostchar[256];
         gethostname(hostchar, sizeof(hostchar) - 1);
         string hostname(hostchar);
-                       
+
         sendUser(Session.nick, hostname, Session.servername, Session.realname);
         sendNick(Session.nick);
-
-        _socket->setNonBlocking();
 
     } else {
         Session.isConnected = 0;
         _app->getEvts()->emitEvent("servmsg", "Failed connecting: " + _socket->error, "", this);
     }
-
 }
 
 gboolean ServerConnection::readdata(GIOChannel* io_channel, GIOCondition cond, gpointer data)
@@ -83,7 +81,6 @@ gboolean ServerConnection::readdata(GIOChannel* io_channel, GIOCondition cond, g
     } else {
         return (FALSE);
     }
-
 }
 
 bool ServerConnection::readsocket()
@@ -269,4 +266,49 @@ bool ServerConnection::sendRaw(const string& text)
     string msg(text + "\r\n");
 
     return _socket->send(msg);
+}
+
+void ServerConnection::addChannel(const string& n)
+{
+    Channel *c = new Channel;
+    c->setName(n);
+    Session.channels.push_back(c);
+}
+
+void ServerConnection::removeChannel(const string& n)
+{
+    vector<Channel*>::iterator i = Session.channels.begin();
+
+    for (;i != Session.channels.end(); ++i) {
+        if (n == (*i)->getName()) {
+            Session.channels.erase(i);
+            return;
+        }
+    }
+}
+
+vector<string> ServerConnection::findUser(const string& n)
+{
+    vector<string> chans;
+    vector<Channel*>::iterator i = Session.channels.begin();
+
+    for (;i != Session.channels.end(); ++i) {
+        if ((*i)->findUser(n)) {
+            cout << "pushing back:" << (*i)->getName() << endl;
+            chans.push_back((*i)->getName());
+        }
+    }
+    return chans;
+}
+
+Channel* ServerConnection::findChannel(const string& c)
+{
+    string chan = c;
+    vector<Channel*>::iterator i = Session.channels.begin();
+    for (;i != Session.channels.end(); ++i) {
+        string name = (*i)->getName();
+        if (Utils::tolower(name) == Utils::tolower(chan))
+              return *i;
+    }
+    return 0;
 }

@@ -30,7 +30,6 @@ Parser::Parser(LostIRCApp *app, ServerConnection *conn)
     : _conn(conn), _app(app), _evts(new Events(app))
 {
     _evts = _app->getEvts();
-
 }
 
 void Parser::parseLine(string& data)
@@ -270,7 +269,13 @@ void Parser::Join(const string& nick, const string& chan)
     args.push_back(findNick(nick));
     args.push_back(chan);
     args.push_back(findHost(nick));
-    _app->evtJoin(findNick(nick), chan, _conn);
+
+    if (findNick(nick) == _conn->Session.nick)
+          _conn->addChannel(chan); // Add channel to ServerConn
+          
+    _conn->findChannel(chan)->addUser(findNick(nick));
+    _app->evtJoin(findNick(nick), chan, _conn); // Send join to frontend
+
     _evts->emitEvent("join", args, chan, _conn);
 }
 
@@ -289,12 +294,24 @@ void Parser::Part(const string& nick, const string& chan)
     args.push_back(findNick(nick));
     args.push_back(chan);
     args.push_back(findHost(nick));
-    _evts->emitEvent("part", args, chan, _conn);
+
+    _conn->findChannel(chan)->removeUser(findNick(nick));
+
+    if (findNick(nick) == _conn->Session.nick)
+          _conn->removeChannel(chan); // Remove channel to ServerConn
+
+    _evts->emitEvent("part", args, chan, _conn); // Send part to frontend
     _app->evtPart(findNick(nick), chan, _conn);
 }
 
 void Parser::Quit(const string& nick, const string& msg)
 {
+    vector<string> chans = _conn->findUser(findNick(nick));
+    vector<string> args;
+    args.push_back(findNick(nick));
+    args.push_back(msg);
+
+    _evts->emitEvent("quit", args, chans, _conn);
     _app->evtQuit(findNick(nick), msg, _conn);
 }
 
@@ -304,6 +321,18 @@ void Parser::Nick(const string& from, const string& to)
     args.push_back(from);
     args.push_back(to);
 
+    // Check whethers it's us who has changed nick
+    if (findNick(from) == _conn->Session.nick) {
+        _conn->Session.nick = to;
+    }
+    vector<string>::iterator i;
+    vector<string> chans = _conn->findUser(findNick(from));
+    for (i = chans.begin(); i != chans.end(); ++i) {
+        _conn->findChannel(*i)->removeUser(findNick(from));
+        _conn->findChannel(*i)->addUser(to);
+    }
+
+    _evts->emitEvent("nick", args, chans, _conn);
     _app->evtNick(findNick(from), to, _conn);
 }
 
@@ -378,7 +407,6 @@ void Parser::CMode(const string& from, const string& param)
                 } else {
                     tmp.push_back(" ");
                 }
-                cout << "pushing back: " << *arg_i << endl;
                 tmp.push_back(*arg_i);
                 arg_i++;
                 break;
@@ -388,7 +416,6 @@ void Parser::CMode(const string& from, const string& param)
                 } else {
                     tmp.push_back(" ");
                 }
-                cout << "pushing back: " << *arg_i << endl;
                 tmp.push_back(*arg_i);
                 arg_i++;
                 break;
@@ -401,7 +428,6 @@ void Parser::CMode(const string& from, const string& param)
 
     // Channel user mode
     _app->evtCUMode(findNick(from), chan, vecvec, _conn);
-        
 }
 
 void Parser::Topic(const string& param, const string& rest)
@@ -484,8 +510,11 @@ void Parser::Banlist(const string& param)
     ss >> owner;
     ss >> time;
 
+    long date = std::atol(time.c_str());
+    time = std::ctime(&date);
+
     vector<string> args;
-    args.push_back(banmask + " " + time);
+    args.push_back(banmask + " " + time.substr(0, time.size() - 1));
     args.push_back(owner);
 
     _evts->emitEvent("banlist", args, chan, _conn);

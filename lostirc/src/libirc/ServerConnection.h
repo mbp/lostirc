@@ -25,13 +25,14 @@
 #include "Socket.h"
 #include "Parser.h"
 #include "LostIRCApp.h"
+#include "Channel.h"
 
 class ServerConnection
 {
 
 public:
-    ServerConnection(LostIRCApp *inout, const std::string& host, int port, const std::string& nick);
-    ServerConnection(LostIRCApp *inout, const std::string& nick, const std::string& realname);
+    ServerConnection(LostIRCApp *app, const std::string& host, int port, const std::string& nick);
+    ServerConnection(LostIRCApp *app, const std::string& nick, const std::string& realname);
     ~ServerConnection();
 
     bool Connect(const std::string &host, int port = 6667);
@@ -56,6 +57,11 @@ public:
     bool sendWho(const std::string& mask);
     bool sendRaw(const std::string& text);
 
+    void addChannel(const std::string& n);
+    void removeChannel(const std::string& n);
+    std::vector<std::string> findUser(const std::string& n);
+    Channel* findChannel(const std::string& c);
+
     static gboolean readdata(GIOChannel *, GIOCondition, gpointer);
 
     // Session struct for all ServerConnections
@@ -65,6 +71,7 @@ public:
         int isConnected;
         int hasRegistered;
         std::string servername;
+        std::vector<Channel*> channels;
     } Session;
 
 private:
@@ -73,6 +80,5 @@ private:
     Socket *_socket;
     Parser *_p;
 };
-
 
 #endif

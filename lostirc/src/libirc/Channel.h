@@ -16,30 +16,29 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef EVENTS_H
-#define EVENTS_H
+#ifndef CHANNEL_H
+#define CHANNEL_H
 
-#include <map>
 #include <string>
+#include <map>
+#include <set>
 #include <vector>
-#include "LostIRCApp.h"
-#include "ServerConnection.h"
 
-class LostIRCApp;
-class ServerConnection;
-
-class Events
-{
-public:
-    Events(LostIRCApp *app);
-
-    void emitEvent(const std::string& name, std::vector<std::string>& args, const std::string& chan, ServerConnection *conn);
-    void emitEvent(const std::string& name, const std::string& arg, const std::string& chan, ServerConnection *conn);
-    void emitEvent(const std::string& name, const std::string& arg, const std::vector<std::string>& to, ServerConnection *conn);
-    void emitEvent(const std::string& name, std::vector<std::string>& arg, const std::vector<std::string>& to, ServerConnection *conn);
-
-private:
-    std::map<std::string, std::string> _events;
-    LostIRCApp *_app;
+enum Mode {
+    OP, VOICE, NONE
 };
+
+class Channel {
+    std::string name;
+    //std::map<int, std::pair<Mode, std::string> > users;
+    std::vector<std::string> users;
+
+public:
+    void setName(const std::string& n) { name = n; }
+    string getName() { return name; }
+    int addUser(const std::string& u);
+    void removeUser(const std::string& u);
+    bool findUser(const std::string& u);
+};
+
 #endif
