@@ -218,6 +218,7 @@ Options::Options(const char *filename)
 
 {
     readConfigFile();
+    writeConfigFile();
 }
 
 Events::Events(const char *filename)
@@ -262,7 +263,6 @@ Events::Events(const char *filename)
     names(this, "names", "$0-- Names$11 %1$0:$16 %2"),
     killed(this, "killed", "$16-- You were killed by $0%1$16 $15($9%2$15)")
 {
-
     map<string, baseConfigValue*>::iterator i = configvalues.begin();
 
     for (; i != configvalues.end(); ++i) {
@@ -272,4 +272,5 @@ Events::Events(const char *filename)
     }
 
     readConfigFile();
+    writeConfigFile();
 }
