@@ -58,7 +58,7 @@ namespace Commands
     void List(ServerConnection *conn, const std::string& params);
     void Set(ServerConnection *conn, const std::string& params);
     void Quote(ServerConnection *conn, const std::string& params);
-    void commands(ServerConnection *conn, const std::string& params);
+    void Exit(ServerConnection *conn, const std::string& params);
     //    void Exec(ServerConnection *conn, const std::string& params);
     void Oper(ServerConnection* conn, const std::string& params);
     void Kill(ServerConnection* conn, const std::string& params);
@@ -70,6 +70,7 @@ namespace Commands
     void Deop(ServerConnection* conn, const std::string& params);
     void Voice(ServerConnection* conn, const std::string& params);
     void Devoice(ServerConnection* conn, const std::string& params);
+    void commands(ServerConnection *conn, const std::string& params);
     bool commandCompletion(const std::string& word, std::string& str);
 
     std::string assignModes(char sign, char mode, std::istringstream& ss);

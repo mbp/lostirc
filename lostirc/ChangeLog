@@ -23,6 +23,8 @@ LostIRC (x.x.x)
   * A KDE menu entry (lostirc.desktop) is now installed by default in the same
     way as a GNOME menu entry has always been default. It can be disabled by
     using ./configure --disable-gnome and --disable-kde 
+  * There is now an /EXIT command which can be used to send a quit-message to
+    all connected servers and quit the client.
 
 LostIRC (0.1.4) - Sat Jul 13th 2002
   * A segfault which appeared when the enviroment variable USER wasn't set,

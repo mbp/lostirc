@@ -39,6 +39,7 @@ const struct UserCommands guicmds[] = {
     { "DEOP",      GuiCommands::Deop,     1 },
     { "VOICE",     GuiCommands::Voice,    1 },
     { "DEVOICE",   GuiCommands::Devoice,  1 },
+    { "EXIT",      GuiCommands::Exit,     1 },
     { "COMMANDS",  GuiCommands::commands, 0 },
     { 0,        0, 0                        }
 };
@@ -159,6 +160,12 @@ void Devoice(ServerConnection *conn, const string& params)
     } else {
         Commands::Devoice(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
     }
+}
+
+void Exit(ServerConnection *conn, const string& params)
+{
+    Commands::Exit(conn, params);
+    Gtk::Main::quit();
 }
 
 void commands(ServerConnection *conn, const string& params)

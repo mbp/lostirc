@@ -13,15 +13,13 @@ NICE-TO-HAVE:
   * ipv6 support
   * note when window has lost focus; then highlight front-tab
   * /BAN command.
-  * /EXIT command so you can specify a quit message for all servers and then
-    quit the client
   * /EXEC
+  * Virtual functions for Commands, to be overriden. Much more OO-like.
 
 RANDOM BUGS:
 ------------
   * you can't see long nicks in nick-list, possibility to move the nick-list
     as a user
-  * nicks overlaps status (@, + etc.) in nick-list.
   * check for EAGAIN on send()?
   * nick-list mentions "0 users" instead of "Not on channel", when a channel
     has been parted with /PART.
@@ -29,10 +27,12 @@ RANDOM BUGS:
   * remove this from 'configure' at release time:
     +extern "C" void exit(int); (:g/extern "C" void exit/d)
 
-WAITING FOR GTKMM2:
--------------------
+GTKMM2 STUFF:
+-------------
   * scrollbar has weird behaviour when resizing window
   * strip all mIRC color-codes from ALL strings, don't show colors at all.
+  * URL highlight/clickable
+  * Notebook should use Glib::ustring and convert to utf8
 
 DCC:
 ---
@@ -41,6 +41,10 @@ DCC:
   * Possibility to define a different outgoing ip-address
   * Show to the user which ip is being sent
   * Possibility to track progress of DCCs
+
+FIXED?:
+------
+  * nicks overlaps status (@, + etc.) in nick-list.
 
 DESIGN:
 -------

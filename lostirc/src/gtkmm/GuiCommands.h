@@ -38,6 +38,7 @@ namespace GuiCommands
     void Deop(ServerConnection *conn, const std::string& params);
     void Voice(ServerConnection *conn, const std::string& params);
     void Devoice(ServerConnection *conn, const std::string& params);
+    void Exit(ServerConnection *conn, const std::string& params);
     void SetFont(ServerConnection *conn, const std::string& params);
     void NewServer(ServerConnection *conn, const std::string& params);
     void commands(ServerConnection *conn, const std::string& params);

@@ -63,6 +63,7 @@ const struct UserCommands cmds[] = {
     { "DEOP",     Commands::Deop,       1 },
     { "VOICE",    Commands::Voice,      1 },
     { "DEVOICE",  Commands::Devoice,    1 },
+    { "EXIT",     Commands::Exit,       1 },
     { 0,        0,                      0 }
 };
 
@@ -505,6 +506,17 @@ void Devoice(ServerConnection* conn, const string& params)
         std::string modeline = assignModes('-', 'v', ss);
 
         conn->sendMode(chan + " " + modeline);
+    }
+}
+
+void Exit(ServerConnection* conn, const string& params)
+{
+    const std::vector<ServerConnection*> servers = App->getServers();
+
+    std::vector<ServerConnection*>::const_iterator i;
+    for (i = servers.begin(); i != servers.end(); ++i)
+    {
+        Quit(*i, params);
     }
 }
 
