@@ -1,6 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
 2004-04-29  Morten Brix Pedersen  <morten@wtf.dk>
+        * main.cpp: Use a better way to set window icon.
+
+2004-04-29  Morten Brix Pedersen  <morten@wtf.dk>
         * Prefs.cpp/Prefs.h: Use FontButton instead of manually opening up a
         FontSelection window. Much less code.
 
