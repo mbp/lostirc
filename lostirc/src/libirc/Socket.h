@@ -30,7 +30,6 @@
 class Socket : public SigC::Object
 {
     int fd;
-    int thepipe[2];
     struct sockaddr_in sockaddr;
     pid_t resolve_pid;
     struct sockaddr_in localaddr;
@@ -42,7 +41,7 @@ public:
 
     void resolvehost(const std::string& host);
     void connect(int port);
-    bool on_host_resolve(Glib::IOCondition cond);
+    bool on_host_resolve(Glib::IOCondition cond, int readpipe);
     void disconnect();
     bool send(const std::string& data);
     bool receive(char *buf, int len);

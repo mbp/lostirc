@@ -28,6 +28,9 @@
 #include "Socket.h"
 
 using std::string;
+using SigC::bind;
+using SigC::slot;
+
 
 Socket::Socket()
     : fd(-1), resolve_pid(-1)
@@ -41,6 +44,7 @@ Socket::~Socket()
 
 void Socket::resolvehost(const string& host)
 {
+    int thepipe[2];
     hostname = host;
     if (pipe(thepipe) == -1) {
         on_error(strerror(errno));
@@ -73,7 +77,7 @@ void Socket::resolvehost(const string& host)
         ::close(thepipe[1]); // close write-pipe
 
         Glib::signal_io().connect(
-                SigC::slot(*this, &Socket::on_host_resolve),
+                bind(slot(*this, &Socket::on_host_resolve), thepipe[0]),
                 thepipe[0],
                 Glib::IO_IN | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL);
 
@@ -83,12 +87,12 @@ void Socket::resolvehost(const string& host)
 
 }
 
-bool Socket::on_host_resolve(Glib::IOCondition cond)
+bool Socket::on_host_resolve(Glib::IOCondition cond, int readpipe)
 {
     int size_to_be_read = sizeof(int) + sizeof(struct in_addr);
     char *buf = new char[size_to_be_read];
 
-    int bytes_read = read(thepipe[0], buf, size_to_be_read);
+    int bytes_read = read(readpipe, buf, size_to_be_read);
 
     if (bytes_read == -1) {
         on_error(strerror(errno));
@@ -96,7 +100,7 @@ bool Socket::on_host_resolve(Glib::IOCondition cond)
         on_error("Unknown host");
     } else if (size_to_be_read != bytes_read) {
         sleep(1);
-        int new_retval = read(thepipe[0], &buf[bytes_read], size_to_be_read - bytes_read);
+        int new_retval = read(readpipe, &buf[bytes_read], size_to_be_read - bytes_read);
 
         if (new_retval != -1) {
             bytes_read += new_retval;
@@ -125,7 +129,7 @@ bool Socket::on_host_resolve(Glib::IOCondition cond)
 
     delete []buf;
 
-    ::close(thepipe[0]);
+    ::close(readpipe);
 
     // wait for our child to exit (it probably already exit'ed, but we need
     // this to avoid defunct childs).
