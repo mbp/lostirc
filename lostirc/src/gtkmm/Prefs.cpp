@@ -282,11 +282,8 @@ void Prefs::cancelPreferences()
     highlightentry.set_text(convert_to_utf8(App->options.highlight_words));
     bufferentry.set_text(convert_to_utf8(App->options.buffer_size().getString()));
 
-    // Limited tab highlighting
-    if (App->options.limited_highlighting)
-          highlightingbutton.set_active(true);
-    else 
-          highlightingbutton.set_active(false);
+    highlightingbutton.set_active(App->options.limited_highlighting);
+    stripcolorsbutton.set_active(App->options.strip_colors);
 }
 
 void Prefs::cancelGeneral()
