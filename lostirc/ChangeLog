@@ -3,6 +3,7 @@ LostIRC (x.x.x)
     completion character than the default (,).
   * Configuration files has been moved to the ~/.lostirc/ directory.
   * It is now possible to autojoin a server with a password defined.
+  * When disconnected from server; reconnect
 
 LostIRC (0.0.6) - Mon Apr 1st 2002
   * You can now tab-complete commands as well as nicks. /j<tab> becomes /JOIN.

@@ -13,7 +13,6 @@ RANDOM:
   * when a op gets voice, his status is lost
   * write away reason in "you are away"
   * when away/unaway - title isn't updated until switch tab
-  * ability to choose which nick-completion character to use
   * implement /help, /help shortcuts and /help commands
   * /oper command
   * tab class should use operator << for output
@@ -23,5 +22,4 @@ RANDOM:
 
 DONE:
 ----
-  * should have tab-completion on commands
-  * shortcut to change the font
+  * ability to choose which nick-completion character to use
