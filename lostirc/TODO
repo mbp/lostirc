@@ -14,6 +14,10 @@ NICE-TO-HAVE:
   * /EXEC
   * Virtual functions for Commands, to be overriden. Much more OO-like.
 
+  * Some feature to see where one when one was highlighted (impossible to
+    find highlights after being away for a day from the client)
+  * Some way to seperate tabs from each other, so they are server sorted.
+
 RANDOM BUGS:
 ------------
   * Should we check for EAGAIN on send()? It seems to always suceeed anyway.
