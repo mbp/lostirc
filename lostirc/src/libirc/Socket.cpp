@@ -17,6 +17,7 @@
  */
 
 #include <iostream>
+#include <string>
 #include <cerrno>
 #include <cstdio>
 #include <unistd.h>

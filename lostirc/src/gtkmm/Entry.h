@@ -20,7 +20,6 @@
 #define ENTRY_H
 
 #include <vector>
-#include <string>
 
 class Tab;
 

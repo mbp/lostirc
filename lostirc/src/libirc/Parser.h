@@ -19,7 +19,6 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include <string>
 #include <glibmm/ustring.h>
 
 // This class takes care of parsing incoming messages from the server

@@ -2,6 +2,10 @@ For a summary of changes between releases - see the NEWS file.
 
 2002-12-16  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * Removed unneeded <string> includes.
+
+2002-12-16  Morten Brix Pedersen  <morten@wtf.dk>
+
         * Made all files in libirc use Glib::ustring instead of std::string.
           This has the advantage that only have to do the convert_to_utf8()
           conversion at one place, that is - while receiving from the server.

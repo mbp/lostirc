@@ -20,7 +20,6 @@
 #define UTILS_H
 
 #include <glibmm/ustring.h>
-#include <vector>
 #include <string> 
 
 namespace Util {

@@ -19,7 +19,6 @@
 #ifndef CONFIGVALUE_H
 #define CONFIGVALUE_H
 
-#include <string>
 #include <sstream>
 #include <glibmm/ustring.h>
 #include "Utils.h"

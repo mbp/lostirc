@@ -19,7 +19,6 @@
 #ifndef CONFIGHANDLER_H
 #define CONFIGHANDLER_H
 
-#include <string>
 #include <map>
 #include <vector>
 #include "Utils.h"

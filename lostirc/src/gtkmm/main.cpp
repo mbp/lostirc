@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <string>
+#include <glibmm/ustring.h>
 #include "MainWindow.h"
 
 int main(int argc, char** argv)
@@ -24,7 +24,7 @@ int main(int argc, char** argv)
     bool autoconnect = true;
 
     for (int i = 0; i < argc; ++i)
-          if (std::string(argv[i]).find("--noauto") != std::string::npos)
+          if (Glib::ustring(argv[i]).find("--noauto") != Glib::ustring::npos)
                 autoconnect = false;
 
     Gtk::Main app(argc, argv);

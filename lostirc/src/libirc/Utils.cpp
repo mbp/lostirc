@@ -24,7 +24,6 @@
 #include "Utils.h"
 
 using Glib::ustring;
-using std::vector;
 
 namespace Util {
 

@@ -21,7 +21,6 @@
 
 #include <glibmm/ustring.h>
 #include <sstream>
-#include <string>
 #include <set>
 #include <exception>
 

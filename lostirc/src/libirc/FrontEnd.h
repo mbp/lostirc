@@ -19,7 +19,6 @@
 #ifndef FRONTEND_H
 #define FRONTEND_H
 
-#include <string>
 #include <sstream>
 #include <vector>
 #include "Channel.h"
