@@ -100,13 +100,7 @@ void MainNotebook::onSwitchPage(GtkNotebookPage *p, unsigned int n)
 
     tab->removeHighlight();
 
-    int pos = tab->getEntry().get_position();
-    tab->getEntry().grab_focus();
-    tab->getEntry().select_region(0, 0);
-    tab->getEntry().set_position(pos);
-
     updateStatus(tab);
-
     updateTitle(tab);
 }
 

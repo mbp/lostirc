@@ -53,6 +53,11 @@ Tab::Tab(ServerConnection *conn, Pango::FontDescription font, Gtk::Label *label)
 
     _hpaned->pack1(_vbox, true, true);
     pack_start(*_hpaned);
+
+    // Make the Entry the first in the focus chain.
+    std::vector<Gtk::Widget *> focuses;
+    focuses.push_back(&_entry);
+    set_focus_chain(focuses);
 }
 
 Tab::~Tab()

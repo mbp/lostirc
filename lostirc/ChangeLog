@@ -2,6 +2,15 @@ For a summary of changes between releases - see the NEWS file.
 
 2003-01-08  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * MainNotebook.cpp: The default behaviour when changing tabs in GTK+
+          2.2 was changed so that tab is set to the first widget after
+          clicking on the tab, thus making the focus in signal_switch_page()
+          non-functional, removed here.
+
+        * Tab.cpp: Make Entry the first widget in the focus chain of the tab.
+
+2003-01-08  Morten Brix Pedersen  <morten@wtf.dk>
+
         * Tab.cpp: Don't change the name directly, use setLabelName() in order
           to have parentes when tab is non-active.
 
