@@ -1,5 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-01-15  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * DCC.cpp/DCC.h: Remove unneeded _localip member.
+
 2003-01-12  Morten Brix Pedersen  <morten@wtf.dk>
 
         * LostIRC.h: Make translations actually work! Forgot to include

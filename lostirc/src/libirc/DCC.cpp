@@ -135,15 +135,16 @@ DCC_Send_Out::DCC_Send_Out(const Glib::ustring& filename, const Glib::ustring& n
         _status = ERROR;
         App->getDcc().statusChange(_number_in_queue);
     } else {
+        Glib::ustring localip;
         _size = st.st_size;
         if (App->options.dccip->empty())
-              _localip = conn->getLocalIP();
+              localip = conn->getLocalIP();
         else
-              _localip = App->options.dccip;
+              localip = App->options.dccip;
 
         #ifdef DEBUG
         App->log << "DCC_Send_Out::DCC_Send_Out(): size: " << st.st_size << std::endl;
-        App->log << "DCC_Send_Out::DCC_Send_Out(): ip: " << _localip << std::endl;
+        App->log << "DCC_Send_Out::DCC_Send_Out(): ip: " << localip << std::endl;
         #endif
 
         fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -168,14 +169,14 @@ DCC_Send_Out::DCC_Send_Out(const Glib::ustring& filename, const Glib::ustring& n
             #endif
 
             std::ostringstream ss;
-            ss << "DCC SEND " << stripPath(_filename) << " " << ntohl(inet_addr(_localip.c_str())) << " " << ntohs(sockaddr.sin_port) << " " << _size;
+            ss << "DCC SEND " << stripPath(_filename) << " " << ntohl(inet_addr(localip.c_str())) << " " << ntohs(sockaddr.sin_port) << " " << _size;
             conn->sendCtcp(nick, ss.str());
 
             _infile.open(_filename.c_str());
 
             listen(fd, 1);
 
-            FE::emit(FE::get(CLIENTMSG) << _("DCC SEND request sent. Sending from:") << _localip, FE::CURRENT);
+            FE::emit(FE::get(CLIENTMSG) << _("DCC SEND request sent. Sending from:") << localip, FE::CURRENT);
 
             Glib::signal_io().connect(
                     SigC::slot(*this, &DCC_Send_Out::onAccept),

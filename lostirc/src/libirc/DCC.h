@@ -104,7 +104,6 @@ public:
 private:
     std::ifstream _infile;
     Glib::ustring _filename;
-    Glib::ustring _localip;
     Glib::ustring _nick;
 
     int fd;
