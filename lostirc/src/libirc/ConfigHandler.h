@@ -71,7 +71,7 @@ private:
     void setEvtDefault(const std::string& key, const std::string& value);
     bool setOptDefaults();
     void setOptDefault(const std::string& key, const std::string& value);
-    bool writeIniFile(const std::string& filename, map<std::string, std::string>& themap);
+    bool writeIniFile(const std::string& filename, std::map<std::string, std::string>& themap);
     bool writeEvents();
     bool writeOptions();
 
