@@ -1,5 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
+2004-08-02  Morten Brix Pedersen  <morten@wtf.dk>
+	* Prefs.cpp, MainWindow.cpp: Enable changing colorschemes.
+	* ConfigHandler.cpp: Add second (black on white) colorscheme.
+
 2004-06-24  Morten Brix Pedersen  <morten@wtf.dk>
         * MainNotebook.cpp: Remove compiler warning.
         * MainWindow.cpp, TextWidget.cpp: Move TextTable initialization to

@@ -53,7 +53,6 @@ MainWindow::MainWindow(bool autoconnect)
     if (x >= 0 && y >= 0)
           move(x, y);
     
-    background_color = _app.colors1.bgcolor;
     setupMenus();
     initializeTagTable();
     Gtk::VBox *vbox = manage(new Gtk::VBox());
@@ -674,5 +673,12 @@ void MainWindow::initializeTagTable()
     boldtag2->property_weight() = Pango::WEIGHT_BOLD;
     _tag_table2->add(boldtag2);
 
-    _current_tag_table = _tag_table1;
+    if (_app.options.colorscheme == 1) {
+        background_color = _app.colors1.bgcolor;
+        _current_tag_table = _tag_table1;
+    } else {
+        background_color = _app.colors2.bgcolor;
+        _current_tag_table = _tag_table2;
+    }
+
 }

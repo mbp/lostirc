@@ -195,9 +195,11 @@ void Prefs::changeColors()
     if (colorschemes.get_active_row_number() == 0) {
         AppWin->_current_tag_table = AppWin->_tag_table1;
         AppWin->background_color = App->colors1.bgcolor;
+        App->options.colorscheme = 1;
     } else {
         AppWin->_current_tag_table = AppWin->_tag_table2;
         AppWin->background_color = App->colors2.bgcolor;
+        App->options.colorscheme = 2;
     }
 
 }

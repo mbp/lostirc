@@ -249,18 +249,47 @@ Options::Options(const char *filename)
     encoding(this, "encoding", "System"),
     hidenicklist(this, "hidenicklist", false),
     hidemenu(this, "hidemenu", false),
-    hidestatusbar(this, "hidestatusbar", false)
+    hidestatusbar(this, "hidestatusbar", false),
+    colorscheme(this, "colorscheme", 1)
+{
+    readConfigFile();
+    writeConfigFile();
+}
+
+Colors1::Colors1(const char *filename)
+    : baseConfig(filename),
+    bgcolor(this, "bgcolor", "#000000"),
+    color0(this, "color0", "#FFFFFF"),
+    color1(this, "color1", "#000000"),
+    color2(this, "color2", "#0000CC"),
+    color3(this, "color3", "#00CC00"),
+    color4(this, "color4", "#DD0000"),
+    color5(this, "color5", "#AA0000"),
+    color6(this, "color6", "#BB00BB"),
+    color7(this, "color7", "#FFAA00"),
+    color8(this, "color8", "#EEDD22"),
+    color9(this, "color9", "#33DE55"),
+    color10(this, "color10", "#00CCCC"),
+    color11(this, "color11", "#33DDEE"),
+    color12(this, "color12", "#0000FF"),
+    color13(this, "color13", "#EE22EE"),
+    color14(this, "color14", "#777777"),
+    color15(this, "color15", "#999999"),
+    color16(this, "color16", "#BEBEBE"),
+    color17(this, "color17", "#000000"),
+    color18(this, "color18", "#FFFFFF"),
+    color19(this, "color19", "#000000")
 
 {
     readConfigFile();
     writeConfigFile();
 }
 
-Colors::Colors(const char *filename)
+Colors2::Colors2(const char *filename)
     : baseConfig(filename),
-    bgcolor(this, "bgcolor", "#000000"),
-    color0(this, "color0", "#FFFFFF"),
-    color1(this, "color1", "#000000"),
+    bgcolor(this, "bgcolor", "#FFFFFF"),
+    color0(this, "color0", "#000000"),
+    color1(this, "color1", "#FFFFFF"),
     color2(this, "color2", "#0000CC"),
     color3(this, "color3", "#00CC00"),
     color4(this, "color4", "#DD0000"),

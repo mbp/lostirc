@@ -50,13 +50,42 @@ public:
     Value<bool> hidenicklist;
     Value<bool> hidemenu;
     Value<bool> hidestatusbar;
+    Value<int> colorscheme;
 };
 
 // Color definitions used by frontend.
-class Colors : public baseConfig
+class Colors1 : public baseConfig
 {
 public:
-    Colors(const char *filename);
+    Colors1(const char *filename);
+
+    Value<Glib::ustring> bgcolor;
+    Value<Glib::ustring> color0;
+    Value<Glib::ustring> color1;
+    Value<Glib::ustring> color2;
+    Value<Glib::ustring> color3;
+    Value<Glib::ustring> color4;
+    Value<Glib::ustring> color5;
+    Value<Glib::ustring> color6;
+    Value<Glib::ustring> color7;
+    Value<Glib::ustring> color8;
+    Value<Glib::ustring> color9;
+    Value<Glib::ustring> color10;
+    Value<Glib::ustring> color11;
+    Value<Glib::ustring> color12;
+    Value<Glib::ustring> color13;
+    Value<Glib::ustring> color14;
+    Value<Glib::ustring> color15;
+    Value<Glib::ustring> color16;
+    Value<Glib::ustring> color17;
+    Value<Glib::ustring> color18;
+    Value<Glib::ustring> color19;
+};
+
+class Colors2 : public baseConfig
+{
+public:
+    Colors2(const char *filename);
 
     Value<Glib::ustring> bgcolor;
     Value<Glib::ustring> color0;
