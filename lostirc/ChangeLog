@@ -1,6 +1,11 @@
 For a summary of changes between releases - see the NEWS file.
 
 2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * TextWidget.cpp: Don't create a mark with a name. Just an anonymously
+          one.
+
+2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
         
         * TextWidget.cpp: New parsing code for colored lines. Can now handle
           background color correctly. It takes one character at the time and

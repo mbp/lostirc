@@ -131,7 +131,7 @@ void TextWidget::insertText(int fgcolor, int bgcolor, const ustring& str)
     Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
 
     if (scroll)
-          _textview.scroll_to_mark(buffer->create_mark("e", buffer->end()), 0.0);
+          _textview.scroll_to_mark(buffer->create_mark(buffer->end()), 0.0);
 
     // FIXME: possible performance critical
     int buffer_size = App->options.buffer_size;
