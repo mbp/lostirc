@@ -1,6 +1,12 @@
 For a summary of changes between releases - see the NEWS file.
 
 2004-02-02  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Makefile.am: Add m4 to EXTRA_DIST
+        * NEWS: Update.
+        * configure.ac: Bump version and release 0.3.2.
+
+2004-02-02  Morten Brix Pedersen  <morten@wtf.dk>
         
         * DCCList.cpp:
          - Remove fileposition column.

@@ -48,11 +48,7 @@ WIN32 TODO:
 -----------
   * Doesn't fork() when using gethostbyname(), it should.
 
-
 DCC:
 ----
   * DCC port ranges.
-  * Ability to cancel a DCC send.
-  * DCCs should use their own events instead of just CLIENTMSG.
   * DCC objects should timeout when no response has been given
-  * Show to the user which ip is being sent

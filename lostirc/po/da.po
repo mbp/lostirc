@@ -3,12 +3,12 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: LostIRC 0.3.2pre\n"
+"Project-Id-Version: LostIRC 0.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-27 04:20+0100\n"
+"POT-Creation-Date: 2004-02-02 22:38+0100\n"
 "PO-Revision-Date: 2004-01-01 19:25+0100\n"
 "Last-Translator: Morten Brix Pedersen <morten@wtf.dk>\n"
-"Language-Team: Danish <dansk@¿lid.dk>\n"
+"Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,11 +21,11 @@ msgstr "Ikke forbundet til server. Prøv `/SERVER <værtsnavn / ip>'.\n"
 msgid "No channel joined. Try `/JOIN #channel-name'\n"
 msgstr "Er ikke i nogen kanal. Prøv `/JOIN #kanalnavn'\n"
 
-#: src/gtkmm/Entry.cpp:144 src/gtkmm/Entry.cpp:175
+#: src/gtkmm/Entry.cpp:143 src/gtkmm/Entry.cpp:176 src/gtkmm/Entry.cpp:199
 msgid "<span foreground=\"blue\">Matches:</span> "
 msgstr "<span foreground=\"blue\">Fundne:</span> "
 
-#: src/gtkmm/Entry.cpp:147
+#: src/gtkmm/Entry.cpp:145 src/gtkmm/Entry.cpp:178
 msgid "<span foreground=\"blue\">No matches.</span>"
 msgstr "<span foreground=\"blue\">Ingen fundne.</span>"
 
@@ -100,11 +100,11 @@ msgstr ""
 "    CTRL-Q - afslut LostIRC\n"
 "\n"
 
-#: src/gtkmm/MainWindow.cpp:287 src/gtkmm/MainWindow.cpp:303
+#: src/gtkmm/MainWindow.cpp:288 src/gtkmm/MainWindow.cpp:304
 msgid "server"
 msgstr "server"
 
-#: src/gtkmm/MainWindow.cpp:326
+#: src/gtkmm/MainWindow.cpp:327
 msgid ""
 "Locale conversion error. An error occured while converting text from UTF-8 "
 "to your current locale.\n"
@@ -122,7 +122,7 @@ msgstr ""
 "\n"
 "Hvis du tror dette er en fejl, raportér det venligst til programmets ejer."
 
-#: src/gtkmm/MainWindow.cpp:330
+#: src/gtkmm/MainWindow.cpp:331
 msgid ""
 "\n"
 "\n"
@@ -132,7 +132,7 @@ msgstr ""
 "\n"
 "Dit nuværende locale (ser ud til) at være: "
 
-#: src/gtkmm/MainWindow.cpp:334
+#: src/gtkmm/MainWindow.cpp:335
 msgid ""
 "Encoding conversion error. An error occured while converting text from UTF-8 "
 "to the user-defined encoding.\n"
@@ -150,7 +150,7 @@ msgstr ""
 "\n"
 "Hvis du tror dette er en fejl, raportér det venligst til programmets ejer."
 
-#: src/gtkmm/MainWindow.cpp:336
+#: src/gtkmm/MainWindow.cpp:337
 msgid ""
 "\n"
 "\n"
@@ -160,7 +160,7 @@ msgstr ""
 "\n"
 "Jeg prøvede at konvertere til: "
 
-#: src/gtkmm/MainWindow.cpp:340
+#: src/gtkmm/MainWindow.cpp:341
 msgid ""
 "\n"
 "\n"
@@ -170,59 +170,59 @@ msgstr ""
 "\n"
 "(OBS: Du vil kun se denne advarsel en gang per LostIRC session)"
 
-#: src/gtkmm/MainWindow.cpp:378 src/gtkmm/TextWidget.cpp:354
+#: src/gtkmm/MainWindow.cpp:379 src/gtkmm/TextWidget.cpp:354
 msgid "_Hide Menubar"
 msgstr "_Skjul menulinje"
 
-#: src/gtkmm/MainWindow.cpp:385
+#: src/gtkmm/MainWindow.cpp:386
 msgid "New Server Tab"
 msgstr "Ny server-faneblad"
 
-#: src/gtkmm/MainWindow.cpp:390
+#: src/gtkmm/MainWindow.cpp:391
 msgid "Clear Window"
 msgstr "Ryd vindue"
 
-#: src/gtkmm/MainWindow.cpp:394
+#: src/gtkmm/MainWindow.cpp:395
 msgid "Clear All Windows"
 msgstr "Ryd alle vinduer"
 
-#: src/gtkmm/MainWindow.cpp:398
+#: src/gtkmm/MainWindow.cpp:399
 msgid "Close Current Tab"
 msgstr "Luk nuværende faneblad"
 
-#: src/gtkmm/MainWindow.cpp:414
+#: src/gtkmm/MainWindow.cpp:415
 msgid "User List"
 msgstr "Brugerliste"
 
-#: src/gtkmm/MainWindow.cpp:419
+#: src/gtkmm/MainWindow.cpp:420
 msgid "Server List"
 msgstr "Serverliste"
 
-#: src/gtkmm/MainWindow.cpp:423
+#: src/gtkmm/MainWindow.cpp:424
 msgid "DCC Transfers"
 msgstr "DCC overførsler"
 
-#: src/gtkmm/MainWindow.cpp:438
+#: src/gtkmm/MainWindow.cpp:439
 msgid "_Introduction"
 msgstr "_Introduktion"
 
-#: src/gtkmm/MainWindow.cpp:443
+#: src/gtkmm/MainWindow.cpp:444
 msgid "_About"
 msgstr "_Om"
 
-#: src/gtkmm/MainWindow.cpp:446
+#: src/gtkmm/MainWindow.cpp:447
 msgid "_LostIRC"
 msgstr "_LostIRC"
 
-#: src/gtkmm/MainWindow.cpp:447
+#: src/gtkmm/MainWindow.cpp:448
 msgid "_View"
 msgstr "_Vis"
 
-#: src/gtkmm/MainWindow.cpp:448
+#: src/gtkmm/MainWindow.cpp:449
 msgid "_Help"
 msgstr "_Hjælp"
 
-#: src/gtkmm/MainWindow.cpp:488
+#: src/gtkmm/MainWindow.cpp:489
 msgid ""
 "LostIRC Quick Introduction\n"
 "\n"
@@ -260,7 +260,7 @@ msgstr ""
 "Og du bør virkelig kigge på listen med tastaturbindinger:\n"
 "    /KEYBINDINGS"
 
-#: src/gtkmm/MainWindow.cpp:502
+#: src/gtkmm/MainWindow.cpp:503
 msgid "LostIRC "
 msgstr "LostIRC "
 
@@ -293,16 +293,32 @@ msgid "Filesize"
 msgstr "Filstørrelse"
 
 #: src/gtkmm/DCCList.cpp:37
-msgid "Fileposition"
-msgstr "Filposition"
-
-#: src/gtkmm/DCCList.cpp:38
 msgid "Progress"
 msgstr "pct. udført"
 
-#: src/gtkmm/DCCList.cpp:39
-msgid "From/To"
-msgstr "Fra/Til"
+#: src/gtkmm/DCCList.cpp:38
+msgid "User"
+msgstr "Bruger"
+
+#: src/gtkmm/DCCList.cpp:110
+msgid "Done"
+msgstr "Færdig"
+
+#: src/gtkmm/DCCList.cpp:112
+msgid "Transfering"
+msgstr "Overfører"
+
+#: src/gtkmm/DCCList.cpp:114
+msgid "Waiting"
+msgstr "Venter"
+
+#: src/gtkmm/DCCList.cpp:116
+msgid "Stopped"
+msgstr "Stoppet"
+
+#: src/gtkmm/DCCList.cpp:118
+msgid "Error"
+msgstr "Fejl"
 
 #: src/gtkmm/Prefs.cpp:46
 msgid "Strip _color codes from incoming messages"
@@ -518,55 +534,55 @@ msgstr "ubenyttet: "
 msgid ", signon time: "
 msgstr ", login tid: "
 
-#: src/libirc/DCC.cpp:58
+#: src/libirc/DCC.cpp:65
 msgid "DCC connected. Receiving file..."
 msgstr "DCC forbundet. Modtager fil..."
 
-#: src/libirc/DCC.cpp:64
+#: src/libirc/DCC.cpp:71
 msgid "Couldn't connect: "
 msgstr "Kunne ikke etablere forbindelse: "
 
-#: src/libirc/DCC.cpp:75
+#: src/libirc/DCC.cpp:81
 msgid "Receiving from:"
 msgstr "Modtager fra:"
 
-#: src/libirc/DCC.cpp:108
+#: src/libirc/DCC.cpp:121
 msgid "File received successfully:"
 msgstr "Fil modtaget korrekt:"
 
-#: src/libirc/DCC.cpp:116
+#: src/libirc/DCC.cpp:128
 msgid "Couldn't receive: "
 msgstr "Kunne ikke modtage: "
 
-#: src/libirc/DCC.cpp:121
+#: src/libirc/DCC.cpp:132
 msgid "DCC connection closed."
 msgstr "DCC forbindelse lukket."
 
-#: src/libirc/DCC.cpp:167
+#: src/libirc/DCC.cpp:180
 msgid "DCC SEND request sent. Sending from:"
 msgstr "DCC SEND forespørgsel sendt. Sender fra:"
 
-#: src/libirc/DCC.cpp:177
+#: src/libirc/DCC.cpp:194
 msgid "Couldn't bind: "
 msgstr "Kunne ikke binde: "
 
-#: src/libirc/DCC.cpp:183
+#: src/libirc/DCC.cpp:201
 msgid "Connection accepted."
 msgstr "Forbindelse accepteret."
 
-#: src/libirc/DCC.cpp:212
+#: src/libirc/DCC.cpp:231
 msgid "File sent successfully:"
 msgstr "Fil sendt korrekt:"
 
-#: src/libirc/DCC.cpp:221
+#: src/libirc/DCC.cpp:239
 msgid "Couldn't send: "
 msgstr "Kunne ikke sende: "
 
-#: src/libirc/DCC.cpp:241
+#: src/libirc/DCC.cpp:257
 msgid "Incoming file has zero size. Sender:"
 msgstr "Indgående fil er tom. Sender:"
 
-#: src/libirc/DCC.cpp:257
+#: src/libirc/DCC.cpp:273
 msgid "File not found: "
 msgstr "Fil ikke fundet: "
 

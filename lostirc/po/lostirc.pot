@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-27 04:20+0100\n"
+"POT-Creation-Date: 2004-02-02 22:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,11 +24,11 @@ msgstr ""
 msgid "No channel joined. Try `/JOIN #channel-name'\n"
 msgstr ""
 
-#: src/gtkmm/Entry.cpp:144 src/gtkmm/Entry.cpp:175
+#: src/gtkmm/Entry.cpp:143 src/gtkmm/Entry.cpp:176 src/gtkmm/Entry.cpp:199
 msgid "<span foreground=\"blue\">Matches:</span> "
 msgstr ""
 
-#: src/gtkmm/Entry.cpp:147
+#: src/gtkmm/Entry.cpp:145 src/gtkmm/Entry.cpp:178
 msgid "<span foreground=\"blue\">No matches.</span>"
 msgstr ""
 
@@ -80,11 +80,11 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:287 src/gtkmm/MainWindow.cpp:303
+#: src/gtkmm/MainWindow.cpp:288 src/gtkmm/MainWindow.cpp:304
 msgid "server"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:326
+#: src/gtkmm/MainWindow.cpp:327
 msgid ""
 "Locale conversion error. An error occured while converting text from UTF-8 "
 "to your current locale.\n"
@@ -95,14 +95,14 @@ msgid ""
 "If you believe this is a bug, please report it to the application author."
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:330
+#: src/gtkmm/MainWindow.cpp:331
 msgid ""
 "\n"
 "\n"
 "Your current locale (seems) to be: "
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:334
+#: src/gtkmm/MainWindow.cpp:335
 msgid ""
 "Encoding conversion error. An error occured while converting text from UTF-8 "
 "to the user-defined encoding.\n"
@@ -113,73 +113,73 @@ msgid ""
 "If you believe this is a bug, please report it to the application author."
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:336
+#: src/gtkmm/MainWindow.cpp:337
 msgid ""
 "\n"
 "\n"
 "I was trying to convert to: "
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:340
+#: src/gtkmm/MainWindow.cpp:341
 msgid ""
 "\n"
 "\n"
 "(Note: You'll only see this warning once per LostIRC session)"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:378 src/gtkmm/TextWidget.cpp:354
+#: src/gtkmm/MainWindow.cpp:379 src/gtkmm/TextWidget.cpp:354
 msgid "_Hide Menubar"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:385
+#: src/gtkmm/MainWindow.cpp:386
 msgid "New Server Tab"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:390
+#: src/gtkmm/MainWindow.cpp:391
 msgid "Clear Window"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:394
+#: src/gtkmm/MainWindow.cpp:395
 msgid "Clear All Windows"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:398
+#: src/gtkmm/MainWindow.cpp:399
 msgid "Close Current Tab"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:414
+#: src/gtkmm/MainWindow.cpp:415
 msgid "User List"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:419
+#: src/gtkmm/MainWindow.cpp:420
 msgid "Server List"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:423
+#: src/gtkmm/MainWindow.cpp:424
 msgid "DCC Transfers"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:438
+#: src/gtkmm/MainWindow.cpp:439
 msgid "_Introduction"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:443
+#: src/gtkmm/MainWindow.cpp:444
 msgid "_About"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:446
+#: src/gtkmm/MainWindow.cpp:447
 msgid "_LostIRC"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:447
+#: src/gtkmm/MainWindow.cpp:448
 msgid "_View"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:448
+#: src/gtkmm/MainWindow.cpp:449
 msgid "_Help"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:488
+#: src/gtkmm/MainWindow.cpp:489
 msgid ""
 "LostIRC Quick Introduction\n"
 "\n"
@@ -200,7 +200,7 @@ msgid ""
 "    /KEYBINDINGS"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:502
+#: src/gtkmm/MainWindow.cpp:503
 msgid "LostIRC "
 msgstr ""
 
@@ -233,15 +233,31 @@ msgid "Filesize"
 msgstr ""
 
 #: src/gtkmm/DCCList.cpp:37
-msgid "Fileposition"
-msgstr ""
-
-#: src/gtkmm/DCCList.cpp:38
 msgid "Progress"
 msgstr ""
 
-#: src/gtkmm/DCCList.cpp:39
-msgid "From/To"
+#: src/gtkmm/DCCList.cpp:38
+msgid "User"
+msgstr ""
+
+#: src/gtkmm/DCCList.cpp:110
+msgid "Done"
+msgstr ""
+
+#: src/gtkmm/DCCList.cpp:112
+msgid "Transfering"
+msgstr ""
+
+#: src/gtkmm/DCCList.cpp:114
+msgid "Waiting"
+msgstr ""
+
+#: src/gtkmm/DCCList.cpp:116
+msgid "Stopped"
+msgstr ""
+
+#: src/gtkmm/DCCList.cpp:118
+msgid "Error"
 msgstr ""
 
 #: src/gtkmm/Prefs.cpp:46
@@ -454,55 +470,55 @@ msgstr ""
 msgid ", signon time: "
 msgstr ""
 
-#: src/libirc/DCC.cpp:58
+#: src/libirc/DCC.cpp:65
 msgid "DCC connected. Receiving file..."
 msgstr ""
 
-#: src/libirc/DCC.cpp:64
+#: src/libirc/DCC.cpp:71
 msgid "Couldn't connect: "
 msgstr ""
 
-#: src/libirc/DCC.cpp:75
+#: src/libirc/DCC.cpp:81
 msgid "Receiving from:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:108
+#: src/libirc/DCC.cpp:121
 msgid "File received successfully:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:116
+#: src/libirc/DCC.cpp:128
 msgid "Couldn't receive: "
 msgstr ""
 
-#: src/libirc/DCC.cpp:121
+#: src/libirc/DCC.cpp:132
 msgid "DCC connection closed."
 msgstr ""
 
-#: src/libirc/DCC.cpp:167
+#: src/libirc/DCC.cpp:180
 msgid "DCC SEND request sent. Sending from:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:177
+#: src/libirc/DCC.cpp:194
 msgid "Couldn't bind: "
 msgstr ""
 
-#: src/libirc/DCC.cpp:183
+#: src/libirc/DCC.cpp:201
 msgid "Connection accepted."
 msgstr ""
 
-#: src/libirc/DCC.cpp:212
+#: src/libirc/DCC.cpp:231
 msgid "File sent successfully:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:221
+#: src/libirc/DCC.cpp:239
 msgid "Couldn't send: "
 msgstr ""
 
-#: src/libirc/DCC.cpp:241
+#: src/libirc/DCC.cpp:257
 msgid "Incoming file has zero size. Sender:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:257
+#: src/libirc/DCC.cpp:273
 msgid "File not found: "
 msgstr ""
 

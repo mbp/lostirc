@@ -1,6 +1,6 @@
 AC_INIT
 AC_CONFIG_SRCDIR([src/gtkmm/main.cpp])
-AM_INIT_AUTOMAKE(lostirc, 0.3.2pre)
+AM_INIT_AUTOMAKE(lostirc, 0.3.2)
 AM_CONFIG_HEADER(config.h)
 AC_PROG_CXX
 AC_PROG_INSTALL
