@@ -17,6 +17,7 @@
  */
 
 #include <sstream>
+#include <gtkmm/messagedialog.h>
 #include <gtkmm/separator.h>
 #include <gtkmm/stock.h>
 #include <gtkmm/image.h>
@@ -40,10 +41,36 @@ ServerWindow::ServerWindow(Gtk::Window& parent)
     : Gtk::Dialog(_("LostIRC Server Window"), parent),
     _columns(),
     _liststore(Gtk::ListStore::create(_columns)),
-    _treeview(_liststore)
+    _treeview(_liststore),
+    _pref_table(2, 2)
 {
+    set_default_size(300, 325);
     set_border_width(5);
-    get_vbox()->set_spacing(18);
+    get_vbox()->set_spacing(12);
+
+    int row = 1;
+
+    // IRC nick
+    ircnickentry.set_text(App->options.nick);
+    Gtk::Label *glabel0 = manage(new Gtk::Label(_("Nickname:"), Gtk::ALIGN_LEFT));
+    _pref_table.attach(*glabel0, 0, 1, row, row + 1);
+    _pref_table.attach(ircnickentry, 1, 2, row, row + 1);
+
+    row++;
+
+    // Real name
+    realnameentry.set_text(App->options.realname);
+    Gtk::Label *glabel1 = manage(new Gtk::Label(_("Real name:"), Gtk::ALIGN_LEFT));
+    _pref_table.attach(*glabel1, 0, 1, row, row + 1);
+    _pref_table.attach(realnameentry, 1, 2, row, row + 1);
+
+    realnameentry.signal_focus_out_event().connect(slot(*this, &ServerWindow::focusChangeEvent));
+    ircnickentry.signal_focus_out_event().connect(slot(*this, &ServerWindow::focusChangeEvent));
+
+
+    Gtk::ScrolledWindow *swin = manage(new Gtk::ScrolledWindow());
+    swin->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+    swin->add(_treeview);
 
     // Autojoin/perform-tab
 
@@ -56,6 +83,9 @@ ServerWindow::ServerWindow(Gtk::Window& parent)
     // Button box.
     Gtk::HButtonBox *buttbox = manage(new Gtk::HButtonBox());
     buttbox->set_spacing(6);
+    buttbox->set_layout(Gtk::BUTTONBOX_END);
+    Gtk::Button *connectbutton = manage(create_imagebutton(_("_Connect"), Gtk::Stock::JUMP_TO));
+    connectbutton->signal_clicked().connect(slot(*this, &ServerWindow::connectEntry));
     Gtk::Button *addbutton = manage(new Gtk::Button(Gtk::Stock::ADD));
     addbutton->signal_clicked().connect(slot(*this, &ServerWindow::addEntry));
     Gtk::Button *modifybutton = manage(create_imagebutton(_("_Modify"), Gtk::Stock::PREFERENCES));
@@ -65,15 +95,30 @@ ServerWindow::ServerWindow(Gtk::Window& parent)
     Gtk::Button *closebutton = manage(new Gtk::Button(Gtk::Stock::CLOSE));
     closebutton->signal_clicked().connect(slot(*this, &Gtk::Dialog::hide));
 
+    buttbox->pack_end(*manage(new Gtk::VBox()), Gtk::PACK_EXPAND_WIDGET);
+    buttbox->pack_end(*connectbutton, Gtk::PACK_SHRINK);
     buttbox->pack_end(*addbutton, Gtk::PACK_SHRINK);
     buttbox->pack_end(*modifybutton, Gtk::PACK_SHRINK);
     buttbox->pack_end(*deletebutton, Gtk::PACK_SHRINK);
     buttbox->pack_end(*closebutton, Gtk::PACK_SHRINK);
 
-    get_vbox()->pack_end(*buttbox, Gtk::PACK_SHRINK);
-    get_vbox()->pack_end(*manage(new Gtk::HSeparator()), Gtk::PACK_EXPAND_PADDING);
-    get_vbox()->pack_end(_treeview, Gtk::PACK_SHRINK);
+    Gtk::Label *servlabel = manage(new Gtk::Label());
+    servlabel->set_markup("<b>Servers</b>");
+    get_vbox()->pack_start(_pref_table, Gtk::PACK_SHRINK);
+    get_vbox()->pack_start(*manage(new Gtk::HSeparator()), Gtk::PACK_SHRINK);
+    get_vbox()->pack_start(*servlabel, Gtk::PACK_SHRINK);
+    get_vbox()->pack_start(*swin, Gtk::PACK_EXPAND_WIDGET);
+    get_vbox()->pack_start(*manage(new Gtk::HSeparator()), Gtk::PACK_SHRINK);
+    get_vbox()->pack_start(*buttbox, Gtk::PACK_SHRINK);
+
     show_all();
+}
+
+bool ServerWindow::focusChangeEvent(GdkEventFocus* event)
+{
+    App->options.nick = ircnickentry.get_text();
+    App->options.realname = realnameentry.get_text();
+    return true;
 }
 
 void ServerWindow::updateList()
@@ -105,6 +150,11 @@ void ServerWindow::addEntry()
     }
 }
 
+void ServerWindow::connectEntry()
+{
+    std::cerr << "connect" << std::endl;
+}
+
 void ServerWindow::modifyEntry()
 {
     Glib::RefPtr<Gtk::TreeSelection> selection = _treeview.get_selection();
@@ -127,12 +177,20 @@ void ServerWindow::deleteEntry()
     Gtk::TreeModel::iterator iterrow = selection->get_selected();
 
     if (iterrow) {
-        Gtk::TreeModel::Row row = *selection->get_selected();
+        // Ask the user whether he/she is sure.
+        Gtk::MessageDialog dialog("Are you sure you want to delete this server?", Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO);
 
-        Server *server = row[_columns.serverptr];
-        _liststore->erase(selection->get_selected());
-        App->cfgservers.removeServer(server);
-        App->cfgservers.writeServersFile();
+        int result = dialog.run();
+
+        if (result == Gtk::RESPONSE_YES) {
+            // Delete the entry.
+            Gtk::TreeModel::Row row = *selection->get_selected();
+
+            Server *server = row[_columns.serverptr];
+            _liststore->erase(selection->get_selected());
+            App->cfgservers.removeServer(server);
+            App->cfgservers.writeServersFile();
+        }
     }
 }
 

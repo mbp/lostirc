@@ -45,8 +45,9 @@ Prefs::Prefs()
     stripcolorsbutton(_("Strip _color codes from incoming messages"), true),
     stripothersbutton(_("Strip _bold and underline codes from incoming messages"), true),
     loggingbutton(_("_Log conversations to disk"), true),
-    _general_table(2, 4),
-    _prefs_table(2, 5)
+    _general_table(2, 2),
+    _prefs_table(2, 3),
+    _dcc_table(2, 2)
 {
     set_title(_("LostIRC Preferences"));
     notebook.set_tab_pos(Gtk::POS_TOP);
@@ -54,6 +55,8 @@ Prefs::Prefs()
     _general_table.set_col_spacings(12);
     _prefs_table.set_row_spacings(6);
     _prefs_table.set_col_spacings(12);
+    _dcc_table.set_row_spacings(6);
+    _dcc_table.set_col_spacings(12);
 
     set_border_width(5);
     set_resizable(false);
@@ -64,25 +67,10 @@ Prefs::Prefs()
 
     Gtk::VBox *generalbox = addPage(_("General"));
     Gtk::VBox *prefsbox = addPage(_("Preferences"));
+    Gtk::VBox *dccbox = addPage(_("DCC"));
 
     // General options-tab
     int row = 1;
-
-    // IRC nick
-    ircnickentry.set_text(App->options.nick);
-    Gtk::Label *glabel0 = manage(new Gtk::Label(_("Nickname:"), Gtk::ALIGN_LEFT));
-    _general_table.attach(*glabel0, 0, 1, row, row + 1);
-    _general_table.attach(ircnickentry, 1, 2, row, row + 1);
-
-    row++;
-
-    // Real name
-    realnameentry.set_text(App->options.realname);
-    Gtk::Label *glabel1 = manage(new Gtk::Label(_("Real name:"), Gtk::ALIGN_LEFT));
-    _general_table.attach(*glabel1, 0, 1, row, row + 1);
-    _general_table.attach(realnameentry, 1, 2, row, row + 1);
-
-    row++;
 
     // IRC username
     ircuserentry.set_text(App->options.ircuser);
@@ -141,24 +129,6 @@ Prefs::Prefs()
     _prefs_table.attach(*plabel4, 0, 1, row, row + 1);
     _prefs_table.attach(bufferspin, 1, 2, row, row + 1);
 
-    row++;
-
-    // DCC ip
-    dccipentry.set_text(App->options.dccip().getString());
-    Gtk::Label *plabel1 = manage(new Gtk::Label(_("DCC IP address:"), Gtk::ALIGN_LEFT));
-    _prefs_table.attach(*plabel1, 0, 1, row, row + 1);
-    _prefs_table.attach(dccipentry, 1, 2, row, row + 1);
-
-    row++;
-
-    // DCC port
-    dccportentry.set_text(App->options.dccport().getString());
-    Gtk::Label *plabel2 = manage(new Gtk::Label(_("DCC Port (0 = random):"), Gtk::ALIGN_LEFT));
-    _prefs_table.attach(*plabel2, 0, 1, row, row + 1);
-    _prefs_table.attach(dccportentry, 1, 2, row, row + 1);
-
-    row++;
-
     prefsbox->pack_start(_prefs_table, Gtk::PACK_SHRINK);
 
     // Strip colors
@@ -172,6 +142,24 @@ Prefs::Prefs()
     // Logging
     loggingbutton.set_active(App->options.logging);
     prefsbox->pack_start(loggingbutton, Gtk::PACK_SHRINK);
+
+    row = 1;
+
+    // DCC ip
+    dccipentry.set_text(App->options.dccip().getString());
+    Gtk::Label *plabel1 = manage(new Gtk::Label(_("DCC IP address:"), Gtk::ALIGN_LEFT));
+    _dcc_table.attach(*plabel1, 0, 1, row, row + 1);
+    _dcc_table.attach(dccipentry, 1, 2, row, row + 1);
+
+    row++;
+
+    // DCC port
+    dccportentry.set_text(App->options.dccport().getString());
+    Gtk::Label *plabel2 = manage(new Gtk::Label(_("DCC Port (0 = random):"), Gtk::ALIGN_LEFT));
+    _dcc_table.attach(*plabel2, 0, 1, row, row + 1);
+    _dcc_table.attach(dccportentry, 1, 2, row, row + 1);
+
+    dccbox->pack_start(_dcc_table, Gtk::PACK_SHRINK);
 
     mainvbox.pack_start(*manage(new Gtk::HSeparator()), Gtk::PACK_SHRINK);
 
@@ -188,9 +176,7 @@ Prefs::Prefs()
 void Prefs::saveSettings()
 {
     // General.
-    App->options.realname = realnameentry.get_text();
     App->options.ircuser = ircuserentry.get_text();
-    App->options.nick = ircnickentry.get_text();
     Glib::ustring encoding = encodingcombo.get_entry()->get_text();
     App->options.encoding = encoding.substr(0, encoding.find_first_of(' '));
 

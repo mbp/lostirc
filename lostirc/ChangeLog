@@ -1,8 +1,12 @@
 For a summary of changes between releases - see the NEWS file.
 
 2003-06-15  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * ServerWindow.cpp: Now things are getting pretty :-)
+
+2003-06-15  Morten Brix Pedersen  <morten@wtf.dk>
         
-        * ServerWindow: More reworking of window layout. Still a few bugs
+        * ServerWindow.cpp: More reworking of window layout. Still a few bugs
           left.
 
 2003-06-15  Morten Brix Pedersen  <morten@wtf.dk>

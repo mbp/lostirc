@@ -37,10 +37,12 @@ public:
     virtual ~ServerWindow() { }
 
 private:
+    void connectEntry();
     void addEntry();
     void modifyEntry();
     void deleteEntry();
 
+    bool focusChangeEvent(GdkEventFocus* event);
     void updateList();
 
     Gtk::HBox hboxserver;
@@ -59,6 +61,10 @@ private:
     ModelColumns _columns;
     Glib::RefPtr<Gtk::ListStore> _liststore;
     Gtk::TreeView _treeview;
+
+    Gtk::Table _pref_table;
+    Gtk::Entry ircnickentry;
+    Gtk::Entry realnameentry;
 };
 
 class ServerEditDialog : public Gtk::Dialog

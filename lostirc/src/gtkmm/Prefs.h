@@ -49,16 +49,12 @@ private:
     Gtk::VBox* addPage(const Glib::ustring& str);
 
     // General
-    Gtk::Entry ircnickentry;
-    Gtk::Entry realnameentry;
     Gtk::Entry ircuserentry;
     Gtk::Combo encodingcombo;
     Gtk::Entry fontentry;
 
     // Preferences
     Gtk::Entry nickcompletionentry;
-    Gtk::Entry dccipentry;
-    Gtk::Entry dccportentry;
     Gtk::Entry highlightentry;
     Gtk::Adjustment bufferadj;
     Gtk::SpinButton bufferspin;
@@ -66,8 +62,13 @@ private:
     Gtk::CheckButton stripothersbutton;
     Gtk::CheckButton loggingbutton;
 
+    // DCC
+    Gtk::Entry dccipentry;
+    Gtk::Entry dccportentry;
+
     Gtk::Table _general_table;
     Gtk::Table _prefs_table;
+    Gtk::Table _dcc_table;
 
     Gtk::Notebook notebook;
 
