@@ -5,6 +5,8 @@ LostIRC (x.x.x)
     correctly.
   * By default, color codes are now stripped from incoming messages. As an
     option in preferences, you can turn them on again.
+  * Bold and underline codes are not stripped by defalt. But you can turn
+    them off in preferences.
   * Title in window wasn't updated after succesfull connection to server and
     joining a channel after that, fixed.
   * Man-page updated with a better description.

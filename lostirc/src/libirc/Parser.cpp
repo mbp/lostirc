@@ -898,7 +898,15 @@ string stripColors(const string& str)
     int numbercount = 0;
     for (string::size_type i = 0; i < str.length(); ++i)
     {
-        if (str[i] == '\003') {
+        if (str[i] == '\017') { // RESET
+            color = false;
+        } else if (App->options.strip_boldandunderline && str[i] == '\002') {
+            // BOLD
+            // No-op.
+        } else if (App->options.strip_boldandunderline && str[i] == '\037') {
+            // UNDERLINE
+            // No-op.
+        } else if (str[i] == '\003') { // COLOR
             color = true;
         } else if (color && isdigit(str[i]) && numbercount < 2) {
 

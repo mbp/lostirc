@@ -1,6 +1,13 @@
 For a summary of changes between releases - see the NEWS file.
 
 2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * ConfigHandler.h/ConfigHandler.cpp: Add strip_boldandunderline option.
+        * Parser.cpp: When strip_boldandunderline is on, also strip bold and
+          underline codes.
+        * Prefs.h/Prefs.cpp: Add option to toggle strip_boldandunderline.
+
+2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
         
         * TextWidget.h: Add TextProperties struct.
         * TextWidget.cpp: Use TextProperties struct to control the properties

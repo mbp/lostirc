@@ -3,6 +3,7 @@ CRITICAL:
   * Implement reading in ServerConnection better (more efficiently)
   * Implement DCC CHAT
   * After being disconnected, queries have a () around them.
+  * URL handling is broken after new color-parsing code.
 
 NICE-TO-HAVE:
 ------------

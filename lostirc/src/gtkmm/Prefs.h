@@ -74,6 +74,7 @@ private:
     Gtk::Entry bufferentry;
     Gtk::CheckButton highlightingbutton;
     Gtk::CheckButton stripcolorsbutton;
+    Gtk::CheckButton stripothersbutton;
 
     // Font selection
     Gtk::FontSelection fontsel;
