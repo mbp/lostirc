@@ -37,6 +37,7 @@ class Tab : public Gtk::VBox
 {
 public:
     Tab(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font);
+    ~Tab();
 
     Gtk::Text*                  getText();
     Gtk::HBox*                  getHBox();

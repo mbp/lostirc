@@ -49,6 +49,12 @@ Tab::Tab(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
 
 }
 
+Tab::~Tab()
+{
+    delete _current_cx;
+    delete _label; // Was new'ed in MainNotebook
+}
+
 Gtk::Text* Tab::getText()
 {
     return _text;

@@ -66,6 +66,9 @@ void Entry::printText(const string& msg)
 {
     stringstream ss(msg);
 
+    if (ss.peek() == '\n')
+          ss.ignore();
+
     string line;
     while (getline(ss, line)) {
         _tab->getConn()->sendMsg(_tab->getLabel()->get_text(), line);

@@ -126,9 +126,14 @@ void MainNotebook::switchPage(Gtk::Notebook_Helpers::Page *p, unsigned int n)
 
 void MainNotebook::closeCurrent()
 {
-    Gtk::Notebook::Page *p = get_current();
-    pages().remove(p);
-    draw(NULL); // Needed for redrawing the widget
+    // Can't delete last page
+    if (pages().size() > 1) {
+        Gtk::Notebook::Page *p = get_current();
+        Tab *tab = dynamic_cast<Tab*>(p->get_child());
+        pages().remove(p);
+        delete tab;
+        draw(NULL); // Needed for redrawing the widget
+    }
 }
 
 void MainNotebook::highlight(Tab *tab)

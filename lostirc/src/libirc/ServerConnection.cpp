@@ -22,14 +22,15 @@
 using std::string;
 
 ServerConnection::ServerConnection(InOut *inout, const string& host, int port, const string& nick)
-    : _io(inout)
+    : _io(inout), _socket(new Socket()), _p(new Parser(_io,this))
 {
     Session.nick = nick;
     Connect(host, port);
 }
 
 ServerConnection::ServerConnection(InOut *inout, const string& nick, const string& realname)
-    : _io(inout)
+    : _io(inout), _socket(new Socket()), _p(new Parser(_io,this))
+
 {
     Session.nick = nick;
     Session.realname = realname;
@@ -38,11 +39,15 @@ ServerConnection::ServerConnection(InOut *inout, const string& nick, const strin
 
 }
 
+ServerConnection::~ServerConnection()
+{
+    delete _socket;
+    delete _p;
+}
+
 bool ServerConnection::Connect(const string &host, int port = 6667)
 {
     Session.servername = host;
-    _socket = new Socket();
-    _p = new Parser(_io, this);
 
     if (_socket->connect(host, port)) {
         Session.isConnected = 1;

@@ -32,6 +32,7 @@ class ServerConnection
 public:
     ServerConnection(InOut *inout, const std::string& host, int port, const std::string& nick);
     ServerConnection(InOut *inout, const std::string& nick, const std::string& realname);
+    ~ServerConnection();
 
     bool Connect(const std::string &host, int port = 6667);
     bool sendPong(const std::string& crap);
