@@ -1,8 +1,8 @@
 CRITICAL: 
 ---------
   * Doesn't show in query when a user quits
-  * Still connected to a server when closing last tab, should keep it open
   * Implement DCC chat/send
+  * Away message appears in query on /whois
 
 RANDOM:
 ------
@@ -25,3 +25,4 @@ DONE:
   * ability to choose which nick-completion character to use
   * Add code to detect timeouts so we can reconnect and not let the user
     wait forever
+  * Still connected to a server when closing last tab, should keep it open

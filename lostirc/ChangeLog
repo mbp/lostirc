@@ -14,6 +14,10 @@ LostIRC (x.x.x)
     server on that channel.
   * The down-arrow key now works to get the previous things said, like the
     up-arrow does, just opposite.
+  * Add /DISCONNECT to disconnect from the current server.
+  * When closing the last tab which belongs to a server-connection, the
+    connection disconnects. Before the connection was still open but with no
+    visible tabs.
 
 LostIRC (0.0.6) - Mon Apr 1st 2002
   * You can now tab-complete commands as well as nicks. /j<tab> becomes /JOIN.
