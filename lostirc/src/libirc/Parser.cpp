@@ -562,7 +562,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             break; // Ignored.
         case 317: // RPL_WHOISIDLE
             {
-                long idle = Utils::stoi(getWord(param, 3));
+                long idle = Util::stoi(getWord(param, 3));
                 std::ostringstream ss;
                 ss << idle / 3600 << ":" << (idle / 60) % 60 << ":" << idle % 60 << std::endl;
                 long date = std::atol(getWord(param, 4).c_str());

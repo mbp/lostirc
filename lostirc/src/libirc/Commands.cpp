@@ -55,7 +55,7 @@ struct UserCommands cmds[] = {
 bool Commands::send(ServerConnection *conn, string cmd, const string& params) {
 
     for (int i = 0; cmds[i].cmd != 0; ++i) {
-        if (cmds[i].cmd == Utils::toupper(cmd)) {
+        if (cmds[i].cmd == Util::upper(cmd)) {
             if (!conn->Session.isConnected && cmds[i].reqConnected) {
                 error = "Must be connected";
                 return false;
@@ -127,7 +127,7 @@ bool Commands::Server(ServerConnection *conn, const string& params)
 
         int p;
         if (!port.empty())
-              p = Utils::stoi(port);
+              p = Util::stoi(port);
 
         if (!port.empty() && !password.empty())
               conn->Connect(host, p, password);
@@ -196,7 +196,7 @@ bool Commands::Ctcp(ServerConnection *conn, const string& params)
         error = "/CTCP <nick> <message>, sends a CTCP message to a user";
         return false;
     } else {
-        action = Utils::toupper(action);
+        action = Util::upper(action);
 
         conn->sendCtcp(to, action);
         return true;

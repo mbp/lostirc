@@ -24,7 +24,7 @@
 using std::string;
 using std::vector;
 
-namespace Utils {
+namespace Util {
 
 void Tokenize(const string& str,
                       vector<string>& tokens,
@@ -46,15 +46,15 @@ void Tokenize(const string& str,
     }
 }
 
-string toupper(string& str)
+string upper(string& str)
 {
-    std::transform(str.begin(), str.end(), str.begin(), std::toupper);
+    std::transform(str.begin(), str.end(), str.begin(), toupper);
     return str;
 }
 
-string tolower(string& str)
+string lower(string& str)
 {
-    std::transform(str.begin(), str.end(), str.begin(), std::tolower);
+    std::transform(str.begin(), str.end(), str.begin(), tolower);
     return str;
 }
 

@@ -19,6 +19,8 @@
 #include <cctype>
 #include "Events.h"
 
+using std::string;
+
 struct {
     const char *s;
     signed int value;
@@ -77,9 +79,9 @@ void Events::emit(Tmpl& t, const string& chan, ServerConnection *conn)
     _app->evtDisplayMessage(msg, chan, conn);
 }
 
-void Events::emit(Tmpl& t, const vector<string>& to, ServerConnection *conn)
+void Events::emit(Tmpl& t, const std::vector<string>& to, ServerConnection *conn)
 {
-    vector<string>::const_iterator i;
+    std::vector<string>::const_iterator i;
     for (i = to.begin(); i != to.end(); ++i) {
         string to = *i;
         emit(t, to, conn);
@@ -108,7 +110,7 @@ string Tmpl::result()
                 if (isdigit(*i) && parsing_arg) {
                     unsigned int num = ((*i) - '0') - 1;
                     if (num >= tokens.size()) {
-                        cerr << "Fatal error, too many tokens! [ " << num << " compared to " << tokens.size() << " ]" << endl;
+                        std::cerr << "Fatal error, too many tokens! [ " << num << " compared to " << tokens.size() << " ]" << std::endl;
                     } else {
                         newstr += tokens[num];
                     }

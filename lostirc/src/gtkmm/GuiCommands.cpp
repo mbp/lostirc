@@ -20,6 +20,8 @@
 #include "Tab.h"
 
 
+using std::string;
+
 struct UserCommands guicmds[] = {
     { "QUERY",     GuiCommands::Query,    0 },
     { "ME",        GuiCommands::Me,       1 },
@@ -29,11 +31,10 @@ struct UserCommands guicmds[] = {
     { 0,        0, 0                        }
 };
 
-
 bool GuiCommands::send(ServerConnection *conn, string cmd, const string& params)
 {
     for (int i = 0; guicmds[i].cmd != 0; ++i) {
-        if (guicmds[i].cmd == Utils::toupper(cmd)) {
+        if (guicmds[i].cmd == Util::upper(cmd)) {
             if (!conn->Session.isConnected && guicmds[i].reqConnected) {
                 Commands::error = "Must be connected.";
                 return false;

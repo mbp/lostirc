@@ -1,4 +1,7 @@
 LostIRC (0.0.4)
+  * A "perform" feature has been implemented, alongside a new preferences
+    window here you can add new servers which should be auto-joined, and you
+    can define which commands should be executed on connect. eg. /join #foobar
   * /TOPIC and /KICK was not working properly, the topic and kick message
     could not be set if it contained spaces
   * When getting a CTCP NOTICE from a user, now show the actual nick it was
@@ -7,7 +10,7 @@ LostIRC (0.0.4)
     a more human-readable format
   * /LIST is now implemented
   * The /NAMES command now works better for channels you are already on
-  * The usual code improvements
+  * The usual code improvements, now compiles fully on gcc 3[0.4].
 
 LostIRC (0.0.3) - Mon Feb, 18th 2002
   * Implement /kick

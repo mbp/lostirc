@@ -45,7 +45,7 @@ bool ConfigHandler::readEvents(const string& filename)
     string str;
     while (getline(in, str)) {
         vector<string> vec;
-        Utils::Tokenize(str, vec);
+        Util::Tokenize(str, vec);
         vector<string>::const_iterator i = vec.begin();
 
         string _tmpparam;
@@ -131,7 +131,7 @@ bool ConfigHandler::readServers(const string& filename)
             } else if (param == "cmd") {
                 tmpcmds.push_back(value);
             } else if (param == "port") {
-                port = Utils::stoi(value);
+                port = Util::stoi(value);
             } else if (param == "password") {
                 password = value;
             } else if (param == "nick") {

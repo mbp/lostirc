@@ -350,7 +350,7 @@ Channel* ServerConnection::findChannel(const string& c)
     vector<Channel*>::iterator i = Session.channels.begin();
     for (;i != Session.channels.end(); ++i) {
         string name = (*i)->getName();
-        if (Utils::tolower(name) == Utils::tolower(chan))
+        if (Util::lower(name) == Util::lower(chan))
               return *i;
     }
     return 0;

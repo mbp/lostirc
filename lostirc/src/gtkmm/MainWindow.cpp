@@ -164,11 +164,11 @@ void MainWindow::onNick(const string& nick, const string& to, ServerConnection *
     }
 }
 
-void MainWindow::onCUMode(const string& nick, const string& chan, const map<string, IRC::UserMode>& users, ServerConnection *conn)
+void MainWindow::onCUMode(const string& nick, const string& chan, const std::map<string, IRC::UserMode>& users, ServerConnection *conn)
 {
     Tab *tab = _nb->findTab(chan, conn);
 
-    map<string, IRC::UserMode>::const_iterator i;
+    std::map<string, IRC::UserMode>::const_iterator i;
     for (i = users.begin(); i != users.end(); ++i) {
         tab->removeUser(i->first);
         tab->insertUser(i->first, i->second);
@@ -179,8 +179,8 @@ void MainWindow::onNames(Channel& c, ServerConnection *conn)
 {
     Tab *tab = _nb->findTab(c.getName(), conn);
 
-    map<string, IRC::UserMode> users = c.getUsers();
-    map<string, IRC::UserMode>::const_iterator i;
+    std::map<string, IRC::UserMode> users = c.getUsers();
+    std::map<string, IRC::UserMode>::const_iterator i;
 
     for (i = users.begin(); i != users.end(); ++i) {
         tab->insertUser(i->first, i->second);

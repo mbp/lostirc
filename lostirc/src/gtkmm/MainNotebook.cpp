@@ -100,7 +100,7 @@ Gtk::Notebook_Helpers::Page * MainNotebook::findPage(const string& name, ServerC
         Tab *tab = dynamic_cast<Tab*>((*i)->get_child());
         if (tab->getConn() == conn) {
             string tab_name = (*i)->get_tab_text();
-            if ((Utils::tolower(tab_name) == Utils::tolower(n)) || n.empty()) {
+            if ((Util::lower(tab_name) == Util::lower(n)) || n.empty()) {
                 return (*i);
             }
         }

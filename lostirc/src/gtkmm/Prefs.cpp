@@ -142,7 +142,7 @@ void Prefs::saveEntry()
     if (portentry->get_text_length() == 0)
           port = 6667;
     else
-          port = Utils::stoi(portentry->get_text());
+          port = Util::stoi(portentry->get_text());
 
     a->port = port;
 

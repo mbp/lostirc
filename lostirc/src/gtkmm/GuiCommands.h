@@ -27,12 +27,12 @@
 class GuiCommands : public Commands
 {
 public:
-    static bool send(ServerConnection *conn, string cmd, const string &params);
-    static bool Query(ServerConnection *conn, const string& params);
-    static bool Me(ServerConnection *conn, const string& params);
-    static bool SetFont(ServerConnection *conn, const string& params);
-    static bool NewServer(ServerConnection *conn, const string& params);
-    static bool commands(ServerConnection *conn, const string& params);
+    static bool send(ServerConnection *conn, std::string cmd, const std::string &params);
+    static bool Query(ServerConnection *conn, const std::string& params);
+    static bool Me(ServerConnection *conn, const std::string& params);
+    static bool SetFont(ServerConnection *conn, const std::string& params);
+    static bool NewServer(ServerConnection *conn, const std::string& params);
+    static bool commands(ServerConnection *conn, const std::string& params);
 
     static MainWindow *mw;
 

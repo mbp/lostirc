@@ -135,11 +135,11 @@ void Tab::parseAndInsert(const string& str)
     while (string::npos != pos || string::npos != lastPos)
     {   
         // Check for digits
-        if (Utils::isDigit(line.substr(lastPos, 2))) {
-            int color = Utils::stoi(line.substr(lastPos, 2));
+        if (Util::isDigit(line.substr(lastPos, 2))) {
+            int color = Util::stoi(line.substr(lastPos, 2));
             insertWithColor(color, line.substr(lastPos + 2, (pos - lastPos) - 2));
-        } else if (Utils::isDigit(line.substr(lastPos, 1))) {
-            int color = Utils::stoi(line.substr(lastPos, 1));
+        } else if (Util::isDigit(line.substr(lastPos, 1))) {
+            int color = Util::stoi(line.substr(lastPos, 1));
             insertWithColor(color, line.substr(lastPos + 1, (pos - lastPos) - 1));
         } else {
             insertWithColor(0, line.substr(lastPos, pos - lastPos));
@@ -340,7 +340,7 @@ bool TabChannel::nickCompletion(const string& word, string& str)
     string nicks;
     // Convert it to lowercase so we can search ignoring the case
     string lcword = word;
-    lcword = Utils::tolower(lcword);
+    lcword = Util::lower(lcword);
     while(i != getCList()->rows().end())
     {
         int row = i->get_row_num();
@@ -348,7 +348,7 @@ bool TabChannel::nickCompletion(const string& word, string& str)
 
         // Lower case again
         string lcnick = nick;
-        lcnick = Utils::tolower(lcnick);
+        lcnick = Util::lower(lcnick);
         if (lcword == lcnick.substr(0, lcword.length())) {
             str = nick;
             nicks += nick + " ";

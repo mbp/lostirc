@@ -22,13 +22,13 @@
 #include <vector>
 #include <string> 
 
-namespace Utils {
+namespace Util {
 
     void Tokenize(const std::string& str, std::vector<std::string>& tokens,
             const std::string& delimiters = " ");
 
-    std::string toupper(std::string& str);
-    std::string tolower(std::string& str);
+    std::string upper(std::string& str);
+    std::string lower(std::string& str);
     int stoi(const std::string& str);
     bool isDigit(const std::string& str);
 }
