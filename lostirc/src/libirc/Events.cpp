@@ -22,8 +22,10 @@
 Events::Events(InOut *inout)
     : _io(inout)
 {
-    _events["privmsg"] = "$1<$4%1$1>$2 %2";
+    _events["privmsg"] = "$1<%1>$2 %2";
+    _events["privmsg_highlight"] = "$1<$4%1$1>$2 %2";
     _events["servmsg"] = "-- : %1";
+    _events["servmsg2"] = "-- : %1 %2";
     _events["ctcp"] = "$8-- CTCP %1 received from %2";
     _events["topicchange"] = "$6-- %1 changes topic to: %2";
     _events["topicis"] = "$6-- Topic for %1 is: %2";

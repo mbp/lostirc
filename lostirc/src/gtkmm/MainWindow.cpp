@@ -40,7 +40,6 @@ MainWindow::MainWindow()
 
     // Signals for all server events
     _io->evtDisplayMessage.connect(slot(this, &MainWindow::onDisplayMessage));
-    _io->evtMsg.connect(slot(this, &MainWindow::onMsg));
     _io->evtServNumeric.connect(slot(this, &MainWindow::onServNumeric));
     _io->evtJoin.connect(slot(this, &MainWindow::onJoin));
     _io->evtKick.connect(slot(this, &MainWindow::onKick));
@@ -107,34 +106,6 @@ void MainWindow::onDisplayMessage(const string& msg, const string& to, ServerCon
     }
 
     _nb->insert(tab, msg);
-}
-
-
-void MainWindow::onMsg(const string& to, const string& from, const string& msg, ServerConnection *conn)
-{
-    string::size_type pos = msg.find(conn->Session.nick);
-
-    string search(from);
-    if (to != conn->Session.nick) {
-        search = to;
-    }
-
-    Tab *tab = _nb->findTab(search, conn);
-
-    if (!tab) {
-        // Create query tab if it doesn't exist already, we assume that
-        // a channel tab always exists
-        tab = _nb->addQueryTab(from, conn);
-    }
-
-    if (pos != string::npos) {
-        // Highlight line
-        _nb->insert(tab, "$1<$4" + from + "$1>$2 " + msg + "\n");
-        _nb->highlight(tab);
-    } else {
-        _nb->insert(tab, "$1<" + from + ">$2 " + msg + "\n");
-    }
-
 }
 
 void MainWindow::onJoin(const string& nick, const string& chan, ServerConnection *conn)

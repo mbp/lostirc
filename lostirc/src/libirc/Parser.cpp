@@ -158,7 +158,13 @@ void Parser::Privmsg(const string& from, const string& param, const string& rest
         args.push_back(findNick(from));
         args.push_back(rest);
 
-        _evts->emitEvent("privmsg", args, findNick(nick), _conn);
+        string::size_type pos = rest.find(_conn->Session.nick);
+
+        if (pos != string::npos) {
+            _evts->emitEvent("privmsg_highlight", args, findNick(nick), _conn);
+        } else {
+            _evts->emitEvent("privmsg", args, findNick(nick), _conn);
+        }
     }
 }
 
@@ -180,9 +186,12 @@ void Parser::CTCP(const string& from, const string& param, const string& rest)
         args.push_back(findNick(from));
         args.push_back(rest_);
 
-        _evts->emitEvent("action", args, param, _conn);
+        _evts->emitEvent("action", args, findNick(from), _conn);
     } else {
-        _evts->emitEvent("unknown", from + " " + param + " " + rest, "", _conn);
+        vector<string> args;
+        args.push_back(command);
+        args.push_back(findNick(from));
+        _evts->emitEvent("ctcp", args, "", _conn);
     }
 
 }
@@ -247,7 +256,7 @@ void Parser::Whois(const string& from, const string& param, const string& rest)
     args.push_back(param);
     args.push_back(rest);
 
-    _evts->emitEvent("whois", args, "", _conn);
+    _evts->emitEvent("servmsg2", args, "", _conn);
 }
 
 void Parser::Part(const string& nick, const string& chan)
@@ -255,8 +264,8 @@ void Parser::Part(const string& nick, const string& chan)
     vector<string> args;
     args.push_back(findNick(nick));
     args.push_back(chan);
-    _evts->emitEvent("part", args, chan, _conn);
     _io->evtPart(findNick(nick), chan, _conn);
+    _evts->emitEvent("part", args, chan, _conn);
 }
 
 void Parser::Quit(const string& nick, const string& msg)
@@ -266,6 +275,10 @@ void Parser::Quit(const string& nick, const string& msg)
 
 void Parser::Nick(const string& from, const string& to)
 {
+    vector<string> args;
+    args.push_back(from);
+    args.push_back(to);
+
     _io->evtNick(findNick(from), to, _conn);
 }
 
@@ -419,10 +432,10 @@ void Parser::Away(const string& from, const string& param, const string& rest)
     ss >> param2;
 
     vector<string> args;
-    args.push_back(param1);
-    args.push_back(param2);
+    args.push_back(from);
+    args.push_back(rest);
 
-    _evts->emitEvent("away", args, from, _conn);
+    _evts->emitEvent("away", args, param2, _conn);
 }
 
 void Parser::Selfaway(const string& rest)
