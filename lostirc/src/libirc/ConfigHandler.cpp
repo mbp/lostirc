@@ -99,7 +99,7 @@ bool ConfigHandler::setDefaults()
     _settings["evt_servmsg"] = "$0-- : %1";
     _settings["evt_servmsg2"] = "$0-- : %1 %2";
     _settings["evt_ctcp"] = "$16-- CTCP %1 received from $0%2";
-    _settings["evt_topicchange"] = "$16-- $0%1$13 changes topic to: %2";
+    _settings["evt_topicchange"] = "$16-- $0%1$16 changes topic to:$15 %2";
     _settings["evt_topicis"] = "$16-- Topic for $11%1$16 is:$0 %2";
     _settings["evt_topictime"] = "$16-- Set by $0%1$16 on $9%2";
     _settings["evt_noticepriv"] = "$7NOTICE $0%1$7 : %2";

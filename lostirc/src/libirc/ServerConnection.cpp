@@ -67,10 +67,11 @@ bool ServerConnection::Connect(const string &host, int port = 6667)
 
         sendUser(Session.nick, hostname, Session.servername, Session.realname);
         sendNick(Session.nick);
-
+        return true;
     } else {
         Session.isConnected = false;
         _app->getEvts()->emitEvent("servmsg", "Failed connecting: " + _socket->error, "", this);
+        return false;
     }
 }
 

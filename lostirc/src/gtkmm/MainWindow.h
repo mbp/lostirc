@@ -30,8 +30,15 @@
 
 class MainWindow : public Gtk::Window
 {
+    MainNotebook* _nb;
+
+    /* Our LostIRCApp object, the backend to the client, controlling the
+     * serverconnections and stuff.. but NOT the GUI. */
+    LostIRCApp *_app;
+
 public:
     MainWindow();
+    ~MainWindow();
 
     gint delete_event_impl(GdkEventAny*) { quit(); }
 
@@ -57,12 +64,6 @@ private:
     void onAway(bool away, ServerConnection *conn);
 
     void quit();
-
-    MainNotebook* _nb;
-
-    /* Our 'In and Out' object, the backend to the client, controlling the
-     * serverconnections and stuff.. but NOT the GUI. */
-    LostIRCApp *_app;
 
 };
 #endif

@@ -18,7 +18,6 @@
 
 #include "LostIRCApp.h"
 #include "ServerConnection.h"
-#include "Parser.h"
 #include "Events.h"
 #include <pwd.h>
 

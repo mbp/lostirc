@@ -81,8 +81,11 @@ Alt + n - create new server tab.
 Alt + c - close current tab.
 Tab - nickcomplete.
 ");
+}
 
-
+MainWindow::~MainWindow()
+{
+    delete _app;
 }
 
 void MainWindow::onDisplayMessage(const string& msg, const string& to, ServerConnection *conn)

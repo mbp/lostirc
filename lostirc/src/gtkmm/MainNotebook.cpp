@@ -43,7 +43,7 @@ TabChannel * MainNotebook::addChannelTab(const string& name, ServerConnection *c
         show_all();
         return tab;
     } else {
-        Gtk::Label *label = new Gtk::Label(name);
+        Gtk::Label *label = manage(new Gtk::Label(name));
         TabChannel *tab = new TabChannel(label, conn, &_font);
         pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, *label));
         show_all();

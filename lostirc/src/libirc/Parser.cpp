@@ -32,6 +32,11 @@ Parser::Parser(LostIRCApp *app, ServerConnection *conn)
     _evts = _app->getEvts();
 }
 
+Parser::~Parser()
+{
+    delete _evts;
+}
+
 void Parser::parseLine(string& data)
 {
     #ifdef DEBUG

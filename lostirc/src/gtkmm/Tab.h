@@ -91,6 +91,8 @@ public:
     bool findUser(const std::string& nick) {
         if (nick == getLabel()->get_text())
               return true;
+        else
+              return false;
     }
     bool nickCompletion(const std::string& word, std::string& str) {
         str = getLabel()->get_text(); return true;
