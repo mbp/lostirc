@@ -33,7 +33,11 @@ int main(int argc, char** argv)
 
     Gtk::Main app(argc, argv);
 
-    Gtk::Window::set_default_icon_from_file(icon_filename);
+    try {
+        Gtk::Window::set_default_icon_from_file(icon_filename);
+    } catch (Glib::Error e) {
+        // Probably an error. Ignore it.
+    }
 
     bindtextdomain(PACKAGE, LOCALEDIR);
     bind_textdomain_codeset (PACKAGE, "UTF-8");
