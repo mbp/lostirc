@@ -136,6 +136,10 @@ void Tab::insertWithColor(int color, const ustring& str)
     if (_swin.get_vadjustment()->get_value() >= (_swin.get_vadjustment()->get_upper() - _swin.get_vadjustment()->get_page_size() - 1e-12))                                                  
           scroll = true;
 
+    // FIXME: temp hack.
+    if (color > colorMap.size())
+        color = colorMap.size() - 1;
+
     // Insert the text
     Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
     buffer->insert_with_tag(buffer->end(), str, colorMap[color]);
