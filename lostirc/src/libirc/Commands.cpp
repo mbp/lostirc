@@ -139,16 +139,16 @@ bool Commands::Banlist(ServerConnection *conn, const string& chan)
 
 bool Commands::Invite(ServerConnection *conn, const string& params)
 {
-    string to, action;
+    string to, chan;
     stringstream ss(params);
     ss >> to;
-    ss >> action;
+    ss >> chan;
 
     if (action.empty()) {
         error = "/INVITE <nick> <channel>, invites someone to a channel.";
         return false;
     } else {
-        conn->sendInvite(to, action);
+        conn->sendInvite(to, chan);
         return true;
     }
 }
@@ -160,7 +160,7 @@ bool Commands::Topic(ServerConnection *conn, const string& params)
     ss >> chan;
     ss >> topic;
 
-    if (topic.empty()) {
+    if (chan.empty()) {
         error = "/TOPIC <channel> [topic], view or change topic for a channel.";
         return false;
     } else {
