@@ -24,6 +24,16 @@ using std::cout;
 using std::vector;
 using std::map;
 
+ConfigHandler::~ConfigHandler()
+{
+    vector<struct autoJoin*>::iterator i;
+
+    for (i = _servers.begin(); i != _servers.end();) {
+        delete (*i);
+        i = _servers.erase(i);
+    }
+}
+
 bool ConfigHandler::readConfig()
 {
     string home(getenv("HOME"));

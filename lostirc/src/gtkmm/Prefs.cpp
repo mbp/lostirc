@@ -38,6 +38,7 @@ Prefs::Prefs(Tab *t)
     clist->select_row.connect(slot(this, &Prefs::onSelectRow));
     clist->unselect_row.connect(slot(this, &Prefs::onUnSelectRow));
 
+
     vector<struct autoJoin*> servers = GuiCommands::mw->getApp()->getCfg().getServers();
     vector<struct autoJoin*>::const_iterator i;
 
@@ -51,6 +52,11 @@ Prefs::Prefs(Tab *t)
     serverhbox->pack_start(*frame);
     Gtk::VBox *serverinfobox = manage(new Gtk::VBox());
     serverhbox->pack_start(*serverinfobox);
+
+    /* hbox for buttons */
+    savehbox = manage(new Gtk::HBox());
+    savehbox->set_spacing(5);
+    serverinfobox->pack_start(*savehbox, 0, 0);
 
     /* hostname */
     hostentry = manage(new Gtk::Entry());
@@ -83,14 +89,14 @@ Prefs::Prefs(Tab *t)
     frame5->add(*cmdtext);
     serverinfobox->pack_start(*frame5, 0, 0);
 
-    /* hbox for buttons */
-    savehbox = manage(new Gtk::HBox());
-    serverinfobox->pack_start(*savehbox, 0, 0);
+    /* lower hbox */
+    Gtk::HBox *bottomhbox = manage(new Gtk::HBox());
+    serverinfobox->pack_end(*bottomhbox, 0, 0);
 
     /* close prefs button */
     closebutton = manage(new Gtk::Button("Close prefs"));
     closebutton->clicked.connect(slot(this, &Prefs::endPrefs));
-    savehbox->pack_end(*closebutton, 0, 0);
+    bottomhbox->pack_end(*closebutton, 0, 0);
 
     /* save button */
     Gtk::Button *savebutton = manage(new Gtk::Button("Save entry"));
@@ -107,6 +113,13 @@ Prefs::Prefs(Tab *t)
     pages().push_back(Gtk::Notebook_Helpers::TabElem(*performbox, "Autojoin servers"));
     pages().push_back(Gtk::Notebook_Helpers::TabElem(*prefsbox, "Preferences"));
     show_all();
+}
+
+Prefs::~Prefs()
+{
+    delete removebutton;
+    delete addnewbutton;
+
 }
 
 void Prefs::endPrefs()

@@ -33,7 +33,7 @@ MainWindow::MainWindow()
     
     Gtk::VBox *_vbox1 = manage(new Gtk::VBox());
 
-    _nb = manage(new MainNotebook(this));
+    _nb = new MainNotebook(this);
     _vbox1->pack_start(*_nb, 1, 1);
 
     add(*_vbox1);
@@ -87,6 +87,7 @@ Tab - nickcomplete.
 
 MainWindow::~MainWindow()
 {
+    delete _nb;
     delete _app;
 }
 

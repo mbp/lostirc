@@ -49,7 +49,7 @@ TabChannel * MainNotebook::addChannelTab(const string& name, ServerConnection *c
         return tab;
     } else {
         Gtk::Label *label = manage(new Gtk::Label(name));
-        TabChannel *tab = new TabChannel(label, conn, &_font);
+        TabChannel *tab = manage(new TabChannel(label, conn, &_font));
         pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, *label));
         show_all();
         return tab;
@@ -58,8 +58,8 @@ TabChannel * MainNotebook::addChannelTab(const string& name, ServerConnection *c
 
 TabQuery * MainNotebook::addQueryTab(const string& name, ServerConnection *conn)
 {
-    Gtk::Label *label = new Gtk::Label(name);
-    TabQuery *tab = new TabQuery(label, conn, &_font);
+    Gtk::Label *label = manage(new Gtk::Label(name));
+    TabQuery *tab = manage(new TabQuery(label, conn, &_font));
     pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, *label));
     show_all();
     return tab;

@@ -38,6 +38,7 @@ class ConfigHandler {
     std::vector<struct autoJoin*> _servers;
 
 public:
+    ~ConfigHandler();
     /* read all configuration files */
     bool readConfig();
 

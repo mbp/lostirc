@@ -91,6 +91,8 @@ Tab::Tab(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
 Tab::~Tab()
 {
     delete _current_cx;
+    delete _hbox2;
+    delete _hbox;
 }
 
 void Tab::setFont(Gdk_Font *font)
@@ -371,7 +373,7 @@ void Tab::startPrefs()
 {
     remove(*_hbox2);
     remove(*_hbox);
-    Prefs *p = new Prefs(this);
+    Prefs *p = manage(new Prefs(this));
     pack_start(*p);
 }
 

@@ -49,6 +49,7 @@ class Prefs : public Gtk::Notebook
 
 public:
     Prefs(Tab *t);
+    ~Prefs();
 };
 
 #endif
