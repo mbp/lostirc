@@ -1,6 +1,14 @@
 For a summary of changes between releases - see the NEWS file.
 
 2003-03-17  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Second shot at Windows port.
+        * configure.in: Add check for socklen_t, define it to int on Windows.
+        * Socket.cpp: Implement resolvehost() differently on Windows, since
+          Windows doesn't have fork().
+        * DCC.cpp: Replace some old-style-casts with C++-casts.
+
+2003-03-17  Morten Brix Pedersen  <morten@wtf.dk>
         
         * acinclude.m4: Remove.
         * configure.in: Remove check for namespaces and stringstream, lets

@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-03-16 23:02+0100\n"
+"POT-Creation-Date: 2003-03-17 10:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -442,19 +442,19 @@ msgstr ""
 msgid "Not found key, `"
 msgstr ""
 
-#: src/libirc/Socket.cpp:67 src/libirc/Socket.cpp:74
+#: src/libirc/Socket.cpp:68 src/libirc/Socket.cpp:75
 msgid "Error writing to pipe: "
 msgstr ""
 
-#: src/libirc/Socket.cpp:110
+#: src/libirc/Socket.cpp:123
 msgid "An error occured while reading from pipe (Internal error 2)"
 msgstr ""
 
-#: src/libirc/Socket.cpp:120
+#: src/libirc/Socket.cpp:133
 msgid "An error occured while reading from pipe (Internal error 3)"
 msgstr ""
 
-#: src/libirc/Socket.cpp:173
+#: src/libirc/Socket.cpp:187
 msgid "Message not sent because of locale problems"
 msgstr ""
 

@@ -44,7 +44,9 @@ public:
 
     void resolvehost(const Glib::ustring& host);
     void connect(int port);
+    #ifndef WIN32
     bool on_host_resolve(Glib::IOCondition cond, int readpipe);
+    #endif
     void disconnect();
     bool send(const Glib::ustring& data);
     bool receive(char *buf, int len, int& received);

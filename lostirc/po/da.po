@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: LostIRC 0.2.5pre\n"
-"POT-Creation-Date: 2003-03-16 23:02+0100\n"
+"POT-Creation-Date: 2003-03-17 10:42+0100\n"
 "PO-Revision-Date: 2003-01-03 19:25+0100\n"
 "Last-Translator: Michael Kristensen <tazz@wtf.dk>\n"
 "Language-Team: Danish\n"
@@ -506,19 +506,19 @@ msgstr "/DEVOICE <kanal> <navne>, fjern lyd fra en eller flere navne."
 msgid "Not found key, `"
 msgstr "Ingen nøgle fundet, `"
 
-#: src/libirc/Socket.cpp:67 src/libirc/Socket.cpp:74
+#: src/libirc/Socket.cpp:68 src/libirc/Socket.cpp:75
 msgid "Error writing to pipe: "
 msgstr "Fejl ved skrivning til rør: "
 
-#: src/libirc/Socket.cpp:110
+#: src/libirc/Socket.cpp:123
 msgid "An error occured while reading from pipe (Internal error 2)"
 msgstr "En fejl opstod, ved at læse fra rør (Intern fejl 2)"
 
-#: src/libirc/Socket.cpp:120
+#: src/libirc/Socket.cpp:133
 msgid "An error occured while reading from pipe (Internal error 3)"
 msgstr "En fejl opstod, ved at læse fra rør (Intern fejl 3)"
 
-#: src/libirc/Socket.cpp:173
+#: src/libirc/Socket.cpp:187
 msgid "Message not sent because of locale problems"
 msgstr "Besked ikke sendt, pga. locale problemer"
 

@@ -87,7 +87,7 @@ bool DCC_Send_In::onReadData(Glib::IOCondition cond)
               _outfile.write(buf, retval);
 
         unsigned long pos = htonl(_pos);
-        send(fd, (char *)&pos, 4, 0);
+        send(fd, reinterpret_cast<char *>(&pos), 4, 0);
 
         #ifdef DEBUG
         App->log << "DCC_Send_In::onReadData(): _pos: " << _pos << std::endl;
@@ -145,7 +145,7 @@ DCC_Send_Out::DCC_Send_Out(const Glib::ustring& filename, const Glib::ustring& n
     fd = socket(AF_INET, SOCK_STREAM, 0);
 
     int yes = 1;
-    setsockopt(fd,SOL_SOCKET,SO_REUSEADDR,&yes,sizeof(int));
+    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
 
     sockaddr.sin_family = AF_INET;
     sockaddr.sin_port = htons(App->options.dccport);
@@ -157,7 +157,7 @@ DCC_Send_Out::DCC_Send_Out(const Glib::ustring& filename, const Glib::ustring& n
         // FIXME: add dcc-done?
     } else {
         socklen_t add_len = sizeof(struct sockaddr_in);
-        getsockname(fd, (struct sockaddr *) &sockaddr, &add_len);
+        getsockname(fd, reinterpret_cast<struct sockaddr *>(&sockaddr), &add_len);
 
         #ifdef DEBUG
         App->log << "DCC_Send_Out::DCC_Send_Out(): new port: " << ntohs(sockaddr.sin_port) << std::endl;

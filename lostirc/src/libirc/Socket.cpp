@@ -46,6 +46,7 @@ Socket::~Socket()
     close();
 }
 
+#ifndef WIN32
 void Socket::resolvehost(const ustring& host)
 {
     int thepipe[2];
@@ -66,7 +67,7 @@ void Socket::resolvehost(const ustring& host)
             if (write(thepipe[1], &size, sizeof(int)) == -1)
                   std::cerr << _("Error writing to pipe: ") << strerror(errno) << std::endl;
         } else {
-            struct in_addr ia = *(struct in_addr *)he->h_addr_list[0];
+            struct in_addr ia = *reinterpret_cast<struct in_addr *>(he->h_addr_list[0]);
 
             int size = sizeof(struct in_addr);
             if (write(thepipe[1], &size, sizeof(int)) == -1 ||
@@ -91,6 +92,20 @@ void Socket::resolvehost(const ustring& host)
 
 }
 
+#else
+
+void Socket::resolvehost(const ustring& host)
+{
+    // FIXME: Windows doesn't have fork(), but we should use CreateProcess
+    // or CreateThread here.
+    struct hostent *he = gethostbyname(host.c_str());
+
+    sockaddr.sin_addr = *((struct in_addr *)he->h_addr);
+    on_host_resolved();
+}
+#endif
+
+#ifndef WIN32
 bool Socket::on_host_resolve(Glib::IOCondition cond, int readpipe)
 {
     static const int size_to_be_read = sizeof(int) + sizeof(struct in_addr);
@@ -140,6 +155,7 @@ bool Socket::on_host_resolve(Glib::IOCondition cond, int readpipe)
 
     return false;
 }
+#endif
 
 void Socket::connect(int port)
 {
@@ -190,7 +206,7 @@ bool Socket::send(const ustring& data)
 const char * Socket::getLocalIP()
 {
     socklen_t add_len = sizeof(struct sockaddr_in);
-    getsockname(fd, (struct sockaddr *) &localaddr, &add_len);
+    getsockname(fd, reinterpret_cast<struct sockaddr *>(&localaddr), &add_len);
     return inet_ntoa(localaddr.sin_addr);
 }
 
