@@ -297,8 +297,11 @@ void Parser::Part(const string& nick, const string& chan)
 
     _conn->findChannel(chan)->removeUser(findNick(nick));
 
-    if (findNick(nick) == _conn->Session.nick)
-          _conn->removeChannel(chan); // Remove channel to ServerConn
+    if (findNick(nick) == _conn->Session.nick) {
+          _conn->removeChannel(chan); // Remove channel in ServerConn
+          if (_conn->Session.channels.empty())
+                _conn->sendQuit(""); // Quit the server if we are parting the last channel
+    }
 
     _evts->emitEvent("part", args, chan, _conn); // Send part to frontend
     _app->evtPart(findNick(nick), chan, _conn);
