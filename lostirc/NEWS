@@ -17,6 +17,8 @@ LostIRC (x.x.x)
   * DCC sending wasn't functional when sending files with full paths,
     because the path was being sent. Now the path is being stripped before
     sending the filename to the remote user.
+  * Gettext support added, making LostIRC translate-able to other languages
+    than English (see po/ directory).
 
 LostIRC (0.2.4) - Sun Dec, 29th 2002
   * The "Less bugs and more features for 2003" release.
