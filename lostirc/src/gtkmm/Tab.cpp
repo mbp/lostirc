@@ -21,6 +21,7 @@
 #include <Utils.h>
 #include "Tab.h"
 #include <algorithm>
+#include <sstream>
 #include <gtk--/frame.h>
 
 using std::vector;
@@ -142,7 +143,7 @@ void Tab::setStyle() {
 
 bool isDigit(const string& str)
 {
-    stringstream ss(str);
+    std::stringstream ss(str);
     int i;
     ss >> i;
     if (ss.fail())
@@ -271,7 +272,7 @@ TabChannel::TabChannel(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font
 void TabChannel::updateUserNumber()
 {
     size_t size = _clist->rows().size();
-    stringstream ss;
+    std::stringstream ss;
     ss << size;
     _users->set_text(ss.str() + " users");
 }
