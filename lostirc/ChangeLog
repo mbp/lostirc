@@ -1,6 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
 2004-04-29  Morten Brix Pedersen  <morten@wtf.dk>
+        * Prefs.cpp/Prefs.h: Use FontButton instead of manually opening up a
+        FontSelection window. Much less code.
+
+2004-04-29  Morten Brix Pedersen  <morten@wtf.dk>
         * DCCList.cpp, DCCList.h, Entry.cpp, MainNotebook.cpp, MainWindow.cpp,
         NickList.cpp, Prefs.cpp, ServerWindow.cpp, ServerWindow.h,
         StatusBar.h, TextWidget.cpp, TextWidget.h:

@@ -94,17 +94,12 @@ Prefs::Prefs()
     row++;
 
     // Font
+    fontbutton.signal_font_set().connect(sigc::mem_fun(*this, &Prefs::saveFont));
     if (!App->options.font->empty())
-          fontentry.set_text(App->options.font);
-    fontentry.set_sensitive(false);
-    Gtk::HBox *fontbox = manage(new Gtk::HBox());
-    Gtk::Button *fontbutton = manage(new Gtk::Button(_("Browse...")));
-    fontbutton->signal_clicked().connect(sigc::mem_fun(*this, &Prefs::openFontWindow));
-    fontbox->pack_start(fontentry, Gtk::PACK_EXPAND_WIDGET);
-    fontbox->pack_start(*fontbutton, Gtk::PACK_SHRINK);
+          fontbutton.set_font_name(App->options.font);
     Gtk::Label *glabel4 = manage(new Gtk::Label(_("Main window font:"), Gtk::ALIGN_LEFT));
     _general_table.attach(*glabel4, 0, 1, row, row + 1);
-    _general_table.attach(*fontbox, 1, 2, row, row + 1);
+    _general_table.attach(fontbutton, 1, 2, row, row + 1);
 
     // Preferences-tab
     row = 1;
@@ -218,21 +213,10 @@ void Prefs::saveSettings()
     App->options.logging = loggingbutton.get_active();
 }
 
-void Prefs::openFontWindow()
+void Prefs::saveFont()
 {
-    Gtk::FontSelectionDialog dialog;
-
-    if (!App->options.font->empty())
-          dialog.set_font_name(App->options.font);
-
-    int result = dialog.run();
-
-    if (result == Gtk::RESPONSE_OK)
-    {
-        App->options.font = dialog.get_font_name();
-        AppWin->getNotebook().setFont(dialog.get_font_name());
-        fontentry.set_text(dialog.get_font_name());
-    }
+    App->options.font = fontbutton.get_font_name();
+    AppWin->getNotebook().setFont(fontbutton.get_font_name());
 }
 
 Gtk::VBox* Prefs::addPage(const Glib::ustring& str)

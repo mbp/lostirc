@@ -27,7 +27,7 @@
 #include <gtkmm/table.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/adjustment.h>
-#include <gtkmm/fontselection.h>
+#include <gtkmm/fontbutton.h>
 #include "MainWindow.h"
 
 class Prefs : public Gtk::Window
@@ -39,7 +39,7 @@ public:
 private:
     void saveSettings();
     void saveEntry();
-    void openFontWindow();
+    void saveFont();
     void removeEntry();
     void addEntry();
     void onChangeRow();
@@ -51,7 +51,7 @@ private:
     // General
     Gtk::Entry ircuserentry;
     Gtk::Combo encodingcombo;
-    Gtk::Entry fontentry;
+    Gtk::FontButton fontbutton;
 
     // Preferences
     Gtk::Entry nickcompletionentry;
