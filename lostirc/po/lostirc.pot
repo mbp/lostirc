@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-26 00:48+0100\n"
+"POT-Creation-Date: 2004-01-02 03:31+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -148,7 +148,7 @@ msgid "Close Current Tab"
 msgstr ""
 
 #: src/gtkmm/MainWindow.cpp:414
-msgid "Nick List"
+msgid "User List"
 msgstr ""
 
 #: src/gtkmm/MainWindow.cpp:419

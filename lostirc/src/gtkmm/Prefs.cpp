@@ -86,6 +86,7 @@ Prefs::Prefs()
 
     // Encoding
     encodingcombo.set_popdown_strings(encodings);
+    encodingcombo.get_entry()->set_text(App->options.encoding);
     Gtk::Label *glabel3 = manage(new Gtk::Label(_("Encoding to use on IRC:"), Gtk::ALIGN_LEFT));
     _general_table.attach(*glabel3, 0, 1, row, row + 1);
     _general_table.attach(encodingcombo, 1, 2, row, row + 1);

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LostIRC 0.3.2pre\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-26 00:48+0100\n"
+"POT-Creation-Date: 2004-01-02 03:31+0100\n"
 "PO-Revision-Date: 2004-01-01 19:25+0100\n"
 "Last-Translator: Morten Brix Pedersen <morten@wtf.dk>\n"
 "Language-Team: Danish <dansk@¿lid.dk>\n"
@@ -191,7 +191,7 @@ msgid "Close Current Tab"
 msgstr "Luk nuværende faneblad"
 
 #: src/gtkmm/MainWindow.cpp:414
-msgid "Nick List"
+msgid "User List"
 msgstr "Brugerliste"
 
 #: src/gtkmm/MainWindow.cpp:419
@@ -223,7 +223,6 @@ msgid "_Help"
 msgstr "_Hjælp"
 
 #: src/gtkmm/MainWindow.cpp:488
-#, fuzzy
 msgid ""
 "LostIRC Quick Introduction\n"
 "\n"
@@ -243,20 +242,23 @@ msgid ""
 "And you should really check out the list of key bindings:\n"
 "    /KEYBINDINGS"
 msgstr ""
-"!\n"
+"LostIRC hurtig introduktion\n"
 "\n"
-"Du kan nu etablere forbindelse til en server ved at bruge:\n"
-"    8/SERVER <værtsnavn / ip>\n"
+"Dette hjælpe vindue er en hurtig hjælp til at komme i gang med LostIRC.\n"
+"Flyt dette vindue væk fra LostIRC-vinduet, og brug det som en hurtig "
+"reference indtil du har fået fat i idéen.\n"
 "\n"
-"7...og så gå ind i en kanal:\n"
-"    8/JOIN <kanalnavn>\n"
+"Du kan etablere forbindelse til en server ved at bruge:\n"
+"    /SERVER <værtsnavn / ip>\n"
 "\n"
-"7En liste over alle kommandoer er tilgængelig med:\n"
-"    8/COMMANDS7\n"
+"...og så gå ind i en kanal:\n"
+"    /JOIN <channel-name>\n"
 "\n"
-"Og du bør virkelig kigge på listen med tastaturbindinger:\n"
-"    8/KEYBINDINGS\n"
+"En liste over alle kommandoer er tilgængelig med:\n"
+"    /COMMANDS\n"
 "\n"
+"Og du bør virkelig kigge på listen med tastaturbindinger:\n"
+"    /KEYBINDINGS"
 
 #: src/gtkmm/MainWindow.cpp:502
 msgid "LostIRC "
@@ -303,14 +305,12 @@ msgid "From/To"
 msgstr "Fra/Til"
 
 #: src/gtkmm/Prefs.cpp:46
-#, fuzzy
 msgid "Strip _color codes from incoming messages"
-msgstr "Fjern farvekoder fra indkommende beskeder"
+msgstr "Fjern farve_koder fra indkommende beskeder"
 
 #: src/gtkmm/Prefs.cpp:47
-#, fuzzy
 msgid "Strip _bold and underline codes from incoming messages"
-msgstr "Fjern fed- og understregskoder fra indkommende beskeder"
+msgstr "Fjern _fed- og understregskoder fra indkommende beskeder"
 
 #: src/gtkmm/Prefs.cpp:48
 msgid "_Log conversations to disk"

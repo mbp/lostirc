@@ -411,7 +411,7 @@ void MainWindow::setupMenus()
         Gtk::Menu::MenuList& menulist = _viewmenu.items();
 
         menulist.push_back(Gtk::Menu_Helpers::CheckMenuElem(
-                    _("Nick List"),
+                    _("User List"),
                     Gtk::Menu::AccelKey("<control>l"),
                     SigC::slot(*this, &MainWindow::hideNickList)));
 

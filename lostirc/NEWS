@@ -1,3 +1,6 @@
+LostIRC - (x.x.x)
+  * The chosen encoding in preferences wasn't being saved properly. Fixed.
+
 LostIRC - (0.3.1) - Fri Dec, 26th 2003
   * Added a very simplish About-dialog.
   * The menubar was accidently not shown by default, not it is.
