@@ -4,6 +4,8 @@ LostIRC (x.x.x)
   * When being away from the client for a long while, and seeing yourself
     being highlighted several places. You can now use CTRL-h to scroll back
     to the previous highlight instead of finding it manually.
+  * CTRL-Home and CTRL-End can now be used to scroll to the top and bottom
+    in the text box.
   * When no real name was set, some IRC servers refused the user to connect.
     Now real name is set to the users nick if not specified.
   * When only one user is on a channel, the plural s from "users" is now
