@@ -211,11 +211,11 @@ Prefs::Prefs()
     hboxserver.pack_end(*savebutton, Gtk::PACK_SHRINK);
     serverinfobox->pack_end(hboxserver, Gtk::PACK_SHRINK);
 
-    addnewbutton = manage(new Gtk::Button("Add new entry"));
+    addnewbutton = manage(create_imagebutton("Add entry", Gtk::Stock::ADD));
     addnewbutton->signal_clicked().connect(slot(*this, &Prefs::addEntry));
     hboxserver.pack_end(*addnewbutton, Gtk::PACK_SHRINK);
 
-    removebutton = manage(new Gtk::Button("Remove entry"));
+    removebutton = manage(create_imagebutton("Remove entry", Gtk::Stock::REMOVE));
     removebutton->signal_clicked().connect(slot(*this, &Prefs::removeEntry));
     hboxserver.pack_end(*removebutton, Gtk::PACK_SHRINK);
 
