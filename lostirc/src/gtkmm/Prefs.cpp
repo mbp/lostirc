@@ -123,7 +123,8 @@ Prefs::Prefs()
     fontbox->pack_end(*hboxfont, Gtk::FILL);
 
     fontsel.set_preview_text("<" + ircnickentry.get_text() + "> Hello World!");
-    fontsel.set_font_name(App->getCfg().getOpt("font"));
+    if (!App->getCfg().getOpt("font").empty())
+          fontsel.set_font_name(App->getCfg().getOpt("font"));
     fontbox->pack_start(fontsel);
     notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*fontbox, "Font selection"));
 
@@ -251,7 +252,9 @@ void Prefs::cancelGeneral()
 
 void Prefs::cancelFont()
 {
-    fontsel.set_font_name(App->getCfg().getOpt("font"));
+    if (!App->getCfg().getOpt("font").empty())
+          fontsel.set_font_name(App->getCfg().getOpt("font"));
+
     AppWin->getNotebook().setFont(fontsel.get_font_name());
 }
 
