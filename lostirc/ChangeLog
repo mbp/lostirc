@@ -1,0 +1,7 @@
+LostIRC (0.0.2)
+  * Code cleanups
+  * Bans and/or unbans is now being shown properly
+  * Can now handle incoming invites
+
+LostIRC (0.0.1) - Fri Jan, 25th 2002
+  * Initial release
