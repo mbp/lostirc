@@ -27,7 +27,7 @@ class User {
     unsigned int state;
 
 public:
-    User() { }
+    User() : state(0) { }
     std::string nick;
     IRC::UserMode getMode() const;
     void setMode(IRC::UserMode u);
