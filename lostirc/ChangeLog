@@ -1,3 +1,7 @@
+LostIRC (x.x.x)
+  * Fix a segfault which appeared with bouncers/servers sending malformed PART
+    lines (they sent the channel _after_ the colon).
+
 LostIRC (0.2.0)
   * Ported to gtkmm2, now depends on sigc++ 1.2 and gtkmm2.
     Noteable features with gtkmm2:

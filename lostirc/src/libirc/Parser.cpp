@@ -373,17 +373,27 @@ void Parser::Join(const string& nick, const string& chan)
     FE::emit(FE::get(JOIN) << findNick(nick) << chan << findHost(nick), *c, _conn);
 }
 
-void Parser::Part(const string& nick, const string& chan, const string& rest)
+void Parser::Part(const string& nick, const string& param, const string& rest)
 {
+    string chan = param;
+
+    // Some clients/servers/bouncers might accidently send the channel name
+    // in the 'rest' string, a bug there, but we would like to avoid a
+    // segfault here. I noticed the same hack in the xchat sources.
+    if (chan.empty() && !rest.empty())
+          chan = getWord(rest, 1);
+
     Channel *c = _conn->findChannel(chan);
-    assert(c);
-    c->removeUser(findNick(nick));
 
-    FE::emit(FE::get(PART) << findNick(nick) << chan << findHost(nick) << rest, *c, _conn);
-    App->fe->part(findNick(nick), *c, _conn);
+    if (c) {
+        c->removeUser(findNick(nick));
 
-    if (findNick(nick) == _conn->Session.nick) {
-          _conn->removeChannel(chan);
+        FE::emit(FE::get(PART) << findNick(nick) << chan << findHost(nick) << rest, *c, _conn);
+        App->fe->part(findNick(nick), *c, _conn);
+
+        if (findNick(nick) == _conn->Session.nick)
+              _conn->removeChannel(chan);
+
     }
 }
 
@@ -399,8 +409,8 @@ void Parser::Quit(const string& nick, const string& msg)
 
 void Parser::Nick(const string& from, const string& to)
 {
-    // When we receive an error that "nick change was too fast, 'to' will be
-    // empty. just return if it is.
+    // When we receive an error that "nick change was too fast", 'to' will
+    // be empty. just return if it is.
 
     if (to.empty())
           return;
