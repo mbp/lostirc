@@ -1,6 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
 2004-02-02  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * AUTHORS: Update.
+
+2004-02-02  Morten Brix Pedersen  <morten@wtf.dk>
         
         * configure.ac: Bump gettext version to 0.13.1.
                         No Makefile in m4 anymore, ignore that dir.

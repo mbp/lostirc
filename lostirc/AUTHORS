@@ -7,7 +7,7 @@ LostIRC author(s) and contributors
         Debian package.
 
 * Lasse Bang Mikkelsen
-        Gentoo package.
+        Initial Gentoo package.
 
 * Juan Salaverria
         FreeBSD port.
@@ -17,3 +17,6 @@ LostIRC author(s) and contributors
 
 * Michael Kristensen
         Lots of feedback, various patches.
+
+* Thomas Johannson
+        Help with Windows port. Various patches.
