@@ -174,7 +174,7 @@ bool Commands::Topic(ServerConnection *conn, const string& params)
 bool Commands::Msg(ServerConnection *conn, const string& params)
 {
     string::size_type pos1 = params.find_first_of(" ");
-    string to = params.substr(0, pos1 + 1);
+    string to = params.substr(0, pos1);
     string msg = params.substr(pos1 + 1);
 
     if (msg.empty()) {
@@ -189,7 +189,7 @@ bool Commands::Msg(ServerConnection *conn, const string& params)
 bool Commands::Notice(ServerConnection *conn, const string& params)
 {
     string::size_type pos1 = params.find_first_of(" ");
-    string to = params.substr(0, pos1 + 1);
+    string to = params.substr(0, pos1);
     string msg = params.substr(pos1 + 1);
 
     if (msg.empty()) {
@@ -205,7 +205,7 @@ bool Commands::Notice(ServerConnection *conn, const string& params)
 bool Commands::Me(ServerConnection *conn, const string& params)
 {
     string::size_type pos1 = params.find_first_of(" ");
-    string to = params.substr(0, pos1 + 1);
+    string to = params.substr(0, pos1);
     string msg = params.substr(pos1 + 1);
 
     if (msg.empty()) {
