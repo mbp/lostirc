@@ -136,7 +136,6 @@ void MainNotebook::closeCurrent()
         Gtk::Notebook::Page *p = get_current();
         Tab *tab = dynamic_cast<Tab*>(p->get_child());
         pages().remove(p);
-        delete tab;
         draw(NULL); // Needed for redrawing the widget
     }
 }
