@@ -13,6 +13,7 @@ NICE-TO-HAVE:
   * implement /help, /help shortcuts and /help commands
   * ipv6 support
   * note when window has lost focus; then highlight front-tab
+  * /OP, /DEOP, /VOICE, /DEVOICE commands.
 
 RANDOM BUGS:
 ------------
@@ -21,7 +22,6 @@ RANDOM BUGS:
   * nicks overlaps status (@, + etc.) in nick-list.
   * strip all mIRC color-codes from ALL strings, don't show colors at all.
   * when away/unaway - title isn't updated until switch tab
-  * /PART, /OP (to be added) and more should work with current channel.
   * on some systems, there is commas in the real name field (3 to be
     precise)
   * lostirc.desktop shouldn't be copied on non-GNOME systems.

@@ -26,6 +26,7 @@ using std::string;
 struct UserCommands guicmds[] = {
     { "QUERY",     GuiCommands::Query,    0 },
     { "ME",        GuiCommands::Me,       1 },
+    { "PART",      GuiCommands::Part,     1 },
     { "SETFONT",   GuiCommands::SetFont,  0 },
     { "NEWSERVER", GuiCommands::NewServer, 0 },
     { "COMMANDS",  GuiCommands::commands, 0 },
@@ -73,6 +74,11 @@ void SetFont(ServerConnection *conn, const string& params)
 void NewServer(ServerConnection *conn, const string& params)
 {
     AppWin->newServer();
+}
+
+void Part(ServerConnection *conn, const string& params)
+{
+    Commands::Part(conn, AppWin->getNotebook()->getCurrent()->getLabel()->get_text() + " " + params);
 }
 
 void commands(ServerConnection *conn, const string& params)

@@ -1,3 +1,7 @@
+LostIRC (x.x.x)
+  * /PART now uses the current channel name instead of forcing the user to
+    type it manually.
+
 LostIRC (0.1.2) - Tue Jun 27th 2002
   * Fix a crash which appeared when connecting to a proxy/bouncer.
     (thanks, |TEcHNO|)
