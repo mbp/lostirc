@@ -1,6 +1,14 @@
 For a summary of changes between releases - see the NEWS file.
 
 2003-08-23  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Prefs.cpp: Add a new tab, "Colours". Not at all done yet.
+        * ServerWindow.cpp: Move the auto-connect column to the first column.
+          Make it editable. Though, this is not working entirely yet.
+
+          Move the TextView into a ScrolledWindow, to make it prettier.
+
+2003-08-23  Morten Brix Pedersen  <morten@wtf.dk>
         
         * ServerConnection.cpp: Fix the error where "Disconnected." was
           inserted into to the frontend, even when just connecting to a

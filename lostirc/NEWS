@@ -5,6 +5,10 @@ LostIRC (x.x.x)
      - Preferences now opens in a dialog window.
      - DCC transfers now opens in a dialog window.
      - The server settings has been moved to its own dialog window.
+     - There is an added menubar (easily removeable)
+  * Other user interface changes:
+    - The nick list can be hidden / unhidden. Just pressing CTRL-L will
+      hide/unhide it.
   * The default font for the main window is now "Sans 10".
   * The "limited highlighting" option has been removed.
   * Fix problem with duplicates in the user list.

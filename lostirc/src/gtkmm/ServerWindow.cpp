@@ -74,9 +74,9 @@ ServerWindow::ServerWindow(Gtk::Window& parent)
 
     // Autojoin/perform-tab
 
+    _treeview.append_column_editable(_("Auto-connect"), _columns.auto_connect);
     _treeview.append_column(_("Hostname"), _columns.servername);
     _treeview.append_column(_("Port"), _columns.port);
-    _treeview.append_column(_("Auto-connect"), _columns.auto_connect);
 
     updateList();
 
@@ -215,9 +215,8 @@ ServerEditDialog::ServerEditDialog(Gtk::Window& parent, Server* server)
     _server_options_table.set_col_spacings(12);
 
     // auto connect
-    get_vbox()->pack_start(auto_connect_button, Gtk::PACK_SHRINK);
-
     get_vbox()->pack_start(_server_options_table, Gtk::PACK_SHRINK);
+    get_vbox()->pack_start(auto_connect_button, Gtk::PACK_SHRINK);
 
     int row = 1;
 
@@ -249,9 +248,14 @@ ServerEditDialog::ServerEditDialog(Gtk::Window& parent, Server* server)
 
     // commmands
     cmdtext.set_editable(true);
-    Gtk::Label *label5 = manage(new Gtk::Label(_("Commmands to perform when connected:")));
+    Gtk::Label *label5 = manage(new Gtk::Label(_("Commands to perform when connected:")));
     get_vbox()->pack_start(*label5, Gtk::PACK_SHRINK);
-    get_vbox()->pack_start(cmdtext);
+
+    Gtk::ScrolledWindow *swin = manage(new Gtk::ScrolledWindow());
+    swin->set_shadow_type(Gtk::SHADOW_IN);
+    swin->add(cmdtext);
+    swin->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+    get_vbox()->pack_start(*swin);
 
     // initialize.
 

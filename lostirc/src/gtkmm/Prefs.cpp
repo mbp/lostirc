@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <gtkmm/optionmenu.h>
 #include <gtkmm/separator.h>
 #include <Utils.h>
 #include "MainWindow.h"
@@ -68,6 +69,7 @@ Prefs::Prefs()
     Gtk::VBox *generalbox = addPage(_("General"));
     Gtk::VBox *prefsbox = addPage(_("Preferences"));
     Gtk::VBox *dccbox = addPage(_("DCC"));
+    Gtk::VBox *colourbox = addPage(_("Colours"));
 
     // General options-tab
     int row = 1;
@@ -161,6 +163,31 @@ Prefs::Prefs()
 
     dccbox->pack_start(_dcc_table, Gtk::PACK_SHRINK);
 
+    // Colour-tab
+    Gtk::OptionMenu *optionmenu = new Gtk::OptionMenu();
+
+    Gtk::Menu *colorschemes = new Gtk::Menu();
+
+    optionmenu->set_menu(*colorschemes);
+
+    {
+        Gtk::Menu::MenuList& menulist = colorschemes->items();
+
+        menulist.push_back( Gtk::Menu_Helpers::MenuElem("White on black",
+                    SigC::slot(*this, &Prefs::saveSettings) ) );
+
+        menulist.push_back( Gtk::Menu_Helpers::MenuElem("Black on white",
+                    SigC::slot(*this, &Prefs::saveSettings) ) );
+
+    }
+
+    colorschemes->set_active(1);
+
+    colourbox->pack_start(*optionmenu, Gtk::PACK_SHRINK);
+
+
+
+    // Final setup
     mainvbox.pack_start(*manage(new Gtk::HSeparator()), Gtk::PACK_SHRINK);
 
     Gtk::HBox *closehbox = manage(new Gtk::HBox());
