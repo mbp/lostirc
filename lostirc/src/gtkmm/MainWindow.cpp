@@ -54,7 +54,7 @@ MainWindow::MainWindow()
     _io->evtTopic.connect(slot(this, &MainWindow::onTopic));
     _io->evtTopicTime.connect(slot(this, &MainWindow::onTopicTime));
     _io->evtMode.connect(slot(this, &MainWindow::onMode));
-    _io->evtUMode.connect(slot(this, &MainWindow::onUMode));
+    _io->evtCMode.connect(slot(this, &MainWindow::onCMode));
     _io->evtAway.connect(slot(this, &MainWindow::onAway));
     _io->evtSelfaway.connect(slot(this, &MainWindow::onSelfaway));
     _io->evtNctcp.connect(slot(this, &MainWindow::onNctcp));
@@ -216,7 +216,7 @@ void MainWindow::onQuit(const string& nick, const string& msg, ServerConnection 
     _nb->findTabsContaining(nick, tabs);
 
     for (i = tabs.begin(); i != tabs.end(); ++i) {
-        _nb->insert(*i, "*** " + nick + " has quit (" + msg + ")\n");
+        _nb->insert(*i, "$5*** " + nick + " has quit (" + msg + ")\n");
         (*i)->removeUser(nick);
     }
 }
@@ -233,7 +233,7 @@ void MainWindow::onNick(const string& from, const string& to, ServerConnection *
     _nb->findTabsContaining(from, tabs);
 
     for (i = tabs.begin(); i != tabs.end(); ++i) {
-        _nb->insert(*i, "*** " + from + " changes nick to " + to + "\n");
+        _nb->insert(*i, "$6*** " + from + " changes nick to " + to + "\n");
         (*i)->renameUser(from, to);
     }
 }
@@ -271,21 +271,21 @@ void MainWindow::onTopicTime(const string& chan, const string& nick, const strin
 void MainWindow::onMode(const string& nick, const string& chan, const string& rest, ServerConnection *conn)
 {
     Tab *tab = _nb->findTab(chan, conn);
-    _nb->insert(tab, "*** " + nick + " sets mode " + rest + "\n");
+    _nb->insert(tab, "$7*** " + nick + " sets mode " + rest + "\n");
 
 }
 
-void MainWindow::onUMode(const string& nick, const string& target, const string& rest, ServerConnection *conn)
+void MainWindow::onCMode(const string& nick, const string& chan, const vector<vector<string> >& users, ServerConnection *conn)
 {
-    Tab *tab = _nb->getCurrent(conn);
-    if (tab) {
-        if (nick == conn->Session.nick) {
-            _nb->insert(tab, "You set mode: " + rest + "\n");
-        } else {
-            _nb->insert(tab, "Mode by " + nick + ": " + rest + "\n");
-        }
-    }
+    Tab *tab = _nb->findTab(chan, conn);
 
+    vector<vector<string> >::const_iterator i;
+    for (i = users.begin(); i != users.end(); ++i) {
+        vector<string> vec = *i;
+        _nb->insert(tab, "$3-- "  + nick + " sets mode " + vec[0] + " to " + vec[1] + "\n");
+        tab->removeUser(vec[1]);
+        tab->insertUser(*i);
+    }
 }
 
 void MainWindow::onGenericError(const string& error, ServerConnection *conn)
@@ -406,10 +406,10 @@ void MainWindow::onErrhandler(const string& from, const string& param2, const st
     _nb->insert(tab, "Error: " + param2 + " -:- " + rest + "\n");
 }
 
-void MainWindow::onBanlist(const string& channel, const string& banmask, const string& owner, ServerConnection *conn)
+void MainWindow::onBanlist(const string& chan, const string& banmask, const string& owner, ServerConnection *conn)
 {       
-    Tab *tab = _nb->findTab(channel, conn);
-    _nb->insert(tab, channel + " banlist: " + banmask + " set by " + owner + "\r\n");
+    Tab *tab = _nb->findTab(chan, conn);
+    _nb->insert(tab, chan + " banlist: " + banmask + " set by " + owner + "\r\n");
 }
 
 void MainWindow::quit()

@@ -47,7 +47,7 @@ public:
     void Topic(const string& from, const string& param, const string& rest);
     void TopicTime(const string& param);
     void Mode(const string& from, const string& param, const string& rest);
-    void UMode(const string& from, const string& param, const string& rest);
+    void CMode(const string& from, const string& param);
     void Join(const string& nick, const string& chan);
     void Part(const string& nick, const string& chan);
     void Quit(const string& nick, const string& msg);

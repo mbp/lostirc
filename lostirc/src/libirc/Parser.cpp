@@ -84,11 +84,7 @@ void Parser::parseLine(string &data)
         else if (command == "PART")
               Part(from, param);
         else if (command == "MODE")
-              if (rest == "") {
-                  Mode(from, param, rest);
-              } else {
-                  UMode(from, param, rest);
-              }
+              Mode(from, param, rest);
         else if (command == "TOPIC")
               Topic(from, param, rest);
         else if (command == "NOTICE")
@@ -240,23 +236,68 @@ void Parser::Topic(const string& from, const string& to, const string& rest)
 
 void Parser::Mode(const string& from, const string& param, const string& rest)
 {
-    // Parse line in this form: '#chan +o nick '
-    string::size_type pos1 = param.find_first_of(" ");
+    if (rest.empty()) {
+        // We encountered a channel mode message
+        CMode(from, param);
+    } else {
+        // User mode message
+        // Parse line in the form: 'user +x'
+        string chan, rest2;
+        stringstream ss(param);
+        ss >> chan;
+        ss >> rest2;
 
-    string chan = param.substr(0, pos1);
-    string rest2 = param.substr(pos1);
-    _io->evtMode(findNick(from), chan, rest2, _conn);
+        _io->evtMode(findNick(from), chan, rest2, _conn);
+    }
         
 }
 
-void Parser::UMode(const string& from, const string& param, const string& rest)
+void Parser::CMode(const string& from, const string& param)
 {
-    // Parse line in this form: '#chan +o nick '
-//    string::size_type pos1 = param.find_first_of(" ");
+    // Parse line in this form: '#chan +ovo nick nick2 nick3'
 
-//    string chan = param.substr(0, pos1);
-//    string rest2 = param.substr(pos1);
-    _io->evtUMode(findNick(from), param, rest, _conn);
+    string::size_type pos1 = param.find_first_of(" ");
+    string::size_type pos2 = param.find_first_of(" ", pos1 + 1);
+
+    string chan = param.substr(0, pos1);
+    string modes = param.substr(pos1 + 1, (pos2 - pos1) - 1);
+    string nicks = param.substr(pos2 + 1);
+
+    vector<string> modesvec, nicksvec;
+    string::const_iterator i;
+    bool plus;
+    for (i = modes.begin(); i != modes.end(); ++i) {
+        if (*i == '+') {
+            plus = true;
+        } else if (*i == '-') {
+            plus = false;
+        } else {
+
+            if (*i == 'o' && plus)
+                  modesvec.push_back("@");
+            else if (*i == 'v' && plus)
+                  modesvec.push_back("+");
+            else
+                  modesvec.push_back(" ");
+        }
+
+    }
+
+    stringstream ss(nicks);
+    string buf;
+    while (ss >> buf)
+          nicksvec.push_back(buf);
+
+    vector<vector<string> > vecvec;
+
+    for (int n = 0; n < modesvec.size(); ++n) {
+        vector<string> vec;
+        vec.push_back(modesvec[n]);
+        vec.push_back(nicksvec[n]);
+        vecvec.push_back(vec);
+    }
+
+    _io->evtCMode(findNick(from), chan, vecvec, _conn);
         
 }
 
@@ -267,8 +308,7 @@ void Parser::Topic(const string& param, const string& rest)
 
     string chan = param.substr(pos1, pos2 - pos1);
 
-    string dummy;
-    _io->evtTopic(dummy, chan, rest, _conn);
+    _io->evtTopic("", chan, rest, _conn);
 }
 
 void Parser::TopicTime(const string& param)
@@ -315,15 +355,15 @@ void Parser::Wallops(const string& from, const string& rest)
 
 void Parser::Banlist(const string& param)
 {
-    string dummy, channel, banmask, owner, time;
+    string dummy, chan, banmask, owner, time;
     stringstream ss(param);
     ss >> dummy;
-    ss >> channel;
+    ss >> chan;
     ss >> banmask;
     ss >> owner;
     ss >> time;
 
-    _io->evtBanlist(channel, banmask, owner, _conn);
+    _io->evtBanlist(chan, banmask, owner, _conn);
 }
      
 void Parser::Errhandler(const string& from, const string& param, const string& rest)

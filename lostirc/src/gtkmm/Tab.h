@@ -33,8 +33,6 @@
 class MainNotebook;
 class ServerConnection;
 
-using namespace std;
-
 class Tab : public Gtk::VBox
 {
 public:

@@ -20,6 +20,7 @@
 #define ENTRY_H
 
 #include <vector>
+#include <string>
 #include "Tab.h"
 
 class Tab;
@@ -33,9 +34,9 @@ public:
     gint on_key_press_event(GdkEventKey* e);
 private:
     void onEntry();
-    void printText(const string& msg);
-    vector<string> _entries;
-    vector<string>::reverse_iterator i;
+    void printText(const std::string& msg);
+    std::vector<std::string> _entries;
+    std::vector<std::string>::reverse_iterator i;
     Tab* _tab;
 
 };

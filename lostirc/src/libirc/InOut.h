@@ -57,7 +57,7 @@ public:
     SigC::Signal4<void, const string&, const string&, const string&, ServerConnection*> evtTopic;
     SigC::Signal4<void, const string&, const string&, const string&, ServerConnection*> evtTopicTime;
     SigC::Signal4<void, const string&, const string&, const string&, ServerConnection*> evtMode;
-    SigC::Signal4<void, const string&, const string&, const string&, ServerConnection*> evtUMode;
+    SigC::Signal4<void, const string&, const string&, const vector<vector<string> >&, ServerConnection*> evtCMode;
     SigC::Signal4<void, const string&, const string&, const string&, ServerConnection*> evtMsg;
     SigC::Signal4<void, const string&, const string&, const string&, ServerConnection*> evtAction;
     SigC::Signal4<void, const string&, const string&, const string&, ServerConnection*> evtErrhandler;

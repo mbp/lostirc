@@ -19,6 +19,9 @@
 #include "GuiCommands.h"
 #include "Entry.h"
 
+using std::vector;
+using std::string;
+
 Entry::Entry(Tab* tab)
     : Gtk::Entry(510), _tab(tab), i(_entries.rbegin())
 {
