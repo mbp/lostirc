@@ -126,4 +126,6 @@ public:
 
 };
 
+Glib::ustring expandHome(const Glib::ustring& str);
+
 #endif

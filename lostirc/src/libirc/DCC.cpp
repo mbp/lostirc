@@ -121,10 +121,12 @@ void DCC_Send_In::getUseableFilename(int i)
 DCC_Send_Out::DCC_Send_Out(const Glib::ustring& filename, const Glib::ustring& nick, ServerConnection *conn)
     : _infile(), _filename(filename), _nick(nick), _pos(0)
 {
+    _filename = expandHome(_filename);
+
     struct stat st;
 
-    if (stat(filename.c_str(), &st) == -1) {
-        FE::emit(FE::get(CLIENTMSG) << "File not found:" << filename, FE::CURRENT);
+    if (stat(_filename.c_str(), &st) == -1) {
+        FE::emit(FE::get(CLIENTMSG) << "File not found:" << _filename, FE::CURRENT);
         // FIXME: add dcc-done?
     } else {
         _size = st.st_size;
@@ -159,10 +161,10 @@ DCC_Send_Out::DCC_Send_Out(const Glib::ustring& filename, const Glib::ustring& n
         #endif
 
         std::ostringstream ss;
-        ss << "DCC SEND " << filename << " " << ntohl(inet_addr(_localip.c_str())) << " " << ntohs(sockaddr.sin_port) << " " << _size;
+        ss << "DCC SEND " << _filename << " " << ntohl(inet_addr(_localip.c_str())) << " " << ntohs(sockaddr.sin_port) << " " << _size;
         conn->sendCtcp(nick, ss.str());
 
-        _infile.open(filename.c_str());
+        _infile.open(_filename.c_str());
 
         listen(fd, 1);
 
@@ -268,4 +270,13 @@ void DCC_queue::dccDone(int n)
         i->second = 0;
         _dccs.erase(i);
     }
+}
+
+Glib::ustring expandHome(const Glib::ustring& str)
+{
+    if (!str.empty() && str.at(0) == '~') {
+        Glib::ustring new_str = App->home + str.substr(1);
+        return new_str;
+    }
+    return str;
 }

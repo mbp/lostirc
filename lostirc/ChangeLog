@@ -1,5 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
+2002-12-31  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * DCC.cpp: Implement expandHome() to expand tildes to home
+          directories.
+
 2002-12-29  Morten Brix Pedersen  <morten@wtf.dk>
 
         * NickList.cpp: remove plural s when only one user is on the channel.
