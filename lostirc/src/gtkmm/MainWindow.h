@@ -43,7 +43,7 @@ public:
     virtual gint on_key_press_event_impl(GdkEventKey* e) { return 0; }
     MainNotebook* getNotebook() { return _nb; }
     LostIRCApp* getApp() { return _app; }
-    void newServer();
+    Tab* newServer();
 
     MainNotebook* _nb;
 
