@@ -80,7 +80,7 @@ public:
     Query* findQuery(const std::string& c);
     void sendCmds();
 
-    const char * getLocalIP() { return _socket->getLocalIP(); }
+    const char * getLocalIP() { return _socket.getLocalIP(); }
 
     bool onReadData(Glib::IOCondition);
     bool onConnect(Glib::IOCondition);
@@ -106,7 +106,7 @@ public:
     } Session;
 
 private:
-    Socket *_socket;
+    Socket _socket;
     Parser _parser;
     std::string tmpbuf;
 

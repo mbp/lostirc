@@ -42,7 +42,7 @@ namespace algo
 }
 
 ServerConnection::ServerConnection(const string& host, const string& nick, int port, bool doconnect)
-    : _socket(new Socket()), _parser(this)
+    : _parser(this)
 {
     Session.nick = nick;
     Session.servername = host;
@@ -55,8 +55,8 @@ ServerConnection::ServerConnection(const string& host, const string& nick, int p
     Session.sentLagCheck = false;
     Session.realname = App->getCfg().getOpt("realname");
 
-    _socket->on_host_resolved.connect(SigC::slot(*this, &ServerConnection::on_host_resolved));
-    _socket->on_error.connect(SigC::slot(*this, &ServerConnection::on_error));
+    _socket.on_host_resolved.connect(SigC::slot(*this, &ServerConnection::on_host_resolved));
+    _socket.on_error.connect(SigC::slot(*this, &ServerConnection::on_error));
 
     App->fe->newTab(this);
 
@@ -66,8 +66,6 @@ ServerConnection::ServerConnection(const string& host, const string& nick, int p
 
 ServerConnection::~ServerConnection()
 {
-    delete _socket;
-    
     for_each(Session.channels.begin(), Session.channels.end(), algo::deletePointer());
 }
 
@@ -103,7 +101,7 @@ void ServerConnection::doCleanup()
     for_each(Session.channels.begin(), Session.channels.end(), algo::deletePointer());
     Session.channels.clear();
 
-    _socket->disconnect();
+    _socket.disconnect();
 }
 
 void ServerConnection::disconnect()
@@ -128,7 +126,7 @@ void ServerConnection::connect()
 
     FE::emit(FE::get(CONNECTING) << Session.host << Session.port, FE::CURRENT, this);
 
-    _socket->resolvehost(Session.host);
+    _socket.resolvehost(Session.host);
 }
 
 
@@ -143,7 +141,7 @@ void ServerConnection::on_host_resolved()
     FE::emit(FE::get(SERVMSG) << "Resolved host. Connecting..", FE::CURRENT, this);
     try {
 
-        _socket->connect(Session.port);
+        _socket.connect(Session.port);
 
     } catch (SocketException &e) {
         FE::emit(FE::get(SERVMSG2) << "Failed connecting:" << e.what(), FE::CURRENT, this);
@@ -159,7 +157,7 @@ void ServerConnection::on_host_resolved()
     // write - we are (hopefully) connected
     signal_write = Glib::signal_io().connect(
             SigC::slot(*this, &ServerConnection::onConnect),
-            _socket->getfd(),
+            _socket.getfd(),
             Glib::IO_OUT | Glib::IO_IN | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_PRI | Glib::IO_NVAL);
 }
 
@@ -202,7 +200,7 @@ bool ServerConnection::onReadData(Glib::IOCondition)
     try {
 
         char buf[4096];
-        if (_socket->receive(buf, 4095)) {
+        if (_socket.receive(buf, 4095)) {
 
             string str;
             if (!tmpbuf.empty()) {
@@ -267,7 +265,7 @@ bool ServerConnection::onConnect(Glib::IOCondition cond)
     // Watch for incoming data from now on
     signal_watch = Glib::signal_io().connect(
             SigC::slot(*this, &ServerConnection::onReadData),
-            _socket->getfd(),
+            _socket.getfd(),
             Glib::IO_IN | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL);
 
     return false;
@@ -299,21 +297,21 @@ bool ServerConnection::sendPong(const string& crap)
 {
     string msg("PONG :" + crap + "\r\n");
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendPing(const string& crap)
 {
     string msg("PING LAG" + crap + "\r\n");
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendUser(const string& nick, const string& localhost, const string& remotehost, const string& name)
 {
     string msg("USER " + nick + " " + localhost + " " + remotehost + " : " + name + "\r\n");
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendNick(const string& nick)
@@ -321,12 +319,12 @@ bool ServerConnection::sendNick(const string& nick)
     if (Session.isConnected && Session.hasRegistered) {
         string msg("NICK " + nick + "\r\n");
 
-        return _socket->send(msg);
+        return _socket.send(msg);
     } else if (Session.isConnected && !Session.hasRegistered) {
         Session.nick = nick;
         string msg("NICK " + nick + "\r\n");
 
-        return _socket->send(msg);
+        return _socket.send(msg);
     } else {
         Session.nick = nick;
         return false;
@@ -336,7 +334,7 @@ bool ServerConnection::sendNick(const string& nick)
 bool ServerConnection::sendPass(const string& pass)
 {
     string msg("PASS " + pass + "\r\n");
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendVersion(const string& to)
@@ -347,28 +345,28 @@ bool ServerConnection::sendVersion(const string& to)
     string vstring("LostIRC "VERSION" on " + s + " " + r + " [" + m + "]");
     string msg("NOTICE " + to + " :\001VERSION " + vstring + "\001\r\n");
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendMsg(const string& to, const string& message)
 {
     string msg("PRIVMSG " + to + " :" + message + "\r\n");
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendNotice(const string& to, const string& message)
 {
     string msg("NOTICE " + to + " :" + message + "\r\n");
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendJoin(const string& chan)
 {
     string msg("JOIN " + chan + "\r\n");
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendPart(const string& chan, const string& message)
@@ -380,28 +378,28 @@ bool ServerConnection::sendPart(const string& chan, const string& message)
         msg = "PART " + chan + "\r\n";
     }
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendKick(const string& chan, const string& nick, const string& kickmsg)
 {
     string msg("KICK " + chan + " " + nick + " :" + kickmsg + "\r\n");
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendWhois(const string& params)
 {
     string msg("WHOIS " + params + "\r\n");
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendList(const string& params)
 {
     string msg("LIST " + params + "\r\n");
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendQuit(const string& quitmsg)
@@ -414,7 +412,7 @@ bool ServerConnection::sendQuit(const string& quitmsg)
             msg = "QUIT :" + quitmsg + "\r\n";
         }
 
-        return _socket->send(msg);
+        return _socket.send(msg);
     }
     return true;
 }
@@ -423,21 +421,21 @@ bool ServerConnection::sendMode(const string& params)
 {
     string msg("MODE " + params + "\r\n");
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendCtcp(const string& to, const string& params)
 {
     string msg("PRIVMSG " + to + " :\001" + params + "\001\r\n");
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendCtcpNotice(const string& to, const string& params)
 {
     string msg("NOTICE " + to + " :\001" + params + "\001\r\n");
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendAway(const string& params)
@@ -445,28 +443,28 @@ bool ServerConnection::sendAway(const string& params)
     string msg("AWAY :" + params + "\r\n");
     Session.awaymsg = params;
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendAdmin(const string& params)
 {
     string msg("ADMIN " + params + "\r\n");
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendWhowas(const string& params)
 {
     string msg("WHOWAS " + params + "\r\n");
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendInvite(const string& to, const string& params)
 {
     string msg("INVITE " + to + " " + params + "\r\n");
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendTopic(const string& chan, const string& topic)
@@ -478,63 +476,63 @@ bool ServerConnection::sendTopic(const string& chan, const string& topic)
         msg = "TOPIC " + chan + " :" + topic + "\r\n";
     }
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendBanlist(const string& chan)
 {
     string msg("MODE " + chan + " +b\r\n");
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendMe(const string& to, const string& message)
 {
     string msg("PRIVMSG " + to + " :\001ACTION " + message + "\001\r\n");
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendWho(const string& mask)
 {
     string msg("WHO " + mask + "\r\n");
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendNames(const string& chan)
 {
     string msg("NAMES " + chan + "\r\n");
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendOper(const string& login, const string& password)
 {
     string msg("OPER " + login + ' ' + password + "\r\n" );
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendWallops(const string& message)
 {
     string msg("WALLOPS :" + message + "\r\n" );
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendKill(const string& nick, const string& reason)
 {
     string msg("KILL " + nick + " :" + reason + "\r\n" );
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 bool ServerConnection::sendRaw(const string& text)
 {
     string msg(text + "\r\n");
 
-    return _socket->send(msg);
+    return _socket.send(msg);
 }
 
 void ServerConnection::addChannel(const string& n)
