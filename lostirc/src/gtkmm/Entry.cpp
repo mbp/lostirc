@@ -58,7 +58,7 @@ void Entry::onEntry()
 
         } catch (CommandException& ce) {
 
-            *_tab << string(ce.what()) + string("\n");
+            _tab->getText() << string(ce.what()) + string("\n");
 
         }
 
@@ -74,9 +74,9 @@ void Entry::onEntry()
 void Entry::sendMsg(const ustring& msg)
 {
     if (!_tab->getConn()->Session.isConnected) {
-        *_tab << "Not connected to server.\n";
+        _tab->getText() << "Not connected to server.\n";
     } else if (!_tab->isActive()) {
-        *_tab << "Not on any channel.\n";
+        _tab->getText() << "Not on any channel.\n";
     } else {
         std::istringstream ss(Glib::locale_from_utf8(msg));
 
@@ -87,7 +87,7 @@ void Entry::sendMsg(const ustring& msg)
         string line;
         while (getline(ss, line)) {
             _tab->getConn()->sendMsg(_tab->getLabel()->get_text(), line);
-            *_tab << "\0037<\0030" + _tab->getConn()->Session.nick + "\0037>\0030 " + line + '\n';
+            _tab->getText() << "\0037<\0030" + _tab->getConn()->Session.nick + "\0037>\0030 " + line + '\n';
         }
     }
 }

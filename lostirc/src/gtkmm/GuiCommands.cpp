@@ -78,7 +78,7 @@ void Me(ServerConnection *conn, const ustring& params)
 
 void Clear(ServerConnection *conn, const ustring& params)
 {
-    AppWin->getNotebook().getCurrent()->clearText();
+    AppWin->getNotebook().getCurrent()->getText().clearText();
 }
 
 void ClearAll(ServerConnection *conn, const ustring& params)

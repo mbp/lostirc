@@ -21,7 +21,6 @@
 
 #include <vector>
 #include <map>
-#include <utility>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/box.h>
@@ -36,6 +35,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <irc_defines.h>
 #include "Entry.h"
+#include "TextWidget.h"
 
 class ServerConnection;
 
@@ -57,12 +57,7 @@ public:
     virtual void renameUser(const Glib::ustring& from, const Glib::ustring& to) = 0;
     virtual bool findUser(const Glib::ustring& nick) = 0;
     virtual std::vector<Glib::ustring> getNicks() = 0;
-    Tab& operator<<(const char * str);
-    Tab& operator<<(const std::string& str);
-    Tab& operator<<(const Glib::ustring& str);
-    void insertText(const Glib::ustring& str);
-    void setStyle();
-    void setFont(const Pango::FontDescription& font);
+    TextWidget& getText() { return _textwidget; }
     void setInActive() {
         if (isActive()) {
             _label->set_text("(" + _label->get_text() + ")");
@@ -73,33 +68,21 @@ public:
         isOnChannel = true;
     }
     bool isActive() { return isOnChannel; }
-    void clearText();
     bool isHighlighted;
     bool hasPrefs;
 
 private:
-    void insertWithColor(int color, const Glib::ustring& str);
-    void realInsert(int color, const Glib::ustring& str);
-
-    std::string _fallback_encoding;
     bool isOnChannel;
     Gtk::Label *_label;
     ServerConnection *_conn;
-    Entry _entry;
     Gtk::ScrolledWindow _swin;
-    Gtk::Label *_away;
-    Gtk::HBox *_hbox;
-
-    std::map<int, Glib::RefPtr<Gtk::TextTag> > colorMap;
-    Glib::RefPtr<Gtk::TextTag> underlinetag;
-
-    void initializeColorMap();
-    void helperInitializer(int i, const Glib::ustring& colorname);
+    Gtk::HBox _hbox;
 
 protected:
-    Gtk::VBox *_vbox;
-    Gtk::TextView _textview;
+    Gtk::VBox _vbox;
     Gtk::HPaned *_hpaned;
+    TextWidget _textwidget;
+    Entry _entry;
 };
 
 class TabQuery : public Tab
@@ -126,7 +109,6 @@ public:
 
 class TabChannel : public Tab
 {
-    Gtk::Frame *_users;
 
 public:
     TabChannel(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font);
@@ -157,6 +139,8 @@ private:
     ModelColumns _columns;
     Glib::RefPtr<Gtk::ListStore> _liststore;
     Gtk::TreeView _treeview;
+
+    Gtk::Frame _users;
 
 };
 

@@ -232,7 +232,7 @@ void MainNotebook::clearAll()
 
     for (i = pages().begin(); i != pages().end(); ++i) {
         Tab *tab = static_cast<Tab*>(i->get_child());
-        tab->clearText();
+        tab->getText().clearText();
     }
 }
 
@@ -244,6 +244,6 @@ void MainNotebook::setFont(const Glib::ustring& str)
 
     for (i = pages().begin(); i != pages().end(); ++i) {
         Tab *tab = static_cast<Tab*>(i->get_child());
-        tab->setFont(fontdescription);
+        tab->getText().setFont(fontdescription);
     }
 }

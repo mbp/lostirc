@@ -2,6 +2,12 @@ For a summary of changes between releases - see the NEWS file.
 
 2002-11-24  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * Tab.cpp/TextWidget.cpp: Move implementation of the TextView to its
+          own class instead of having the functionality directly in the Tab
+          class. 
+
+2002-11-24  Morten Brix Pedersen  <morten@wtf.dk>
+
         * Tab.cpp: Have an extra 'priority' column (not visible) which
           internally decide which mode is supposed to higher than the other.
           Rework TabChannel::sortFunc() to always sort correctly.
