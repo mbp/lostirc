@@ -22,6 +22,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <sstream>
 #include "LostIRCApp.h"
 #include "ServerConnection.h"
 

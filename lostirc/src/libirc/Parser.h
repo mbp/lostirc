@@ -21,10 +21,8 @@
 
 #include <string>
 #include <vector>
-#include <sstream>
 #include <algorithm>
 #include "irc_defines.h"
-#include "LostIRCApp.h"
 
 // This class takes care of parsing incoming messages from the server
 
@@ -44,7 +42,6 @@ public:
     void parseLine(std::string &data);
 
 private:
-    void Ping(const std::string& rest);
     void Privmsg(const std::string& from, const std::string& param, const std::string& rest);
     void ServMsg(const std::string& from, const std::string& param, const std::string& rest);
     void Notice(const std::string& from, const std::string& param, const std::string& rest);
@@ -60,15 +57,14 @@ private:
     void Nick(const std::string& from, const std::string& to);
     void Invite(const std::string& from, const std::string& to);
     void Kick(const std::string& from, const std::string& chan, const std::string& nickandmsg);
-    void Whois(const std::string& from, const std::string& param, const std::string& rest);
     void Names(const std::string& chan, const std::string& names);
     void Ctcp(const std::string& from, const std::string& param, const std::string& rest);
     void Away(const std::string& from, const std::string& param, const std::string& rest);
-    void Errhandler(const std::string& from, const std::string& param, const std::string& rest);
     void Wallops(const std::string& from, const std::string& rest);
-    void Selfaway(const std::string& rest);
     void Banlist(const std::string& param);
     void numeric(int n, const std::string& from, const std::string& param, const std::string& rest);
+
+    inline void Ping(const std::string& rest);
 
     std::string findNick(const std::string& str) {
         return str.substr(0, str.find_first_of("!"));

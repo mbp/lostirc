@@ -16,11 +16,13 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include "ServerConnection.h"
-#include "Utils.h"
+#include <sstream>
 #include "Parser.h"
+#include "Utils.h"
 #include "Channel.h"
 #include "Events.h"
+#include "LostIRCApp.h"
+#include "ServerConnection.h"
 
 using std::vector;
 using std::string;
@@ -144,6 +146,7 @@ void Parser::parseLine(string& data)
 
 }
 
+inline
 void Parser::Ping(const string& rest)
 {
     _conn->sendPong(rest);
@@ -200,12 +203,11 @@ void Parser::Notice(const string& from, const string& to, const string& rest)
 {
     if (rest[0] == '\001') {
         // CTCP notice
-        
         string tmp = rest;
         string::iterator i = remove(tmp.begin(), tmp.end(), '\001');
         string output(tmp.begin(), i);
 
-        _evts->emit(_evts->get(SERVMSG) << output, "", _conn);
+        _evts->emit(_evts->get(SERVMSG) << findNick(from) + " " + output, "", _conn);
     } else {
         // Normal notice
         _evts->emit(_evts->get(NOTICEPUBL) << findNick(from) << to << rest, "", _conn);
@@ -245,11 +247,6 @@ void Parser::Join(const string& nick, const string& chan)
     _app->evtJoin(findNick(nick), chan, _conn); // Send join to frontend
 
     _evts->emit(_evts->get(JOIN) << findNick(nick) << chan << findHost(nick), chan, _conn);
-}
-
-void Parser::Whois(const string& from, const string& param, const string& rest)
-{
-    _evts->emit(_evts->get(SERVMSG2) << param << rest, "", _conn);
 }
 
 void Parser::Part(const string& nick, const string& chan)
@@ -296,11 +293,6 @@ void Parser::Nick(const string& from, const string& to)
 void Parser::Invite(const string& from, const string& params)
 {
     _evts->emit(_evts->get(INVITED) << findNick(from) << params, "", _conn);
-}
-
-void Parser::Topic(const string& from, const string& to, const string& rest)
-{
-    _evts->emit(_evts->get(TOPICCHANGE) << findNick(from) << rest, to, _conn);
 }
 
 void Parser::Mode(const string& from, const string& param, const string& rest)
@@ -392,6 +384,11 @@ void Parser::CMode(const string& from, const string& param)
     _app->evtCUMode(findNick(from), chan, modesmap, _conn);
 }
 
+void Parser::Topic(const string& from, const string& to, const string& rest)
+{
+    _evts->emit(_evts->get(TOPICCHANGE) << findNick(from) << rest, to, _conn);
+}
+
 void Parser::Topic(const string& param, const string& rest)
 {
     string::size_type pos1 = param.find_first_of("#");
@@ -435,11 +432,6 @@ void Parser::Away(const string& from, const string& param, const string& rest)
     _evts->emit(_evts->get(AWAY) << param2 << rest, param2, _conn);
 }
 
-void Parser::Selfaway(const string& rest)
-{
-    _evts->emit(_evts->get(SERVMSG) << rest, "", _conn);
-}
-
 void Parser::Wallops(const string& from, const string& rest)
 {
     _evts->emit(_evts->get(WALLOPS) << from << rest, "", _conn);
@@ -461,11 +453,6 @@ void Parser::Banlist(const string& param)
     _evts->emit(_evts->get(BANLIST) << banmask << owner, chan, _conn);
 }
      
-void Parser::Errhandler(const string& from, const string& param, const string& rest)
-{
-    _evts->emit(_evts->get(ERROR) << param + " " + rest, "", _conn);
-}
-
 void Parser::numeric(int n, const string& from, const string& param, const string& rest)
 {
     switch(n)
@@ -484,15 +471,9 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 251: // RPL_LUSERCLIENT
         case 252: // RPL_LUSEROP
         case 253: // RPL_LUSERUNKNOWN
-            ServMsg(from, param, rest);
-            break;
-
         case 254: // RPL_LUSERCHANNELS
-            ServMsg(from, param, rest);
-            break;
-
         case 255: // RPL_LUSERME
-            ServMsg(from, param, rest);
+            _evts->emit(_evts->get(SERVMSG) << rest, "", _conn);
             break;
 
         case 301: // RPL_AWAY
@@ -502,13 +483,13 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 305: // RPL_UNAWAY
             _app->evtAway(false, _conn);
             _conn->Session.isAway = false;
-            Selfaway(rest);
+            _evts->emit(_evts->get(SERVMSG) << rest, "", _conn);
             break;
 
         case 306: // RPL_NOWAWAY
             _app->evtAway(true, _conn);
             _conn->Session.isAway = true;
-            Selfaway(rest);
+            _evts->emit(_evts->get(SERVMSG) << rest, "", _conn);
             break;
 
         case 332: // RPL_TOPIC
@@ -524,15 +505,9 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             break;
 
         case 368: // RPL_END_OF_BANLIST
-            _evts->emit(_evts->get(SERVMSG) << rest, "", _conn);
-            break;
-
         case 372: // RPL_MOTD
-            ServMsg(from, param, rest);
-            break;
-
         case 375: // RPL_MOTDSTART
-            ServMsg(from, param, rest);
+            _evts->emit(_evts->get(SERVMSG) << rest, "", _conn);
             break;
 
         case 376: // RPL_ENDOFMOTD
@@ -544,11 +519,11 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 403: // ERR_NOSUCHCHANNEL
         case 404: // ERR_CANNOTSENDTOCHAN
         case 405: // ERR_TOOMANYCHANNELS
-            Errhandler(from, param, rest);
+            _evts->emit(_evts->get(ERROR) << param + " " + rest, "", _conn);
             break;
 
         case 412: // ERR_NOTEXTTOSEND (or something)
-            ServMsg(from, param, rest);
+            _evts->emit(_evts->get(SERVMSG) << rest, "", _conn);
             break;
 
         case 422: // ERR_NOMOTD
@@ -579,7 +554,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 491: // ERR_NOOPERHOST
         case 501: // ERR_UMODEUNKNOWNFLAG
         case 502: // ERR_USERSDONTMATCH
-            Errhandler(from, param, rest);
+            _evts->emit(_evts->get(ERROR) << param + " " + rest, "", _conn);
             break;
 
         case 353: // RPL_NAMREPLY
@@ -589,13 +564,13 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 366: // RPL_ENDOFNAMES
             break; // Ignored.
 
+        case 317: // RPL_WHOISIDLE
         case 311: // RPL_WHOISUSER
         case 312: // RPL_WHOISSERVER
         case 313: // RPL_WHOISOPERATOR
-        case 317: // RPL_WHOISIDLE
         case 318: // RPL_ENDOFWHOIS
         case 319: // RPL_WHOISCHANNELS
-            Whois(from, param, rest);
+            _evts->emit(_evts->get(SERVMSG2) << param << rest, "", _conn);
             break;
 
         default:
