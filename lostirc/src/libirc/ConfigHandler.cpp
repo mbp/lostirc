@@ -269,7 +269,7 @@ Events::Events(const char *filename)
     dcc_receive(this, "dcc_receive", "$15-- $16DCC SEND from §$00%1§$16 (%2), use /DCC RECEIVE %3 to accept the file transfer."),
     servmsg1(this, "servmsg1", "$15-- :$00 %1"),
     servmsg2(this, "servmsg2", "$15-- :$00 %1 %2"),
-    servmsg3(this, "servmsg3", "$15-- §$00%1§:$16 %2"),
+    servmsg3(this, "servmsg3", "$15-- $00%1:$16 %2"),
     clientmsg(this, "clientmsg", "$15-- $16%1"),
     ctcp(this, "ctcp", "$15-- $16CTCP $07%1 $16received from §$00%2"),
     ctcp_multi(this, "ctcp_multi", "$15-- $16CTCP $07%1 $16received from §$00%2§$16 $15($16to §%3§$15)"),
@@ -302,7 +302,11 @@ Events::Events(const char *filename)
     invited(this, "invited", "$15-- §$00%1§$16 invites you to join §%2"),
     connecting(this, "connecting", "$15-- $16Connecting to §$11%1§$16 on port §$11%2§$16..."),
     names(this, "names", "$15-- $16Names §%1§$00:$16 %2"),
-    killed(this, "killed", "$15-- $16You were killed by §$00%1§$16 $15($03%2$15)")
+    killed(this, "killed", "$15-- $16You were killed by §$00%1§$16 $15($03%2$15)"),
+    whois_user(this, "whois_user", "$15-- $16User info $15($00§%1§$15)$00: $03%2@%3$00 - %4"),
+    whois_channels(this, "whois_channels", "$15-- $16User info $15($00§%1§$15)$00: on channels §%2"),
+    whois_server(this, "whois_server", "$15-- $16User info $15($00§%1§$15)$00: on server %2 (%3)"),
+    whois_generic(this, "whois_generic", "$15-- $16User info $15($00§%1§$15)$00: %2")
 {
     map<string, baseConfigValue*>::iterator i = configvalues.begin();
 

@@ -1,6 +1,11 @@
 For a summary of changes between releases - see the NEWS file.
 
 2002-12-09  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * ConfigHandler.cpp/Parser.cpp: Add WHOIS_SERVER, WHOIS_USER,
+          WHOIS_CHANNELS, WHOIS_GENERIC events and use them.
+
+2002-12-09  Morten Brix Pedersen  <morten@wtf.dk>
         
         * Events.h, Events.cpp: Add CLIENTMSG. Rename SERVMSG to SERVMSG1.
         * Parser.cpp, ServerConnection.cpp, Commands.cpp: Use CLIENTMSG

@@ -808,19 +808,29 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             {
                 long idle = Util::stoi(getWord(param, 3));
                 std::ostringstream ss;
+                ss << "idle: ";
                 ss << idle / 3600 << ":" << (idle / 60) % 60 << ":" << idle % 60;
                 long date = std::atol(getWord(param, 4).c_str());
                 string time = std::ctime(&date);
-                FE::emit(FE::get(SERVMSG3) << ss.str() + ",  " + time.substr(0, time.size() - 1) << rest, FE::CURRENT, _conn);
+                ss << ", signon time: " << time.substr(0, time.size() - 1);
+                FE::emit(FE::get(WHOIS_GENERIC) << getWord(param, 1) << ss.str(), FE::CURRENT, _conn);
             }
             break;
+        case 314: // RPL_WHOWASUSER
         case 311: // RPL_WHOISUSER
+            FE::emit(FE::get(WHOIS_USER) << getWord(param, 1) << getWord(param, 3) << getWord(param, 4) << rest, FE::CURRENT, _conn);
+            break;
         case 312: // RPL_WHOISSERVER
+            FE::emit(FE::get(WHOIS_SERVER) << getWord(param, 1) << getWord(param, 3) << rest, FE::CURRENT, _conn);
+            break;
         case 313: // RPL_WHOISOPERATOR
-        case 318: // RPL_ENDOFWHOIS
-        case 319: // RPL_WHOISCHANNELS
             // We need this find_first_of to omit the first word
-            FE::emit(FE::get(SERVMSG2) << param.substr(param.find_first_of(" ") + 1) << rest, FE::CURRENT, _conn);
+            FE::emit(FE::get(WHOIS_GENERIC) << getWord(param, 1) << rest, FE::CURRENT, _conn);
+            break;
+        case 318: // RPL_ENDOFWHOIS
+            break;
+        case 319: // RPL_WHOISCHANNELS
+            FE::emit(FE::get(WHOIS_CHANNELS) << getWord(param, 1) << rest, FE::CURRENT, _conn);
             break;
 
         default:

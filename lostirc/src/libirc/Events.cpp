@@ -68,6 +68,10 @@ struct {
     { 2, "connecting", CONNECTING },
     { 2, "names", NAMES },
     { 2, "killed", KILLED },
+    { 2, "whois_user", WHOIS_USER },
+    { 2, "whois_channels", WHOIS_CHANNELS },
+    { 2, "whois_server", WHOIS_SERVER },
+    { 2, "whois_generic", WHOIS_GENERIC },
     { 0, 0, 0 }
 };
 

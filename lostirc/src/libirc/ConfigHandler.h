@@ -125,6 +125,10 @@ public:
     Value<std::string> connecting;
     Value<std::string> names;
     Value<std::string> killed;
+    Value<std::string> whois_user;
+    Value<std::string> whois_channels;
+    Value<std::string> whois_server;
+    Value<std::string> whois_generic;
 };
 
 struct autoJoin {

@@ -1,4 +1,5 @@
 LostIRC (x.x.x)
+  * WHOIS output is now formatted much nicer.
   * Color-codes are now handled better. Before the background
     color (e.g. ^C12,5) wasn't being handled and just printed ",5". Now the
     correct background color is used. Bold and underline is now also handled
