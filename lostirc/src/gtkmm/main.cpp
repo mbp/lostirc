@@ -16,13 +16,20 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <string>
 #include "MainWindow.h"
 
 int main(int argc, char** argv)
 {
+    bool autoconnect = true;
+
+    for (int i = 0; i < argc; ++i)
+          if (std::string(argv[i]).find("--noauto") != std::string::npos)
+                autoconnect = false;
+
     Gtk::Main app(argc, argv);
 
-    MainWindow window;
+    MainWindow window(autoconnect);
 
     app.run(window);
 }

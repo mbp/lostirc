@@ -39,7 +39,7 @@ class MainWindow : public Gtk::Window, public FrontEnd
     MainNotebook notebook;
 
 public:
-    MainWindow();
+    MainWindow(bool autoconnect = 0);
     virtual ~MainWindow();
 
     MainNotebook& getNotebook() { return notebook; }

@@ -21,6 +21,8 @@ LostIRC (x.x.x)
      (This is to follow the 'GNOME Human Interface Guidelines' and the 'KDE
      User Interface Guidelines').
 
+  * An added --noauto command-line option has been added, this makes LostIRC
+    not connect to servers automatically at startup.
   * When users part channels without a part-message, empty parentes are no
     longer displayed. (thanks, Michael Kristensen)
   * Fix a segfault which appeared with bouncers/servers sending malformed PART
