@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-22 04:39+0100\n"
+"POT-Creation-Date: 2004-01-27 04:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -430,20 +430,20 @@ msgstr ""
 msgid "Not found key, `"
 msgstr ""
 
-#: src/libirc/Socket.cpp:64 src/libirc/Socket.cpp:71
+#: src/libirc/Socket.cpp:111
+msgid "Message not sent because of locale problems"
+msgstr ""
+
+#: src/libirc/Socket.cpp:286 src/libirc/Socket.cpp:293
 msgid "Error writing to pipe: "
 msgstr ""
 
-#: src/libirc/Socket.cpp:107
+#: src/libirc/Socket.cpp:328
 msgid "An error occured while reading from pipe (Internal error 2)"
 msgstr ""
 
-#: src/libirc/Socket.cpp:117
+#: src/libirc/Socket.cpp:338
 msgid "An error occured while reading from pipe (Internal error 3)"
-msgstr ""
-
-#: src/libirc/Socket.cpp:276
-msgid "Message not sent because of locale problems"
 msgstr ""
 
 #: src/libirc/Parser.cpp:855
@@ -454,60 +454,56 @@ msgstr ""
 msgid ", signon time: "
 msgstr ""
 
-#: src/libirc/DCC.cpp:51
+#: src/libirc/DCC.cpp:58
 msgid "DCC connected. Receiving file..."
 msgstr ""
 
-#: src/libirc/DCC.cpp:57
+#: src/libirc/DCC.cpp:64
 msgid "Couldn't connect: "
 msgstr ""
 
-#: src/libirc/DCC.cpp:68
+#: src/libirc/DCC.cpp:75
 msgid "Receiving from:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:101
+#: src/libirc/DCC.cpp:108
 msgid "File received successfully:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:109
+#: src/libirc/DCC.cpp:116
 msgid "Couldn't receive: "
 msgstr ""
 
-#: src/libirc/DCC.cpp:114
+#: src/libirc/DCC.cpp:121
 msgid "DCC connection closed."
 msgstr ""
 
-#: src/libirc/DCC.cpp:160
+#: src/libirc/DCC.cpp:167
 msgid "DCC SEND request sent. Sending from:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:170
+#: src/libirc/DCC.cpp:177
 msgid "Couldn't bind: "
 msgstr ""
 
-#: src/libirc/DCC.cpp:176
+#: src/libirc/DCC.cpp:183
 msgid "Connection accepted."
 msgstr ""
 
-#: src/libirc/DCC.cpp:205
+#: src/libirc/DCC.cpp:212
 msgid "File sent successfully:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:214
+#: src/libirc/DCC.cpp:221
 msgid "Couldn't send: "
 msgstr ""
 
-#: src/libirc/DCC.cpp:234
+#: src/libirc/DCC.cpp:241
 msgid "Incoming file has zero size. Sender:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:253
-msgid "File not found:"
-msgstr ""
-
-#: src/libirc/DCC.cpp:256
-msgid "File has zero size:"
+#: src/libirc/DCC.cpp:257
+msgid "File not found: "
 msgstr ""
 
 #: src/libirc/ServerConnection.cpp:118
