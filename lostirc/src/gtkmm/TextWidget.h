@@ -58,9 +58,6 @@ private:
     std::map<int, Glib::RefPtr<Gtk::TextTag> > bgColorMap;
     Glib::RefPtr<Gtk::TextTag> underlinetag;
     Glib::RefPtr<Gtk::TextTag> boldtag;
-
-    std::string _fallback_encoding;
-
 };
 
 struct TextProperties

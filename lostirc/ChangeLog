@@ -2,6 +2,13 @@ For a summary of changes between releases - see the NEWS file.
 
 2002-12-24  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * FrontEnd.cpp: Add timestamp here.
+        * TextWidget.cpp: Don't add timestamp here.
+        * TextWidget.h/TextWidget.cpp: Remove unused variable
+          _fallback_encoding.
+
+2002-12-24  Morten Brix Pedersen  <morten@wtf.dk>
+
         * Patch from Michael Kristensen to add log support, revised quite a
           bit by me:
 

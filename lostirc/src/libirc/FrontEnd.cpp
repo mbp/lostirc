@@ -137,7 +137,13 @@ Tmpl get(Event e)
 
 Glib::ustring Tmpl::result()
 {
-    Glib::ustring newstr;
+    // Add timestamp
+    time_t timeval = time(0);
+    char tim[11];
+    strftime(tim, 10, "%H:%M:%S ", localtime(&timeval));
+
+    Glib::ustring generated_str(tim);
+
     bool parsing_arg = false;
     Glib::ustring::iterator i;
     for (i = orig.begin(); i != orig.end(); ++i) {
@@ -146,17 +152,17 @@ Glib::ustring Tmpl::result()
         } else if (isdigit(*i) && parsing_arg) {
             unsigned int num = ((*i) - '0') - 1;
             if (tokens.size() > num)
-                  newstr += tokens[num];
+                  generated_str += tokens[num];
             parsing_arg = false;
         } else {
-            newstr += *i; 
+            generated_str += *i; 
             parsing_arg = false;
         }
     }
 
-    newstr += '\n';
+    generated_str += '\n';
 
-    return newstr;
+    return generated_str;
 }
 
 }

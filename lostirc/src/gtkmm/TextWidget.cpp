@@ -23,7 +23,6 @@ using std::vector;
 using Glib::ustring;
 
 TextWidget::TextWidget(Pango::FontDescription font)
-    : _fallback_encoding("ISO-8859-15")
 {
     _textview.set_wrap_mode(Gtk::WRAP_CHAR);
     _textview.unset_flags(Gtk::CAN_FOCUS);
@@ -93,17 +92,7 @@ TextWidget& TextWidget::operator<<(const ustring& line)
     if (get_vadjustment()->get_value() >= (get_vadjustment()->get_upper() - get_vadjustment()->get_page_size() - 1e-12))
           need_to_scroll = true;
 
-    // Add timestamp
-    time_t timeval = time(0);
-    char tim[11];
-    strftime(tim, 10, "%H:%M:%S ", localtime(&timeval));
-
     TextProperties tp;
-    tp.clear();
-    tp.fgnumber = "0";
-    tp.bgnumber = "1";
-    insertText(tp, ustring(tim));
-
     tp.clear();
     // Parse string and insert character by character
     for (ustring::size_type i = 0; i < line.length(); ++i)
