@@ -48,6 +48,7 @@ struct {
     { 1, "unknown", UNKNOWN },
     { 1, "join", JOIN },
     { 1, "part", PART },
+    { 1, "part2", PART2 },
     { 1, "quit", QUIT },
     { 1, "nick", NICK },
     { 1, "mode", MODE },

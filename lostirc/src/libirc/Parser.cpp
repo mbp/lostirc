@@ -388,7 +388,12 @@ void Parser::Part(const string& nick, const string& param, const string& rest)
     if (c) {
         c->removeUser(findNick(nick));
 
-        FE::emit(FE::get(PART) << findNick(nick) << chan << findHost(nick) << rest, *c, _conn);
+        if (rest.empty())
+              FE::emit(FE::get(PART2) << findNick(nick) << chan << findHost(nick) << rest, *c, _conn);
+        else
+              FE::emit(FE::get(PART) << findNick(nick) << chan << findHost(nick) << rest, *c, _conn);
+
+
         App->fe->part(findNick(nick), *c, _conn);
 
         if (findNick(nick) == _conn->Session.nick)

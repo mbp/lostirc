@@ -280,6 +280,7 @@ Events::Events(const char *filename)
     unknown(this, "unknown", "$16-- Unknown message: $2%1"),
     join(this, "join", "$16-- $0%1$11 $15($9%3$15)$16 has joined $11%2"),
     part(this, "part", "$16-- $0%1$16 $15($9%3$15)$16 has parted $11%2 (%4)"),
+    part2(this, "part2", "$16-- $0%1$16 $15($9%3$15)$16 has parted $11%2"),
     quit(this, "quit", "$16-- $0%1$16 has quit $11(%2)"),
     nick(this, "nick", "$16-- $0%1$16 changes nick to %2"),
     mode(this, "mode", "$16-- $0%1$16 sets mode$9 %2$16 %3"),

@@ -102,6 +102,7 @@ public:
     Value<std::string> unknown;
     Value<std::string> join;
     Value<std::string> part;
+    Value<std::string> part2;
     Value<std::string> quit;
     Value<std::string> nick;
     Value<std::string> mode;

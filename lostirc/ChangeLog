@@ -6,6 +6,8 @@ LostIRC (x.x.x)
      - matches for nick completion are here instead of in the main text window
   * There is a now a seperator between the main text window and the nick list
     which can be dragged to make the nick list smaller/bigger.
+  * When users part channels without a part-message, empty parentes are no
+    longer displayed. (thanks, Michael Kristensen)
   * Fix a segfault which appeared with bouncers/servers sending malformed PART
     lines (they sent the channel _after_ the colon).
   * The --enable-debug option has been renamed to --enable-logdebug.
