@@ -1,9 +1,7 @@
 CRITICAL: 
 ---------
-  * Implement reading in ServerConncetion better (more efficiently)
+  * Implement reading in ServerConnection better (more efficiently)
   * Implement DCC CHAT
-  * Should have a limit on the text-buffer, not go on forever.
-  * port to gtkmm2 when it's ready
 
 NICE-TO-HAVE:
 ------------
@@ -31,6 +29,12 @@ RANDOM BUGS:
 
   * remove this from 'configure' at release time:
     +extern "C" void exit(int); (:g/extern "C" void exit/d)
+
+WAITING FOR GTKMM2:
+-------------------
+  * Should have a limit on the text-buffer, not go on forever.
+  * /CLEAR, /CLEARALL.
+  * scrollbar has weird behaviour when resizing window
 
 DCC:
 ---
