@@ -2,6 +2,11 @@ For a summary of changes between releases - see the NEWS file.
 
 2003-01-15  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * Tab.h: Remove getEntry() member, not needed. Made some member
+          functions const.
+
+2003-01-15  Morten Brix Pedersen  <morten@wtf.dk>
+
         * DCC.cpp/DCC.h: Remove unneeded _localip member.
 
 2003-01-12  Morten Brix Pedersen  <morten@wtf.dk>

@@ -45,10 +45,9 @@ public:
 
     enum Type { UNDEFINED, CHANNEL, QUERY, SERVER };
 
-    Entry&                      getEntry() { return _entry; }
     TextWidget&                 getText() { return _textwidget; }
-    ServerConnection*           getConn() { return _conn; }
-    const Glib::ustring&        getName() { return _name; }
+    ServerConnection*           getConn() const { return _conn; }
+    const Glib::ustring&        getName() const { return _name; }
 
     void setName(const Glib::ustring& str);
     void startPrefs();
@@ -65,10 +64,10 @@ public:
 
     void setInActive();
     void setActive();
-    bool isActive() { return _isActive; }
+    bool isActive() const { return _isActive; }
 
     void setType(Type type) { _type = type; addOrRemoveNickList(); }
-    bool isType(Type type) { return type == _type; }
+    bool isType(Type type) const { return type == _type; }
 
     void highlightNick();
     void highlightActivity();
