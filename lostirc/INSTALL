@@ -1,11 +1,18 @@
 INSTALLATION
 ------------
 
-You need to have 'libgtkmm-dev', 'libsigc++-dev' and 'libglib1.2-dev'
-installed.
+In order to compile LostIRC, you need have at least these things installed:
+
+ * A C++ compiler, like g++
+ * libgtkmm-dev (development files for gtkmm)
+ * libsigc++-dev (development files for lib sigc++)
+ * libglib1.2-dev (development files for glib 1.2)
 
 Then execute these commands:
   
    $ ./configure
    $ make
-   $ src/gtkmm/lostirc
+   $ su
+   $ make install
+   $ exit
+   $ lostirc
