@@ -17,6 +17,7 @@
  */
 
 #include <sstream>
+#include <cstdio>
 #include "Parser.h"
 #include "Utils.h"
 #include "Channel.h"
@@ -417,11 +418,6 @@ void Parser::TopicTime(const string& param)
     _evts->emit(_evts->get(TOPICTIME) << nick << time.substr(0, time.size() - 1), chan, _conn);
 }
 
-void Parser::ServMsg(const string& from, const string& param, const string& msg)
-{
-    _evts->emit(_evts->get(SERVMSG) << msg, "", _conn);
-}
-
 void Parser::Away(const string& from, const string& param, const string& rest)
 {
     string param1, param2;
@@ -461,9 +457,6 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             _conn->Session.servername = from;
             _conn->Session.hasRegistered = 1;
             _conn->Session.nick = param;
-            ServMsg(from, param, rest);
-            break;
-
         case 2:   // RPL_YOURHOST
         case 3:   // RPL_CREATED
         case 4:   // RPL_MYINFO
@@ -511,7 +504,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             break;
 
         case 376: // RPL_ENDOFMOTD
-            ServMsg(from, param, rest);
+            _evts->emit(_evts->get(SERVMSG) << rest, "", _conn);
             _conn->sendCmds();
             break;
 
@@ -565,12 +558,24 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             break; // Ignored.
 
         case 317: // RPL_WHOISIDLE
+            {
+                long idle = Utils::stoi(getWord(param, 3));
+                cout << "idle: " << idle << endl;
+                char *tmpbuf;
+                std::sprintf (tmpbuf, "%02ld:%02ld:%02ld", idle / 3600, (idle / 60) % 60, idle % 60);
+                cout << "tmpbuf: " << tmpbuf << endl;
+                long date = std::atol(getWord(param, 4).c_str());
+                string time = std::ctime(&date);
+                _evts->emit(_evts->get(SERVMSG) << string(tmpbuf) + ",  " + time.substr(0, time.size() - 1) + " " + rest, "", _conn);
+            }
+                break;
         case 311: // RPL_WHOISUSER
         case 312: // RPL_WHOISSERVER
         case 313: // RPL_WHOISOPERATOR
         case 318: // RPL_ENDOFWHOIS
         case 319: // RPL_WHOISCHANNELS
-            _evts->emit(_evts->get(SERVMSG2) << param << rest, "", _conn);
+            // We need this find_first_of to omit the first word
+            _evts->emit(_evts->get(SERVMSG2) << param.substr(param.find_first_of(" ") + 1) << rest, "", _conn);
             break;
 
         default:
@@ -607,4 +612,23 @@ void Parser::Names(const string& chan, const string& names)
           _app->evtNames(*c, _conn);
     else
           _evts->emit(_evts->get(NAMES) << channel << names, "", _conn);
+}
+
+string Parser::getWord(const string& str, int n)
+{
+    int count = 0;
+    string::size_type lastPos = str.find_first_not_of(" ", 0);
+    string::size_type pos     = str.find_first_of(" ", lastPos);
+
+    while (pos != string::npos || lastPos != string::npos)
+    {
+        if ((count + 1) == n)
+              return str.substr(lastPos, pos - lastPos);
+
+        lastPos = str.find_first_not_of(" ", pos);
+        pos = str.find_first_of(" ", lastPos);
+        count++;
+    }
+    return "";
+
 }

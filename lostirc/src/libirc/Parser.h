@@ -43,7 +43,6 @@ public:
 
 private:
     void Privmsg(const std::string& from, const std::string& param, const std::string& rest);
-    void ServMsg(const std::string& from, const std::string& param, const std::string& rest);
     void Notice(const std::string& from, const std::string& param, const std::string& rest);
     void Notice(const std::string& msg);
     void Topic(const std::string& param, const std::string& rest);
@@ -73,7 +72,7 @@ private:
     std::string findHost(const std::string& str) {
         return str.substr(str.find_first_of("!") + 1);
     }
-
+    std::string getWord(const std::string& str, int n);
 };
 
 #endif
