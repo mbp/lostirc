@@ -20,6 +20,7 @@
 #define COMMANDS_H
 
 #include <string>
+#include <vector>
 #include <exception>
 #include "Events.h"
 
@@ -71,7 +72,7 @@ namespace Commands
     void Voice(ServerConnection* conn, const std::string& params);
     void Devoice(ServerConnection* conn, const std::string& params);
     void commands(ServerConnection *conn, const std::string& params);
-    bool commandCompletion(const std::string& word, std::string& str);
+    void getCommands(std::vector<std::string>& commands);
 
     std::string assignModes(char sign, char mode, std::istringstream& ss);
 

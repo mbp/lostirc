@@ -56,7 +56,7 @@ public:
     virtual void removeUser(const Glib::ustring& nick) = 0;
     virtual void renameUser(const Glib::ustring& from, const Glib::ustring& to) = 0;
     virtual bool findUser(const Glib::ustring& nick) = 0;
-    virtual bool nickCompletion(Glib::ustring& word, Glib::ustring& str) = 0;
+    virtual std::vector<Glib::ustring> getNicks() = 0;
     Tab& operator<<(const char * str);
     Tab& operator<<(const std::string& str);
     Tab& operator<<(const Glib::ustring& str);
@@ -118,8 +118,8 @@ public:
         else
               return false;
     }
-    bool nickCompletion(Glib::ustring& word, Glib::ustring& str) {
-        word = getLabel()->get_text(); return true;
+    std::vector<Glib::ustring> getNicks() {
+        std::vector<Glib::ustring> vec; vec.push_back(getLabel()->get_text()); return vec;
     }
 };
 
@@ -134,7 +134,7 @@ public:
     void removeUser(const Glib::ustring& nick);
     void renameUser(const Glib::ustring& from, const Glib::ustring& to);
     bool findUser(const Glib::ustring& nick);
-    bool nickCompletion(Glib::ustring& word, Glib::ustring& str);
+    std::vector<Glib::ustring> getNicks();
 
     void setActive() { _liststore->clear(); Tab::setActive(); }
 
@@ -157,7 +157,5 @@ private:
     Gtk::TreeView _treeview;
 
 };
-
-std::pair<bool, Glib::ustring> findPartialString(std::vector<Glib::ustring>& vec, const Glib::ustring& search);
 
 #endif

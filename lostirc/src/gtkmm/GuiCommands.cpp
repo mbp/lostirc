@@ -180,19 +180,19 @@ void commands(ServerConnection *conn, const string& params)
     Commands::commands(conn, params);
 }
 
-bool commandCompletion(const string& word, string& str)
+vector<Glib::ustring> getCommands()
 {
-    string lcword = Util::lower(word);
-    for (int i = 0; guicmds[i].cmd != 0; ++i) {
-        string lccmd = guicmds[i].cmd;
-        lccmd = Util::lower(lccmd);
-        if (lccmd.length() > lcword.length()) {
-            if (lcword == lccmd.substr(0, lcword.length())) {
-                str = guicmds[i].cmd;
-                return true;
-            }
-        }
-    }
-    return Commands::commandCompletion(word, str);
+    vector<Glib::ustring> commands;
+
+    for (int i = 0; guicmds[i].cmd != 0; ++i) 
+        commands.push_back(guicmds[i].cmd);
+
+    vector<string> cmds;
+    Commands::getCommands(cmds);
+
+    for (vector<string>::iterator i = cmds.begin(); i != cmds.end(); ++i)
+          commands.push_back(*i);
+
+    return commands;
 }
 }

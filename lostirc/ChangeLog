@@ -8,6 +8,9 @@ LostIRC (x.x.x)
     which can be dragged to make the nick list smaller/bigger.
   * Nick-completion is now smarter. It partially completes the nick if the
     matching nicks has common prefixes.
+  * Command-completion has undergone the same changes.
+  * When pressing TAB when only a space had been entered, all nicks were
+    matched. Fixed.
   * The default keyboard-shortcuts has been changed:
      - ALT-C has been changed to CTRL-C (close tab)
      - ALT-P has been changed to CTRL-P (preferences)

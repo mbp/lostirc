@@ -25,6 +25,8 @@ using std::vector;
 using std::string;
 using Glib::ustring;
 
+int autoCompletion(ustring& search, ustring& matches_str, vector<ustring> full_list);
+
 Entry::Entry(Tab* tab)
     : Gtk::Entry(), _tab(tab), i(_entries.begin())
 {
@@ -127,33 +129,111 @@ bool Entry::onKeyPress(GdkEventKey* e)
                 word = line.substr(pos + 1);
             }
             if (line.at(0) == '/' && !word.empty() && pos == 0) {
-                // Command completion, could be prettier
-                string newstr = Glib::locale_from_utf8(str);
-                if (GuiCommands::commandCompletion(Glib::locale_from_utf8(word.substr(1)), newstr)) {
-                    set_text("/" + Glib::locale_to_utf8(newstr) + " ");
+
+                // Auto complete the command
+                ustring matches_str;
+                word = word.substr(1);
+                int matches = autoCompletion(word, matches_str, GuiCommands::getCommands());
+
+                if (matches == 1) {
+                    set_text("/" + word + " ");
                     set_position(-1);
+
+                } else if (matches > 1) {
+                    set_text("/" + word);
+                    set_position(-1);
+                    AppWin->statusbar.setText2("<span foreground=\"blue\">Matches:</span> " + matches_str);
+
+                } else {
+                    AppWin->statusbar.setText2("<span foreground=\"blue\">No matches.</span>");
+
                 }
 
-            } else if (_tab->nickCompletion(word, str)) {
-                // Nick-completetion
-                if (pos == 0) {
-                    set_text(word + App->options.nickcompletion_char + " ");
-                    set_position(-1);
+            } else if (!word.empty()) {
+
+                ustring matches_str;
+                int matches = autoCompletion(word, matches_str, _tab->getNicks());
+
+                if (matches == 1) {
+
+                    if (pos == 0) {
+                        set_text(word + App->options.nickcompletion_char + " ");
+                        set_position(-1);
+                    } else {
+                        set_text(line.substr(0, pos + 1) + word);
+                        set_position(-1);
+                    }
+
+
+                } else if (matches > 1) {
+                    if (pos == 0) {
+                        set_text(word);
+                        set_position(-1);
+                    } else {
+                        set_text(line.substr(0, pos + 1) + word);
+                        set_position(-1);
+                    }
+                    AppWin->statusbar.setText2("<span foreground=\"blue\">Matches:</span> " + matches_str);
                 } else {
-                    set_text(line.substr(0, pos + 1) + word);
-                    set_position(-1);
+                    AppWin->statusbar.setText2("<span foreground=\"blue\">No matches.</span>");
+
                 }
-            } else {
-                if (pos == 0) {
-                    set_text(word);
-                    set_position(-1);
-                } else {
-                    set_text(line.substr(0, pos + 1) + word);
-                    set_position(-1);
-                }
-                AppWin->statusbar.setText2("<span foreground=\"blue\">Matches:</span> " + str);
+
             }
         }
     }
     return true;
 }
+
+struct notPrefixedBy : public std::binary_function<ustring,ustring,bool> 
+{
+    bool operator() (const ustring& str1, const ustring& str2) const {
+        if (str1.length() >= str2.length() && str2.lowercase() == str1.substr(0, str2.length()).lowercase())
+              return false;
+        else
+              return true;
+    }
+};
+
+
+void findCommon(vector<ustring>& vec, const ustring& search, int& atchar)
+{
+    if (atchar > search.length())
+          return;
+
+    for (vector<ustring>::const_iterator i = vec.begin(); i != vec.end(); ++i)
+    {
+        if (atchar > i->length() ||
+                search.substr(0, atchar).lowercase() != i->substr(0, atchar).lowercase()) {
+            atchar--;
+            return;
+        }
+    }
+    findCommon(vec, search, ++atchar);
+
+}
+
+int autoCompletion(ustring& search, ustring& matches_str, vector<ustring> full_list)
+{
+    full_list.erase(remove_if(full_list.begin(), full_list.end(), std::bind2nd(notPrefixedBy(), search)), full_list.end());;
+
+    if (full_list.size() == 1) {
+        // Match!
+        search = full_list[0];
+
+    } else if (full_list.size() > 1) {
+
+        int atchar = 1;
+        findCommon(full_list, full_list[0], atchar);
+
+        search = full_list[0].substr(0, atchar);
+
+        // More than one candidate.
+        for (vector<ustring>::const_iterator i = full_list.begin(); i != full_list.end(); ++i)
+              matches_str += *i + " ";
+
+    }
+
+    return full_list.size();
+}
+

@@ -565,21 +565,10 @@ void commands(ServerConnection *conn, const string& params)
     FE::emit(FE::get(SERVMSG) << cmdss, FE::CURRENT, conn);
 }
 
-bool commandCompletion(const string& word, string& str)
+void getCommands(std::vector<string>& commands)
 {
-    string lcword = word;
-    lcword = Util::lower(lcword);
-    for (int i = 0; cmds[i].cmd != 0; ++i) {
-        string lccmd = cmds[i].cmd;
-        lccmd = Util::lower(lccmd);
-        if (lccmd.length() > lcword.length()) {
-            if (lcword == lccmd.substr(0, lcword.length())) {
-                str = cmds[i].cmd;
-                return true;
-            }
-        }
-    }
-    return false;
+    for (int i = 0; cmds[i].cmd != 0; ++i)
+        commands.push_back(cmds[i].cmd);
 }
 
 std::string assignModes(char sign, char mode, istringstream& ss)

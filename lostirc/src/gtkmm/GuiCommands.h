@@ -19,7 +19,9 @@
 #ifndef GUICOMMANDS_H
 #define GUICOMMANDS_H
 
+#include <vector>
 #include <Commands.h>
+#include <glibmm/ustring.h>
 #include "MainWindow.h"
 
 namespace GuiCommands
@@ -42,7 +44,7 @@ namespace GuiCommands
     void SetFont(ServerConnection *conn, const std::string& params);
     void NewServer(ServerConnection *conn, const std::string& params);
     void commands(ServerConnection *conn, const std::string& params);
-    bool commandCompletion(const std::string& word, std::string& str);
+    std::vector<Glib::ustring> getCommands();
 
 }
 #endif
