@@ -101,7 +101,8 @@ protected:
 class TabQuery : public Tab
 {
 public:
-    TabQuery(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font);
+    TabQuery(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font)
+            : Tab(label, conn, font) { }
 
     void insertUser(const Glib::ustring& user, IRC::UserMode i = IRC::NONE) {};
     void removeUser(const Glib::ustring& nick) {};

@@ -21,8 +21,6 @@ RANDOM BUGS:
   * you can't see long nicks in nick-list, possibility to move the nick-list
     as a user
   * check for EAGAIN on send()?
-  * nick-list mentions "0 users" instead of "Not on channel", when a channel
-    has been parted with /PART.
 
   * remove this from 'configure' at release time:
     +extern "C" void exit(int); (:g/extern "C" void exit/d)

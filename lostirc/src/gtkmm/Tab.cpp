@@ -193,11 +193,10 @@ void Tab::setUnAway()
 
     for (i = _hbox2->children().begin(); i != _hbox2->children().end();) {
         Gtk::Label *a = dynamic_cast<Gtk::Label*>(i->get_widget());
-        if (a) {
-            i = _hbox2->children().erase(i);
-        } else {
-            ++i;
-        }
+        if (a)
+              i = _hbox2->children().erase(i);
+        else
+              ++i;
     }
     _hbox2->show_all();
 }
@@ -224,13 +223,6 @@ void Tab::endPrefs()
     pack_start(*_hbox2, Gtk::FILL);
     _entry.grab_focus();
     hasPrefs = false;
-}
-
-
-TabQuery::TabQuery(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font)
-    : Tab(label, conn, font)
-{
-
 }
 
 TabChannel::TabChannel(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font)
@@ -263,9 +255,13 @@ TabChannel::TabChannel(Gtk::Label *label, ServerConnection *conn, Pango::FontDes
 void TabChannel::updateUserNumber()
 {
     size_t size = _liststore->children().size();
-    std::stringstream ss;
-    ss << size;
-    _users->set_label(ss.str() + " users");
+    if (size > 0) {
+        std::stringstream ss;
+        ss << size;
+        _users->set_label(ss.str() + " users");
+    } else {
+        _users->set_label("Not on channel");
+    }
 }
 
 void TabChannel::insertUser(const ustring& nick, IRC::UserMode m)

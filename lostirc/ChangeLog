@@ -25,6 +25,8 @@ LostIRC (x.x.x)
     using ./configure --disable-gnome and --disable-kde 
   * There is now an /EXIT command which can be used to send a quit-message to
     all connected servers and quit the client.
+  * The nick-list no longer mentions "0 users" when a channel has parted, but
+    "Not on channel"
 
 LostIRC (0.1.4) - Sat Jul 13th 2002
   * A segfault which appeared when the enviroment variable USER wasn't set,
