@@ -31,9 +31,16 @@ MainWindow::MainWindow()
     set_usize(400, 200);
     key_press_event.connect(slot(this, &MainWindow::on_key_press_event));
     
-    _app = new LostIRCApp();
     Gtk::VBox *_vbox1 = manage(new Gtk::VBox());
 
+    _nb = manage(new MainNotebook(this));
+    _vbox1->pack_start(*_nb, 1, 1);
+
+    add(*_vbox1);
+    set_title("LostIRC "VERSION);
+    set_usize(600, 400);
+
+    _app = new LostIRCApp();
     // Connect signals for all the backend events
     _app->evtDisplayMessage.connect(slot(this, &MainWindow::onDisplayMessage));
     _app->evtHighlight.connect(slot(this, &MainWindow::onHighlight));
@@ -46,19 +53,12 @@ MainWindow::MainWindow()
     _app->evtCUMode.connect(slot(this, &MainWindow::onCUMode));
     _app->evtAway.connect(slot(this, &MainWindow::onAway));
 
-    _nb = manage(new MainNotebook(this));
-    _vbox1->pack_start(*_nb, 1, 1);
-
-    add(*_vbox1);
-    set_title("LostIRC "VERSION);
-
     // Construct initial tab
     string name = "<server>";
     ServerConnection *conn = _app->newServer();
     conn->Session.servername = name;
     TabChannel *tab = _nb->addChannelTab(name, conn);
     tab->is_on_channel = false;
-    set_usize(600, 400);
     show_all();
     _nb->insert(tab, "\00311Welcome to LostIRC!\n\nThis client is mainly keyboard oriented, so don't expect fancy menus and buttons for you to click on.
 
