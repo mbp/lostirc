@@ -42,6 +42,13 @@ LostIRCApp::LostIRCApp(FrontEnd *f)
 
     if (pwentry != NULL) {
 
+        string realname = pwentry->pw_gecos;
+
+        // Only read until the first comma
+        if (realname.find(",") != string::npos) {
+            realname = realname.substr(0, realname.find(","));
+        }
+
         if (_cfg.getOpt("nick").empty())
               _cfg.setOpt("nick", pwentry->pw_name);
 
@@ -49,7 +56,7 @@ LostIRCApp::LostIRCApp(FrontEnd *f)
               _cfg.setOpt("ircuser", pwentry->pw_name);
 
         if (_cfg.getOpt("realname").empty())
-              _cfg.setOpt("realname", pwentry->pw_gecos);
+              _cfg.setOpt("realname", realname);
 
     } else {
         if (_cfg.getOpt("nick").empty())
