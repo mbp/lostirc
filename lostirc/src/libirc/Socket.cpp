@@ -82,7 +82,7 @@ string Socket::receive()
     if (isBlocking)
           isBlocking = false;
     else
-          buf = ""; // FIXME: why isn't there a clear()?
+          buf = ""; // FIXME: why isn't there a clear() on gcc 2.95.4?
 
     while (1)
     {
@@ -93,6 +93,7 @@ string Socket::receive()
         switch(i) {
             case 0:
                 cerr << "0.. returning." << endl;
+                error = "Disconnected.";
                 return "";
             case -1:
                 if (errno == EAGAIN) {
