@@ -79,7 +79,7 @@ MainWindow::MainWindow()
     //tab->getText()->insert("Welcome to LostIRC!\n\nThis client is mainly keyboard oriented, so don't expect fancy menus and buttons for you to click on.\n\nTo list all available commands type /COMMANDS.\nTo see all available keybindings type /BINDS.\n\nType /SERVER <hostname> to connect to a server.\n");
     set_usize(600, 400);
     show_all();
-    _nb->insert(tab, "Welcome to LostIRC!\n\nThis client is mainly keyboard oriented, so don't expect fancy menus and buttons for you to click on.\n\n$2Available commands:$
+    _nb->insert(tab, "Welcome to LostIRC!\n\nThis client is mainly keyboard oriented, so don't expect fancy menus and buttons for you to click on.\n\n$2Available commands:
 $3/SERVER <hostname> - connect to server.
 /JOIN <channel> - join channel.
 /PART <channel> - part channel.
@@ -89,10 +89,10 @@ $3/SERVER <hostname> - connect to server.
 /AWAY <msg> - go away.
 /QUIT <msg> - quit IRC with <msg>.
 
-$2Available GUI commands:$
+$2Available GUI commands:
 $3/QUERY <nick> - start query with <nick>.
 
-$2Available keybindings:$
+$2Available keybindings:
 $3Alt + [1-9] - switch tabs from 1-9.
 Alt + n - create new server tab.
 Alt + c - close current tab.
@@ -142,7 +142,12 @@ void MainWindow::onAction(const string& to, const string& from, const string& ms
 {
     string::size_type pos = msg.find(conn->Session.nick);
 
-    Tab *tab = _nb->findTab(from, conn);
+    string search(from);
+    if (to != conn->Session.nick) {
+        search = to;
+    }
+
+    Tab *tab = _nb->findTab(search, conn);
 
     if (!tab) {
         tab = _nb->addQueryTab(from, conn);
@@ -206,7 +211,7 @@ void MainWindow::onPart(const string& nick, const string& chan, ServerConnection
 void MainWindow::onQuit(const string& nick, const string& msg, ServerConnection *conn)
 {
     vector<Tab*> tabs;
-    vector<Tab*>::iterator i;
+    vector<Tab*>::const_iterator i;
 
     _nb->findTabsContaining(nick, tabs);
 
@@ -223,7 +228,7 @@ void MainWindow::onNick(const string& from, const string& to, ServerConnection *
         conn->Session.nick = to;
     }
     vector<Tab*> tabs;
-    vector<Tab*>::iterator i;
+    vector<Tab*>::const_iterator i;
 
     _nb->findTabsContaining(from, tabs);
 
