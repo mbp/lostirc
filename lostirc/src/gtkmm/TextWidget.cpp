@@ -67,6 +67,12 @@ TextWidget& TextWidget::operator<<(const std::string& str)
 
 TextWidget& TextWidget::operator<<(const ustring& line)
 {
+    // see if the scrollbar is located in the bottom, then we need to scroll
+    // after insert
+    bool need_to_scroll = false;
+    if (get_vadjustment()->get_value() >= (get_vadjustment()->get_upper() - get_vadjustment()->get_page_size() - 1e-12))
+          need_to_scroll = true;
+
     // Add timestamp
     time_t timeval = time(0);
     char tim[11];
@@ -79,6 +85,7 @@ TextWidget& TextWidget::operator<<(const ustring& line)
     insertText(tp, ustring(tim));
 
     tp.clear();
+    // Parse string and insert character by character
     for (ustring::size_type i = 0; i < line.length(); ++i)
     {
         if (line[i] == '\017') { // RESET
@@ -117,23 +124,23 @@ TextWidget& TextWidget::operator<<(const ustring& line)
             insertText(tp, text);
         }   
     } 
+
+    // scroll if we need to
+    if (need_to_scroll) {
+        Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
+        _textview.scroll_to_mark(buffer->create_mark(buffer->end()), 0.0);
+    }
+
+    removeBuffer();
+
     return *this;
 }
 
-void TextWidget::insertText(const TextProperties& tp, const ustring& str)
+
+void TextWidget::removeBuffer()
 {
-    // see if the scrollbar is located in the bottom, then we need to scroll
-    // after insert
-    bool scroll = false;
-    if (get_vadjustment()->get_value() >= (get_vadjustment()->get_upper() - get_vadjustment()->get_page_size() - 1e-12))
-          scroll = true;
-
-    // Insert the text
-    realInsert(tp, str);
+    // Remove X number of lines from top of the buffer which we don't want.
     Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
-
-    if (scroll)
-          _textview.scroll_to_mark(buffer->create_mark(buffer->end()), 0.0);
 
     // FIXME: possible performance critical
     int buffer_size = App->options.buffer_size;
@@ -141,10 +148,8 @@ void TextWidget::insertText(const TextProperties& tp, const ustring& str)
           buffer->erase(buffer->begin(), buffer->get_iter_at_line(buffer->get_line_count() - buffer_size));
 }
 
-void TextWidget::realInsert(const TextProperties& tp, const ustring& line)
+void TextWidget::insertText(const TextProperties& tp, const ustring& line)
 {
-    // This function has the purpose to insert the line - but first check to
-    // see whether we have an URL.
     Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
 
     std::vector< Glib::RefPtr<Gtk::TextTag> > tags;

@@ -42,8 +42,9 @@ public:
 
 private:
     void insertText(const TextProperties& tp, const Glib::ustring& str);
-    void realInsert(const TextProperties& tp, const Glib::ustring& str);
     void setStyle();
+
+    void removeBuffer();
 
     void initializeColorMap();
     Glib::RefPtr<Gtk::TextTag> initializeFG(const Glib::ustring& colorname);

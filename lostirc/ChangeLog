@@ -2,6 +2,12 @@ For a summary of changes between releases - see the NEWS file.
 
 2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
         
+        * TextWidget.cpp: Remove realInsert() function, put it into
+          insertText() function instead.  Don't try to scroll after each
+          character inserted! Do it after the full string has been inserted.
+
+2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
+        
         * README: Update with a better description.
 
 2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
