@@ -21,8 +21,6 @@ NICE-TO-HAVE:
 
 RANDOM BUGS:
 ------------
-  * Scrollbar doesn't scroll down properly when resizing window.
-
   * Color-parsing might be slow, since it inserts one character at the time.
     Need to look into optimizing it.
 

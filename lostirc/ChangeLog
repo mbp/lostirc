@@ -1,5 +1,12 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-01-01  Jonathan James Taylor  <jonathan.taylor@utoronto.ca>
+
+        * TextWidget.h/TextWidget.cpp: There is now a Mark that we can
+          maintain.  This mark represents what we are looking at so that any
+          scrolls/resizes will function properly.  Will be useful in the
+          future too.
+
 2002-12-31  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Socket.cpp/DCC.cpp/ServerConnection.cpp: When getting a system error

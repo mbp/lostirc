@@ -16,6 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <gtkmm/scrollbar.h>
+#include <gtkmm/adjustment.h>
 #include "TextWidget.h"
 #include "MainWindow.h"
 
@@ -34,8 +36,25 @@ TextWidget::TextWidget(Pango::FontDescription font)
     initializeColorMap();
     setStyle();
     _textview.modify_font(font);
+    Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
+    pos = buffer->create_mark(buffer->end());
+    get_vscrollbar()->signal_size_allocate().connect(SigC::slot(*this, &TextWidget::onResize));
+    get_vscrollbar()->signal_value_changed().connect(SigC::slot(*this, &TextWidget::onScroll));
 }
 
+void TextWidget::onResize(GtkAllocation *alloc)
+{
+    _textview.scroll_to_mark(pos, 0.0);
+}
+
+void TextWidget::onScroll()
+{
+    _textview.move_mark_onscreen(pos);
+    if (get_vscrollbar()->get_value() >= (get_vscrollbar()->get_adjustment()->get_upper() - get_vscrollbar()->get_adjustment()->get_page_size() - 1e-12)) {
+        Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
+        pos = buffer->create_mark(buffer->end());
+    }
+}
 void TextWidget::scrollUpPage()
 {
     Gtk::Adjustment *vadj = get_vadjustment();
@@ -137,7 +156,8 @@ TextWidget& TextWidget::operator<<(const ustring& line)
     // scroll if we need to
     if (need_to_scroll) {
         Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
-        _textview.scroll_to_mark(buffer->create_mark(buffer->end()), 0.0);
+        pos = buffer->create_mark(buffer->end());
+        _textview.scroll_to_mark(pos, 0.0);
     }
 
     removeTopBuffer();
