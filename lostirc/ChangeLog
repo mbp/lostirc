@@ -1,5 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-06-16  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * configure.in: Renamed to configure.ac. This is the recommended
+          autoconf name nowadays.
+
 2003-06-15  Morten Brix Pedersen  <morten@wtf.dk>
 
         * ServerWindow.cpp: Now things are getting pretty :-)
