@@ -34,6 +34,10 @@ class Events;
 
 class Parser
 {
+    ServerConnection *_conn;
+    Events *_evts;
+    LostIRCApp *_app;
+
 public:
     Parser(LostIRCApp *app, ServerConnection *conn);
 
@@ -66,13 +70,14 @@ private:
     void Banlist(const std::string& param);
     void numeric(int n, const std::string& from, const std::string& param, const std::string& rest);
 
-    std::string findNick(const std::string& str);
-    std::string findHost(const std::string& str);
+    std::string findNick(const std::string& str) {
+        return str.substr(0, str.find_first_of("!"));
+    }
 
+    std::string findHost(const std::string& str) {
+        return str.substr(str.find_first_of("!") + 1);
+    }
 
-    ServerConnection *_conn;
-    Events *_evts;
-    LostIRCApp *_app;
 };
 
 #endif

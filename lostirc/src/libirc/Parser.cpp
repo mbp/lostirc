@@ -326,7 +326,7 @@ void Parser::CMode(const string& from, const string& param)
     string args = param.substr(pos2 + 1);
 
     //vector<struct Mode> modesmap;
-    map<string, IRC::UserMode> modesmap;
+    std::map<string, IRC::UserMode> modesmap;
 
     // Get arguments
     vector<string> arguments;
@@ -531,6 +531,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 375: // RPL_MOTDSTART
         case 376: // RPL_ENDOFMOTD
             ServMsg(from, param, rest);
+            //_conn->startPerform();
             break;
 
         case 401: // ERR_NOSUCNICK
@@ -544,8 +545,8 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             ServMsg(from, param, rest);
             break;
 
-        case 422: // ERR_NOTONCHANNEL
-            Errhandler(from, param, rest);
+        case 422: // ERR_NOMOTD
+            //_conn->startPerform();
             break;
 
         case 433: // ERR_NICKNAMEINUSE
@@ -625,14 +626,4 @@ void Parser::Names(const string& chan, const string& names)
           _app->evtNames(*c, _conn);
     else
           _evts->emit(_evts->get(NAMES) << channel << names, "", _conn);
-}
-
-string Parser::findNick(const string& str)
-{
-    return str.substr(0, str.find_first_of("!"));
-}
-
-string Parser::findHost(const string& str)
-{
-    return str.substr(str.find_first_of("!") + 1);
 }
