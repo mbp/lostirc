@@ -69,7 +69,7 @@ public:
             isOnChannel = false;
         }
     }
-    void setActive() {
+    virtual void setActive() {
         isOnChannel = true;
     }
     bool isActive() { return isOnChannel; }
@@ -132,6 +132,8 @@ public:
     void renameUser(const Glib::ustring& from, const Glib::ustring& to);
     bool findUser(const Glib::ustring& nick);
     bool nickCompletion(const Glib::ustring& word, Glib::ustring& str);
+
+    void setActive() { _liststore->clear(); Tab::setActive(); }
 
 private:
     void updateUserNumber();
