@@ -1,7 +1,7 @@
 INSTALLATION
 ------------
 
-In order to compile LostIRC, you need have at least these things installed:
+In order to compile LostIRC, you need have at least these packages installed:
 
  * A C++ compiler, like g++
  * libgtkmm-dev (development files for gtkmm)
@@ -21,6 +21,6 @@ Then execute these commands:
    $ exit
    $ lostirc
 
-LostIRC is developed mainly with g++ 2.95.4 in mind - g++ 3 is not guranteed
+LostIRC is developed mainly with g++ 2.95.4 in mind - g++ 3 is not guaranteed
 to work. Especially if your gtkmm is compiled with g++ 2.95.4, and you're
 trying to compile LostIRC with g++ 3, it simply won't work.
