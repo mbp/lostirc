@@ -126,66 +126,60 @@ void DCC_Send_In::getUseableFilename(int i)
 DCC_Send_Out::DCC_Send_Out(const Glib::ustring& filename, const Glib::ustring& nick, ServerConnection *conn)
     : _infile(), _filename(filename), _nick(nick), _pos(0), _status(WAITING)
 {
-    _filename = expandHome(_filename);
+    Glib::ustring localip;
 
     struct stat st;
+    stat(filename.c_str(), &st);
 
-    if (stat(_filename.c_str(), &st) == -1) {
-        FE::emit(FE::get(CLIENTMSG) << _("File not found:") << _filename, FE::CURRENT);
-        _status = ERROR;
-        App->getDcc().statusChange(_number_in_queue);
+    _size = st.st_size;
+    if (App->options.dccip->empty())
+          localip = conn->getLocalIP();
+    else
+          localip = App->options.dccip;
+
+    #ifdef DEBUG
+    App->log << "DCC_Send_Out::DCC_Send_Out(): size: " << st.st_size << std::endl;
+    App->log << "DCC_Send_Out::DCC_Send_Out(): ip: " << localip << std::endl;
+    #endif
+
+    fd = socket(AF_INET, SOCK_STREAM, 0);
+
+    int yes = 1;
+    setsockopt(fd,SOL_SOCKET,SO_REUSEADDR,&yes,sizeof(int));
+
+    sockaddr.sin_family = AF_INET;
+    sockaddr.sin_port = htons(App->options.dccport);
+    sockaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    memset(&(sockaddr.sin_zero), '\0', 8);
+
+    if (bind(fd, reinterpret_cast<struct sockaddr *>(&sockaddr), sizeof(struct sockaddr)) == -1) {
+        FE::emit(FE::get(CLIENTMSG) << _("Couldn't bind:") << Util::convert_to_utf8(strerror(errno)), FE::CURRENT);
+        // FIXME: add dcc-done?
     } else {
-        Glib::ustring localip;
-        _size = st.st_size;
-        if (App->options.dccip->empty())
-              localip = conn->getLocalIP();
-        else
-              localip = App->options.dccip;
+        socklen_t add_len = sizeof(struct sockaddr_in);
+        getsockname(fd, (struct sockaddr *) &sockaddr, &add_len);
 
         #ifdef DEBUG
-        App->log << "DCC_Send_Out::DCC_Send_Out(): size: " << st.st_size << std::endl;
-        App->log << "DCC_Send_Out::DCC_Send_Out(): ip: " << localip << std::endl;
+        App->log << "DCC_Send_Out::DCC_Send_Out(): new port: " << ntohs(sockaddr.sin_port) << std::endl;
         #endif
 
-        fd = socket(AF_INET, SOCK_STREAM, 0);
+        std::ostringstream ss;
+        ss << "DCC SEND " << stripPath(_filename) << " " << ntohl(inet_addr(localip.c_str())) << " " << ntohs(sockaddr.sin_port) << " " << _size;
+        conn->sendCtcp(nick, ss.str());
 
-        int yes = 1;
-        setsockopt(fd,SOL_SOCKET,SO_REUSEADDR,&yes,sizeof(int));
+        _infile.open(_filename.c_str());
 
-        sockaddr.sin_family = AF_INET;
-        sockaddr.sin_port = htons(App->options.dccport);
-        sockaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-        memset(&(sockaddr.sin_zero), '\0', 8);
+        listen(fd, 1);
 
-        if (bind(fd, reinterpret_cast<struct sockaddr *>(&sockaddr), sizeof(struct sockaddr)) == -1) {
-            FE::emit(FE::get(CLIENTMSG) << _("Couldn't bind:") << Util::convert_to_utf8(strerror(errno)), FE::CURRENT);
-            // FIXME: add dcc-done?
-        } else {
-            socklen_t add_len = sizeof(struct sockaddr_in);
-            getsockname(fd, (struct sockaddr *) &sockaddr, &add_len);
+        FE::emit(FE::get(CLIENTMSG) << _("DCC SEND request sent. Sending from:") << localip, FE::CURRENT);
 
-            #ifdef DEBUG
-            App->log << "DCC_Send_Out::DCC_Send_Out(): new port: " << ntohs(sockaddr.sin_port) << std::endl;
-            #endif
+        Glib::signal_io().connect(
+                SigC::slot(*this, &DCC_Send_Out::onAccept),
+                fd,
+                Glib::IO_IN | Glib::IO_ERR | Glib::IO_OUT | Glib::IO_HUP | Glib::IO_NVAL);
 
-            std::ostringstream ss;
-            ss << "DCC SEND " << stripPath(_filename) << " " << ntohl(inet_addr(localip.c_str())) << " " << ntohs(sockaddr.sin_port) << " " << _size;
-            conn->sendCtcp(nick, ss.str());
+        _status = ONGOING;
 
-            _infile.open(_filename.c_str());
-
-            listen(fd, 1);
-
-            FE::emit(FE::get(CLIENTMSG) << _("DCC SEND request sent. Sending from:") << localip, FE::CURRENT);
-
-            Glib::signal_io().connect(
-                    SigC::slot(*this, &DCC_Send_Out::onAccept),
-                    fd,
-                    Glib::IO_IN | Glib::IO_ERR | Glib::IO_OUT | Glib::IO_HUP | Glib::IO_NVAL);
-
-            _status = ONGOING;
-
-        }
     }
 
 }
@@ -258,20 +252,38 @@ bool DCC_queue::do_dcc(int n)
 
 int DCC_queue::addDccSendIn(const Glib::ustring& filename, const Glib::ustring& nick, unsigned long address, unsigned short port, unsigned long size)
 {
-    DCC_Send_In *d = new DCC_Send_In(filename, nick, address, port, size);
-    d->_number_in_queue = ++_count;
-    _dccs[_count] = d;
-    App->fe->newDCC(d);
-    return _count;
+    if (size == 0) {
+        FE::emit(FE::get(CLIENTMSG) << _("Incoming file has zero size. Sender:") << nick, FE::CURRENT);
+        return 0;
+    } else {
+        DCC_Send_In *d = new DCC_Send_In(filename, nick, address, port, size);
+        d->_number_in_queue = ++_count;
+        _dccs[_count] = d;
+        App->fe->newDCC(d);
+        return _count;
+    }
 }
 
-int DCC_queue::addDccSendOut(const Glib::ustring& filename, const Glib::ustring& nick, ServerConnection *conn)
+int DCC_queue::addDccSendOut(const Glib::ustring& file, const Glib::ustring& nick, ServerConnection *conn)
 {
-    DCC_Send_Out *d = new DCC_Send_Out(filename, nick, conn);
-    d->_number_in_queue = ++_count;
-    _dccs[_count] = d;
-    App->fe->newDCC(d);
-    return _count;
+    Glib::ustring filename = expandHome(file);
+
+    struct stat st;
+    int retval = stat(filename.c_str(), &st);
+
+    if (retval == -1) {
+        FE::emit(FE::get(CLIENTMSG) << _("File not found:") << filename, FE::CURRENT);
+        return 0;
+    } else if (st.st_size == 0) {
+        FE::emit(FE::get(CLIENTMSG) << _("File has zero size:") << filename, FE::CURRENT);
+        return 0;
+    } else {
+        DCC_Send_Out *d = new DCC_Send_Out(filename, nick, conn);
+        d->_number_in_queue = ++_count;
+        _dccs[_count] = d;
+        App->fe->newDCC(d);
+        return _count;
+    }
 }
 
 void DCC_queue::statusChange(int n)

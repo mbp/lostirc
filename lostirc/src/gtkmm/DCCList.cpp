@@ -19,6 +19,12 @@
 #include <LostIRC.h>
 #include "DCCList.h"
 
+inline
+unsigned int getProgress(DCC *dcc)
+{
+    return static_cast<unsigned int>(static_cast<float>((dcc->getPosition() * 100.00) / dcc->getSize()));
+}
+
 DCCList::DCCList()
     : _activeDccs(0), _columns(),
     _liststore(Gtk::ListStore::create(_columns))
@@ -29,6 +35,7 @@ DCCList::DCCList()
     append_column(_("Filename"), _columns.filename);
     append_column(_("Filesize"), _columns.filesize);
     append_column(_("Fileposition"), _columns.fileposition);
+    append_column(_("Progress"), _columns.progress);
     append_column(_("From/To"), _columns.nick);
 
     show_all();
@@ -41,6 +48,7 @@ void DCCList::add(DCC *dcc)
     row[_columns.filename] = dcc->getFilename();
     row[_columns.filesize] = dcc->getSize();
     row[_columns.fileposition] = dcc->getPosition();
+    row[_columns.progress] = getProgress(dcc);
     row[_columns.nick] = dcc->getNick();
 
     row[_columns.dcc_ptr] = dcc;
@@ -50,7 +58,7 @@ void DCCList::add(DCC *dcc)
     if (!signal_timeout.connected()) {
         signal_timeout = Glib::signal_timeout().connect(
                 SigC::slot(*this, &DCCList::updateDccData),
-                1000);
+                500);
     }
 }
 
@@ -79,6 +87,7 @@ bool DCCList::updateDccData()
             row[_columns.filename] = dcc->getFilename();
             row[_columns.filesize] = dcc->getSize();
             row[_columns.fileposition] = dcc->getPosition();
+            row[_columns.progress] = getProgress(dcc);
             row[_columns.nick] = dcc->getNick();
         }
     }

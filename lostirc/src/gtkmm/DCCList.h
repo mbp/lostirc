@@ -56,13 +56,14 @@ private:
         Gtk::TreeModelColumn<Glib::ustring> filename;
         Gtk::TreeModelColumn<unsigned long> filesize;
         Gtk::TreeModelColumn<unsigned long> fileposition;
+        Gtk::TreeModelColumn<unsigned long> progress;
         Gtk::TreeModelColumn<Glib::ustring> nick;
 
         Gtk::TreeModelColumn<DCC*> dcc_ptr;
 
         ModelColumns() {
             add(status); add(filename); add(filesize);
-            add(fileposition); add(nick); add(dcc_ptr);
+            add(fileposition); add(progress); add(nick); add(dcc_ptr);
         }
     };
 

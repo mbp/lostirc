@@ -235,6 +235,10 @@ msgid "Fileposition"
 msgstr "Filposition"
 
 #: src/gtkmm/DCCList.cpp:32
+msgid "Progress"
+msgstr "pct. udført"
+
+#: src/gtkmm/DCCList.cpp:33
 msgid "From/To"
 msgstr "Fra/Til"
 

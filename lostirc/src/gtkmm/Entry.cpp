@@ -33,6 +33,7 @@ Entry::Entry(Tab* tab)
 {
     signal_key_press_event().connect(slot(*this, &Entry::onKeyPress));
     signal_activate().connect(slot(*this, &Entry::onEntry));
+    _entries.push_back("");
 }
 
 void Entry::onEntry()
