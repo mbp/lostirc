@@ -1,5 +1,11 @@
 For a summary of changes between releases - see the NEWS file.
 
+2002-12-04  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Parser.cpp: Add stripColor() function to remove colors.
+        * ConfigHandler.cpp: Add strip_color bool option.
+        * Prefs.cpp: Add new CheckButton to enable/disable strip_color option.
+
 2002-12-03  Morten Brix Pedersen  <morten@wtf.dk>
 
         * lostirc.1: Updated with a better description.

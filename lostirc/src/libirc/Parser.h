@@ -71,5 +71,6 @@ private:
 };
 
 std::string getWord(const std::string& str, int n);
+std::string stripColors(const std::string& str);
 
 #endif

@@ -45,6 +45,7 @@ public:
     Value<std::string> highlight_words;
     Value<std::string> font;
     Value<bool> limited_highlighting;
+    Value<bool> strip_colors;
 };
 
 // Color definitions used by frontend.

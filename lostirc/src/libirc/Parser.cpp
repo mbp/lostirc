@@ -70,6 +70,8 @@ void Parser::parseLine(string& data)
     #endif
     // Erase \r and \n, we dont need them when parsing the messages.
     data.erase(data.find_last_not_of("\r\n") + 1);
+    if (App->options.strip_colors)
+          data = stripColors(data);
 
     if (data[0] == ':') {
         /*
@@ -854,6 +856,21 @@ void Parser::Names(const string& chan, const string& names)
     }
 }
 
+bool Parser::shouldHighlight(const string& str)
+{
+    if (str.find(_conn->Session.nick) != string::npos)
+          return true;
+
+    std::istringstream ss(App->options.highlight_words);
+
+    string tmp;
+    while (ss >> tmp)
+          if (str.find(tmp) != string::npos)
+                return true;
+
+    return false;
+}
+
 string getWord(const string& str, int n)
 {
     int count = 0;
@@ -872,17 +889,27 @@ string getWord(const string& str, int n)
     return "";
 }
 
-bool Parser::shouldHighlight(const string& str)
+// Strip mIRC colors. Spec at: http://www.mirc.co.uk/help/color.txt
+// Only strips color-strings right now. Not bold and underline.
+string stripColors(const string& str)
 {
-    if (str.find(_conn->Session.nick) != string::npos)
-          return true;
+    string newstr;
+    bool color = false;
+    int numbercount = 0;
+    for (int i = 0; i < str.length(); ++i)
+    {
+        if (str[i] == '\003') {
+            color = true;
+        } else if (color && isdigit(str[i]) && numbercount < 2) {
 
-    std::istringstream ss(App->options.highlight_words);
-
-    string tmp;
-    while (ss >> tmp)
-          if (str.find(tmp) != string::npos)
-                return true;
-
-    return false;
+            numbercount++;
+        } else if (color && str[i] == ',' && numbercount < 3) {
+            numbercount = 0;
+        } else {
+            numbercount = 0;
+            color = false;
+            newstr += str[i];
+        }
+    }
+    return newstr;
 }

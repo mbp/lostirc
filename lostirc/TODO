@@ -6,24 +6,28 @@ CRITICAL:
 
 NICE-TO-HAVE:
 ------------
-  * implement /help, /help shortcuts and /help commands
+  * Implement /help, /help shortcuts and /help commands
   * ipv6 support
-  * note when window has lost focus; then highlight front-tab
+  * When window has lost its focus, then highlight the front tab too.
   * /BAN command.
   * /EXEC
   * Virtual functions for Commands, to be overriden. Much more OO-like.
 
 RANDOM BUGS:
 ------------
-  * check for EAGAIN on send()?
+  * Should we check for EAGAIN on send()? It seems to always suceeed anyway.
 
-  * this has to be removed from 'configure' at release time:
+  * This has to be removed from 'configure' at release time, or else the
+    configure script fails on Red Hat/Mandrake:
     +extern "C" void exit(int); (:g/extern "C" void exit/d)
+
+  * Background-colors (e.g. ^C15,5) isn't used/parsed.
+  * Bold: ditto
+  * Underline: ditto
 
 GTKMM2 STUFF:
 -------------
   * scrollbar has weird behaviour when resizing window
-  * strip all mIRC color-codes from ALL strings, don't show colors at all.
   * URLs clickable
 
 DCC:

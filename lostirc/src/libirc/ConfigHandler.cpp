@@ -222,7 +222,8 @@ Options::Options(const char *filename)
     dccport(this, "dccport", 0),
     highlight_words(this, "highlight_words"),
     font(this, "font"),
-    limited_highlighting(this, "limited_highlighting", false)
+    limited_highlighting(this, "limited_highlighting", false),
+    strip_colors(this, "strip_colors", true)
 
 {
     readConfigFile();

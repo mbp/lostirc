@@ -41,6 +41,7 @@ Gtk::Button* create_imagebutton(const Glib::ustring& str, const Gtk::StockID& st
 Prefs::Prefs()
     : Gtk::VBox(),
     highlightingbutton("Limited highlighting (don't mark tabs red on joins/parts etc.)"),
+    stripcolorsbutton("Strip color codes from incoming messages"),
     _columns(),
     _liststore(Gtk::ListStore::create(_columns)),
     _treeview(_liststore)
@@ -132,12 +133,18 @@ Prefs::Prefs()
     notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*prefsbox, "Preferences"));
 
     // Limited tab highlighting
-    if (App->options.limited_highlighting)
-          highlightingbutton.set_active(true);
+    highlightingbutton.set_active(App->options.limited_highlighting);
 
     Gtk::Frame *frame14 = manage(new Gtk::Frame());
     frame14->add(highlightingbutton);
     prefsbox->pack_start(*frame14, Gtk::PACK_SHRINK);
+
+    // Strip colors
+    stripcolorsbutton.set_active(App->options.strip_colors);
+
+    Gtk::Frame *frame16 = manage(new Gtk::Frame());
+    frame16->add(stripcolorsbutton);
+    prefsbox->pack_start(*frame16, Gtk::PACK_SHRINK);
 
     // Font selection
 
@@ -250,10 +257,8 @@ void Prefs::applyPreferences()
     App->options.highlight_words = Glib::locale_from_utf8(highlightentry.get_text());
     App->options.buffer_size = Glib::locale_from_utf8(bufferentry.get_text());
 
-    if (highlightingbutton.get_active())
-        App->options.limited_highlighting = true;
-    else
-        App->options.limited_highlighting = false;
+    App->options.limited_highlighting = highlightingbutton.get_active();
+    App->options.strip_colors = stripcolorsbutton.get_active();
 }
 
 void Prefs::applyGeneral()
