@@ -428,7 +428,7 @@ void DCC(ServerConnection* conn, const ustring& params)
 
        action = Util::upper(action);
        if (action == "RECEIVE") {
-           if (!App->getDcc().do_dcc(Util::convert<int>(secondparam)))
+           if (!App->getDcc().start_dcc(Util::convert<int>(secondparam)))
                  throw CommandException(_("No DCC with that number"));
        } else if (action == "SEND") {
            ustring filename;

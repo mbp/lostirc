@@ -1,6 +1,19 @@
 For a summary of changes between releases - see the NEWS file.
 
 2004-02-02  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * DCCList.cpp:
+         - Remove fileposition column.
+         - Rename column "From/To" to "User"
+         - Implement stopSelected(), to cancel the currently selected file
+         transfer.
+         - Nicer status messages.
+       * DCCList.h:
+         - Add the DCCList to a ScrolledWindow.
+       * DCC.h/.cpp: Move _status member into base DCC class. Implement
+       setStatus method().
+
+2004-02-02  Morten Brix Pedersen  <morten@wtf.dk>
 
         * AUTHORS: Update.
 

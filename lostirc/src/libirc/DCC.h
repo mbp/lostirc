@@ -23,25 +23,30 @@
 #include <fstream>
 #include <cerrno>
 #include <cstdio>
-#include "Socket.h"
 #include <glibmm/main.h>
 #include <sigc++/sigc++.h>
+#include "Socket.h"
 
 class ServerConnection;
 
 class DCC : public SigC::Object {
 
 public:
-
     enum Status { DONE, ONGOING, WAITING, STOPPED, FAIL };
 
-    virtual void go_ahead() = 0;
+    virtual void start() = 0;
+    virtual void cancel() = 0;
+    void setStatus(Status s);
 
     virtual Glib::ustring getFilename() const = 0;
     virtual unsigned long getSize() const = 0;
     virtual unsigned long getPosition() const = 0;
     virtual Glib::ustring getNick() const = 0;
-    virtual Status getStatus() const = 0;
+    virtual Status getStatus() const { return _status; }
+
+    int _number_in_queue;
+protected:
+    Status _status;
 };
 
 class DCC_Send_In : public DCC {
@@ -49,7 +54,8 @@ public:
     DCC_Send_In(const Glib::ustring& filename, const Glib::ustring& nick, unsigned long address, unsigned short port, unsigned long size = 0);
     virtual ~DCC_Send_In() { }
 
-    void go_ahead();
+    void start();
+    void cancel();
     void onReadData();
     void getUseableFilename(int i);
 
@@ -60,9 +66,6 @@ public:
     virtual unsigned long getSize() const { return _size; }
     virtual unsigned long getPosition() const { return _pos; }
     virtual Glib::ustring getNick() const { return _nick; }
-    virtual Status getStatus() const { return _status; }
-
-    int _number_in_queue;
 
 private:
     std::ofstream _outfile;
@@ -74,7 +77,6 @@ private:
     unsigned long _size;
     unsigned long _pos;
 
-    Status _status;
     Socket _socket;
 };
 
@@ -83,19 +85,17 @@ public:
     DCC_Send_Out(const Glib::ustring& filename, const Glib::ustring& nick, ServerConnection* conn);
     virtual ~DCC_Send_Out() { }
 
-    void go_ahead() { }
+    void start() { }
+    void cancel();
     void onAccept();
     void onSendData();
 
     void on_bind_failed(const char *str);
 
-    int _number_in_queue;
-
     virtual Glib::ustring getFilename() const { return _filename; }
     virtual unsigned long getSize() const { return _size; }
     virtual unsigned long getPosition() const { return _pos; }
     virtual Glib::ustring getNick() const { return _nick; }
-    virtual Status getStatus() const { return _status; }
 
 private:
     std::ifstream _infile;
@@ -105,7 +105,6 @@ private:
     unsigned long _pos;
     unsigned long _size;
 
-    Status _status;
     Socket _socket;
 };
 
@@ -115,12 +114,12 @@ class DCC_queue {
 public:
     DCC_queue() : _count(0) { }
 
-    bool do_dcc(int n);
+    bool start_dcc(int n);
 
     int addDccSendIn(const Glib::ustring& filename, const Glib::ustring& nick, unsigned long address, unsigned short port, unsigned long size);
     int addDccSendOut(const Glib::ustring& filename, const Glib::ustring& nick, ServerConnection *conn);
 
-    void statusChange(int n);
+    void statusChange(DCC *dcc);
 
 };
 

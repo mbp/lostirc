@@ -34,9 +34,8 @@ DCCList::DCCList()
     append_column(_("Status"), _columns.status);
     append_column(_("Filename"), _columns.filename);
     append_column(_("Filesize"), _columns.filesize);
-    append_column(_("Fileposition"), _columns.fileposition);
     append_column(_("Progress"), _columns.progress);
-    append_column(_("From/To"), _columns.nick);
+    append_column(_("User"), _columns.nick);
 
     show_all();
 }
@@ -47,7 +46,6 @@ void DCCList::add(DCC *dcc)
     row[_columns.status] = statusToStr(dcc->getStatus());
     row[_columns.filename] = dcc->getFilename();
     row[_columns.filesize] = dcc->getSize();
-    row[_columns.fileposition] = dcc->getPosition();
     row[_columns.progress] = getProgress(dcc);
     row[_columns.nick] = dcc->getNick();
 
@@ -74,6 +72,18 @@ void DCCList::statusChange(DCC *dcc)
         signal_timeout.disconnect();
 }
 
+void DCCList::stopSelected()
+{
+    Glib::RefPtr<Gtk::TreeSelection> selection = get_selection();
+    Gtk::TreeModel::iterator iterrow = selection->get_selected();
+
+    if (iterrow) {
+        Gtk::TreeModel::Row row = *iterrow;
+        DCC *dcc = row[_columns.dcc_ptr];
+        dcc->cancel();
+    }
+}
+
 bool DCCList::updateDccData()
 {
     Gtk::TreeModel::Children::iterator iter;
@@ -86,7 +96,6 @@ bool DCCList::updateDccData()
             row[_columns.status] = statusToStr(dcc->getStatus());
             row[_columns.filename] = dcc->getFilename();
             row[_columns.filesize] = dcc->getSize();
-            row[_columns.fileposition] = dcc->getPosition();
             row[_columns.progress] = getProgress(dcc);
             row[_columns.nick] = dcc->getNick();
         }
@@ -98,15 +107,15 @@ bool DCCList::updateDccData()
 Glib::ustring DCCList::statusToStr(DCC::Status status)
 {
     if (status == DCC::DONE)
-          return "DONE";
+          return _("Done");
     else if (status == DCC::ONGOING)
-          return "ONGOING";
+          return _("Transfering");
     else if (status == DCC::WAITING)
-          return "WAITING";
+          return _("Waiting");
     else if (status == DCC::STOPPED)
-          return "STOPPED";
+          return _("Stopped");
     else if (status == DCC::FAIL)
-          return "ERROR";
+          return _("Error");
     else
           return "";
 }

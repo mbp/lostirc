@@ -22,6 +22,7 @@
 #include <gtkmm/dialog.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/treeview.h>
+#include <gtkmm/scrolledwindow.h>
 #include <DCC.h>
 
 class DCCList : public Gtk::TreeView
@@ -33,6 +34,7 @@ public:
     }
     void add(DCC *dcc);
     void statusChange(DCC *dcc);
+    void stopSelected();
 
 private:
     DCCList();
@@ -48,7 +50,6 @@ private:
         Gtk::TreeModelColumn<Glib::ustring> status;
         Gtk::TreeModelColumn<Glib::ustring> filename;
         Gtk::TreeModelColumn<unsigned long> filesize;
-        Gtk::TreeModelColumn<unsigned long> fileposition;
         Gtk::TreeModelColumn<unsigned long> progress;
         Gtk::TreeModelColumn<Glib::ustring> nick;
 
@@ -56,7 +57,7 @@ private:
 
         ModelColumns() {
             add(status); add(filename); add(filesize);
-            add(fileposition); add(progress); add(nick); add(dcc_ptr);
+            add(progress); add(nick); add(dcc_ptr);
         }
     };
 
@@ -71,19 +72,30 @@ private:
 
 class DCCWindow : public Gtk::Dialog
 {
+    Gtk::ScrolledWindow _scrollwin;
+
 public:
     DCCWindow(Gtk::Window& parent)
             : Gtk::Dialog("LostIRC DCC Transfers", parent)
     {
+        add_button(Gtk::Stock::STOP, Gtk::RESPONSE_CANCEL);
         add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
         get_vbox()->set_border_width(12);
         set_border_width(5);
-        get_vbox()->pack_start(*DCCList::Instance());
+        _scrollwin.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
+        _scrollwin.add(*DCCList::Instance());
+        get_vbox()->pack_start(_scrollwin, Gtk::PACK_EXPAND_WIDGET);
         show_all();
     }
     virtual ~DCCWindow() { }
 
-    virtual void on_response(int) { hide(); }
+    virtual void on_response(int response)
+    {
+        if (response == Gtk::RESPONSE_CLOSE)
+              hide();
+        else if (response == Gtk::RESPONSE_CANCEL)
+              DCCList::Instance()->stopSelected();
+    }
 };
 
 

@@ -24,6 +24,8 @@
 #include "Channel.h"
 #include "LostIRCApp.h"
 
+class DCC;
+
 class ServerConnection;
 class ChannelBase;
 
