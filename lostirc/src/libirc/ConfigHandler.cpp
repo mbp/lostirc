@@ -288,8 +288,8 @@ bool ConfigHandler::setEvtDefaults()
     setEvtDefault("evt_part", "$16-- $0%1$16 $15($9%3$15)$16 has parted $11%2 (%4)");
     setEvtDefault("evt_quit", "$16-- $0%1$16 has quit $11(%2)");
     setEvtDefault("evt_nick", "$16-- $0%1$16 changes nick to %2");
-    setEvtDefault("evt_mode", "$16-- $0%1$16 sets mode $5%2$16 %3");
-    setEvtDefault("evt_cmode", "$16-- $0%1$16 sets channel mode $9%2$16 on %3");
+    setEvtDefault("evt_mode", "$16-- $0%1$16 sets mode$9 %2$16 %3");
+    setEvtDefault("evt_cmode", "$16-- $0%1$16 sets channel mode$9 %2$16 on %3");
     setEvtDefault("evt_wallops", "$8WALLOPS/<$0%1$8>$9 %2");
     setEvtDefault("evt_kicked", "$16-- $0%1$16 was kicked from $11%2$16 by %3 $15($9%4$15)");
     setEvtDefault("evt_opped", "$16-- $0%1$16 gives channel operator status to %2");
