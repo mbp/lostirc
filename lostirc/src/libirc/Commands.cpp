@@ -256,12 +256,11 @@ void Commands::Msg(ServerConnection *conn, const string& params)
     if (pos1 != string::npos)
           msg = params.substr(pos1 + 1);
 
-    // FIXME: we need to show the message in the window
     if (msg.empty()) {
         throw CommandException("/MSG <nick/channel> <message>, sends a normal message.");
     } else {
         conn->sendMsg(to, msg);
-        string sendgui = "Messsage to " + to + ": " + msg;
+        string sendgui = "Message to " + to + ": " + msg;
         Commands::app->getEvts()->emit(Commands::app->getEvts()->get(SERVMSG) << sendgui, conn);
     }
 }

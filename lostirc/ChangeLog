@@ -4,6 +4,7 @@ LostIRC (x.x.x)
   * Configuration files has been moved to the ~/.lostirc/ directory.
   * It is now possible to autojoin a server with a password defined.
   * When disconnected from server; reconnect
+  * Fix stupid typo, s/messsage/message/
 
 LostIRC (0.0.6) - Mon Apr 1st 2002
   * You can now tab-complete commands as well as nicks. /j<tab> becomes /JOIN.
