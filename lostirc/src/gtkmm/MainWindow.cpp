@@ -32,7 +32,7 @@ using Glib::ustring;
 MainWindow* AppWin = 0;
 
 MainWindow::MainWindow(bool autoconnect)
-    : Gtk::Window(), _app(this), _nickList(true)
+    : Gtk::Window(), _app(this)
 {
     AppWin = this;
     set_title("LostIRC");
@@ -59,6 +59,9 @@ MainWindow::MainWindow(bool autoconnect)
 
     add(*vbox);
     show_all();
+
+    if (!_app.options.hidemenu)
+          _menubar.hide();
 
     if (!_app.cfgservers.hasAutoConnects() || !autoconnect) {
         // Construct initial tab
@@ -443,13 +446,13 @@ void MainWindow::setupMenus()
     _menubar.items().push_back(Gtk::Menu_Helpers::MenuElem(_("_LostIRC"), _firstmenu));
     _menubar.items().push_back(Gtk::Menu_Helpers::MenuElem(_("_View"), _viewmenu));
     _menubar.items().push_back(Gtk::Menu_Helpers::MenuElem(_("_Help"), _helpmenu));
-
 }
 
 
 void MainWindow::hideMenu()
 {
-    if (_menubar.is_visible())
+    _app.options.hidemenu = !_app.options.hidemenu;
+    if (!_app.options.hidemenu)
           _menubar.hide();
     else
           _menubar.show();
@@ -457,7 +460,7 @@ void MainWindow::hideMenu()
 
 void MainWindow::hideNickList()
 {
-    _nickList = !_nickList;
+    _app.options.hidenicklist = !_app.options.hidenicklist;
     vector<Tab*> tabs;
 
     _notebook.Tabs(tabs);

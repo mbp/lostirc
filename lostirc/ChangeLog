@@ -2,6 +2,12 @@ For a summary of changes between releases - see the NEWS file.
 
 2003-10-16  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * ConfigHandler.cpp: Add options 'hidenicklist' and 'hidemenu'
+        * MainWindow.cpp: Use the options to save the configuration of hidden
+        nick list and menu.
+
+2003-10-16  Morten Brix Pedersen  <morten@wtf.dk>
+
         * MainWindow.cpp: Remove show_all() call to make sure NickList wont
         get showed again.
         * MainNotebook.cpp: ditto.

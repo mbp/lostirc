@@ -110,7 +110,7 @@ void Tab::removeHighlight()
 
 void Tab::toggleNickList()
 {
-    if (isType(CHANNEL) && AppWin->hasNickList())
+    if (isType(CHANNEL) && !App->options.hidenicklist)
           _nicklist.show();
     else 
           _nicklist.hide();

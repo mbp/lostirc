@@ -61,8 +61,6 @@ class MainWindow : public Gtk::Window, public FrontEnd
     void closeCurrentTab();
     void hideNickList();
 
-    bool _nickList;
-
 public:
     MainWindow(bool autoconnect = 0);
     virtual ~MainWindow();
@@ -93,7 +91,6 @@ public:
     void newDCC(DCC *dcc);
     void dccStatusChanged(DCC *dcc);
     void localeError(bool tried_custom_encoding);
-    bool hasNickList() const { return _nickList; }
     const Gtk::MenuBar& getMenuBar() const { return _menubar; }
 
     StatusBar _statusbar;

@@ -242,7 +242,9 @@ Options::Options(const char *filename)
     strip_colors(this, "strip_colors", true),
     strip_boldandunderline(this, "strip_boldandunderline", false),
     logging(this, "logging", false),
-    encoding(this, "encoding", "System")
+    encoding(this, "encoding", "System"),
+    hidenicklist(this, "hidenicklist", false),
+    hidemenu(this, "hidemenu", false)
 
 {
     readConfigFile();
