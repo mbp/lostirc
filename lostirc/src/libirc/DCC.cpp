@@ -72,7 +72,7 @@ gboolean DCC_Send_In::onReadData(GIOChannel* io_channel, GIOCondition cond, gpoi
     char buf[4096];
     int retval = recv(dcc.fd, buf, sizeof(buf), 0);
 
-    if (retval == 0) App->log << "DCC_Send_In::onReadData(): no bytes received?!" << std::endl;
+    if (retval == 0) FE::emit(FE::get(SERVMSG) << "DCC connection closed.", FE::CURRENT);
     else if (retval == -1) {
         if (!(errno == EAGAIN || errno == EWOULDBLOCK)) {
             FE::emit(FE::get(SERVMSG2) << "Couldn't receive:" << strerror(errno), FE::CURRENT);

@@ -27,7 +27,11 @@ using std::vector;
 LostIRCApp* App;
 
 LostIRCApp::LostIRCApp(FrontEnd *f)
-    : log("lostirc-"VERSION".log"), fe(f), _cfg(), _dcc_queue()
+    : 
+#ifdef DEBUG
+    log("lostirc-"VERSION".log"),
+#endif
+    fe(f), _cfg(), _dcc_queue()
 {
     #ifdef DEBUG
     std::cout << "Logging to `" << "lostirc-"VERSION".log" << "'." << std::endl;
