@@ -19,6 +19,7 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
+#include <glibmm/ustring.h>
 #include <sstream>
 #include <string>
 #include <set>
@@ -26,55 +27,54 @@
 
 class ServerConnection;
 
-template<typename stringType>
 struct UserCommands {
     const char *cmd;
-    void (*function)(ServerConnection *, const stringType&);
+    void (*function)(ServerConnection *, const Glib::ustring&);
     const bool reqConnected;
 };
 
 namespace Commands
 {
 
-    void send(ServerConnection *conn, std::string cmd, const std::string& params);
-    void Join(ServerConnection *conn, const std::string& params);
-    void Part(ServerConnection *conn, const std::string& params);
-    void Quit(ServerConnection *conn, const std::string& params);
-    void Kick(ServerConnection *conn, const std::string& params);
-    void Server(ServerConnection *conn, const std::string& params);
-    void Disconnect(ServerConnection *conn, const std::string& params);
-    void Nick(ServerConnection *conn, const std::string& params);
-    void Whois(ServerConnection *conn, const std::string& params);
-    void Mode(ServerConnection *conn, const std::string& params);
-    void Ctcp(ServerConnection *conn, const std::string& cmd);
-    void Away(ServerConnection *conn, const std::string& params);
-    void Awayall(ServerConnection *conn, const std::string& params);
-    void Names(ServerConnection *conn, const std::string& params);
-    void Invite(ServerConnection *conn, const std::string& cmd);
-    void Topic(ServerConnection *conn, const std::string& cmd);
-    void Banlist(ServerConnection *conn, const std::string& params);
-    void Msg(ServerConnection *conn, const std::string& params);
-    void Notice(ServerConnection *conn, const std::string& params);
-    void Me(ServerConnection *conn, const std::string& params);
-    void Who(ServerConnection *conn, const std::string& params);
-    void List(ServerConnection *conn, const std::string& params);
-    void Set(ServerConnection *conn, const std::string& params);
-    void Quote(ServerConnection *conn, const std::string& params);
-    void Exit(ServerConnection *conn, const std::string& params);
-    //    void Exec(ServerConnection *conn, const std::string& params);
-    void Oper(ServerConnection* conn, const std::string& params);
-    void Kill(ServerConnection* conn, const std::string& params);
-    void Wallops(ServerConnection* conn, const std::string& params);
-    void DCC(ServerConnection* conn, const std::string& params);
-    void Admin(ServerConnection* conn, const std::string& params);
-    void Whowas(ServerConnection* conn, const std::string& params);
-    void Op(ServerConnection* conn, const std::string& params);
-    void Deop(ServerConnection* conn, const std::string& params);
-    void Voice(ServerConnection* conn, const std::string& params);
-    void Devoice(ServerConnection* conn, const std::string& params);
-    void getCommands(std::set<std::string>& commands);
+    void send(ServerConnection *conn, Glib::ustring cmd, const Glib::ustring& params);
+    void Join(ServerConnection *conn, const Glib::ustring& params);
+    void Part(ServerConnection *conn, const Glib::ustring& params);
+    void Quit(ServerConnection *conn, const Glib::ustring& params);
+    void Kick(ServerConnection *conn, const Glib::ustring& params);
+    void Server(ServerConnection *conn, const Glib::ustring& params);
+    void Disconnect(ServerConnection *conn, const Glib::ustring& params);
+    void Nick(ServerConnection *conn, const Glib::ustring& params);
+    void Whois(ServerConnection *conn, const Glib::ustring& params);
+    void Mode(ServerConnection *conn, const Glib::ustring& params);
+    void Ctcp(ServerConnection *conn, const Glib::ustring& cmd);
+    void Away(ServerConnection *conn, const Glib::ustring& params);
+    void Awayall(ServerConnection *conn, const Glib::ustring& params);
+    void Names(ServerConnection *conn, const Glib::ustring& params);
+    void Invite(ServerConnection *conn, const Glib::ustring& cmd);
+    void Topic(ServerConnection *conn, const Glib::ustring& cmd);
+    void Banlist(ServerConnection *conn, const Glib::ustring& params);
+    void Msg(ServerConnection *conn, const Glib::ustring& params);
+    void Notice(ServerConnection *conn, const Glib::ustring& params);
+    void Me(ServerConnection *conn, const Glib::ustring& params);
+    void Who(ServerConnection *conn, const Glib::ustring& params);
+    void List(ServerConnection *conn, const Glib::ustring& params);
+    void Set(ServerConnection *conn, const Glib::ustring& params);
+    void Quote(ServerConnection *conn, const Glib::ustring& params);
+    void Exit(ServerConnection *conn, const Glib::ustring& params);
+    //    void Exec(ServerConnection *conn, const Glib::ustring& params);
+    void Oper(ServerConnection* conn, const Glib::ustring& params);
+    void Kill(ServerConnection* conn, const Glib::ustring& params);
+    void Wallops(ServerConnection* conn, const Glib::ustring& params);
+    void DCC(ServerConnection* conn, const Glib::ustring& params);
+    void Admin(ServerConnection* conn, const Glib::ustring& params);
+    void Whowas(ServerConnection* conn, const Glib::ustring& params);
+    void Op(ServerConnection* conn, const Glib::ustring& params);
+    void Deop(ServerConnection* conn, const Glib::ustring& params);
+    void Voice(ServerConnection* conn, const Glib::ustring& params);
+    void Devoice(ServerConnection* conn, const Glib::ustring& params);
+    void getCommands(std::set<Glib::ustring>& commands);
 
-    std::string assignModes(char sign, char mode, std::istringstream& ss);
+    Glib::ustring assignModes(char sign, char mode, std::istringstream& ss);
 
 }
 
@@ -83,7 +83,7 @@ class CommandException : public std::exception
     const char * error;
 public:
     CommandException(const char *e) : error(e) { }
-    CommandException(const std::string &e) : error(e.c_str()) { }
+    CommandException(const Glib::ustring &e) : error(e.c_str()) { }
     const char * what() const throw() {
         return error;
     }

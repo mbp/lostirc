@@ -20,8 +20,8 @@
 #define INOUT_H
 
 #include <vector>
-#include <string>
 #include <sys/utsname.h>
+#include <glibmm/ustring.h>
 #include <pwd.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -37,7 +37,7 @@ class FrontEnd;
 #include <iostream>
 class Log : public std::ofstream
 {
-    std::string _filename;
+    Glib::ustring _filename;
 public:
     Log()
     {
@@ -57,10 +57,10 @@ private:
     {
         struct stat st;
         std::stringstream ss;
-        std::string myint;
+        Glib::ustring myint;
         ss << i;
         ss >> myint;
-        std::string newfilename = _filename + "." + myint;
+        Glib::ustring newfilename = _filename + "." + myint;
         if (stat(newfilename.c_str(), &st) == 0)
               getUseableFilename(++i);
         else
@@ -92,7 +92,7 @@ class LostIRCApp
                 App->home = getenv("HOME");
             }
 
-            std::string configdir = std::string(App->home) + "/.lostirc/";
+            Glib::ustring configdir = Glib::ustring(App->home) + "/.lostirc/";
             mkdir(configdir.c_str(), 0700);
         }
     };
@@ -106,7 +106,7 @@ public:
     ~LostIRCApp();
 
     void autoConnect();
-    ServerConnection* newServer(const std::string& host, int port);
+    ServerConnection* newServer(const Glib::ustring& host, int port);
     ServerConnection* newServer();
 
     DCC_queue& getDcc() { return _dcc_queue; }

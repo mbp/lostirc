@@ -54,7 +54,7 @@ void Entry::onEntry()
 
         try {
 
-            GuiCommands::send(_tab->getConn(), Util::upper(msg.substr(1, pos - 1)), params);
+            GuiCommands::send(_tab->getConn(), msg.substr(1, pos - 1).uppercase(), params);
 
         } catch (CommandException& ce) {
 
@@ -78,7 +78,7 @@ void Entry::sendMsg(const ustring& msg)
     } else if (!_tab->isActive()) {
         _tab->getText() << "No channel joined. Try `/JOIN #channel-name'\n";
     } else {
-        std::istringstream ss(Glib::locale_from_utf8(msg));
+        std::istringstream ss(msg.raw());
 
         if (ss.peek() == '\n')
               ss.ignore();

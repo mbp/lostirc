@@ -2,6 +2,17 @@ For a summary of changes between releases - see the NEWS file.
 
 2002-12-16  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * Made all files in libirc use Glib::ustring instead of std::string.
+          This has the advantage that only have to do the convert_to_utf8()
+          conversion at one place, that is - while receiving from the server.
+          This makes libirc depend even more on glibmm.. oh well.
+          
+          Configuration files are now saved in UTF-8.
+
+          Lots of new bug has probably been produced now...
+
+2002-12-16  Morten Brix Pedersen  <morten@wtf.dk>
+
         * ConfigHandler.cpp/ConfigHandler.h: Rename autoJoin server to Server.
           Add code to disable automatically connection on startup.
           Add hasAutoConnects() method to see whether any auto connect servers

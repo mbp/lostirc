@@ -34,7 +34,6 @@ public:
     TextWidget(Pango::FontDescription font);
 
     TextWidget& operator<<(const char * str);
-    TextWidget& operator<<(const std::string& str);
     TextWidget& operator<<(const Glib::ustring& str);
 
     void clearText();

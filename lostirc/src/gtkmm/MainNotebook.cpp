@@ -27,7 +27,7 @@ MainNotebook::MainNotebook()
     : Gtk::Notebook()
 {
     set_tab_pos(Gtk::POS_BOTTOM);
-    fontdescription = Pango::FontDescription(convert_to_utf8(App->options.font));
+    fontdescription = Pango::FontDescription(App->options.font);
     signal_switch_page().connect(SigC::slot(*this, &MainNotebook::onSwitchPage));
 }
 
@@ -171,7 +171,7 @@ void MainNotebook::updateStatus(Tab *tab)
           tab = getCurrent();
 
     if (tab->getConn()->Session.isAway)
-          AppWin->statusbar.setText1(tab->getConn()->Session.nick + " <span foreground=\"red\">(away: " + convert_to_utf8(tab->getConn()->Session.awaymsg) + ")</span> - " + tab->getConn()->Session.servername);
+          AppWin->statusbar.setText1(tab->getConn()->Session.nick + " <span foreground=\"red\">(away: " + tab->getConn()->Session.awaymsg + ")</span> - " + tab->getConn()->Session.servername);
     else
           AppWin->statusbar.setText1(tab->getConn()->Session.nick + " - " + tab->getConn()->Session.servername);
 
@@ -227,7 +227,7 @@ void MainNotebook::findTabs(const ustring& nick, ServerConnection *conn, vector<
             
     for (i = pages().begin(); i != pages().end(); ++i) {
         Tab *tab = static_cast<Tab*>(i->get_child());
-        if (tab->getConn() == conn && tab->findUser(convert_to_utf8(nick))) {
+        if (tab->getConn() == conn && tab->findUser(nick)) {
             vec.push_back(tab);
         }
     }

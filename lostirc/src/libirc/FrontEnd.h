@@ -42,17 +42,17 @@ namespace FE
 {
     class Tmpl
     {
-        std::string orig;
-        std::vector<std::string> tokens;
+        Glib::ustring orig;
+        std::vector<Glib::ustring> tokens;
 
     public:
-        Tmpl(const std::string& str, const signed p) : orig(str), priority(p) { }
+        Tmpl(const Glib::ustring& str, const signed p) : orig(str), priority(p) { }
 
-        Tmpl& operator<<(const std::string& str) { tokens.push_back(str); return *this; }
+        Tmpl& operator<<(const Glib::ustring& str) { tokens.push_back(str); return *this; }
         Tmpl& operator<<(int i) { std::stringstream ss; ss << i; tokens.push_back(ss.str()); return *this; }
 
         const signed priority;
-        std::string result();
+        Glib::ustring result();
     };
 
     enum Destination {
@@ -78,17 +78,17 @@ namespace FE
 class FrontEnd
 {
 public:
-    virtual void displayMessage(const std::string& msg, FE::Destination d, bool shouldHighlight = true) = 0;
-    virtual void displayMessage(const std::string& msg, FE::Destination d, ServerConnection *conn, bool shouldHighlight = true) = 0;
-    virtual void displayMessage(const std::string& msg, ChannelBase& to, ServerConnection *conn, bool shouldHighlight = true) = 0;
+    virtual void displayMessage(const Glib::ustring& msg, FE::Destination d, bool shouldHighlight = true) = 0;
+    virtual void displayMessage(const Glib::ustring& msg, FE::Destination d, ServerConnection *conn, bool shouldHighlight = true) = 0;
+    virtual void displayMessage(const Glib::ustring& msg, ChannelBase& to, ServerConnection *conn, bool shouldHighlight = true) = 0;
     virtual void highlight(ChannelBase& chan, ServerConnection *conn) = 0;
-    virtual void join(const std::string& nick, Channel& chan, ServerConnection *conn) = 0;
-    virtual void part(const std::string& nick, Channel& chan, ServerConnection *conn) = 0;
-    virtual void kick(const std::string& from, Channel& chan, const std::string& kicker, const std::string& msg,  ServerConnection *conn) = 0;
-    virtual void quit(const std::string& nick, std::vector<ChannelBase*> chans, ServerConnection *conn) = 0;
-    virtual void nick(const std::string& from, const std::string& to, std::vector<ChannelBase*> chans, ServerConnection *conn) = 0;
+    virtual void join(const Glib::ustring& nick, Channel& chan, ServerConnection *conn) = 0;
+    virtual void part(const Glib::ustring& nick, Channel& chan, ServerConnection *conn) = 0;
+    virtual void kick(const Glib::ustring& from, Channel& chan, const Glib::ustring& kicker, const Glib::ustring& msg,  ServerConnection *conn) = 0;
+    virtual void quit(const Glib::ustring& nick, std::vector<ChannelBase*> chans, ServerConnection *conn) = 0;
+    virtual void nick(const Glib::ustring& from, const Glib::ustring& to, std::vector<ChannelBase*> chans, ServerConnection *conn) = 0;
     virtual void names(Channel& c, ServerConnection *conn) = 0;
-    virtual void CUMode(const std::string& nick, Channel& chan, const std::vector<User>& users, ServerConnection *conn) = 0;
+    virtual void CUMode(const Glib::ustring& nick, Channel& chan, const std::vector<User>& users, ServerConnection *conn) = 0;
     virtual void away(bool away, ServerConnection *conn) = 0;
     virtual void connected(ServerConnection *conn) = 0;
     virtual void newTab(ServerConnection *conn) = 0;

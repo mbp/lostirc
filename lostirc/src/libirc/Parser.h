@@ -20,6 +20,7 @@
 #define PARSER_H
 
 #include <string>
+#include <glibmm/ustring.h>
 
 // This class takes care of parsing incoming messages from the server
 
@@ -32,46 +33,46 @@ class Parser
 public:
     Parser(ServerConnection *conn);
 
-    void parseLine(std::string &data);
+    void parseLine(Glib::ustring &data);
 
 private:
-    void Privmsg(const std::string& from, const std::string& param, const std::string& rest);
-    void Notice(const std::string& from, const std::string& param, const std::string& rest);
-    void Notice(const std::string& msg);
-    void Topic(const std::string& param, const std::string& rest);
-    void Topic(const std::string& from, const std::string& param, const std::string& rest);
-    void TopicTime(const std::string& param);
-    void Mode(const std::string& from, const std::string& param, const std::string& rest);
-    void CMode(const std::string& from, const std::string& param);
-    void Join(const std::string& nick, const std::string& param, const std::string& chan);
-    void Part(const std::string& nick, const std::string& chan, std::string& rest);
-    void Quit(const std::string& nick, const std::string& msg);
-    void Nick(const std::string& from, const std::string& to);
-    void Invite(const std::string& from, const std::string& to);
-    void Kill(const std::string& from, const std::string& to);
-    void Kick(const std::string& from, const std::string& chan, const std::string& nickandmsg);
-    void Names(const std::string& chan, const std::string& names);
-    void Ctcp(const std::string& from, const std::string& param, const std::string& rest);
-    void Away(const std::string& param, const std::string& rest);
-    void Wallops(const std::string& from, const std::string& rest);
-    void Banlist(const std::string& param);
-    void numeric(int n, const std::string& from, const std::string& param, const std::string& rest);
+    void Privmsg(const Glib::ustring& from, const Glib::ustring& param, const Glib::ustring& rest);
+    void Notice(const Glib::ustring& from, const Glib::ustring& param, const Glib::ustring& rest);
+    void Notice(const Glib::ustring& msg);
+    void Topic(const Glib::ustring& param, const Glib::ustring& rest);
+    void Topic(const Glib::ustring& from, const Glib::ustring& param, const Glib::ustring& rest);
+    void TopicTime(const Glib::ustring& param);
+    void Mode(const Glib::ustring& from, const Glib::ustring& param, const Glib::ustring& rest);
+    void CMode(const Glib::ustring& from, const Glib::ustring& param);
+    void Join(const Glib::ustring& nick, const Glib::ustring& param, const Glib::ustring& chan);
+    void Part(const Glib::ustring& nick, const Glib::ustring& chan, Glib::ustring& rest);
+    void Quit(const Glib::ustring& nick, const Glib::ustring& msg);
+    void Nick(const Glib::ustring& from, const Glib::ustring& to);
+    void Invite(const Glib::ustring& from, const Glib::ustring& to);
+    void Kill(const Glib::ustring& from, const Glib::ustring& to);
+    void Kick(const Glib::ustring& from, const Glib::ustring& chan, const Glib::ustring& nickandmsg);
+    void Names(const Glib::ustring& chan, const Glib::ustring& names);
+    void Ctcp(const Glib::ustring& from, const Glib::ustring& param, const Glib::ustring& rest);
+    void Away(const Glib::ustring& param, const Glib::ustring& rest);
+    void Wallops(const Glib::ustring& from, const Glib::ustring& rest);
+    void Banlist(const Glib::ustring& param);
+    void numeric(int n, const Glib::ustring& from, const Glib::ustring& param, const Glib::ustring& rest);
 
-    inline void Ping(const std::string& rest);
+    inline void Ping(const Glib::ustring& rest);
 
-    bool shouldHighlight(const std::string& str);
+    bool shouldHighlight(const Glib::ustring& str);
 };
 
 inline
-std::string findNick(const std::string& str);
+Glib::ustring findNick(const Glib::ustring& str);
 
 inline
-std::string findHost(const std::string& str);
+Glib::ustring findHost(const Glib::ustring& str);
 
 inline
-std::string skipFirstWord(const std::string& str);
+Glib::ustring skipFirstWord(const Glib::ustring& str);
 
-std::string getWord(const std::string& str, int n);
-std::string stripColors(const std::string& str);
+Glib::ustring getWord(const Glib::ustring& str, int n);
+Glib::ustring stripColors(const Glib::ustring& str);
 
 #endif

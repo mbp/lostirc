@@ -39,7 +39,7 @@ TextWidget::TextWidget(Pango::FontDescription font)
 
 void TextWidget::setStyle() {
     // TODO: Should this go into a ressource file?
-    Gdk::Color col1(convert_to_utf8(App->colors.bgcolor));
+    Gdk::Color col1(App->colors.bgcolor);
 
     _textview.modify_base(Gtk::STATE_NORMAL, col1);
 }
@@ -58,11 +58,6 @@ void TextWidget::setFont(const Pango::FontDescription& font)
 TextWidget& TextWidget::operator<<(const char * str)
 {
     return operator<<(std::string(str));
-}
-
-TextWidget& TextWidget::operator<<(const std::string& str)
-{
-    return operator<<(convert_to_utf8(str));
 }
 
 TextWidget& TextWidget::operator<<(const ustring& line)
@@ -224,53 +219,53 @@ Glib::RefPtr<Gtk::TextTag> TextWidget::initializeBG(const Glib::ustring& colorna
 void TextWidget::initializeColorMap()
 {
     int i = 0;
-    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color0));
-    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color1));
-    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color2));
-    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color3));
-    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color4));
-    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color5));
-    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color6));
-    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color7));
-    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color8));
-    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color9));
-    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color10));
-    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color11));
-    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color12));
-    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color13));
-    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color14));
-    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color15));
-    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color16));
-    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color17));
-    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color18));
-    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color19));
+    fgColorMap[i++] = initializeFG(App->colors.color0);
+    fgColorMap[i++] = initializeFG(App->colors.color1);
+    fgColorMap[i++] = initializeFG(App->colors.color2);
+    fgColorMap[i++] = initializeFG(App->colors.color3);
+    fgColorMap[i++] = initializeFG(App->colors.color4);
+    fgColorMap[i++] = initializeFG(App->colors.color5);
+    fgColorMap[i++] = initializeFG(App->colors.color6);
+    fgColorMap[i++] = initializeFG(App->colors.color7);
+    fgColorMap[i++] = initializeFG(App->colors.color8);
+    fgColorMap[i++] = initializeFG(App->colors.color9);
+    fgColorMap[i++] = initializeFG(App->colors.color10);
+    fgColorMap[i++] = initializeFG(App->colors.color11);
+    fgColorMap[i++] = initializeFG(App->colors.color12);
+    fgColorMap[i++] = initializeFG(App->colors.color13);
+    fgColorMap[i++] = initializeFG(App->colors.color14);
+    fgColorMap[i++] = initializeFG(App->colors.color15);
+    fgColorMap[i++] = initializeFG(App->colors.color16);
+    fgColorMap[i++] = initializeFG(App->colors.color17);
+    fgColorMap[i++] = initializeFG(App->colors.color18);
+    fgColorMap[i++] = initializeFG(App->colors.color19);
 
     i = 0;
-    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color0));
-    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color1));
-    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color2));
-    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color3));
-    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color4));
-    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color5));
-    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color6));
-    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color7));
-    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color8));
-    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color9));
-    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color10));
-    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color11));
-    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color12));
-    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color13));
-    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color14));
-    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color15));
-    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color16));
-    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color17));
-    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color18));
-    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color19));
+    bgColorMap[i++] = initializeBG(App->colors.color0);
+    bgColorMap[i++] = initializeBG(App->colors.color1);
+    bgColorMap[i++] = initializeBG(App->colors.color2);
+    bgColorMap[i++] = initializeBG(App->colors.color3);
+    bgColorMap[i++] = initializeBG(App->colors.color4);
+    bgColorMap[i++] = initializeBG(App->colors.color5);
+    bgColorMap[i++] = initializeBG(App->colors.color6);
+    bgColorMap[i++] = initializeBG(App->colors.color7);
+    bgColorMap[i++] = initializeBG(App->colors.color8);
+    bgColorMap[i++] = initializeBG(App->colors.color9);
+    bgColorMap[i++] = initializeBG(App->colors.color10);
+    bgColorMap[i++] = initializeBG(App->colors.color11);
+    bgColorMap[i++] = initializeBG(App->colors.color12);
+    bgColorMap[i++] = initializeBG(App->colors.color13);
+    bgColorMap[i++] = initializeBG(App->colors.color14);
+    bgColorMap[i++] = initializeBG(App->colors.color15);
+    bgColorMap[i++] = initializeBG(App->colors.color16);
+    bgColorMap[i++] = initializeBG(App->colors.color17);
+    bgColorMap[i++] = initializeBG(App->colors.color18);
+    bgColorMap[i++] = initializeBG(App->colors.color19);
 
     // Create a underlined-tag.
     underlinetag = Gtk::TextTag::create();
     underlinetag->property_underline() = Pango::UNDERLINE_SINGLE;
-    underlinetag->property_foreground() = convert_to_utf8(App->colors.color0);
+    underlinetag->property_foreground() = App->colors.color0;
     _textview.get_buffer()->get_tag_table()->add(underlinetag);
 
     // Create a bold-tag

@@ -22,11 +22,11 @@
 #include "ServerConnection.h"
 #include "DCC.h"
 
-DCC_Send_In::DCC_Send_In(const std::string& filename, const std::string& nick, unsigned long address, unsigned short port, unsigned long size)
+DCC_Send_In::DCC_Send_In(const Glib::ustring& filename, const Glib::ustring& nick, unsigned long address, unsigned short port, unsigned long size)
 : _outfile(), _filename(filename), _nick(nick), _address(address),
     _port(port), _size(size), _pos(0)
 {
-    _downloaddir = std::string(App->home) + "/.lostirc/downloads/";
+    _downloaddir = Glib::ustring(App->home) + "/.lostirc/downloads/";
     mkdir(_downloaddir.c_str(), 0700);
 
     _filename = _downloaddir + _filename;
@@ -108,17 +108,17 @@ void DCC_Send_In::getUseableFilename(int i)
 {
     struct stat st;
     std::stringstream ss;
-    std::string myint;
+    Glib::ustring myint;
     ss << i;
     ss >> myint;
-    std::string newfilename = _filename + "." + myint;
+    Glib::ustring newfilename = _filename + "." + myint;
     if (stat(newfilename.c_str(), &st) == 0)
           getUseableFilename(++i);
     else
           _filename = newfilename;
 }
 
-DCC_Send_Out::DCC_Send_Out(const std::string& filename, const std::string& nick, ServerConnection *conn)
+DCC_Send_Out::DCC_Send_Out(const Glib::ustring& filename, const Glib::ustring& nick, ServerConnection *conn)
     : _infile(), _filename(filename), _nick(nick), _pos(0)
 {
     struct stat st;
@@ -241,7 +241,7 @@ bool DCC_queue::do_dcc(int n)
     return false;
 }
 
-int DCC_queue::addDccSendIn(const std::string& filename, const std::string& nick, unsigned long address, unsigned short port, unsigned long size)
+int DCC_queue::addDccSendIn(const Glib::ustring& filename, const Glib::ustring& nick, unsigned long address, unsigned short port, unsigned long size)
 {
     DCC_Send_In *d = new DCC_Send_In(filename, nick, address, port, size);
     d->_number_in_queue = ++_count;
@@ -250,7 +250,7 @@ int DCC_queue::addDccSendIn(const std::string& filename, const std::string& nick
     return _count;
 }
 
-int DCC_queue::addDccSendOut(const std::string& filename, const std::string& nick, ServerConnection *conn)
+int DCC_queue::addDccSendOut(const Glib::ustring& filename, const Glib::ustring& nick, ServerConnection *conn)
 {
     DCC_Send_Out *d = new DCC_Send_Out(filename, nick, conn);
     d->_number_in_queue = ++_count;

@@ -24,10 +24,11 @@
 #include <sys/wait.h>
 #include <arpa/inet.h>
 #include <glibmm/main.h>
+#include <glibmm/convert.h>
 #include "LostIRCApp.h"
 #include "Socket.h"
 
-using std::string;
+using Glib::ustring;
 using SigC::bind;
 using SigC::slot;
 
@@ -42,7 +43,7 @@ Socket::~Socket()
     close();
 }
 
-void Socket::resolvehost(const string& host)
+void Socket::resolvehost(const ustring& host)
 {
     int thepipe[2];
     hostname = host;
@@ -165,12 +166,13 @@ void Socket::disconnect()
     close();
 }
 
-bool Socket::send(const string& data)
+bool Socket::send(const ustring& data)
 {
+    const std::string msg = Glib::locale_from_utf8(data);
     #ifdef DEBUG
     App->log << ">> " << data << std::flush;
     #endif
-    if (::send(fd, data.c_str(), data.length(), 0) > 0) {
+    if (::send(fd, msg.c_str(), msg.length(), 0) > 0) {
         return true;
     } else {
         #ifdef DEBUG

@@ -23,11 +23,11 @@
 #include "Utils.h"
 #include "LostIRCApp.h"
 
-using std::string;
+using Glib::ustring;
 using std::stringstream;
 using std::istringstream;
 
-const struct UserCommands<string> cmds[] = {
+const struct UserCommands cmds[] = {
     { "SERVER",   Commands::Server,     false },
     { "DISCONNECT", Commands::Disconnect,     false },
     { "JOIN",     Commands::Join,       true },
@@ -68,7 +68,7 @@ const struct UserCommands<string> cmds[] = {
 
 
 namespace Commands {
-void send(ServerConnection *conn, string cmd, const string& params) {
+void send(ServerConnection *conn, ustring cmd, const ustring& params) {
 
     for (int i = 0; cmds[i].cmd != 0; ++i) {
         if (cmds[i].cmd == cmd) {
@@ -87,7 +87,7 @@ void send(ServerConnection *conn, string cmd, const string& params) {
           Quote(conn, cmd + " " + params);
 }
 
-void Join(ServerConnection *conn, const string& params)
+void Join(ServerConnection *conn, const ustring& params)
 {
     if (params.length() == 0) {
         throw CommandException("/JOIN <channel>, join a channel");
@@ -96,38 +96,38 @@ void Join(ServerConnection *conn, const string& params)
     }
 }
 
-void Part(ServerConnection *conn, const string& params)
+void Part(ServerConnection *conn, const ustring& params)
 {
     if (params.length() == 0) {
         throw CommandException("/PART <channel> [msg], part a channel - optional with a part message");
     } else {
-        string::size_type pos1 = params.find_first_of(" ");
-        string chan = params.substr(0, pos1);
-        string msg;
-        if (pos1 != string::npos)
+        ustring::size_type pos1 = params.find_first_of(" ");
+        ustring chan = params.substr(0, pos1);
+        ustring msg;
+        if (pos1 != ustring::npos)
               msg = params.substr(pos1 + 1);
 
         conn->sendPart(chan, msg);
     }
 }
 
-void Quit(ServerConnection *conn, const string& params)
+void Quit(ServerConnection *conn, const ustring& params)
 {
     conn->sendQuit(params);
     conn->disconnect();
 }
 
-void Kick(ServerConnection *conn, const string& params)
+void Kick(ServerConnection *conn, const ustring& params)
 {
-    string chan, nick, msg;
-    string::size_type pos1 = params.find_first_of(" ");
+    ustring chan, nick, msg;
+    ustring::size_type pos1 = params.find_first_of(" ");
     chan = params.substr(0, pos1);
-    if (pos1 != string::npos) {
-        string::size_type pos2 = params.find_first_of(" ", pos1 + 1);
+    if (pos1 != ustring::npos) {
+        ustring::size_type pos2 = params.find_first_of(" ", pos1 + 1);
 
         nick = params.substr(pos1 + 1, (pos2 - 1) - pos1);
 
-        if (pos2 != string::npos) {
+        if (pos2 != ustring::npos) {
             msg = params.substr(pos2 + 1);
         }
     }
@@ -139,12 +139,12 @@ void Kick(ServerConnection *conn, const string& params)
     }
 }
 
-void Server(ServerConnection *conn, const string& params)
+void Server(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
         throw CommandException("/SERVER <host/ip> [port] [password], connect to an IRC server");
     } else {
-        string host, port, password;
+        ustring host, port, password;
         istringstream ss(params);
         ss >> host;
         ss >> port;
@@ -168,13 +168,13 @@ void Server(ServerConnection *conn, const string& params)
     }
 }
 
-void Disconnect(ServerConnection *conn, const string& params)
+void Disconnect(ServerConnection *conn, const ustring& params)
 {
     conn->removeReconnectTimer();
     conn->disconnect();
 }
 
-void Nick(ServerConnection *conn, const string& params)
+void Nick(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
         throw CommandException("/NICK <nick>, change nick.");
@@ -187,7 +187,7 @@ void Nick(ServerConnection *conn, const string& params)
     }
 }
 
-void Whois(ServerConnection *conn, const string& params)
+void Whois(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
         throw CommandException("/WHOIS <nick>, whois nick.");
@@ -196,7 +196,7 @@ void Whois(ServerConnection *conn, const string& params)
     }
 }
 
-void Mode(ServerConnection *conn, const string& params)
+void Mode(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
         throw CommandException("/MODE <channel> <modes>, set modes for a channel.");
@@ -205,23 +205,23 @@ void Mode(ServerConnection *conn, const string& params)
     }
 }
 
-void Set(ServerConnection *conn, const string& params)
+void Set(ServerConnection *conn, const ustring& params)
 {
-    string::size_type pos1 = params.find_first_of(" ");
-    string key = params.substr(0, pos1);
-    string value;
-    if (pos1 != string::npos)
+    ustring::size_type pos1 = params.find_first_of(" ");
+    ustring key = params.substr(0, pos1);
+    ustring value;
+    if (pos1 != ustring::npos)
           value = params.substr(pos1 + 1);
 
     App->options.set(key, value);
 }
 
-void Ctcp(ServerConnection *conn, const string& params)
+void Ctcp(ServerConnection *conn, const ustring& params)
 {
-    string::size_type pos1 = params.find_first_of(" ");
-    string to = params.substr(0, pos1);
-    string action;
-    if (pos1 != string::npos)
+    ustring::size_type pos1 = params.find_first_of(" ");
+    ustring to = params.substr(0, pos1);
+    ustring action;
+    if (pos1 != ustring::npos)
           action = params.substr(pos1 + 1);
 
     if (action.empty()) {
@@ -233,12 +233,12 @@ void Ctcp(ServerConnection *conn, const string& params)
     }
 }
 
-void Away(ServerConnection *conn, const string& params)
+void Away(ServerConnection *conn, const ustring& params)
 {
     conn->sendAway(params);
 }
 
-void Awayall(ServerConnection *conn, const string& params)
+void Awayall(ServerConnection *conn, const ustring& params)
 {
     std::vector<ServerConnection*> servers = App->getServers();
     std::vector<ServerConnection*>::iterator i;
@@ -249,7 +249,7 @@ void Awayall(ServerConnection *conn, const string& params)
     }
 }
 
-void Banlist(ServerConnection *conn, const string& chan)
+void Banlist(ServerConnection *conn, const ustring& chan)
 {
     if (chan.empty()) {
         throw CommandException("/BANLIST <channel>, see banlist for channel.");
@@ -258,9 +258,9 @@ void Banlist(ServerConnection *conn, const string& chan)
     }
 }
 
-void Invite(ServerConnection *conn, const string& params)
+void Invite(ServerConnection *conn, const ustring& params)
 {
-    string to, chan;
+    ustring to, chan;
     stringstream ss(params);
     ss >> to;
     ss >> chan;
@@ -272,12 +272,12 @@ void Invite(ServerConnection *conn, const string& params)
     }
 }
 
-void Topic(ServerConnection *conn, const string& params)
+void Topic(ServerConnection *conn, const ustring& params)
 {
-    string::size_type pos1 = params.find_first_of(" ");
-    string chan = params.substr(0, pos1);
-    string topic;
-    if (pos1 != string::npos)
+    ustring::size_type pos1 = params.find_first_of(" ");
+    ustring chan = params.substr(0, pos1);
+    ustring topic;
+    if (pos1 != ustring::npos)
           topic = params.substr(pos1 + 1);
 
     if (chan.empty()) {
@@ -287,45 +287,45 @@ void Topic(ServerConnection *conn, const string& params)
     }
 }
 
-void Msg(ServerConnection *conn, const string& params)
+void Msg(ServerConnection *conn, const ustring& params)
 {
-    string::size_type pos1 = params.find_first_of(" ");
-    string to = params.substr(0, pos1);
-    string msg;
-    if (pos1 != string::npos)
+    ustring::size_type pos1 = params.find_first_of(" ");
+    ustring to = params.substr(0, pos1);
+    ustring msg;
+    if (pos1 != ustring::npos)
           msg = params.substr(pos1 + 1);
 
     if (msg.empty()) {
         throw CommandException("/MSG <nick/channel> <message>, sends a normal message.");
     } else {
         conn->sendMsg(to, msg);
-        string sendgui = "Message to " + to + ":";
+        ustring sendgui = "Message to " + to + ":";
         FE::emit(FE::get(CLIENTMSG) << sendgui << msg, FE::CURRENT, conn);
     }
 }
 
-void Notice(ServerConnection *conn, const string& params)
+void Notice(ServerConnection *conn, const ustring& params)
 {
-    string::size_type pos1 = params.find_first_of(" ");
-    string to = params.substr(0, pos1);
-    string msg;
-    if (pos1 != string::npos)
+    ustring::size_type pos1 = params.find_first_of(" ");
+    ustring to = params.substr(0, pos1);
+    ustring msg;
+    if (pos1 != ustring::npos)
           msg = params.substr(pos1 + 1);
 
     if (msg.empty()) {
         throw CommandException("/NOTICE <nick/channel> <message>, sends a notice.");
     } else {
         conn->sendNotice(to, msg);
-        string sendgui = "Notice to " + to + ":";
+        ustring sendgui = "Notice to " + to + ":";
         FE::emit(FE::get(CLIENTMSG) << sendgui << msg, FE::CURRENT, conn);
     }
 }
 
-void Me(ServerConnection *conn, const string& params)
+void Me(ServerConnection *conn, const ustring& params)
 {
-    string::size_type pos1 = params.find_first_of(" ");
-    string to = params.substr(0, pos1);
-    string msg = params.substr(pos1 + 1);
+    ustring::size_type pos1 = params.find_first_of(" ");
+    ustring to = params.substr(0, pos1);
+    ustring msg = params.substr(pos1 + 1);
 
     if (msg.empty()) {
         throw CommandException("/ME <message>, sends the action to the current channel.");
@@ -335,7 +335,7 @@ void Me(ServerConnection *conn, const string& params)
     }
 }
 
-void Who(ServerConnection *conn, const string& params)
+void Who(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
         throw CommandException("/WHO <mask> [o], search for mask on network, if o is supplied, only search for oppers.");
@@ -344,13 +344,13 @@ void Who(ServerConnection *conn, const string& params)
     }
 }
 
-void List(ServerConnection *conn, const string& params)
+void List(ServerConnection *conn, const ustring& params)
 {
     //throw CommandException("/LIST [channels] [server], list channels on a network, if a channel is supplied, only list that channel. If a server is supplied, forward the request to that IRC server.");
     conn->sendList(params);
 }
 
-void Quote(ServerConnection *conn, const string& params)
+void Quote(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
         throw CommandException("/QUOTE <text>, send raw text to server.");
@@ -359,7 +359,7 @@ void Quote(ServerConnection *conn, const string& params)
     }
 }
 
-void Names(ServerConnection *conn, const string& params)
+void Names(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
         throw CommandException("/NAMES <channel>, see who's on a channel.");
@@ -368,12 +368,12 @@ void Names(ServerConnection *conn, const string& params)
     }
 }
 
-void Oper(ServerConnection* conn, const string& params)
+void Oper(ServerConnection* conn, const ustring& params)
 {
     if (params.empty()) {
        throw CommandException("/OPER <login> <password>, oper up.");
     } else {
-       string login, password;
+       ustring login, password;
        istringstream ss(params);
        ss >> login;
        ss >> password;
@@ -385,12 +385,12 @@ void Oper(ServerConnection* conn, const string& params)
     }
 }
 
-void Kill(ServerConnection* conn, const string& params)
+void Kill(ServerConnection* conn, const ustring& params)
 {
-    string::size_type pos1 = params.find_first_of(" ");
-    string nick = params.substr(0, pos1);
-    string reason;
-    if (pos1 != string::npos)
+    ustring::size_type pos1 = params.find_first_of(" ");
+    ustring nick = params.substr(0, pos1);
+    ustring reason;
+    if (pos1 != ustring::npos)
           reason = params.substr(pos1 + 1);
 
     if (nick.empty()) {
@@ -401,7 +401,7 @@ void Kill(ServerConnection* conn, const string& params)
     }
 }
 
-void Wallops(ServerConnection* conn, const string& params)
+void Wallops(ServerConnection* conn, const ustring& params)
 {
     if (params.empty()) {
        throw CommandException("/WALLOPS <message>, send wallop message.");
@@ -411,12 +411,12 @@ void Wallops(ServerConnection* conn, const string& params)
     }
 }
 
-void DCC(ServerConnection* conn, const string& params)
+void DCC(ServerConnection* conn, const ustring& params)
 {
     if (params.empty()) {
        throw CommandException("/DCC <actions>, perform a DCC action.");
     } else {
-       string action, secondparam;
+       ustring action, secondparam;
        istringstream ss(params);
        ss >> action;
        ss >> secondparam;
@@ -426,7 +426,7 @@ void DCC(ServerConnection* conn, const string& params)
            if (!App->getDcc().do_dcc(Util::stoi(secondparam)))
                  throw CommandException("No DCC with that number");
        } else if (action == "SEND") {
-           string filename;
+           ustring filename;
            ss >> filename;
 
            App->getDcc().addDccSendOut(filename, secondparam, conn);
@@ -434,81 +434,81 @@ void DCC(ServerConnection* conn, const string& params)
     }
 }
 
-void Admin(ServerConnection* conn, const string& params)
+void Admin(ServerConnection* conn, const ustring& params)
 {
     conn->sendAdmin(params);
 }
 
-void Whowas(ServerConnection* conn, const string& params)
+void Whowas(ServerConnection* conn, const ustring& params)
 {
     conn->sendWhowas(params);
 }
 
-void Op(ServerConnection* conn, const string& params)
+void Op(ServerConnection* conn, const ustring& params)
 {
     if (params.empty()) {
         throw CommandException("/OP <channel> <nicks>, give operator status to one or more nicks.");
     } else {
 
-        string chan;
+        ustring chan;
         istringstream ss(params);
         ss >> chan;
 
-        std::string modeline = assignModes('+', 'o', ss);
+        Glib::ustring modeline = assignModes('+', 'o', ss);
 
         conn->sendMode(chan + " " + modeline);
     }
 }
 
-void Deop(ServerConnection* conn, const string& params)
+void Deop(ServerConnection* conn, const ustring& params)
 {
     if (params.empty()) {
         throw CommandException("/DEOP <channel> <nicks>, remove operator status from one or more nicks.");
     } else {
 
-        string chan;
+        ustring chan;
         istringstream ss(params);
         ss >> chan;
 
-        std::string modeline = assignModes('-', 'o', ss);
+        Glib::ustring modeline = assignModes('-', 'o', ss);
 
         conn->sendMode(chan + " " + modeline);
     }
 }
 
-void Voice(ServerConnection* conn, const string& params)
+void Voice(ServerConnection* conn, const ustring& params)
 {
     if (params.empty()) {
         throw CommandException("/VOICE <channel> <nicks>, gives voice to one or more nicks.");
     } else {
 
-        string chan;
+        ustring chan;
         istringstream ss(params);
         ss >> chan;
 
-        std::string modeline = assignModes('+', 'v', ss);
+        Glib::ustring modeline = assignModes('+', 'v', ss);
 
         conn->sendMode(chan + " " + modeline);
     }
 }
 
-void Devoice(ServerConnection* conn, const string& params)
+void Devoice(ServerConnection* conn, const ustring& params)
 {
     if (params.empty()) {
         throw CommandException("/DEVOICE <channel> <nicks>, removes voice from one or more nicks.");
     } else {
 
-        string chan;
+        ustring chan;
         istringstream ss(params);
         ss >> chan;
 
-        std::string modeline = assignModes('-', 'v', ss);
+        Glib::ustring modeline = assignModes('-', 'v', ss);
 
         conn->sendMode(chan + " " + modeline);
     }
 }
 
-void Exit(ServerConnection* conn, const string& params)
+void Exit(ServerConnection* conn, const ustring& params)
 {
     const std::vector<ServerConnection*> servers = App->getServers();
 
@@ -520,11 +520,11 @@ void Exit(ServerConnection* conn, const string& params)
 }
 
 /*
-void Exec(ServerConnection *conn, const string& params)
+void Exec(ServerConnection *conn, const ustring& params)
 {
-    string::size_type pos1 = params.find_first_of(" ");
-    string param = params.substr(0, pos1);
-    string rest = params.substr(pos1 + 1);
+    ustring::size_type pos1 = params.find_first_of(" ");
+    ustring param = params.substr(0, pos1);
+    ustring rest = params.substr(pos1 + 1);
 
     if (param == "-o") {
         FILE* f = popen(rest.c_str(), "r");
@@ -546,27 +546,27 @@ void Exec(ServerConnection *conn, const string& params)
         std::cout << "output: \n" << buf << std::endl;
         FE::emit(FE::get(CLIENTMSG) << buf, FE::CURRENT, conn);
 
-        string str(buf);
+        ustring str(buf);
     } else {
        throw CommandException("/EXEC [-o] <command>, execute a command, if -o is used, output to channel.");
     }
 }
 */
 
-void getCommands(std::set<string>& commands)
+void getCommands(std::set<Glib::ustring>& commands)
 {
     for (int i = 0; cmds[i].cmd != 0; ++i)
         commands.insert(cmds[i].cmd);
 }
 
-std::string assignModes(char sign, char mode, istringstream& ss)
+Glib::ustring assignModes(char sign, char mode, istringstream& ss)
 {
-    string modes;
+    ustring modes;
     modes += sign;
 
-    string nicks;
+    ustring nicks;
 
-    string nick;
+    ustring nick;
     while (ss >> nick)
     {
         modes += mode;

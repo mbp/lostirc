@@ -21,13 +21,14 @@
 
 #include <string>
 #include <sstream>
+#include <glibmm/ustring.h>
 #include "Utils.h"
 
 class baseConfigValue
 {
 public:
-    virtual std::string getString() = 0;
-    virtual baseConfigValue& operator=(const std::string&) = 0;
+    virtual Glib::ustring getString() = 0;
+    virtual baseConfigValue& operator=(const Glib::ustring&) = 0;
 };
 
 template<typename T>
@@ -44,14 +45,14 @@ public:
 
     virtual ~ConfigValue() { }
 
-    std::string getString()
+    Glib::ustring getString()
     {
         std::ostringstream ss;
         ss << value;
         return ss.str();
     }
 
-    baseConfigValue& operator=(const std::string& str)
+    baseConfigValue& operator=(const Glib::ustring& str)
     {
         std::stringstream ss;
         ss << str;
@@ -65,30 +66,30 @@ public:
     T* get() { return &value; }
 };
 
-// Specialization for std::string
+// Specialization for Glib::ustring
 template<>
-class ConfigValue<std::string> : public baseConfigValue
+class ConfigValue<Glib::ustring> : public baseConfigValue
 {
-    std::string value;
+    Glib::ustring value;
 
 public:
     ConfigValue() { }
 
-    ConfigValue(std::string defaultvalue)
+    ConfigValue(Glib::ustring defaultvalue)
             : value(defaultvalue)
             { }
 
     virtual ~ConfigValue() { }
 
-    std::string getString()
+    Glib::ustring getString()
     {
         return value;
     }
 
-    ConfigValue<std::string>& operator=(const std::string& val) { value = val; return *this; }
-    operator std::string() { return value; }
-    std::string operator *() { return value; }
-    std::string* get() { return &value; }
+    ConfigValue<Glib::ustring>& operator=(const Glib::ustring& val) { value = val; return *this; }
+    operator Glib::ustring() { return value; }
+    Glib::ustring operator *() { return value; }
+    Glib::ustring* get() { return &value; }
 };
 
 class baseConfig
@@ -96,8 +97,8 @@ class baseConfig
 public:
     baseConfig(const char *filename);
 
-    void set(const std::string& key, const std::string& value);
-    std::string get(const std::string& key);
+    void set(const Glib::ustring& key, const Glib::ustring& value);
+    Glib::ustring get(const Glib::ustring& key);
 
 
 protected:
@@ -106,8 +107,8 @@ protected:
 
     void add(const char *name, baseConfigValue* t) { configvalues[name] = t; }
 
-    std::map<std::string, baseConfigValue*> configvalues;
-    std::string filename;
+    std::map<Glib::ustring, baseConfigValue*> configvalues;
+    Glib::ustring filename;
 
     template<typename T> friend class Value;
 };
@@ -135,36 +136,36 @@ public:
     ~Value() { delete valueptr; }
 
     Value<T>& operator=(const T& val) { *valueptr = val; holder->writeConfigFile(); return *this; }
-    Value<T>& operator=(const std::string& val) { *valueptr = val; holder->writeConfigFile(); return *this; }
+    Value<T>& operator=(const Glib::ustring& val) { *valueptr = val; holder->writeConfigFile(); return *this; }
     operator T() { return *(*valueptr); }
     T* operator->() { return valueptr->get(); }
     ConfigValue<T>& operator() () { return *valueptr; }
     ConfigValue<T>* operator*() { return valueptr; }
 };
 
-// Specialization for std::string
+// Specialization for Glib::ustring
 template<>
-class Value<std::string>
+class Value<Glib::ustring>
 {
-    ConfigValue<std::string> *valueptr;
+    ConfigValue<Glib::ustring> *valueptr;
     baseConfig *holder;
 
 public:
     Value(baseConfig *holder, const char *name)
-        : valueptr(new ConfigValue<std::string>), holder(holder)
+        : valueptr(new ConfigValue<Glib::ustring>), holder(holder)
         { holder->add(name, valueptr); }
 
-    Value(baseConfig *holder, const char *name, std::string defaultvalue)
-        : valueptr(new ConfigValue<std::string>(defaultvalue)), holder(holder)
+    Value(baseConfig *holder, const char *name, Glib::ustring defaultvalue)
+        : valueptr(new ConfigValue<Glib::ustring>(defaultvalue)), holder(holder)
         { holder->add(name, valueptr); }
 
     ~Value() { delete valueptr; }
 
-    Value<std::string>& operator=(const std::string& val) { *valueptr = val; holder->writeConfigFile(); return *this; }
-    operator std::string() { return *(*valueptr); }
-    std::string* operator->() { return valueptr->get(); }
-    ConfigValue<std::string>& operator() () { return *valueptr; }
-    ConfigValue<std::string>* operator*() { return valueptr; }
+    Value<Glib::ustring>& operator=(const Glib::ustring& val) { *valueptr = val; holder->writeConfigFile(); return *this; }
+    operator Glib::ustring() { return *(*valueptr); }
+    Glib::ustring* operator->() { return valueptr->get(); }
+    ConfigValue<Glib::ustring>& operator() () { return *valueptr; }
+    ConfigValue<Glib::ustring>* operator*() { return valueptr; }
 };
 
 

@@ -76,7 +76,7 @@ namespace FE {
 
 void emit(Tmpl& t, ChannelBase& chan, ServerConnection *conn)
 {
-    std::string msg = t.result();
+    Glib::ustring msg = t.result();
 
     // If the user has limited_highligthing enabled, only highlight if the
     // priority is above 1
@@ -97,7 +97,7 @@ void emit(Tmpl& t, const std::vector<ChannelBase*>& to, ServerConnection *conn)
 
 void emit(Tmpl& t, Destination d, ServerConnection *conn)
 {
-    std::string msg = t.result();
+    Glib::ustring msg = t.result();
     
     // If the user has limited_highligthing enabled, only highlight if the
     // priority is above 1
@@ -110,7 +110,7 @@ void emit(Tmpl& t, Destination d, ServerConnection *conn)
 
 void emit(Tmpl& t, Destination d)
 {
-    std::string msg = t.result();
+    Glib::ustring msg = t.result();
     
     // If the user has limited_highligthing enabled, only highlight if the
     // priority is above 1
@@ -129,11 +129,11 @@ Tmpl get(Event e)
     }
 }
 
-string Tmpl::result()
+Glib::ustring Tmpl::result()
 {
-    string newstr;
+    Glib::ustring newstr;
     bool parsing_arg = false;
-    string::const_iterator i;
+    Glib::ustring::iterator i;
     for (i = orig.begin(); i != orig.end(); ++i) {
         if (*i == '%') {
             parsing_arg = true;

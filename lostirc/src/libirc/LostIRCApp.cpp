@@ -20,7 +20,7 @@
 #include "ServerConnection.h"
 #include "Commands.h"
 
-using std::string;
+using Glib::ustring;
 using std::vector;
 
 LostIRCApp* App;
@@ -40,10 +40,10 @@ LostIRCApp::LostIRCApp(FrontEnd *f)
 
     if (pwentry != NULL) {
 
-        string realname = pwentry->pw_gecos;
+        ustring realname = pwentry->pw_gecos;
 
         // Only read until the first comma
-        if (realname.find(",") != string::npos) {
+        if (realname.find(",") != ustring::npos) {
             realname = realname.substr(0, realname.find(","));
         }
 
@@ -100,7 +100,7 @@ void LostIRCApp::autoConnect()
     }
 }
 
-ServerConnection* LostIRCApp::newServer(const string& host, int port)
+ServerConnection* LostIRCApp::newServer(const ustring& host, int port)
 {
     ServerConnection *conn = new ServerConnection(host, options.nick, port);
     _servers.push_back(conn);

@@ -26,7 +26,7 @@
 #include "ConfigHandler.h"
 #include "LostIRCApp.h"
 
-using std::string;
+using Glib::ustring;
 using std::cout;
 using std::vector;
 using std::map;
@@ -55,16 +55,17 @@ bool Servers::readServersFile()
     if (!in)
           return false;
 
-    vector<string> tmpcmds;
-    string server, tmp, nick, password;
+    vector<ustring> tmpcmds;
+    ustring server, nick, password;
+    std::string tmp;
     int port = 0;
     int auto_connect = 1;
     while (getline(in, tmp)) {
-        string::size_type pos1 = tmp.find_first_of("=");
-        string param;
-        string value;
+        ustring::size_type pos1 = tmp.find_first_of("=");
+        ustring param;
+        ustring value;
 
-        if (pos1 != string::npos) {
+        if (pos1 != ustring::npos) {
             param = tmp.substr(0, pos1 - 1);
             value = tmp.substr(pos1 + 2);
 
@@ -122,7 +123,7 @@ bool Servers::writeServersFile()
           return false;
 
     vector<Server*>::const_iterator i;
-    vector<string>::const_iterator ivec;
+    vector<ustring>::const_iterator ivec;
 
     for (i = _servers.begin(); i != _servers.end(); ++i) {
         out << "hostname = " << (*i)->hostname << std::endl;
@@ -162,7 +163,7 @@ baseConfig::baseConfig(const char *file)
     filename += file;
 }
 
-void baseConfig::set(const string& key, const string& value)
+void baseConfig::set(const ustring& key, const ustring& value)
 {
     if (configvalues.find(key) != configvalues.end())
           *(configvalues[key]) = value;
@@ -170,9 +171,9 @@ void baseConfig::set(const string& key, const string& value)
         std::cerr << "Not found key, `" << key << "'" << std::endl;
 }
 
-std::string baseConfig::get(const string& key)
+Glib::ustring baseConfig::get(const ustring& key)
 {
-    map<string, baseConfigValue*>::const_iterator i = configvalues.find(key);
+    map<ustring, baseConfigValue*>::const_iterator i = configvalues.find(key);
 
     if (i != configvalues.end())
           return i->second->getString();
@@ -188,11 +189,11 @@ bool baseConfig::readConfigFile()
     if (!in)
           return false;
 
-    string str;
+    std::string str;
     while (getline(in, str)) {
-        string::size_type pos = str.find(" = ");
-        string param = str.substr(0, pos);
-        string value = str.substr(pos + 3);
+        ustring::size_type pos = str.find(" = ");
+        ustring param = str.substr(0, pos);
+        ustring value = str.substr(pos + 3);
 
         if (configvalues.find(param.c_str()) != configvalues.end())
               *(configvalues[param.c_str()]) = value;
@@ -213,7 +214,7 @@ bool baseConfig::writeConfigFile()
     #ifdef DEBUG
     App->log << "\twriting..." << std::endl;
     #endif
-    map<string, baseConfigValue*>::const_iterator i;
+    map<ustring, baseConfigValue*>::const_iterator i;
 
     for (i = configvalues.begin(); i != configvalues.end(); ++i) {
         out << i->first << " = " << i->second->getString() << std::endl;
@@ -325,10 +326,10 @@ Events::Events(const char *filename)
     whois_server(this, "whois_server", "$15-- $16User $00%1$00: on server %2 (%3)"),
     whois_generic(this, "whois_generic", "$15-- $16User $00%1$00: %2")
 {
-    map<string, baseConfigValue*>::iterator i = configvalues.begin();
+    map<ustring, baseConfigValue*>::iterator i = configvalues.begin();
 
     for (; i != configvalues.end(); ++i) {
-        string msg = i->second->getString();
+        std::string msg = i->second->getString();
         std::replace(msg.begin(), msg.end(), '$', '\003');
         std::replace(msg.begin(), msg.end(), '§', '\002');
         *(i->second) = msg;

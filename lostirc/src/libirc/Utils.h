@@ -19,6 +19,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <glibmm/ustring.h>
 #include <vector>
 #include <string> 
 
@@ -26,7 +27,9 @@ namespace Util {
 
     std::string upper(std::string str);
     std::string lower(std::string str);
-    int stoi(const std::string& str);
-    bool isDigit(const std::string& str);
+    int stoi(const Glib::ustring& str);
+    bool isDigit(const Glib::ustring& str);
+
+    Glib::ustring convert_to_utf8(const std::string& str);
 }
 #endif

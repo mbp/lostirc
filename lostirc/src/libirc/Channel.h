@@ -19,7 +19,7 @@
 #ifndef CHANNEL_H
 #define CHANNEL_H
 
-#include <string>
+#include <glibmm/ustring.h>
 #include <vector>
 #include "irc_defines.h"
 
@@ -28,7 +28,7 @@ class User {
 
 public:
     User() : state(0) { }
-    std::string nick;
+    Glib::ustring nick;
     IRC::UserMode getMode() const;
     void setMode(IRC::UserMode u);
     void removeMode(IRC::UserMode u);
@@ -37,40 +37,40 @@ public:
 class ChannelBase {
 public:
     virtual ~ChannelBase() { }
-    virtual std::string getName() = 0;
-    virtual bool findUser(const std::string& n) = 0;
-    virtual void renameUser(const std::string& from, const std::string& to) = 0;
+    virtual Glib::ustring getName() = 0;
+    virtual bool findUser(const Glib::ustring& n) = 0;
+    virtual void renameUser(const Glib::ustring& from, const Glib::ustring& to) = 0;
 
 };
 
 class Channel : public ChannelBase {
-    std::string _name;
+    Glib::ustring _name;
     std::vector<User*> _users;
 
 public:
-    Channel(const std::string& n) : _name(n), endOfNames(false) { }
-    std::string getName() { return _name; }
-    bool findUser(const std::string& u);
-    void renameUser(const std::string& from, const std::string& to);
+    Channel(const Glib::ustring& n) : _name(n), endOfNames(false) { }
+    Glib::ustring getName() { return _name; }
+    bool findUser(const Glib::ustring& u);
+    void renameUser(const Glib::ustring& from, const Glib::ustring& to);
 
-    void addUser(const std::string& n, IRC::UserMode i = IRC::NONE);
-    void removeUser(const std::string& u);
+    void addUser(const Glib::ustring& n, IRC::UserMode i = IRC::NONE);
+    void removeUser(const Glib::ustring& u);
     const std::vector<User*>& getUsers() { return _users; }
 
-    User* getUser(const std::string& n);
+    User* getUser(const Glib::ustring& n);
 
     bool endOfNames; // have we reached our 'ENDOFNAMES' on channel join?
 };
 
 class Query : public ChannelBase {
-    std::string _name;
+    Glib::ustring _name;
 
 public:
-    Query(const std::string& n) : _name(n) { }
+    Query(const Glib::ustring& n) : _name(n) { }
 
-    std::string getName() { return _name; }
-    bool findUser(const std::string& n) { return (n == _name); }
-    void renameUser(const std::string& from, const std::string& to) {
+    Glib::ustring getName() { return _name; }
+    bool findUser(const Glib::ustring& n) { return (n == _name); }
+    void renameUser(const Glib::ustring& from, const Glib::ustring& to) {
         if (_name == from) _name = to;
     }
 

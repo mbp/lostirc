@@ -21,6 +21,7 @@
 
 #include <string>
 #include <glibmm/main.h>
+#include <glibmm/ustring.h>
 #include "Socket.h"
 #include "Parser.h"
 #include "Channel.h"
@@ -29,10 +30,10 @@ class ServerConnection : public SigC::Object
 {
 
 public:
-    ServerConnection(const std::string& host, const std::string& nick, int port = 6667, bool doconnect = false);
+    ServerConnection(const Glib::ustring& host, const Glib::ustring& nick, int port = 6667, bool doconnect = false);
     ~ServerConnection();
 
-    void connect(const std::string& host, int port = 6667, const std::string& pass = "");
+    void connect(const Glib::ustring& host, int port = 6667, const Glib::ustring& pass = "");
     void connect();
     void on_error(const char *msg);
     void on_host_resolved();
@@ -40,44 +41,44 @@ public:
     void addConnectionTimerCheck();
     void addReconnectTimer();
     void removeReconnectTimer();
-    bool sendPong(const std::string& crap);
-    bool sendPing(const std::string& crap = "");
-    bool sendUser(const std::string& nick, const std::string& localhost, const std::string& remotehost, const std::string& name);
-    bool sendNick(const std::string& nick);
-    bool sendPass(const std::string& pass);
-    bool sendVersion(const std::string& to);
-    bool sendMsg(const std::string& to, const std::string& msg);
-    bool sendNotice(const std::string& to, const std::string& msg);
-    bool sendJoin(const std::string& chan);
-    bool sendPart(const std::string& chan, const std::string& msg);
-    bool sendNames(const std::string& chan);
-    bool sendKick(const std::string& chan, const std::string& nick, const std::string& msg);
-    bool sendWhois(const std::string& params);
-    bool sendQuit(const std::string& quitmsg = "");
-    bool sendMode(const std::string& params);
-    bool sendCtcp(const std::string& to, const std::string& params);
-    bool sendCtcpNotice(const std::string& to, const std::string& params);
-    bool sendTopic(const std::string& chan, const std::string& params);
-    bool sendAway(const std::string& params);
-    bool sendAdmin(const std::string& params);
-    bool sendWhowas(const std::string& params);
-    bool sendInvite(const std::string& to, const std::string& params);
-    bool sendBanlist(const std::string& chan);
-    bool sendMe(const std::string& to, const std::string& msg);
-    bool sendWho(const std::string& mask);
-    bool sendList(const std::string& params);
-    bool sendOper(const std::string& login, const std::string& password);
-    bool sendKill(const std::string& nick, const std::string& reason);
-    bool sendWallops(const std::string& message);
-    bool sendRaw(const std::string& text);
+    bool sendPong(const Glib::ustring& crap);
+    bool sendPing(const Glib::ustring& crap = "");
+    bool sendUser(const Glib::ustring& nick, const Glib::ustring& localhost, const Glib::ustring& remotehost, const Glib::ustring& name);
+    bool sendNick(const Glib::ustring& nick);
+    bool sendPass(const Glib::ustring& pass);
+    bool sendVersion(const Glib::ustring& to);
+    bool sendMsg(const Glib::ustring& to, const Glib::ustring& msg);
+    bool sendNotice(const Glib::ustring& to, const Glib::ustring& msg);
+    bool sendJoin(const Glib::ustring& chan);
+    bool sendPart(const Glib::ustring& chan, const Glib::ustring& msg);
+    bool sendNames(const Glib::ustring& chan);
+    bool sendKick(const Glib::ustring& chan, const Glib::ustring& nick, const Glib::ustring& msg);
+    bool sendWhois(const Glib::ustring& params);
+    bool sendQuit(const Glib::ustring& quitmsg = "");
+    bool sendMode(const Glib::ustring& params);
+    bool sendCtcp(const Glib::ustring& to, const Glib::ustring& params);
+    bool sendCtcpNotice(const Glib::ustring& to, const Glib::ustring& params);
+    bool sendTopic(const Glib::ustring& chan, const Glib::ustring& params);
+    bool sendAway(const Glib::ustring& params);
+    bool sendAdmin(const Glib::ustring& params);
+    bool sendWhowas(const Glib::ustring& params);
+    bool sendInvite(const Glib::ustring& to, const Glib::ustring& params);
+    bool sendBanlist(const Glib::ustring& chan);
+    bool sendMe(const Glib::ustring& to, const Glib::ustring& msg);
+    bool sendWho(const Glib::ustring& mask);
+    bool sendList(const Glib::ustring& params);
+    bool sendOper(const Glib::ustring& login, const Glib::ustring& password);
+    bool sendKill(const Glib::ustring& nick, const Glib::ustring& reason);
+    bool sendWallops(const Glib::ustring& message);
+    bool sendRaw(const Glib::ustring& text);
 
-    void addChannel(const std::string& n);
-    void addQuery(const std::string &n);
-    void removeQuery(const std::string &n);
-    bool removeChannel(const std::string& n);
-    std::vector<ChannelBase*> findUser(const std::string& n);
-    Channel* findChannel(const std::string& c);
-    Query* findQuery(const std::string& c);
+    void addChannel(const Glib::ustring& n);
+    void addQuery(const Glib::ustring &n);
+    void removeQuery(const Glib::ustring &n);
+    bool removeChannel(const Glib::ustring& n);
+    std::vector<ChannelBase*> findUser(const Glib::ustring& n);
+    Channel* findChannel(const Glib::ustring& c);
+    Query* findQuery(const Glib::ustring& c);
     void sendCmds();
 
     const char * getLocalIP() { return _socket.getLocalIP(); }
@@ -89,20 +90,20 @@ public:
 
     // Session struct for all ServerConnections
     struct {
-        std::string nick;
-        std::string realname;
-        std::string password;
-        std::string awaymsg;
+        Glib::ustring nick;
+        Glib::ustring realname;
+        Glib::ustring password;
+        Glib::ustring awaymsg;
         bool isConnected;
         bool hasRegistered;
         bool isAway;
         bool endOfMotd;
         int port;
         bool sentLagCheck;
-        std::string servername;
-        std::string host;
+        Glib::ustring servername;
+        Glib::ustring host;
         std::vector<ChannelBase*> channels;
-        std::vector<std::string> cmds;
+        std::vector<Glib::ustring> cmds;
     } Session;
 
 private:

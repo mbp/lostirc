@@ -31,8 +31,6 @@
 #include "MainNotebook.h"
 #include "StatusBar.h"
 
-Glib::ustring convert_to_utf8(const std::string& str);
-
 
 class MainWindow : public Gtk::Window, public FrontEnd
 {
@@ -49,15 +47,15 @@ public:
     Tab* newServer();
 
     // Methods implemented for the abstract base class 'FrontEnd' 
-    void displayMessage(const std::string& msg, FE::Destination d, bool shouldHighlight = true);
-    void displayMessage(const std::string& msg, FE::Destination d, ServerConnection *conn, bool shouldHighlight = true);
-    void displayMessage(const std::string& msg, ChannelBase& to, ServerConnection *conn, bool shouldHighlight = true);
-    void join(const std::string& nick, Channel& chan, ServerConnection *conn);
-    void part(const std::string& nick, Channel& chan, ServerConnection *conn);
-    void kick(const std::string& from, Channel& chan, const std::string& kicker, const std::string& msg,  ServerConnection *conn);
-    void quit(const std::string& nick, std::vector<ChannelBase*> chans, ServerConnection *conn);
-    void nick(const std::string& from, const std::string& to, std::vector<ChannelBase*> chans, ServerConnection *conn);
-    void CUMode(const std::string& nick, Channel& chan, const std::vector<User>& users, ServerConnection *conn);
+    void displayMessage(const Glib::ustring& msg, FE::Destination d, bool shouldHighlight = true);
+    void displayMessage(const Glib::ustring& msg, FE::Destination d, ServerConnection *conn, bool shouldHighlight = true);
+    void displayMessage(const Glib::ustring& msg, ChannelBase& to, ServerConnection *conn, bool shouldHighlight = true);
+    void join(const Glib::ustring& nick, Channel& chan, ServerConnection *conn);
+    void part(const Glib::ustring& nick, Channel& chan, ServerConnection *conn);
+    void kick(const Glib::ustring& from, Channel& chan, const Glib::ustring& kicker, const Glib::ustring& msg,  ServerConnection *conn);
+    void quit(const Glib::ustring& nick, std::vector<ChannelBase*> chans, ServerConnection *conn);
+    void nick(const Glib::ustring& from, const Glib::ustring& to, std::vector<ChannelBase*> chans, ServerConnection *conn);
+    void CUMode(const Glib::ustring& nick, Channel& chan, const std::vector<User>& users, ServerConnection *conn);
     void names(Channel& c, ServerConnection *conn);
     void highlight(ChannelBase& chan, ServerConnection *conn);
     void away(bool away, ServerConnection *conn);

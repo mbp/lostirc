@@ -29,7 +29,7 @@
 #include "DCC.h"
 
 using std::vector;
-using std::string;
+using Glib::ustring;
 
 /* different functions used in for_each */
 namespace algo
@@ -37,23 +37,23 @@ namespace algo
 
   struct removeUser : public std::unary_function<ChannelBase*, void>
   {
-      removeUser(const std::string& n) : nick(n) { }
+      removeUser(const Glib::ustring& n) : nick(n) { }
       void operator() (ChannelBase* x) {
           Channel *c = dynamic_cast<Channel*>(x);
           if (c)
                 c->removeUser(nick);
       }
-      std::string nick;
+      Glib::ustring nick;
   };
 
   struct renameUser : public std::unary_function<ChannelBase*, void>
   {
-      renameUser(const std::string& f, const std::string& t) : from(f), to(t) { }
+      renameUser(const Glib::ustring& f, const Glib::ustring& t) : from(f), to(t) { }
       void operator() (ChannelBase* x) {
           x->renameUser(from, to);
       }
-      std::string from;
-      std::string to;
+      Glib::ustring from;
+      Glib::ustring to;
   };
 
 }
@@ -63,7 +63,7 @@ Parser::Parser(ServerConnection *conn)
 {
 }
 
-void Parser::parseLine(string& data)
+void Parser::parseLine(ustring& data)
 {
     #ifdef DEBUG
     App->log << "<< " << data << std::endl;
@@ -84,16 +84,16 @@ void Parser::parseLine(string& data)
         */
 
         // Find prefix
-        string::size_type pos1 = data.find_first_of(" ", 1);
-        string from = data.substr(1, pos1 - 1);
+        ustring::size_type pos1 = data.find_first_of(" ", 1);
+        ustring from = data.substr(1, pos1 - 1);
 
         // Find command
-        string::size_type pos2 = data.find_first_of(" ", pos1 + 1);
-        string command = data.substr(pos1 + 1, (pos2 - 1) - pos1);
+        ustring::size_type pos2 = data.find_first_of(" ", pos1 + 1);
+        ustring command = data.substr(pos1 + 1, (pos2 - 1) - pos1);
 
         // Check whether there is any params
-        string::size_type pos3 = data.find_first_of(":", pos2 + 1);
-        string param;
+        ustring::size_type pos3 = data.find_first_of(":", pos2 + 1);
+        ustring param;
 
         if ((pos3 - 1) != pos2) {
             // We have params
@@ -101,8 +101,8 @@ void Parser::parseLine(string& data)
         }
 
         // Get rest (whats after the ':', if there were any ':')
-        string rest;
-        if (pos3 != string::npos) {
+        ustring rest;
+        if (pos3 != ustring::npos) {
             rest = data.substr(pos3 + 1);
         }
 
@@ -149,13 +149,13 @@ void Parser::parseLine(string& data)
               FE::emit(FE::get(UNKNOWN) << data, FE::CURRENT, _conn);
 
     } else {
-        // Parse string in form, eg. 'PING :23523525'
-        string::size_type pos1 = data.find_first_of(" ", 0);
-        string command = data.substr(0, pos1);
+        // Parse ustring in form, eg. 'PING :23523525'
+        ustring::size_type pos1 = data.find_first_of(" ", 0);
+        ustring command = data.substr(0, pos1);
 
         // Check whether there are any params
-        string::size_type pos2 = data.find_first_of(":", pos1 + 1);
-        string param;
+        ustring::size_type pos2 = data.find_first_of(":", pos1 + 1);
+        ustring param;
 
         if ((pos2 - 1) != pos1) {
             // We have params
@@ -163,7 +163,7 @@ void Parser::parseLine(string& data)
         }
 
         // Get rest (whats after the ':')
-        string rest = data.substr(pos2 + 1);
+        ustring rest = data.substr(pos2 + 1);
 
         #ifdef DEBUG
         App->log << "\t[command '" << command << "']";
@@ -185,12 +185,12 @@ void Parser::parseLine(string& data)
 }
 
 inline
-void Parser::Ping(const string& rest)
+void Parser::Ping(const ustring& rest)
 {
     _conn->sendPong(rest);
 }
 
-void Parser::Privmsg(const string& from, const string& param, const string& rest)
+void Parser::Privmsg(const ustring& from, const ustring& param, const ustring& rest)
 {
     if (rest[0] == '\001') {
         // We got CTCP
@@ -226,16 +226,16 @@ void Parser::Privmsg(const string& from, const string& param, const string& rest
     }
 }
 
-void Parser::Ctcp(const string& from, const string& param, const string& rest)
+void Parser::Ctcp(const ustring& from, const ustring& param, const ustring& rest)
 {
-    string::size_type pos = rest.find_first_of(" \001", 1);
-    string command = rest.substr(1, pos - 1);
+    ustring::size_type pos = rest.find_first_of(" \001", 1);
+    ustring command = rest.substr(1, pos - 1);
 
     if (command == "VERSION") {
         _conn->sendVersion(findNick(from));
 
     } else if (command == "ACTION") {
-        string rest_ = rest.substr(pos + 1, (rest.length() - pos) - 2);
+        ustring rest_ = rest.substr(pos + 1, (rest.length() - pos) - 2);
 
         ChannelBase *chan;
 
@@ -266,17 +266,17 @@ void Parser::Ctcp(const string& from, const string& param, const string& rest)
 
     } else if (command == "PING") {
         // Reply to the client with the same timestamp they sent us.
-        string rest_ = rest.substr(pos + 1, (rest.length() - pos) - 2);
+        ustring rest_ = rest.substr(pos + 1, (rest.length() - pos) - 2);
         _conn->sendCtcpNotice(findNick(from), "PING " + rest_);
 
     } else if (command == "DCC") {
-        string dcc_type = getWord(rest, 2);
-        string dcc_address = getWord(rest, 4);
-        string dcc_port = getWord(rest, 5);
+        ustring dcc_type = getWord(rest, 2);
+        ustring dcc_address = getWord(rest, 4);
+        ustring dcc_port = getWord(rest, 5);
 
         if (dcc_type == "SEND") {
-            string dcc_size = getWord(rest, 6);
-            string dcc_filename = getWord(rest, 3);
+            ustring dcc_size = getWord(rest, 6);
+            ustring dcc_filename = getWord(rest, 3);
 
             std::istringstream ss(dcc_address);
             unsigned long address;
@@ -316,13 +316,13 @@ void Parser::Ctcp(const string& from, const string& param, const string& rest)
 
 }
 
-void Parser::Notice(const string& from, const string& to, const string& rest)
+void Parser::Notice(const ustring& from, const ustring& to, const ustring& rest)
 {
     if (rest[0] == '\001') {
         // CTCP notice
-        string tmp = rest;
-        string::iterator i = remove(tmp.begin(), tmp.end(), '\001');
-        string output(tmp.begin(), i);
+        std::string tmp = rest;
+        std::string::iterator i = remove(tmp.begin(), tmp.end(), '\001');
+        ustring output(tmp.begin(), i);
 
         FE::emit(FE::get(CTCP_REPLY) << getWord(output, 1) << findNick(from) << skipFirstWord(output), FE::CURRENT, _conn);
 
@@ -335,18 +335,18 @@ void Parser::Notice(const string& from, const string& to, const string& rest)
     }
 }
 
-void Parser::Notice(const string& msg)
+void Parser::Notice(const ustring& msg)
 {
-    string::size_type pos = msg.find_first_of(" ");
-    string from = msg.substr(0, pos);
-    string rest = msg.substr(pos + 1);
+    ustring::size_type pos = msg.find_first_of(" ");
+    ustring from = msg.substr(0, pos);
+    ustring rest = msg.substr(pos + 1);
 
     FE::emit(FE::get(NOTICEPRIV) << from << rest, FE::CURRENT, _conn);
 }
 
-void Parser::Kick(const string& from, const string& param, const string& msg)
+void Parser::Kick(const ustring& from, const ustring& param, const ustring& msg)
 {
-    string chan, nick;
+    ustring chan, nick;
     std::istringstream ss(param);
     ss >> chan;
     ss >> nick;
@@ -362,9 +362,9 @@ void Parser::Kick(const string& from, const string& param, const string& msg)
 
 }
 
-void Parser::Join(const string& nick, const string& param, const string& rest)
+void Parser::Join(const ustring& nick, const ustring& param, const ustring& rest)
 {
-    string chan = param;
+    ustring chan = param;
 
     // Some clients/servers/bouncers might accidently send the channel name
     // in the 'rest' string, a bug there, but we would like to avoid a
@@ -387,9 +387,9 @@ void Parser::Join(const string& nick, const string& param, const string& rest)
     FE::emit(FE::get(JOIN) << findNick(nick) << chan << findHost(nick), *c, _conn);
 }
 
-void Parser::Part(const string& nick, const string& param, string& rest)
+void Parser::Part(const ustring& nick, const ustring& param, ustring& rest)
 {
-    string chan = param;
+    ustring chan = param;
 
     // Some clients/servers/bouncers might accidently send the channel name
     // in the 'rest' string, a bug there, but we would like to avoid a
@@ -418,7 +418,7 @@ void Parser::Part(const string& nick, const string& param, string& rest)
     }
 }
 
-void Parser::Quit(const string& nick, const string& msg)
+void Parser::Quit(const ustring& nick, const ustring& msg)
 {
     vector<ChannelBase*> chans = _conn->findUser(findNick(nick));
 
@@ -432,7 +432,7 @@ void Parser::Quit(const string& nick, const string& msg)
           FE::emit(FE::get(QUIT) << findNick(nick) << msg, chans, _conn);
 }
 
-void Parser::Nick(const string& from, const string& to)
+void Parser::Nick(const ustring& from, const ustring& to)
 {
     // When we receive an error that "nick change was too fast", 'to' will
     // be empty. just return if it is.
@@ -455,17 +455,17 @@ void Parser::Nick(const string& from, const string& to)
 
 }
 
-void Parser::Invite(const string& from, const string& rest)
+void Parser::Invite(const ustring& from, const ustring& rest)
 {
     FE::emit(FE::get(INVITED) << findNick(from) << rest, FE::CURRENT, _conn);
 }
 
-void Parser::Kill(const string& from, const string& rest)
+void Parser::Kill(const ustring& from, const ustring& rest)
 {
     FE::emit(FE::get(KILLED) << findNick(from) << rest, FE::CURRENT, _conn);
 }
 
-void Parser::Mode(const string& from, const string& param, const string& rest)
+void Parser::Mode(const ustring& from, const ustring& param, const ustring& rest)
 {
     if (rest.empty()) {
         // We encountered a channel mode message
@@ -477,19 +477,19 @@ void Parser::Mode(const string& from, const string& param, const string& rest)
     }
 }
 
-void Parser::CMode(const string& from, const string& param)
+void Parser::CMode(const ustring& from, const ustring& param)
 {
     // Parse line in the form: '#chan +ovo nick nick2 nick3'
-    string::size_type pos1 = param.find_first_of(" ");
-    string::size_type pos2 = param.find_first_of(" ", pos1 + 1);
+    ustring::size_type pos1 = param.find_first_of(" ");
+    ustring::size_type pos2 = param.find_first_of(" ", pos1 + 1);
 
     // No real modes? No reason to continue.
-    if (pos1 == string::npos)
+    if (pos1 == ustring::npos)
           return;
 
-    string channel = param.substr(0, pos1);
-    string modes = param.substr(pos1 + 1, (pos2 - pos1) - 1);
-    string args = param.substr(pos2 + 1);
+    ustring channel = param.substr(0, pos1);
+    ustring modes = param.substr(pos1 + 1, (pos2 - pos1) - 1);
+    ustring args = param.substr(pos2 + 1);
 
     Channel *chan = _conn->findChannel(channel);
 
@@ -502,9 +502,9 @@ void Parser::CMode(const string& from, const string& param)
           return;
 
     // Get arguments
-    vector<string> arguments;
+    vector<ustring> arguments;
     std::istringstream ss(args);
-    string buf;
+    ustring buf;
     while (ss >> buf)
           arguments.push_back(buf);
 
@@ -517,9 +517,9 @@ void Parser::CMode(const string& from, const string& param)
     std::vector<User> modesvec;
     bool sign = false; // Used to track whether we get a + or a -
 
-    vector<string>::const_iterator arg_i = arguments.begin();
+    vector<ustring>::const_iterator arg_i = arguments.begin();
 
-    for (string::const_iterator i = modes.begin(); i != modes.end(); ++i) {
+    for (ustring::iterator i = modes.begin(); i != modes.end(); ++i) {
         switch (*i)
         {
             case '+':
@@ -533,7 +533,7 @@ void Parser::CMode(const string& from, const string& param)
                 Event e;
                 IRC::UserMode mode = IRC::OP;
                 sign ? (e = OPPED) : (e = DEOPPED);
-                string nick = *arg_i++;
+                ustring nick = *arg_i++;
 
                 User *user = chan->getUser(nick);
                 sign ? (user->setMode(mode)) : (user->removeMode(mode));
@@ -547,7 +547,7 @@ void Parser::CMode(const string& from, const string& param)
                 Event e;
                 IRC::UserMode mode = IRC::VOICE;
                 sign ? (e = VOICED) : (e = DEVOICED);
-                string nick = *arg_i++;
+                ustring nick = *arg_i++;
 
                 User *user = chan->getUser(nick);
 
@@ -562,7 +562,7 @@ void Parser::CMode(const string& from, const string& param)
                 Event e;
                 IRC::UserMode mode = IRC::HALFOP;
                 sign ? (e = HALFOPPED) : (e = HALFDEOPPED);
-                string nick = *arg_i++;
+                ustring nick = *arg_i++;
 
                 User *user = chan->getUser(nick);
                 sign ? (user->setMode(mode)) : (user->removeMode(mode));
@@ -576,7 +576,7 @@ void Parser::CMode(const string& from, const string& param)
                 Event e;
                 sign ? (e = BANNED) : (e = UNBANNED);
 
-                string nick = *arg_i++;
+                ustring nick = *arg_i++;
                 FE::emit(FE::get(e) << findNick(from) << nick, *chan, _conn);
                 break;
                 }
@@ -594,7 +594,7 @@ void Parser::CMode(const string& from, const string& param)
                 modebuf[1] = (*i);
                 modebuf[2] = '\0';
 
-                string nick = *arg_i++;
+                ustring nick = *arg_i++;
                 FE::emit(FE::get(MODE) << findNick(from) << modebuf << nick, *chan, _conn);
                 }
         }
@@ -605,7 +605,7 @@ void Parser::CMode(const string& from, const string& param)
     App->fe->CUMode(findNick(from), *chan, modesvec, _conn);
 }
 
-void Parser::Topic(const string& from, const string& chan, const string& rest)
+void Parser::Topic(const ustring& from, const ustring& chan, const ustring& rest)
 {
     Channel *c = _conn->findChannel(chan);
     if (c)
@@ -615,12 +615,12 @@ void Parser::Topic(const string& from, const string& chan, const string& rest)
 
 }
 
-void Parser::Topic(const string& param, const string& rest)
+void Parser::Topic(const ustring& param, const ustring& rest)
 {
-    string::size_type pos1 = param.find_first_of("#&+!");
-    string::size_type pos2 = param.find_first_of(" ", pos1);
+    ustring::size_type pos1 = param.find_first_of("#&+!");
+    ustring::size_type pos2 = param.find_first_of(" ", pos1);
 
-    string chan = param.substr(pos1, pos2 - pos1);
+    ustring chan = param.substr(pos1, pos2 - pos1);
     Channel *c = _conn->findChannel(chan);
 
     if (c)
@@ -629,17 +629,17 @@ void Parser::Topic(const string& param, const string& rest)
           FE::emit(FE::get(TOPICIS) << chan << rest, FE::CURRENT, _conn);
 }
 
-void Parser::TopicTime(const string& param)
+void Parser::TopicTime(const ustring& param)
 {
     // Find channel
-    string::size_type pos1 = param.find_first_of("#&+!");
-    string::size_type pos2 = param.find_first_of(" ", pos1);
-    string chan = param.substr(pos1, pos2 - pos1);
+    ustring::size_type pos1 = param.find_first_of("#&+!");
+    ustring::size_type pos2 = param.find_first_of(" ", pos1);
+    ustring chan = param.substr(pos1, pos2 - pos1);
 
     // Find user who set the topic
-    string::size_type pos3 = param.find_first_of(" ", pos2 + 1);
-    string nick = param.substr(pos2 + 1, (pos3 - pos2) - 1);
-    string time = param.substr(pos3 + 1);
+    ustring::size_type pos3 = param.find_first_of(" ", pos2 + 1);
+    ustring nick = param.substr(pos2 + 1, (pos3 - pos2) - 1);
+    ustring time = param.substr(pos3 + 1);
 
     long date = std::atol(time.c_str());
     time = std::ctime(&date);
@@ -652,9 +652,9 @@ void Parser::TopicTime(const string& param)
           FE::emit(FE::get(TOPICTIME) << nick << time.substr(0, time.size() - 1), FE::CURRENT, _conn);
 }
 
-void Parser::Away(const string& param, const string& rest)
+void Parser::Away(const ustring& param, const ustring& rest)
 {
-    string param1, param2;
+    ustring param1, param2;
     std::istringstream ss(param);
     ss >> param1;
     ss >> param2;
@@ -662,14 +662,14 @@ void Parser::Away(const string& param, const string& rest)
     FE::emit(FE::get(AWAY) << param2 << rest, FE::CURRENT, _conn);
 }
 
-void Parser::Wallops(const string& from, const string& rest)
+void Parser::Wallops(const ustring& from, const ustring& rest)
 {
     FE::emit(FE::get(WALLOPS) << findNick(from) << rest, FE::CURRENT, _conn);
 }
 
-void Parser::Banlist(const string& param)
+void Parser::Banlist(const ustring& param)
 {
-    string dummy, chan, banmask, owner, time;
+    ustring dummy, chan, banmask, owner, time;
     std::istringstream ss(param);
     ss >> dummy;
     ss >> chan;
@@ -686,7 +686,7 @@ void Parser::Banlist(const string& param)
     FE::emit(FE::get(BANLIST) << banmask << owner, *c, _conn);
 }
      
-void Parser::numeric(int n, const string& from, const string& param, const string& rest)
+void Parser::numeric(int n, const ustring& from, const ustring& param, const ustring& rest)
 {
     switch(n)
     {
@@ -816,7 +816,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
                 ss << "idle: ";
                 ss << idle / 3600 << ":" << (idle / 60) % 60 << ":" << idle % 60;
                 long date = std::atol(getWord(param, 4).c_str());
-                string time = std::ctime(&date);
+                ustring time = std::ctime(&date);
                 ss << ", signon time: " << time.substr(0, time.size() - 1);
                 FE::emit(FE::get(WHOIS_GENERIC) << getWord(param, 2) << ss.str(), FE::CURRENT, _conn);
             }
@@ -854,17 +854,17 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
 
 }
 
-void Parser::Names(const string& chan, const string& names)
+void Parser::Names(const ustring& chan, const ustring& names)
 {
-    // Find channel from a string like 'nick = #chan'
-    string::size_type pos = chan.find_first_of("#&+!");
-    string channel = chan.substr(pos);
+    // Find channel from a ustring like 'nick = #chan'
+    ustring::size_type pos = chan.find_first_of("#&+!");
+    ustring channel = chan.substr(pos);
 
     Channel *c = _conn->findChannel(channel);
     if (c && !c->endOfNames) {
 
         std::istringstream ss(names);
-        string buf;
+        ustring buf;
 
         while (ss >> buf)
         {
@@ -884,28 +884,28 @@ void Parser::Names(const string& chan, const string& names)
     }
 }
 
-bool Parser::shouldHighlight(const string& str)
+bool Parser::shouldHighlight(const ustring& str)
 {
-    if (str.find(_conn->Session.nick) != string::npos)
+    if (str.find(_conn->Session.nick) != ustring::npos)
           return true;
 
-    std::istringstream ss(App->options.highlight_words);
+    std::istringstream ss(App->options.highlight_words->raw());
 
-    string tmp;
+    ustring tmp;
     while (ss >> tmp)
-          if (str.find(tmp) != string::npos)
+          if (str.find(tmp) != ustring::npos)
                 return true;
 
     return false;
 }
 
-string getWord(const string& str, int n)
+ustring getWord(const ustring& str, int n)
 {
     int count = 0;
-    string::size_type lastPos = str.find_first_not_of(" ", 0);
-    string::size_type pos     = str.find_first_of(" ", lastPos);
+    ustring::size_type lastPos = str.find_first_not_of(" ", 0);
+    ustring::size_type pos     = str.find_first_of(" ", lastPos);
 
-    while (pos != string::npos || lastPos != string::npos)
+    while (pos != ustring::npos || lastPos != ustring::npos)
     {
         if ((count + 1) == n)
               return str.substr(lastPos, pos - lastPos);
@@ -919,12 +919,12 @@ string getWord(const string& str, int n)
 
 // Strip mIRC colors. Spec at: http://www.mirc.co.uk/help/color.txt
 // Only strips color-strings. Not bold and underline.
-string stripColors(const string& str)
+ustring stripColors(const ustring& str)
 {
-    string newstr;
+    ustring newstr;
     bool color = false;
     int numbercount = 0;
-    for (string::size_type i = 0; i < str.length(); ++i)
+    for (ustring::size_type i = 0; i < str.length(); ++i)
     {
         if (str[i] == '\017') { // RESET
             color = false;
@@ -950,17 +950,17 @@ string stripColors(const string& str)
     return newstr;
 }
 
-std::string findNick(const std::string& str)
+Glib::ustring findNick(const Glib::ustring& str)
 {
     return str.substr(0, str.find_first_of("!"));
 }
 
-std::string findHost(const std::string& str)
+Glib::ustring findHost(const Glib::ustring& str)
 {
     return str.substr(str.find_first_of("!") + 1);
 }
 
-std::string skipFirstWord(const std::string& str)
+Glib::ustring skipFirstWord(const Glib::ustring& str)
 {
     return str.substr(str.find_first_of(" ") + 1);
 }

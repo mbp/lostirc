@@ -20,21 +20,21 @@
 #include <functional>
 #include "Channel.h"
 
-using std::string;
+using Glib::ustring;
 using std::vector;
 
 namespace algo
 {
   struct isUser : public std::unary_function<User*, void>
   {
-      isUser(const std::string& n) : nick(n) { }
+      isUser(const Glib::ustring& n) : nick(n) { }
       bool operator() (User* u) {
           if (u->nick == nick)
                 return true;
           else
                 return false;
       }
-      std::string nick;
+      Glib::ustring nick;
   };
 }
 
@@ -60,7 +60,7 @@ void User::removeMode(IRC::UserMode u)
     state &= ~u;
 }
 
-void Channel::addUser(const string& n, IRC::UserMode i)
+void Channel::addUser(const ustring& n, IRC::UserMode i)
 {
     User *user = new User;
     user->nick = n;
@@ -69,7 +69,7 @@ void Channel::addUser(const string& n, IRC::UserMode i)
     _users.push_back(user);
 }
 
-void Channel::removeUser(const string& u)
+void Channel::removeUser(const ustring& u)
 {
     vector<User*>::iterator i = std::find_if(_users.begin(), _users.end(), algo::isUser(u));
 
@@ -79,7 +79,7 @@ void Channel::removeUser(const string& u)
     }
 }
 
-bool Channel::findUser(const string& u)
+bool Channel::findUser(const ustring& u)
 {
     vector<User*>::iterator i = std::find_if(_users.begin(), _users.end(), algo::isUser(u));
 
@@ -89,7 +89,7 @@ bool Channel::findUser(const string& u)
     return false;
 }
 
-void Channel::renameUser(const string& from, const string& to)
+void Channel::renameUser(const ustring& from, const ustring& to)
 {
     vector<User*>::iterator i = std::find_if(_users.begin(), _users.end(), algo::isUser(from));
 
@@ -98,7 +98,7 @@ void Channel::renameUser(const string& from, const string& to)
     }
 }
 
-User* Channel::getUser(const string& u)
+User* Channel::getUser(const ustring& u)
 {
     vector<User*>::iterator i = std::find_if(_users.begin(), _users.end(), algo::isUser(u));
 

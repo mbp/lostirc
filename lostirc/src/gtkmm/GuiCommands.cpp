@@ -23,7 +23,7 @@
 
 using Glib::ustring;
 
-const struct UserCommands<ustring> guicmds[] = {
+const struct UserCommands guicmds[] = {
     { "QUERY",     GuiCommands::Query,    false },
     { "CLEAR",     GuiCommands::Clear,    false },
     { "CLEARALL",  GuiCommands::ClearAll, false },
@@ -57,7 +57,7 @@ void send(ServerConnection *conn, ustring cmd, const ustring& params)
         }
     }
 
-    Commands::send(conn, Glib::locale_from_utf8(cmd), Glib::locale_from_utf8(params));
+    Commands::send(conn, cmd, params);
 }
 
 void Query(ServerConnection *conn, const ustring& params)
@@ -73,7 +73,7 @@ void Me(ServerConnection *conn, const ustring& params)
 {
     ustring to = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
     ustring param = to + " " + params;
-    return Commands::Me(conn, Glib::locale_from_utf8(param));
+    return Commands::Me(conn, param);
 }
 
 void Clear(ServerConnection *conn, const ustring& params)
@@ -95,14 +95,14 @@ void Part(ServerConnection *conn, const ustring& params)
 {
     ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
     ustring param = channel + " " + params;
-    Commands::Part(conn, Glib::locale_from_utf8(param));
+    Commands::Part(conn, param);
 }
 
 void Topic(ServerConnection *conn, const ustring& params)
 {
     ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
     ustring param = channel + " " + params;
-    Commands::Topic(conn, Glib::locale_from_utf8(param));
+    Commands::Topic(conn, param);
 }
 
 void Kick(ServerConnection *conn, const ustring& params)
@@ -113,13 +113,13 @@ void Kick(ServerConnection *conn, const ustring& params)
     } else {
         ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
         ustring param = channel + " " + params;
-        Commands::Kick(conn, Glib::locale_from_utf8(param));
+        Commands::Kick(conn, param);
     }
 }
 
 void Banlist(ServerConnection *conn, const ustring& params)
 {
-    Commands::Banlist(conn, Glib::locale_from_utf8(AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text()));
+    Commands::Banlist(conn, AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text());
 }
 
 void Op(ServerConnection *conn, const ustring& params)
@@ -130,7 +130,7 @@ void Op(ServerConnection *conn, const ustring& params)
     } else {
         ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
         ustring param = channel + " " + params;
-        Commands::Op(conn, Glib::locale_from_utf8(param));
+        Commands::Op(conn, param);
     }
 }
 
@@ -142,7 +142,7 @@ void Deop(ServerConnection *conn, const ustring& params)
     } else {
         ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
         ustring param = channel + " " + params;
-        Commands::Deop(conn, Glib::locale_from_utf8(param));
+        Commands::Deop(conn, param);
     }
 }
 
@@ -154,7 +154,7 @@ void Voice(ServerConnection *conn, const ustring& params)
     } else {
         ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
         ustring param = channel + " " + params;
-        Commands::Voice(conn, Glib::locale_from_utf8(param));
+        Commands::Voice(conn, param);
     }
 }
 
@@ -166,13 +166,13 @@ void Devoice(ServerConnection *conn, const ustring& params)
     } else {
         ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
         ustring param = channel + " " + params;
-        Commands::Devoice(conn, Glib::locale_from_utf8(param));
+        Commands::Devoice(conn, param);
     }
 }
 
 void Exit(ServerConnection *conn, const ustring& params)
 {
-    Commands::Exit(conn, Glib::locale_from_utf8(params));
+    Commands::Exit(conn, params);
     AppWin->hide();
 }
 
@@ -195,7 +195,7 @@ void displayCommands(ServerConnection *conn, const ustring& params)
 
 std::vector<Glib::ustring> getCommands()
 {
-    std::set<std::string> commands;
+    std::set<Glib::ustring> commands;
 
     for (int i = 0; guicmds[i].cmd != 0; ++i) 
         commands.insert(guicmds[i].cmd);
@@ -203,7 +203,7 @@ std::vector<Glib::ustring> getCommands()
     Commands::getCommands(commands);
 
     std::vector<Glib::ustring> cmds;
-    for (std::set<std::string>::const_iterator i = commands.begin(); i != commands.end(); ++i)
+    for (std::set<Glib::ustring>::const_iterator i = commands.begin(); i != commands.end(); ++i)
           cmds.push_back(*i);
 
     return cmds;
