@@ -17,6 +17,7 @@
  */
 
 #include "ConfigHandler.h"
+#include <algorithm>
 
 using std::string;
 using std::cout;
@@ -244,3 +245,9 @@ void ConfigHandler::setDefault(const string& key, const string& value)
           _settings[key] = value;
 }
 
+void ConfigHandler::removeServer(struct autoJoin *a)
+{
+    vector<struct autoJoin*>::iterator i = std::find(_servers.begin(), _servers.end(), a);
+    _servers.erase(i);
+    delete a;
+}

@@ -48,6 +48,9 @@ public:
     /* return "auto-join list" */
     std::vector<struct autoJoin*> getServers() { return _servers; }
 
+    void addServer(struct autoJoin* a) { _servers.push_back(a); }
+    void removeServer(struct autoJoin* a);
+
     /* write server list */
     bool writeServers();
 
