@@ -4,6 +4,11 @@ LostIRC (x.x.x)
   * When using ALT+P and the preferences window is open, it will now get
     closed.
   * ALT+F can now be used for setting the font, same result as /SETFONT
+  * You can now part a channel with the optional leave-message without
+    problems
+  * When other people are parting with a message, the message is now being
+    shown (delete your old ~/.lostirc.events!)
+  * When a user changes a channel mode, it now looks more sane
 
 LostIRC (0.0.5) - Fri Mar 8th 2002
   * An unwanted newline occuring in a /whois has been removed
