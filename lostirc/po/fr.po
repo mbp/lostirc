@@ -208,7 +208,7 @@ msgstr "_Affichage"
 
 #: src/gtkmm/MainWindow.cpp:377
 msgid "_Menubar"
-msgstr "_Barre de menu"
+msgstr "Barre de _menu"
 
 #: src/gtkmm/MainWindow.cpp:378
 msgid "Status_bar"

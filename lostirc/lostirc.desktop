@@ -1,7 +1,9 @@
 [Desktop Entry]
+Encoding=UTF-8
 Name=LostIRC
 Comment=Chat on IRC-networks
-Comment[da]=Chat pÂ IRC-netvÊrk
+Comment[da]=Chat p√• IRC-netv√¶rk
+Comment[fr]=Chat sur les r√©seaux IRC
 TryExec=lostirc
 Exec=lostirc
 Icon=lostirc.png

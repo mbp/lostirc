@@ -1,4 +1,9 @@
 LostIRC - (x.x.x)
+  * Fix build failure on amd64 with gcc-4.0 (thanks, Andeas Jochens)
+  * Correct already used access key for menubar in French translation.
+    (thanks, Martin Calignon)
+  * Add French LostIRC description to .desktop file. (thanks, Martin
+    Calignon)
   * /PART does no longer work in queries. Before it tried to part a channel
     with the user name.
 
@@ -13,7 +18,7 @@ LostIRC - (0.4.3) - Fri Oct, 15th 2004
     text outputted to the first tab.
   * Fixed segmentation fault where both a mode for a channel and mode for a
     user was being set in the same MODE command. Thanks to Christian
-    Jørgensen for testing.
+    JÃ¸rgensen for testing.
   * Fixed segmentation fault which occured when only one empty line existed
     in automatic perform for a server. Thanks Martin Calignon for reporting.
   * The client now more intelligently checks what a server supports of
@@ -351,7 +356,7 @@ LostIRC (0.1.0) - Fri May 31st 2002
   * /ADMIN and /WHOWAS commands implemented.
 
 LostIRC (0.0.8) - Sat May 11th 2002
-  * gcc-3.1 fixes (thanks, Mads Martin Jørgensen)
+  * gcc-3.1 fixes (thanks, Mads Martin JÃ¸rgensen)
   * When disconnected from a server, the last tab belonging to that
     server-connecting could not be removed.
   * Replies are now sent upon CTCP PING from other clients.

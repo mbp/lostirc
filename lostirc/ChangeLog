@@ -1,21 +1,29 @@
 For a summary of changes between releases - see the NEWS file.
 
-2004-11-01  Morten Brix Pedersen  <morten@wtf.dk>
+2004-11-01  Morten Brix Pedersen
+	* ChangeLog: Remove email addresses from file.
+	* lostirc.desktop: Add French description. Specify UTF-8 encoding.
+	* FrontEnd.cpp: Fix compilation on amd64 with gcc-4.0.
+	* po/fr.po: Fix conflict with same shortcut key.
+	* NEWS: Convert to UTF-8.
+	* AUTHORS: Add Martin Braure de Calignon.
+
+2004-11-01  Morten Brix Pedersen
 	* GuiCommands.cpp: Only make /PART work for channels. 
 
-2004-10-15  Morten Brix Pedersen  <morten@wtf.dk>
+2004-10-15  Morten Brix Pedersen
 	* configure.ac: Bump version and release 0.4.3.
 
-2004-10-14  Morten Brix Pedersen  <morten@wtf.dk>
+2004-10-14  Morten Brix Pedersen
 	* ServerConnection.h: Add isChannelPrefix function, to check whether
 	a character is in the serverconnections chantypes.
 	* MainNotebook.cpp: Don't take Tab* as an argument to updateStatus
 	and updateTitle. Not used at all.
 
-2004-10-14  Morten Brix Pedersen  <morten@wtf.dk>
+2004-10-14  Morten Brix Pedersen
 	* TextWidget.cpp: Add the hide/show menubar feature again.
 
-2004-10-14  Morten Brix Pedersen  <morten@wtf.dk>
+2004-10-14  Morten Brix Pedersen
 	* MainNotebook.cpp:
 	  - Fix a bug when auto-connecting to multiple server and text was
 	  only being displayed in the first tab.
@@ -29,16 +37,16 @@ For a summary of changes between releases - see the NEWS file.
 	* FrontEnd.cpp:
 	  - Ditto.
 	  
-2004-10-14  Morten Brix Pedersen  <morten@wtf.dk>
+2004-10-14  Morten Brix Pedersen
 	* Parser.cpp: Fix problem where MODE #chan +mv user was causing a
 	segmentation fault.
 	* ServerConnection.cpp: Add a default value for chanmodes.
 
-2004-10-13  Morten Brix Pedersen  <morten@wtf.dk>
+2004-10-13  Morten Brix Pedersen
 	* ServerConnection.cpp: Fix segmentation fault when an empty string
 	is read.
 
-2004-10-13  Morten Brix Pedersen  <morten@wtf.dk>
+2004-10-13  Morten Brix Pedersen
 	* ServerConnection.h: Add 'supports' (005 numeric) information to
 	ServerConnection instances.
 	* Parser.cpp: Add function to parse specific ircd supports.
@@ -51,14 +59,14 @@ For a summary of changes between releases - see the NEWS file.
 	* MainNotebook.cpp: Use network name instead of servername in
 	statusbar, if available.
 
-2004-10-13  Morten Brix Pedersen  <morten@wtf.dk>
+2004-10-13  Morten Brix Pedersen
 	* Parser.cpp: Probably output some of the incoming server messages.
 	Some strings were stripped.
 
-2004-09-08  Morten Brix Pedersen  <morten@wtf.dk>
+2004-09-08  Morten Brix Pedersen
 	* configure.ac: Bump version and release 0.4.2.
 
-2004-09-08  Morten Brix Pedersen  <morten@wtf.dk>
+2004-09-08  Morten Brix Pedersen
  	* src/gtkmm/GuiCommands.cpp: List a few more keybindings in
 	/KEYBINDINGS.
 	* src/libirc/Parser.cpp: Remove some old +q code, I noticed that it
@@ -67,91 +75,91 @@ For a summary of changes between releases - see the NEWS file.
 	well.
 	* po/da.po: Update.
 
-2004-08-28  Morten Brix Pedersen  <morten@wtf.dk>
+2004-08-28  Morten Brix Pedersen
 	* src/gtkmm/Prefs.cpp: Remember which colorscheme was picked.
 	* src/gtkmm/MainWindow.cpp: Don't scroll when the user is holding
 	the CTRL button.
 
-2004-08-28  Morten Brix Pedersen  <morten@wtf.dk>
+2004-08-28  Morten Brix Pedersen
 	* src/gtkmm/Prefs.cpp: Remember which colorscheme was picked.
 
-2004-08-28  Morten Brix Pedersen  <morten@wtf.dk>
+2004-08-28  Morten Brix Pedersen
 	* src/gtkmm/ServerWindow.cpp: When connecting to a server, close the
 	server window.
 	* src/gtkmm/MainWindow.cpp: Open the server window on startup. And
 	if the current tab is not connected, use that to connect.
 
-2004-08-28  Morten Brix Pedersen  <morten@wtf.dk>
+2004-08-28  Morten Brix Pedersen
 	* src/gtkmm/ServerWindow.cpp: Marked a missing string translateable.
 	* po/POTFILES.in: Added missing ServerWindow files.
 	* po/da.po: Updated.
 
-2004-08-02  Morten Brix Pedersen  <morten@wtf.dk>
+2004-08-02  Morten Brix Pedersen
 	* configure.ac: Bump version and release 0.4.1.
 
-2004-08-02  Morten Brix Pedersen  <morten@wtf.dk>
+2004-08-02  Morten Brix Pedersen
 	* StatusBar.cpp: Crop strings which are too long in statusbar. This
 	prevents the window from growing very big.
 
-2004-08-02  Morten Brix Pedersen  <morten@wtf.dk>
+2004-08-02  Morten Brix Pedersen
 	* MainWindow.cpp: Remove old tab hack which apparently isn't needed for
 	gtkmm 2.4.
 	* MainWindow.cpp: Grab focus on Entry on startup.
 
-2004-08-02  Morten Brix Pedersen  <morten@wtf.dk>
+2004-08-02  Morten Brix Pedersen
 	* Prefs.cpp, MainWindow.cpp: Enable changing colorschemes.
 	* ConfigHandler.cpp: Add second (black on white) colorscheme.
 
-2004-06-24  Morten Brix Pedersen  <morten@wtf.dk>
+2004-06-24  Morten Brix Pedersen
         * MainNotebook.cpp: Remove compiler warning.
         * MainWindow.cpp, TextWidget.cpp: Move TextTable initialization to
         MainWindow instead of having a new instance for each TextWidget.
         Should save some memory space.
         * Prefs.cpp: Add experimental support for color schemes.
 
-2004-06-13  Morten Brix Pedersen  <morten@wtf.dk>
+2004-06-13  Morten Brix Pedersen
 	* po/fr.po: Added. Thanks to Bruno Dusausoy.
 
-2004-06-05  Morten Brix Pedersen  <morten@wtf.dk>
+2004-06-05  Morten Brix Pedersen
         * configure.ac: Bump version and release 0.4.0.
 
-2004-06-05  Morten Brix Pedersen  <morten@wtf.dk>
+2004-06-05  Morten Brix Pedersen
 	* MainNotebook.cpp: Implement simple sorting of tabs, using bubble
 	sort.
 
-2004-05-16  Morten Brix Pedersen  <morten@wtf.dk>
+2004-05-16  Morten Brix Pedersen
 	* Commands.cpp: Don't crash on /DCC SEND.
 
-2004-05-13  Morten Brix Pedersen  <morten@wtf.dk>
+2004-05-13  Morten Brix Pedersen
 	* MainWindow.cpp: Move control-w shortcut to the right function :)
 
-2004-05-13  Morten Brix Pedersen  <morten@wtf.dk>
+2004-05-13  Morten Brix Pedersen
 	* configure.ac: Check for glibmm and gtkmm dependencies seperately.
 	* src/libirc/Makefile.am: Only use glibmm dependency.
 	* src/gtkmm/Makefile.am: Only use gtkmm dependency.
 
-2004-05-13  Morten Brix Pedersen  <morten@wtf.dk>
+2004-05-13  Morten Brix Pedersen
 	* TextWidget.cpp: Remove use of some deprecated methods
 	(scroll_to_iter() and scroll_to_mark() changed to scroll_to()).
 	* MainWindow.cpp: Re-add control-w shortcut.
 
-2004-05-13  Morten Brix Pedersen  <morten@wtf.dk>
+2004-05-13  Morten Brix Pedersen
 	* MainWindow.cpp: Use UIManager and Actions instead of manual
 	creation of menus. This is gtkmm 2.4 only.
 	* configure.ac: Change AM_CONFIG_HEADER to AC_CONFIG_HEADERS
 	(suggested by `autoupdate`)
 
-2004-05-11  Morten Brix Pedersen  <morten@wtf.dk>
+2004-05-11  Morten Brix Pedersen
         * main.cpp: Catch any exceptions when setting window icon.
 
-2004-04-29  Morten Brix Pedersen  <morten@wtf.dk>
+2004-04-29  Morten Brix Pedersen
         * main.cpp: Use a better way to set window icon.
 
-2004-04-29  Morten Brix Pedersen  <morten@wtf.dk>
+2004-04-29  Morten Brix Pedersen
         * Prefs.cpp/Prefs.h: Use FontButton instead of manually opening up a
         FontSelection window. Much less code.
 
-2004-04-29  Morten Brix Pedersen  <morten@wtf.dk>
+2004-04-29  Morten Brix Pedersen
         * DCCList.cpp, DCCList.h, Entry.cpp, MainNotebook.cpp, MainWindow.cpp,
         NickList.cpp, Prefs.cpp, ServerWindow.cpp, ServerWindow.h,
         StatusBar.h, TextWidget.cpp, TextWidget.h:
@@ -160,15 +168,15 @@ For a summary of changes between releases - see the NEWS file.
         * configure.ac: Bump version to 0.4.0-pre.
                         Bump gettext requirement from 0.13.1 to 0.14.1.
 
-2004-03-23  Morten Brix Pedersen  <morten@wtf.dk>
+2004-03-23  Morten Brix Pedersen
         
         * configure.ac: Bump version and release 0.3.3.
 
-2004-03-18  Morten Brix Pedersen  <morten@wtf.dk>
+2004-03-18  Morten Brix Pedersen
         
         * Update Copyright to 2004 in all source files.
 
-2004-03-18  Morten Brix Pedersen  <morten@wtf.dk>
+2004-03-18  Morten Brix Pedersen
 
         * ConfigHandler.cpp: Add hidestatusbar option.
         * MainWindow.cpp: - Add hideStatusbar() method. 
@@ -176,35 +184,35 @@ For a summary of changes between releases - see the NEWS file.
                           hide/show the statusbar.
                           - Move the "Hide Menubar" to the View menu.
 
-2004-03-18  Morten Brix Pedersen  <morten@wtf.dk>
+2004-03-18  Morten Brix Pedersen
 
         * ConfigHandler.cpp: Fix segmentation fault when there is no space
         efter the equal sign in perform.conf. Thanks to Thomas Johansson for
         the bug report.
 
-2004-03-18  Morten Brix Pedersen  <morten@wtf.dk>
+2004-03-18  Morten Brix Pedersen
 
         * DCCList.cpp: Rename two columns in DCC window: Progress -> %,
         Filesize -> Size.
 
-2004-03-01  Morten Brix Pedersen  <morten@wtf.dk>
+2004-03-01  Morten Brix Pedersen
 
         * ServerWindow.cpp: Make the password field masked by asterixs.
 
-2004-02-13  Morten Brix Pedersen  <morten@wtf.dk>
+2004-02-13  Morten Brix Pedersen
 
         * configure.ac: Version 0.3.3pre.
         * Commands.cpp: You can now send files that contains spaces. Thanks
         Thomas Johansson for the bug report.
         * Prefs.cpp: FreeBSD compilation fix.
 
-2004-02-02  Morten Brix Pedersen  <morten@wtf.dk>
+2004-02-02  Morten Brix Pedersen
 
         * Makefile.am: Add m4 to EXTRA_DIST
         * NEWS: Update.
         * configure.ac: Bump version and release 0.3.2.
 
-2004-02-02  Morten Brix Pedersen  <morten@wtf.dk>
+2004-02-02  Morten Brix Pedersen
         
         * DCCList.cpp:
          - Remove fileposition column.
@@ -217,11 +225,11 @@ For a summary of changes between releases - see the NEWS file.
        * DCC.h/.cpp: Move _status member into base DCC class. Implement
        setStatus method().
 
-2004-02-02  Morten Brix Pedersen  <morten@wtf.dk>
+2004-02-02  Morten Brix Pedersen
 
         * AUTHORS: Update.
 
-2004-02-02  Morten Brix Pedersen  <morten@wtf.dk>
+2004-02-02  Morten Brix Pedersen
         
         * configure.ac: Bump gettext version to 0.13.1.
                         No Makefile in m4 anymore, ignore that dir.
@@ -232,28 +240,28 @@ For a summary of changes between releases - see the NEWS file.
         * Entry.cpp: Added channel autocompletion.
                      Syntax cleanup.
 
-2004-02-01  Morten Brix Pedersen  <morten@wtf.dk>
+2004-02-01  Morten Brix Pedersen
 
         * MainNotebook.cpp: Implement clearWindow() function.
         * MainWindow.cpp: Remove unneeded newServer() function.
                           Remove unneeded clearWindow() function.
                           Remove unneeded clearAllWindows() function.
 
-2004-02-01  Morten Brix Pedersen  <morten@wtf.dk>
+2004-02-01  Morten Brix Pedersen
         
         * Remove update-potfile.sh: Unneeded.
 
-2004-02-01  Morten Brix Pedersen  <morten@wtf.dk>
+2004-02-01  Morten Brix Pedersen
         
         * Remove m4/Makefile.am: Apparently auto-generated.
 
-2004-02-01  Morten Brix Pedersen  <morten@wtf.dk>
+2004-02-01  Morten Brix Pedersen
 
         * ServerWindow.cpp: Apply patch from Thomas Johannsson making the
         text-field in the server edit dialog slightly bigger, and horizontal
         scrollbar support.
 
-2004-02-01  Morten Brix Pedersen  <morten@wtf.dk>
+2004-02-01  Morten Brix Pedersen
 
         * MainWindow.cpp: Add Ctrl-PgUp/PgDn as alternative keys to browse
         tabs.
@@ -262,7 +270,7 @@ For a summary of changes between releases - see the NEWS file.
         MainWindow::hideMenu() instead.
         * NEWS: Update.
 
-2004-01-27  Morten Brix Pedersen  <morten@wtf.dk>
+2004-01-27  Morten Brix Pedersen
 
         * configure.ac: Remove define for socklen_t.
                         Add check for Win32 and define PLATFORM_WIN32.
@@ -271,85 +279,85 @@ For a summary of changes between releases - see the NEWS file.
         * Socket.cpp: Add #define socklen_t int on Windows.
         * Socket.h: Remove hostname member, unused.
 
-2004-01-27  Morten Brix Pedersen  <morten@wtf.dk>
+2004-01-27  Morten Brix Pedersen
 
         * DCC.cpp: Make it compile on Windows.
 
-2004-01-25  Morten Brix Pedersen  <morten@wtf.dk>
+2004-01-25  Morten Brix Pedersen
 
         * Socket.cpp/Socket.h/FrontEnd.cpp: Commit some of Thomas Johansson
         work on porting LostIRC to Windows.
 
-2004-01-25  Morten Brix Pedersen  <morten@wtf.dk>
+2004-01-25  Morten Brix Pedersen
 
         * ABOUT-NLS: Removed from CVS version control. Apparently it gets
         copied to the source directory everytime on autogen.
 
-2004-01-22  Morten Brix Pedersen  <morten@wtf.dk>
+2004-01-22  Morten Brix Pedersen
 
         * ServerConnection.cpp, Socket.cpp, DCC.cpp:
           Move all socket related code and calls to the Socket class. This
           should make it easier for the upcoming Win32 port.
 
-2004-01-21  Morten Brix Pedersen  <morten@wtf.dk>
+2004-01-21  Morten Brix Pedersen
 
         * Parser.cpp: Fix crash which occured on some MODE-lines.
 
-2004-01-21  Morten Brix Pedersen  <morten@wtf.dk>
+2004-01-21  Morten Brix Pedersen
         
         * configure.ac: Modify more text for --enable-logdebug option.
 
-2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-02  Morten Brix Pedersen
 
         * TODO: Update.
 
-2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-02  Morten Brix Pedersen
 
         * Prefs.cpp: Fix problem where the choosen encoding wouldn't be
         remembered.
         * MainWindow.cpp: Rename "Nick List" to "User List".
 
-2004-01-02  Morten Brix Pedersen  <morten@wtf.dk>
+2004-01-02  Morten Brix Pedersen
 
         * configure.ac: Version 0.3.2pre.
                         Modify text for --enable-logdebug option.
         * po/da.po: Update Danish translation.
 
-2003-12-26  Morten Brix Pedersen  <morten@wtf.dk>
+2003-12-26  Morten Brix Pedersen
 
         * configure.ac: Bump version and release 0.3.1.
 
-2003-12-26  Morten Brix Pedersen  <morten@wtf.dk>
+2003-12-26  Morten Brix Pedersen
 
         * MainWindow.cpp: Add very simplish About-dialog.
         * configure.ac: Bump gettext version number.
 
-2003-12-03  Morten Brix Pedersen  <morten@wtf.dk>
+2003-12-03  Morten Brix Pedersen
 
         * MainWindow.cpp: Close "Introduction" window when clicking "Close".
 
-2003-12-03  Morten Brix Pedersen  <morten@wtf.dk>
+2003-12-03  Morten Brix Pedersen
 
         * Prefs.cpp: Remove separator.
         * ServerWindow.cpp: Remove useless spacing in the bottom of the
         window.
 
-2003-12-03  Morten Brix Pedersen  <morten@wtf.dk>
+2003-12-03  Morten Brix Pedersen
 
         * MainWindow.cpp: The menubar was accidently not being shown, show it.
 
-2003-10-31  Morten Brix Pedersen  <morten@wtf.dk>
+2003-10-31  Morten Brix Pedersen
 
         * Prefs.cpp: Comment out "Colors" code for now.
         * Parser.cpp: Comment out +q mode code that causes a crash.
         * configure.ac: Bump version and release 0.3.0.
 
-2003-10-31  Morten Brix Pedersen  <morten@wtf.dk>
+2003-10-31  Morten Brix Pedersen
 
         * Use Glib::file_test() instead of stat() in some places. This helps
         on portability.
 
-2003-10-29  Morten Brix Pedersen  <morten@wtf.dk>
+2003-10-29  Morten Brix Pedersen
 
         * Fix typo in FrontEnd.h.
 
@@ -358,46 +366,46 @@ For a summary of changes between releases - see the NEWS file.
         * Add support for "channel owner" (+q) and "channel admin" (+a) status
         modes.
 
-2003-10-16  Morten Brix Pedersen  <morten@wtf.dk>
+2003-10-16  Morten Brix Pedersen
 
         * ConfigHandler.cpp: Add options 'hidenicklist' and 'hidemenu'
         * MainWindow.cpp: Use the options to save the configuration of hidden
         nick list and menu.
 
-2003-10-16  Morten Brix Pedersen  <morten@wtf.dk>
+2003-10-16  Morten Brix Pedersen
 
         * MainWindow.cpp: Remove show_all() call to make sure NickList wont
         get showed again.
         * MainNotebook.cpp: ditto.
         * Tab.cpp: Add show_all() to compromise for above removals.
 
-2003-10-02  Morten Brix Pedersen  <morten@wtf.dk>
+2003-10-02  Morten Brix Pedersen
 
         * MainNotebook.cpp: Add a missing '-' in the title when away.
 
-2003-09-28  Morten Brix Pedersen  <morten@wtf.dk>
+2003-09-28  Morten Brix Pedersen
 
         * MainWindow.h: Fix mysterious error when quitting LostIRC.
         * ServerWindow.cpp: Make sure perform.conf is saved when we add new
         servers.
 
-2003-09-20  Morten Brix Pedersen  <morten@wtf.dk>
+2003-09-20  Morten Brix Pedersen
 
         * TextWidget.cpp: Add an extra menuitem to the TextView context menu,
         to disable/enable the menubar.
 
-2003-09-20  Morten Brix Pedersen  <morten@wtf.dk>
+2003-09-20  Morten Brix Pedersen
 
         * Tab.cpp: Only enable the NickList on channels. Never queries.
         * MainWindow.cpp: Remove redundant Tab::setType() call.
         * MainNotebook.cpp: Move show_all() before setType() call, to ensure
         that we don't show() the NickList.
 
-2003-09-20  Morten Brix Pedersen  <morten@wtf.dk>
+2003-09-20  Morten Brix Pedersen
 
         * ServerWindow.cpp: Toggling the "auto-connect" column now works.
 
-2003-08-23  Morten Brix Pedersen  <morten@wtf.dk>
+2003-08-23  Morten Brix Pedersen
 
         * Prefs.cpp: Add a new tab, "Colours". Not at all done yet.
         * ServerWindow.cpp: Move the auto-connect column to the first column.
@@ -405,20 +413,20 @@ For a summary of changes between releases - see the NEWS file.
 
           Move the TextView into a ScrolledWindow, to make it prettier.
 
-2003-08-23  Morten Brix Pedersen  <morten@wtf.dk>
+2003-08-23  Morten Brix Pedersen
         
         * ServerConnection.cpp: Fix the error where "Disconnected." was
           inserted into to the frontend, even when just connecting to a
           server.
          
-2003-08-23  Morten Brix Pedersen  <morten@wtf.dk>
+2003-08-23  Morten Brix Pedersen
 
         * MainWindow.cpp: Make hiding and showing of menu work properly. The
           same with the Nick List.
 
         * Tab.cpp/Tab.h: Ditto.
 
-2003-08-21  Morten Brix Pedersen  <morten@wtf.dk>
+2003-08-21  Morten Brix Pedersen
 
         * ServerWindow.cpp: Implement the connectEntry() function, such that
           you can now click on "Connect" to connect to the selected server.
@@ -426,7 +434,7 @@ For a summary of changes between releases - see the NEWS file.
           the above.
         * MainWindow.cpp: Change capitalization of some words in menu items.
 
-2003-06-29  Morten Brix Pedersen  <morten@wtf.dk>
+2003-06-29  Morten Brix Pedersen
         
         * NickList.h: Change 'int' to 'unsigned short'. It's a smaller data
           type, dont know how much it will mean in the real world.
@@ -434,31 +442,31 @@ For a summary of changes between releases - see the NEWS file.
           list when reconnecting to a server. The disconnected() signal was
           never sent to the frontend.
 
-2003-06-19  Morten Brix Pedersen  <morten@wtf.dk>
+2003-06-19  Morten Brix Pedersen
         
         * configure.ac: Revert a change made by autoupdate.
         * MainWindow.cpp: Add a menu.
 
-2003-06-18  Morten Brix Pedersen  <morten@wtf.dk>
+2003-06-18  Morten Brix Pedersen
 
         * configure.ac: Run 'autoupdate' on the file to catch-up on how
           autoconf is really supposed to be used nowadays.
 
-2003-06-16  Morten Brix Pedersen  <morten@wtf.dk>
+2003-06-16  Morten Brix Pedersen
 
         * configure.in: Renamed to configure.ac. This is the recommended
           autoconf name nowadays.
 
-2003-06-15  Morten Brix Pedersen  <morten@wtf.dk>
+2003-06-15  Morten Brix Pedersen
 
         * ServerWindow.cpp: Now things are getting pretty :-)
 
-2003-06-15  Morten Brix Pedersen  <morten@wtf.dk>
+2003-06-15  Morten Brix Pedersen
         
         * ServerWindow.cpp: More reworking of window layout. Still a few bugs
           left.
 
-2003-06-15  Morten Brix Pedersen  <morten@wtf.dk>
+2003-06-15  Morten Brix Pedersen
         
         * ConfigHandler.cpp: Remove limited highlighting optino.
         * FrontEnd.cpp: Ditto.
@@ -468,7 +476,7 @@ For a summary of changes between releases - see the NEWS file.
           have a minimize button in the title to conform to HIG.
         * ServerWindow.cpp: Rework window layout. Not done yet.
 
-2003-06-15  Morten Brix Pedersen  <morten@wtf.dk>
+2003-06-15  Morten Brix Pedersen
 
         * ConfigHandler.cpp: Make the default font "Sans 10".
         * ServerWindow.cpp: Move server preferences from Preference Window to
@@ -479,7 +487,7 @@ For a summary of changes between releases - see the NEWS file.
           preferences in a seperate window.
         * Prefs.cpp: Make buffer size a SpinButton instead of text entry.
 
-2003-06-15  Morten Brix Pedersen  <morten@wtf.dk>
+2003-06-15  Morten Brix Pedersen
 
         * lostirc.desktop: Change description to follow the GNOME HIG
           suggestions.
@@ -489,19 +497,19 @@ For a summary of changes between releases - see the NEWS file.
         * Prefs.cpp: Make preferences a dialog window. Conform to GNOME HIG.
         * DCCList.cpp: Make DCCList a dialog window. Conform to GNOME HIG.
 
-2003-06-09  Morten Brix Pedersen  <morten@wtf.dk>
+2003-06-09  Morten Brix Pedersen
 
         * Commands.cpp: Add /RECONNECT command.
         * ServerConnection.cpp: Add reconnect() function to ServerConnection
           class.
         * configure.in: Bump to 0.2.7 and release.
 
-2003-06-01  Morten Brix Pedersen  <morten@wtf.dk>
+2003-06-01  Morten Brix Pedersen
 
         * Entry.cpp: Remove the empty entry pushed back into entries, avoid
           segmentation fault.
 
-2003-05-31  Morten Brix Pedersen  <morten@wtf.dk>
+2003-05-31  Morten Brix Pedersen
 
         * Parser.cpp: Include <cassert> to fix compilation with gcc 3.3.
         * lostirc.png: Added.
@@ -509,19 +517,19 @@ For a summary of changes between releases - see the NEWS file.
         * main.cpp: Use lostirc.png as window icon.
         * lostirc.desktop: Use lostirc.png as menu icon.
 
-2003-05-30  Morten Brix Pedersen  <morten@wtf.dk>
+2003-05-30  Morten Brix Pedersen
 
         * Parser.cpp: Another compilation fix for FreeBSD 5.0.
 
-2003-04-28  Morten Brix Pedersen  <morten@wtf.dk>
+2003-04-28  Morten Brix Pedersen
 
         * configure.in: Bump version to 0.2.6 and release.
 
-2003-04-18  Morten Brix Pedersen  <morten@wtf.dk>
+2003-04-18  Morten Brix Pedersen
 
         * TextWidget.h: Remove inclusion of TextWidget.h
 
-2003-03-24  Morten Brix Pedersen  <morten@wtf.dk>
+2003-03-24  Morten Brix Pedersen
 
         * Parser.cpp: Compilation fix for FreeBSD 5.0. Closes bug #708599
 
@@ -530,11 +538,11 @@ For a summary of changes between releases - see the NEWS file.
         * MainWindow.cpp: Corrected a bug, which did so that it wouldn't save
           your window position, if either x or y was 0.
 
-2003-03-17  Morten Brix Pedersen  <morten@wtf.dk>
+2003-03-17  Morten Brix Pedersen
 
         * LostIRCApp.cpp: Fix segfault on startup.
 
-2003-03-17  Morten Brix Pedersen  <morten@wtf.dk>
+2003-03-17  Morten Brix Pedersen
 
         * Second shot at Windows port.
         * configure.in: Add check for socklen_t, define it to int on Windows.
@@ -542,13 +550,13 @@ For a summary of changes between releases - see the NEWS file.
           Windows doesn't have fork().
         * DCC.cpp: Replace some old-style-casts with C++-casts.
 
-2003-03-17  Morten Brix Pedersen  <morten@wtf.dk>
+2003-03-17  Morten Brix Pedersen
         
         * acinclude.m4: Remove.
         * configure.in: Remove check for namespaces and stringstream, lets
           just assume that the world is up to date now.
 
-2003-03-16  Morten Brix Pedersen  <morten@wtf.dk>
+2003-03-16  Morten Brix Pedersen
         
         * First shot at Windows port.
         * DCCList.cpp/DCC.h/DCC.cpp: Rename ERROR to FAIL, because it
@@ -565,7 +573,7 @@ For a summary of changes between releases - see the NEWS file.
 
           More to come...
 
-2003-03-16  Morten Brix Pedersen  <morten@wtf.dk>
+2003-03-16  Morten Brix Pedersen
 
         * DCC.cpp: When sending a file, ensure that a file exists and its size
           > 0 before creating DCC_Send_Out object (This is to ensure that
@@ -580,43 +588,43 @@ For a summary of changes between releases - see the NEWS file.
           _entries vector
         * da.po: Added a translation for one of the changes in DCCList.cpp.
 
-2003-02-06  Morten Brix Pedersen  <morten@wtf.dk>
+2003-02-06  Morten Brix Pedersen
 
         * Makefile.am: Supply lostirc.desktop to /usr/share/applications
           instead of /usr/share/gnome/apps/Internet/.
         * lostirc.desktop: Insert "Categories=Application;Network;" line.
         * configure.in: Bump to 0.2.6pre.
 
-2003-01-16  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-16  Morten Brix Pedersen
 
         * configure.in: Bump version to 0.2.5 and release.
 
-2003-01-15  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-15  Morten Brix Pedersen
 
         * Tab.h: Remove getEntry() member, not needed. Made some member
           functions const.
 
-2003-01-15  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-15  Morten Brix Pedersen
 
         * DCC.cpp/DCC.h: Remove unneeded _localip member.
 
-2003-01-12  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-12  Morten Brix Pedersen
 
         * LostIRC.h: Make translations actually work! Forgot to include
           <config.h> which defines ENABLE_NLS. Thanks to Daniel Elstner for
           finding this for me.
 
-2003-01-12  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-12  Morten Brix Pedersen
 
         * main.cpp: Make sure translated strings are in UTF-8, so use
           bind_textdomain_codeset().
 
-2003-01-09  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-09  Morten Brix Pedersen
 
         * Socket.cpp: Don't check if the first element in the array is 0, the
           check is not needed and it seems to cause problems on PowerPC.
 
-2003-01-08  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-08  Morten Brix Pedersen
 
         * MainNotebook.cpp: The default behaviour when changing tabs in GTK+
           2.2 was changed so that tab is set to the first widget after
@@ -625,12 +633,12 @@ For a summary of changes between releases - see the NEWS file.
 
         * Tab.cpp: Make Entry the first widget in the focus chain of the tab.
 
-2003-01-08  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-08  Morten Brix Pedersen
 
         * Tab.cpp: Don't change the name directly, use setLabelName() in order
           to have parentes when tab is non-active.
 
-2003-01-08  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-08  Morten Brix Pedersen
 
         * Utils.cpp: Fix foolish, foolish error. I removed the "go to next
           word" part of the while loop before comitting, resulting in an
@@ -639,7 +647,7 @@ For a summary of changes between releases - see the NEWS file.
         * Socket.cpp: The size_to_be_read is available at compile time, so
           make it a static const variable.
 
-2003-01-06  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-06  Morten Brix Pedersen
         
         * Utils.cpp: Because we can't just use streams to tokenize on words,
           implement tokenizeWords().
@@ -647,12 +655,12 @@ For a summary of changes between releases - see the NEWS file.
         * configure.in, po/LINGUAS: Add da translation.
         * po/da.po: Added.
 
-2003-01-05  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-05  Morten Brix Pedersen
         
         * Parser.cpp: Unwanted character set conversion happened when
           retrieving the list of names because we used operator >>. Fixed.
 
-2003-01-04  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-04  Morten Brix Pedersen
 
         * MainNotebook.cpp: Fix segfault when closing a tab with
           CTRL-w and prefs and dcclist wasn't closed.
@@ -660,7 +668,7 @@ For a summary of changes between releases - see the NEWS file.
           Also differentiate from locale and encoding errors.
         * MainWindow.cpp: Modified message for encoding errors.
 
-2003-01-04  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-04  Morten Brix Pedersen
 
         * More cleanups:
         * MainNotebook.cpp/.h: Remove <gtkmm/style.h> include, not needed.
@@ -674,12 +682,12 @@ For a summary of changes between releases - see the NEWS file.
         * Tab.cpp: No need to check for boolean value of _nicklist before
           deleting, delete 0 will work fine.
 
-2003-01-03  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-03  Morten Brix Pedersen
 
         * Minor bugfix to previous changes:
         * MainNotebook.cpp: Remember to set name for new tabs.
 
-2003-01-03  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-03  Morten Brix Pedersen
 
         * Some more cleanups:
         * MainNotebook.cpp/.h: Remove addChannelTab() and addQueryTab(),
@@ -696,11 +704,11 @@ For a summary of changes between releases - see the NEWS file.
 
         * MainWindow.cpp, GuiCommands.cpp: Update to reflect above API changes.
 
-2003-01-03  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-03  Morten Brix Pedersen
         
         * NickList.cpp: Translate "user/users".
 
-2003-01-03  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-03  Morten Brix Pedersen
 
         * Tab.cpp/.h: Add enum Type { } to keep track of Tab type, instead of
           bool members. Remove setChannel(), setQuery(), isChannel() and
@@ -712,7 +720,7 @@ For a summary of changes between releases - see the NEWS file.
         * MainNotebook.cpp/.h: Remove findPage(), because it isn't needed. Add
           a findTab() to find types instead.
 
-2003-01-03  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-03  Morten Brix Pedersen
 
         * ConfigHandler.cpp/.h: Add encoding member, defaults to "System
           default"
@@ -720,12 +728,12 @@ For a summary of changes between releases - see the NEWS file.
           "System default", convert to the selected encoding.
         * Prefs.cpp: Add Gtk::Combo to hold possible encodings.
 
-2003-01-03  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-03  Morten Brix Pedersen
 
         * Add LostIRC.h which includes gettext includes.
         * Remove gettext.h, just use libintl.h
 
-2003-01-03  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-03  Morten Brix Pedersen
         
         * Add po/lostirc.pot - a template file for future translations.
 
@@ -733,31 +741,31 @@ For a summary of changes between releases - see the NEWS file.
         
         * Make strings in source translateable, by using _() around them.
 
-2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-02  Morten Brix Pedersen
 
         * Added gettext support so LostIRC can be translated to different
           languages. Get ready to a ton of build problems...
 
-2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-02  Morten Brix Pedersen
 
         * MainWindow.cpp: Add ALT-Left and ALT-Right keybindings to move to
           the tab on the left/right.
         * GuiCommands.cpp: Document that in displayKeybindings().
 
-2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-02  Morten Brix Pedersen
         
         * GuiCommands.cpp: Add displayKeybindings() to display all key
           bindings.
         * MainWindow.cpp: Shorten down introduction text when starting client.
 
-2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-02  Morten Brix Pedersen
 
         * TextWidget.h/TextWidget.cpp: Implement scrollToBottom() and
           scrollToTop();
         * MainWindow.cpp: Make CTRL-Home and CTRL-End scroll the text widget
           to the top and bottom.
 
-2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-02  Morten Brix Pedersen
 
         * TextWidget.h: Make onScroll() and onResize() private.
         * TextWidget.h: Create setHighlightMark() and scrollToHighlightMark(),
@@ -769,7 +777,7 @@ For a summary of changes between releases - see the NEWS file.
         * MainWindow.cpp: Use the two above functions. Add notice in startup
           text of new key-binding. CTRL-h.
 
-2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
+2003-01-02  Morten Brix Pedersen
 
          * Add 2003 to copyright in source and header files.
 
@@ -780,65 +788,65 @@ For a summary of changes between releases - see the NEWS file.
           scrolls/resizes will function properly.  Will be useful in the
           future too.
 
-2002-12-31  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-31  Morten Brix Pedersen
 
         * Socket.cpp/DCC.cpp/ServerConnection.cpp: When getting a system error
           message, remember to convert it to utf8, since it can contain
           non-ascii characters when locale is not C.
 
-2002-12-31  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-31  Morten Brix Pedersen
 
         * DCC.cpp/FrontEnd.h/MainWindow.cpp/DCCList.cpp: Implement different DCC
           status's instead of just the simple concept of marking a DCC done.
           Fixes a serious segfault when the DCC pointer was non-existent.
 
-2002-12-31  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-31  Morten Brix Pedersen
 
         * DCC.cpp: When unable to bind, don't send message to remote user.
 
-2002-12-31  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-31  Morten Brix Pedersen
         
         * DCC.cpp: Strip path from filename sent to the user.
 
-2002-12-31  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-31  Morten Brix Pedersen
 
         * DCC.cpp: Implement expandHome() to expand tildes to home
           directories.
 
-2002-12-29  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-29  Morten Brix Pedersen
 
         * NickList.cpp: remove plural s when only one user is on the channel.
 
-2002-12-29  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-29  Morten Brix Pedersen
 
         * configure.in: Bump version to 0.2.5pre.
         * ServerConnection.cpp: When no real name has been set, use the
           nickname.
 
-2002-12-29  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-29  Morten Brix Pedersen
 
         * configure.in: Bump version to 0.2.4 and release.
 
-2002-12-24  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-24  Morten Brix Pedersen
 
         * Commands.cpp/GuiCommand.cpp: Don't require connection to /EXIT.
         * MainWindow.cpp: Add extra note to locale message.
         * Socket.cpp: Insert an error when the message couldn't be sent.
 
-2002-12-24  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-24  Morten Brix Pedersen
 
         * ServerConnection.cpp: Add extra bool flag to sendMsg() whether or
           not to send the message to the GUI as well, prevents a bug in /MSG
           where the message was outputted to the current channel.
 
-2002-12-24  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-24  Morten Brix Pedersen
 
         * FrontEnd.cpp: Add timestamp here.
         * TextWidget.cpp: Don't add timestamp here.
         * TextWidget.h/TextWidget.cpp: Remove unused variable
           _fallback_encoding.
 
-2002-12-24  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-24  Morten Brix Pedersen
 
         * Patch from Michael Kristensen to add log support, revised quite a
           bit by me:
@@ -854,14 +862,14 @@ For a summary of changes between releases - see the NEWS file.
 
         * LostIRCApp.h: Add logdir public member.
 
-2002-12-23  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-23  Morten Brix Pedersen
 
         * MainWindow.cpp: After connecting, call setActive() on all queries,
           to remove parentes.
         * Tab.cpp: In setActive(), remove parentes if first character starts
           with an '('.
 
-2002-12-23  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-23  Morten Brix Pedersen
 
         * Socket.cpp/Socket.h: Add extra 'int& received' argument to
           receive().
@@ -870,43 +878,43 @@ For a summary of changes between releases - see the NEWS file.
         * Parser.cpp: No need to erase \r and \n, done in ServerConnection
           now.
 
-2002-12-23  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-23  Morten Brix Pedersen
 
         * Parser.cpp: Notices not sent to the user, are now sent to the
           correct channel instead of FE:CURRENT.
 
-2002-12-23  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-23  Morten Brix Pedersen
         
         * TextWidget.cpp: Add code to scroll up/down.
         * MainWindow.cpp: Catch Page_Up and Page_Down keys.
 
-2002-12-23  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-23  Morten Brix Pedersen
 
         * ConfigHandler.cpp: Use raw() on strings saved to files so we ensure
           that we save in UTF-8 and to avoid problems with locales.
 
-2002-12-21  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-21  Morten Brix Pedersen
 
         * configure.in: Bump to version 0.2.4pre.
         * Notebook.cpp: Use arrows when tabs can no longer fit into the
           window. set_scrollable(true).
         * Notebook.cpp: Don't explicitly call Gtk::Notebook() constructor.
 
-2002-12-19  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-19  Morten Brix Pedersen
 
         * configure.in: Bump to version 0.2.3 and release.
 
-2002-12-19  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-19  Morten Brix Pedersen
 
         * Tab.h/Tab.cpp: Remove unused ScrolledWindow member. Move members
           round a bit.
 
-2002-12-16  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-16  Morten Brix Pedersen
         
         * ServerConnection.cpp: Add missing space and kolon before error
           message.
 
-2002-12-16  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-16  Morten Brix Pedersen
 
         * Utils.cpp/Utils.h: Add convert_from_utf8(), to convert to the
           current locale. If the conversion fails, show an error box.
@@ -915,11 +923,11 @@ For a summary of changes between releases - see the NEWS file.
           MessageDialog when locale conversion failed.
         * Socket.cpp: Convert strings with convert_from_utf8().
 
-2002-12-16  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-16  Morten Brix Pedersen
 
         * Removed unneeded <string> includes.
 
-2002-12-16  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-16  Morten Brix Pedersen
 
         * Made all files in libirc use Glib::ustring instead of std::string.
           This has the advantage that only have to do the convert_to_utf8()
@@ -930,7 +938,7 @@ For a summary of changes between releases - see the NEWS file.
 
           Lots of new bug has probably been produced now...
 
-2002-12-16  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-16  Morten Brix Pedersen
 
         * ConfigHandler.cpp/ConfigHandler.h: Rename autoJoin server to Server.
           Add code to disable automatically connection on startup.
@@ -943,13 +951,13 @@ For a summary of changes between releases - see the NEWS file.
           boxes better inside a table. Added feature to disable/enable
           automatically connection on startup.
 
-2002-12-14  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-14  Morten Brix Pedersen
 
         * Events.cpp/Events.h: Removed.
         * FrontEnd.cpp/FrontEnd.: Merge sources from Events.cpp/Events.h to
           here.
 
-2002-12-13  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-13  Morten Brix Pedersen
 
         * DCC.cpp/DCC.h: Add extra pure virtual functions to abstract base
           class. Add _nick member to DCC_Send_In class.
@@ -959,23 +967,23 @@ For a summary of changes between releases - see the NEWS file.
         * DCC.cpp: Use CLIENTMSG instead of SERVERMSG1 event.
         * DCCList.h/DCCList.cpp: Add functionality to track progress of DCCs.
 
-2002-12-13  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-13  Morten Brix Pedersen
 
         * ConfigHandler.cpp: Don't use bold for nicks anyway. Just plain
           white. I think it was too disturbing and I got focused way to much
           on the very light and bold nicks everytime a person joined the
           channel.
 
-2002-12-13  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-13  Morten Brix Pedersen
 
         * Added CTCP_REPLY event.
 
-2002-12-13  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-13  Morten Brix Pedersen
 
         * Added an extra event for quits without any quit message, so we can
           show it without an empty parentes.
 
-2002-12-11  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-11  Morten Brix Pedersen
 
         * DCCList.cpp/DCCList.h: Initial work for a DCC list.
         * Tab.cpp/Tab.h: Add DCCList functionality. Rename member from
@@ -983,7 +991,7 @@ For a summary of changes between releases - see the NEWS file.
         * Prefs.h/Prefs.cpp: Rename function from endPrefs() to closePrefs().
           Move declaration of the function inside the class declaration.
 
-2002-12-09  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-09  Morten Brix Pedersen
 
         * Parser.h: Add skipFirstWord() method. Move 2 methods out of class
           definition.
@@ -991,17 +999,17 @@ For a summary of changes between releases - see the NEWS file.
           it's usually our nick.
         * ConfigHandler.cpp: Added missing ending-bold to evt_part2.
 
-2002-12-09  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-09  Morten Brix Pedersen
         
         * Parser.cpp: Recognize QuakeNet's "is authed as" and freenodes "is an
           identified user" replies.
 
-2002-12-09  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-09  Morten Brix Pedersen
 
         * ConfigHandler.cpp/Parser.cpp: Add WHOIS_SERVER, WHOIS_USER,
           WHOIS_CHANNELS, WHOIS_GENERIC events and use them.
 
-2002-12-09  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-09  Morten Brix Pedersen
         
         * Events.h, Events.cpp: Add CLIENTMSG. Rename SERVMSG to SERVMSG1.
         * Parser.cpp, ServerConnection.cpp, Commands.cpp: Use CLIENTMSG
@@ -1009,132 +1017,132 @@ For a summary of changes between releases - see the NEWS file.
         * ConfigHandler.cpp: Change the default colors, and parse bold too.
         * Parser.cpp: Use NOTICEPRIV when notice is private.
 
-2002-12-09  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-09  Morten Brix Pedersen
 
         * ConfigHandler.cpp: Prefix number values with zero, to avoid next
           character to get colored when it's a digit.
 
-2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-05  Morten Brix Pedersen
         
         * TextWidget.cpp: Remove realInsert() function, put it into
           insertText() function instead.  Don't try to scroll after each
           character inserted! Do it after the full string has been inserted.
 
-2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-05  Morten Brix Pedersen
         
         * README: Update with a better description.
 
-2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-05  Morten Brix Pedersen
 
         * Entry.cpp: When typing in text when not connected or no channel
           join, mention a /SERVER and /JOIN example.
 
-2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-05  Morten Brix Pedersen
 
         * ConfigHandler.h/ConfigHandler.cpp: Add strip_boldandunderline option.
         * Parser.cpp: When strip_boldandunderline is on, also strip bold and
           underline codes.
         * Prefs.h/Prefs.cpp: Add option to toggle strip_boldandunderline.
 
-2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-05  Morten Brix Pedersen
         
         * TextWidget.h: Add TextProperties struct.
         * TextWidget.cpp: Use TextProperties struct to control the properties
           of text. Make functions take a TextProperties reference.
           Disable URL handling code since it's non-functional at the moment.
 
-2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-05  Morten Brix Pedersen
 
         * Prefs.cpp: "Cancel" on strip colors wasn't working. Fixed.
           Simplified some other code a bit.
 
-2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-05  Morten Brix Pedersen
 
         * TextWidget.cpp: Handle bold and underline as well as reset
           attribute.
 
-2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-05  Morten Brix Pedersen
 
         * TextWidget.cpp: Don't create a mark with a name. Just an anonymously
           one.
 
-2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-05  Morten Brix Pedersen
         
         * TextWidget.cpp: New parsing code for colored lines. Can now handle
           background color correctly. It takes one character at the time and
           inserts it, so I'm afraid that it might be a bit slow. But hey,
           premature optimizations is the root of all evil.
 
-2002-12-04  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-04  Morten Brix Pedersen
 
         * Parser.cpp: Add stripColor() function to remove colors.
         * ConfigHandler.cpp: Add strip_color bool option.
         * Prefs.cpp: Add new CheckButton to enable/disable strip_color option.
 
-2002-12-03  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-03  Morten Brix Pedersen
 
         * lostirc.1: Updated with a better description.
 
-2002-12-02  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-02  Morten Brix Pedersen
 
         * MainWindow.cpp: updateTitle() when connected.
 
-2002-12-01  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-01  Morten Brix Pedersen
         
         * MainNotebook.cpp: Use static_cast<> instead of dynamic_cast<>.
 
-2002-12-01  Morten Brix Pedersen  <morten@wtf.dk>
+2002-12-01  Morten Brix Pedersen
 
         * Release 0.2.2
 
-2002-11-28  Morten Brix Pedersen  <morten@wtf.dk>
+2002-11-28  Morten Brix Pedersen
 
         * Prefs.cpp/Tab.cpp: Use stock icons instead of just text buttons.
 
-2002-11-27  Morten Brix Pedersen  <morten@wtf.dk>
+2002-11-27  Morten Brix Pedersen
 
         * MainNotebook.cpp: Save cursor position, and unselect any selected
           text when switching tab.
 
-2002-11-27  Morten Brix Pedersen  <morten@wtf.dk>
+2002-11-27  Morten Brix Pedersen
         
         * MainWindow.cpp: Change CTRL-c to CTRL-w.
 
-2002-11-27  Morten Brix Pedersen  <morten@wtf.dk>
+2002-11-27  Morten Brix Pedersen
 
         * DCC.cpp: Don't call onReadData when we can send data, only when data
           is incoming.
 
-2002-11-27  Morten Brix Pedersen  <morten@wtf.dk>
+2002-11-27  Morten Brix Pedersen
         
         * Parser.cpp: When the channel isn't found after the :, use the
           parameter before that.
 
-2002-11-27  Morten Brix Pedersen  <morten@wtf.dk>
+2002-11-27  Morten Brix Pedersen
 
         * NickList.cpp/NickList.h: Seperate NickList code into its own class.
         * Tab.cpp/Tab.h: Remove TabChannel and TabQuery inheriting from Tab.
           Instead we identify the class with a bool member. Enabling us to
           remove or add the nicklist dynamically.
 
-2002-11-25  Morten Brix Pedersen  <morten@wtf.dk>
+2002-11-25  Morten Brix Pedersen
 
         * Move utf8-fallback code into its own function: convert_to_utf8().
           Replace all Glib::locale_to_utf8() calls with convert_to_utf8(),
           this should hopefully fix problems for people.
 
-2002-11-25  Morten Brix Pedersen  <morten@wtf.dk>
+2002-11-25  Morten Brix Pedersen
         
         * There was no real good reason for the label to be created manually.
           No longer part of the Tab class, but access through the notebook
           widget using the new method MainNotebook::getLabel().
 
-2002-11-25  Morten Brix Pedersen  <morten@wtf.dk>
+2002-11-25  Morten Brix Pedersen
 
         * ServerConnection.h: Make copy ctr and operator= private to avoid
           copying/pass-by-value.
 
-2002-11-25  Morten Brix Pedersen  <morten@wtf.dk>
+2002-11-25  Morten Brix Pedersen
 
         * FrontEnd.h/MainWindow.h: Add connected() method.
         * ServerConnection.cpp/Parser.cpp: Call connected() when host is
@@ -1157,13 +1165,13 @@ For a summary of changes between releases - see the NEWS file.
         * DCC.cpp: The port, which LostIRC will use when DCC-sending, changed
           to use whatever one specified in the preferences-window.
 
-2002-11-24  Morten Brix Pedersen  <morten@wtf.dk>
+2002-11-24  Morten Brix Pedersen
 
         * Tab.cpp/TextWidget.cpp: Move implementation of the TextView to its
           own class instead of having the functionality directly in the Tab
           class. 
 
-2002-11-24  Morten Brix Pedersen  <morten@wtf.dk>
+2002-11-24  Morten Brix Pedersen
 
         * Tab.cpp: Have an extra 'priority' column (not visible) which
           internally decide which mode is supposed to higher than the other.
@@ -1174,7 +1182,7 @@ For a summary of changes between releases - see the NEWS file.
           since that's what it really is, and upstream gtkmm just changed to
           this in CVS.
 
-2002-11-23  Morten Brix Pedersen  <morten@wtf.dk>
+2002-11-23  Morten Brix Pedersen
         
         * GuiCommmands.cpp: Remove SetFont() function which isn't used
         * Commands.h: Make UserCommands a templated type so both std::string
@@ -1183,14 +1191,14 @@ For a summary of changes between releases - see the NEWS file.
           it in GuiCommands.cpp. Fixes bug with creating queries with special
           characters.
 
-2002-11-23  Morten Brix Pedersen  <morten@wtf.dk>
+2002-11-23  Morten Brix Pedersen
         
         * GuiCommands.cpp/Commands.cpp: Use a set<> instead of a vector<> in
           getCommands() to void duplicate command-entries.
         * GuiCommands.cpp/Commands.cpp: rename commands() to displayCommands()
           and make it use getCommands() to retrieve the commands.
 
-2002-11-23  Morten Brix Pedersen  <morten@wtf.dk>
+2002-11-23  Morten Brix Pedersen
 
         * Create real ChangeLog. Rename old ChangeLog to NEWS.
         * Makefile.am: Remove FOREIGN automake option since we now have all

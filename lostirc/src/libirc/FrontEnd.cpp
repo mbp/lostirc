@@ -20,7 +20,7 @@
 #include "ServerConnection.h"
 #include "Parser.h"
 
-struct {
+static struct {
     const char *name;
     const signed int value;
 } event_map[] = {
