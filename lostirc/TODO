@@ -10,18 +10,16 @@ NICE-TO-HAVE:
   * Implement /help, /help shortcuts and /help commands
   * ipv6 support
   * When window has lost its focus, then highlight the front tab too.
-  * /BAN command.
-  * /EXEC
+  * /BAN and /EXEC command.
   * Virtual functions for Commands, to be overriden. Much more OO-like.
 
-  * Some feature to see where one when one was highlighted (impossible to
-    find highlights after being away for a day from the client)
+  * Some feature to see where one when one was highlighted (it's impossible
+    to find highlights after being away for a day from the client)
   * Some way to seperate tabs from each other, so they are server sorted.
 
 RANDOM BUGS:
 ------------
   * Should we check for EAGAIN on send()? It seems to always suceeed anyway.
-  * When someone has an ident starting with a number, it gets colored. Bug.
 
   * This has to be removed from 'configure' at release time, or else the
     configure script fails on Red Hat/Mandrake:

@@ -1,5 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
+2002-12-09  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * ConfigHandler.cpp: Prefix number values with zero, to avoid next
+          character to get colored when it's a digit.
+
 2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
         
         * TextWidget.cpp: Remove realInsert() function, put it into

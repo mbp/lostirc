@@ -7,6 +7,8 @@ LostIRC (x.x.x)
     option in preferences, you can turn them on again.
   * Bold and underline codes are not stripped by defalt. But you can turn
     them off in preferences.
+  * Before, a number in the ident would make the line get colored. Fixed.
+    (You need to remove ~/.lostirc/events.conf first).
   * Title in window wasn't updated after succesfull connection to server and
     joining a channel after that, fixed.
   * Man-page updated with a better description.
