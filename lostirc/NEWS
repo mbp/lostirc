@@ -4,6 +4,7 @@ LostIRC (0.2.x)
   * Your previous window position wasn't remembered if you had your window
     located in an x or y value that equaled 0, fixed. (thanks, Michael
     Kristensen)
+  * Compilation fixes for FreeBSD 5.0
 
 LostIRC (0.2.5) - Thu Jan, 16th 2003
   * When the window was resized, the scrollbar moved unwanted away from the

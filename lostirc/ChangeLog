@@ -1,5 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-03-24  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Parser.cpp: Compilation fix for FreeBSD 5.0. Closes bug #
+
 2003-03-23  Michael Kristensen  <michael@wtf.dk>
 
         * MainWindow.cpp: Corrected a bug, which did so that it wouldn't save

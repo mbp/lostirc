@@ -644,7 +644,7 @@ void Parser::TopicTime(const ustring& param)
     ustring time = param.substr(pos3 + 1);
 
     long date = std::atol(time.c_str());
-    time = std::ctime(&date);
+    time = std::ctime(reinterpret_cast<const time_t*>(&date));
 
     Channel *c = _conn->findChannel(chan);
 
