@@ -2,6 +2,12 @@ For a summary of changes between releases - see the NEWS file.
 
 2002-12-29  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * configure.in: Bump version to 0.2.5pre.
+        * ServerConnection.cpp: When no real name has been set, use the
+          nickname.
+
+2002-12-29  Morten Brix Pedersen  <morten@wtf.dk>
+
         * configure.in: Bump version to 0.2.4 and release.
 
 2002-12-24  Morten Brix Pedersen  <morten@wtf.dk>

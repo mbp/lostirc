@@ -302,7 +302,9 @@ bool ServerConnection::sendPing(const ustring& crap)
 
 bool ServerConnection::sendUser(const ustring& nick, const ustring& localhost, const ustring& remotehost, const ustring& name)
 {
-    ustring msg("USER " + nick + " " + localhost + " " + remotehost + " :" + name + "\r\n");
+    ustring realname = (name.empty() ? nick : name);
+
+    ustring msg("USER " + nick + " " + localhost + " " + remotehost + " :" + realname + "\r\n");
 
     return _socket.send(msg);
 }
@@ -376,11 +378,10 @@ bool ServerConnection::sendJoin(const ustring& chan)
 bool ServerConnection::sendPart(const ustring& chan, const ustring& message)
 {
     ustring msg;
-    if (!message.empty()) {
-        msg = "PART " + chan + " :" + message + "\r\n";
-    } else {
-        msg = "PART " + chan + "\r\n";
-    }
+    if (!message.empty())
+          msg = "PART " + chan + " :" + message + "\r\n";
+    else
+          msg = "PART " + chan + "\r\n";
 
     return _socket.send(msg);
 }
@@ -474,11 +475,10 @@ bool ServerConnection::sendInvite(const ustring& to, const ustring& params)
 bool ServerConnection::sendTopic(const ustring& chan, const ustring& topic)
 {
     ustring msg;
-    if (topic.empty()) {
-        msg = "TOPIC " + chan + "\r\n";
-    } else {
-        msg = "TOPIC " + chan + " :" + topic + "\r\n";
-    }
+    if (topic.empty())
+          msg = "TOPIC " + chan + "\r\n";
+    else
+          msg = "TOPIC " + chan + " :" + topic + "\r\n";
 
     return _socket.send(msg);
 }
