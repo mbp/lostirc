@@ -107,9 +107,7 @@ public:
     void insertUser(const std::vector<string>& users);
     void insertUser(const std::string& user);
     void removeUser(const std::string& nick);
-    void renameUser(const std::string& from, const std::string& to) {
-        removeUser(from); insertUser(to);
-    }
+    void renameUser(const std::string& from, const std::string& to);
     bool findUser(const std::string& nick);
     bool nickCompletion(const std::string& word, std::string& str);
 

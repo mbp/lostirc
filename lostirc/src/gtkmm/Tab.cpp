@@ -26,7 +26,6 @@
 using std::vector;
 using std::string;
 
-
 // Color code definitions taken from palette.c in xchat, and modified just a
 // bit
 
@@ -222,6 +221,40 @@ void Tab::insertWithColor(int color, const string& str)
         _text->get_vadjustment()->set_value(_text->get_vadjustment()->get_upper());
 }
 
+void Tab::setAway()
+{
+    bool away = false;
+
+    Gtk::Box_Helpers::BoxList::iterator i;
+
+    for (i = _hbox2->children().begin(); i != _hbox2->children().end(); ++i) {
+        Gtk::Label *a = dynamic_cast<Gtk::Label*>((*i)->get_widget());
+        if (a)
+              away = true;
+    }
+
+    if (!away) {
+        Gtk::Label *a = manage(new Gtk::Label("You are away"));
+        _hbox2->pack_start(*a);
+        _hbox2->show_all();
+    }
+}
+
+void Tab::setUnAway()
+{
+    Gtk::Box_Helpers::BoxList::iterator i;
+
+    for (i = _hbox2->children().begin(); i != _hbox2->children().end();) {
+        Gtk::Label *a = dynamic_cast<Gtk::Label*>((*i)->get_widget());
+        if (a) {
+            i = _hbox2->children().erase(i);
+        } else {
+            ++i;
+        }
+    }
+    _hbox2->show_all();
+}
+
 TabQuery::TabQuery(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
     : Tab(label, conn, font)
 {
@@ -293,6 +326,24 @@ void TabChannel::removeUser(const string& nick)
     _users->set_text(ss.str() + " users");
 }
 
+void TabChannel::renameUser(const string& from, const string& to)
+{
+    Gtk::CList_Helpers::RowIterator i = _clist->rows().begin();
+
+    while(i != _clist->rows().end())
+    {
+        int row = i->get_row_num();
+        string text = _clist->cell(row, 1).get_text();
+
+        if (text == from) {
+            _clist->cell(row, 1).set_text(to);
+            break;
+        }
+        i++;
+    }
+
+}
+
 bool TabChannel::findUser(const string& nick)
 {
     Gtk::CList_Helpers::RowIterator i = _clist->rows().begin();
@@ -313,41 +364,6 @@ bool TabChannel::findUser(const string& nick)
 Gtk::CList* TabChannel::getCList()
 {
     return _clist;
-}
-
-
-void Tab::setAway()
-{
-    bool away = false;
-
-    Gtk::Box_Helpers::BoxList::iterator i;
-
-    for (i = _hbox2->children().begin(); i != _hbox2->children().end(); ++i) {
-        Gtk::Label *a = dynamic_cast<Gtk::Label*>((*i)->get_widget());
-        if (a)
-              away = true;
-    }
-
-    if (!away) {
-        Gtk::Label *a = manage(new Gtk::Label("You are away"));
-        _hbox2->pack_start(*a);
-        _hbox2->show_all();
-    }
-}
-
-void Tab::setUnAway()
-{
-    Gtk::Box_Helpers::BoxList::iterator i;
-
-    for (i = _hbox2->children().begin(); i != _hbox2->children().end();) {
-        Gtk::Label *a = dynamic_cast<Gtk::Label*>((*i)->get_widget());
-        if (a) {
-            i = _hbox2->children().erase(i);
-        } else {
-            ++i;
-        }
-    }
-    _hbox2->show_all();
 }
 
 bool TabChannel::nickCompletion(const string& word, string& str)
