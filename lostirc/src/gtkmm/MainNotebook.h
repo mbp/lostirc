@@ -19,14 +19,12 @@
 #ifndef MAINNOTEBOOK_H
 #define MAINNOTEBOOK_H
 
-#include <gtk--/notebook.h>
-#include <gtk--/style.h>
-#include <gtk--/fontselection.h>
+#include <gtkmm/notebook.h>
+#include <gtkmm/style.h>
+#include <gtkmm/fontselection.h>
 #include <ServerConnection.h>
 #include <vector>
 #include "Tab.h"
-
-class MainWindow;
 
 class MainNotebook : public Gtk::Notebook
 {
@@ -38,7 +36,7 @@ public:
     Tab* getCurrent(ServerConnection *conn);
     Tab* getCurrent();
     Tab* findTab(const std::string& name, ServerConnection *conn, bool findInActive = false);
-    Gtk::Notebook_Helpers::Page* findPage(const std::string& name, ServerConnection *conn, bool findInActive = false);
+    int findPage(const std::string& name, ServerConnection *conn, bool findInActive = false);
 
     void findTabs(const std::string& nick, ServerConnection *conn, std::vector<Tab*>& vec);
     void findTabs(ServerConnection *conn, std::vector<Tab*>& vec);
@@ -46,16 +44,15 @@ public:
     void closeCurrent();
     void highlight(Tab *tab);
     void onInserted(Tab *tab);
-    void setFont();
+    //void setFont();
     int countTabs(ServerConnection *conn);
 
 private:
-    void switchPage(Gtk::Notebook_Helpers::Page *p, unsigned int n);
-    void fontSelectionOk();
-    void destroyFontSelection(Gtk::FontSelectionDialog *w);
+    void switchPage(GtkNotebookPage *p, unsigned int n);
+    //void fontSelectionOk();
+    //void destroyFontSelection(Gtk::FontSelectionDialog *w);
 
-    Gtk::FontSelectionDialog *fontdialog;
-    Gdk_Font _font;
-
+    //Gtk::FontSelectionDialog *fontdialog;
+    //Gdk_Font _font;
 };
 #endif

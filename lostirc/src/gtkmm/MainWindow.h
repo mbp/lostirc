@@ -20,8 +20,9 @@
 #define MAINWINDOW_H
 
 #include <vector>
-#include <gtk--/main.h>
-#include <gtk--/window.h>
+#include <gtkmm/main.h>
+#include <gtkmm/window.h>
+#include <gtk/gtksignal.h>
 #include <gdk/gdkkeysyms.h>
 #include <ServerConnection.h>
 #include <LostIRCApp.h>
@@ -35,12 +36,10 @@ class MainWindow : public Gtk::Window, public FrontEnd
 
 public:
     MainWindow();
-    ~MainWindow();
+    virtual ~MainWindow();
 
-    gint delete_event_impl(GdkEventAny*) { Gtk::Main::quit(); return 0; }
-
-    gint on_key_press_event(GdkEventKey* e);
-    virtual gint on_key_press_event_impl(GdkEventKey* e) { return 0; }
+    bool onKeyPress(GdkEventKey* e);
+    
     MainNotebook& getNotebook() { return notebook; }
     LostIRCApp& getApp() { return app; }
     Tab* newServer();

@@ -76,7 +76,7 @@ void Me(ServerConnection *conn, const string& params)
 
 void SetFont(ServerConnection *conn, const string& params)
 {
-    AppWin->getNotebook().setFont();
+    // FIXME AppWin->getNotebook().setFont();
 }
 
 void NewServer(ServerConnection *conn, const string& params)

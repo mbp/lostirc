@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <pangomm/fontdescription.h>
 #include <ctime>
 #include <algorithm>
 #include <sstream>
@@ -27,104 +28,79 @@
 
 using std::vector;
 using std::string;
+using Glib::ustring;
 
-// Color code definitions taken from palette.c in xchat, and modified just a
-// bit
-
-        //{0, 0xcf3c, 0xcf3c, 0xcf3c}, /* 0  white */
-GdkColor colors[] = { 
-        {0, 0xFFFF, 0xFFFF, 0xFFFF}, /* 0  white */
-        {0, 0x0000, 0x0000, 0x0000}, /* 1  black */
-        {0, 0x0000, 0x0000, 0xcccc}, /* 2  blue */
-        {0, 0x0000, 0xcccc, 0x0000}, /* 3  green */
-        {0, 0xdddd, 0x0000, 0x0000}, /* 4  red */
-        {0, 0xaaaa, 0x0000, 0x0000}, /* 5  light red */
-        {0, 0xbbbb, 0x0000, 0xbbbb}, /* 6  purple */
-        {0, 0xffff, 0xaaaa, 0x0000}, /* 7  orange */
-        {0, 0xeeee, 0xdddd, 0x2222}, /* 8  yellow */
-        {0, 0x3333, 0xdede, 0x5555}, /* 9  green */
-        {0, 0x0000, 0xcccc, 0xcccc}, /* 10 aqua */
-        {0, 0x3333, 0xdddd, 0xeeee}, /* 11 light aqua */
-        {0, 0x0000, 0x0000, 0xffff}, /* 12 blue */
-        {0, 0xeeee, 0x2222, 0xeeee}, /* 13 light purple */
-        {0, 0x7777, 0x7777, 0x7777}, /* 14 grey */
-        {0, 0x9999, 0x9999, 0x9999}, /* 15 light grey */
-        {0, 0xbe00, 0xbe00, 0xbe00}, /* 16 marktext Back (white) */
-        {0, 0x0000, 0x0000, 0x0000}, /* 17 marktext Fore (black) */
-        {0, 0xcf3c, 0xcf3c, 0xcf3c}, /* 18 foreground (white) */
-        {0, 0x0000, 0x0000, 0x0000}, /* 19 background (black) */
-};
-
-Tab::Tab(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
+Tab::Tab(Gtk::Label *label, ServerConnection *conn) //, Gdk_Font *font)
     : Gtk::VBox(), isHighlighted(false), hasPrefs(false),
-      isOnChannel(true), _label(label), _conn(conn), _font(font)
+      isOnChannel(true), _label(label), _conn(conn), _entry(this)
 {
-    // To hold current context (colors) for Text widget
-    _current_cx = new Gtk::Text::Context;
-
     // Creating HBox; will contain 2 widgets, a scrollwindow and an entry
     _hbox = new Gtk::HBox(false, 3); 
-    _scrollwindow = manage(new Gtk::ScrolledWindow());
-    _entry = manage(new Entry(this));
 
-    // Attaching Gtk::Text to scollwindow
-    _text = manage(new Gtk::Text());
-    _text->unset_flags(GTK_CAN_FOCUS);
-    _text->set_word_wrap(true);
-    _scrollwindow->set_policy(GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-    _scrollwindow->add(*_text);
+    // Attaching Gtk::TextView to scollwindow
+    
+    _textview.set_wrap_mode(Gtk::WRAP_WORD);
+    _textview.set_editable(false);
+    _textview.unset_flags(Gtk::CAN_FOCUS);
+    _swin.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+    _swin.add(_textview);
 
-    setStyle();
-
-    _hbox->pack_start(*_scrollwindow);
+    _hbox->pack_start(_swin);
     pack_start(*_hbox);
     _hbox2 = new Gtk::HBox();
-    pack_start(*_hbox2, 0, 1);
-    _hbox2->pack_start(*_entry, 1, 1);
+    pack_start(*_hbox2, Gtk::FILL);
+    _hbox2->pack_start(_entry);
 
     Gtk::Button *_button = manage(new Gtk::Button("Prefs"));
-    _button->clicked.connect(slot(this, &Tab::startPrefs));
-    _hbox2->pack_start(*_button, 0, 0);
+    _button->signal_clicked().connect(slot(*this, &Tab::startPrefs));
+    _hbox2->pack_start(*_button, Gtk::SHRINK);
 
     if (_conn->Session.isAway)
           setAway();
+
+    initializeColorMap();
+    setStyle();
+
 }
 
 Tab::~Tab()
 {
-    delete _current_cx;
     delete _hbox2;
     delete _hbox;
 }
 
+
+/*
 void Tab::setFont(Gdk_Font *font)
 {
     _font = font;
 }
 
+*/
 void Tab::setStyle() {
-    // Should go into ressource file!
-    GdkColor col1;
-    col1.red   = 0;
-    col1.green = 0;
-    col1.blue  = 0;
-
-    GdkColor col2;
-    col2.red   = 50000;
-    col2.green = 50000;
-    col2.blue  = 50000;
+    // TODO: Should this go into a ressource file?
+    Gdk::Color col1;
+    col1.set_rgb(0, 0, 0);
     
-    Gtk::Style *style = Gtk::Style::create();
-    style->set_font(*_font);
-    style->set_base(GTK_STATE_NORMAL, col1);
-    style->set_bg(GTK_STATE_NORMAL, col1);
-    style->set_text(GTK_STATE_NORMAL, col2);
-    style->set_fg(GTK_STATE_PRELIGHT, col2);
-    _text->set_style(*style);
+    // FIXME style->set_font(*_font);
+    _textview.modify_base(Gtk::STATE_NORMAL, col1);
+}
+
+Tab& Tab::operator<<(const char * str)
+{
+    // Convert the string to utf8 and pass it on to the real operator <<
+    return operator<<(Glib::locale_to_utf8(str));
 }
 
 Tab& Tab::operator<<(const string& str)
 {
+    // Convert the string to utf8 and pass it on to the real operator <<
+    return operator<<(Glib::locale_to_utf8(str));
+}
+
+Tab& Tab::operator<<(const ustring& str)
+{
+
     AppWin->getNotebook().onInserted(this);
 
     // Add timestamp 
@@ -132,11 +108,13 @@ Tab& Tab::operator<<(const string& str)
     char tim[11];
     strftime(tim, 10, "%H:%M:%S ", localtime(&timeval));
 
-    insertWithColor(0, string(tim));
-    string line(str);
+    insertWithColor(0, ustring(tim));
+    ustring line(str);
 
-    string::size_type lastPos = line.find_first_not_of("\003", 0);
-    string::size_type pos = line.find_first_of("\003", lastPos);
+    ustring::size_type lastPos = line.find_first_not_of("\003", 0);
+    ustring::size_type pos = line.find_first_of("\003", lastPos);
+
+    // FIXME: can be done prettier and better with TextBuffer marks
 
     while (string::npos != pos || string::npos != lastPos)
     {   
@@ -157,28 +135,28 @@ Tab& Tab::operator<<(const string& str)
     return *this;
 }
 
-void Tab::insertWithColor(int color, const string& str)
+void Tab::insertWithColor(int color, const ustring& str)
 {   
+    // see if the scrollbar is located in the bottom, then we need to scroll
+    // after insert 
+    bool scroll = false;
+    if (_swin.get_vadjustment()->get_value() >= (_swin.get_vadjustment()->get_upper() - _swin.get_vadjustment()->get_page_size() - 1e-12))                                                  
+          scroll = true;
 
-    // Find out whether we need to scroll this widget auto
-    float vscroll = _text->get_vadjustment()->get_value();
-    float page_size = _text->get_vadjustment()->get_page_size();
-    float upper_vscroll = _text->get_vadjustment()->get_upper();
+    // Insert the text
+    Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
+    buffer->insert_with_tag(buffer->end(), str, colorMap[color]);
 
-    bool autoscroll = false;
-    if (vscroll + page_size == upper_vscroll)
-          autoscroll = true;
+    if (scroll)
+          _textview.scroll_to_mark(buffer->create_mark("e", buffer->end()), 0.0);
 
-    _text->freeze();
-
-    _current_cx->set_foreground(colors[color]);
-    _text->insert(*_current_cx, str);
-
-    _text->thaw();
-
-    // Scroll it down, if true
-    if (autoscroll)
-        _text->get_vadjustment()->set_value(_text->get_vadjustment()->get_upper());
+    // FIXME: possible performance critical
+    int buffer_size = Util::stoi(AppWin->getApp().getCfg().getOpt("buffer_size"));
+    if (buffer_size && buffer->get_line_count() > buffer_size) {
+        Gtk::TextBuffer::iterator start = buffer->get_iter_at_line(0);
+        Gtk::TextBuffer::iterator end = buffer->get_iter_at_line(buffer->get_line_count() - buffer_size);
+        buffer->delete_text(start, end);
+    }
 }
 
 void Tab::setAway()
@@ -190,7 +168,7 @@ void Tab::setAway()
     Gtk::Box_Helpers::BoxList::iterator i;
 
     for (i = _hbox2->children().begin(); i != _hbox2->children().end(); ++i) {
-        Gtk::Label *a = dynamic_cast<Gtk::Label*>((*i)->get_widget());
+        Gtk::Label *a = dynamic_cast<Gtk::Label*>(i->get_widget());
         if (a)
               away = true;
     }
@@ -207,7 +185,7 @@ void Tab::setUnAway()
     Gtk::Box_Helpers::BoxList::iterator i;
 
     for (i = _hbox2->children().begin(); i != _hbox2->children().end();) {
-        Gtk::Label *a = dynamic_cast<Gtk::Label*>((*i)->get_widget());
+        Gtk::Label *a = dynamic_cast<Gtk::Label*>(i->get_widget());
         if (a) {
             i = _hbox2->children().erase(i);
         } else {
@@ -215,165 +193,6 @@ void Tab::setUnAway()
         }
     }
     _hbox2->show_all();
-}
-
-TabQuery::TabQuery(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
-    : Tab(label, conn, font)
-{
-
-}
-
-TabChannel::TabChannel(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
-    : Tab(label, conn, font)
-{
-
-    Gtk::ScrolledWindow *swin = manage(new Gtk::ScrolledWindow());
-    swin->set_policy(GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-
-    Gtk::VBox *v = manage(new Gtk::VBox());
-    _users = manage(new Gtk::Label("Not on channel"));
-    _clist = manage(new Gtk::CList(2));
-    _clist->set_column_width(0, 10);
-    _clist->set_auto_sort(1);
-    _clist->set_compare_func(&sortFunc);
-
-    _clist->set_usize(100, 100);
-    swin->add(*_clist);
-
-    _hbox->pack_start(*v, 0, 0, 0);
-    v->pack_start(*_users, 0, 0, 0);
-    v->pack_start(*swin, 1, 1, 0);
-}
-
-void TabChannel::updateUserNumber()
-{
-    size_t size = _clist->rows().size();
-    std::stringstream ss;
-    ss << size;
-    _users->set_text(ss.str() + " users");
-}
-
-void TabChannel::insertUser(const vector<string>& users)
-{
-    /* only add him if he doesn't exist already, this could probably be made
-     * more effecient */
-    if (!findUser(users[1])) {
-        _clist->rows().push_back(users);
-        updateUserNumber();
-    }
-}
-
-void TabChannel::insertUser(const string& nick, IRC::UserMode m)
-{
-    vector<string> tmp;
-
-    switch (m)
-    {
-        case IRC::OP:
-            tmp.push_back("@");
-            break;
-        case IRC::VOICE:
-            tmp.push_back("+");
-            break;
-        case IRC::HALFOP:
-            tmp.push_back("%");
-            break;
-        case IRC::NONE:
-            tmp.push_back(" ");
-    }
-
-    tmp.push_back(nick);
-    insertUser(tmp);
-}
-
-void TabChannel::removeUser(const string& nick)
-{
-    Gtk::CList_Helpers::RowIterator i = _clist->rows().begin();
-
-    while(i != _clist->rows().end())
-    {
-        int row = i->get_row_num();
-        string text = _clist->cell(row, 1).get_text();
-
-        if (text == nick) {
-            _clist->rows().remove(_clist->row(row));
-            break;
-        }
-        i++;
-    }
-    updateUserNumber();
-}
-
-void TabChannel::renameUser(const string& from, const string& to)
-{
-    Gtk::CList_Helpers::RowIterator i = _clist->rows().begin();
-
-    while(i != _clist->rows().end())
-    {
-        int row = i->get_row_num();
-        string text = _clist->cell(row, 1).get_text();
-
-        if (text == from) {
-            _clist->cell(row, 1).set_text(to);
-            break;
-        }
-        i++;
-    }
-
-}
-
-bool TabChannel::findUser(const string& nick)
-{
-    Gtk::CList_Helpers::RowIterator i = _clist->rows().begin();
-
-    while(i != _clist->rows().end())
-    {
-        int row = i->get_row_num();
-        string text = _clist->cell(row, 1).get_text();
-
-        if (text == nick) {
-            return true;
-        }
-        i++;
-    }
-    return false;
-}
-
-Gtk::CList* TabChannel::getCList()
-{
-    return _clist;
-}
-
-bool TabChannel::nickCompletion(const string& word, string& str)
-{
-    Gtk::CList_Helpers::RowIterator i = getCList()->rows().begin();
-
-    int matches = 0;
-    string nicks;
-    // Convert it to lowercase so we can search ignoring the case
-    string lcword = Util::lower(word);
-    while(i != getCList()->rows().end())
-    {
-        string nick = getCList()->cell(i->get_row_num(), 1).get_text();
-
-        // Lower case again
-        string lcnick = Util::lower(nick);
-        if (lcword == lcnick.substr(0, lcword.length())) {
-            str = nick;
-            nicks += nick + " ";
-            matches++;
-        }
-        i++;
-    }
-    if (matches == 1) {
-        return true;
-    } else if (matches > 1) {
-        str = nicks + '\n';
-        return false;
-    } else {
-        str = "";
-        return false;
-    }
 }
 
 void Tab::startPrefs()
@@ -395,10 +214,148 @@ void Tab::endPrefs()
     remove(*p);
     Prefs::currentTab = 0;
     pack_start(*_hbox);
-    pack_start(*_hbox2, 0, 1);
+    pack_start(*_hbox2, Gtk::FILL);
     hasPrefs = false;
 }
 
+
+TabQuery::TabQuery(Gtk::Label *label, ServerConnection *conn) //, Gdk_Font *font)
+    : Tab(label, conn) //, font)
+{
+
+}
+
+TabChannel::TabChannel(Gtk::Label *label, ServerConnection *conn) //, Gdk_Font *font)
+    : Tab(label, conn), //, font),
+    _columns(),
+    _liststore(Gtk::ListStore::create(_columns)),
+    _treeview(_liststore)
+{
+
+    Gtk::ScrolledWindow *swin = manage(new Gtk::ScrolledWindow());
+    swin->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+
+    _users = manage(new Gtk::Frame("Not on channel"));
+    _treeview.append_column("", _columns.status);
+    _treeview.append_column("", _columns.nick);
+    _treeview.get_selection()->set_mode(Gtk::SELECTION_NONE);
+
+    /* FIXME: no sorting yet! */
+    /* FIXME: no set_column_width() like in the old days! */
+
+    _treeview.set_headers_visible(false);
+    //_treeview.set_default_size(100, 100);
+    swin->add(_treeview);
+
+    _hbox->pack_start(*_users, Gtk::SHRINK);
+    _users->add(*swin);
+}
+
+void TabChannel::updateUserNumber()
+{
+    size_t size = _liststore->children().size();
+    std::stringstream ss;
+    ss << size;
+    _users->set_label(ss.str() + " users");
+}
+
+void TabChannel::insertUser(const string& nick, IRC::UserMode m)
+{
+    Glib::ustring sign;
+    switch (m)
+    {
+        case IRC::OP:
+            sign = "@";
+            break;
+        case IRC::VOICE:
+            sign = "+";
+            break;
+        case IRC::HALFOP:
+            sign = "%";
+            break;
+        case IRC::NONE:
+            sign = " ";
+    }
+
+    Gtk::TreeModel::Row row = *_liststore->append();
+    row[_columns.status] = sign;
+    row[_columns.nick] = nick;
+    updateUserNumber();
+}
+
+void TabChannel::removeUser(const string& nick)
+{
+    Gtk::ListStore::iterator i = _liststore->children().begin();
+
+    while (i != _liststore->children().end())
+    {
+        if (i->get_value(_columns.nick) == nick)
+              i = _liststore->erase(i);
+        else
+              ++i;
+    }
+
+    updateUserNumber();
+}
+
+void TabChannel::renameUser(const string& from, const string& to)
+{
+    Gtk::ListStore::iterator i = _liststore->children().begin();
+
+    while (i != _liststore->children().end())
+    {
+        if (i->get_value(_columns.nick) == from) {
+            i->set_value(_columns.nick, Glib::ustring(to));
+            break;
+        }
+    }
+}
+
+bool TabChannel::findUser(const string& nick)
+{
+    Gtk::ListStore::iterator i = _liststore->children().begin();
+
+    while (i != _liststore->children().end())
+    {
+        if (i->get_value(_columns.nick) == nick)
+              return true;
+    }
+    return false;
+}
+
+bool TabChannel::nickCompletion(const ustring& word, ustring& str)
+{
+    Gtk::ListStore::iterator i = _liststore->children().begin();
+
+    int matches = 0;
+    ustring nicks;
+    // Convert it to lowercase so we can search ignoring the case
+    ustring lcword = Util::lower(word);
+    while (i != _liststore->children().end())
+    {
+        string nick = Util::lower(i->get_value(_columns.nick));
+
+        string lcnick = Util::lower(nick);
+        if (lcword == lcnick.substr(0, lcword.length())) {
+            str = nick;
+            nicks += nick + " ";
+            matches++;
+        }
+        i++;
+    }
+
+    if (matches == 1) {
+        return true;
+    } else if (matches > 1) {
+        str = nicks + '\n';
+        return false;
+    } else {
+        str = "";
+        return false;
+    }
+}
+
+/* FIXME
 gint sortFunc(GtkCList *clist, gconstpointer ptr1, gconstpointer ptr2)
 {
     gchar* row0_cell0 = GTK_CELL_TEXT(((GtkCListRow*)ptr1)->cell[0])->text;
@@ -412,4 +369,38 @@ gint sortFunc(GtkCList *clist, gconstpointer ptr1, gconstpointer ptr2)
     } else {
         return -strcmp(row0_cell0, row1_cell0);
     }
+}
+*/
+
+void Tab::helperInitializer(int i, const char * colorname)
+{
+    Glib::RefPtr<Gtk::TextTag> texttag = Gtk::TextTag::create();
+    Glib::PropertyProxy_WriteOnly<Glib::ustring> fg = texttag->property_foreground();
+    fg.set_value(colorname);
+    _textview.get_buffer()->get_tag_table()->add(texttag);
+    colorMap[i] = texttag;
+}
+
+void Tab::initializeColorMap()
+{
+    helperInitializer(0, "#FFFFFF");
+    helperInitializer(1, "#000000");
+    helperInitializer(2, "#0000CC");
+    helperInitializer(3, "#00CC00");
+    helperInitializer(4, "#DD0000");
+    helperInitializer(5, "#AA0000");
+    helperInitializer(6, "#BB00BB");
+    helperInitializer(7, "#FFAA00");
+    helperInitializer(8, "#EEDD22");
+    helperInitializer(9, "#33DE55");
+    helperInitializer(10, "#00CCCC");
+    helperInitializer(11, "#33DDEE");
+    helperInitializer(12, "#0000FF");
+    helperInitializer(13, "#EE22EE");
+    helperInitializer(14, "#777777");
+    helperInitializer(15, "#999999");
+    helperInitializer(16, "#BEBEBE");
+    helperInitializer(17, "#000000");
+    helperInitializer(18, "#FFFFFF");
+    helperInitializer(19, "#000000");
 }

@@ -1,3 +1,6 @@
+LostIRC (x.x.x)
+  * Ported to gtkmm2, now depends on sigc++ 1.1 and gtkmm1.3.
+
 LostIRC (0.1.4) - Sat Jul 13th 2002
   * A segfault which appeared when the enviroment variable USER wasn't set,
     has been fixed (thanks, Gabriele Giorgetti)

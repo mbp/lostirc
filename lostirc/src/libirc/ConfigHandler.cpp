@@ -332,6 +332,7 @@ void ConfigHandler::setEvtDefault(const string& key, const string& value)
 bool ConfigHandler::setOptDefaults()
 {
     setOptDefault("nickcompletion_character", ",");
+    setOptDefault("buffer_size", "500");
 
     return writeOptions();
 }

@@ -23,12 +23,13 @@
 
 using std::vector;
 using std::string;
+using Glib::ustring;
 
 Entry::Entry(Tab* tab)
     : Gtk::Entry(), _tab(tab), i(_entries.begin())
 {
-    key_press_event.connect(slot(this, &Entry::on_key_press_event));
-    activate.connect(slot(this, &Entry::onEntry));
+    signal_key_press_event().connect(slot(*this, &Entry::onKeyPress));
+    signal_activate().connect(slot(*this, &Entry::onEntry));
 }
 
 void Entry::onEntry()
@@ -36,22 +37,22 @@ void Entry::onEntry()
     if (get_text().length() == 0)
           return;
 
-    string msg = get_text();
+    ustring msg = get_text();
 
     // If the line is prefixed by two slashes, just send it as a msg.
     if (msg.length() > 1 && (msg.at(0) == '/' && msg.at(1) == '/')) {
         sendMsg(msg.substr(1));
     } else if (msg.at(0) == '/') {
 
-        string::size_type pos = msg.find_first_of(" ");
+        ustring::size_type pos = msg.find_first_of(" ");
 
-        string params;
+        ustring params;
         if (pos != string::npos)
               params = msg.substr(pos + 1);
 
         try {
 
-            GuiCommands::send(_tab->getConn(), Util::upper(msg.substr(1, pos - 1)), params);
+            GuiCommands::send(_tab->getConn(), Util::upper(Glib::locale_from_utf8(msg.substr(1, pos - 1))), Glib::locale_from_utf8(params));
 
         } catch (CommandException& ce) {
 
@@ -68,7 +69,7 @@ void Entry::onEntry()
     set_text("");
 }
 
-void Entry::sendMsg(const string& msg)
+void Entry::sendMsg(const ustring& msg)
 {
     if (!_tab->getConn()->Session.isConnected) {
         *_tab << "Not connected to server.\n";
@@ -80,6 +81,7 @@ void Entry::sendMsg(const string& msg)
         if (ss.peek() == '\n')
               ss.ignore();
 
+        // FIXME - ustring
         string line;
         while (getline(ss, line)) {
             _tab->getConn()->sendMsg(_tab->getLabel()->get_text(), line);
@@ -88,7 +90,7 @@ void Entry::sendMsg(const string& msg)
     }
 }
 
-gint Entry::on_key_press_event(GdkEventKey* e)
+bool Entry::onKeyPress(GdkEventKey* e)
 {
     if ((e->keyval == GDK_uparrow) || (e->keyval == GDK_Up)) {
         if (!_entries.empty()) {
@@ -112,11 +114,11 @@ gint Entry::on_key_press_event(GdkEventKey* e)
         }
     } else if ((e->keyval == GDK_Tab)) {
         // Nick completion using Tab key
-        string line = get_text();
+        ustring line = get_text();
         if (!line.empty()) {
-            string str, word;
-            string::size_type pos = line.find_last_of(" ");
-            if (pos == string::npos) {
+            ustring str, word;
+            ustring::size_type pos = line.find_last_of(" ");
+            if (pos == ustring::npos) {
                 pos = 0;
                 word = line.substr(pos);
             } else {
@@ -124,23 +126,22 @@ gint Entry::on_key_press_event(GdkEventKey* e)
             }
             if (line.at(0) == '/' && !word.empty() && pos == 0) {
                 // Command completion, could be prettier
-                if (GuiCommands::commandCompletion(word.substr(1), str)) {
+                string newstr = Glib::locale_from_utf8(str);
+                if (GuiCommands::commandCompletion(Glib::locale_from_utf8(word.substr(1)), newstr)) {
                     set_text("/" + str + " ");
                 }
 
             } else if (_tab->nickCompletion(word, str)) {
                 // Nick-completetion
                 if (pos == 0) {
-                    set_text("");
-                    append_text(str + AppWin->getApp().getCfg().getOpt("nickcompletion_character") + " ");
+                    set_text(str + AppWin->getApp().getCfg().getOpt("nickcompletion_character") + " ");
                 } else {
-                    set_text(line.substr(0, pos + 1));
-                    append_text(str);
+                    set_text(line.substr(0, pos + 1) + str);
                 }
             } else {
-                _tab->getText()->insert(str);
+                *_tab << str;
             }
         }
     }
-    return 0;
+    return true;
 }

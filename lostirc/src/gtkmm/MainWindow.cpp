@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <gtk--/box.h>
+#include <gtkmm/box.h>
 #include <algorithm>
 #include <functional>
 #include "Tab.h"
@@ -28,26 +28,25 @@ using std::string;
 MainWindow* AppWin = 0;
 
 MainWindow::MainWindow()
-: Gtk::Window(GTK_WINDOW_TOPLEVEL), app(this)
+    : Gtk::Window(), app(this)
 {
     AppWin = this;
-    set_policy(1, 1, 0); // Policy for main window: user resizeable
     set_title("LostIRC "VERSION);
+    set_resizable(true);
 
     int width = Util::stoi(app.getCfg().getOpt("window_width"));
     int height = Util::stoi(app.getCfg().getOpt("window_height"));
     if (width != 0 && height != 0) {
-        set_usize(width, height);
+        set_default_size(width, height);
     } else {
-        set_usize(600, 400);
+        set_default_size(600, 400);
     }
-
-    key_press_event.connect(slot(this, &MainWindow::on_key_press_event));
     
+    signal_key_press_event().connect(slot(*this, &MainWindow::onKeyPress));
+
     Gtk::VBox *_vbox1 = manage(new Gtk::VBox());
 
     _vbox1->pack_start(notebook);
-
     add(*_vbox1);
 
     show_all();
@@ -55,6 +54,7 @@ MainWindow::MainWindow()
     int num_of_servers = app.start();
     if (num_of_servers == 0) {
         // Construct initial tab
+        //App->newServer();
         Tab *tab = newServer();
         *tab << "\0037\nWelcome to LostIRC "VERSION"!\n\nYou use the client mainly by typing in commands and text in the entry-bar shown below.\n\nYou can connect to a server using:\n    \0038/SERVER <hostname>\n\n\0037Then join a channel:\n    \0038/JOIN <channel-name>\n\n\0037The rest of the commands is available with:\n    \0038/COMMANDS\0037.\n\n\0037Available keybindings:\n    \0038Alt + [1-9] - switch tabs from 1-9.\n    Alt + n - create new server tab.\n    Alt + c - close current tab.\n    Alt + p - open preferences.\n    Tab - nick-completion and command-completion.\n";
     }
@@ -65,9 +65,7 @@ MainWindow::~MainWindow()
     // Save the width and height of the windows
     int width, height;
 
-    width = this->width();
-    height = this->height();
-
+    get_size(width, height);
     if (width && height) {
         app.getCfg().setOpt("window_width", width);
         app.getCfg().setOpt("window_height", height);
@@ -78,7 +76,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::displayMessage(const string& msg, FE::Destination d)
 {
-
     if (d == FE::CURRENT) {
         Tab *tab = notebook.getCurrent();
 
@@ -238,11 +235,13 @@ void MainWindow::newTab(ServerConnection *conn)
     conn->Session.servername = name;
     Tab *tab = notebook.addChannelTab(name, conn);
     notebook.show_all();
+
     // XXX: this is a hack for a "bug" in the gtkmm code which makes the
     // application crash in the start when no pages exists, even though we
-    // added one above... doing set_page(0) will somehow add it fully.
-    if (notebook.get_current_page_num() == -1) {
-        notebook.set_page(0);
+    // added one above... doing set_current_page(0) will somehow add it fully.
+    // TODO: fixed in gtkmm2?
+    if (notebook.get_current_page() == -1) {
+        notebook.set_current_page(0);
     }
     tab->setInActive();
 }
@@ -257,38 +256,38 @@ Tab* MainWindow::newServer()
     return tab;
 }
 
-gint MainWindow::on_key_press_event(GdkEventKey* e)
+bool MainWindow::onKeyPress(GdkEventKey* e)
 {
     // Default keybindings. Still needs work.
     if ((e->keyval == GDK_0) && (e->state & GDK_MOD1_MASK)) {
-        notebook.set_page(9);
+        notebook.set_current_page(9);
     }
     else if ((e->keyval == GDK_1) && (e->state & GDK_MOD1_MASK)) {
-        notebook.set_page(0);
+        notebook.set_current_page(0);
     }
     else if ((e->keyval == GDK_2) && (e->state & GDK_MOD1_MASK)) {
-        notebook.set_page(1);
+        notebook.set_current_page(1);
     }
     else if ((e->keyval == GDK_3) && (e->state & GDK_MOD1_MASK)) {
-        notebook.set_page(2);
+        notebook.set_current_page(2);
     }
     else if ((e->keyval == GDK_4) && (e->state & GDK_MOD1_MASK)) {
-        notebook.set_page(3);
+        notebook.set_current_page(3);
     }
     else if ((e->keyval == GDK_5) && (e->state & GDK_MOD1_MASK)) {
-        notebook.set_page(4);
+        notebook.set_current_page(4);
     }
     else if ((e->keyval == GDK_6) && (e->state & GDK_MOD1_MASK)) {
-        notebook.set_page(5);
+        notebook.set_current_page(5);
     }
     else if ((e->keyval == GDK_7) && (e->state & GDK_MOD1_MASK)) {
-        notebook.set_page(6);
+        notebook.set_current_page(6);
     }
     else if ((e->keyval == GDK_8) && (e->state & GDK_MOD1_MASK)) {
-        notebook.set_page(7);
+        notebook.set_current_page(7);
     }
     else if ((e->keyval == GDK_9) && (e->state & GDK_MOD1_MASK)) {
-        notebook.set_page(8);
+        notebook.set_current_page(8);
     }
     else if ((e->keyval == GDK_c) && (e->state & GDK_MOD1_MASK)) {
         TabChannel *tab = dynamic_cast<TabChannel*>(notebook.getCurrent());
@@ -316,12 +315,14 @@ gint MainWindow::on_key_press_event(GdkEventKey* e)
     }
     else if (e->keyval == GDK_Up || e->keyval == GDK_Tab || e->keyval == GDK_Down) {
         if (!notebook.getCurrent()->hasPrefs) {
-            notebook.getCurrent()->getEntry()->on_key_press_event(e);
-            gtk_signal_emit_stop_by_name(GTK_OBJECT(this->gtkobj()), "key_press_event");
+            notebook.getCurrent()->getEntry().onKeyPress(e);
+            // FIXME: plain old gtk+, does
+            // signal_key_press_event().emission_stop(); work?
+            gtk_signal_emit_stop_by_name(GTK_OBJECT(this->gobj()), "key_press_event");
         }
     }
     else if ((e->keyval == GDK_f) && (e->state & GDK_MOD1_MASK)) {
-        notebook.setFont();
+        //notebook.setFont();
     }
-    return 0;
+    return true;
 }

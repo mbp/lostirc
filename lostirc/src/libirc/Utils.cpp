@@ -20,10 +20,13 @@
 #include <sstream>
 #include <cctype>
 #include <cstdlib>
+#include <glibmm/convert.h>
+#include <glibmm/unicode.h>
 #include "Utils.h"
 
 using std::string;
 using std::vector;
+using Glib::ustring;
 
 namespace Util {
 
@@ -39,10 +42,22 @@ string lower(string str)
     return str;
 }
 
+ustring upper(ustring str)
+{
+    std::transform(str.begin(), str.end(), str.begin(), Glib::Unicode::toupper);
+    return str;
+}
+
+ustring lower(ustring str)
+{
+    std::transform(str.begin(), str.end(), str.begin(), Glib::Unicode::tolower);
+    return str;
+}
+
 int stoi(const string& str)
 {
-    /* this function is implemented using atoi, only because stringstreams
-     * is broken on gcc 2.96 (redhat, mandrake) */
+    /* TODO: this function is implemented using atoi, only because
+     * stringstreams is broken on gcc 2.96 (redhat, mandrake) */
     return std::atoi(str.c_str());
 }
 

@@ -20,13 +20,17 @@
 #define TAB_H
 
 #include <vector>
-#include <gtk--/scrolledwindow.h>
-#include <gtk--/entry.h>
-#include <gtk--/box.h>
-#include <gtk--/label.h>
-#include <gtk--/text.h>
-#include <gtk--/clist.h>
-#include <gtk--/style.h>
+#include <map>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/entry.h>
+#include <gtkmm/box.h>
+#include <gtkmm/label.h>
+#include <gtkmm/frame.h>
+#include <gtkmm/textbuffer.h>
+#include <gtkmm/textview.h>
+#include <gtkmm/liststore.h>
+#include <gtkmm/treeview.h>
+#include <gtkmm/style.h>
 #include <gdk/gdkkeysyms.h>
 #include <irc_defines.h>
 #include "Entry.h"
@@ -36,13 +40,12 @@ class ServerConnection;
 class Tab : public Gtk::VBox
 {
 public:
-    Tab(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font);
+    Tab(Gtk::Label *label, ServerConnection *conn);//, Gdk_Font *font);
     ~Tab();
 
-    Gtk::Text*                  getText() { return _text; }
+    Glib::RefPtr<Gtk::TextBuffer> getText() { return _textview.get_buffer(); }
     Gtk::Label*                 getLabel() { return _label; }
-    virtual Gtk::CList*         getCList() { return 0; }
-    Entry*                      getEntry() { return _entry; }
+    Entry&                      getEntry() { return _entry; }
     ServerConnection*           getConn() { return _conn; }
 
     void setAway();
@@ -50,15 +53,16 @@ public:
     void startPrefs();
     void endPrefs();
 
-    virtual void insertUser(const std::vector<std::string>& users) = 0;
     virtual void insertUser(const std::string& user, IRC::UserMode m = IRC::NONE) = 0;
     virtual void removeUser(const std::string& nick) = 0;
     virtual void renameUser(const std::string& from, const std::string& to) = 0;
     virtual bool findUser(const std::string& nick) = 0;
     virtual bool nickCompletion(const std::string& word, std::string& str) = 0;
+    Tab& operator<<(const char * str);
     Tab& operator<<(const std::string& str);
+    Tab& operator<<(const Glib::ustring& str);
     void setStyle();
-    void setFont(Gdk_Font *font);
+    //void setFont(Gdk_Font *font);
     void setInActive() {
         if (isActive()) {
             _label->set_text("(" + _label->get_text() + ")");
@@ -73,33 +77,32 @@ public:
     bool hasPrefs;
 
 private:
-    void insertWithColor(int color, const std::string& str);
+    void insertWithColor(int color, const Glib::ustring& str);
 
     bool isOnChannel;
     Gtk::Label *_label;
-    Entry *_entry;
     ServerConnection *_conn;
-    Gtk::ScrolledWindow *_scrollwindow;
-    Gtk::Text::Context *_current_cx;
-    Gdk_Font *_font;
+    Entry _entry;
+    Gtk::ScrolledWindow _swin;
+    //Gdk_Font *_font;
     Gtk::Label *_away;
     Gtk::HBox *_hbox2;
 
+    std::map<int, Glib::RefPtr<Gtk::TextTag> > colorMap;
+
+    void initializeColorMap();
+    void helperInitializer(int i, const char *colorname);
+
 protected:
     Gtk::HBox *_hbox;
-    Gtk::Text *_text;
-
-
+    Gtk::TextView _textview;
 };
 
 class TabQuery : public Tab
 {
 public:
-    TabQuery(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font);
+    TabQuery(Gtk::Label *label, ServerConnection *conn); //, Gdk_Font *font);
 
-    Gtk::CList*         getCList() { return 0; }
-
-    void insertUser(const std::vector<std::string>& users) {};
     void insertUser(const std::string& user, IRC::UserMode i = IRC::NONE) {};
     void removeUser(const std::string& nick) {};
     void renameUser(const std::string& from, const std::string& to) {
@@ -118,15 +121,11 @@ public:
 
 class TabChannel : public Tab
 {
-    Gtk::CList *_clist;
-    Gtk::Label *_users;
+    Gtk::Frame *_users;
 
 public:
-    TabChannel(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font);
+    TabChannel(Gtk::Label *label, ServerConnection *conn); //, Gdk_Font *font);
 
-    Gtk::CList*         getCList();
-
-    void insertUser(const std::vector<std::string>& users);
     void insertUser(const std::string& user, IRC::UserMode i = IRC::NONE);
     void removeUser(const std::string& nick);
     void renameUser(const std::string& from, const std::string& to);
@@ -136,7 +135,22 @@ public:
 private:
     void updateUserNumber();
 
+    /* what our columned-list contains */
+    struct ModelColumns : public Gtk::TreeModel::ColumnRecord
+    {
+        Gtk::TreeModelColumn<Glib::ustring> status;
+        Gtk::TreeModelColumn<Glib::ustring> nick;
+
+        ModelColumns() { add(status); add(nick); }
+    };
+
+
+    ModelColumns _columns;
+    Glib::RefPtr<Gtk::ListStore> _liststore;
+    Gtk::TreeView _treeview;
+
 };
-gint sortFunc(GtkCList *clist, gconstpointer ptr1, gconstpointer ptr2);
+
+//gint sortFunc(GtkCList *clist, gconstpointer ptr1, gconstpointer ptr2);
 
 #endif

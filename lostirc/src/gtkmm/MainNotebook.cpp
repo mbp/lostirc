@@ -25,9 +25,9 @@ using std::vector;
 MainNotebook::MainNotebook()
     : Gtk::Notebook()
 {
-    set_tab_pos(GTK_POS_BOTTOM);
-    switch_page.connect(slot(this, &MainNotebook::switchPage));
-    _font = Gdk_Font("-b&h-lucidatypewriter-medium-r-normal-*-*-120-*-*-m-*-*-*");
+    set_tab_pos(Gtk::POS_BOTTOM);
+    signal_switch_page().connect(slot(*this, &MainNotebook::switchPage));
+    //_font = Gdk_Font("-b&h-lucidatypewriter-medium-r-normal-*-*-120-*-*-m-*-*-*");
     //_font = Gdk_Font("-*-fixed-medium-r-normal-*-14-*-*-*-c-*-*-*");
     show_all();
 }
@@ -36,25 +36,24 @@ TabChannel * MainNotebook::addChannelTab(const string& name, ServerConnection *c
 {
     // First try to find out whether we have a "server"-tab for this
     // ServerConnection.
-    Gtk::Notebook_Helpers::Page *p = findPage("(server)", conn);
+    int pagenum = findPage("(server)", conn);
 
-    if (p) {
+    if (pagenum != -1) {
         // If we have a "server"-tab, reuse it as a channel-tab.
-        TabChannel* tab = dynamic_cast<TabChannel*>(p->get_child());
+        TabChannel* tab = dynamic_cast<TabChannel*>(get_nth_page(pagenum));
         tab->getLabel()->set_text(name);
         tab->setActive();
         show_all();
         return tab;
     } else if (Tab *tab = findTab(name, conn, true)) {
         // If we find an *inactive* channel-tab, lets reuse it.
-        assert(tab);
         tab->setActive();
         tab->getLabel()->set_text(name);
         return dynamic_cast<TabChannel*>(tab);
     } else {
         // If not, create a new channel-tab.
         Gtk::Label *label = manage(new Gtk::Label(name));
-        TabChannel *tab = manage(new TabChannel(label, conn, &_font));
+        TabChannel *tab = manage(new TabChannel(label, conn)); //, &_font));
         pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, *label));
         show_all();
         return tab;
@@ -64,7 +63,7 @@ TabChannel * MainNotebook::addChannelTab(const string& name, ServerConnection *c
 TabQuery * MainNotebook::addQueryTab(const string& name, ServerConnection *conn)
 {
     Gtk::Label *label = manage(new Gtk::Label(name));
-    TabQuery *tab = manage(new TabQuery(label, conn, &_font));
+    TabQuery *tab = manage(new TabQuery(label, conn)); //, &_font));
     pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, *label));
     show_all();
     return tab;
@@ -72,7 +71,7 @@ TabQuery * MainNotebook::addQueryTab(const string& name, ServerConnection *conn)
 
 Tab* MainNotebook::getCurrent(ServerConnection *conn)
 {
-    Tab *tab = static_cast<Tab*>(get_current_child());
+    Tab *tab = getCurrent();
     if (tab->getConn() != conn) {
         tab = findTab("", conn);
     }
@@ -81,60 +80,60 @@ Tab* MainNotebook::getCurrent(ServerConnection *conn)
 
 Tab* MainNotebook::getCurrent()
 {
-    return static_cast<Tab*>(get_current_child());
+    return static_cast<Tab*>(get_nth_page(get_current_page()));
 }
 
 Tab * MainNotebook::findTab(const string& name, ServerConnection *conn, bool findInActive)
 {
-    Gtk::Notebook_Helpers::Page *p = findPage(name, conn, findInActive);
+    int pagenum = findPage(name, conn, findInActive);
 
-    if (p) {
-        return static_cast<Tab*>(p->get_child());
+    if (pagenum != -1) {
+        return static_cast<Tab*>(get_nth_page(pagenum));
     }
     return 0;
 }
 
-Gtk::Notebook_Helpers::Page * MainNotebook::findPage(const string& name, ServerConnection *conn, bool findInActive)
+int MainNotebook::findPage(const string& name, ServerConnection *conn, bool findInActive)
 {
     string n = name;
     Gtk::Notebook_Helpers::PageList::iterator i;
             
     for (i = pages().begin(); i != pages().end(); ++i) {
-        Tab *tab = static_cast<Tab*>((*i)->get_child());
+        Tab *tab = static_cast<Tab*>(i->get_child());
         if (tab->getConn() == conn) {
-            string tab_name = (*i)->get_tab_text();
-            if ((Util::lower(tab_name) == Util::lower(n)) || n.empty()) {
-                return (*i);
+            string tab_name = i->get_tab_label_text();
+            if ((Util::lower(tab_name) == Util::lower(n))) {
+                return i->get_page_num();
             } else if (findInActive && Util::lower(tab_name) == string("(" + Util::lower(n) + ")")) {
-                return (*i);
+                return i->get_page_num();
             }
         }
     }
-    return 0;
+    return -1;
 }
 
-void MainNotebook::switchPage(Gtk::Notebook_Helpers::Page *p, unsigned int n)
+//void MainNotebook::switchPage(Gtk::Notebook_Helpers::Page *p, unsigned int n)
+void MainNotebook::switchPage(GtkNotebookPage *p, unsigned int n)
 {
-    Tab *tab = static_cast<Tab*>(p->get_child());
-    Gdk_Color color("black");
-    Gtk::Style *style = Gtk::Style::create();
-    style->set_fg(GTK_STATE_NORMAL, color);
-    tab->getLabel()->set_style(*style);
-    tab->getEntry()->grab_focus();
+    Tab *tab = static_cast<Tab*>(get_nth_page(n));
+
+    Gdk::Color color("black");
+    tab->getLabel()->modify_fg(Gtk::STATE_NORMAL, color);
+    tab->getEntry().grab_focus();
     tab->isHighlighted = false;
 
     if (tab->getConn()->Session.isAway) {
-        AppWin->set_title("LostIRC "VERSION" - " + tab->getConn()->Session.nick + "[currently away]: " + p->get_tab_text());
+        AppWin->set_title("LostIRC "VERSION" - " + tab->getConn()->Session.nick + "[currently away]: " + tab->getLabel()->get_text());
     } else {
-        AppWin->set_title("LostIRC "VERSION" - " + tab->getConn()->Session.nick + ": " + p->get_tab_text());
+        AppWin->set_title("LostIRC "VERSION" - " + tab->getConn()->Session.nick + ": " + tab->getLabel()->get_text());
     }
 }
 
 void MainNotebook::closeCurrent()
 {
-    Tab *tab = static_cast<Tab*>(get_current_child());
+    Tab *tab = getCurrent();
     if (countTabs(tab->getConn()) > 1) {
-        pages().remove(get_current());
+        pages().remove(*get_nth_page(get_current_page()));
     } else {
         if (tab->getConn()->Session.isConnected) {
             tab->getConn()->sendQuit();
@@ -142,19 +141,17 @@ void MainNotebook::closeCurrent()
             tab->setInActive();
         } else if (pages().size() > 1) {
             // Only delete the page if it's not the very last.
-            pages().remove(get_current());
+            pages().remove(*get_nth_page(get_current_page()));
         }
     }
-    draw(NULL); // Needed for redrawing the widget
+    queue_draw();
 }
 
 void MainNotebook::highlight(Tab *tab)
 {
     if (tab != getCurrent()) {
-        Gdk_Color color("blue");
-        Gtk::Style *style = Gtk::Style::create();
-        style->set_fg(GTK_STATE_NORMAL, color);
-        tab->getLabel()->set_style(*style);
+        Gdk::Color color("blue");
+        tab->getLabel()->modify_fg(Gtk::STATE_NORMAL, color);
         tab->isHighlighted = true;
     }
 }
@@ -162,10 +159,8 @@ void MainNotebook::highlight(Tab *tab)
 void MainNotebook::onInserted(Tab *tab)
 {   
     if (tab != getCurrent() && !tab->isHighlighted) {
-        Gdk_Color color("red");
-        Gtk::Style *style = Gtk::Style::create();
-        style->set_fg(GTK_STATE_NORMAL, color);
-        tab->getLabel()->set_style(*style);
+        Gdk::Color color("red");
+        tab->getLabel()->modify_fg(Gtk::STATE_NORMAL, color);
     }
 }
 
@@ -174,7 +169,7 @@ void MainNotebook::findTabs(const string& nick, ServerConnection *conn, vector<T
     Gtk::Notebook_Helpers::PageList::iterator i;
             
     for (i = pages().begin(); i != pages().end(); ++i) {
-        Tab *tab = static_cast<Tab*>((*i)->get_child());
+        Tab *tab = static_cast<Tab*>(i->get_child());
         if (tab->getConn() == conn && tab->findUser(nick)) {
             vec.push_back(tab);
         }
@@ -186,7 +181,7 @@ void MainNotebook::findTabs(ServerConnection *conn, vector<Tab*>& vec)
     Gtk::Notebook_Helpers::PageList::iterator i;
             
     for (i = pages().begin(); i != pages().end(); ++i) {
-        Tab *tab = static_cast<Tab*>((*i)->get_child());
+        Tab *tab = static_cast<Tab*>(i->get_child());
         if (tab->getConn() == conn) {
             vec.push_back(tab);
         }
@@ -198,11 +193,26 @@ void MainNotebook::Tabs(vector<Tab*>& vec)
     Gtk::Notebook_Helpers::PageList::iterator i;
             
     for (i = pages().begin(); i != pages().end(); ++i) {
-        Tab *tab = static_cast<Tab*>((*i)->get_child());
+        Tab *tab = static_cast<Tab*>(i->get_child());
         vec.push_back(tab);
     }
 }
 
+int MainNotebook::countTabs(ServerConnection *conn)
+{
+    int num = 0;
+
+    Gtk::Notebook_Helpers::PageList::iterator i;
+
+    for (i = pages().begin(); i != pages().end(); ++i) {
+        Tab *tab = static_cast<Tab*>(i->get_child());
+        if (tab->getConn() == conn)
+              num++;
+    }
+    return num;
+}
+
+/* FIXME
 void MainNotebook::setFont()
 {
     fontdialog = manage(new Gtk::FontSelectionDialog("Font Selection Dialog"));
@@ -221,7 +231,7 @@ void MainNotebook::fontSelectionOk()
         Gtk::Notebook_Helpers::PageList::iterator i;
                 
         for (i = pages().begin(); i != pages().end(); ++i) {
-            Tab *tab = static_cast<Tab*>((*i)->get_child());
+            Tab *tab = static_cast<Tab*>(i->get_child());
             tab->setFont(&_font);
             tab->setStyle();
         }
@@ -234,17 +244,5 @@ void MainNotebook::destroyFontSelection(Gtk::FontSelectionDialog *w)
     // XXX: plain gtk+ code
     gtk_widget_destroy((GtkWidget*)w->gtkobj());
 }
+*/
 
-int MainNotebook::countTabs(ServerConnection *conn)
-{
-    int num = 0;
-
-    Gtk::Notebook_Helpers::PageList::iterator i;
-
-    for (i = pages().begin(); i != pages().end(); ++i) {
-        Tab *tab = static_cast<Tab*>((*i)->get_child());
-        if (tab->getConn() == conn)
-              num++;
-    }
-    return num;
-}

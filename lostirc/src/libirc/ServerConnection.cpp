@@ -56,8 +56,8 @@ ServerConnection::ServerConnection(const string& host, const string& nick, int p
     Session.sentLagCheck = false;
     Session.realname = App->getCfg().getOpt("realname");
 
-    _socket->on_host_resolved.connect(SigC::slot(this, &ServerConnection::on_host_resolved));
-    _socket->on_error.connect(SigC::slot(this, &ServerConnection::on_error));
+    _socket->on_host_resolved.connect(SigC::slot(*this, &ServerConnection::on_host_resolved));
+    _socket->on_error.connect(SigC::slot(*this, &ServerConnection::on_error));
 
     App->fe->newTab(this);
 

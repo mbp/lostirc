@@ -21,8 +21,8 @@
 int main(int argc, char** argv)
 {
     Gtk::Main app(argc, argv);
-    MainWindow window;
-    window.show();
 
-    app.run();
+    MainWindow window;
+
+    app.run(window);
 }

@@ -13,5 +13,5 @@ libirc_a_SOURCES = ServerConnection.cpp ServerConnection.h \
                        FrontEnd.cpp FrontEnd.h \
                        irc_defines.h
 
-libirc_a_LIBS = @SIGC_LIBS@ @GLIB_LIBS@
-INCLUDES = @SIGC_CFLAGS@ @GLIB_CFLAGS@
+libirc_a_LIBS = $(DEPS_LIBS)
+INCLUDES = $(DEPS_CFLAGS)

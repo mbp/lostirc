@@ -19,10 +19,11 @@
 #ifndef PREFS_H
 #define PREFS_H
 
-#include <gtk--/notebook.h>
-#include <gtk--/button.h>
-#include <gtk--/entry.h>
-#include <gtk--/clist.h>
+#include <gtkmm/notebook.h>
+#include <gtkmm/button.h>
+#include <gtkmm/entry.h>
+#include <gtkmm/liststore.h>
+#include <gtkmm/treeview.h>
 #include "Tab.h"
 
 class Prefs : public Gtk::VBox
@@ -48,11 +49,9 @@ private:
     void saveSettings();
     void removeEntry();
     void addEntry();
-    void onSelectRow(int row, int col, GdkEvent* e);
-    void onUnSelectRow(int row, int col, GdkEvent* e);
+    void onSelectRow(bool start_editing);
+    void onUnSelectRow();
     void clearEntries();
-
-    Gtk::CList *clist;
 
     Gtk::Entry passentry;
     Gtk::Entry portentry;
@@ -64,12 +63,25 @@ private:
     Gtk::Entry dccipentry;
     Gtk::Entry highlightentry;
     Gtk::Entry nickentry;
-    Gtk::Text cmdtext;
+    Gtk::TextView cmdtext;
     Gtk::HBox savehbox;
     Gtk::Notebook notebook;
 
     Gtk::Button *removebutton;
     Gtk::Button *addnewbutton;
+
+    // what our columned-list contains
+    struct ModelColumns : public Gtk::TreeModel::ColumnRecord
+    {
+        Gtk::TreeModelColumn<Glib::ustring> servername;
+        Gtk::TreeModelColumn<struct autoJoin*> autojoin;
+
+        ModelColumns() { add(servername); add(autojoin); }
+    };
+
+    ModelColumns _columns;
+    Glib::RefPtr<Gtk::ListStore> _liststore;
+    Gtk::TreeView _treeview;
 };
 
 #endif

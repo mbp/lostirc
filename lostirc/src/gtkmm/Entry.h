@@ -30,13 +30,13 @@ class Entry : public Gtk::Entry
 public:
     Entry(Tab *tab);
 
-    gint on_key_press_event(GdkEventKey* e);
+    bool onKeyPress(GdkEventKey* e);
 private:
     void onEntry();
-    void sendMsg(const std::string& msg);
-    std::vector<std::string> _entries;
+    void sendMsg(const Glib::ustring& msg);
+    std::vector<Glib::ustring> _entries;
     Tab* _tab;
-    std::vector<std::string>::iterator i;
+    std::vector<Glib::ustring>::iterator i;
 
 };
 #endif

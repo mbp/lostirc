@@ -25,7 +25,7 @@
 #include <netinet/in.h>
 #include <string>
 #include <exception>
-#include <sigc++/signal_system.h>
+#include <sigc++/sigc++.h>
 
 class Socket : public SigC::Object
 {
