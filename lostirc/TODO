@@ -1,7 +1,7 @@
 CRITICAL: 
 ---------
-  * Doesn't show in query when a user quits
   * Implement DCC chat/send
+  * Doesn't show in query when a user quits
   * Away message appears in query on /whois
 
 RANDOM:
@@ -13,12 +13,12 @@ RANDOM:
   * when away/unaway - title isn't updated until switch tab
   * implement /help, /help shortcuts and /help commands
   * /oper command
-  * tab class should use operator << for output
 
   * remove this from 'configure' at release time:
     +extern "C" void exit(int); (:g/extern "C" void exit/d)
   * ipv6 support
   * /part should part current channel when called without arguments
+  * possibility to add user-defined highlights other than just the current nick
 
 DONE:
 ----
