@@ -42,6 +42,7 @@ namespace Commands
     void Kick(ServerConnection *conn, const Glib::ustring& params);
     void Server(ServerConnection *conn, const Glib::ustring& params);
     void Disconnect(ServerConnection *conn, const Glib::ustring& params);
+    void Reconnect(ServerConnection *conn, const Glib::ustring& params);
     void Nick(ServerConnection *conn, const Glib::ustring& params);
     void Whois(ServerConnection *conn, const Glib::ustring& params);
     void Mode(ServerConnection *conn, const Glib::ustring& params);

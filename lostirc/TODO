@@ -9,7 +9,6 @@ NICE-TO-HAVE:
   * When window has lost its focus, then highlight the front tab too.
   * /BAN and /EXEC command.
   * Virtual functions for Commands, to be overriden. Much more OO-like.
-  * A LostIRC icon.
 
   * Some way to seperate tabs from each other, so they are server sorted.
   * Recognise URLs (and make them clickable?)
@@ -33,6 +32,8 @@ RANDOM BUGS:
   * Wrapping of text in the text widget is done character wise, it would
     be nice if it could be done word-wise. But when using WRAP_WORD, a bug
     in GTK+ causes the window to be resized when the new text is inserted.
+
+    This can be solved when gtkmm 2.4 gets released, which has WRAP_WORD_CHAR.
 
   * This has to be removed from 'configure' at release time, or else the
     configure script fails on Red Hat/Mandrake:

@@ -30,6 +30,7 @@ using std::istringstream;
 const struct UserCommands cmds[] = {
     { "SERVER",   Commands::Server,     false },
     { "DISCONNECT", Commands::Disconnect,     false },
+    { "RECONNECT", Commands::Reconnect,     false },
     { "JOIN",     Commands::Join,       true },
     { "WHOIS",    Commands::Whois,      true },
     { "PART",     Commands::Part,       true },
@@ -172,6 +173,11 @@ void Disconnect(ServerConnection *conn, const ustring& params)
 {
     conn->removeReconnectTimer();
     conn->disconnect();
+}
+
+void Reconnect(ServerConnection *conn, const ustring& params)
+{
+    conn->reconnect();
 }
 
 void Nick(ServerConnection *conn, const ustring& params)

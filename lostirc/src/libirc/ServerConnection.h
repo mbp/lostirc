@@ -35,6 +35,7 @@ public:
 
     void connect(const Glib::ustring& host, int port = 6667, const Glib::ustring& pass = "");
     void connect();
+    void reconnect();
     void on_error(const char *msg);
     void on_host_resolved();
     void disconnect();

@@ -1,5 +1,12 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-06-09  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Commands.cpp: Add /RECONNECT command.
+        * ServerConnection.cpp: Add reconnect() function to ServerConnection
+          class.
+        * configure.in: Bump to 0.2.7 and release.
+
 2003-06-01  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Entry.cpp: Remove the empty entry pushed back into entries, avoid

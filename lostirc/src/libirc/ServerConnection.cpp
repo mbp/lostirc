@@ -80,6 +80,11 @@ void ServerConnection::connect(const ustring &host, int port, const ustring& pas
     connect();
 }
 
+void ServerConnection::reconnect()
+{
+    connect(Session.servername, Session.port, Session.password);
+}
+
 void ServerConnection::doCleanup()
 {
     // called when we get disconnected or connect to a new server, need to

@@ -7,7 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-04-28 23:37+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-06-09 22:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,23 +16,23 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/gtkmm/Entry.cpp:79
+#: src/gtkmm/Entry.cpp:78
 msgid "Not connected to server. Try `/SERVER <hostname / ip>'.\n"
 msgstr ""
 
-#: src/gtkmm/Entry.cpp:81
+#: src/gtkmm/Entry.cpp:80
 msgid "No channel joined. Try `/JOIN #channel-name'\n"
 msgstr ""
 
-#: src/gtkmm/Entry.cpp:145 src/gtkmm/Entry.cpp:176
+#: src/gtkmm/Entry.cpp:144 src/gtkmm/Entry.cpp:175
 msgid "<span foreground=\"blue\">Matches:</span> "
 msgstr ""
 
-#: src/gtkmm/Entry.cpp:148
+#: src/gtkmm/Entry.cpp:147
 msgid "<span foreground=\"blue\">No matches.</span>"
 msgstr ""
 
-#: src/gtkmm/GuiCommands.cpp:54 src/libirc/Commands.cpp:76
+#: src/gtkmm/GuiCommands.cpp:54 src/libirc/Commands.cpp:77
 msgid "Must be connected."
 msgstr ""
 
@@ -328,113 +329,113 @@ msgstr ""
 msgid " users"
 msgstr ""
 
-#: src/libirc/Commands.cpp:93
+#: src/libirc/Commands.cpp:94
 msgid "/JOIN <channel>, join a channel"
 msgstr ""
 
-#: src/libirc/Commands.cpp:102
+#: src/libirc/Commands.cpp:103
 msgid "/PART <channel> [msg], part a channel - optional with a part message"
 msgstr ""
 
-#: src/libirc/Commands.cpp:136
+#: src/libirc/Commands.cpp:137
 msgid "/KICK <channel> <nick> [msg], kick a user from a channel."
 msgstr ""
 
-#: src/libirc/Commands.cpp:145
+#: src/libirc/Commands.cpp:146
 msgid "/SERVER <host/ip> [port] [password], connect to an IRC server"
 msgstr ""
 
-#: src/libirc/Commands.cpp:180
+#: src/libirc/Commands.cpp:186
 msgid "/NICK <nick>, change nick."
 msgstr ""
 
-#: src/libirc/Commands.cpp:193
+#: src/libirc/Commands.cpp:199
 msgid "/WHOIS <nick>, whois nick."
 msgstr ""
 
-#: src/libirc/Commands.cpp:202
+#: src/libirc/Commands.cpp:208
 msgid "/MODE <channel> <modes>, set modes for a channel."
 msgstr ""
 
-#: src/libirc/Commands.cpp:228
+#: src/libirc/Commands.cpp:234
 msgid "/CTCP <nick> <message>, sends a CTCP message to a user"
 msgstr ""
 
-#: src/libirc/Commands.cpp:255
+#: src/libirc/Commands.cpp:261
 msgid "/BANLIST <channel>, see banlist for channel."
 msgstr ""
 
-#: src/libirc/Commands.cpp:269
+#: src/libirc/Commands.cpp:275
 msgid "/INVITE <nick> <channel>, invites someone to a channel."
 msgstr ""
 
-#: src/libirc/Commands.cpp:284
+#: src/libirc/Commands.cpp:290
 msgid "/TOPIC <channel> [topic], view or change topic for a channel."
 msgstr ""
 
-#: src/libirc/Commands.cpp:299
+#: src/libirc/Commands.cpp:305
 msgid "/MSG <nick/channel> <message>, sends a normal message."
 msgstr ""
 
-#: src/libirc/Commands.cpp:316
+#: src/libirc/Commands.cpp:322
 msgid "/NOTICE <nick/channel> <message>, sends a notice."
 msgstr ""
 
-#: src/libirc/Commands.cpp:319
+#: src/libirc/Commands.cpp:325
 msgid "Notice to "
 msgstr ""
 
-#: src/libirc/Commands.cpp:331
+#: src/libirc/Commands.cpp:337
 msgid "/ME <message>, sends the action to the current channel."
 msgstr ""
 
-#: src/libirc/Commands.cpp:340
+#: src/libirc/Commands.cpp:346
 msgid ""
 "/WHO <mask> [o], search for mask on network, if o is supplied, only search "
 "for opers."
 msgstr ""
 
-#: src/libirc/Commands.cpp:355
+#: src/libirc/Commands.cpp:361
 msgid "/QUOTE <text>, send raw text to server."
 msgstr ""
 
-#: src/libirc/Commands.cpp:364
+#: src/libirc/Commands.cpp:370
 msgid "/NAMES <channel>, see who's on a channel."
 msgstr ""
 
-#: src/libirc/Commands.cpp:373 src/libirc/Commands.cpp:381
+#: src/libirc/Commands.cpp:379 src/libirc/Commands.cpp:387
 msgid "/OPER <login> <password>, oper up."
 msgstr ""
 
-#: src/libirc/Commands.cpp:396
+#: src/libirc/Commands.cpp:402
 msgid "/KILL <user> [reason], kill a user from the network."
 msgstr ""
 
-#: src/libirc/Commands.cpp:406
+#: src/libirc/Commands.cpp:412
 msgid "/WALLOPS <message>, send wallop message."
 msgstr ""
 
-#: src/libirc/Commands.cpp:416
+#: src/libirc/Commands.cpp:422
 msgid "/DCC <actions>, perform a DCC action."
 msgstr ""
 
-#: src/libirc/Commands.cpp:426
+#: src/libirc/Commands.cpp:432
 msgid "No DCC with that number"
 msgstr ""
 
-#: src/libirc/Commands.cpp:449
+#: src/libirc/Commands.cpp:455
 msgid "/OP <channel> <nicks>, give operator status to one or more nicks."
 msgstr ""
 
-#: src/libirc/Commands.cpp:465
+#: src/libirc/Commands.cpp:471
 msgid "/DEOP <channel> <nicks>, remove operator status from one or more nicks."
 msgstr ""
 
-#: src/libirc/Commands.cpp:481
+#: src/libirc/Commands.cpp:487
 msgid "/VOICE <channel> <nicks>, gives voice to one or more nicks."
 msgstr ""
 
-#: src/libirc/Commands.cpp:497
+#: src/libirc/Commands.cpp:503
 msgid "/DEVOICE <channel> <nicks>, removes voice from one or more nicks."
 msgstr ""
 
@@ -458,11 +459,11 @@ msgstr ""
 msgid "Message not sent because of locale problems"
 msgstr ""
 
-#: src/libirc/Parser.cpp:818
+#: src/libirc/Parser.cpp:819
 msgid "idle: "
 msgstr ""
 
-#: src/libirc/Parser.cpp:822
+#: src/libirc/Parser.cpp:823
 msgid ", signon time: "
 msgstr ""
 
@@ -518,27 +519,27 @@ msgstr ""
 msgid "File has zero size:"
 msgstr ""
 
-#: src/libirc/ServerConnection.cpp:117
+#: src/libirc/ServerConnection.cpp:122
 msgid "Disconnected."
 msgstr ""
 
-#: src/libirc/ServerConnection.cpp:137
+#: src/libirc/ServerConnection.cpp:142
 msgid "Failed connecting: "
 msgstr ""
 
-#: src/libirc/ServerConnection.cpp:143
+#: src/libirc/ServerConnection.cpp:148
 msgid "Resolved host. Connecting.."
 msgstr ""
 
-#: src/libirc/ServerConnection.cpp:149
+#: src/libirc/ServerConnection.cpp:154
 msgid "Failed connecting:"
 msgstr ""
 
-#: src/libirc/ServerConnection.cpp:231
+#: src/libirc/ServerConnection.cpp:236
 msgid "Failed to receive: "
 msgstr ""
 
-#: src/libirc/ServerConnection.cpp:246
+#: src/libirc/ServerConnection.cpp:251
 msgid "Connected. Logging in..."
 msgstr ""
 

@@ -1,9 +1,10 @@
-LostIRC (x.x.x)
+LostIRC (0.2.7) - Mon Jun, 9th 2003
   * Now includes a fancy LostIRC icon.
   * Another compiliation fix for FreeBSD 5.0.
   * Compilation fix for gcc 3.3.
   * Fixed segmentation fault when pressing down arrow just after the client
     started.
+  * Added /RECONNECT command.
 
 LostIRC (0.2.6) - Mon Apr, 28th 2003
   * A progress field is now located in the list of DCCs (thanks, Michael
