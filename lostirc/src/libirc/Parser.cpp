@@ -151,7 +151,7 @@ void Parser::parseLine(string& data)
         string::size_type pos1 = data.find_first_of(" ", 0);
         string command = data.substr(0, pos1);
 
-        // Check whether there is any params
+        // Check whether there are any params
         string::size_type pos2 = data.find_first_of(":", pos1 + 1);
         string param;
 
