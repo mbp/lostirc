@@ -554,10 +554,10 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 366: // RPL_ENDOFNAMES
             {
                 Channel *c = _conn->findChannel(getWord(param, 2));
-                if (c)
+                if (c && !c->endOfNames)
                       c->endOfNames = true;
-
-                _evts->emit(_evts->get(SERVMSG) << param + " " + rest, "", _conn);
+                else
+                      _evts->emit(_evts->get(SERVMSG) << param + " " + rest, "", _conn);
             }
             break; // Ignored.
         case 317: // RPL_WHOISIDLE
