@@ -832,6 +832,9 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 319: // RPL_WHOISCHANNELS
             FE::emit(FE::get(WHOIS_CHANNELS) << getWord(param, 2) << rest, FE::CURRENT, _conn);
             break;
+        case 421: // ERR_UNKNOWNCOMMAND
+            FE::emit(FE::get(SERVMSG3) << getWord(param, 2) << rest, FE::CURRENT, _conn);
+            break;
 
         default:
             FE::emit(FE::get(SERVMSG3) << param << rest, FE::CURRENT, _conn);
