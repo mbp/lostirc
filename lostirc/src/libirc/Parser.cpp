@@ -584,9 +584,11 @@ void Parser::Topic(const string& param, const string& rest)
 
     string chan = param.substr(pos1, pos2 - pos1);
     Channel *c = _conn->findChannel(chan);
-    assert(c);
 
-    FE::emit(FE::get(TOPICIS) << chan << rest, *c, _conn);
+    if (c)
+          FE::emit(FE::get(TOPICIS) << chan << rest, *c, _conn);
+    else
+          FE::emit(FE::get(TOPICIS) << chan << rest, FE::CURRENT, _conn);
 }
 
 void Parser::TopicTime(const string& param)
@@ -605,9 +607,11 @@ void Parser::TopicTime(const string& param)
     time = std::ctime(&date);
 
     Channel *c = _conn->findChannel(chan);
-    assert(c);
 
-    FE::emit(FE::get(TOPICTIME) << nick << time.substr(0, time.size() - 1), *c, _conn);
+    if (c)
+          FE::emit(FE::get(TOPICTIME) << nick << time.substr(0, time.size() - 1), *c, _conn);
+    else
+          FE::emit(FE::get(TOPICTIME) << nick << time.substr(0, time.size() - 1), FE::CURRENT, _conn);
 }
 
 void Parser::Away(const string& param, const string& rest)
