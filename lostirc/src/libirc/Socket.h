@@ -36,6 +36,7 @@ public:
     ~Socket();
 
     void connect(const std::string& host, int port);
+    void disconnect();
     bool send(const std::string& data);
     bool receive(char *buf, int len);
     void setNonBlocking();

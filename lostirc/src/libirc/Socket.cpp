@@ -57,6 +57,11 @@ void Socket::connect(const string& host, int port)
     }
 }
 
+void Socket::disconnect()
+{
+    close();
+}
+
 bool Socket::send(const string& data)
 {
     if (::send(fd, data.c_str(), data.length(), 0) > 0) {

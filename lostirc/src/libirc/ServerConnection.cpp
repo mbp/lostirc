@@ -24,8 +24,8 @@
 using std::string;
 using std::vector;
 
-ServerConnection::ServerConnection(const string& host, const string& nick, int port = 6667, bool connect = false)
-    : _socket(new Socket()), _p(new Parser(App,this))
+ServerConnection::ServerConnection(const string& host, const string& nick, int port = 6667, bool doconnect = false)
+    : _socket(new Socket()), _p(new Parser(App,this)), _writeid(0), _watchid(0), _connectioncheckid(0)
 {
     Session.nick = nick;
     Session.servername = host;
@@ -38,8 +38,8 @@ ServerConnection::ServerConnection(const string& host, const string& nick, int p
 
     App->evtNewTab(this);
 
-    if (connect)
-          Connect();
+    if (doconnect)
+          connect();
 }
 
 ServerConnection::~ServerConnection()
@@ -48,17 +48,42 @@ ServerConnection::~ServerConnection()
     delete _p;
 }
 
-bool ServerConnection::Connect(const string &host, int port = 6667, const string& pass = "")
+bool ServerConnection::connect(const string &host, int port = 6667, const string& pass = "")
 {
     Session.servername = host;
     Session.host = host;
     Session.password = pass;
     Session.port = port;
 
-    return Connect();
+    return connect();
 }
 
-bool ServerConnection::Connect()
+void ServerConnection::disconnect()
+{
+    Session.isConnected = false;
+    Session.hasRegistered = false;
+    Session.isAway = false;
+
+    if (_writeid > 0) {
+        g_source_remove(_writeid);
+        _writeid = 0;
+    }
+    if (_watchid > 0) {
+        g_source_remove(_watchid);
+        _watchid = 0;
+    }
+    if (_connectioncheckid > 0) {
+        g_source_remove(_connectioncheckid);
+        _connectioncheckid = 0;
+    }
+
+    _socket->disconnect();
+    FE::emit(FE::get(SERVMSG) << "Disconnected.", FE::ALL, this);
+    App->evtDisconnected(this);
+
+}
+
+bool ServerConnection::connect()
 {
 
     FE::emit(FE::get(CONNECTING) << Session.host << Session.port, FE::CURRENT, this);
@@ -68,9 +93,8 @@ bool ServerConnection::Connect()
         _socket->connect(Session.host, Session.port);
 
     } catch (SocketException &e) {
-        Session.isConnected = false;
         FE::emit(FE::get(SERVMSG2) << "Failed connecting:" << e.what(), FE::CURRENT, this);
-        App->evtDisconnected(this);
+        disconnect();
         return false;
     }
 
@@ -83,17 +107,15 @@ bool ServerConnection::Connect()
 
     // This is a temporary watch to see when we can write, when we can
     // write - we are (hopefully) connected
-    g_io_add_watch(g_io_channel_unix_new(_socket->getfd()),
+    _writeid = g_io_add_watch(g_io_channel_unix_new(_socket->getfd()),
                    GIOCondition (G_IO_OUT),
                    &ServerConnection::onConnect, this);
 
     // This watch makes sure we read data when it's available
-    // FIXME: should this be moved to ServerConnection::write?
-    g_io_add_watch(g_io_channel_unix_new(_socket->getfd()),
+    // FIXME: should this be moved to ServerConnection::onConnect?
+    _watchid = g_io_add_watch(g_io_channel_unix_new(_socket->getfd()),
                    GIOCondition (G_IO_IN | G_IO_ERR | G_IO_HUP | G_IO_NVAL),
                    &ServerConnection::onReadData, this);
-
-    g_timeout_add(30000, &ServerConnection::connectionCheck, this);
 
     return true;
 }
@@ -101,7 +123,7 @@ bool ServerConnection::Connect()
 gboolean ServerConnection::autoReconnect(gpointer data)
 {
     ServerConnection& conn = *(static_cast<ServerConnection*>(data));
-    conn.Connect();
+    conn.connect();
     return FALSE;
 }
 
@@ -115,9 +137,8 @@ gboolean ServerConnection::connectionCheck(gpointer data)
         #ifdef DEBUG
         std::cout << "connectionCheck().. disconnected" << std::endl;
         #endif
-        FE::emit(FE::get(SERVMSG) << "Disconnected.", FE::ALL, &conn);
-        App->evtDisconnected(&conn);
-        conn.Connect();
+        conn.disconnect();
+        conn.connect();
 
         return FALSE;
     } else {
@@ -172,8 +193,7 @@ gboolean ServerConnection::onReadData(GIOChannel* io_channel, GIOCondition cond,
 
     } catch (SocketException &e) {
         FE::emit(FE::get(SERVMSG) << e.what(), FE::ALL, &conn);
-        conn.Session.isConnected = false;
-        App->evtDisconnected(&conn);
+        conn.disconnect();
         g_timeout_add(2000, &ServerConnection::autoReconnect, &conn);
         return FALSE;
     }
@@ -194,6 +214,8 @@ gboolean ServerConnection::onConnect(GIOChannel* io_channel, GIOCondition cond, 
 
     conn.sendNick(conn.Session.nick);
     conn.sendUser(conn.Session.nick, hostname, conn.Session.host, conn.Session.realname);
+
+    conn._connectioncheckid = g_timeout_add(30000, &ServerConnection::connectionCheck, &conn);
 
     return FALSE;
 }
@@ -308,7 +330,7 @@ bool ServerConnection::sendList(const string& params)
     return _socket->send(msg);
 }
 
-bool ServerConnection::sendQuit(const string& quitmsg)
+bool ServerConnection::sendQuit(const string& quitmsg = "")
 {
     if (Session.isConnected) {
         string msg;
@@ -405,16 +427,17 @@ Channel* ServerConnection::addChannel(const string& n)
     return c;
 }
 
-void ServerConnection::removeChannel(const string& n)
+bool ServerConnection::removeChannel(const string& n)
 {
     vector<Channel*>::iterator i = Session.channels.begin();
 
     for (;i != Session.channels.end(); ++i) {
         if (n == (*i)->getName()) {
             Session.channels.erase(i);
-            return;
+            return true;
         }
     }
+    return false;
 }
 
 vector<Channel*> ServerConnection::findUser(const string& n)

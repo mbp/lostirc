@@ -21,7 +21,6 @@
 
 #include <string>
 #include <exception>
-#include "LostIRCApp.h"
 #include "Events.h"
 
 class ServerConnection;
@@ -42,6 +41,7 @@ public:
     static void Quit(ServerConnection *conn, const std::string& params);
     static void Kick(ServerConnection *conn, const std::string& params);
     static void Server(ServerConnection *conn, const std::string& params);
+    static void Disconnect(ServerConnection *conn, const std::string& params);
     static void Nick(ServerConnection *conn, const std::string& params);
     static void Whois(ServerConnection *conn, const std::string& params);
     static void Mode(ServerConnection *conn, const std::string& params);

@@ -30,11 +30,12 @@ class ServerConnection
 {
 
 public:
-    ServerConnection(const std::string& host, const std::string& nick, int port = 6667, bool connect = false);
+    ServerConnection(const std::string& host, const std::string& nick, int port = 6667, bool doconnect = false);
     ~ServerConnection();
 
-    bool Connect(const std::string& host, int port = 6667, const std::string& pass = "");
-    bool Connect();
+    bool connect(const std::string& host, int port = 6667, const std::string& pass = "");
+    bool connect();
+    void disconnect();
     bool sendPong(const std::string& crap);
     bool sendPing(const std::string& crap = "");
     bool sendUser(const std::string& nick, const std::string& localhost, const std::string& remotehost, const std::string& name);
@@ -48,7 +49,7 @@ public:
     bool sendNames(const std::string& chan);
     bool sendKick(const std::string& chan, const std::string& nick, const std::string& msg);
     bool sendWhois(const std::string& params);
-    bool sendQuit(const std::string& quitmsg);
+    bool sendQuit(const std::string& quitmsg = "");
     bool sendMode(const std::string& params);
     bool sendCtcp(const std::string& to, const std::string& params);
     bool sendTopic(const std::string& chan, const std::string& params);
@@ -61,7 +62,7 @@ public:
     bool sendRaw(const std::string& text);
 
     Channel* addChannel(const std::string& n);
-    void removeChannel(const std::string& n);
+    bool removeChannel(const std::string& n);
     std::vector<Channel*> findUser(const std::string& n);
     Channel* findChannel(const std::string& c);
     void sendCmds();
@@ -91,6 +92,10 @@ private:
     Socket *_socket;
     Parser *_p;
     std::string tmpbuf;
+
+    guint _writeid;
+    guint _watchid;
+    guint _connectioncheckid;
 };
 
 #endif

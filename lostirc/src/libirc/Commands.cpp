@@ -21,6 +21,7 @@
 #include "Commands.h"
 #include "ServerConnection.h"
 #include "Utils.h"
+#include "LostIRCApp.h"
 
 using std::string;
 using std::stringstream;
@@ -28,6 +29,7 @@ using std::istringstream;
 
 struct UserCommands cmds[] = {
     { "SERVER",   Commands::Server,     0 },
+    { "DISCONNECT", Commands::Disconnect,     1 },
     { "JOIN",     Commands::Join,       1 },
     { "WHOIS",    Commands::Whois,      1 },
     { "PART",     Commands::Part,       1 },
@@ -134,7 +136,7 @@ void Commands::Server(ServerConnection *conn, const string& params)
         ss >> password;
 
         if (conn->Session.isConnected) {
-              conn->sendQuit("");
+              conn->sendQuit();
               conn->Session.isConnected = false;
         }
         int p;
@@ -142,12 +144,17 @@ void Commands::Server(ServerConnection *conn, const string& params)
               p = Util::stoi(port);
 
         if (!port.empty() && !password.empty())
-              conn->Connect(host, p, password);
+              conn->connect(host, p, password);
         else if (!port.empty())
-              conn->Connect(host, p);
+              conn->connect(host, p);
         else
-              conn->Connect(host);
+              conn->connect(host);
     }
+}
+
+void Commands::Disconnect(ServerConnection *conn, const string& params)
+{
+    conn->disconnect();
 }
 
 void Commands::Nick(ServerConnection *conn, const string& params)

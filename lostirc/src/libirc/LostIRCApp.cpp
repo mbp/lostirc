@@ -48,7 +48,7 @@ LostIRCApp::~LostIRCApp()
 
     for (i = _servers.begin(); i != _servers.end();) {
         if ((*i)->Session.isConnected) {
-            (*i)->sendQuit("");
+            (*i)->sendQuit();
         }
         delete (*i);
         i = _servers.erase(i);
@@ -67,7 +67,7 @@ int LostIRCApp::start()
               conn->Session.password = (*i)->password;
         if (!(*i)->nick.empty())
               conn->Session.nick = (*i)->nick;
-        conn->Connect();
+        conn->connect();
     }
     return servers.size();
 }
