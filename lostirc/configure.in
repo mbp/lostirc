@@ -7,6 +7,9 @@ AM_PROG_LIBTOOL
 AM_PATH_GTKMM(1.2.5,,AC_MSG_ERROR([Cannot find gtkmm 1.2.5 or greater.]))
 AM_PATH_SIGC(1.0.0)
 AM_PATH_GLIB(1.2.0)
+
+AC_CXX_HAVE_SSTREAM
+
 LIBS="$LIBS `gtkmm-config --libs`"
 
 
