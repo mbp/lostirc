@@ -56,7 +56,7 @@ MainWindow::MainWindow()
     if (num_of_servers == 0) {
         // Construct initial tab
         Tab *tab = newServer();
-        *tab << "\0037\nWelcome to LostIRC "VERSION"!\n\nYou use the client mainly by typing in commands and text in the entry-bar shown below.\n\n You can connect to a server using:\n\0038/SERVER <hostname>\n\n\0037Then join a channel:\n\0038/JOIN <channel-name>\n\n\0037The rest of the commands is available with \0038/COMMANDS\0037.\n\n\0037Available keybindings:\n\0038Alt + [1-9] - switch tabs from 1-9.\nAlt + n - create new server tab.\nAlt + c - close current tab.\nAlt + p - open preferences.\nTab - nick-completion and command-completion.\n";
+        *tab << "\0037\nWelcome to LostIRC "VERSION"!\n\nYou use the client mainly by typing in commands and text in the entry-bar shown below.\n\nYou can connect to a server using:\n    \0038/SERVER <hostname>\n\n\0037Then join a channel:\n    \0038/JOIN <channel-name>\n\n\0037The rest of the commands is available with:\n    \0038/COMMANDS\0037.\n\n\0037Available keybindings:\n    \0038Alt + [1-9] - switch tabs from 1-9.\n    Alt + n - create new server tab.\n    Alt + c - close current tab.\n    Alt + p - open preferences.\n    Tab - nick-completion and command-completion.\n";
     }
 }
 
