@@ -56,10 +56,10 @@ private:
     void onNick(const string& from, const string& to, ServerConnection *conn);
     void onNotice(const string& from, const string& to, const string& msg, ServerConnection *conn);
     void onKick(const string& from, const string& chan, const string& kicker, const string& msg,  ServerConnection *conn);
-    void onNames(const string& chan, const vector<vector<string> >& users, ServerConnection *conn);
+    void onNames(Channel& c, ServerConnection *conn);
     void onMode(const string& nick, const string& chan, const string& topic, ServerConnection *conn);
     void onCMode(const string& nick, const string& chan, char, const string& modes, ServerConnection *conn);
-    void onCUMode(const string& nick, const string& chan, const vector<struct Mode>& users, ServerConnection *conn);
+    void onCUMode(const string& nick, const string& chan, const map<string, IRC::UserMode>& users, ServerConnection *conn);
     void onHighlight(const string& to, ServerConnection *conn);
     void onAway(bool away, ServerConnection *conn);
 

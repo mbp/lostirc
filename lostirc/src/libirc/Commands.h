@@ -46,6 +46,7 @@ public:
     static bool Mode(ServerConnection *conn, const std::string& params);
     static bool Ctcp(ServerConnection *conn, const std::string& cmd);
     static bool Away(ServerConnection *conn, const std::string& params);
+    static bool Names(ServerConnection *conn, const std::string& params);
     static bool Invite(ServerConnection *conn, const std::string& cmd);
     static bool Topic(ServerConnection *conn, const std::string& cmd);
     static bool Banlist(ServerConnection *conn, const std::string& params);

@@ -19,6 +19,7 @@
 #include "ServerConnection.h"
 #include "Utils.h"
 #include "Parser.h"
+#include "Channel.h"
 #include "Events.h"
 
 using std::vector;
@@ -227,6 +228,9 @@ void Parser::Kick(const string& from, const string& param, const string& msg)
     ss >> chan;
     ss >> nick;
 
+    if (nick == _conn->Session.nick) // We got kicked
+          _conn->removeChannel(chan);
+
     _evts->emit(_evts->get(KICKED) << nick << chan << findNick(from) << msg, chan, _conn);
     _app->evtKick(findNick(from), chan, nick, msg, _conn);
 }
@@ -234,9 +238,9 @@ void Parser::Kick(const string& from, const string& param, const string& msg)
 void Parser::Join(const string& nick, const string& chan)
 {
     if (findNick(nick) == _conn->Session.nick)
-          _conn->addChannel(chan); // Add channel to ServerConn
-          
-    _conn->findChannel(chan)->addUser(findNick(nick));
+          _conn->addChannel(chan);
+    else
+          _conn->findChannel(chan)->addUser(findNick(nick));
 
     _app->evtJoin(findNick(nick), chan, _conn); // Send join to frontend
 
@@ -321,7 +325,8 @@ void Parser::CMode(const string& from, const string& param)
     string modes = param.substr(pos1 + 1, (pos2 - pos1) - 1);
     string args = param.substr(pos2 + 1);
 
-    vector<struct Mode> modesvec;
+    //vector<struct Mode> modesmap;
+    map<string, IRC::UserMode> modesmap;
 
     // Get arguments
     vector<string> arguments;
@@ -349,65 +354,42 @@ void Parser::CMode(const string& from, const string& param)
                 break;
             case 'o':
                 {
-                struct Mode m;
-                sign ? (m.mode = IRC::OP) : (m.mode = IRC::DEOP);
-                m.nick = *arg_i++;
+                Event e;
+                IRC::UserMode u;
+                sign ? (u = IRC::OP) : (u = IRC::NONE);
+                sign ? (e = OPPED) : (e = DEOPPED);
+                string nick = *arg_i++;
 
-                modesvec.push_back(m);
+                modesmap.insert(make_pair(nick, u));
+                _evts->emit(_evts->get(e) << findNick(from) << nick, chan, _conn);
                 }
                 break;
             case 'v':
                 {
-                struct Mode m;
-                sign ? (m.mode = IRC::VOICE) : (m.mode = IRC::DEVOICE);
-                m.nick = *arg_i++;
+                Event e;
+                IRC::UserMode u;
+                sign ? (u = IRC::VOICE) : (u = IRC::NONE);
+                sign ? (e = VOICED) : (e = DEVOICED);
+                string nick = *arg_i++;
 
-                modesvec.push_back(m);
+                modesmap.insert(make_pair(nick, u));
+                _evts->emit(_evts->get(e) << findNick(from) << nick, chan, _conn);
                 }
                 break;
             case 'b':
                 {
-                struct Mode m;
-                sign ? (m.mode = IRC::BAN) : (m.mode = IRC::UNBAN);
-                m.nick = *arg_i++;
-
-                modesvec.push_back(m);
+                Event e;
+                sign ? (e = BANNED) : (e = UNBANNED);
+                string nick = *arg_i++;
+                _evts->emit(_evts->get(e) << findNick(from) << nick, chan, _conn);
                 break;
                 }
         }
 
     }
 
-    // Go through our modes and send the proper msg to the client
-    vector<struct Mode>::iterator i;
-    for (i = modesvec.begin(); i != modesvec.end(); ++i) {
-        Event e;
-        switch (i->mode)
-        {
-            case IRC::OP:
-                e = OPPED;
-                break;
-            case IRC::DEOP:
-                e = DEOPPED;
-                break;
-            case IRC::VOICE:
-                e = VOICED;
-                break;
-            case IRC::DEVOICE:
-                e = DEVOICED;
-                break;
-            case IRC::BAN:
-                e = BANNED;
-                break;
-            case IRC::UNBAN:
-                e = UNBANNED;
-                break;
-        }
-        _evts->emit(_evts->get(e) << findNick(from) << i->nick, chan, _conn);
-    }
-
     // Channel user mode
-    _app->evtCUMode(findNick(from), chan, modesvec, _conn);
+    _app->evtCUMode(findNick(from), chan, modesmap, _conn);
 }
 
 void Parser::Topic(const string& param, const string& rest)
@@ -437,7 +419,6 @@ void Parser::TopicTime(const string& param)
 
     _evts->emit(_evts->get(TOPICTIME) << nick << time.substr(0, time.size() - 1), chan, _conn);
 }
-
 
 void Parser::ServMsg(const string& from, const string& param, const string& msg)
 {
@@ -625,26 +606,25 @@ void Parser::Names(const string& chan, const string& names)
     stringstream ss(names);
     string buf;
 
-    vector<vector<string> > vecvec;
-
+    Channel *c = _conn->findChannel(channel);
     while(ss >> buf)
     {
-        vector<string> vec;
-        if (buf[0] == '@' || buf[0] == '+') {
-            vec.push_back(buf.substr(0, 1));
-            vec.push_back(buf.substr(1));
-            // Add to internal Channel's, XXX this should be fixed so it doesn't
-            // have to search for the channel every time
-            _conn->findChannel(channel)->addUser(buf.substr(1));
+        if (buf[0] == '@') {
+            if (c)
+                  c->addUser(buf.substr(1), IRC::OP);
+        } else if (buf[0] == '+') {
+            if (c)
+                  c->addUser(buf.substr(1), IRC::VOICE);
         } else {
-            vec.push_back(" ");
-            vec.push_back(buf);
-            _conn->findChannel(channel)->addUser(buf);
+            if (c)
+                  c->addUser(buf, IRC::NONE);
         }
-        vecvec.push_back(vec);
     }
 
-    _app->evtNames(channel, vecvec, _conn);
+    if (c)
+          _app->evtNames(*c, _conn);
+    else
+          _evts->emit(_evts->get(NAMES) << channel << names, "", _conn);
 }
 
 string Parser::findNick(const string& str)

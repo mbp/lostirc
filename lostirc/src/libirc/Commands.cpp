@@ -31,6 +31,8 @@ struct UserCommands cmds[] = {
     { "PART",     Commands::Part,       1 },
     { "QUIT",     Commands::Quit,       1 },
     { "NICK",     Commands::Nick,       1 },
+    { "KICK",     Commands::Kick,       1 },
+    { "NAMES",    Commands::Names,      1 },
     { "MODE",     Commands::Mode,       1 },
     { "CTCP",     Commands::Ctcp,       1 },
     { "AWAY",     Commands::Away,       1 },
@@ -88,8 +90,13 @@ bool Commands::Quit(ServerConnection *conn, const string& params)
 
 bool Commands::Kick(ServerConnection *conn, const string& params)
 {
-    conn->sendKick(params);
-    return true;
+    if (params.empty()) {
+        error = "/KICK <channel> <nick> [msg], kick a user from a channel.";
+        return false;
+    } else {
+        conn->sendKick(params);
+        return true;
+    }
 }
 
 bool Commands::Server(ServerConnection *conn, const string& params)
@@ -282,24 +289,36 @@ bool Commands::Me(ServerConnection *conn, const string& params)
 bool Commands::Who(ServerConnection *conn, const string& params)
 {
     if (params.empty()) {
-       error = "/WHO <mask> [o], search for mask on network, if o is supplied, only search for oppers.";
-       return false;
+        error = "/WHO <mask> [o], search for mask on network, if o is supplied, only search for oppers.";
+        return false;
     } else {
-       conn->sendWho(params);
-       return true;
+        conn->sendWho(params);
+        return true;
     }
 }
 
 bool Commands::Quote(ServerConnection *conn, const string& params)
 {
     if (params.empty()) {
-       error = "/QUOTE <text>, send raw text to server.";
-       return false;
+        error = "/QUOTE <text>, send raw text to server.";
+        return false;
     } else {
-       conn->sendRaw(params);
-       return true;
+        conn->sendRaw(params);
+        return true;
     }
 }
+
+bool Commands::Names(ServerConnection *conn, const string& params)
+{
+    if (params.empty()) {
+        error = "/NAMES <channel>, see who's on a channel.";
+        return false;
+    } else {
+        conn->sendNames(params);
+        return true;
+    }
+}
+
 
 bool Commands::commands(ServerConnection *conn, const string& params)
 {

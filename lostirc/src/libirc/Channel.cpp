@@ -22,27 +22,26 @@
 using std::string;
 using std::map;
 using std::pair;
+using std::vector;
 
-//typedef map<int, pair<Mode, string> >::iterator usersIter;
+typedef std::map<std::string, IRC::UserMode> uMap;
 
-int Channel::addUser(const string& u)
+void Channel::addUser(const string& n, IRC::UserMode i = IRC::NONE)
 {
-    //usersIter i = users.begin();
-    users.push_back(u);
-    return 1;
+    users.insert(make_pair(n, i));
 }
 
 void Channel::removeUser(const string& u)
 {
-    vector<string>::iterator i = std::find(users.begin(), users.end(), u);
+    uMap::iterator i = users.find(u);
 
     if (i != users.end())
           users.erase(i);
 }
 
-bool Channel::findUser(const string& n)
+bool Channel::findUser(const string& u)
 {
-    vector<string>::iterator i = std::find(users.begin(), users.end(), n);
+    uMap::const_iterator i = users.find(u);
 
     if (i != users.end())
           return true;

@@ -25,6 +25,7 @@
 #include <sys/utsname.h>
 #include "ConfigHandler.h"
 #include "Parser.h"
+#include "Channel.h"
 
 class ServerConnection;
 class Events;
@@ -61,8 +62,8 @@ public:
     Signal3<void, const std::string&, const std::string&, ServerConnection*> evtNick;
 
     // Emitted when we receive all the names from the channel
-    Signal3<void, const std::string&, const std::vector<std::vector<std::string> >&, ServerConnection*> evtNames;
-    Signal4<void, const std::string&, const std::string&, const std::vector<struct Mode>&, ServerConnection*> evtCUMode;
+    Signal2<void, Channel&, ServerConnection*> evtNames;
+    Signal4<void, const std::string&, const std::string&, const std::map<std::string, IRC::UserMode>&, ServerConnection*> evtCUMode;
     Signal5<void, const std::string&, const std::string&, const std::string&, const std::string&, ServerConnection*> evtKick;
 
     // Emitted when the frontend needs to diplay a message

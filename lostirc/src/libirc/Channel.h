@@ -23,18 +23,20 @@
 #include <map>
 #include <set>
 #include <vector>
+#include "irc_defines.h"
 
 class Channel {
     std::string name;
-    //std::map<int, std::pair<Mode, std::string> > users;
-    std::vector<std::string> users;
+    std::map<std::string, IRC::UserMode> users;
+    //std::vector<std::string> users;
 
 public:
     void setName(const std::string& n) { name = n; }
     std::string getName() { return name; }
-    int addUser(const std::string& u);
+    void addUser(const string& n, IRC::UserMode i = IRC::NONE);
     void removeUser(const std::string& u);
     bool findUser(const std::string& u);
+    std::map<std::string, IRC::UserMode> getUsers() { return users; }
 };
 
 #endif

@@ -290,23 +290,11 @@ void TabChannel::insertUser(const vector<string>& users)
     _users->set_text(ss.str() + " users");
 }
 
-void TabChannel::insertUser(const string& user)
-{
-    vector<string> users;
-    users.push_back(" ");
-    users.push_back(user);
-    _clist->rows().push_back(users);
-    size_t size = _clist->rows().size();
-    stringstream ss;
-    ss << size;
-    _users->set_text(ss.str() + " users");
-}
-
-void TabChannel::insertUser(const Mode& m)
+void TabChannel::insertUser(const string& nick, IRC::UserMode m = IRC::NONE)
 {
     vector<string> tmp;
 
-    switch (m.mode)
+    switch (m)
     {
         case IRC::OP:
             tmp.push_back("@");
@@ -314,16 +302,12 @@ void TabChannel::insertUser(const Mode& m)
         case IRC::VOICE:
             tmp.push_back("+");
             break;
-        case IRC::BAN:
-        case IRC::UNBAN:
-            return;
-        default:
+        case IRC::NONE:
             tmp.push_back(" ");
     }
 
-    tmp.push_back(m.nick);
+    tmp.push_back(nick);
     insertUser(tmp);
-
 }
 
 void TabChannel::removeUser(const string& nick)

@@ -162,25 +162,26 @@ void MainWindow::onNick(const string& nick, const string& to, ServerConnection *
     }
 }
 
-void MainWindow::onCUMode(const string& nick, const string& chan, const vector<struct Mode>& users, ServerConnection *conn)
+void MainWindow::onCUMode(const string& nick, const string& chan, const map<string, IRC::UserMode>& users, ServerConnection *conn)
 {
     Tab *tab = _nb->findTab(chan, conn);
 
-    vector<struct Mode>::const_iterator i;
+    map<string, IRC::UserMode>::const_iterator i;
     for (i = users.begin(); i != users.end(); ++i) {
-        tab->removeUser(i->nick);
-        tab->insertUser(*i);
+        tab->removeUser(i->first);
+        tab->insertUser(i->first, i->second);
     }
 }
 
-void MainWindow::onNames(const string& chan, const vector<vector<string> >& users, ServerConnection *conn)
+void MainWindow::onNames(Channel& c, ServerConnection *conn)
 {
-    vector<vector<string> >::const_iterator i;
+    Tab *tab = _nb->findTab(c.getName(), conn);
 
-    Tab *tab = _nb->findTab(chan, conn);
+    map<string, IRC::UserMode> users = c.getUsers();
+    map<string, IRC::UserMode>::const_iterator i;
 
     for (i = users.begin(); i != users.end(); ++i) {
-        tab->insertUser(*i);
+        tab->insertUser(i->first, i->second);
     }
 }
 

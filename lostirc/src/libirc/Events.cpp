@@ -55,6 +55,7 @@ struct {
     { "evt_unbanned", UNBANNED },
     { "evt_invited", INVITED },
     { "evt_connecting", CONNECTING },
+    { "evt_names", NAMES },
     { 0, 0 }
 };
 
@@ -111,10 +112,10 @@ string Tmpl::result()
                         newstr += tokens[num];
                     }
                     parsing_arg = false;
-                    break;
+                } else {
+                    newstr += *i; 
+                    parsing_arg = false;
                 }
-                newstr += *i;
-                parsing_arg = false;
         }
     }
 

@@ -289,6 +289,13 @@ bool ServerConnection::sendWho(const string& mask)
     return _socket->send(msg);
 }
 
+bool ServerConnection::sendNames(const string& chan)
+{
+    string msg("NAMES " + chan + "\r\n");
+
+    return _socket->send(msg);
+}
+
 bool ServerConnection::sendRaw(const string& text)
 {
     string msg(text + "\r\n");

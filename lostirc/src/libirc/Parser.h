@@ -23,7 +23,7 @@
 #include <vector>
 #include <sstream>
 #include <algorithm>
-#include "Channel.h"
+#include "irc_defines.h"
 #include "LostIRCApp.h"
 
 // This class takes care of parsing incoming messages from the server
@@ -73,18 +73,6 @@ private:
     ServerConnection *_conn;
     Events *_evts;
     LostIRCApp *_app;
-};
-
-namespace IRC
-{
-    enum UserMode {
-        OP, VOICE, DEOP, DEVOICE, BAN, UNBAN
-    };
-}
-
-struct Mode {
-    std::string nick;
-    IRC::UserMode mode;
 };
 
 #endif

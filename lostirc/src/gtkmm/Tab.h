@@ -51,8 +51,7 @@ public:
     void setUnAway();
 
     virtual void insertUser(const std::vector<std::string>& users) = 0;
-    virtual void insertUser(const std::string& user) = 0;
-    virtual void insertUser(const Mode& m) = 0;
+    virtual void insertUser(const std::string& user, IRC::UserMode m = IRC::NONE) = 0;
     virtual void removeUser(const std::string& nick) = 0;
     virtual void renameUser(const std::string& from, const std::string& to) = 0;
     virtual bool findUser(const std::string& nick) = 0;
@@ -85,8 +84,7 @@ public:
     Gtk::CList*         getCList() { return 0; }
 
     void insertUser(const std::vector<std::string>& users) {};
-    void insertUser(const std::string& user) {};
-    void insertUser(const Mode& m) {};
+    void insertUser(const std::string& user, IRC::UserMode i = IRC::NONE) {};
     void removeUser(const std::string& nick) {};
     void renameUser(const std::string& from, const std::string& to) {
         getLabel()->set_text(to);
@@ -110,8 +108,7 @@ public:
     Gtk::CList*         getCList();
 
     void insertUser(const std::vector<string>& users);
-    void insertUser(const std::string& user);
-    void insertUser(const Mode& m);
+    void insertUser(const std::string& user, IRC::UserMode i = IRC::NONE);
     void removeUser(const std::string& nick);
     void renameUser(const std::string& from, const std::string& to);
     bool findUser(const std::string& nick);
