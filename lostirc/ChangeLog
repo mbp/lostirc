@@ -2,6 +2,18 @@ For a summary of changes between releases - see the NEWS file.
 
 2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * TextWidget.h: Make onScroll() and onResize() private.
+        * TextWidget.h: Create setHighlightMark() and scrollToHighlightMark(),
+          create member which holds a vector of marks.
+        * TextWidget.cpp: setHighlightMark(): Used to push back a mark into
+          the vector.
+        * TextWidget.cpp: scrollToHiglightMark(): Browse the vector and scroll
+          through the marks.
+        * MainWindow.cpp: Use the two above functions. Add notice in startup
+          text of new key-binding. CTRL-h.
+
+2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
+
          * Add 2003 to copyright in source and header files.
 
 2003-01-01  Jonathan James Taylor  <jonathan.taylor@utoronto.ca>

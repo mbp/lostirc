@@ -20,6 +20,7 @@
 #define TEXTWIDGET_H
 
 #include <map>
+#include <vector>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/textbuffer.h>
 #include <gtkmm/textmark.h>
@@ -37,11 +38,11 @@ public:
     TextWidget& operator<<(const char * str);
     TextWidget& operator<<(const Glib::ustring& str);
 
-    void onResize(GtkAllocation *alloc);
-    void onScroll();
-	
     void clearText();
     void setFont(const Pango::FontDescription& font);
+
+    void setHighlightMark();
+    void scrollToHighlightMark();
 
     void scrollUpPage();
     void scrollDownPage();
@@ -49,6 +50,9 @@ public:
 private:
     void insertText(const TextProperties& tp, const Glib::ustring& str);
     void setStyle();
+
+    void onResize(GtkAllocation *alloc);
+    void onScroll();
 
     void removeTopBuffer();
 
@@ -63,6 +67,9 @@ private:
     Glib::RefPtr<Gtk::TextTag> underlinetag;
     Glib::RefPtr<Gtk::TextTag> boldtag;
     Glib::RefPtr<Gtk::TextBuffer::Mark> pos;
+
+    std::vector<Glib::RefPtr<Gtk::TextBuffer::Mark> > highlight_marks;
+    std::vector<Glib::RefPtr<Gtk::TextBuffer::Mark> >::reverse_iterator highlight_mark_pos;
 
 };
 

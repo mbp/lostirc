@@ -60,7 +60,7 @@ MainWindow::MainWindow(bool autoconnect)
     if (!app.cfgservers.hasAutoConnects() || !autoconnect) {
         // Construct initial tab
         Tab *tab = newServer();
-        tab->getText() << "\0037\n\002Welcome to LostIRC "VERSION"!\002\n\nYou use the client mainly by typing in commands and text in the entry-box shown below.\n\nYou can connect to a server using:\n    \0038/SERVER <hostname / ip>\n\n\0037Then join a channel:\n    \0038/JOIN <channel-name>\n\n\0037The rest of the commands is available with:\n    \0038/COMMANDS\0037.\n\n\0037Available keybindings:\n    \0038CTRL-[1-9] - switch tabs from 1-9.\n    CTRL-N - create new server tab.\n    CTRL-W - close current window(tab).\n    CTRL-P - open preferences.\n    Tab - nick-completion and command-completion.\n";
+        tab->getText() << "\0037\n\002Welcome to LostIRC "VERSION"!\002\n\nYou use the client mainly by typing in commands and text in the entry-box shown below.\n\nYou can connect to a server using:\n    \0038/SERVER <hostname / ip>\n\n\0037Then join a channel:\n    \0038/JOIN <channel-name>\n\n\0037The rest of the commands is available with:\n    \0038/COMMANDS\0037.\n\n\0037Available keybindings:\n    \0038CTRL-[1-9] - switch tabs from 1-9.\n    CTRL-N - create new server tab.\n    CTRL-W - close current window(tab).\n    CTRL-P - open preferences. CTRL-H - Scroll back to previous highlight (if any)\n    Tab - nick-completion and command-completion.\n";
     } else {
         // Auto-connect to servers.
         app.autoConnect();
@@ -108,6 +108,7 @@ void MainWindow::displayMessage(const ustring& msg, FE::Destination d, bool shou
 
         for (i = tabs.begin(); i != tabs.end(); ++i) {
             (*i)->getText() << msg;
+
             if (shouldHighlight)
                   notebook.highlightActivity(*i);
         }
@@ -135,6 +136,7 @@ void MainWindow::displayMessage(const ustring& msg, FE::Destination d, ServerCon
 
         for (i = tabs.begin(); i != tabs.end(); ++i) {
             (*i)->getText() << msg;
+
             if (shouldHighlight)
                   notebook.highlightActivity(*i);
         }
@@ -242,8 +244,10 @@ void MainWindow::highlight(ChannelBase& chan, ServerConnection* conn)
 {
     Tab *tab = notebook.findTab(chan.getName(), conn);
 
-    if (tab)
-          notebook.highlightNick(tab);
+    if (tab) {
+        notebook.highlightNick(tab);
+        tab->getText().setHighlightMark();
+    }
 }
 
 void MainWindow::away(bool away, ServerConnection* conn)
@@ -374,6 +378,9 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
                   notebook.getCurrent()->startDCCList();
             else
                   notebook.getCurrent()->closeDCCList();
+        } else if (e->keyval == GDK_h) {
+            // find highlight mark
+            notebook.getCurrent()->getText().scrollToHighlightMark();
         } else if (e->keyval == GDK_n) {
             newServer();
         } else if (e->keyval == GDK_q) {

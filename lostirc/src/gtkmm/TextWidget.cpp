@@ -25,6 +25,7 @@ using std::vector;
 using Glib::ustring;
 
 TextWidget::TextWidget(Pango::FontDescription font)
+    : highlight_mark_pos(highlight_marks.rend())
 {
     _textview.set_wrap_mode(Gtk::WRAP_CHAR);
     _textview.unset_flags(Gtk::CAN_FOCUS);
@@ -55,6 +56,25 @@ void TextWidget::onScroll()
         pos = buffer->create_mark(buffer->end());
     }
 }
+
+void TextWidget::setHighlightMark()
+{
+    Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
+    highlight_marks.push_back(buffer->create_mark(buffer->end()));
+    highlight_mark_pos = highlight_marks.rbegin();
+}
+
+void TextWidget::scrollToHighlightMark()
+{
+    if (!highlight_marks.empty()) {
+        highlight_mark_pos++;
+        if (highlight_mark_pos == highlight_marks.rend())
+              highlight_mark_pos = highlight_marks.rbegin();
+
+        _textview.scroll_to_mark(*highlight_mark_pos, 0.1, 0.0, 1.0);
+    }
+}
+
 void TextWidget::scrollUpPage()
 {
     Gtk::Adjustment *vadj = get_vadjustment();
