@@ -100,11 +100,10 @@ int MainNotebook::findPage(const ustring& name, ServerConnection *conn, bool fin
         Tab *tab = static_cast<Tab*>(i->get_child());
         if (tab->getConn() == conn) {
             ustring tab_name = i->get_tab_label_text();
-            if ((Util::lower(tab_name) == Util::lower(n)) || n.empty()) {
-                return i->get_page_num();
-            } else if (findInActive && Util::lower(tab_name) == ustring("(" + Util::lower(n) + ")")) {
-                return i->get_page_num();
-            }
+            if ((Util::lower(tab_name) == Util::lower(n)) || n.empty())
+                  return i->get_page_num();
+            else if (findInActive && Util::lower(tab_name) == ustring("(" + Util::lower(n) + ")"))
+                  return i->get_page_num();
         }
     }
     return -1;
@@ -136,7 +135,7 @@ void MainNotebook::closeCurrent()
 {
     Tab *tab = getCurrent();
     if (countTabs(tab->getConn()) > 1) {
-        pages().remove(*get_nth_page(get_current_page()));
+        pages().erase(get_current());
     } else {
         if (tab->getConn()->Session.isConnected) {
             tab->getConn()->sendQuit();
@@ -144,7 +143,7 @@ void MainNotebook::closeCurrent()
             tab->setInActive();
         } else if (pages().size() > 1) {
             // Only delete the page if it's not the very last.
-            pages().remove(*get_nth_page(get_current_page()));
+            pages().erase(get_current());
         }
     }
     queue_draw();
