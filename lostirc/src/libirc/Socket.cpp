@@ -99,7 +99,6 @@ string Socket::receive()
                 if (errno == EAGAIN) {
                     // It's just blocking. Return false and set isBlocking
                     // to true
-                    cout << "\t\tnonblocking" << endl;
                     isBlocking = true;
                     return buf;
                 } else {
