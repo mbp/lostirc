@@ -53,7 +53,7 @@ Tab::Tab(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font)
 
     Gtk::Button *_button = manage(new Gtk::Button("Prefs"));
     _button->signal_clicked().connect(slot(*this, &Tab::startPrefs));
-    _hbox2->pack_start(*_button, Gtk::SHRINK);
+    _hbox2->pack_start(*_button, Gtk::PACK_SHRINK);
 
     if (_conn->Session.isAway)
           setAway();
@@ -289,7 +289,7 @@ TabChannel::TabChannel(Gtk::Label *label, ServerConnection *conn, Pango::FontDes
     //_treeview.set_default_size(100, 100);
     swin->add(_treeview);
 
-    _hbox->pack_start(*_users, Gtk::SHRINK);
+    _hbox->pack_start(*_users, Gtk::PACK_SHRINK);
     _users->add(*swin);
 }
 

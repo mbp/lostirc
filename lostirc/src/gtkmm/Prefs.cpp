@@ -48,27 +48,27 @@ Prefs::Prefs()
     Gtk::Button *buttgeneral2 = manage(new Gtk::Button("Cancel"));
     buttgeneral1->signal_clicked().connect(slot(*this, &Prefs::applyGeneral));
     buttgeneral2->signal_clicked().connect(slot(*this, &Prefs::cancelGeneral));
-    hboxgeneral->pack_end(*buttgeneral2, Gtk::SHRINK);
-    hboxgeneral->pack_end(*buttgeneral1, Gtk::SHRINK);
+    hboxgeneral->pack_end(*buttgeneral2, Gtk::PACK_SHRINK);
+    hboxgeneral->pack_end(*buttgeneral1, Gtk::PACK_SHRINK);
     generalbox->pack_end(*hboxgeneral, Gtk::FILL);
 
     // IRC nick
     ircnickentry.set_text(Glib::locale_to_utf8(App->options.nick));
     Gtk::Frame *frame20 = manage(new Gtk::Frame("Nickname"));
     frame20->add(ircnickentry);
-    generalbox->pack_start(*frame20, Gtk::SHRINK);
+    generalbox->pack_start(*frame20, Gtk::PACK_SHRINK);
 
     // IRC nick
     realnameentry.set_text(Glib::locale_to_utf8(App->options.realname));
     Gtk::Frame *frame21 = manage(new Gtk::Frame("Real name"));
     frame21->add(realnameentry);
-    generalbox->pack_start(*frame21, Gtk::SHRINK);
+    generalbox->pack_start(*frame21, Gtk::PACK_SHRINK);
 
     // IRC nick
     ircuserentry.set_text(Glib::locale_to_utf8(App->options.ircuser));
     Gtk::Frame *frame22 = manage(new Gtk::Frame("IRC username (ident)"));
     frame22->add(ircuserentry);
-    generalbox->pack_start(*frame22, Gtk::SHRINK);
+    generalbox->pack_start(*frame22, Gtk::PACK_SHRINK);
 
     notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*generalbox, "General"));
 
@@ -80,8 +80,8 @@ Prefs::Prefs()
     Gtk::Button *buttprefs2 = manage(new Gtk::Button("Cancel"));
     buttprefs1->signal_clicked().connect(slot(*this, &Prefs::applyPreferences));
     buttprefs2->signal_clicked().connect(slot(*this, &Prefs::cancelPreferences));
-    hboxprefs->pack_end(*buttprefs2, Gtk::SHRINK);
-    hboxprefs->pack_end(*buttprefs1, Gtk::SHRINK);
+    hboxprefs->pack_end(*buttprefs2, Gtk::PACK_SHRINK);
+    hboxprefs->pack_end(*buttprefs1, Gtk::PACK_SHRINK);
     prefsbox->pack_end(*hboxprefs, Gtk::FILL);
 
     // nickcompletion character
@@ -89,25 +89,25 @@ Prefs::Prefs()
     nickcompletionentry.set_text(Glib::locale_to_utf8(App->options.nickcompletion_char().getString()));
     Gtk::Frame *frame10 = manage(new Gtk::Frame("Nick-completion character"));
     frame10->add(nickcompletionentry);
-    prefsbox->pack_start(*frame10, Gtk::SHRINK);
+    prefsbox->pack_start(*frame10, Gtk::PACK_SHRINK);
 
     // DCC ip
     dccipentry.set_text(App->options.dccip().getString());
     Gtk::Frame *frame11 = manage(new Gtk::Frame("DCC IP-Address"));
     frame11->add(dccipentry);
-    prefsbox->pack_start(*frame11, Gtk::SHRINK);
+    prefsbox->pack_start(*frame11, Gtk::PACK_SHRINK);
 
     // Highligted words
     highlightentry.set_text(Glib::locale_to_utf8(App->options.highlight_words));
     Gtk::Frame *frame12 = manage(new Gtk::Frame("Words to highlight on (space seperated)"));
     frame12->add(highlightentry);
-    prefsbox->pack_start(*frame12, Gtk::SHRINK);
+    prefsbox->pack_start(*frame12, Gtk::PACK_SHRINK);
 
     // Buffer size for text
     bufferentry.set_text(App->options.buffer_size().getString());
     Gtk::Frame *frame13 = manage(new Gtk::Frame("Maximum number of lines to save"));
     frame13->add(bufferentry);
-    prefsbox->pack_start(*frame13, Gtk::SHRINK);
+    prefsbox->pack_start(*frame13, Gtk::PACK_SHRINK);
 
     notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*prefsbox, "Preferences"));
 
@@ -117,7 +117,7 @@ Prefs::Prefs()
 
     Gtk::Frame *frame14 = manage(new Gtk::Frame());
     frame14->add(highlightingbutton);
-    prefsbox->pack_start(*frame14, Gtk::SHRINK);
+    prefsbox->pack_start(*frame14, Gtk::PACK_SHRINK);
 
     // Font selection
 
@@ -127,8 +127,8 @@ Prefs::Prefs()
     Gtk::Button *buttfont2 = manage(new Gtk::Button("Cancel"));
     buttfont1->signal_clicked().connect(slot(*this, &Prefs::applyFont));
     buttfont2->signal_clicked().connect(slot(*this, &Prefs::cancelFont));
-    hboxfont->pack_end(*buttfont2, Gtk::SHRINK);
-    hboxfont->pack_end(*buttfont1, Gtk::SHRINK);
+    hboxfont->pack_end(*buttfont2, Gtk::PACK_SHRINK);
+    hboxfont->pack_end(*buttfont1, Gtk::PACK_SHRINK);
     fontbox->pack_end(*hboxfont, Gtk::FILL);
 
     fontsel.set_preview_text("<" + ircnickentry.get_text() + "> Hello World!");
@@ -162,22 +162,22 @@ Prefs::Prefs()
     // hostname
     Gtk::Frame *frame1 = manage(new Gtk::Frame("Hostname"));
     frame1->add(hostentry);
-    serverinfobox->pack_start(*frame1, Gtk::SHRINK);
+    serverinfobox->pack_start(*frame1, Gtk::PACK_SHRINK);
 
     // port
     Gtk::Frame *frame2 = manage(new Gtk::Frame("Port"));
     frame2->add(portentry);
-    serverinfobox->pack_start(*frame2, Gtk::SHRINK);
+    serverinfobox->pack_start(*frame2, Gtk::PACK_SHRINK);
 
     // password
     Gtk::Frame *frame3 = manage(new Gtk::Frame("Password"));
     frame3->add(passentry);
-    serverinfobox->pack_start(*frame3, Gtk::SHRINK);
+    serverinfobox->pack_start(*frame3, Gtk::PACK_SHRINK);
 
     // nick
     Gtk::Frame *frame4 = manage(new Gtk::Frame("Nick"));
     frame4->add(nickentry);
-    serverinfobox->pack_start(*frame4, Gtk::SHRINK);
+    serverinfobox->pack_start(*frame4, Gtk::PACK_SHRINK);
 
     // nick
     cmdtext.set_editable(true);
@@ -188,16 +188,16 @@ Prefs::Prefs()
     // buttons
     Gtk::Button *savebutton = manage(new Gtk::Button("Save this entry"));
     savebutton->signal_clicked().connect(slot(*this, &Prefs::saveEntry));
-    hboxserver.pack_end(*savebutton, Gtk::SHRINK);
-    serverinfobox->pack_end(hboxserver, Gtk::SHRINK);
+    hboxserver.pack_end(*savebutton, Gtk::PACK_SHRINK);
+    serverinfobox->pack_end(hboxserver, Gtk::PACK_SHRINK);
 
     addnewbutton = manage(new Gtk::Button("Add new entry"));
     addnewbutton->signal_clicked().connect(slot(*this, &Prefs::addEntry));
-    hboxserver.pack_end(*addnewbutton, Gtk::SHRINK);
+    hboxserver.pack_end(*addnewbutton, Gtk::PACK_SHRINK);
 
     removebutton = manage(new Gtk::Button("Remove entry"));
     removebutton->signal_clicked().connect(slot(*this, &Prefs::removeEntry));
-    hboxserver.pack_end(*removebutton, Gtk::SHRINK);
+    hboxserver.pack_end(*removebutton, Gtk::PACK_SHRINK);
 
 
     performbox->pack_start(*serverhbox);
@@ -208,7 +208,7 @@ Prefs::Prefs()
     closebutt->signal_clicked().connect(slot(*this, &Prefs::endPrefs));
 
     Gtk::HBox *bottommenubox = manage(new Gtk::HBox());
-    bottommenubox->pack_end(*closebutt, Gtk::SHRINK);
+    bottommenubox->pack_end(*closebutt, Gtk::PACK_SHRINK);
 
     pack_start(*bottommenubox, Gtk::FILL);
 
@@ -401,7 +401,7 @@ Gtk::VBox* Prefs::addPage(const Glib::ustring& str)
     labelframe->add(*label);
     labelframe->set_shadow_type(Gtk::SHADOW_ETCHED_IN);
 
-    vbox->pack_start(*labelframe, Gtk::SHRINK);
+    vbox->pack_start(*labelframe, Gtk::PACK_SHRINK);
     return vbox;
 }
 
