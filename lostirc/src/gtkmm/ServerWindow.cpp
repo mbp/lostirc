@@ -279,7 +279,7 @@ void ServerEditDialog::on_response(int response)
         if (portentry.get_text_length() == 0)
               port = 6667;
         else
-              port = Util::stoi(portentry.get_text());
+              port = Util::convert<int>(portentry.get_text());
 
         _server->port = port;
 

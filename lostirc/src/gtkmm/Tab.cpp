@@ -32,7 +32,7 @@ using Glib::ustring;
 
 Tab::Tab(ServerConnection *conn, Pango::FontDescription font, Gtk::Label *label)
     : Gtk::VBox(), isHighlighted(false),
-    _conn(conn), _nicklist(0), _textwidget(font), _isActive(true),
+    _conn(conn), _textwidget(font), _isActive(true),
     _type(UNDEFINED), _entry(this), _label(label)
 {
     _hpaned = new Gtk::HPaned();
@@ -43,13 +43,16 @@ Tab::Tab(ServerConnection *conn, Pango::FontDescription font, Gtk::Label *label)
 
     _vbox.pack_start(_hbox, Gtk::PACK_SHRINK);
 
+    /* FIXME :
     Gtk::Button *prefs_button = manage(new Gtk::Button());
     Gtk::Image *prefsimage = manage(new Gtk::Image(Gtk::Stock::PREFERENCES, Gtk::ICON_SIZE_MENU));
     prefs_button->add(*prefsimage);
     prefs_button->signal_clicked().connect(slot(*this, &Tab::startPrefs));
     _hbox.pack_start(*prefs_button, Gtk::PACK_SHRINK);
+    */
 
     _hpaned->pack1(_vbox, true, true);
+    _hpaned->pack2(_nicklist, false, true);
     pack_start(*_hpaned);
 
     // Make the Entry the first in the focus chain.
@@ -61,7 +64,6 @@ Tab::Tab(ServerConnection *conn, Pango::FontDescription font, Gtk::Label *label)
 Tab::~Tab()
 {
     delete _hpaned;
-    delete _nicklist;
 }
 
 void Tab::setInActive()
@@ -75,8 +77,7 @@ void Tab::setActive()
     _isActive = true;
     setLabelName();
 
-    if (_nicklist)
-          _nicklist->setActive();
+    _nicklist.setActive();
 }
 
 void Tab::setName(const Glib::ustring& str)
@@ -116,32 +117,26 @@ void Tab::removeHighlight()
 
 void Tab::addOrRemoveNickList()
 {
-    if (isType(CHANNEL) && !_nicklist) {
-        _nicklist = new NickList;
-        _hpaned->pack2(*_nicklist, false, true);
-    } else if (isType(QUERY) && _nicklist) {
-        _hpaned->remove(*_nicklist);
-        delete _nicklist;
-        _nicklist = 0;
-    }
+    if (isType(QUERY) || isType(SERVER) || !AppWin->hasNickList())
+          _nicklist.hide();
 }
 
 void Tab::insertUser(const Glib::ustring& user, IRC::UserMode m)
 {
     if (isType(CHANNEL))
-          _nicklist->insertUser(user, m);
+          _nicklist.insertUser(user, m);
 }
 
 void Tab::removeUser(const Glib::ustring& nick)
 {
     if (isType(CHANNEL))
-          _nicklist->removeUser(nick);
+          _nicklist.removeUser(nick);
 }
 
 void Tab::renameUser(const Glib::ustring& from, const Glib::ustring& to)
 {
     if (isType(CHANNEL))
-          _nicklist->renameUser(from, to);
+          _nicklist.renameUser(from, to);
     else if (isType(QUERY))
           setName(to);
 }
@@ -149,7 +144,7 @@ void Tab::renameUser(const Glib::ustring& from, const Glib::ustring& to)
 bool Tab::findUser(const Glib::ustring& nick)
 {
     if (isType(CHANNEL))
-          return _nicklist->findUser(nick);
+          return _nicklist.findUser(nick);
     else 
           return (nick == getName());
 }
@@ -157,15 +152,10 @@ bool Tab::findUser(const Glib::ustring& nick)
 std::vector<Glib::ustring> Tab::getNicks()
 {
     if (isType(CHANNEL))
-          return _nicklist->getNicks();
+          return _nicklist.getNicks();
     else {
         std::vector<Glib::ustring> vec;
         vec.push_back(getName());
         return vec;
     }
-}
-
-void Tab::startPrefs()
-{
-    AppWin->openPrefs();
 }

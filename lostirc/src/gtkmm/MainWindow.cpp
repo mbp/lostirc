@@ -33,39 +33,41 @@ using Glib::ustring;
 MainWindow* AppWin = 0;
 
 MainWindow::MainWindow(bool autoconnect)
-    : Gtk::Window(), app(this)
+    : Gtk::Window(), _app(this), _nickList(true)
 {
     AppWin = this;
     set_title("LostIRC");
 
-    int width = app.options.window_width;
-    int height = app.options.window_height;
+    int width = _app.options.window_width;
+    int height = _app.options.window_height;
     if (width && height)
           set_default_size(width, height);
     else
           set_default_size(600, 400);
 
-    int x = app.options.window_x;
-    int y = app.options.window_y;
+    int x = _app.options.window_x;
+    int y = _app.options.window_y;
 
     if (x >= 0 && y >= 0)
           move(x, y);
     
+    setupMenus();
     Gtk::VBox *vbox = manage(new Gtk::VBox());
 
-    vbox->pack_start(notebook, Gtk::PACK_EXPAND_WIDGET);
-    vbox->pack_start(statusbar, Gtk::PACK_SHRINK);
+    vbox->pack_start(_menubar, Gtk::PACK_SHRINK);
+    vbox->pack_start(_notebook, Gtk::PACK_EXPAND_WIDGET);
+    vbox->pack_start(_statusbar, Gtk::PACK_SHRINK);
 
     add(*vbox);
     show_all();
 
-    if (!app.cfgservers.hasAutoConnects() || !autoconnect) {
+    if (!_app.cfgservers.hasAutoConnects() || !autoconnect) {
         // Construct initial tab
         Tab *tab = newServer();
         tab->getText() << _("\0037\002Welcome to LostIRC "VERSION"!\002\n\nYou can now connect to a server using:\n    \0038/SERVER <hostname / ip>\n\n\0037...and then join a channel:\n    \0038/JOIN <channel-name>\n\n\0037A list of all commands are available with:\n    \0038/COMMANDS\0037\n\nAnd you should \002really\002 check out the list of key bindings:\n    \0038/KEYBINDINGS\n\n");
     } else {
         // Auto-connect to servers.
-        app.autoConnect();
+        _app.autoConnect();
     }
 }
 
@@ -76,15 +78,15 @@ MainWindow::~MainWindow()
 
     get_size(width, height);
     if (width && height) {
-        app.options.window_width = width;
-        app.options.window_height = height;
+        _app.options.window_width = width;
+        _app.options.window_height = height;
     }
 
     int x, y;
     get_window()->get_root_origin(x, y);
     if (x >= 0 && y >= 0) {
-        app.options.window_x = x;
-        app.options.window_y = y;
+        _app.options.window_x = x;
+        _app.options.window_y = y;
     }
 
     AppWin = 0;
@@ -94,7 +96,7 @@ void MainWindow::displayMessage(const ustring& msg, FE::Destination d, bool shou
 {
 
     if (d == FE::CURRENT) {
-        Tab *tab = notebook.getCurrent();
+        Tab *tab = _notebook.getCurrent();
 
         if (tab) {
             tab->getText() << msg;
@@ -106,7 +108,7 @@ void MainWindow::displayMessage(const ustring& msg, FE::Destination d, bool shou
     } else if (d == FE::ALL) {
         vector<Tab*> tabs;
         vector<Tab*>::const_iterator i;
-        notebook.Tabs(tabs);
+        _notebook.Tabs(tabs);
 
         for (i = tabs.begin(); i != tabs.end(); ++i) {
             (*i)->getText() << msg;
@@ -122,7 +124,7 @@ void MainWindow::displayMessage(const ustring& msg, FE::Destination d, ServerCon
 {
 
     if (d == FE::CURRENT) {
-        Tab *tab = notebook.getCurrent(conn);
+        Tab *tab = _notebook.getCurrent(conn);
 
         if (tab) {
             tab->getText() << msg;
@@ -134,7 +136,7 @@ void MainWindow::displayMessage(const ustring& msg, FE::Destination d, ServerCon
     } else if (d == FE::ALL) {
         vector<Tab*> tabs;
         vector<Tab*>::const_iterator i;
-        notebook.findTabs(conn, tabs);
+        _notebook.findTabs(conn, tabs);
 
         for (i = tabs.begin(); i != tabs.end(); ++i) {
             (*i)->getText() << msg;
@@ -147,14 +149,14 @@ void MainWindow::displayMessage(const ustring& msg, FE::Destination d, ServerCon
 
 void MainWindow::displayMessage(const ustring& msg, ChannelBase& chan, ServerConnection *conn, bool shouldHighlight)
 {
-    Tab *tab = notebook.findTab(chan.getName(), conn);
+    Tab *tab = _notebook.findTab(chan.getName(), conn);
 
     // if the channel doesn't exist, it's probably a query. (the channel is
     // created on join) - there is also a hack here to ensure that it's not
     // a channel
     char p = chan.getName().at(0);
     if (!tab && (p != '#' && p != '&' && p != '!' && p != '+'))
-        tab = notebook.addTab(Tab::QUERY, chan.getName(), conn);
+        tab = _notebook.addTab(Tab::QUERY, chan.getName(), conn);
 
     if (tab) {
         tab->getText() << msg;
@@ -166,10 +168,10 @@ void MainWindow::displayMessage(const ustring& msg, ChannelBase& chan, ServerCon
 
 void MainWindow::join(const ustring& nick, Channel& chan, ServerConnection *conn)
 {
-    Tab *tab = notebook.findTab(chan.getName(), conn);
+    Tab *tab = _notebook.findTab(chan.getName(), conn);
     if (!tab) {
-        tab = notebook.addTab(Tab::CHANNEL, chan.getName(), conn);
-        notebook.updateTitle();
+        tab = _notebook.addTab(Tab::CHANNEL, chan.getName(), conn);
+        _notebook.updateTitle();
         return;
     }
     tab->insertUser(nick);
@@ -177,7 +179,7 @@ void MainWindow::join(const ustring& nick, Channel& chan, ServerConnection *conn
 
 void MainWindow::part(const ustring& nick, Channel& chan, ServerConnection *conn)
 {
-    Tab *tab = notebook.findTab(chan.getName(), conn);
+    Tab *tab = _notebook.findTab(chan.getName(), conn);
     if (tab) {
         if (nick == conn->Session.nick) {
             // It's us who's parting
@@ -189,7 +191,7 @@ void MainWindow::part(const ustring& nick, Channel& chan, ServerConnection *conn
 
 void MainWindow::kick(const ustring& kicker, Channel& chan, const ustring& nick, const ustring& msg, ServerConnection *conn)
 {
-    Tab *tab = notebook.findTab(chan.getName(), conn);
+    Tab *tab = _notebook.findTab(chan.getName(), conn);
     if (nick == conn->Session.nick) {
         // It's us who's been kicked
         tab->setInActive();
@@ -203,7 +205,7 @@ void MainWindow::quit(const ustring& nick, vector<ChannelBase*> chans, ServerCon
     vector<ChannelBase*>::const_iterator i;
 
     for (i = chans.begin(); i != chans.end(); ++i) {
-        if (Tab *tab = notebook.findTab((*i)->getName(), conn))
+        if (Tab *tab = _notebook.findTab((*i)->getName(), conn))
             tab->removeUser(nick);
     }
 }
@@ -213,15 +215,15 @@ void MainWindow::nick(const ustring& nick, const ustring& to, vector<ChannelBase
     vector<ChannelBase*>::const_iterator i;
 
     for (i = chans.begin(); i != chans.end(); ++i) {
-        if (Tab *tab = notebook.findTab((*i)->getName(), conn))
+        if (Tab *tab = _notebook.findTab((*i)->getName(), conn))
               tab->renameUser(nick, to);
     }
-    notebook.updateStatus();
+    _notebook.updateStatus();
 }
 
 void MainWindow::CUMode(const ustring& nick, Channel& chan, const std::vector<User>& users, ServerConnection *conn)
 {
-    Tab *tab = notebook.findTab(chan.getName(), conn);
+    Tab *tab = _notebook.findTab(chan.getName(), conn);
 
     std::vector<User>::const_iterator i;
     for (i = users.begin(); i != users.end(); ++i) {
@@ -232,7 +234,7 @@ void MainWindow::CUMode(const ustring& nick, Channel& chan, const std::vector<Us
 
 void MainWindow::names(Channel& c, ServerConnection *conn)
 {
-    Tab *tab = notebook.findTab(c.getName(), conn);
+    Tab *tab = _notebook.findTab(c.getName(), conn);
 
     std::vector<User*> users = c.getUsers();
     std::vector<User*>::const_iterator i;
@@ -243,7 +245,7 @@ void MainWindow::names(Channel& c, ServerConnection *conn)
 
 void MainWindow::highlight(ChannelBase& chan, ServerConnection* conn)
 {
-    Tab *tab = notebook.findTab(chan.getName(), conn);
+    Tab *tab = _notebook.findTab(chan.getName(), conn);
 
     if (tab)
           tab->highlightNick();
@@ -251,19 +253,19 @@ void MainWindow::highlight(ChannelBase& chan, ServerConnection* conn)
 
 void MainWindow::away(bool away, ServerConnection* conn)
 {
-    notebook.updateStatus();
-    notebook.updateTitle();
+    _notebook.updateStatus();
+    _notebook.updateTitle();
 }
 
 void MainWindow::connected(ServerConnection* conn)
 {
-    notebook.updateStatus();
-    notebook.updateTitle();
+    _notebook.updateStatus();
+    _notebook.updateTitle();
 
     vector<Tab*> tabs;
     vector<Tab*>::const_iterator i;
 
-    notebook.findTabs(conn, tabs);
+    _notebook.findTabs(conn, tabs);
 
     for (i = tabs.begin(); i != tabs.end(); ++i)
           if ((*i)->isType(Tab::QUERY))
@@ -274,7 +276,7 @@ void MainWindow::disconnected(ServerConnection* conn)
 {
     vector<Tab*> tabs;
 
-    notebook.findTabs(conn, tabs);
+    _notebook.findTabs(conn, tabs);
 
     std::for_each(tabs.begin(), tabs.end(), std::mem_fun(&Tab::setInActive));
 }
@@ -283,15 +285,15 @@ void MainWindow::newTab(ServerConnection *conn)
 {
     ustring name = _("server");
     conn->Session.servername = name;
-    Tab *tab = notebook.addTab(Tab::SERVER, name, conn);
+    Tab *tab = _notebook.addTab(Tab::SERVER, name, conn);
     tab->setType(Tab::SERVER);
-    notebook.show_all();
+    _notebook.show_all();
 
     // XXX: this is a hack for a "bug" in the gtkmm code which makes the
     // application crash in the start when no pages exists, even though we
     // added one above... doing set_current_page(0) will somehow add it fully.
-    if (notebook.get_current_page() == -1) {
-        notebook.set_current_page(0);
+    if (_notebook.get_current_page() == -1) {
+        _notebook.set_current_page(0);
     }
     tab->setInActive();
 }
@@ -299,9 +301,9 @@ void MainWindow::newTab(ServerConnection *conn)
 Tab* MainWindow::newServer()
 {
     ustring name = _("server");
-    ServerConnection *conn = app.newServer();
+    ServerConnection *conn = _app.newServer();
     conn->Session.servername = name;
-    Tab *tab = notebook.addTab(Tab::SERVER, name, conn);
+    Tab *tab = _notebook.addTab(Tab::SERVER, name, conn);
     tab->setType(Tab::SERVER);
     tab->setInActive();
     return tab;
@@ -345,41 +347,161 @@ void MainWindow::localeError(bool tried_custom_encoding)
 
 void MainWindow::openPrefs()
 {
-    if (prefswin.get()) {
-          prefswin->present();
+    if (_prefswin.get()) {
+          _prefswin->present();
     } else {
         std::auto_ptr<Prefs> dialog(new Prefs());
 
         dialog->show();
 
-        prefswin = dialog;
+        _prefswin = dialog;
     }
 }
 
 void MainWindow::openDccWindow()
 {
-    if (dccwin.get()) {
-          dccwin->present();
+    if (_dccwin.get()) {
+          _dccwin->present();
     } else {
         std::auto_ptr<DCCWindow> dialog(new DCCWindow(*this));
 
         dialog->show();
 
-        dccwin = dialog;
+        _dccwin = dialog;
     }
+}
+void MainWindow::setupMenus()
+{
+    { // First menu.
+        Gtk::Menu::MenuList& menulist = _firstmenu.items();
+
+        menulist.push_back(Gtk::Menu_Helpers::MenuElem(
+                    _("_Hide menubar"),
+                    Gtk::Menu::AccelKey("<control>m"),
+                    SigC::slot(*this, &MainWindow::hideMenu)));
+
+        menulist.push_back(Gtk::Menu_Helpers::SeparatorElem::SeparatorElem());
+
+        menulist.push_back(Gtk::Menu_Helpers::MenuElem(
+                    _("New Server Tab"),
+                    Gtk::Menu::AccelKey("<control>n"),
+                    SigC::slot(*this, &MainWindow::newServerTab)));
+
+        menulist.push_back(Gtk::Menu_Helpers::MenuElem(
+                    _("Clear window"),
+                    SigC::slot(*this, &MainWindow::clearWindow)));
+
+        menulist.push_back(Gtk::Menu_Helpers::MenuElem(
+                    _("Clear all windows"),
+                    SigC::slot(*this, &MainWindow::clearAllWindows)));
+
+        menulist.push_back(Gtk::Menu_Helpers::MenuElem(
+                    _("Close Current Tab"),
+                    Gtk::Menu::AccelKey("<control>w"),
+                    SigC::slot(*this, &MainWindow::closeCurrentTab)));
+
+
+        menulist.push_back(Gtk::Menu_Helpers::SeparatorElem::SeparatorElem());
+        menulist.push_back(
+                Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::QUIT,
+                    Gtk::Menu::AccelKey("<control>q"),
+                    SigC::slot(*this, &Gtk::Window::hide)));
+    }
+
+    { // View menu.
+        Gtk::Menu::MenuList& menulist = _viewmenu.items();
+
+        menulist.push_back(Gtk::Menu_Helpers::CheckMenuElem(
+                    _("Nick List"),
+                    Gtk::Menu::AccelKey("<control>l"),
+                    SigC::slot(*this, &MainWindow::hideNickList)));
+
+        menulist.push_back(Gtk::Menu_Helpers::MenuElem(
+                    _("Server List"),
+                    Gtk::Menu::AccelKey("<control>s"),
+                    SigC::slot(*this, &MainWindow::openServerWindow)));
+        menulist.push_back(Gtk::Menu_Helpers::MenuElem(
+                    _("DCC Transfers"),
+                    Gtk::Menu::AccelKey("<control>d"),
+                    SigC::slot(*this, &MainWindow::openDccWindow)));
+        menulist.push_back(
+                Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::PREFERENCES,
+                    Gtk::Menu::AccelKey("<control>p"),
+                    SigC::slot(*this, &MainWindow::openPrefs)));
+
+
+    }
+
+    { // Help menu.
+        Gtk::Menu::MenuList& menulist = _helpmenu.items();
+        menulist.push_back(Gtk::Menu_Helpers::MenuElem(
+                    _("_About")));
+    }
+
+    _menubar.items().push_back(Gtk::Menu_Helpers::MenuElem(_("_LostIRC"), _firstmenu));
+    _menubar.items().push_back(Gtk::Menu_Helpers::MenuElem(_("_View"), _viewmenu));
+    _menubar.items().push_back(Gtk::Menu_Helpers::MenuElem(_("_Help"), _helpmenu));
+
+}
+
+
+void MainWindow::hideMenu()
+{
+    // FIXME
+    #warning IMPLEMENT ME hideMenu()
+    _menubar.hide();
+}
+
+void MainWindow::hideNickList()
+{
+    // FIXME
+    #warning IMPLEMENT ME hideNickList()
+    _nickList = !_nickList;
+    vector<Tab*> tabs;
+
+    _notebook.Tabs(tabs);
+    std::for_each(tabs.begin(), tabs.end(), std::mem_fun(&Tab::updateNickList));
 }
 
 void MainWindow::openServerWindow()
 {
-    if (serverwin.get()) {
-          serverwin->present();
+    if (_serverwin.get()) {
+          _serverwin->present();
     } else {
         std::auto_ptr<ServerWindow> dialog(new ServerWindow(*this));
 
         dialog->show();
 
-        serverwin = dialog;
+        _serverwin = dialog;
     }
+}
+
+void MainWindow::newServerTab()
+{
+    newServer();
+}
+
+void MainWindow::closeCurrentTab()
+{
+    Tab *tab = _notebook.getCurrent();
+    if (tab->isType(Tab::CHANNEL) && tab->getConn()->Session.isConnected && tab->isActive()) {
+        // It's a channel, so we need to part it
+        tab->getConn()->sendPart(tab->getName(), "");
+    } else {
+        // Query
+        tab->getConn()->removeChannel(tab->getName());
+    }
+    _notebook.closeCurrent();
+}
+
+void MainWindow::clearWindow()
+{
+    _notebook.getCurrent()->getText().clearText();
+}
+
+void MainWindow::clearAllWindows()
+{
+    _notebook.clearAll();
 }
 
 bool MainWindow::on_key_press_event(GdkEventKey* e)
@@ -387,68 +509,47 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
     // CTRL key.
     if (e->state & GDK_CONTROL_MASK) {
         if (e->keyval == GDK_0) {
-            notebook.set_current_page(9);
+            _notebook.set_current_page(9);
         } else if (e->keyval == GDK_1) {
-            notebook.set_current_page(0);
+            _notebook.set_current_page(0);
         } else if (e->keyval == GDK_2) {
-            notebook.set_current_page(1);
+            _notebook.set_current_page(1);
         } else if (e->keyval == GDK_3) {
-            notebook.set_current_page(2);
+            _notebook.set_current_page(2);
         } else if (e->keyval == GDK_4) {
-            notebook.set_current_page(3);
+            _notebook.set_current_page(3);
         } else if (e->keyval == GDK_5) {
-            notebook.set_current_page(4);
+            _notebook.set_current_page(4);
         } else if (e->keyval == GDK_6) {
-            notebook.set_current_page(5);
+            _notebook.set_current_page(5);
         } else if (e->keyval == GDK_7) {
-            notebook.set_current_page(6);
+            _notebook.set_current_page(6);
         } else if (e->keyval == GDK_8) {
-            notebook.set_current_page(7);
+            _notebook.set_current_page(7);
         } else if (e->keyval == GDK_9) {
-            notebook.set_current_page(8);
-        } else if (e->keyval == GDK_w) {
-            Tab *tab = notebook.getCurrent();
-            if (tab->isType(Tab::CHANNEL) && tab->getConn()->Session.isConnected && tab->isActive()) {
-                // It's a channel, so we need to part it
-                tab->getConn()->sendPart(tab->getName(), "");
-            } else {
-                // Query
-                tab->getConn()->removeChannel(tab->getName());
-            }
-            notebook.closeCurrent();
-        } else if (e->keyval == GDK_p) {
-            openPrefs();
-        } else if (e->keyval == GDK_d) {
-            openDccWindow();
-        } else if (e->keyval == GDK_s) {
-            openServerWindow();
+            _notebook.set_current_page(8);
         } else if (e->keyval == GDK_h) {
             // find highlight mark
-            notebook.getCurrent()->getText().scrollToHighlightMark();
-        } else if (e->keyval == GDK_n) {
-            newServer();
-        } else if (e->keyval == GDK_q) {
-            // hide() here will quit the application
-            hide();
+            _notebook.getCurrent()->getText().scrollToHighlightMark();
         } else if (e->keyval == GDK_End) {
-            notebook.getCurrent()->getText().scrollToBottom();
+            _notebook.getCurrent()->getText().scrollToBottom();
         } else if (e->keyval == GDK_Home) {
-            notebook.getCurrent()->getText().scrollToTop();
+            _notebook.getCurrent()->getText().scrollToTop();
         }
     } else if (e->state & GDK_MOD1_MASK) {
         // ALT key.
         if (e->keyval == GDK_Left)
-              notebook.prev_page();
+              _notebook.prev_page();
         else if (e->keyval == GDK_Right)
-              notebook.next_page();
+              _notebook.next_page();
     }
     if (e->keyval == GDK_Page_Up) {
         // scroll up text widget
-        notebook.getCurrent()->getText().scrollUpPage();
+        _notebook.getCurrent()->getText().scrollUpPage();
 
     } else if (e->keyval == GDK_Page_Down) {
         // scroll down text widget
-        notebook.getCurrent()->getText().scrollDownPage();
+        _notebook.getCurrent()->getText().scrollDownPage();
     }
 
     Gtk::Window::on_key_press_event(e);

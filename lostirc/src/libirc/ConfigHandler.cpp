@@ -90,13 +90,13 @@ bool Servers::readServersFile()
             } else if (param == "cmd") {
                 tmpcmds.push_back(value);
             } else if (param == "port") {
-                port = Util::stoi(value);
+                port = Util::convert<int>(value);
             } else if (param == "password") {
                 password = value;
             } else if (param == "nick") {
                 nick = value;
             } else if (param == "auto_connect") {
-                auto_connect = Util::stoi(value);
+                auto_connect = Util::convert<int>(value);
             }
         }
     }

@@ -16,6 +16,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <gtkmm/image.h>
+#include <gtkmm/button.h>
+#include <gtkmm/stock.h>
 #include "StatusBar.h"
 #include <LostIRC.h>
 
@@ -36,6 +39,4 @@ StatusBar::StatusBar()
     setText1(_("Not connected."));
 
     show_all();
-
-
 }

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-06-15 12:46+0200\n"
+"POT-Creation-Date: 2003-06-15 21:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -185,76 +185,68 @@ msgstr ""
 msgid "From/To"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:47
-msgid "LostIRC Preferences"
-msgstr ""
-
-#: src/gtkmm/Prefs.cpp:50
-msgid "Limited _highlighting (don't mark tabs red on joins/parts etc.)"
-msgstr ""
-
-#: src/gtkmm/Prefs.cpp:51
+#: src/gtkmm/Prefs.cpp:45
 msgid "Strip _color codes from incoming messages"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:52
+#: src/gtkmm/Prefs.cpp:46
 msgid "Strip _bold and underline codes from incoming messages"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:53
+#: src/gtkmm/Prefs.cpp:47
 msgid "_Log conversations to disk"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:66
+#: src/gtkmm/Prefs.cpp:52
+msgid "LostIRC Preferences"
+msgstr ""
+
+#: src/gtkmm/Prefs.cpp:68
 msgid "General"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:67
+#: src/gtkmm/Prefs.cpp:69
 msgid "Preferences"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:74
-msgid "Nickname:"
+#: src/gtkmm/Prefs.cpp:70
+msgid "DCC"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:82
-msgid "Real name:"
-msgstr ""
-
-#: src/gtkmm/Prefs.cpp:90
+#: src/gtkmm/Prefs.cpp:77
 msgid "IRC username (ident):"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:100
+#: src/gtkmm/Prefs.cpp:87
 msgid "Encoding to use on IRC:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:111
+#: src/gtkmm/Prefs.cpp:98
 msgid "Browse..."
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:115
+#: src/gtkmm/Prefs.cpp:102
 msgid "Main window font:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:125
+#: src/gtkmm/Prefs.cpp:112
 msgid "Nick-completion character:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:133
-msgid "DCC IP address:"
-msgstr ""
-
-#: src/gtkmm/Prefs.cpp:141
-msgid "DCC Port (0 = random):"
-msgstr ""
-
-#: src/gtkmm/Prefs.cpp:149
+#: src/gtkmm/Prefs.cpp:120
 msgid "Words to highlight on (space seperated):"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:157
-msgid "Maxmium number of lines to cache:"
+#: src/gtkmm/Prefs.cpp:128
+msgid "Maximium number of lines to cache:"
+msgstr ""
+
+#: src/gtkmm/Prefs.cpp:150
+msgid "DCC IP address:"
+msgstr ""
+
+#: src/gtkmm/Prefs.cpp:158
+msgid "DCC Port (0 = random):"
 msgstr ""
 
 #: src/gtkmm/NickList.cpp:57

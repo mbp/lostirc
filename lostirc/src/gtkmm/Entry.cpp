@@ -141,10 +141,10 @@ bool Entry::onKeyPress(GdkEventKey* e)
                 } else if (matches > 1) {
                     set_text("/" + word);
                     set_position(-1);
-                    AppWin->statusbar.setText2(_("<span foreground=\"blue\">Matches:</span> ") + matches_str);
+                    AppWin->_statusbar.setText2(_("<span foreground=\"blue\">Matches:</span> ") + matches_str);
 
                 } else {
-                    AppWin->statusbar.setText2(_("<span foreground=\"blue\">No matches.</span>"));
+                    AppWin->_statusbar.setText2(_("<span foreground=\"blue\">No matches.</span>"));
 
                 }
 
@@ -172,9 +172,9 @@ bool Entry::onKeyPress(GdkEventKey* e)
                         set_text(line.substr(0, pos + 1) + word);
                         set_position(-1);
                     }
-                    AppWin->statusbar.setText2(_("<span foreground=\"blue\">Matches:</span> ") + matches_str);
+                    AppWin->_statusbar.setText2(_("<span foreground=\"blue\">Matches:</span> ") + matches_str);
                 } else {
-                    AppWin->statusbar.setText2(("<span foreground=\"blue\">No matches.</span>"));
+                    AppWin->_statusbar.setText2(("<span foreground=\"blue\">No matches.</span>"));
 
                 }
 

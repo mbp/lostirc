@@ -114,7 +114,7 @@ void Parser::parseLine(ustring& data)
 
         // Redirect to the right parsing function...
         
-        int n = Util::stoi(command);
+        int n = Util::convert<int>(command);
         if (n)
               numeric(n, from, param, rest);
         else if (command == "PRIVMSG")
@@ -814,7 +814,7 @@ void Parser::numeric(int n, const ustring& from, const ustring& param, const ust
             break;
         case 317: // RPL_WHOISIDLE
             {
-                long idle = Util::stoi(getWord(param, 3));
+                long idle = Util::convert<long>(getWord(param, 3));
                 std::ostringstream ss;
                 ss << _("idle: ");
                 ss << idle / 3600 << ":" << (idle / 60) % 60 << ":" << idle % 60;

@@ -205,15 +205,15 @@ void TextWidget::insertText(const TextProperties& tp, const ustring& line)
     Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
 
     std::vector< Glib::RefPtr<Gtk::TextTag> > tags;
-    if (Util::stoi(tp.fgnumber) > fgColorMap.size())
+    if (Util::convert<unsigned int>(tp.fgnumber) > fgColorMap.size())
           tags.push_back(fgColorMap[0]);
     else
-          tags.push_back(fgColorMap[Util::stoi(tp.fgnumber)]);
+          tags.push_back(fgColorMap[Util::convert<int>(tp.fgnumber)]);
 
-    if (Util::stoi(tp.bgnumber) > bgColorMap.size())
+    if (Util::convert<unsigned int>(tp.bgnumber) > bgColorMap.size())
           tags.push_back(bgColorMap[1]);
     else
-          tags.push_back(bgColorMap[Util::stoi(tp.bgnumber)]);
+          tags.push_back(bgColorMap[Util::convert<int>(tp.bgnumber)]);
 
     if (tp.bold)
           tags.push_back(boldtag);

@@ -156,7 +156,7 @@ void Server(ServerConnection *conn, const ustring& params)
               conn->Session.isConnected = false;
         }
         if (!port.empty()) {
-            int p = Util::stoi(port);
+            int p = Util::convert<int>(port);
 
             if (!password.empty()) {
                 conn->connect(host, p, password);
@@ -428,7 +428,7 @@ void DCC(ServerConnection* conn, const ustring& params)
 
        action = Util::upper(action);
        if (action == "RECEIVE") {
-           if (!App->getDcc().do_dcc(Util::stoi(secondparam)))
+           if (!App->getDcc().do_dcc(Util::convert<int>(secondparam)))
                  throw CommandException(_("No DCC with that number"));
        } else if (action == "SEND") {
            ustring filename;

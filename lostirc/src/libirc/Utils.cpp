@@ -17,10 +17,8 @@
  */
 
 #include <algorithm>
-#include <sstream>
 #include <glibmm/convert.h>
 #include <cctype>
-#include <cstdlib>
 #include "Utils.h"
 #include "LostIRCApp.h"
 
@@ -38,13 +36,6 @@ std::string lower(std::string str)
 {
     std::transform(str.begin(), str.end(), str.begin(), tolower);
     return str;
-}
-
-int stoi(const ustring& str)
-{
-    /* TODO: this function is implemented using atoi, only because
-     * stringstreams is broken on gcc 2.96 (redhat, mandrake) */
-    return std::atoi(str.c_str());
 }
 
 bool isDigit(const ustring& str)

@@ -110,9 +110,9 @@ void MainNotebook::updateStatus(Tab *tab)
           tab = getCurrent();
 
     if (tab->getConn()->Session.isAway)
-          AppWin->statusbar.setText1(tab->getConn()->Session.nick + _(" <span foreground=\"red\">(away: ") + tab->getConn()->Session.awaymsg + ")</span> - " + tab->getConn()->Session.servername);
+          AppWin->_statusbar.setText1(tab->getConn()->Session.nick + _(" <span foreground=\"red\">(away: ") + tab->getConn()->Session.awaymsg + ")</span> - " + tab->getConn()->Session.servername);
     else
-          AppWin->statusbar.setText1(tab->getConn()->Session.nick + " - " + tab->getConn()->Session.servername);
+          AppWin->_statusbar.setText1(tab->getConn()->Session.nick + " - " + tab->getConn()->Session.servername);
 
 }
 

@@ -62,26 +62,26 @@ fi
 dnl Check for socklen_t (it should be int on Windows). Taken from gaim
 dnl configure.in.
 AC_MSG_CHECKING(for socklen_t)
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+AC_TRY_COMPILE([
         #include <sys/types.h>
         #include <sys/socket.h>
         socklen_t x;
-]], [[]])],[
+], [],
+[       
         AC_MSG_RESULT(yes)
-],[
-        _au_changequote([,])AC_TRY_COMPILE([
+], [    
+        AC_TRY_COMPILE([
                 #include <sys/types.h>
                 #include <sys/socket.h>
                 int accept(int, struct sockaddr *, size_t *);
         ], [], [
                 AC_MSG_RESULT(size_t)
                 AC_DEFINE(socklen_t, size_t, [socklen_t size])
-        ], [
+        ], [    
                 AC_MSG_RESULT(int)
                 AC_DEFINE(socklen_t, int, [socklen_t size])
         ])
 ])
-
 
 AC_CONFIG_FILES([lostirc.spec Makefile src/Makefile src/libirc/Makefile src/gtkmm/Makefile po/Makefile.in m4/Makefile  intl/Makefile ])
 AC_OUTPUT

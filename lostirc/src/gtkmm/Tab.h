@@ -50,7 +50,6 @@ public:
     const Glib::ustring&        getName() const { return _name; }
 
     void setName(const Glib::ustring& str);
-    void startPrefs();
 
     void insertUser(const Glib::ustring& user, IRC::UserMode m = IRC::NONE);
     void removeUser(const Glib::ustring& nick);
@@ -61,6 +60,7 @@ public:
     void setInActive();
     void setActive();
     bool isActive() const { return _isActive; }
+    void updateNickList() { addOrRemoveNickList(); }
 
     void setType(Type type) { _type = type; addOrRemoveNickList(); }
     bool isType(Type type) const { return type == _type; }
@@ -81,7 +81,7 @@ private:
     Gtk::HBox _hbox;
     Gtk::HPaned *_hpaned;
 
-    NickList *_nicklist;
+    NickList _nicklist;
     TextWidget _textwidget;
 
     bool _isActive;

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LostIRC 0.2.5pre\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-06-15 12:46+0200\n"
+"POT-Creation-Date: 2003-06-15 21:11+0200\n"
 "PO-Revision-Date: 2003-01-03 19:25+0100\n"
 "Last-Translator: Michael Kristensen <tazz@wtf.dk>\n"
 "Language-Team: Danish\n"
@@ -243,91 +243,78 @@ msgstr "pct. udført"
 msgid "From/To"
 msgstr "Fra/Til"
 
-#: src/gtkmm/Prefs.cpp:47
-#, fuzzy
-msgid "LostIRC Preferences"
-msgstr "Indstillinger"
-
-#: src/gtkmm/Prefs.cpp:50
-#, fuzzy
-msgid "Limited _highlighting (don't mark tabs red on joins/parts etc.)"
-msgstr ""
-"Begrænset anmærkning (marker ikke faneblade røde ved personer der kommer ind "
-"i kanalen, eller forlader kanalen.)"
-
-#: src/gtkmm/Prefs.cpp:51
+#: src/gtkmm/Prefs.cpp:45
 #, fuzzy
 msgid "Strip _color codes from incoming messages"
 msgstr "Fjern farvekoder fra indkommende beskeder"
 
-#: src/gtkmm/Prefs.cpp:52
+#: src/gtkmm/Prefs.cpp:46
 #, fuzzy
 msgid "Strip _bold and underline codes from incoming messages"
 msgstr "Fjern fed- og understregskoder fra indkommende beskeder"
 
-#: src/gtkmm/Prefs.cpp:53
+#: src/gtkmm/Prefs.cpp:47
 msgid "_Log conversations to disk"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:66
+#: src/gtkmm/Prefs.cpp:52
+#, fuzzy
+msgid "LostIRC Preferences"
+msgstr "Indstillinger"
+
+#: src/gtkmm/Prefs.cpp:68
 msgid "General"
 msgstr "Generelt"
 
-#: src/gtkmm/Prefs.cpp:67
+#: src/gtkmm/Prefs.cpp:69
 msgid "Preferences"
 msgstr "Indstillinger"
 
-#: src/gtkmm/Prefs.cpp:74
-#, fuzzy
-msgid "Nickname:"
-msgstr "Kaldenavn"
+#: src/gtkmm/Prefs.cpp:70
+msgid "DCC"
+msgstr ""
 
-#: src/gtkmm/Prefs.cpp:82
-#, fuzzy
-msgid "Real name:"
-msgstr "Rigtigt navn"
-
-#: src/gtkmm/Prefs.cpp:90
+#: src/gtkmm/Prefs.cpp:77
 #, fuzzy
 msgid "IRC username (ident):"
 msgstr "IRC brugernavn (ident)"
 
-#: src/gtkmm/Prefs.cpp:100
+#: src/gtkmm/Prefs.cpp:87
 msgid "Encoding to use on IRC:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:111
+#: src/gtkmm/Prefs.cpp:98
 msgid "Browse..."
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:115
+#: src/gtkmm/Prefs.cpp:102
 msgid "Main window font:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:125
+#: src/gtkmm/Prefs.cpp:112
 #, fuzzy
 msgid "Nick-completion character:"
 msgstr "Navnefærdiggørelsesbogstav"
 
-#: src/gtkmm/Prefs.cpp:133
-#, fuzzy
-msgid "DCC IP address:"
-msgstr "DCC IP-Adresse"
-
-#: src/gtkmm/Prefs.cpp:141
-#, fuzzy
-msgid "DCC Port (0 = random):"
-msgstr "DCC Port (0 = tilfældig)"
-
-#: src/gtkmm/Prefs.cpp:149
+#: src/gtkmm/Prefs.cpp:120
 #, fuzzy
 msgid "Words to highlight on (space seperated):"
 msgstr "Ord der skal anmærkes på (mellemrumssepareret)"
 
-#: src/gtkmm/Prefs.cpp:157
+#: src/gtkmm/Prefs.cpp:128
 #, fuzzy
-msgid "Maxmium number of lines to cache:"
+msgid "Maximium number of lines to cache:"
 msgstr "Maksimum linier, der skal gemmes"
+
+#: src/gtkmm/Prefs.cpp:150
+#, fuzzy
+msgid "DCC IP address:"
+msgstr "DCC IP-Adresse"
+
+#: src/gtkmm/Prefs.cpp:158
+#, fuzzy
+msgid "DCC Port (0 = random):"
+msgstr "DCC Port (0 = tilfældig)"
 
 #: src/gtkmm/NickList.cpp:57
 msgid " user"
@@ -558,6 +545,20 @@ msgstr "Forbundet. Logger ind..."
 #: src/libirc/LostIRCApp.h:53
 msgid "Logging to `"
 msgstr "Logger til `"
+
+#, fuzzy
+#~ msgid "Limited _highlighting (don't mark tabs red on joins/parts etc.)"
+#~ msgstr ""
+#~ "Begrænset anmærkning (marker ikke faneblade røde ved personer der kommer "
+#~ "ind i kanalen, eller forlader kanalen.)"
+
+#, fuzzy
+#~ msgid "Nickname:"
+#~ msgstr "Kaldenavn"
+
+#, fuzzy
+#~ msgid "Real name:"
+#~ msgstr "Rigtigt navn"
 
 #~ msgid "Log to file"
 #~ msgstr "Log til fil"

@@ -24,6 +24,7 @@
 #include <gtkmm/main.h>
 #include <glibmm/main.h>
 #include <gtkmm/window.h>
+#include <gtkmm/menubar.h>
 #include <ServerConnection.h>
 #include <LostIRCApp.h>
 #include <FrontEnd.h>
@@ -37,15 +38,38 @@ class MainWindow : public Gtk::Window, public FrontEnd
 {
     virtual bool on_key_press_event(GdkEventKey* e);
 
-    LostIRCApp app;
-    MainNotebook notebook;
+    LostIRCApp _app;
+    MainNotebook _notebook;
+
+    Gtk::MenuBar _menubar;
+    Gtk::Menu _firstmenu;
+    Gtk::Menu _viewmenu;
+    Gtk::Menu _helpmenu;
+
+    std::auto_ptr<Prefs> _prefswin;
+    std::auto_ptr<DCCWindow> _dccwin;
+    std::auto_ptr<ServerWindow> _serverwin;
+
+    void openPrefs();
+    void openDccWindow();
+    void openServerWindow();
+    void newServerTab();
+    void hideMenu();
+    void setupMenus();
+    void closeCurrentTab();
+    void hideNickList();
+
+    bool _nickList;
 
 public:
     MainWindow(bool autoconnect = 0);
     virtual ~MainWindow();
 
-    MainNotebook& getNotebook() { return notebook; }
+    MainNotebook& getNotebook() { return _notebook; }
     Tab* newServer();
+    void clearWindow();
+    void clearAllWindows();
+
 
     // Methods implemented for the abstract base class 'FrontEnd' 
     void displayMessage(const Glib::ustring& msg, FE::Destination d, bool shouldHighlight = true);
@@ -66,14 +90,9 @@ public:
     void newDCC(DCC *dcc);
     void dccStatusChanged(DCC *dcc);
     void localeError(bool tried_custom_encoding);
-    void openPrefs();
-    void openDccWindow();
-    void openServerWindow();
+    bool hasNickList() const { return _nickList; }
 
-    StatusBar statusbar;
-    std::auto_ptr<Prefs> prefswin;
-    std::auto_ptr<DCCWindow> dccwin;
-    std::auto_ptr<ServerWindow> serverwin;
+    StatusBar _statusbar;
 };
 
 extern MainWindow* AppWin;

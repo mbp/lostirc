@@ -1,5 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-06-19  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * configure.ac: Revert a change made by autoupdate.
+        * MainWindow.cpp: Add a menu.
+
 2003-06-18  Morten Brix Pedersen  <morten@wtf.dk>
 
         * configure.ac: Run 'autoupdate' on the file to catch-up on how

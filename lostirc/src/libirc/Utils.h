@@ -22,12 +22,24 @@
 #include <glibmm/ustring.h>
 #include <string> 
 #include <vector>
+#include <stdexcept>
+#include <sstream>
 
 namespace Util {
 
     std::string upper(std::string str);
     std::string lower(std::string str);
-    int stoi(const Glib::ustring& str);
+
+    template<typename T>
+    T convert(const Glib::ustring& str)
+    {
+        std::istringstream ss(str);
+        T number;
+        if (!(ss >> number))
+              return 0;
+        return number;
+    }
+
     bool isDigit(const Glib::ustring& str);
 
     Glib::ustring convert_to_utf8(const std::string& str);
