@@ -18,6 +18,7 @@ RANDOM:
   * remove this from 'configure' at release time:
     +extern "C" void exit(int); (:g/extern "C" void exit/d)
   * ipv6 support
+  * /part should part current channel when called without arguments
 
 DONE:
 ----
