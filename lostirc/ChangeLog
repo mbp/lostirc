@@ -1,5 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-03-23  Michael Kristensen  <michael@wtf.dk>
+
+        * MainWindow.cpp: Corrected a bug, which did so that it wouldn't save
+          your window position, if either x or y was 0.
+
 2003-03-17  Morten Brix Pedersen  <morten@wtf.dk>
 
         * LostIRCApp.cpp: Fix segfault on startup.

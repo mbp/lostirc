@@ -48,7 +48,7 @@ MainWindow::MainWindow(bool autoconnect)
     int x = app.options.window_x;
     int y = app.options.window_y;
 
-    if (x && y)
+    if (x >= 0 && y >= 0)
           move(x, y);
     
     Gtk::VBox *vbox = manage(new Gtk::VBox());
@@ -82,7 +82,7 @@ MainWindow::~MainWindow()
 
     int x, y;
     get_window()->get_root_origin(x, y);
-    if (x && y) {
+    if (x >= 0 && y >= 0) {
         app.options.window_x = x;
         app.options.window_y = y;
     }
