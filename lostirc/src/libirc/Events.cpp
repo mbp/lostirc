@@ -50,6 +50,7 @@ struct {
     { 1, "part", PART },
     { 1, "part2", PART2 },
     { 1, "quit", QUIT },
+    { 1, "quit2", QUIT2 },
     { 1, "nick", NICK },
     { 1, "mode", MODE },
     { 1, "cmode", CMODE },

@@ -424,7 +424,11 @@ void Parser::Quit(const string& nick, const string& msg)
     for_each(chans.begin(), chans.end(), algo::removeUser(nick));
 
     App->fe->quit(findNick(nick), chans, _conn);
-    FE::emit(FE::get(QUIT) << findNick(nick) << msg, chans, _conn);
+
+    if (msg.empty())
+          FE::emit(FE::get(QUIT2) << findNick(nick), chans, _conn);
+    else
+          FE::emit(FE::get(QUIT) << findNick(nick) << msg, chans, _conn);
 }
 
 void Parser::Nick(const string& from, const string& to)

@@ -107,6 +107,7 @@ public:
     Value<std::string> part;
     Value<std::string> part2;
     Value<std::string> quit;
+    Value<std::string> quit2;
     Value<std::string> nick;
     Value<std::string> mode;
     Value<std::string> cmode;
