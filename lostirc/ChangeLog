@@ -1,4 +1,4 @@
-LostIRC (0.0.2)
+LostIRC (0.0.2) - Sun Feb, 3rd 2002
   * Code cleanups
   * It's now possible to connect to a server on another port than 6667, and to
     define a password
