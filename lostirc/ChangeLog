@@ -2,6 +2,11 @@ For a summary of changes between releases - see the NEWS file.
 
 2003-01-08  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * Tab.cpp: Don't change the name directly, use setLabelName() in order
+          to have parentes when tab is non-active.
+
+2003-01-08  Morten Brix Pedersen  <morten@wtf.dk>
+
         * Utils.cpp: Fix foolish, foolish error. I removed the "go to next
           word" part of the while loop before comitting, resulting in an
           endless loop...

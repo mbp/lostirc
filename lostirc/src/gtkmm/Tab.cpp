@@ -108,7 +108,7 @@ void Tab::highlightActivity()
 void Tab::removeHighlight()
 {
     isHighlighted = false;
-    _label->set_text(_name);
+    setLabelName();
 }
 
 void Tab::addOrRemoveNickList()
