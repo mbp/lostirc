@@ -15,13 +15,13 @@ lostirc_SOURCES =  main.cpp \
 
 lostirc_LDADD = ../libirc/libirc.a
 
-INCLUDES = $(DEPS_CFLAGS) \
+INCLUDES = $(GTKMMDEPS_CFLAGS) \
            -I$(top_srcdir)/src/libirc \
            -I$(top_srcdir)/intl \
            -DLOCALEDIR=\"$(datadir)/locale\" \
            -DLOSTIRC_DATADIR=\"$(datadir)\"
 
-LIBS = $(DEPS_LIBS)
+LIBS = $(GTKMMDEPS_LIBS)
 
 if PLATFORM_WIN32
 LIBS += -lws2_32
