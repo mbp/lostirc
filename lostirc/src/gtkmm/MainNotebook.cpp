@@ -67,7 +67,7 @@ TabQuery * MainNotebook::addQueryTab(const string& name, ServerConnection *conn)
 
 Tab* MainNotebook::getCurrent(ServerConnection *conn)
 {
-    Tab *tab = dynamic_cast<Tab*>(get_current()->get_child());
+    Tab *tab = dynamic_cast<Tab*>(get_current_child());
     if (tab->getConn() != conn) {
         tab = findTab("", conn);
     }
@@ -76,7 +76,7 @@ Tab* MainNotebook::getCurrent(ServerConnection *conn)
 
 Tab* MainNotebook::getCurrent()
 {
-    Tab *tab = dynamic_cast<Tab*>(get_current()->get_child());
+    Tab *tab = dynamic_cast<Tab*>(get_current_child());
     return tab;
 }
 
