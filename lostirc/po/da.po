@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: LostIRC 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-06-05 19:34+0200\n"
-"PO-Revision-Date: 2004-06-13 20:52+0200\n"
+"PO-Revision-Date: 2004-07-30 18:02+0200\n"
 "Last-Translator: Morten Brix Pedersen <morten@wtf.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -200,7 +200,7 @@ msgstr "_Menulinje"
 
 #: src/gtkmm/MainWindow.cpp:400
 msgid "Status_bar"
-msgstr "Statulinje"
+msgstr "Statuslinje"
 
 #: src/gtkmm/MainWindow.cpp:401
 msgid "_User List"
