@@ -54,7 +54,7 @@ void DCC_Send_In::go_ahead()
     FE::emit(FE::get(CLIENTMSG) << "Receiving from:" << inet_ntoa(sockaddr.sin_addr), FE::CURRENT);
 
     if (::connect(fd, reinterpret_cast<struct sockaddr *>(&sockaddr), sizeof(struct sockaddr)) < 0 && errno != EINPROGRESS) {
-        FE::emit(FE::get(CLIENTMSG) << "Couldn't connect:" << strerror(errno), FE::CURRENT);
+        FE::emit(FE::get(CLIENTMSG) << "Couldn't connect:" << Util::convert_to_utf8(strerror(errno)), FE::CURRENT);
         _status = ERROR;
         App->getDcc().statusChange(_number_in_queue);
     }
@@ -75,7 +75,7 @@ bool DCC_Send_In::onReadData(Glib::IOCondition cond)
     if (retval == 0) FE::emit(FE::get(CLIENTMSG) << "DCC connection closed.", FE::CURRENT);
     else if (retval == -1) {
         if (!(errno == EAGAIN || errno == EWOULDBLOCK)) {
-            FE::emit(FE::get(CLIENTMSG) << "Couldn't receive:" << strerror(errno), FE::CURRENT);
+            FE::emit(FE::get(CLIENTMSG) << "Couldn't receive:" << Util::convert_to_utf8(strerror(errno)), FE::CURRENT);
             _status = ERROR;
             App->getDcc().statusChange(_number_in_queue);
             return false;
@@ -157,7 +157,7 @@ DCC_Send_Out::DCC_Send_Out(const Glib::ustring& filename, const Glib::ustring& n
         memset(&(sockaddr.sin_zero), '\0', 8);
 
         if (bind(fd, reinterpret_cast<struct sockaddr *>(&sockaddr), sizeof(struct sockaddr)) == -1) {
-            FE::emit(FE::get(CLIENTMSG) << "Couldn't bind:" << strerror(errno), FE::CURRENT);
+            FE::emit(FE::get(CLIENTMSG) << "Couldn't bind:" << Util::convert_to_utf8(strerror(errno)), FE::CURRENT);
             // FIXME: add dcc-done?
         } else {
             socklen_t add_len = sizeof(struct sockaddr_in);
@@ -215,7 +215,7 @@ bool DCC_Send_Out::onSendData(Glib::IOCondition cond)
     int retval = send(accept_fd, buf, read_chars, 0);
     if (retval == -1) {
         if (!(errno == EAGAIN || errno == EWOULDBLOCK)) {
-            FE::emit(FE::get(CLIENTMSG) << "Couldn't send:" << strerror(errno), FE::CURRENT);
+            FE::emit(FE::get(CLIENTMSG) << "Couldn't send:" << Util::convert_to_utf8(strerror(errno)), FE::CURRENT);
             _status = ERROR;
             App->getDcc().statusChange(_number_in_queue);
             return false;

@@ -2,6 +2,12 @@ For a summary of changes between releases - see the NEWS file.
 
 2002-12-31  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * Socket.cpp/DCC.cpp/ServerConnection.cpp: When getting a system error
+          message, remember to convert it to utf8, since it can contain
+          non-ascii characters when locale is not C.
+
+2002-12-31  Morten Brix Pedersen  <morten@wtf.dk>
+
         * DCC.cpp/FrontEnd.h/MainWindow.cpp/DCCList.cpp: Implement different DCC
           status's instead of just the simple concept of marking a DCC done.
           Fixes a serious segfault when the DCC pointer was non-existent.
