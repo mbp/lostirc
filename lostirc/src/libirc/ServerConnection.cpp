@@ -345,16 +345,14 @@ bool ServerConnection::sendMsg(const ustring& to, const ustring& message)
 {
     ustring msg("PRIVMSG " + to + " :" + message + "\r\n");
 
-    if (App->options.logging) {
-        ChannelBase *chan = findChannel(to);
-        if (!chan)
-              chan = findQuery(to);
+    ChannelBase *chan = findChannel(to);
+    if (!chan)
+          chan = findQuery(to);
 
-        if (chan)
-              FE::emit(FE::get(PRIVMSG_SELF) << Session.nick << message, *chan, this);
-        else
-              FE::emit(FE::get(PRIVMSG_SELF) << Session.nick << message, FE::CURRENT, this);
-    }
+    if (chan)
+          FE::emit(FE::get(PRIVMSG_SELF) << Session.nick << message, *chan, this);
+    else
+          FE::emit(FE::get(PRIVMSG_SELF) << Session.nick << message, FE::CURRENT, this);
 
     return _socket.send(msg);
 }
@@ -494,16 +492,14 @@ bool ServerConnection::sendMe(const ustring& to, const ustring& message)
 {
     ustring msg("PRIVMSG " + to + " :\001ACTION " + message + "\001\r\n");
 
-    if (App->options.logging) {
-        ChannelBase *chan = findChannel(to);
-        if (!chan)
-              chan = findQuery(to);
+    ChannelBase *chan = findChannel(to);
+    if (!chan)
+          chan = findQuery(to);
 
-        if (chan)
-              FE::emit(FE::get(ACTION) << Session.nick << message, *chan, this);
-        else
-              FE::emit(FE::get(ACTION) << Session.nick << message, FE::CURRENT, this);
-    }
+    if (chan)
+          FE::emit(FE::get(ACTION) << Session.nick << message, *chan, this);
+    else
+          FE::emit(FE::get(ACTION) << Session.nick << message, FE::CURRENT, this);
 
     return _socket.send(msg);
 }
