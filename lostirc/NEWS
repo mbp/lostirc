@@ -18,7 +18,7 @@ LostIRC (x.x.x)
     now also possible to disable/enable automatic connection to the servers.
   * When using a mal-functioning locale, show an error to the screen when
     conversion to the locale fails.
-  * There is now a preliminary and experimtal DCC status list available with
+  * There is now a preliminary and experimental DCC status list available with
     CTRL-d.
   * Man-page updated with a better description.
 
