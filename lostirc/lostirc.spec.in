@@ -45,6 +45,5 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-, root, root)
 %doc AUTHORS COPYING ChangeLog README
-%config %{_sysconfdir}/X11/applnk/Internet/LostIRC.desktop
 %{_bindir}/%{name}
 %{_datadir}/gnome/apps/Internet/%{name}.desktop
