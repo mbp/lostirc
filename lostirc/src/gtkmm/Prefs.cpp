@@ -33,6 +33,7 @@ Prefs::Prefs(Tab *t)
     Gtk::VBox *performbox = manage(new Gtk::VBox());
     Gtk::VBox *prefsbox = manage(new Gtk::VBox());
     Gtk::HBox *serverhbox = manage(new Gtk::HBox());
+    Gtk::Frame *frame = manage(new Gtk::Frame("Available servers"));
     clist = manage(new Gtk::CList(1));
     clist->select_row.connect(slot(this, &Prefs::onSelectRow));
     clist->unselect_row.connect(slot(this, &Prefs::onUnSelectRow));
@@ -46,7 +47,8 @@ Prefs::Prefs(Tab *t)
         clist->rows().push_back(v);
         clist->rows().back().set_data(*i);
     }
-    serverhbox->pack_start(*clist);
+    frame->add(*clist);
+    serverhbox->pack_start(*frame);
     Gtk::VBox *serverinfobox = manage(new Gtk::VBox());
     serverhbox->pack_start(*serverinfobox);
 
@@ -154,6 +156,7 @@ void Prefs::saveEntry()
 
     GuiCommands::mw->getApp()->getCfg().writeServers();
 
+    clist->unselect_all();
     clist->select_row(clist->find_row_from_data(a));
 }
 
@@ -190,13 +193,11 @@ void Prefs::removeEntry()
     struct autoJoin *a = static_cast<struct autoJoin*>(clist->selection().front().get_data());
     clist->remove_row(clist->find_row_from_data(a));
     GuiCommands::mw->getApp()->getCfg().removeServer(a);
-    savehbox->remove(*removebutton);
+    GuiCommands::mw->getApp()->getCfg().writeServers();
 }
 
 void Prefs::addEntry()
 {
-    savehbox->remove(*addnewbutton);
-    savehbox->remove(*removebutton);
     clearEntries();
     clist->unselect_all();
     hostentry->grab_focus();
