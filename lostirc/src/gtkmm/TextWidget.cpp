@@ -39,7 +39,7 @@ TextWidget::TextWidget(Pango::FontDescription font)
 
 void TextWidget::setStyle() {
     // TODO: Should this go into a ressource file?
-    Gdk::Color col1(Glib::locale_to_utf8(App->colors.bgcolor));
+    Gdk::Color col1(convert_to_utf8(App->colors.bgcolor));
 
     _textview.modify_base(Gtk::STATE_NORMAL, col1);
 }
@@ -62,34 +62,7 @@ TextWidget& TextWidget::operator<<(const char * str)
 
 TextWidget& TextWidget::operator<<(const std::string& str)
 {
-    Glib::ustring str_utf8 (str);
-
-    if (!str_utf8.validate()) // invalid UTF-8?
-    {
-        bool did_conversion = false;
-
-        if (!Glib::get_charset()) // locale charset is not UTF-8?
-        {
-            try // ignore errors -- go on with the fallback if the conversion fails
-            {
-                str_utf8 = Glib::locale_to_utf8(str);
-                did_conversion = true;
-            }
-            catch(const Glib::ConvertError&)
-            {}
-        }
-
-        if (!did_conversion)
-        {
-            // Fallback conversion -- used either if the conversion from the
-            // current locale's encoding failed, or if the user is running a
-            // UTF-8 locale.
-            str_utf8 = Glib::convert(str, "UTF-8", _fallback_encoding);
-        }
-    }
-
-    // Pass on to the real operator <<
-    return operator<<(str_utf8);
+    return operator<<(convert_to_utf8(str));
 }
 
 TextWidget& TextWidget::operator<<(const ustring& line)
@@ -200,30 +173,30 @@ void TextWidget::helperInitializer(int i, const Glib::ustring& colorname)
 
 void TextWidget::initializeColorMap()
 {
-    helperInitializer(0, Glib::locale_to_utf8(App->colors.color0));
-    helperInitializer(1, Glib::locale_to_utf8(App->colors.color1));
-    helperInitializer(2, Glib::locale_to_utf8(App->colors.color2));
-    helperInitializer(3, Glib::locale_to_utf8(App->colors.color3));
-    helperInitializer(4, Glib::locale_to_utf8(App->colors.color4));
-    helperInitializer(5, Glib::locale_to_utf8(App->colors.color5));
-    helperInitializer(6, Glib::locale_to_utf8(App->colors.color6));
-    helperInitializer(7, Glib::locale_to_utf8(App->colors.color7));
-    helperInitializer(8, Glib::locale_to_utf8(App->colors.color8));
-    helperInitializer(9, Glib::locale_to_utf8(App->colors.color9));
-    helperInitializer(10, Glib::locale_to_utf8(App->colors.color10));
-    helperInitializer(11, Glib::locale_to_utf8(App->colors.color11));
-    helperInitializer(12, Glib::locale_to_utf8(App->colors.color12));
-    helperInitializer(13, Glib::locale_to_utf8(App->colors.color13));
-    helperInitializer(14, Glib::locale_to_utf8(App->colors.color14));
-    helperInitializer(15, Glib::locale_to_utf8(App->colors.color15));
-    helperInitializer(16, Glib::locale_to_utf8(App->colors.color16));
-    helperInitializer(17, Glib::locale_to_utf8(App->colors.color17));
-    helperInitializer(18, Glib::locale_to_utf8(App->colors.color18));
-    helperInitializer(19, Glib::locale_to_utf8(App->colors.color19));
+    helperInitializer(0, convert_to_utf8(App->colors.color0));
+    helperInitializer(1, convert_to_utf8(App->colors.color1));
+    helperInitializer(2, convert_to_utf8(App->colors.color2));
+    helperInitializer(3, convert_to_utf8(App->colors.color3));
+    helperInitializer(4, convert_to_utf8(App->colors.color4));
+    helperInitializer(5, convert_to_utf8(App->colors.color5));
+    helperInitializer(6, convert_to_utf8(App->colors.color6));
+    helperInitializer(7, convert_to_utf8(App->colors.color7));
+    helperInitializer(8, convert_to_utf8(App->colors.color8));
+    helperInitializer(9, convert_to_utf8(App->colors.color9));
+    helperInitializer(10, convert_to_utf8(App->colors.color10));
+    helperInitializer(11, convert_to_utf8(App->colors.color11));
+    helperInitializer(12, convert_to_utf8(App->colors.color12));
+    helperInitializer(13, convert_to_utf8(App->colors.color13));
+    helperInitializer(14, convert_to_utf8(App->colors.color14));
+    helperInitializer(15, convert_to_utf8(App->colors.color15));
+    helperInitializer(16, convert_to_utf8(App->colors.color16));
+    helperInitializer(17, convert_to_utf8(App->colors.color17));
+    helperInitializer(18, convert_to_utf8(App->colors.color18));
+    helperInitializer(19, convert_to_utf8(App->colors.color19));
 
     // Create a underlined-tag.
     underlinetag = Gtk::TextTag::create();
     underlinetag->property_underline() = Pango::UNDERLINE_SINGLE;
-    underlinetag->property_foreground().set_value(Glib::locale_to_utf8(App->colors.color0));
+    underlinetag->property_foreground().set_value(convert_to_utf8(App->colors.color0));
     _textview.get_buffer()->get_tag_table()->add(underlinetag);
 }

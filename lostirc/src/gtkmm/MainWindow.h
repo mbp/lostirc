@@ -31,6 +31,9 @@
 #include "MainNotebook.h"
 #include "StatusBar.h"
 
+Glib::ustring convert_to_utf8(const std::string& str);
+
+
 class MainWindow : public Gtk::Window, public FrontEnd
 {
     virtual bool on_key_press_event(GdkEventKey* e);

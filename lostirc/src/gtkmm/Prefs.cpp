@@ -53,19 +53,19 @@ Prefs::Prefs()
     generalbox->pack_end(*hboxgeneral, Gtk::PACK_SHRINK);
 
     // IRC nick
-    ircnickentry.set_text(Glib::locale_to_utf8(App->options.nick));
+    ircnickentry.set_text(convert_to_utf8(App->options.nick));
     Gtk::Frame *frame20 = manage(new Gtk::Frame("Nickname"));
     frame20->add(ircnickentry);
     generalbox->pack_start(*frame20, Gtk::PACK_SHRINK);
 
     // IRC nick
-    realnameentry.set_text(Glib::locale_to_utf8(App->options.realname));
+    realnameentry.set_text(convert_to_utf8(App->options.realname));
     Gtk::Frame *frame21 = manage(new Gtk::Frame("Real name"));
     frame21->add(realnameentry);
     generalbox->pack_start(*frame21, Gtk::PACK_SHRINK);
 
     // IRC nick
-    ircuserentry.set_text(Glib::locale_to_utf8(App->options.ircuser));
+    ircuserentry.set_text(convert_to_utf8(App->options.ircuser));
     Gtk::Frame *frame22 = manage(new Gtk::Frame("IRC username (ident)"));
     frame22->add(ircuserentry);
     generalbox->pack_start(*frame22, Gtk::PACK_SHRINK);
@@ -86,7 +86,7 @@ Prefs::Prefs()
 
     // nickcompletion character
     nickcompletionentry.set_max_length(1);
-    nickcompletionentry.set_text(Glib::locale_to_utf8(App->options.nickcompletion_char().getString()));
+    nickcompletionentry.set_text(convert_to_utf8(App->options.nickcompletion_char().getString()));
     Gtk::Frame *frame10 = manage(new Gtk::Frame("Nick-completion character"));
     frame10->add(nickcompletionentry);
     prefsbox->pack_start(*frame10, Gtk::PACK_SHRINK);
@@ -104,7 +104,7 @@ Prefs::Prefs()
     prefsbox->pack_start(*frame15, Gtk::PACK_SHRINK);
 
     // Highligted words
-    highlightentry.set_text(Glib::locale_to_utf8(App->options.highlight_words));
+    highlightentry.set_text(convert_to_utf8(App->options.highlight_words));
     Gtk::Frame *frame12 = manage(new Gtk::Frame("Words to highlight on (space seperated)"));
     frame12->add(highlightentry);
     prefsbox->pack_start(*frame12, Gtk::PACK_SHRINK);
@@ -139,7 +139,7 @@ Prefs::Prefs()
 
     fontsel.set_preview_text("<" + ircnickentry.get_text() + "> Hello World!");
     if (!App->options.font->empty())
-          fontsel.set_font_name(Glib::locale_to_utf8(App->options.font));
+          fontsel.set_font_name(convert_to_utf8(App->options.font));
     fontbox->pack_start(fontsel);
     notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*fontbox, "Font selection"));
 
@@ -257,11 +257,11 @@ void Prefs::applyFont()
 
 void Prefs::cancelPreferences()
 {
-    nickcompletionentry.set_text(Glib::locale_to_utf8(App->options.nickcompletion_char().getString()));
-    dccipentry.set_text(Glib::locale_to_utf8(App->options.dccip));
-    dccportentry.set_text(Glib::locale_to_utf8(App->options.dccport().getString()));
-    highlightentry.set_text(Glib::locale_to_utf8(App->options.highlight_words));
-    bufferentry.set_text(Glib::locale_to_utf8(App->options.buffer_size().getString()));
+    nickcompletionentry.set_text(convert_to_utf8(App->options.nickcompletion_char().getString()));
+    dccipentry.set_text(convert_to_utf8(App->options.dccip));
+    dccportentry.set_text(convert_to_utf8(App->options.dccport().getString()));
+    highlightentry.set_text(convert_to_utf8(App->options.highlight_words));
+    bufferentry.set_text(convert_to_utf8(App->options.buffer_size().getString()));
 
     // Limited tab highlighting
     if (App->options.limited_highlighting)
@@ -272,15 +272,15 @@ void Prefs::cancelPreferences()
 
 void Prefs::cancelGeneral()
 {
-    realnameentry.set_text(Glib::locale_to_utf8(App->options.realname));
-    ircuserentry.set_text(Glib::locale_to_utf8(App->options.ircuser));
-    ircnickentry.set_text(Glib::locale_to_utf8(App->options.nick));
+    realnameentry.set_text(convert_to_utf8(App->options.realname));
+    ircuserentry.set_text(convert_to_utf8(App->options.ircuser));
+    ircnickentry.set_text(convert_to_utf8(App->options.nick));
 }
 
 void Prefs::cancelFont()
 {
     if (!App->options.font->empty())
-          fontsel.set_font_name(Glib::locale_to_utf8(App->options.font));
+          fontsel.set_font_name(convert_to_utf8(App->options.font));
 }
 
 void Prefs::saveEntry()
@@ -360,7 +360,7 @@ void Prefs::onChangeRow()
         vector<std::string>::const_iterator i;
         for (i = a->cmds.begin(); i != a->cmds.end(); ++i) {
             Gtk::TextIter iter = textbuffer->end();
-            textbuffer->insert(iter, Glib::locale_to_utf8(*i + '\n'));
+            textbuffer->insert(iter, convert_to_utf8(*i + '\n'));
         }
         show_all();
     } else {

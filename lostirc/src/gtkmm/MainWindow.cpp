@@ -87,6 +87,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::displayMessage(const string& msg, FE::Destination d, bool shouldHighlight)
 {
+
     if (d == FE::CURRENT) {
         Tab *tab = notebook.getCurrent();
 
@@ -113,6 +114,7 @@ void MainWindow::displayMessage(const string& msg, FE::Destination d, bool shoul
 
 void MainWindow::displayMessage(const string& msg, FE::Destination d, ServerConnection *conn, bool shouldHighlight)
 {
+
     if (d == FE::CURRENT) {
         Tab *tab = notebook.getCurrent(conn);
 
@@ -138,14 +140,14 @@ void MainWindow::displayMessage(const string& msg, FE::Destination d, ServerConn
 
 void MainWindow::displayMessage(const string& msg, ChannelBase& chan, ServerConnection *conn, bool shouldHighlight)
 {
-    Tab *tab = notebook.findTab(Glib::locale_to_utf8(chan.getName()), conn);
+    Tab *tab = notebook.findTab(convert_to_utf8(chan.getName()), conn);
 
     // if the channel doesn't exist, it's probably a query. (the channel is
     // created on join) - there is also a hack here to ensure that it's not
     // a channel
     char p = chan.getName().at(0);
     if (!tab && (p != '#' && p != '&' && p != '!' && p != '+'))
-        tab = notebook.addQueryTab(Glib::locale_to_utf8(chan.getName()), conn);
+        tab = notebook.addQueryTab(convert_to_utf8(chan.getName()), conn);
 
     if (tab) {
         tab->getText() << msg;
@@ -157,34 +159,34 @@ void MainWindow::displayMessage(const string& msg, ChannelBase& chan, ServerConn
 
 void MainWindow::join(const string& nick, Channel& chan, ServerConnection *conn)
 {
-    Tab *tab = notebook.findTab(Glib::locale_to_utf8(chan.getName()), conn);
+    Tab *tab = notebook.findTab(convert_to_utf8(chan.getName()), conn);
     if (!tab) {
-        tab = notebook.addChannelTab(Glib::locale_to_utf8(chan.getName()), conn);
+        tab = notebook.addChannelTab(convert_to_utf8(chan.getName()), conn);
         return;
     }
-    tab->insertUser(Glib::locale_to_utf8(nick));
+    tab->insertUser(convert_to_utf8(nick));
 }
 
 void MainWindow::part(const string& nick, Channel& chan, ServerConnection *conn)
 {
-    Tab *tab = notebook.findTab(Glib::locale_to_utf8(chan.getName()), conn);
+    Tab *tab = notebook.findTab(convert_to_utf8(chan.getName()), conn);
     if (tab) {
         if (nick == conn->Session.nick) {
             // It's us who's parting
             tab->setInActive();
         }
-        tab->removeUser(Glib::locale_to_utf8(nick));
+        tab->removeUser(convert_to_utf8(nick));
     }
 }
 
 void MainWindow::kick(const string& kicker, Channel& chan, const string& nick, const string& msg, ServerConnection *conn)
 {
-    Tab *tab = notebook.findTab(Glib::locale_to_utf8(chan.getName()), conn);
+    Tab *tab = notebook.findTab(convert_to_utf8(chan.getName()), conn);
     if (nick == conn->Session.nick) {
         // It's us who's been kicked
         tab->setInActive();
     }
-    tab->removeUser(Glib::locale_to_utf8(nick));
+    tab->removeUser(convert_to_utf8(nick));
 }
 
 
@@ -193,8 +195,8 @@ void MainWindow::quit(const string& nick, vector<ChannelBase*> chans, ServerConn
     vector<ChannelBase*>::const_iterator i;
 
     for (i = chans.begin(); i != chans.end(); ++i) {
-        if (Tab *tab = notebook.findTab(Glib::locale_to_utf8((*i)->getName()), conn))
-            tab->removeUser(Glib::locale_to_utf8(nick));
+        if (Tab *tab = notebook.findTab(convert_to_utf8((*i)->getName()), conn))
+            tab->removeUser(convert_to_utf8(nick));
     }
 }
 
@@ -203,38 +205,38 @@ void MainWindow::nick(const string& nick, const string& to, vector<ChannelBase*>
     vector<ChannelBase*>::const_iterator i;
 
     for (i = chans.begin(); i != chans.end(); ++i) {
-        if (Tab *tab = notebook.findTab(Glib::locale_to_utf8((*i)->getName()), conn))
-              tab->renameUser(Glib::locale_to_utf8(nick), Glib::locale_to_utf8(to));
+        if (Tab *tab = notebook.findTab(convert_to_utf8((*i)->getName()), conn))
+              tab->renameUser(convert_to_utf8(nick), convert_to_utf8(to));
     }
     notebook.updateStatus();
 }
 
 void MainWindow::CUMode(const string& nick, Channel& chan, const std::vector<User>& users, ServerConnection *conn)
 {
-    Tab *tab = notebook.findTab(Glib::locale_to_utf8(chan.getName()), conn);
+    Tab *tab = notebook.findTab(convert_to_utf8(chan.getName()), conn);
 
     std::vector<User>::const_iterator i;
     for (i = users.begin(); i != users.end(); ++i) {
-        tab->removeUser(Glib::locale_to_utf8(i->nick));
-        tab->insertUser(Glib::locale_to_utf8(i->nick), i->getMode());
+        tab->removeUser(convert_to_utf8(i->nick));
+        tab->insertUser(convert_to_utf8(i->nick), i->getMode());
     }
 }
 
 void MainWindow::names(Channel& c, ServerConnection *conn)
 {
-    Tab *tab = notebook.findTab(Glib::locale_to_utf8(c.getName()), conn);
+    Tab *tab = notebook.findTab(convert_to_utf8(c.getName()), conn);
 
     std::vector<User*> users = c.getUsers();
     std::vector<User*>::const_iterator i;
 
     for (i = users.begin(); i != users.end(); ++i) {
-        tab->insertUser(Glib::locale_to_utf8((*i)->nick), (*i)->getMode());
+        tab->insertUser(convert_to_utf8((*i)->nick), (*i)->getMode());
     }
 }
 
 void MainWindow::highlight(ChannelBase& chan, ServerConnection* conn)
 {
-    Tab *tab = notebook.findTab(Glib::locale_to_utf8(chan.getName()), conn);
+    Tab *tab = notebook.findTab(convert_to_utf8(chan.getName()), conn);
 
     if (tab)
           notebook.highlightNick(tab);
@@ -264,7 +266,7 @@ void MainWindow::newTab(ServerConnection *conn)
 {
     string name = "server";
     conn->Session.servername = name;
-    Tab *tab = notebook.addChannelTab(Glib::locale_to_utf8(name), conn);
+    Tab *tab = notebook.addChannelTab(convert_to_utf8(name), conn);
     notebook.show_all();
 
     // XXX: this is a hack for a "bug" in the gtkmm code which makes the
@@ -281,7 +283,7 @@ Tab* MainWindow::newServer()
     string name = "server";
     ServerConnection *conn = app.newServer();
     conn->Session.servername = name;
-    Tab *tab = notebook.addChannelTab(Glib::locale_to_utf8(name), conn);
+    Tab *tab = notebook.addChannelTab(convert_to_utf8(name), conn);
     tab->setInActive();
     return tab;
 }
@@ -346,4 +348,35 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
     }
     Gtk::Window::on_key_press_event(e);
     return false;
+}
+
+Glib::ustring convert_to_utf8(const std::string& str)
+{
+    Glib::ustring str_utf8 (str);
+
+    if (!str_utf8.validate()) { // invalid UTF-8?
+        bool did_conversion = false;
+
+        if (!Glib::get_charset()) {// locale charset is not UTF-8?
+            try // ignore errors -- go on with the fallback if the conversion fails
+            {
+                str_utf8 = Glib::locale_to_utf8(str);
+                did_conversion = true;
+            }
+            catch(const Glib::ConvertError&)
+            {}
+        }
+
+        if (!did_conversion) {
+            // Fallback conversion -- used either if the conversion from the
+            // current locale's encoding failed, or if the user is running a
+            // UTF-8 locale.
+            str_utf8 = Glib::convert(str, "UTF-8", "ISO-8859-15");
+
+            // ISO-8859-15 is the default fallback encoding. Might want to
+            // make it configurable some day.
+        }
+    }
+
+    return str_utf8;
 }
