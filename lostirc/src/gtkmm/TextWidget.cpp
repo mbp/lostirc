@@ -136,18 +136,6 @@ TextWidget& TextWidget::operator<<(const ustring& line)
     return *this;
 }
 
-
-void TextWidget::removeTopBuffer()
-{
-    // Remove X number of lines from top of the buffer which we don't want.
-    Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
-
-    // FIXME: possible performance critical
-    int buffer_size = App->options.buffer_size;
-    if (buffer_size && buffer->get_line_count() > buffer_size)
-          buffer->erase(buffer->begin(), buffer->get_iter_at_line(buffer->get_line_count() - buffer_size));
-}
-
 void TextWidget::insertText(const TextProperties& tp, const ustring& line)
 {
     Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
@@ -204,6 +192,17 @@ void TextWidget::insertText(const TextProperties& tp, const ustring& line)
         buffer->insert_with_tags(buffer->end(), line, tags);
     }
     */
+}
+
+void TextWidget::removeTopBuffer()
+{
+    // Remove X number of lines from top of the buffer which we don't want.
+    Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
+
+    // FIXME: possible performance critical
+    int buffer_size = App->options.buffer_size;
+    if (buffer_size && buffer->get_line_count() > buffer_size)
+          buffer->erase(buffer->begin(), buffer->get_iter_at_line(buffer->get_line_count() - buffer_size));
 }
 
 Glib::RefPtr<Gtk::TextTag> TextWidget::initializeFG(const Glib::ustring& colorname)
