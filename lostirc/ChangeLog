@@ -1,5 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-06-18  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * configure.ac: Run 'autoupdate' on the file to catch-up on how
+          autoconf is really supposed to be used nowadays.
+
 2003-06-16  Morten Brix Pedersen  <morten@wtf.dk>
 
         * configure.in: Renamed to configure.ac. This is the recommended

@@ -1,4 +1,5 @@
-AC_INIT(src/gtkmm/main.cpp)
+AC_INIT
+AC_CONFIG_SRCDIR([src/gtkmm/main.cpp])
 AM_INIT_AUTOMAKE(lostirc, 0.2.8pre)
 AM_CONFIG_HEADER(config.h)
 AC_PROG_CXX
@@ -61,15 +62,14 @@ fi
 dnl Check for socklen_t (it should be int on Windows). Taken from gaim
 dnl configure.in.
 AC_MSG_CHECKING(for socklen_t)
-AC_TRY_COMPILE([
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
         #include <sys/types.h>
         #include <sys/socket.h>
         socklen_t x;
-], [],
-[
+]], [[]])],[
         AC_MSG_RESULT(yes)
-], [
-        AC_TRY_COMPILE([
+],[
+        _au_changequote([,])AC_TRY_COMPILE([
                 #include <sys/types.h>
                 #include <sys/socket.h>
                 int accept(int, struct sockaddr *, size_t *);
@@ -83,4 +83,5 @@ AC_TRY_COMPILE([
 ])
 
 
-AC_OUTPUT(lostirc.spec Makefile src/Makefile src/libirc/Makefile src/gtkmm/Makefile po/Makefile.in m4/Makefile  intl/Makefile )
+AC_CONFIG_FILES([lostirc.spec Makefile src/Makefile src/libirc/Makefile src/gtkmm/Makefile po/Makefile.in m4/Makefile  intl/Makefile ])
+AC_OUTPUT
