@@ -3,6 +3,7 @@ CRITICAL:
   * Implement reading in ServerConnection better (more efficiently)
   * Implement DCC CHAT
   * DCC SEND freezes the client until finished.
+  * After being disconnected, queries have a () around them.
 
 NICE-TO-HAVE:
 ------------
