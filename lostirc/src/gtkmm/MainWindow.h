@@ -21,6 +21,7 @@
 
 #include <vector>
 #include <gtkmm/main.h>
+#include <glibmm/main.h>
 #include <gtkmm/window.h>
 #include <gtk/gtksignal.h>
 #include <gdk/gdkkeysyms.h>

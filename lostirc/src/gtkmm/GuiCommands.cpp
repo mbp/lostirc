@@ -24,24 +24,24 @@
 using std::string;
 
 const struct UserCommands guicmds[] = {
-    { "QUERY",     GuiCommands::Query,    0 },
-    { "CLEAR",     GuiCommands::Clear,    0 },
-    { "CLEARALL",  GuiCommands::ClearAll, 0 },
-    { "SETFONT",   GuiCommands::SetFont,  0 },
-    { "NEWSERVER", GuiCommands::NewServer, 0 },
-    { "ME",        GuiCommands::Me,       1 },
-    { "PART",      GuiCommands::Part,     1 },
-    { "TOPIC",     GuiCommands::Topic,    1 },
-    { "KICK",      GuiCommands::Kick,     1 },
-    { "KICK",      GuiCommands::Kick,     1 },
-    { "BANLIST",   GuiCommands::Banlist,  1 },
-    { "OP",        GuiCommands::Op,       1 },
-    { "DEOP",      GuiCommands::Deop,     1 },
-    { "VOICE",     GuiCommands::Voice,    1 },
-    { "DEVOICE",   GuiCommands::Devoice,  1 },
-    { "EXIT",      GuiCommands::Exit,     1 },
-    { "COMMANDS",  GuiCommands::commands, 0 },
-    { 0,        0, 0                        }
+    { "QUERY",     GuiCommands::Query,    false },
+    { "CLEAR",     GuiCommands::Clear,    false },
+    { "CLEARALL",  GuiCommands::ClearAll, false },
+    { "SETFONT",   GuiCommands::SetFont,  false },
+    { "NEWSERVER", GuiCommands::NewServer, false },
+    { "ME",        GuiCommands::Me,       true },
+    { "PART",      GuiCommands::Part,     true },
+    { "TOPIC",     GuiCommands::Topic,    true },
+    { "KICK",      GuiCommands::Kick,     true },
+    { "KICK",      GuiCommands::Kick,     true },
+    { "BANLIST",   GuiCommands::Banlist,  true },
+    { "OP",        GuiCommands::Op,       true },
+    { "DEOP",      GuiCommands::Deop,     true },
+    { "VOICE",     GuiCommands::Voice,    true },
+    { "DEVOICE",   GuiCommands::Devoice,  true },
+    { "EXIT",      GuiCommands::Exit,     true },
+    { "COMMANDS",  GuiCommands::commands, false },
+    { 0,        0, false                        }
 };
 
 namespace GuiCommands {
