@@ -57,7 +57,7 @@ MainWindow::MainWindow()
     if (app.cfgservers.getServers().empty()) {
         // Construct initial tab
         Tab *tab = newServer();
-        *tab << "\0037\nWelcome to LostIRC "VERSION"!\n\nYou use the client mainly by typing in commands and text in the entry-bar shown below.\n\nYou can connect to a server using:\n    \0038/SERVER <hostname>\n\n\0037Then join a channel:\n    \0038/JOIN <channel-name>\n\n\0037The rest of the commands is available with:\n    \0038/COMMANDS\0037.\n\n\0037Available keybindings:\n    \0038Alt + [1-9] - switch tabs from 1-9.\n    Alt + n - create new server tab.\n    Alt + c - close current tab.\n    Alt + p - open preferences.\n    Tab - nick-completion and command-completion.\n";
+        *tab << "\0037\nWelcome to LostIRC "VERSION"!\n\nYou use the client mainly by typing in commands and text in the entry-bar shown below.\n\nYou can connect to a server using:\n    \0038/SERVER <hostname>\n\n\0037Then join a channel:\n    \0038/JOIN <channel-name>\n\n\0037The rest of the commands is available with:\n    \0038/COMMANDS\0037.\n\n\0037Available keybindings:\n    \0038CTRL-[1-9] - switch tabs from 1-9.\n    CTRL-N - create new server tab.\n    CTRL-C - close current tab.\n    CTRL-P - open preferences.\n    Tab - nick-completion and command-completion.\n";
     } else {
         // Auto-connect to servers.
         app.start();
@@ -283,37 +283,37 @@ Tab* MainWindow::newServer()
 bool MainWindow::on_key_press_event(GdkEventKey* e)
 {
     // Default keybindings. Still needs work.
-    if ((e->keyval == GDK_0) && (e->state & GDK_MOD1_MASK)) {
+    if ((e->keyval == GDK_0) && (e->state & GDK_CONTROL_MASK)) {
         notebook.set_current_page(9);
     }
-    else if ((e->keyval == GDK_1) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_1) && (e->state & GDK_CONTROL_MASK)) {
         notebook.set_current_page(0);
     }
-    else if ((e->keyval == GDK_2) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_2) && (e->state & GDK_CONTROL_MASK)) {
         notebook.set_current_page(1);
     }
-    else if ((e->keyval == GDK_3) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_3) && (e->state & GDK_CONTROL_MASK)) {
         notebook.set_current_page(2);
     }
-    else if ((e->keyval == GDK_4) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_4) && (e->state & GDK_CONTROL_MASK)) {
         notebook.set_current_page(3);
     }
-    else if ((e->keyval == GDK_5) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_5) && (e->state & GDK_CONTROL_MASK)) {
         notebook.set_current_page(4);
     }
-    else if ((e->keyval == GDK_6) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_6) && (e->state & GDK_CONTROL_MASK)) {
         notebook.set_current_page(5);
     }
-    else if ((e->keyval == GDK_7) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_7) && (e->state & GDK_CONTROL_MASK)) {
         notebook.set_current_page(6);
     }
-    else if ((e->keyval == GDK_8) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_8) && (e->state & GDK_CONTROL_MASK)) {
         notebook.set_current_page(7);
     }
-    else if ((e->keyval == GDK_9) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_9) && (e->state & GDK_CONTROL_MASK)) {
         notebook.set_current_page(8);
     }
-    else if ((e->keyval == GDK_c) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_c) && (e->state & GDK_CONTROL_MASK)) {
         TabChannel *tab = dynamic_cast<TabChannel*>(notebook.getCurrent());
         if (tab && tab->getConn()->Session.isConnected && tab->isActive()) {
             // It's a channel, so we need to part it
@@ -324,17 +324,17 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
         }
         notebook.closeCurrent();
     }
-    else if ((e->keyval == GDK_p) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_p) && (e->state & GDK_CONTROL_MASK)) {
         if (!notebook.getCurrent()->hasPrefs) {
             notebook.getCurrent()->startPrefs();
         } else {
             notebook.getCurrent()->endPrefs();
         }
     }
-    else if ((e->keyval == GDK_n) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_n) && (e->state & GDK_CONTROL_MASK)) {
         newServer();
     }
-    else if ((e->keyval == GDK_q) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_q) && (e->state & GDK_CONTROL_MASK)) {
         // hide() here will quit the application
         hide();
     }

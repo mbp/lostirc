@@ -8,6 +8,16 @@ LostIRC (x.x.x)
     which can be dragged to make the nick list smaller/bigger.
   * Nick-completion is now smarter. It partially completes the nick if the
     matching nicks has common prefixes.
+  * The default keyboard-shortcuts has been changed:
+     - ALT-C has been changed to CTRL-C (close tab)
+     - ALT-P has been changed to CTRL-P (preferences)
+     - ALT-N has been changed to CTRL-N (new server)
+     - ALT-Q has been changed to CTLR-Q (quit)
+     - ALT-[1-9] has been changed to CTRL-[1-9] (switch tab)
+
+     (This is to follow the 'GNOME Human Interface Guidelines' and the 'KDE
+     User Interface Guidelines').
+
   * When users part channels without a part-message, empty parentes are no
     longer displayed. (thanks, Michael Kristensen)
   * Fix a segfault which appeared with bouncers/servers sending malformed PART
