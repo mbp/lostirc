@@ -195,7 +195,7 @@ void displayCommands(ServerConnection *conn, const ustring& params)
 
 std::vector<Glib::ustring> getCommands()
 {
-    std::set<string> commands;
+    std::set<std::string> commands;
 
     for (int i = 0; guicmds[i].cmd != 0; ++i) 
         commands.insert(guicmds[i].cmd);
@@ -203,7 +203,7 @@ std::vector<Glib::ustring> getCommands()
     Commands::getCommands(commands);
 
     std::vector<Glib::ustring> cmds;
-    for (std::set<string>::const_iterator i = commands.begin(); i != commands.end(); ++i)
+    for (std::set<std::string>::const_iterator i = commands.begin(); i != commands.end(); ++i)
           cmds.push_back(*i);
 
     return cmds;
