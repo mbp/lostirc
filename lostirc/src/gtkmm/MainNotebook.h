@@ -21,6 +21,7 @@
 
 #include <gtkmm/notebook.h>
 #include <gtkmm/style.h>
+#include <glibmm/ustring.h>
 #include <ServerConnection.h>
 #include <vector>
 #include "Tab.h"
@@ -30,14 +31,14 @@ class MainNotebook : public Gtk::Notebook
 public:
     MainNotebook();
 
-    TabChannel* addChannelTab(const std::string& name, ServerConnection *conn);
-    TabQuery* addQueryTab(const std::string& name, ServerConnection *conn);
+    TabChannel* addChannelTab(const Glib::ustring& name, ServerConnection *conn);
+    TabQuery* addQueryTab(const Glib::ustring& name, ServerConnection *conn);
     Tab* getCurrent(ServerConnection *conn);
     Tab* getCurrent();
-    Tab* findTab(const std::string& name, ServerConnection *conn, bool findInActive = false);
-    int findPage(const std::string& name, ServerConnection *conn, bool findInActive = false);
+    Tab* findTab(const Glib::ustring& name, ServerConnection *conn, bool findInActive = false);
+    int findPage(const Glib::ustring& name, ServerConnection *conn, bool findInActive = false);
 
-    void findTabs(const std::string& nick, ServerConnection *conn, std::vector<Tab*>& vec);
+    void findTabs(const Glib::ustring& nick, ServerConnection *conn, std::vector<Tab*>& vec);
     void findTabs(ServerConnection *conn, std::vector<Tab*>& vec);
     void clearAll();
     void Tabs(std::vector<Tab*>& vec);

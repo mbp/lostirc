@@ -29,9 +29,10 @@ GTKMM2 STUFF:
   * scrollbar has weird behaviour when resizing window
   * strip all mIRC color-codes from ALL strings, don't show colors at all.
   * URL highlight/clickable
-  * Notebook should use Glib::ustring and convert to utf8
   * Nick-list is not resorted on changes
   * Nick-list expands on long nicks
+  * Limited-highlighting is probably non-functional after
+    configuration-system changes.
 
 DCC:
 ---

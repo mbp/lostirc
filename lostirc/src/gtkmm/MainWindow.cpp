@@ -121,13 +121,13 @@ void MainWindow::displayMessage(const string& msg, FE::Destination d, ServerConn
 
 void MainWindow::displayMessage(const string& msg, ChannelBase& chan, ServerConnection *conn, bool shouldHighlight)
 {
-    Tab *tab = notebook.findTab(chan.getName(), conn);
+    Tab *tab = notebook.findTab(Glib::locale_to_utf8(chan.getName()), conn);
 
     // if the channel doesn't exist, it's probably a query. (the channel is
     // created on join) - there is also a hack here to ensure that it's not
     // a channel
     if (!tab && chan.getName().at(0) != '#') {
-        tab = notebook.addQueryTab(chan.getName(), conn);
+        tab = notebook.addQueryTab(Glib::locale_to_utf8(chan.getName()), conn);
     }
 
     if (tab) {
@@ -140,9 +140,9 @@ void MainWindow::displayMessage(const string& msg, ChannelBase& chan, ServerConn
 
 void MainWindow::join(const string& nick, Channel& chan, ServerConnection *conn)
 {
-    Tab *tab = notebook.findTab(chan.getName(), conn);
+    Tab *tab = notebook.findTab(Glib::locale_to_utf8(chan.getName()), conn);
     if (!tab) {
-        tab = notebook.addChannelTab(chan.getName(), conn);
+        tab = notebook.addChannelTab(Glib::locale_to_utf8(chan.getName()), conn);
         return;
     }
     tab->insertUser(Glib::locale_to_utf8(nick));
@@ -150,7 +150,7 @@ void MainWindow::join(const string& nick, Channel& chan, ServerConnection *conn)
 
 void MainWindow::part(const string& nick, Channel& chan, ServerConnection *conn)
 {
-    Tab *tab = notebook.findTab(chan.getName(), conn);
+    Tab *tab = notebook.findTab(Glib::locale_to_utf8(chan.getName()), conn);
     if (tab) {
         if (nick == conn->Session.nick) {
             // It's us who's parting
@@ -162,7 +162,7 @@ void MainWindow::part(const string& nick, Channel& chan, ServerConnection *conn)
 
 void MainWindow::kick(const string& kicker, Channel& chan, const string& nick, const string& msg, ServerConnection *conn)
 {
-    Tab *tab = notebook.findTab(chan.getName(), conn);
+    Tab *tab = notebook.findTab(Glib::locale_to_utf8(chan.getName()), conn);
     if (nick == conn->Session.nick) {
         // It's us who's been kicked
         tab->setInActive();
@@ -176,7 +176,7 @@ void MainWindow::quit(const string& nick, vector<ChannelBase*> chans, ServerConn
     vector<ChannelBase*>::const_iterator i;
 
     for (i = chans.begin(); i != chans.end(); ++i) {
-        if (Tab *tab = notebook.findTab((*i)->getName(), conn))
+        if (Tab *tab = notebook.findTab(Glib::locale_to_utf8((*i)->getName()), conn))
             tab->removeUser(Glib::locale_to_utf8(nick));
     }
 }
@@ -186,14 +186,14 @@ void MainWindow::nick(const string& nick, const string& to, vector<ChannelBase*>
     vector<ChannelBase*>::const_iterator i;
 
     for (i = chans.begin(); i != chans.end(); ++i) {
-        if (Tab *tab = notebook.findTab((*i)->getName(), conn))
+        if (Tab *tab = notebook.findTab(Glib::locale_to_utf8((*i)->getName()), conn))
               tab->renameUser(Glib::locale_to_utf8(nick), Glib::locale_to_utf8(to));
     }
 }
 
 void MainWindow::CUMode(const string& nick, Channel& chan, const std::vector<User>& users, ServerConnection *conn)
 {
-    Tab *tab = notebook.findTab(chan.getName(), conn);
+    Tab *tab = notebook.findTab(Glib::locale_to_utf8(chan.getName()), conn);
 
     std::vector<User>::const_iterator i;
     for (i = users.begin(); i != users.end(); ++i) {
@@ -204,7 +204,7 @@ void MainWindow::CUMode(const string& nick, Channel& chan, const std::vector<Use
 
 void MainWindow::names(Channel& c, ServerConnection *conn)
 {
-    Tab *tab = notebook.findTab(c.getName(), conn);
+    Tab *tab = notebook.findTab(Glib::locale_to_utf8(c.getName()), conn);
 
     std::vector<User*> users = c.getUsers();
     std::vector<User*>::const_iterator i;
@@ -216,7 +216,7 @@ void MainWindow::names(Channel& c, ServerConnection *conn)
 
 void MainWindow::highlight(ChannelBase& chan, ServerConnection* conn)
 {
-    Tab *tab = notebook.findTab(chan.getName(), conn);
+    Tab *tab = notebook.findTab(Glib::locale_to_utf8(chan.getName()), conn);
 
     if (tab)
           notebook.highlightNick(tab);
@@ -248,7 +248,7 @@ void MainWindow::newTab(ServerConnection *conn)
 {
     string name = "server";
     conn->Session.servername = name;
-    Tab *tab = notebook.addChannelTab(name, conn);
+    Tab *tab = notebook.addChannelTab(Glib::locale_to_utf8(name), conn);
     notebook.show_all();
 
     // XXX: this is a hack for a "bug" in the gtkmm code which makes the
@@ -265,7 +265,7 @@ Tab* MainWindow::newServer()
     string name = "server";
     ServerConnection *conn = app.newServer();
     conn->Session.servername = name;
-    Tab *tab = notebook.addChannelTab(name, conn);
+    Tab *tab = notebook.addChannelTab(Glib::locale_to_utf8(name), conn);
     tab->setInActive();
     return tab;
 }

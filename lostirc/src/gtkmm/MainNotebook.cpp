@@ -19,7 +19,7 @@
 #include "MainNotebook.h"
 #include "MainWindow.h"
 
-using std::string;
+using Glib::ustring;
 using std::vector;
 
 MainNotebook::MainNotebook()
@@ -30,7 +30,7 @@ MainNotebook::MainNotebook()
     signal_switch_page().connect(SigC::slot(*this, &MainNotebook::onSwitchPage));
 }
 
-TabChannel * MainNotebook::addChannelTab(const string& name, ServerConnection *conn)
+TabChannel * MainNotebook::addChannelTab(const ustring& name, ServerConnection *conn)
 {
     // First try to find out whether we have a "server"-tab for this
     // ServerConnection.
@@ -58,7 +58,7 @@ TabChannel * MainNotebook::addChannelTab(const string& name, ServerConnection *c
     }
 }
 
-TabQuery * MainNotebook::addQueryTab(const string& name, ServerConnection *conn)
+TabQuery * MainNotebook::addQueryTab(const ustring& name, ServerConnection *conn)
 {
     Gtk::Label *label = manage(new Gtk::Label(name));
     TabQuery *tab = manage(new TabQuery(label, conn, fontdescription));
@@ -81,7 +81,7 @@ Tab* MainNotebook::getCurrent()
     return static_cast<Tab*>(get_nth_page(get_current_page()));
 }
 
-Tab * MainNotebook::findTab(const string& name, ServerConnection *conn, bool findInActive)
+Tab * MainNotebook::findTab(const ustring& name, ServerConnection *conn, bool findInActive)
 {
     int pagenum = findPage(name, conn, findInActive);
 
@@ -91,18 +91,18 @@ Tab * MainNotebook::findTab(const string& name, ServerConnection *conn, bool fin
     return 0;
 }
 
-int MainNotebook::findPage(const string& name, ServerConnection *conn, bool findInActive)
+int MainNotebook::findPage(const ustring& name, ServerConnection *conn, bool findInActive)
 {
-    string n = name;
+    ustring n = name;
     Gtk::Notebook_Helpers::PageList::iterator i;
             
     for (i = pages().begin(); i != pages().end(); ++i) {
         Tab *tab = static_cast<Tab*>(i->get_child());
         if (tab->getConn() == conn) {
-            string tab_name = i->get_tab_label_text();
+            ustring tab_name = i->get_tab_label_text();
             if ((Util::lower(tab_name) == Util::lower(n)) || n.empty()) {
                 return i->get_page_num();
-            } else if (findInActive && Util::lower(tab_name) == string("(" + Util::lower(n) + ")")) {
+            } else if (findInActive && Util::lower(tab_name) == ustring("(" + Util::lower(n) + ")")) {
                 return i->get_page_num();
             }
         }
@@ -165,7 +165,7 @@ void MainNotebook::highlightActivity(Tab *tab)
     }
 }
 
-void MainNotebook::findTabs(const string& nick, ServerConnection *conn, vector<Tab*>& vec)
+void MainNotebook::findTabs(const ustring& nick, ServerConnection *conn, vector<Tab*>& vec)
 {
     Gtk::Notebook_Helpers::PageList::iterator i;
             
