@@ -62,13 +62,19 @@ struct {
 Events::Events(LostIRCApp *app)
     : _app(app)
 {
+    /* replace all $ with \003 in our events */
+    for (int i = 0; event_map[i].s != 0; ++i) {
+        string msg = _app->getCfg().getParam(event_map[i].s);
+        cout << "msg: " << msg << endl;
+        std::replace(msg.begin(), msg.end(), '$', '\003');
+        _app->getCfg().setParam(event_map[i].s, msg);
+    }
 
 }
 
 void Events::emit(Tmpl& t, const string& chan, ServerConnection *conn)
 {
     string msg = t.result(); // FIXME: we shouldn't be doing this operation here
-    std::replace(msg.begin(), msg.end(), '$', '\003');
     _app->evtDisplayMessage(msg, chan, conn);
 }
 
@@ -83,14 +89,10 @@ void Events::emit(Tmpl& t, const vector<string>& to, ServerConnection *conn)
 
 Tmpl Events::get(Event e)
 {
-    string msg;
     for (int i = 0; event_map[i].s != 0; ++i) {
-        if (event_map[i].value == e) {
-            msg = _app->getCfg().getParam(event_map[i].s);
-        }
+        if (event_map[i].value == e)
+            return Tmpl(_app->getCfg().getParam(event_map[i].s));
     }
-    Tmpl t(msg);
-    return t;
 }
 
 string Tmpl::result()
@@ -123,4 +125,3 @@ string Tmpl::result()
 
     return newstr;
 }
-

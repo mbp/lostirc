@@ -41,7 +41,7 @@ public:
     /* read all configuration files */
     bool readConfig();
 
-    /* set and get a parameter in ~/.lostircrc */
+    /* set and get a parameter in ~/.lostircrc FIXME: outdated */
     bool setParam(const std::string& key, const std::string& value);
     std::string getParam(const std::string& param);
 
@@ -53,7 +53,7 @@ private:
     bool readServers(const std::string& filename);
     bool setDefaults();
     void setDefault(const std::string& key, const std::string& value);
-    bool writeConfig();
+    bool writeEvents();
 
 };
 #endif

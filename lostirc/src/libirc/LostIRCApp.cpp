@@ -26,16 +26,18 @@ using std::string;
 using std::vector;
 
 LostIRCApp::LostIRCApp()
-    : _evts(new Events(this))
 {
     Commands::app = this;
     uname(&uname_info);
     if (!_cfg.readConfig())
-          std::cerr << "Failed reading config file ~/.lostircrc" << std::endl;
+          std::cerr << "Failed reading config file(s)" << std::endl;
+
+    _evts = new Events(this);
 
     if (_cfg.getParam("nick").empty()) {
         _cfg.setParam("nick", getenv("USER"));
     }
+
     struct passwd *p = getpwnam(_cfg.getParam("nick").c_str());
     if (p != NULL)
           realname = p->pw_gecos;

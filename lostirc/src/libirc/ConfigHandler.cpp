@@ -26,8 +26,9 @@ using std::map;
 bool ConfigHandler::readConfig()
 {
     string home(getenv("HOME"));
-    readEvents(home + "/.lostircrc");
+    readEvents(home + "/.lostirc.events");
     readServers(home + "/.lostirc.perform");
+    writeEvents();
     return true; // FIXME
 }
 
@@ -35,8 +36,9 @@ bool ConfigHandler::readEvents(const string& filename)
 {
     std::ifstream in(filename.c_str());
 
-    if (!in)
-          return false;
+    if (!in) {
+        return setDefaults();
+    }
 
     /* FIXME: too many nested while loops below */
     string str;
@@ -140,7 +142,8 @@ bool ConfigHandler::setParam(const string& key, const string& value)
     #endif
     _settings[key] = value;
 
-    return writeConfig();
+    //return writeEvents();
+    return true;
 }
 
 string ConfigHandler::getParam(const string& param)
@@ -186,10 +189,10 @@ bool ConfigHandler::setDefaults()
     setDefault("evt_banned", "$16-- $0%1$16 sets ban on %2");
     setDefault("evt_unbanned", "$16-- $0%1$16 unbans %2");
     setDefault("evt_invited", "$16-- $0%1$16 invites you to join %2");
-    setDefault("evt_connecting", "$16-- Connecting to $8%1$16 on port $8%2$16...");
+    setDefault("evt_connecting", "$16-- Connecting to $8%1$16 on port$8 %2$16...");
     setDefault("evt_names", "$16-- Names %1: %2");
 
-    return writeConfig();
+    return writeEvents();
 }
 
 void ConfigHandler::setDefault(const string& key, const string& value)
@@ -200,10 +203,10 @@ void ConfigHandler::setDefault(const string& key, const string& value)
           _settings[key] = value;
 }
 
-bool ConfigHandler::writeConfig()
+bool ConfigHandler::writeEvents()
 {
     string home(getenv("HOME"));
-    std::ofstream out(string(home + "/.lostircrc").c_str());
+    std::ofstream out(string(home + "/.lostirc.events").c_str());
 
     if (!out)
           return false;
