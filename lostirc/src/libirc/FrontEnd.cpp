@@ -171,7 +171,7 @@ void logToFile(const Glib::ustring& msg, ChannelBase& chan, ServerConnection *co
 
     Glib::ustring stripped_msg = stripColors(msg, true);
     
-    ofstream logfile(filename.c_str(), ios::app);
+    std::ofstream logfile(filename.c_str(), std::ios::app);
     if (logfile.good())
           logfile << stripped_msg;
 }
