@@ -56,6 +56,7 @@ private:
     void Wallops(const Glib::ustring& from, const Glib::ustring& rest);
     void Banlist(const Glib::ustring& param);
     void numeric(int n, const Glib::ustring& from, const Glib::ustring& param, const Glib::ustring& rest);
+    void parseIRCSupports(const Glib::ustring& supports);
 
     inline void Ping(const Glib::ustring& rest);
 

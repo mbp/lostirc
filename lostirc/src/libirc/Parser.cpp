@@ -83,26 +83,26 @@ void Parser::parseLine(ustring& data)
         */
 
         // Find prefix
-        ustring::size_type pos1 = data.find_first_of(" ", 1);
+        ustring::size_type pos1 = data.find(" ", 1);
         ustring from = data.substr(1, pos1 - 1);
 
         // Find command
-        ustring::size_type pos2 = data.find_first_of(" ", pos1 + 1);
+        ustring::size_type pos2 = data.find(" ", pos1 + 1);
         ustring command = data.substr(pos1 + 1, (pos2 - 1) - pos1);
 
         // Check whether there is any params
-        ustring::size_type pos3 = data.find_first_of(":", pos2 + 1);
+        ustring::size_type pos3 = data.find(" :", pos2 + 1);
         ustring param;
 
-        if ((pos3 - 1) != pos2) {
+        if ((pos3 - 2) != pos2) {
             // We have params
-            param = data.substr(pos2 + 1, (pos3 - 2) - pos2);
+            param = data.substr(pos2 + 1, (pos3 - 1) - pos2);
         }
 
         // Get rest (whats after the ':', if there were any ':')
         ustring rest;
         if (pos3 != ustring::npos) {
-            rest = data.substr(pos3 + 1);
+            rest = data.substr(pos3 + 2);
         }
 
         #ifdef DEBUG
@@ -707,13 +707,52 @@ void Parser::Banlist(const ustring& param)
 
     FE::emit(FE::get(BANLIST) << banmask << owner, *c, _conn);
 }
+
+// Function to parse the 005 numeric string, also known as RPL_ISUPPORT
+// Right now only a small subset of the parameters are being used, namely:
+//
+// CHANTYPES, PREFIX, CHANMODES, NETWORK
+//
+// The specification can be found (at the time of writing) at:
+// http://www.irc.org/tech_docs/005.html
+// http://www.irc.org/tech_docs/draft-brocklesby-irc-isupport-03.txt
+void Parser::parseIRCSupports(const ustring& supports)
+{
+    ustring::size_type pos;
+    pos = supports.find("CHANTYPES=");
+    if (pos != ustring::npos) {
+        pos += 10;
+        ustring::size_type endpos = supports.find_first_of(" ", pos);
+        _conn->supports.chantypes = supports.substr(pos, endpos - pos);
+        
+    }
+    pos = supports.find("PREFIX=");
+    if (pos != ustring::npos) {
+        pos += 7;
+        ustring::size_type endpos = supports.find_first_of(" ", pos);
+        _conn->supports.prefix = supports.substr(pos, endpos - pos);
+    }
+    pos = supports.find("CHANMODES=");
+    if (pos != ustring::npos) {
+        pos += 10;
+        ustring::size_type endpos = supports.find_first_of(" ", pos);
+        _conn->supports.chanmodes = supports.substr(pos, endpos - pos);
+    }
+    pos = supports.find("NETWORK=");
+    if (pos != ustring::npos) {
+        pos += 8;
+        ustring::size_type endpos = supports.find_first_of(" ", pos);
+        _conn->supports.network = supports.substr(pos, endpos - pos);
+    }
+}
      
 void Parser::numeric(int n, const ustring& from, const ustring& param, const ustring& rest)
 {
     switch(n)
     {
+        case 5:   // RPL_ISUPPORT
+            parseIRCSupports(skipFirstWord(param));
         case 4:   // RPL_MYINFO
-        case 5:   // RPL_MYINFO
         case 252: // RPL_LUSEROP
         case 253: // RPL_LUSERUNKNOWN
         case 254: // RPL_LUSERCHANNELS

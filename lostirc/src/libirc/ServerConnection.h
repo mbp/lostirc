@@ -90,7 +90,7 @@ public:
     bool connectionCheck();
 
     // Session struct for all ServerConnections
-    struct {
+    struct Sessioninfo {
         Glib::ustring nick;
         Glib::ustring realname;
         Glib::ustring password;
@@ -107,6 +107,14 @@ public:
         std::vector<ChannelBase*> channels;
         std::vector<Glib::ustring> cmds;
     } Session;
+
+    struct Supports {
+        Supports() : chantypes("#&"), prefix("(ov)@+") { }
+        Glib::ustring chantypes;
+        Glib::ustring prefix;
+        Glib::ustring chanmodes;
+        Glib::ustring network;
+    } supports;
 
 private:
     Socket _socket;

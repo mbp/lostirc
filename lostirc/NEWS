@@ -1,6 +1,8 @@
 LostIRC - (x.x.x)
   * Some messages sent by the IRC-server on connect was being stripped so
     the full message wasn't being outputted. Fixed.
+  * If a server supplies a network name, show that in the status bar instead
+    of the hostname of the connected server.
 
 LostIRC - (0.4.2) - Wed Sep, 8th 2004
   * On start up without connecting to any servers automatically, open the

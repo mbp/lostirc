@@ -1,6 +1,19 @@
 For a summary of changes between releases - see the NEWS file.
 
 2004-10-13  Morten Brix Pedersen  <morten@wtf.dk>
+	* ServerConnection.h: Add 'supports' (005 numeric) information to
+	ServerConnection instances.
+	* Parser.cpp: Add function to parse specific ircd supports.
+	  Some fundamental changes:
+	   - Replace find_first_of() with just find(), no need to use
+	   first_of when we only search for a string and not a multiple of
+	   them.
+	   - Use " :" as the delimiter instead of just ":". This was
+	   important to properly parse 005 correctly.
+	* MainNotebook.cpp: Use network name instead of servername in
+	statusbar, if available.
+
+2004-10-13  Morten Brix Pedersen  <morten@wtf.dk>
 	* Parser.cpp: Probably output some of the incoming server messages.
 	Some strings were stripped.
 

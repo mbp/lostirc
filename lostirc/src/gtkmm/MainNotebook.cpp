@@ -132,10 +132,14 @@ void MainNotebook::updateStatus(Tab *tab)
     if (!tab)
           tab = getCurrent();
 
+    Glib::ustring networkname = tab->getConn()->Session.servername;
+    if (!tab->getConn()->supports.network.empty())
+          networkname = tab->getConn()->supports.network;
+
     if (tab->getConn()->Session.isAway)
-          AppWin->_statusbar.setText1(tab->getConn()->Session.nick + _(" <span foreground=\"red\">(away: ") + tab->getConn()->Session.awaymsg + ")</span> - " + tab->getConn()->Session.servername);
+          AppWin->_statusbar.setText1(tab->getConn()->Session.nick + _(" <span foreground=\"red\">(away: ") + tab->getConn()->Session.awaymsg + ")</span> - " + networkname);
     else
-          AppWin->_statusbar.setText1(tab->getConn()->Session.nick + " - " + tab->getConn()->Session.servername);
+          AppWin->_statusbar.setText1(tab->getConn()->Session.nick + " - " + networkname);
 
 }
 
