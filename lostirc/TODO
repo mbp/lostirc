@@ -12,7 +12,6 @@ text fields = access key?
 
 CRITICAL: 
 ---------
-  * Segfaults on CTRL-W. (Seems to be the re-occuring gtkmm/g++-3.3 bug)
   * Implement DCC CHAT
 
 NICE-TO-HAVE:
