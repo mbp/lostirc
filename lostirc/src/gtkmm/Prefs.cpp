@@ -295,10 +295,10 @@ void Prefs::saveEntry()
     Glib::RefPtr<Gtk::TextBuffer> textbuffer = cmdtext.get_buffer();
 
     // push back commands, for each and every line 
-    std::istringstream ss(textbuffer->get_text(textbuffer->begin(), textbuffer->end(), true));
+    std::istringstream ss(Glib::locale_from_utf8(textbuffer->get_text(textbuffer->begin(), textbuffer->end(), true)));
     autojoin->cmds.clear();
 
-    string tmp;
+    std::string tmp;
     while (getline(ss, tmp))
           autojoin->cmds.push_back(tmp);
 
@@ -328,10 +328,10 @@ void Prefs::onChangeRow()
         Glib::RefPtr<Gtk::TextBuffer> textbuffer = cmdtext.get_buffer();
         textbuffer->set_text("");
 
-        vector<string>::const_iterator i;
+        vector<std::string>::const_iterator i;
         for (i = a->cmds.begin(); i != a->cmds.end(); ++i) {
-            Gtk::TextIter iter = textbuffer->get_iter_at_offset(0);
-            textbuffer->insert(iter, *i + '\n');
+            Gtk::TextIter iter = textbuffer->end();
+            textbuffer->insert(iter, Glib::locale_to_utf8(*i + '\n'));
         }
         show_all();
     } else {

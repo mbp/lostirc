@@ -27,7 +27,6 @@
 #include "MainWindow.h"
 
 using std::vector;
-using std::string;
 using Glib::ustring;
 
 Tab::Tab(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font)
@@ -89,7 +88,7 @@ Tab& Tab::operator<<(const char * str)
     return operator<<(Glib::locale_to_utf8(str));
 }
 
-Tab& Tab::operator<<(const string& str)
+Tab& Tab::operator<<(const std::string& str)
 {
     // Convert the string to utf8 and pass it on to the real operator <<
     return operator<<(Glib::locale_to_utf8(str));
@@ -364,6 +363,7 @@ bool TabChannel::nickCompletion(const ustring& word, ustring& str)
         return false;
     }
 }
+
 gint TabChannel::sortFunc(const Gtk::TreeModel::iterator& i1, const Gtk::TreeModel::iterator& i2)
 {
     // Sort the nicklist. The status field has highest priority, nick has second priority.
