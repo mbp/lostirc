@@ -2,6 +2,11 @@ For a summary of changes between releases - see the NEWS file.
 
 2003-01-03  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * Minor bugfix to previous changes:
+        * MainNotebook.cpp: Remember to set name for new tabs.
+
+2003-01-03  Morten Brix Pedersen  <morten@wtf.dk>
+
         * Some more cleanups:
         * MainNotebook.cpp/.h: Remove addChannelTab() and addQueryTab(),
           instead we have one function, addTab() which takes the type as the

@@ -236,9 +236,8 @@ void MainWindow::names(Channel& c, ServerConnection *conn)
     std::vector<User*> users = c.getUsers();
     std::vector<User*>::const_iterator i;
 
-    for (i = users.begin(); i != users.end(); ++i) {
-        tab->insertUser((*i)->nick, (*i)->getMode());
-    }
+    for (i = users.begin(); i != users.end(); ++i)
+          tab->insertUser((*i)->nick, (*i)->getMode());
 }
 
 void MainWindow::highlight(ChannelBase& chan, ServerConnection* conn)

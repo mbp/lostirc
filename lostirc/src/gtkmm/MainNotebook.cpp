@@ -37,21 +37,19 @@ Tab* MainNotebook::addTab(Tab::Type type, const ustring& name, ServerConnection 
 
     if (tab) {
         // If we have a server-tab, reuse it
-        tab->setActive();
-        tab->setType(type);
-        tab->setName(name);
+        // no-op if statement
     } else if ((tab = findTab(name, conn, true))) {
         // If we find an *inactive* tab, lets reuse it.
-        tab->setActive();
-        tab->setType(type);
-        tab->setName(name);
+        // no-op if statement
     } else {
-        // FIXME: set name?
         Gtk::Label *label = manage(new Gtk::Label());
         tab = manage(new Tab(conn, fontdescription, label));
-        tab->setType(type);
         pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, *label));
     }
+    tab->setActive();
+    tab->setType(type);
+    tab->setName(name);
+
     show_all();
     return tab;
 }
@@ -80,7 +78,7 @@ Tab * MainNotebook::findTab(const ustring& name, ServerConnection *conn, bool fi
             ustring tab_name = tab->getName();
             if ((Util::lower(tab_name) == Util::lower(n)) || n.empty()) {
                 if ((!tab->isActive() && findInActive) || tab->isActive())
-                  return static_cast<Tab*>(get_nth_page(i->get_page_num()));
+                  return tab;
             }
         }
     }
