@@ -57,7 +57,7 @@ private:
     void Kick(const std::string& from, const std::string& chan, const std::string& nickandmsg);
     void Whois(const std::string& from, const std::string& param, const std::string& rest);
     void Names(const std::string& chan, const std::string& names);
-    void CTCP(const std::string& from, const std::string& param, const std::string& rest);
+    void Ctcp(const std::string& from, const std::string& param, const std::string& rest);
     void Away(const std::string& from, const std::string& param, const std::string& rest);
     void Errhandler(const std::string& from, const std::string& param, const std::string& rest);
     void Wallops(const std::string& from, const std::string& rest);
@@ -67,6 +67,7 @@ private:
 
     std::string findNick(const std::string& str);
     std::string findHost(const std::string& str);
+
 
     ServerConnection *_conn;
     Events *_evts;

@@ -107,7 +107,7 @@ void Parser::parseLine(string& data)
         else if (command == "WALLOPS")
               Wallops(from, rest);
         else
-              _evts->emitEvent("wnknown", data, "", _conn);
+              _evts->emit(_evts->get(UNKNOWN) << data, "", _conn);
 
     } else {
         // Parse string in form, eg. 'PING :23523525'
@@ -138,9 +138,9 @@ void Parser::parseLine(string& data)
         else if (command == "NOTICE")
               Notice(param + " :" + rest);
         else if (command == "ERROR")
-              _evts->emitEvent("error", param + " " + rest, "", _conn);
+              _evts->emit(_evts->get(ERROR) << param + " " + rest, "", _conn);
         else
-              _evts->emitEvent("servmsg", data, "", _conn);
+              _evts->emit(_evts->get(SERVMSG) << data, "", _conn);
     }
 
 }
@@ -154,39 +154,31 @@ void Parser::Privmsg(const string& from, const string& param, const string& rest
 {
     if (rest[0] == '\001') {
         // We got CTCP
-        CTCP(from, param, rest);
+        Ctcp(from, param, rest);
     } else {
         // Normal privmsg 
-        vector<string> args;
         string nick = param;
         if (param == _conn->Session.nick)
               nick = from;
 
-        args.push_back(findNick(from));
-        args.push_back(rest);
-
         if (rest.find(_conn->Session.nick) != string::npos) {
-            _evts->emitEvent("privmsg_highlight", args, findNick(nick), _conn);
+            _evts->emit(_evts->get(PRIVMSG_HIGHLIGHT) << findNick(from) << rest, findNick(nick), _conn);
             _app->evtHighlight(findNick(nick), _conn);
         } else {
-            _evts->emitEvent("privmsg", args, findNick(nick), _conn);
+            _evts->emit(_evts->get(PRIVMSG) << findNick(from) << rest, findNick(nick), _conn);
         }
     }
 }
 
-void Parser::CTCP(const string& from, const string& param, const string& rest)
+void Parser::Ctcp(const string& from, const string& param, const string& rest)
 {
     string::size_type pos = rest.find_first_of(" \001", 1);
     string command = rest.substr(1, pos - 1);
 
     if (command == "VERSION") {
         _conn->sendVersion(findNick(from));
-        vector<string> args;
-        args.push_back(command);
-        args.push_back(findNick(from));
-        _evts->emitEvent("ctcp", args, "", _conn);
+        _evts->emit(_evts->get(CTCP) << command << findNick(from), "", _conn);
     } else if (command == "ACTION") {
-
         string rest_ = rest.substr(pos + 1, (rest.length() - pos) - 2);
         vector<string> args;
         args.push_back(findNick(from));
@@ -197,16 +189,13 @@ void Parser::CTCP(const string& from, const string& param, const string& rest)
               nick = from;
 
         if (rest_.find(_conn->Session.nick) != string::npos) {
-            _evts->emitEvent("action_highlight", args, findNick(nick), _conn);
+            _evts->emit(_evts->get(ACTION_HIGHLIGHT) << findNick(from) << rest_, findNick(nick), _conn);
             _app->evtHighlight(findNick(nick), _conn);
         } else {
-            _evts->emitEvent("action", args, findNick(nick), _conn);
+            _evts->emit(_evts->get(ACTION) << findNick(from) << rest_, findNick(nick), _conn);
         }
     } else {
-        vector<string> args;
-        args.push_back(command);
-        args.push_back(findNick(from));
-        _evts->emitEvent("ctcp", args, "", _conn);
+        _evts->emit(_evts->get(CTCP) << command << findNick(from), "", _conn);
     }
 
 }
@@ -220,16 +209,10 @@ void Parser::Notice(const string& from, const string& to, const string& rest)
         string::iterator i = remove(tmp.begin(), tmp.end(), '\001');
         string output(tmp.begin(), i);
 
-        _evts->emitEvent("servmsg", output, "", _conn);
+        _evts->emit(_evts->get(SERVMSG) << output, "", _conn);
     } else {
         // Normal notice
-        
-        vector<string> args;
-        args.push_back(findNick(from));
-        args.push_back(to);
-        args.push_back(rest);
-
-        _evts->emitEvent("noticepubl", args, "", _conn);
+        _evts->emit(_evts->get(NOTICEPUBL) << findNick(from) << to << rest, "", _conn);
     }
 }
 
@@ -239,11 +222,7 @@ void Parser::Notice(const string& msg)
     string from = msg.substr(0, pos);
     string rest = msg.substr(pos + 1);
 
-    vector<string> args;
-    args.push_back(from);
-    args.push_back(rest);
-
-    _evts->emitEvent("noticepriv", args, "", _conn);
+    _evts->emit(_evts->get(NOTICEPRIV) << from << rest, "", _conn);
 }
 
 void Parser::Kick(const string& from, const string& param, const string& msg)
@@ -253,48 +232,28 @@ void Parser::Kick(const string& from, const string& param, const string& msg)
     ss >> chan;
     ss >> nick;
 
-    vector<string> args;
-    args.push_back(nick);
-    args.push_back(chan);
-    args.push_back(findNick(from));
-    args.push_back(msg);
-
-    _evts->emitEvent("kicked", args, chan, _conn);
+    _evts->emit(_evts->get(KICKED) << nick << chan << findNick(from) << msg, chan, _conn);
     _app->evtKick(findNick(from), chan, nick, msg, _conn);
 }
 
 void Parser::Join(const string& nick, const string& chan)
 {
-    vector<string> args;
-    args.push_back(findNick(nick));
-    args.push_back(chan);
-    args.push_back(findHost(nick));
-
     if (findNick(nick) == _conn->Session.nick)
           _conn->addChannel(chan); // Add channel to ServerConn
           
     _conn->findChannel(chan)->addUser(findNick(nick));
     _app->evtJoin(findNick(nick), chan, _conn); // Send join to frontend
 
-    _evts->emitEvent("join", args, chan, _conn);
+    _evts->emit(_evts->get(JOIN) << findNick(nick) << chan << findHost(nick), chan, _conn);
 }
 
 void Parser::Whois(const string& from, const string& param, const string& rest)
 {
-    vector<string> args;
-    args.push_back(param);
-    args.push_back(rest);
-
-    _evts->emitEvent("servmsg2", args, "", _conn);
+    _evts->emit(_evts->get(SERVMSG2) << param << rest, "", _conn);
 }
 
 void Parser::Part(const string& nick, const string& chan)
 {
-    vector<string> args;
-    args.push_back(findNick(nick));
-    args.push_back(chan);
-    args.push_back(findHost(nick));
-
     _conn->findChannel(chan)->removeUser(findNick(nick));
 
     if (findNick(nick) == _conn->Session.nick) {
@@ -303,18 +262,15 @@ void Parser::Part(const string& nick, const string& chan)
                 _conn->sendQuit(""); // Quit the server if we are parting the last channel
     }
 
-    _evts->emitEvent("part", args, chan, _conn); // Send part to frontend
+    _evts->emit(_evts->get(PART) << findNick(nick) << chan << findHost(nick), chan, _conn);
     _app->evtPart(findNick(nick), chan, _conn);
 }
 
 void Parser::Quit(const string& nick, const string& msg)
 {
     vector<string> chans = _conn->findUser(findNick(nick));
-    vector<string> args;
-    args.push_back(findNick(nick));
-    args.push_back(msg);
 
-    _evts->emitEvent("quit", args, chans, _conn);
+    _evts->emit(_evts->get(QUIT) << findNick(nick) << msg, chans, _conn);
     _app->evtQuit(findNick(nick), msg, _conn);
 }
 
@@ -336,17 +292,13 @@ void Parser::Nick(const string& from, const string& to)
         _conn->findChannel(*i)->addUser(to);
     }
 
-    _evts->emitEvent("nick", args, chans, _conn);
+    _evts->emit(_evts->get(NICK) << findNick(from) << to, chans, _conn);
     _app->evtNick(findNick(from), to, _conn);
 }
 
 void Parser::Topic(const string& from, const string& to, const string& rest)
 {
-    vector<string> args;
-    args.push_back(findNick(from));
-    args.push_back(rest);
-
-    _evts->emitEvent("topicchange", args, to, _conn);
+    _evts->emit(_evts->get(TOPICCHANGE) << findNick(from) << rest, to, _conn);
 }
 
 void Parser::Mode(const string& from, const string& param, const string& rest)
@@ -357,11 +309,7 @@ void Parser::Mode(const string& from, const string& param, const string& rest)
     } else {
         // User mode message
         // We got line in the form: 'user +x'
-        vector<string> args;
-        args.push_back(findNick(from));
-        args.push_back(param);
-        args.push_back(rest);
-        _evts->emitEvent("mode", args, "", _conn);
+        _evts->emit(_evts->get(MODE) << findNick(from) << param << rest, "", _conn);
     }
 }
 
@@ -386,13 +334,7 @@ void Parser::CMode(const string& from, const string& param)
 
     if (arguments.empty()) {
         // Received a channel mode, like '#chan +n'
-        vector<string> args;
-        args.push_back(findNick(from));
-        args.push_back(modes.substr(0, 1));
-        args.push_back(modes);
-        args.push_back(chan);
-
-        _evts->emitEvent("cmode", args, chan, _conn);
+        _evts->emit(_evts->get(CMODE) << findNick(from) << modes.substr(0, 1) << modes << chan, chan, _conn);
         return;
     }
 
@@ -441,30 +383,29 @@ void Parser::CMode(const string& from, const string& param)
     // Go through our modes and send the proper msg to the client
     vector<struct Mode>::iterator i;
     for (i = modesvec.begin(); i != modesvec.end(); ++i) {
-        vector<string> args;
-        args.push_back(findNick(from));
-        args.push_back(i->nick);
+        Event e;
         switch (i->mode)
         {
             case IRC::OP:
-                     _evts->emitEvent("opped", args, chan, _conn);
-                     break;
+                e = OPPED;
+                break;
             case IRC::DEOP:
-                     _evts->emitEvent("deopped", args, chan, _conn);
-                     break;
+                e = DEOPPED;
+                break;
             case IRC::VOICE:
-                     _evts->emitEvent("voiced", args, chan, _conn);
-                     break;
+                e = VOICED;
+                break;
             case IRC::DEVOICE:
-                     _evts->emitEvent("devoiced", args, chan, _conn);
-                     break;
+                e = DEVOICED;
+                break;
             case IRC::BAN:
-                     _evts->emitEvent("banned", args, chan, _conn);
-                     break;
+                e = BANNED;
+                break;
             case IRC::UNBAN:
-                     _evts->emitEvent("unbanned", args, chan, _conn);
-                     break;
+                e = UNBANNED;
+                break;
         }
+        _evts->emit(_evts->get(e) << findNick(from) << i->nick, chan, _conn);
     }
 
     // Channel user mode
@@ -478,10 +419,7 @@ void Parser::Topic(const string& param, const string& rest)
 
     string chan = param.substr(pos1, pos2 - pos1);
 
-    vector<string> args;
-    args.push_back(chan);
-    args.push_back(rest);
-    _evts->emitEvent("topicis", args, chan, _conn);
+    _evts->emit(_evts->get(TOPICIS) << chan << rest, chan, _conn);
 }
 
 void Parser::TopicTime(const string& param)
@@ -499,17 +437,13 @@ void Parser::TopicTime(const string& param)
     long date = std::atol(time.c_str());
     time = std::ctime(&date);
 
-    vector<string> args;
-    args.push_back(nick);
-    args.push_back(time.substr(0, time.size() - 1));
-
-    _evts->emitEvent("topictime", args, chan, _conn);
+    _evts->emit(_evts->get(TOPICTIME) << nick << time.substr(0, time.size() - 1), chan, _conn);
 }
 
 
 void Parser::ServMsg(const string& from, const string& param, const string& msg)
 {
-    _evts->emitEvent("servmsg", msg, "", _conn);
+    _evts->emit(_evts->get(SERVMSG) << msg, "", _conn);
 }
 
 void Parser::Away(const string& from, const string& param, const string& rest)
@@ -519,26 +453,17 @@ void Parser::Away(const string& from, const string& param, const string& rest)
     ss >> param1;
     ss >> param2;
 
-    vector<string> args;
-    args.push_back(param2);
-    args.push_back(rest);
-
-    _evts->emitEvent("away", args, param2, _conn);
+    _evts->emit(_evts->get(AWAY) << param2 << rest, param2, _conn);
 }
 
 void Parser::Selfaway(const string& rest)
 {
-    vector<string> args;
-    args.push_back(rest);
-    _evts->emitEvent("servmsg", args, "", _conn);
+    _evts->emit(_evts->get(SERVMSG) << rest, "", _conn);
 }
 
 void Parser::Wallops(const string& from, const string& rest)
 {
-    vector<string> args;
-    args.push_back(from);
-    args.push_back(rest);
-    _evts->emitEvent("wallops", args, "", _conn);
+    _evts->emit(_evts->get(WALLOPS) << from << rest, "", _conn);
 }
 
 void Parser::Banlist(const string& param)
@@ -554,22 +479,16 @@ void Parser::Banlist(const string& param)
     long date = std::atol(time.c_str());
     time = std::ctime(&date);
 
-    vector<string> args;
-    args.push_back(banmask + " " + time.substr(0, time.size() - 1));
-    args.push_back(owner);
-
-    _evts->emitEvent("banlist", args, chan, _conn);
+    _evts->emit(_evts->get(BANLIST) << banmask << owner, chan, _conn);
 }
      
 void Parser::Errhandler(const string& from, const string& param, const string& rest)
 {
-    _evts->emitEvent("error", param + " " + rest, "", _conn);
+    _evts->emit(_evts->get(ERROR) << param + " " + rest, "", _conn);
 }
 
 void Parser::numeric(int n, const string& from, const string& param, const string& rest)
 {
-    vector<string> args;
-    args.push_back(rest);
     switch(n)
     {
     case 1: // RPL_WELCOME
@@ -643,7 +562,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         break;
                         
     case 368: // RPL_END_OF_BANLIST
-        _evts->emitEvent("servmsg", args, "", _conn);
+        _evts->emit(_evts->get(SERVMSG) << rest, "", _conn);
         break;
     
     case 372: // RPL_MOTD
@@ -796,7 +715,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         break;
 
     default:
-        _evts->emitEvent("servmsg", from + " " + param + " " + rest, "", _conn);
+        _evts->emit(_evts->get(SERVMSG) << from + " " + param + " " + rest, "", _conn);
     }
 
 }

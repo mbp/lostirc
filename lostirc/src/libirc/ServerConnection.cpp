@@ -67,7 +67,7 @@ bool ServerConnection::Connect(const string &host, int port = 6667)
         return true;
     } else {
         Session.isConnected = false;
-        _app->getEvts()->emitEvent("servmsg", "Failed connecting: " + _socket->error, "", this);
+        _app->getEvts()->emit(_app->getEvts()->get(SERVMSG) << "Failed connecting: " + _socket->error, "", this);
         return false;
     }
 }
@@ -110,7 +110,7 @@ bool ServerConnection::readsocket()
         _p->parseLine(data);
         return true;
     } else {
-        _app->getEvts()->emitEvent("servmsg", _socket->error, "", this);
+        _app->getEvts()->emit(_app->getEvts()->get(SERVMSG) << _socket->error, "", this);
         Session.isConnected = false;
         return false;
     }

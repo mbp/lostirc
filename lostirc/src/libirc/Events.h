@@ -28,17 +28,38 @@
 class LostIRCApp;
 class ServerConnection;
 
+enum Event {
+    PRIVMSG = 0, PRIVMSG_HIGHLIGHT, ACTION, ACTION_HIGHLIGHT, SERVMSG,
+    SERVMSG2, CTCP, TOPICCHANGE, TOPICIS, TOPICTIME, NOTICEPRIV, NOTICEPUBL,
+    ERROR, AWAY, BANLIST, UNKNOWN, JOIN, PART, QUIT, NICK, MODE, CMODE,
+    WALLOPS, KICKED, OPPED, DEOPPED, VOICED, DEVOICED, BANNED, UNBANNED
+};
+
+class Tmpl
+{
+    std::string orig;
+    std::vector<std::string> tokens;
+
+public:
+    Tmpl(const std::string& str) : orig(str) { }
+
+    Tmpl& operator<<(const std::string& str) { tokens.push_back(str); return *this; }
+
+    std::string result();
+};
+
 class Events
 {
+    LostIRCApp *_app;
+
 public:
     Events(LostIRCApp *app);
 
-    void emitEvent(const std::string& name, std::vector<std::string>& args, const std::string& chan, ServerConnection *conn);
-    void emitEvent(const std::string& name, const std::string& arg, const std::string& chan, ServerConnection *conn);
-    void emitEvent(const std::string& name, const std::string& arg, const std::vector<std::string>& to, ServerConnection *conn);
-    void emitEvent(const std::string& name, std::vector<std::string>& arg, const std::vector<std::string>& to, ServerConnection *conn);
+    void emit(Tmpl& t, const std::string& chan, ServerConnection *conn);
+    void emit(Tmpl& t, const std::vector<std::string>& to, ServerConnection *conn);
 
-private:
-    LostIRCApp *_app;
+    Tmpl get(Event i);
 };
+
+
 #endif
