@@ -18,11 +18,22 @@
 
 #include "ConfigHandler.h"
 #include <algorithm>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 using std::string;
 using std::cout;
 using std::vector;
 using std::map;
+
+ConfigHandler::ConfigHandler()
+{
+    string home(getenv("HOME"));
+    string configdir = home + "/.lostirc/";
+    mkdir(configdir.c_str(), 0700);
+
+    readConfig();
+}
 
 ConfigHandler::~ConfigHandler()
 {
@@ -37,18 +48,36 @@ ConfigHandler::~ConfigHandler()
 bool ConfigHandler::readConfig()
 {
     string home(getenv("HOME"));
-    readEvents(home + "/.lostirc.events");
-    readServers(home + "/.lostirc.perform");
+    readOptions(home + "/.lostirc/options.conf");
+    readEvents(home + "/.lostirc/events.conf");
+    readServers(home + "/.lostirc/perform.conf");
     writeEvents();
     return true; // FIXME
 }
 
 bool ConfigHandler::readEvents(const string& filename)
 {
+    if (!readIniFile(filename, _events))
+          return setEvtDefaults();
+
+    return true;
+}
+
+bool ConfigHandler::readOptions(const string& filename)
+{
+    if (!readIniFile(filename, _options))
+          return setOptDefaults();
+
+    return true;
+}
+
+bool ConfigHandler::readIniFile(const string& filename, map<string, string> & themap)
+{
+
     std::ifstream in(filename.c_str());
 
     if (!in) {
-        return setDefaults();
+        return false;
     }
 
     /* FIXME: too many nested while loops below */
@@ -73,7 +102,7 @@ bool ConfigHandler::readEvents(const string& filename)
                 if (!_tmpvalue.empty()) {
                     _tmpvalue = _tmpvalue.substr(0, _tmpvalue.size() - 1);
                 }
-                _settings.insert(make_pair(_tmpparam, _tmpvalue));
+                themap.insert(make_pair(_tmpparam, _tmpvalue));
                 break;
             } else {
                 _tmpparam = *i;
@@ -82,23 +111,33 @@ bool ConfigHandler::readEvents(const string& filename)
             ++i;
         }
     }
-    return setDefaults();
+    return false;
 }
 
 bool ConfigHandler::writeEvents()
 {
-    string home(getenv("HOME"));
-    std::ofstream out(string(home + "/.lostirc.events").c_str());
+    return writeIniFile(string(string(getenv("HOME")) + "/.lostirc/events.conf"), _events);
+}
+
+bool ConfigHandler::writeOptions()
+{
+    return writeIniFile(string(string(getenv("HOME")) + "/.lostirc/options.conf"), _options);
+}
+
+bool ConfigHandler::writeIniFile(const string& filename, map<string, string>& themap)
+{
+    std::ofstream out(filename.c_str());
 
     if (!out)
           return false;
 
     map<string, string>::const_iterator i;
 
-    for (i = _settings.begin(); i != _settings.end(); ++i) {
+    for (i = themap.begin(); i != themap.end(); ++i) {
         out << i->first << " = " << i->second << std::endl;
     }
     return true;
+
 }
 
 bool ConfigHandler::readServers(const string& filename)
@@ -164,7 +203,7 @@ bool ConfigHandler::readServers(const string& filename)
 bool ConfigHandler::writeServers()
 {
     string home(getenv("HOME"));
-    std::ofstream out(string(home + "/.lostirc.perform").c_str());
+    std::ofstream out(string(home + "/.lostirc/perform.conf").c_str());
 
     if (!out)
           return false;
@@ -186,72 +225,108 @@ bool ConfigHandler::writeServers()
     return true;
 }
 
-bool ConfigHandler::setParam(const string& key, const string& value)
+bool ConfigHandler::setEvt(const string& key, const string& value)
 {
     #ifdef DEBUG
     std::cout << "trying to set '" + key + "' to: '" + value + "'" << std::endl;
     #endif
-    _settings[key] = value;
+    _events[key] = value;
 
     //return writeEvents();
     return true;
 }
 
-string ConfigHandler::getParam(const string& param)
+string ConfigHandler::getEvt(const string& param)
 {
-    map<string, string>::const_iterator i = _settings.find(param);
+    map<string, string>::const_iterator i = _events.find(param);
 
-    if (i != _settings.end())
+    if (i != _events.end())
           return (*i).second;
 
     return "";
 }
 
-bool ConfigHandler::setDefaults()
+bool ConfigHandler::setOpt(const string& key, const string& value)
 {
-    setDefault("evt_privmsg", "$12<$0%1$12>$0 %2");
-    setDefault("evt_privmsg_highlight", "$2<$8%1$2>$0 %2");
-    setDefault("evt_action", "$7* %1$0 %2");
-    setDefault("evt_action_highlight", "$8* %1$0 %2");
-    setDefault("evt_servmsg", "$0-- : %1");
-    setDefault("evt_servmsg2", "$0-- : %1 %2");
-    setDefault("evt_ctcp", "$16-- CTCP %1 received from $0%2");
-    setDefault("evt_topicchange", "$16-- $0%1$16 changes topic to:$15 %2");
-    setDefault("evt_topicis", "$16-- Topic for $11%1$16 is:$0 %2");
-    setDefault("evt_topictime", "$16-- Set by $0%1$16 on $9%2");
-    setDefault("evt_noticepriv", "$7NOTICE $0%1$7 : %2");
-    setDefault("evt_noticepubl", "$7NOTICE $0%1$7 (to %2): %3");
-    setDefault("evt_error", "$16-- Error:$8 %1");
-    setDefault("evt_away", "$3User $0%1$3 is away $15($3%2$15)");
-    setDefault("evt_banlist", "$16-- Ban: $9%1$16 set by: $0%2");
-    setDefault("evt_unknown", "$16-- Unknown message: $2%1");
-    setDefault("evt_join", "$16-- $0%1$11 $15($9%3$15)$16 has joined $11%2");
-    setDefault("evt_part", "$16-- $0%1$16 $15($9%3$15)$16 has parted $11%2 (%4)");
-    setDefault("evt_quit", "$16-- $0%1$16 has quit $11(%2)");
-    setDefault("evt_nick", "$16-- $0%1$16 changes nick to %2");
-    setDefault("evt_mode", "$16-- $0%1$16 sets mode $5%2$16 %3");
-    setDefault("evt_cmode", "$16-- $0%1$16 sets channel mode $5%2$16 on %3");
-    setDefault("evt_wallops", "$2WALLOPS -: %1 :- %2");
-    setDefault("evt_kicked", "$16-- $0%1$16 was kicked from $11%2$16 by %3 $15($9%4$15)");
-    setDefault("evt_opped", "$16-- $0%1$16 gives channel operator status to %2");
-    setDefault("evt_deopped", "$16-- $0%1$16 removes channel operator status from %2");
-    setDefault("evt_voiced", "$16-- $0%1$16 gives voice to %2");
-    setDefault("evt_devoiced", "$16-- $0%1$16 removes voice from %2");
-    setDefault("evt_banned", "$16-- $0%1$16 sets ban on %2");
-    setDefault("evt_unbanned", "$16-- $0%1$16 unbans %2");
-    setDefault("evt_invited", "$16-- $0%1$16 invites you to join %2");
-    setDefault("evt_connecting", "$16-- Connecting to $8%1$16 on port$8 %2$16...");
-    setDefault("evt_names", "$16-- Names %1: %2");
+    #ifdef DEBUG
+    std::cout << "trying to set '" + key + "' to: '" + value + "'" << std::endl;
+    #endif
+    _options[key] = value;
+
+    return writeOptions();
+    return true;
+}
+
+string ConfigHandler::getOpt(const string& param)
+{
+    map<string, string>::const_iterator i = _options.find(param);
+
+    if (i != _options.end())
+          return (*i).second;
+
+    return "";
+}
+
+bool ConfigHandler::setEvtDefaults()
+{
+    setEvtDefault("evt_privmsg", "$12<$0%1$12>$0 %2");
+    setEvtDefault("evt_privmsg_highlight", "$2<$8%1$2>$0 %2");
+    setEvtDefault("evt_action", "$7* %1$0 %2");
+    setEvtDefault("evt_action_highlight", "$8* %1$0 %2");
+    setEvtDefault("evt_servmsg", "$0-- : %1");
+    setEvtDefault("evt_servmsg2", "$0-- : %1 %2");
+    setEvtDefault("evt_ctcp", "$16-- CTCP %1 received from $0%2");
+    setEvtDefault("evt_topicchange", "$16-- $0%1$16 changes topic to:$15 %2");
+    setEvtDefault("evt_topicis", "$16-- Topic for $11%1$16 is:$0 %2");
+    setEvtDefault("evt_topictime", "$16-- Set by $0%1$16 on $9%2");
+    setEvtDefault("evt_noticepriv", "$7NOTICE $0%1$7 : %2");
+    setEvtDefault("evt_noticepubl", "$7NOTICE $0%1$7 (to %2): %3");
+    setEvtDefault("evt_error", "$16-- Error:$8 %1");
+    setEvtDefault("evt_away", "$3User $0%1$3 is away $15($3%2$15)");
+    setEvtDefault("evt_banlist", "$16-- Ban: $9%1$16 set by: $0%2");
+    setEvtDefault("evt_unknown", "$16-- Unknown message: $2%1");
+    setEvtDefault("evt_join", "$16-- $0%1$11 $15($9%3$15)$16 has joined $11%2");
+    setEvtDefault("evt_part", "$16-- $0%1$16 $15($9%3$15)$16 has parted $11%2 (%4)");
+    setEvtDefault("evt_quit", "$16-- $0%1$16 has quit $11(%2)");
+    setEvtDefault("evt_nick", "$16-- $0%1$16 changes nick to %2");
+    setEvtDefault("evt_mode", "$16-- $0%1$16 sets mode $5%2$16 %3");
+    setEvtDefault("evt_cmode", "$16-- $0%1$16 sets channel mode $5%2$16 on %3");
+    setEvtDefault("evt_wallops", "$2WALLOPS -: %1 :- %2");
+    setEvtDefault("evt_kicked", "$16-- $0%1$16 was kicked from $11%2$16 by %3 $15($9%4$15)");
+    setEvtDefault("evt_opped", "$16-- $0%1$16 gives channel operator status to %2");
+    setEvtDefault("evt_deopped", "$16-- $0%1$16 removes channel operator status from %2");
+    setEvtDefault("evt_voiced", "$16-- $0%1$16 gives voice to %2");
+    setEvtDefault("evt_devoiced", "$16-- $0%1$16 removes voice from %2");
+    setEvtDefault("evt_banned", "$16-- $0%1$16 sets ban on %2");
+    setEvtDefault("evt_unbanned", "$16-- $0%1$16 unbans %2");
+    setEvtDefault("evt_invited", "$16-- $0%1$16 invites you to join %2");
+    setEvtDefault("evt_connecting", "$16-- Connecting to $8%1$16 on port$8 %2$16...");
+    setEvtDefault("evt_names", "$16-- Names %1: %2");
 
     return writeEvents();
 }
 
-void ConfigHandler::setDefault(const string& key, const string& value)
+void ConfigHandler::setEvtDefault(const string& key, const string& value)
 {
-    map<string, string>::const_iterator i = _settings.find(key);
+    map<string, string>::const_iterator i = _events.find(key);
 
-    if (i == _settings.end())
-          _settings[key] = value;
+    if (i == _events.end())
+          _events[key] = value;
+}
+
+bool ConfigHandler::setOptDefaults()
+{
+    setOptDefault("nickcompletion_character", ",");
+
+    return writeOptions();
+}
+
+void ConfigHandler::setOptDefault(const string& key, const string& value)
+{
+    map<string, string>::const_iterator i = _options.find(key);
+
+    if (i == _options.end())
+          _options[key] = value;
 }
 
 void ConfigHandler::removeServer(struct autoJoin *a)

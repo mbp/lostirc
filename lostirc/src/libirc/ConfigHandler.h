@@ -34,33 +34,46 @@ struct autoJoin {
 };
 
 class ConfigHandler {
-    std::map<std::string, std::string> _settings;
+    std::map<std::string, std::string> _events;
+    std::map<std::string, std::string> _options;
     std::vector<struct autoJoin*> _servers;
 
 public:
+    ConfigHandler();
     ~ConfigHandler();
     /* read all configuration files */
     bool readConfig();
 
-    /* set and get a parameter in ~/.lostircrc FIXME: outdated */
-    bool setParam(const std::string& key, const std::string& value);
-    std::string getParam(const std::string& param);
+    /* ~/.lostirc/events.conf */
+    bool setEvt(const std::string& key, const std::string& value);
+    std::string getEvt(const std::string& param);
+
+    /* ~/.lostirc/options.conf */
+    bool setOpt(const std::string& key, const std::string& value);
+    std::string getOpt(const std::string& param);
+
+    /* ~/.lostirc/perform.conf */
+    void addServer(struct autoJoin* a) { _servers.push_back(a); }
+    void removeServer(struct autoJoin* a);
 
     /* return "auto-join list" */
     std::vector<struct autoJoin*> getServers() { return _servers; }
-
-    void addServer(struct autoJoin* a) { _servers.push_back(a); }
-    void removeServer(struct autoJoin* a);
 
     /* write server list */
     bool writeServers();
 
 private:
+    bool readOptions(const std::string& filename);
     bool readEvents(const std::string& filename);
     bool readServers(const std::string& filename);
-    bool setDefaults();
-    void setDefault(const std::string& key, const std::string& value);
+    bool readIniFile(const std::string& filename, std::map<std::string, std::string> & themap);
+    bool setEvtDefaults();
+    void setEvtDefault(const std::string& key, const std::string& value);
+    bool setOptDefaults();
+    void setOptDefault(const std::string& key, const std::string& value);
+    bool writeIniFile(const std::string& filename, map<std::string, std::string>& themap);
     bool writeEvents();
+    bool writeOptions();
 
 };
 #endif
