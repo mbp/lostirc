@@ -2,6 +2,11 @@ For a summary of changes between releases - see the NEWS file.
 
 2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * Entry.cpp: When typing in text when not connected or no channel
+          join, mention a /SERVER and /JOIN example.
+
+2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
+
         * ConfigHandler.h/ConfigHandler.cpp: Add strip_boldandunderline option.
         * Parser.cpp: When strip_boldandunderline is on, also strip bold and
           underline codes.

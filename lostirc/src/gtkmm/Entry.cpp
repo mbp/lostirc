@@ -74,9 +74,9 @@ void Entry::onEntry()
 void Entry::sendMsg(const ustring& msg)
 {
     if (!_tab->getConn()->Session.isConnected) {
-        _tab->getText() << "Not connected to server.\n";
+        _tab->getText() << "Not connected to server. Try `/SERVER <hostname / ip>'.\n";
     } else if (!_tab->isActive()) {
-        _tab->getText() << "Not on any channel.\n";
+        _tab->getText() << "No channel joined. Try `/JOIN #channel-name'\n";
     } else {
         std::istringstream ss(Glib::locale_from_utf8(msg));
 
