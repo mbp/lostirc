@@ -283,7 +283,7 @@ Events::Events(const char *filename)
     banlist(this, "banlist", "$15-- $16Ban: $03%1$16 set by: §$00%2"),
     unknown(this, "unknown", "$15-- $16Unknown message: $02%1"),
     join(this, "join", "$15-- §$00%1§ $15($03%3$15)$16 has joined §%2"),
-    part(this, "part", "$15-- §$00%1§ $15($03%3$15)$16 has parted §%2 $15($03%4$15)"),
+    part(this, "part", "$15-- §$00%1§ $15($03%3$15)$16 has parted §%2§ $15($03%4$15)"),
     part2(this, "part2", "$15-- §$00%1§ $15($03%3$15)$16 has parted §%2"),
     quit(this, "quit", "$15-- §$00%1§$16 has quit $15($03%$15)"),
     nick(this, "nick", "$15-- §$00%1§$16 changes nick to §$00%2"),

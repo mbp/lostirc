@@ -747,7 +747,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 403: // ERR_NOSUCHCHANNEL
         case 404: // ERR_CANNOTSENDTOCHAN
         case 405: // ERR_TOOMANYCHANNELS
-            FE::emit(FE::get(ERROR) << param + ": " + rest, FE::CURRENT, _conn);
+            FE::emit(FE::get(ERROR) << skipFirstWord(param) + ": " + rest, FE::CURRENT, _conn);
             break;
 
         case 412: // ERR_NOTEXTTOSEND
@@ -786,7 +786,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         case 491: // ERR_NOOPERHOST
         case 501: // ERR_UMODEUNKNOWNFLAG
         case 502: // ERR_USERSDONTMATCH
-            FE::emit(FE::get(ERROR) << param + " " + rest, FE::CURRENT, _conn);
+            FE::emit(FE::get(ERROR) << skipFirstWord(param) + " " + rest, FE::CURRENT, _conn);
             break;
 
         case 353: // RPL_NAMREPLY
@@ -844,7 +844,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             break;
 
         default:
-            FE::emit(FE::get(SERVMSG3) << param << rest, FE::CURRENT, _conn);
+            FE::emit(FE::get(SERVMSG3) << skipFirstWord(param) << rest, FE::CURRENT, _conn);
     }
 
 }

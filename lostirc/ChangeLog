@@ -1,5 +1,14 @@
 For a summary of changes between releases - see the NEWS file.
 
+
+2002-12-09  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Parser.h: Add skipFirstWord() method. Move 2 methods out of class
+          definition.
+        * Parser.cpp: Don't display use the first word of the parameter since
+          it's usually our nick.
+        * ConfigHandler.cpp: Added missing ending-bold to evt_part2.
+
 2002-12-09  Morten Brix Pedersen  <morten@wtf.dk>
         
         * Parser.cpp: Recognize QuakeNet's "is authed as" and freenodes "is an
