@@ -11,6 +11,8 @@ LostIRC (x.x.x)
   * When a user changes a channel mode, it now looks more sane
   * When changing nick too fast, and the server gives an error - you no longer
     end up with an empty nick.
+  * When a user got kicked from a channel, and he changed nick on another, his
+    actions were still shown in the channel he was kicked from.
 
 LostIRC (0.0.5) - Fri Mar 8th 2002
   * An unwanted newline occuring in a /whois has been removed
