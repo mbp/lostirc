@@ -42,7 +42,7 @@ public:
     Gtk::Notebook_Helpers::Page* findPage(const std::string& name, ServerConnection *conn);
 
     void findTabs(const std::string& nick, ServerConnection *conn, std::vector<Tab*>& vec);
-    void Tabs(ServerConnection *conn, vector<Tab*>& vec);
+    void Tabs(ServerConnection *conn, std::vector<Tab*>& vec);
     void closeCurrent();
     void highlight(Tab *tab);
     void insert(Tab *tab, const std::string& str);

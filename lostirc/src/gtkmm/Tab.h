@@ -114,7 +114,7 @@ public:
 
     Gtk::CList*         getCList();
 
-    void insertUser(const std::vector<string>& users);
+    void insertUser(const std::vector<std::string>& users);
     void insertUser(const std::string& user, IRC::UserMode i = IRC::NONE);
     void removeUser(const std::string& nick);
     void renameUser(const std::string& from, const std::string& to);

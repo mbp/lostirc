@@ -50,18 +50,18 @@ public:
 
 private:
     // Events
-    void onDisplayMessage(const string& msg, const string& to, ServerConnection *conn);
-    void onJoin(const string& nick, const string& chan, ServerConnection *conn);
-    void onPart(const string& nick, const string& chan, ServerConnection *conn);
-    void onQuit(const string& nick, const string& chan, ServerConnection *conn);
-    void onNick(const string& from, const string& to, ServerConnection *conn);
-    void onNotice(const string& from, const string& to, const string& msg, ServerConnection *conn);
-    void onKick(const string& from, const string& chan, const string& kicker, const string& msg,  ServerConnection *conn);
+    void onDisplayMessage(const std::string& msg, const std::string& to, ServerConnection *conn);
+    void onJoin(const std::string& nick, const std::string& chan, ServerConnection *conn);
+    void onPart(const std::string& nick, const std::string& chan, ServerConnection *conn);
+    void onQuit(const std::string& nick, const std::string& chan, ServerConnection *conn);
+    void onNick(const std::string& from, const std::string& to, ServerConnection *conn);
+    void onNotice(const std::string& from, const std::string& to, const std::string& msg, ServerConnection *conn);
+    void onKick(const std::string& from, const std::string& chan, const std::string& kicker, const std::string& msg,  ServerConnection *conn);
     void onNames(Channel& c, ServerConnection *conn);
-    void onMode(const string& nick, const string& chan, const string& topic, ServerConnection *conn);
-    void onCMode(const string& nick, const string& chan, char, const string& modes, ServerConnection *conn);
-    void onCUMode(const string& nick, const string& chan, const map<string, IRC::UserMode>& users, ServerConnection *conn);
-    void onHighlight(const string& to, ServerConnection *conn);
+    void onMode(const std::string& nick, const std::string& chan, const std::string& topic, ServerConnection *conn);
+    void onCMode(const std::string& nick, const std::string& chan, char, const std::string& modes, ServerConnection *conn);
+    void onCUMode(const std::string& nick, const std::string& chan, const std::map<std::string, IRC::UserMode>& users, ServerConnection *conn);
+    void onHighlight(const std::string& to, ServerConnection *conn);
     void onAway(bool away, ServerConnection *conn);
     void onNewTab(ServerConnection *conn);
 
