@@ -2,6 +2,11 @@ For a summary of changes between releases - see the NEWS file.
 
 2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * Prefs.cpp: "Cancel" on strip colors wasn't working. Fixed.
+          Simplified some other code a bit.
+
+2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
+
         * TextWidget.cpp: Handle bold and underline as well as reset
           attribute.
 
