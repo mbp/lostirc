@@ -1,6 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
 2003-01-03  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * NickList.cpp: Translate "user/users".
+
+2003-01-03  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Tab.cpp/.h: Add enum Type { } to keep track of Tab type, instead of
           bool members. Remove setChannel(), setQuery(), isChannel() and
