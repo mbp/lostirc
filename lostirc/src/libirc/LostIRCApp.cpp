@@ -41,10 +41,10 @@ LostIRCApp::LostIRCApp(FrontEnd *f)
     struct passwd *pwentry = getpwuid(getuid());
 
     if (_cfg.getOpt("nick").empty())
-          _cfg.setOpt("nick", pwentry->name);
+          _cfg.setOpt("nick", pwentry->pw_name);
 
     if (_cfg.getOpt("ircuser").empty())
-          _cfg.setOpt("ircuser", pwentry->name);
+          _cfg.setOpt("ircuser", pwentry->pw_name);
 
     if (_cfg.getOpt("realname").empty())
           _cfg.setOpt("realname", pwentry->pw_gecos);
