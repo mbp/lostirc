@@ -262,6 +262,7 @@ void Parser::Join(const string& nick, const string& chan)
     vector<string> args;
     args.push_back(findNick(nick));
     args.push_back(chan);
+    args.push_back(findHost(nick));
     _io->evtJoin(findNick(nick), chan, _conn);
     _evts->emitEvent("join", args, chan, _conn);
 }
@@ -280,6 +281,7 @@ void Parser::Part(const string& nick, const string& chan)
     vector<string> args;
     args.push_back(findNick(nick));
     args.push_back(chan);
+    args.push_back(findHost(nick));
     _io->evtPart(findNick(nick), chan, _conn);
     _evts->emitEvent("part", args, chan, _conn);
 }
@@ -752,4 +754,9 @@ void Parser::Names(const string& chan, const string& names)
 string Parser::findNick(const string& str)
 {
     return str.substr(0, str.find_first_of("!"));
+}
+
+string Parser::findHost(const string& str)
+{
+    return str.substr(str.find_first_of("!") + 1);
 }

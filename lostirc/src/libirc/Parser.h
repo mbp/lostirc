@@ -64,6 +64,7 @@ private:
     void numeric(int n, const std::string& from, const std::string& param, const std::string& rest);
 
     std::string findNick(const std::string& str);
+    std::string findHost(const std::string& str);
 
     ServerConnection *_conn;
     InOut *_io;
