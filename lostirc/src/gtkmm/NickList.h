@@ -47,7 +47,7 @@ private:
     {
         Gtk::TreeModelColumn<Glib::ustring> status;
         Gtk::TreeModelColumn<Glib::ustring> nick;
-        Gtk::TreeModelColumn<int> priority;
+        Gtk::TreeModelColumn<unsigned short> priority;
 
         ModelColumns() { add(status); add(nick); add(priority); }
     };

@@ -1,5 +1,13 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-06-29  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * NickList.h: Change 'int' to 'unsigned short'. It's a smaller data
+          type, dont know how much it will mean in the real world.
+        * ServerConnection.cpp: Fix problem with having duplicates in the user
+          list when reconnecting to a server. The disconnected() signal was
+          never sent to the frontend.
+
 2003-06-19  Morten Brix Pedersen  <morten@wtf.dk>
         
         * configure.ac: Revert a change made by autoupdate.
