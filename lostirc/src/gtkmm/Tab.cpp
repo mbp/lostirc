@@ -56,9 +56,6 @@ Tab::Tab(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font)
     _button->signal_clicked().connect(slot(*this, &Tab::startPrefs));
     _hbox->pack_start(*_button, Gtk::PACK_SHRINK);
 
-    if (_conn->Session.isAway)
-          setAway();
-
     initializeColorMap();
     setStyle();
 
@@ -202,41 +199,6 @@ void Tab::clearText()
 {
     Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
     buffer->erase(buffer->begin(), buffer->end());
-}
-
-void Tab::setAway()
-{
-    setUnAway();
-
-    bool away = false;
-
-    Gtk::Box_Helpers::BoxList::iterator i;
-
-    for (i = _hbox->children().begin(); i != _hbox->children().end(); ++i) {
-        Gtk::Label *a = dynamic_cast<Gtk::Label*>(i->get_widget());
-        if (a)
-              away = true;
-    }
-
-    if (!away) {
-        Gtk::Label *a = manage(new Gtk::Label("Away (" + Glib::locale_to_utf8(_conn->Session.awaymsg) + ")"));
-        _hbox->pack_start(*a);
-        _hbox->show_all();
-    }
-}
-
-void Tab::setUnAway()
-{
-    Gtk::Box_Helpers::BoxList::iterator i;
-
-    for (i = _hbox->children().begin(); i != _hbox->children().end();) {
-        Gtk::Label *a = dynamic_cast<Gtk::Label*>(i->get_widget());
-        if (a)
-              i = _hbox->children().erase(i);
-        else
-              ++i;
-    }
-    _hbox->show_all();
 }
 
 void Tab::startPrefs()

@@ -116,8 +116,22 @@ void MainNotebook::onSwitchPage(GtkNotebookPage *p, unsigned int n)
     tab->getLabel()->modify_fg(Gtk::STATE_NORMAL, Gdk::Color("black"));
     tab->getEntry().grab_focus();
     tab->isHighlighted = false;
-    AppWin->statusbar.setText1(tab->getConn()->Session.nick + " - " + tab->getConn()->Session.servername);
+
+    updateStatus(tab);
+
     updateTitle(tab);
+}
+
+void MainNotebook::updateStatus(Tab *tab)
+{
+    if (!tab)
+          tab = getCurrent();
+
+    if (tab->getConn()->Session.isAway)
+          AppWin->statusbar.setText1(tab->getConn()->Session.nick + " <span foreground=\"red\">(away: " + Glib::locale_to_utf8(tab->getConn()->Session.awaymsg) + ")</span> - " + tab->getConn()->Session.servername);
+    else
+          AppWin->statusbar.setText1(tab->getConn()->Session.nick + " - " + tab->getConn()->Session.servername);
+
 }
 
 void MainNotebook::updateTitle(Tab *tab)
@@ -125,11 +139,10 @@ void MainNotebook::updateTitle(Tab *tab)
     if (!tab)
           tab = getCurrent();
 
-    if (tab->getConn()->Session.isAway) {
-        AppWin->set_title("LostIRC "VERSION" - " + tab->getConn()->Session.nick + " (currently away): " + tab->getLabel()->get_text());
-    } else {
-        AppWin->set_title("LostIRC "VERSION" - " + tab->getConn()->Session.nick + ": " + tab->getLabel()->get_text());
-    }
+    if (tab->getConn()->Session.isAway)
+          AppWin->set_title("LostIRC "VERSION" - " + tab->getLabel()->get_text() + " (currently away)");
+    else
+          AppWin->set_title("LostIRC "VERSION" - " + tab->getLabel()->get_text());
 }
 
 void MainNotebook::closeCurrent()

@@ -144,7 +144,7 @@ bool Entry::onKeyPress(GdkEventKey* e)
                     set_position(-1);
                 }
             } else {
-                AppWin->statusbar.setText2(str);
+                AppWin->statusbar.setText2("<span foreground=\"blue\">Matches:</span> " + str);
             }
         }
     }

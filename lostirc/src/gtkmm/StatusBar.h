@@ -22,16 +22,26 @@
 #include <gtkmm/box.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/label.h>
-#include <gtkmm/statusbar.h>
+//#include <gtkmm/statusbar.h>
 
 class StatusBar : public Gtk::HBox
 {
 public:
     StatusBar();
 
-    void setText1(const Glib::ustring& str) { _label.set_text(str); }
+    void setText1(const Glib::ustring& str) { _label.set_markup(str); }
     void clearText1() { _label.set_text(""); }
 
+    void setText2(const Glib::ustring& str) { _notifylabel.set_markup(str);
+        signal_timeout = Glib::signal_timeout().connect(
+                SigC::slot(*this, &StatusBar::onText2Timeout),
+                5000);
+    }
+    void clearText2() { _notifylabel.set_text(""); }
+
+
+    /* TODO: statusbar disabled for now since it doesn't support pango
+     * markup.
     void setText2(const Glib::ustring& str) {
         // First remove any previous.
         signal_timeout.disconnect();
@@ -45,15 +55,18 @@ public:
     }
 
     void clearText2() { _statusbar.pop(); }
-
-    bool onText2Timeout() { clearText2(); return false; }
+    */
 
 
 private:
+    bool onText2Timeout() { clearText2(); return false; }
+
     Gtk::Frame _frame;
-    Gtk::Statusbar _statusbar;
+    Gtk::Frame _notifyframe;
+    // Gtk::Statusbar _statusbar; disabled for now
 
     Gtk::Label _label;
+    Gtk::Label _notifylabel;
 
     SigC::Connection signal_timeout;
 };

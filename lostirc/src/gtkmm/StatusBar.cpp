@@ -23,11 +23,14 @@ StatusBar::StatusBar()
     _label("", 0.5, 0.5)
 {
     _frame.add(_label);
+    _notifyframe.add(_notifylabel);
+    //_statusbar.pack_end(_statuslabel);
 
-    //_frame2.set_shadow_type(Gtk::SHADOW_IN);
+    //_frame.set_shadow_type(Gtk::SHADOW_IN);
+    _notifyframe.set_shadow_type(Gtk::SHADOW_IN);
 
     pack_start(_frame);
-    pack_start(_statusbar);
+    pack_start(_notifyframe);
 
     setText1("Not connected.");
 

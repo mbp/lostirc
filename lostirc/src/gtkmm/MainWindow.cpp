@@ -241,14 +241,7 @@ void MainWindow::highlight(ChannelBase& chan, ServerConnection* conn)
 
 void MainWindow::away(bool away, ServerConnection* conn)
 {
-    vector<Tab*> tabs;
-
-    notebook.findTabs(conn, tabs);
-    if (away) {
-        std::for_each(tabs.begin(), tabs.end(), std::mem_fun(&Tab::setAway));
-    } else {
-        std::for_each(tabs.begin(), tabs.end(), std::mem_fun(&Tab::setUnAway));
-    }
+    notebook.updateStatus();
     notebook.updateTitle();
 }
 

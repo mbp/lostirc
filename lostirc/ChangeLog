@@ -1,4 +1,9 @@
 LostIRC (x.x.x)
+  * The application GUI has changed a little. There is now a statusbar below
+    the tabs which tells you different things:
+     - nick, servername
+     - away status
+     - matches for nick completion are here instead of in the main text window
   * There is a now a seperator between the main text window and the nick list
     which can be dragged to make the nick list smaller/bigger.
   * Fix a segfault which appeared with bouncers/servers sending malformed PART

@@ -48,8 +48,6 @@ public:
     Entry&                      getEntry() { return _entry; }
     ServerConnection*           getConn() { return _conn; }
 
-    void setAway();
-    void setUnAway();
     void startPrefs();
     void endPrefs();
 
