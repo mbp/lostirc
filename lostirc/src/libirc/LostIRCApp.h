@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001 Morten Brix Pedersen <morten@wtf.dk>
+ * Copyright (C) 2002 Morten Brix Pedersen <morten@wtf.dk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,10 +47,20 @@ public:
     Events* getEvts() { return _evts; }
 
     // Signals 
+    
+    // Emitted when a user joins a channel
     Signal3<void, const std::string&, const std::string&, ServerConnection*> evtJoin;
+
+    // Emitted when a user parts a channel
     Signal3<void, const std::string&, const std::string&, ServerConnection*> evtPart;
+
+    // Emitted when a user quits a channel
     Signal3<void, const std::string&, const std::string&, ServerConnection*> evtQuit;
+
+    // Emitted when a user changes nick
     Signal3<void, const std::string&, const std::string&, ServerConnection*> evtNick;
+
+    // Emitted when we receive all the names from the channel
     Signal3<void, const std::string&, const std::vector<std::vector<std::string> >&, ServerConnection*> evtNames;
     Signal4<void, const std::string&, const std::string&, const vector<vector<std::string> >&, ServerConnection*> evtCUMode;
     Signal5<void, const std::string&, const std::string&, const std::string&, const std::string&, ServerConnection*> evtKick;
@@ -61,6 +71,8 @@ public:
 
     // Emitted when a channel needs to be highlighted
     Signal2<void, const std::string&, ServerConnection*> evtHighlight;
+
+    // Emitted when the user is going away
     Signal2<void, bool, ServerConnection*> evtAway;
 
 

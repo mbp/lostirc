@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001 Morten Brix Pedersen <morten@wtf.dk>
+ * Copyright (C) 2002 Morten Brix Pedersen <morten@wtf.dk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 #include "Commands.h"
 #include "ServerConnection.h"
 #include "Utils.h"
+#include <cstdio>
 
 using std::string;
 using std::stringstream;
@@ -42,6 +43,7 @@ struct UserCommands cmds[] = {
     { "WHO",      Commands::Who,        1 },
     { "QUOTE",    Commands::Quote,      1 },
     { "COMMANDS", Commands::commands,   0 },
+    { "EXEC",     Commands::Exec,       0 },
     { 0,        0,                      0 }
 };
 
@@ -181,10 +183,9 @@ bool Commands::Invite(ServerConnection *conn, const string& params)
 
 bool Commands::Topic(ServerConnection *conn, const string& params)
 {
-    string chan, topic;
-    stringstream ss(params);
-    ss >> chan;
-    ss >> topic;
+    string::size_type pos1 = params.find_first_of(" ");
+    string chan = params.substr(0, pos1);
+    string topic = params.substr(pos1 + 1);
 
     if (chan.empty()) {
         error = "/TOPIC <channel> [topic], view or change topic for a channel.";
@@ -272,6 +273,38 @@ bool Commands::commands(ServerConnection *conn, const string& params)
         Commands::error += "\00311]";
     }
     return false;
+}
+
+bool Commands::Exec(ServerConnection *conn, const string& params)
+{
+    string::size_type pos1 = params.find_first_of(" ");
+    string param = params.substr(0, pos1);
+    string rest = params.substr(pos1 + 1);
+
+    if (param == "-o") {
+        FILE* f = popen("/bin/sh -c ls", "r");
+
+        char buf[4028];
+
+        fread(buf, 1, 4028, f);
+
+        cout << buf << endl;
+
+        return true;
+    } else if (!params.empty()) {
+        FILE* f = popen("/bin/sh -c ls", "r");
+
+        char buf[4028];
+
+        fread(buf, 1, 4028, f);
+
+        string str(buf);
+        Commands::error = str;
+        return false;
+    } else {
+       error = "/EXEC [-o] <command>, execute a command, if -o is used, output to channel.";
+       return false;
+    }
 }
 
 string Commands::error;
