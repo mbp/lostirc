@@ -20,6 +20,9 @@ LostIRC (x.x.x)
   * When exiting preferences, focus is now giving to the input box.
   * When going /AWAY, the title bar of the window wasn't updated until you
     switched to a new tab. Fixed.
+  * A KDE menu entry (lostirc.desktop) is now installed by default in the same
+    way as a GNOME menu entry has always been default. It can be disabled by
+    using ./configure --disable-gnome and --disable-kde 
 
 LostIRC (0.1.4) - Sat Jul 13th 2002
   * A segfault which appeared when the enviroment variable USER wasn't set,

@@ -22,8 +22,6 @@ RANDOM BUGS:
   * you can't see long nicks in nick-list, possibility to move the nick-list
     as a user
   * nicks overlaps status (@, + etc.) in nick-list.
-  * lostirc.desktop shouldn't be copied on non-GNOME systems.
-  * lostirc.desktop should be distributed as KDE link as well.
   * check for EAGAIN on send()?
   * nick-list mentions "0 users" instead of "Not on channel", when a channel
     has been parted with /PART.

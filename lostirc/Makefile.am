@@ -7,6 +7,14 @@ EXTRA_DIST = lostirc.desktop \
 dist-hook: lostirc.spec
 	cp lostirc.spec $(distdir)
 
-Applicationsdir = $(datadir)/gnome/apps/Internet
-Applications_DATA = lostirc.desktop
+if GNOME
+Gnomedir = $(datadir)/gnome/apps/Internet
+Gnome_DATA = lostirc.desktop
+endif
+
+if KDE
+Kdedir = $(prefix)/share/applnk
+Kde_DATA = lostirc.desktop
+endif
+
 man_MANS = lostirc.1
