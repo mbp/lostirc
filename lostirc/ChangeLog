@@ -1,4 +1,4 @@
-LostIRC (0.0.3)
+LostIRC (0.0.3) - Mon Feb, 18th 2002
   * Implement /kick
   * Implement /names
   * No longer crash when doing /quote names #chan
@@ -6,9 +6,9 @@ LostIRC (0.0.3)
     messages in that tab
   * No longer crash when connecting to some unreal ircd servers
   * When you join a new channel, or a query gets started and you are away, the
-    "You are away" msg will still appear.
+    "You are away" msg will still appear
   * The port when connecting is now displayed correctly
-  * Many code cleanups
+  * Many code cleanups: performance improvements, g++ 3 fixes
 
 LostIRC (0.0.2) - Sun Feb, 3rd 2002
   * Code cleanups
