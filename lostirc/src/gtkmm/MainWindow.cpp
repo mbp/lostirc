@@ -257,36 +257,36 @@ gint MainWindow::on_key_press_event(GdkEventKey* e)
 {
     // Default keybindings. Still needs work.
     if ((e->keyval == GDK_0) && (e->state & GDK_MOD1_MASK)) {
-        _nb->set_page(10);
+        _nb->set_page(9);
     }
-    if ((e->keyval == GDK_1) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_1) && (e->state & GDK_MOD1_MASK)) {
         _nb->set_page(0);
     }
-    if ((e->keyval == GDK_2) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_2) && (e->state & GDK_MOD1_MASK)) {
         _nb->set_page(1);
     }
-    if ((e->keyval == GDK_3) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_3) && (e->state & GDK_MOD1_MASK)) {
         _nb->set_page(2);
     }
-    if ((e->keyval == GDK_4) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_4) && (e->state & GDK_MOD1_MASK)) {
         _nb->set_page(3);
     }
-    if ((e->keyval == GDK_5) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_5) && (e->state & GDK_MOD1_MASK)) {
         _nb->set_page(4);
     }
-    if ((e->keyval == GDK_6) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_6) && (e->state & GDK_MOD1_MASK)) {
         _nb->set_page(5);
     }
-    if ((e->keyval == GDK_7) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_7) && (e->state & GDK_MOD1_MASK)) {
         _nb->set_page(6);
     }
-    if ((e->keyval == GDK_8) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_8) && (e->state & GDK_MOD1_MASK)) {
         _nb->set_page(7);
     }
-    if ((e->keyval == GDK_9) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_9) && (e->state & GDK_MOD1_MASK)) {
         _nb->set_page(8);
     }
-    if ((e->keyval == GDK_c) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_c) && (e->state & GDK_MOD1_MASK)) {
         TabChannel *tab = dynamic_cast<TabChannel*>(_nb->getCurrent());
         if (tab) {
             // It's a channel, so we need to part it
@@ -296,19 +296,19 @@ gint MainWindow::on_key_press_event(GdkEventKey* e)
         }
         _nb->closeCurrent();
     }
-    if ((e->keyval == GDK_p) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_p) && (e->state & GDK_MOD1_MASK)) {
         TabChannel *tab = dynamic_cast<TabChannel*>(_nb->getCurrent());
         if (tab) {
             tab->startPrefs();
         }
     }
-    if ((e->keyval == GDK_n) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_n) && (e->state & GDK_MOD1_MASK)) {
         newServer();
     }
-    if ((e->keyval == GDK_q) && (e->state & GDK_MOD1_MASK)) {
+    else if ((e->keyval == GDK_q) && (e->state & GDK_MOD1_MASK)) {
         Gtk::Main::quit();
     }
-    if (e->keyval == GDK_Up || e->keyval == GDK_Tab || e->keyval == GDK_Down) {
+    else if (e->keyval == GDK_Up || e->keyval == GDK_Tab || e->keyval == GDK_Down) {
         if (!_nb->getCurrent()->hasPrefs) {
             _nb->getCurrent()->getEntry()->on_key_press_event(e);
             gtk_signal_emit_stop_by_name(GTK_OBJECT(this->gtkobj()), "key_press_event");
