@@ -1,5 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-10-29  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Fix typo in FrontEnd.h.
+
 2003-10-26  Peter Hille <peter@das-system.ath.cx>
 
         * Add support for "channel owner" (+q) and "channel admin" (+a) status

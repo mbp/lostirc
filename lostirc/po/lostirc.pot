@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-06-15 21:11+0200\n"
+"POT-Creation-Date: 2003-10-29 06:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -80,33 +80,11 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:65
-msgid "7Welcome to LostIRC "
-msgstr ""
-
-#: src/gtkmm/MainWindow.cpp:65
-msgid ""
-"!\n"
-"\n"
-"You can now connect to a server using:\n"
-"    8/SERVER <hostname / ip>\n"
-"\n"
-"7...and then join a channel:\n"
-"    8/JOIN <channel-name>\n"
-"\n"
-"7A list of all commands are available with:\n"
-"    8/COMMANDS7\n"
-"\n"
-"And you should really check out the list of key bindings:\n"
-"    8/KEYBINDINGS\n"
-"\n"
-msgstr ""
-
-#: src/gtkmm/MainWindow.cpp:284 src/gtkmm/MainWindow.cpp:301
+#: src/gtkmm/MainWindow.cpp:287 src/gtkmm/MainWindow.cpp:303
 msgid "server"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:325
+#: src/gtkmm/MainWindow.cpp:326
 msgid ""
 "Locale conversion error. An error occured while converting text from UTF-8 "
 "to your current locale.\n"
@@ -117,14 +95,14 @@ msgid ""
 "If you believe this is a bug, please report it to the application author."
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:329
+#: src/gtkmm/MainWindow.cpp:330
 msgid ""
 "\n"
 "\n"
 "Your current locale (seems) to be: "
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:333
+#: src/gtkmm/MainWindow.cpp:334
 msgid ""
 "Encoding conversion error. An error occured while converting text from UTF-8 "
 "to the user-defined encoding.\n"
@@ -135,18 +113,95 @@ msgid ""
 "If you believe this is a bug, please report it to the application author."
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:335
+#: src/gtkmm/MainWindow.cpp:336
 msgid ""
 "\n"
 "\n"
 "I was trying to convert to: "
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:339
+#: src/gtkmm/MainWindow.cpp:340
 msgid ""
 "\n"
 "\n"
 "(Note: You'll only see this warning once per LostIRC session)"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:378 src/gtkmm/TextWidget.cpp:354
+msgid "_Hide Menubar"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:385
+msgid "New Server Tab"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:390
+msgid "Clear Window"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:394
+msgid "Clear All Windows"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:398
+msgid "Close Current Tab"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:414
+msgid "Nick List"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:419
+msgid "Server List"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:423
+msgid "DCC Transfers"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:438
+msgid "_Introduction"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:443
+msgid "_About"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:446
+msgid "_LostIRC"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:447
+msgid "_View"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:448
+msgid "_Help"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:489
+msgid ""
+"LostIRC Quick Introduction\n"
+"\n"
+"This help window is a quick guide to get you going with LostIRC.\n"
+"Move this window away from the LostIRC window, and use it as a quick "
+"reference window until you know the general idea.\n"
+"\n"
+"You can connect to a server using:\n"
+"    /SERVER <hostname / ip>\n"
+"\n"
+"...and then join a channel:\n"
+"    /JOIN <channel-name>\n"
+"\n"
+"A list of all commands are available with:\n"
+"    /COMMANDS\n"
+"\n"
+"And you should really check out the list of key bindings:\n"
+"    /KEYBINDINGS"
+msgstr ""
+
+#: src/gtkmm/TextWidget.cpp:359
+msgid "_Show Menubar"
 msgstr ""
 
 #: src/gtkmm/MainNotebook.cpp:113
@@ -157,7 +212,7 @@ msgstr ""
 msgid " (currently away)"
 msgstr ""
 
-#: src/gtkmm/StatusBar.cpp:36
+#: src/gtkmm/StatusBar.cpp:39
 msgid "Not connected."
 msgstr ""
 
@@ -185,67 +240,71 @@ msgstr ""
 msgid "From/To"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:45
+#: src/gtkmm/Prefs.cpp:46
 msgid "Strip _color codes from incoming messages"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:46
+#: src/gtkmm/Prefs.cpp:47
 msgid "Strip _bold and underline codes from incoming messages"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:47
+#: src/gtkmm/Prefs.cpp:48
 msgid "_Log conversations to disk"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:52
+#: src/gtkmm/Prefs.cpp:53
 msgid "LostIRC Preferences"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:68
+#: src/gtkmm/Prefs.cpp:69
 msgid "General"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:69
+#: src/gtkmm/Prefs.cpp:70
 msgid "Preferences"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:70
+#: src/gtkmm/Prefs.cpp:71
 msgid "DCC"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:77
+#: src/gtkmm/Prefs.cpp:72
+msgid "Colours"
+msgstr ""
+
+#: src/gtkmm/Prefs.cpp:79
 msgid "IRC username (ident):"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:87
+#: src/gtkmm/Prefs.cpp:89
 msgid "Encoding to use on IRC:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:98
+#: src/gtkmm/Prefs.cpp:100
 msgid "Browse..."
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:102
+#: src/gtkmm/Prefs.cpp:104
 msgid "Main window font:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:112
+#: src/gtkmm/Prefs.cpp:114
 msgid "Nick-completion character:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:120
+#: src/gtkmm/Prefs.cpp:122
 msgid "Words to highlight on (space seperated):"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:128
+#: src/gtkmm/Prefs.cpp:130
 msgid "Maximium number of lines to cache:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:150
+#: src/gtkmm/Prefs.cpp:152
 msgid "DCC IP address:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:158
+#: src/gtkmm/Prefs.cpp:160
 msgid "DCC Port (0 = random):"
 msgstr ""
 
@@ -387,11 +446,11 @@ msgstr ""
 msgid "Message not sent because of locale problems"
 msgstr ""
 
-#: src/libirc/Parser.cpp:819
+#: src/libirc/Parser.cpp:847
 msgid "idle: "
 msgstr ""
 
-#: src/libirc/Parser.cpp:823
+#: src/libirc/Parser.cpp:851
 msgid ", signon time: "
 msgstr ""
 
@@ -451,23 +510,23 @@ msgstr ""
 msgid "Disconnected."
 msgstr ""
 
-#: src/libirc/ServerConnection.cpp:142
+#: src/libirc/ServerConnection.cpp:143
 msgid "Failed connecting: "
 msgstr ""
 
-#: src/libirc/ServerConnection.cpp:148
+#: src/libirc/ServerConnection.cpp:149
 msgid "Resolved host. Connecting.."
 msgstr ""
 
-#: src/libirc/ServerConnection.cpp:154
+#: src/libirc/ServerConnection.cpp:155
 msgid "Failed connecting:"
 msgstr ""
 
-#: src/libirc/ServerConnection.cpp:236
+#: src/libirc/ServerConnection.cpp:237
 msgid "Failed to receive: "
 msgstr ""
 
-#: src/libirc/ServerConnection.cpp:251
+#: src/libirc/ServerConnection.cpp:252
 msgid "Connected. Logging in..."
 msgstr ""
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LostIRC 0.2.5pre\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-06-15 21:11+0200\n"
+"POT-Creation-Date: 2003-10-29 06:39+0100\n"
 "PO-Revision-Date: 2003-01-03 19:25+0100\n"
 "Last-Translator: Michael Kristensen <tazz@wtf.dk>\n"
 "Language-Team: Danish\n"
@@ -103,47 +103,11 @@ msgstr ""
 "    CTRL-Q - afslut LostIRC\n"
 "\n"
 
-#: src/gtkmm/MainWindow.cpp:65
-msgid "7Welcome to LostIRC "
-msgstr "7Velkommen til LostIRC "
-
-#: src/gtkmm/MainWindow.cpp:65
-msgid ""
-"!\n"
-"\n"
-"You can now connect to a server using:\n"
-"    8/SERVER <hostname / ip>\n"
-"\n"
-"7...and then join a channel:\n"
-"    8/JOIN <channel-name>\n"
-"\n"
-"7A list of all commands are available with:\n"
-"    8/COMMANDS7\n"
-"\n"
-"And you should really check out the list of key bindings:\n"
-"    8/KEYBINDINGS\n"
-"\n"
-msgstr ""
-"!\n"
-"\n"
-"Du kan nu etablere forbindelse til en server ved at bruge:\n"
-"    8/SERVER <værtsnavn / ip>\n"
-"\n"
-"7...og så gå ind i en kanal:\n"
-"    8/JOIN <kanalnavn>\n"
-"\n"
-"7En liste over alle kommandoer er tilgængelig med:\n"
-"    8/COMMANDS7\n"
-"\n"
-"Og du bør virkelig kigge på listen med tastaturbindinger:\n"
-"    8/KEYBINDINGS\n"
-"\n"
-
-#: src/gtkmm/MainWindow.cpp:284 src/gtkmm/MainWindow.cpp:301
+#: src/gtkmm/MainWindow.cpp:287 src/gtkmm/MainWindow.cpp:303
 msgid "server"
 msgstr "server"
 
-#: src/gtkmm/MainWindow.cpp:325
+#: src/gtkmm/MainWindow.cpp:326
 msgid ""
 "Locale conversion error. An error occured while converting text from UTF-8 "
 "to your current locale.\n"
@@ -161,7 +125,7 @@ msgstr ""
 "\n"
 "Hvis du tror dette er en fejl, raportér det venligst til programmets ejer."
 
-#: src/gtkmm/MainWindow.cpp:329
+#: src/gtkmm/MainWindow.cpp:330
 msgid ""
 "\n"
 "\n"
@@ -171,7 +135,7 @@ msgstr ""
 "\n"
 "Dit nuværende locale (ser ud til) at være: "
 
-#: src/gtkmm/MainWindow.cpp:333
+#: src/gtkmm/MainWindow.cpp:334
 #, fuzzy
 msgid ""
 "Encoding conversion error. An error occured while converting text from UTF-8 "
@@ -190,14 +154,14 @@ msgstr ""
 "\n"
 "Hvis du tror dette er en fejl, raportér det venligst til programmets ejer."
 
-#: src/gtkmm/MainWindow.cpp:335
+#: src/gtkmm/MainWindow.cpp:336
 msgid ""
 "\n"
 "\n"
 "I was trying to convert to: "
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:339
+#: src/gtkmm/MainWindow.cpp:340
 msgid ""
 "\n"
 "\n"
@@ -207,6 +171,101 @@ msgstr ""
 "\n"
 "(OBS: Du vil kun se denne advarsel en gang per LostIRC session)"
 
+#: src/gtkmm/MainWindow.cpp:378 src/gtkmm/TextWidget.cpp:354
+msgid "_Hide Menubar"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:385
+msgid "New Server Tab"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:390
+msgid "Clear Window"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:394
+msgid "Clear All Windows"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:398
+msgid "Close Current Tab"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:414
+#, fuzzy
+msgid "Nick List"
+msgstr "Navn: "
+
+#: src/gtkmm/MainWindow.cpp:419
+#, fuzzy
+msgid "Server List"
+msgstr "Servere"
+
+#: src/gtkmm/MainWindow.cpp:423
+msgid "DCC Transfers"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:438
+msgid "_Introduction"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:443
+#, fuzzy
+msgid "_About"
+msgstr "Auto"
+
+#: src/gtkmm/MainWindow.cpp:446
+msgid "_LostIRC"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:447
+msgid "_View"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:448
+msgid "_Help"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:489
+#, fuzzy
+msgid ""
+"LostIRC Quick Introduction\n"
+"\n"
+"This help window is a quick guide to get you going with LostIRC.\n"
+"Move this window away from the LostIRC window, and use it as a quick "
+"reference window until you know the general idea.\n"
+"\n"
+"You can connect to a server using:\n"
+"    /SERVER <hostname / ip>\n"
+"\n"
+"...and then join a channel:\n"
+"    /JOIN <channel-name>\n"
+"\n"
+"A list of all commands are available with:\n"
+"    /COMMANDS\n"
+"\n"
+"And you should really check out the list of key bindings:\n"
+"    /KEYBINDINGS"
+msgstr ""
+"!\n"
+"\n"
+"Du kan nu etablere forbindelse til en server ved at bruge:\n"
+"    8/SERVER <værtsnavn / ip>\n"
+"\n"
+"7...og så gå ind i en kanal:\n"
+"    8/JOIN <kanalnavn>\n"
+"\n"
+"7En liste over alle kommandoer er tilgængelig med:\n"
+"    8/COMMANDS7\n"
+"\n"
+"Og du bør virkelig kigge på listen med tastaturbindinger:\n"
+"    8/KEYBINDINGS\n"
+"\n"
+
+#: src/gtkmm/TextWidget.cpp:359
+msgid "_Show Menubar"
+msgstr ""
+
 #: src/gtkmm/MainNotebook.cpp:113
 msgid " <span foreground=\"red\">(away: "
 msgstr " <span foreground=\"red\">(væk: "
@@ -215,7 +274,7 @@ msgstr " <span foreground=\"red\">(væk: "
 msgid " (currently away)"
 msgstr " (væk i øjeblikket)"
 
-#: src/gtkmm/StatusBar.cpp:36
+#: src/gtkmm/StatusBar.cpp:39
 msgid "Not connected."
 msgstr "Ikke forbundet."
 
@@ -243,75 +302,80 @@ msgstr "pct. udført"
 msgid "From/To"
 msgstr "Fra/Til"
 
-#: src/gtkmm/Prefs.cpp:45
+#: src/gtkmm/Prefs.cpp:46
 #, fuzzy
 msgid "Strip _color codes from incoming messages"
 msgstr "Fjern farvekoder fra indkommende beskeder"
 
-#: src/gtkmm/Prefs.cpp:46
+#: src/gtkmm/Prefs.cpp:47
 #, fuzzy
 msgid "Strip _bold and underline codes from incoming messages"
 msgstr "Fjern fed- og understregskoder fra indkommende beskeder"
 
-#: src/gtkmm/Prefs.cpp:47
+#: src/gtkmm/Prefs.cpp:48
 msgid "_Log conversations to disk"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:52
+#: src/gtkmm/Prefs.cpp:53
 #, fuzzy
 msgid "LostIRC Preferences"
 msgstr "Indstillinger"
 
-#: src/gtkmm/Prefs.cpp:68
+#: src/gtkmm/Prefs.cpp:69
 msgid "General"
 msgstr "Generelt"
 
-#: src/gtkmm/Prefs.cpp:69
+#: src/gtkmm/Prefs.cpp:70
 msgid "Preferences"
 msgstr "Indstillinger"
 
-#: src/gtkmm/Prefs.cpp:70
+#: src/gtkmm/Prefs.cpp:71
 msgid "DCC"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:77
+#: src/gtkmm/Prefs.cpp:72
+#, fuzzy
+msgid "Colours"
+msgstr "Luk"
+
+#: src/gtkmm/Prefs.cpp:79
 #, fuzzy
 msgid "IRC username (ident):"
 msgstr "IRC brugernavn (ident)"
 
-#: src/gtkmm/Prefs.cpp:87
+#: src/gtkmm/Prefs.cpp:89
 msgid "Encoding to use on IRC:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:98
+#: src/gtkmm/Prefs.cpp:100
 msgid "Browse..."
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:102
+#: src/gtkmm/Prefs.cpp:104
 msgid "Main window font:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:112
+#: src/gtkmm/Prefs.cpp:114
 #, fuzzy
 msgid "Nick-completion character:"
 msgstr "Navnefærdiggørelsesbogstav"
 
-#: src/gtkmm/Prefs.cpp:120
+#: src/gtkmm/Prefs.cpp:122
 #, fuzzy
 msgid "Words to highlight on (space seperated):"
 msgstr "Ord der skal anmærkes på (mellemrumssepareret)"
 
-#: src/gtkmm/Prefs.cpp:128
+#: src/gtkmm/Prefs.cpp:130
 #, fuzzy
 msgid "Maximium number of lines to cache:"
 msgstr "Maksimum linier, der skal gemmes"
 
-#: src/gtkmm/Prefs.cpp:150
+#: src/gtkmm/Prefs.cpp:152
 #, fuzzy
 msgid "DCC IP address:"
 msgstr "DCC IP-Adresse"
 
-#: src/gtkmm/Prefs.cpp:158
+#: src/gtkmm/Prefs.cpp:160
 #, fuzzy
 msgid "DCC Port (0 = random):"
 msgstr "DCC Port (0 = tilfældig)"
@@ -458,11 +522,11 @@ msgstr "En fejl opstod, ved at læse fra rør (Intern fejl 3)"
 msgid "Message not sent because of locale problems"
 msgstr "Besked ikke sendt, pga. locale problemer"
 
-#: src/libirc/Parser.cpp:819
+#: src/libirc/Parser.cpp:847
 msgid "idle: "
 msgstr "ubenyttet: "
 
-#: src/libirc/Parser.cpp:823
+#: src/libirc/Parser.cpp:851
 msgid ", signon time: "
 msgstr ", login tid: "
 
@@ -522,29 +586,32 @@ msgstr ""
 msgid "Disconnected."
 msgstr "Forbindelse afbrudt."
 
-#: src/libirc/ServerConnection.cpp:142
+#: src/libirc/ServerConnection.cpp:143
 msgid "Failed connecting: "
 msgstr "Kunne ikke forbinde: "
 
-#: src/libirc/ServerConnection.cpp:148
+#: src/libirc/ServerConnection.cpp:149
 msgid "Resolved host. Connecting.."
 msgstr "Værtsnavn slået op. Forbinder.."
 
-#: src/libirc/ServerConnection.cpp:154
+#: src/libirc/ServerConnection.cpp:155
 msgid "Failed connecting:"
 msgstr "Kunne ikke forbinde:"
 
-#: src/libirc/ServerConnection.cpp:236
+#: src/libirc/ServerConnection.cpp:237
 msgid "Failed to receive: "
 msgstr "Kunne ikke modtage: "
 
-#: src/libirc/ServerConnection.cpp:251
+#: src/libirc/ServerConnection.cpp:252
 msgid "Connected. Logging in..."
 msgstr "Forbundet. Logger ind..."
 
 #: src/libirc/LostIRCApp.h:53
 msgid "Logging to `"
 msgstr "Logger til `"
+
+#~ msgid "7Welcome to LostIRC "
+#~ msgstr "7Velkommen til LostIRC "
 
 #, fuzzy
 #~ msgid "Limited _highlighting (don't mark tabs red on joins/parts etc.)"
@@ -569,9 +636,6 @@ msgstr "Logger til `"
 #~ msgid "Font selection"
 #~ msgstr "Skrifttypevalg"
 
-#~ msgid "Servers"
-#~ msgstr "Servere"
-
 #~ msgid "Apply settings"
 #~ msgstr "Anvend indstillinger"
 
@@ -583,9 +647,6 @@ msgstr "Logger til `"
 
 #~ msgid "> Hello World!"
 #~ msgstr "> Hej Verden!"
-
-#~ msgid "Auto"
-#~ msgstr "Auto"
 
 #~ msgid "Options"
 #~ msgstr "Indstillinger"
@@ -602,9 +663,6 @@ msgstr "Logger til `"
 #~ msgid "Password: "
 #~ msgstr "Adgangskode: "
 
-#~ msgid "Nick: "
-#~ msgstr "Navn: "
-
 #~ msgid "Commmands to perform on connect: "
 #~ msgstr "Kommandoer, der skal udføres ved forbindelse: "
 
@@ -616,9 +674,6 @@ msgstr "Logger til `"
 
 #~ msgid "Remove entry"
 #~ msgstr "Fjern element"
-
-#~ msgid "Close"
-#~ msgstr "Luk"
 
 #~ msgid "Somebody"
 #~ msgstr "Nogen"
