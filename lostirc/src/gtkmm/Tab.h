@@ -134,6 +134,7 @@ public:
 
 private:
     void updateUserNumber();
+    gint sortFunc(const Gtk::TreeModel::iterator& i1, const Gtk::TreeModel::iterator& i2);
 
     /* what our columned-list contains */
     struct ModelColumns : public Gtk::TreeModel::ColumnRecord
@@ -150,7 +151,5 @@ private:
     Gtk::TreeView _treeview;
 
 };
-
-//gint sortFunc(GtkCList *clist, gconstpointer ptr1, gconstpointer ptr2);
 
 #endif

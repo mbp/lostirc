@@ -244,8 +244,9 @@ TabChannel::TabChannel(Gtk::Label *label, ServerConnection *conn) //, Gdk_Font *
     _treeview.append_column("", _columns.status);
     _treeview.append_column("", _columns.nick);
     _treeview.get_selection()->set_mode(Gtk::SELECTION_NONE);
+    _liststore->set_sort_column_id(0, Gtk::SORT_ASCENDING);
+    _liststore->set_sort_func(0, SigC::slot(*this, &TabChannel::sortFunc));
 
-    /* FIXME: no sorting yet! */
     /* FIXME: no set_column_width() like in the old days! */
 
     _treeview.set_headers_visible(false);
@@ -359,23 +360,18 @@ bool TabChannel::nickCompletion(const ustring& word, ustring& str)
         return false;
     }
 }
-
-/* FIXME
-gint sortFunc(GtkCList *clist, gconstpointer ptr1, gconstpointer ptr2)
+gint TabChannel::sortFunc(const Gtk::TreeModel::iterator& i1, const Gtk::TreeModel::iterator& i2)
 {
-    gchar* row0_cell0 = GTK_CELL_TEXT(((GtkCListRow*)ptr1)->cell[0])->text;
-    gchar* row1_cell0 = GTK_CELL_TEXT(((GtkCListRow*)ptr2)->cell[0])->text;
+    // Sort the nicklist. The status field has highest priority, nick has second priority.
 
-    gchar* row0_cell1 = GTK_CELL_TEXT(((GtkCListRow*)ptr1)->cell[1])->text;
-    gchar* row1_cell1 = GTK_CELL_TEXT(((GtkCListRow*)ptr2)->cell[1])->text;
+    // This is not very readable, but it works, and it has to be fast when
+    // joining huge channels.
 
-    if (strcmp(row0_cell0, row1_cell0) == 0) {
-        return strcmp(row0_cell1, row1_cell1);
-    } else {
-        return -strcmp(row0_cell0, row1_cell0);
-    }
+    return strcmp(i1->get_value(_columns.status).c_str(), i2->get_value(_columns.status).c_str())
+            <
+            strcmp(i1->get_value(_columns.nick).c_str(), i2->get_value(_columns.nick).c_str());
+
 }
-*/
 
 void Tab::helperInitializer(int i, const char * colorname)
 {

@@ -125,7 +125,6 @@ bool Entry::onKeyPress(GdkEventKey* e)
                 word = line.substr(pos + 1);
             }
             if (line.at(0) == '/' && !word.empty() && pos == 0) {
-                std::cout << "Commandcompletetion" << std::endl;
                 // Command completion, could be prettier
                 string newstr = Glib::locale_from_utf8(str);
                 if (GuiCommands::commandCompletion(Glib::locale_from_utf8(word.substr(1)), newstr)) {
@@ -134,13 +133,13 @@ bool Entry::onKeyPress(GdkEventKey* e)
                 }
 
             } else if (_tab->nickCompletion(word, str)) {
-                std::cout << "Nickcompletetion" << std::endl;
                 // Nick-completetion
                 if (pos == 0) {
                     set_text(str + AppWin->getApp().getCfg().getOpt("nickcompletion_character") + " ");
                     set_position(-1);
                 } else {
                     set_text(line.substr(0, pos + 1) + str);
+                    set_position(-1);
                 }
             } else {
                 std::cout << "text: '" << str << "'" << std::endl;
