@@ -348,8 +348,7 @@ bool TabChannel::nickCompletion(const string& word, string& str)
     lcword = Util::lower(lcword);
     while(i != getCList()->rows().end())
     {
-        int row = i->get_row_num();
-        string nick = getCList()->cell(row, 1).get_text();
+        string nick = getCList()->cell(i->get_row_num(), 1).get_text();
 
         // Lower case again
         string lcnick = nick;
