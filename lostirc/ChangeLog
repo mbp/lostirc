@@ -1,4 +1,4 @@
-LostIRC (x.x.x)
+LostIRC (0.1.4) - Sat Jul 13th 2002
   * A segfault which appeared when the enviroment variable USER wasn't set,
     has been fixed (thanks, Gabriele Giorgetti)
   * gcc 3.1 compilation fix
