@@ -3,8 +3,6 @@ CRITICAL:
   * Implement reading in ServerConncetion better (more efficiently)
   * Implement DCC CHAT
   * Should have a limit on the text-buffer, not go on forever.
-  * When parting an empty channel where one has op, and joining the channel
-    again, op is not shown.
 
 RANDOM:
 ------
@@ -25,6 +23,8 @@ RANDOM:
   * lostirc.desktop should be distributed as KDE link as well.
   * note when window has lost focus; then highlight front-tab
   * check for EAGAIN on send()?
+  * nick-list mentions "0 users" instead of "Not on channel" when a channel
+    has been parted with /PART.
 
 DCC:
 ---

@@ -32,7 +32,6 @@ class MainNotebook : public Gtk::Notebook
 {
 public:
     MainNotebook();
-    ~MainNotebook();
 
     TabChannel* addChannelTab(const std::string& name, ServerConnection *conn);
     TabQuery* addQueryTab(const std::string& name, ServerConnection *conn);

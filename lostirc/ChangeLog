@@ -6,6 +6,9 @@ LostIRC (x.x.x)
     should now be fixed.
   * KILL messages are now being parsed correctly (for those of you who get
     killed often..)
+  * When a channel was parted with /PART, or the user was disconnected, a
+    rejoin to the channel would make the nick-list reuse nicks from the
+    previous session
 
 LostIRC (0.1.1) - Thu Jun 20th 2002
   * A bug where the client consumed 100% CPU has been fixed.

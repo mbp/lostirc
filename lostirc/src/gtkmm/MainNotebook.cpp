@@ -32,22 +32,27 @@ MainNotebook::MainNotebook()
     show_all();
 }
 
-MainNotebook::~MainNotebook()
-{
-    // FIXME
-}
-
 TabChannel * MainNotebook::addChannelTab(const string& name, ServerConnection *conn)
 {
+    // First try to find out whether we have a "server"-tab for this
+    // ServerConnection.
     Gtk::Notebook_Helpers::Page *p = findPage("(server)", conn);
 
     if (p) {
+        // If we have a "server"-tab, reuse it as a channel-tab.
         TabChannel* tab = dynamic_cast<TabChannel*>(p->get_child());
         tab->getLabel()->set_text(name);
         tab->setActive();
         show_all();
         return tab;
+    } else if (Tab *tab = findTab(name, conn, true)) {
+        // If we find an *inactive* channel-tab, lets reuse it.
+        assert(tab);
+        tab->setActive();
+        tab->getLabel()->set_text(name);
+        return dynamic_cast<TabChannel*>(tab);
     } else {
+        // If not, create a new channel-tab.
         Gtk::Label *label = manage(new Gtk::Label(name));
         TabChannel *tab = manage(new TabChannel(label, conn, &_font));
         pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, *label));
@@ -84,8 +89,7 @@ Tab * MainNotebook::findTab(const string& name, ServerConnection *conn, bool fin
     Gtk::Notebook_Helpers::Page *p = findPage(name, conn, findInActive);
 
     if (p) {
-        Tab* tab = static_cast<Tab*>(p->get_child());
-        return tab;
+        return static_cast<Tab*>(p->get_child());
     }
     return 0;
 }

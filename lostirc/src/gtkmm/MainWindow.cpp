@@ -113,13 +113,10 @@ void MainWindow::displayMessage(const string& msg, ChannelBase& chan, ServerConn
 
 void MainWindow::join(const string& nick, Channel& chan, ServerConnection *conn)
 {
-    Tab *tab = _nb->findTab(chan.getName(), conn, true);
+    Tab *tab = _nb->findTab(chan.getName(), conn);
     if (!tab) {
         tab = _nb->addChannelTab(chan.getName(), conn);
         return;
-    } else if (!tab->isActive()) {
-        tab->setActive();
-        tab->getLabel()->set_text(chan.getName());
     }
     tab->insertUser(nick);
 }
