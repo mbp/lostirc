@@ -1,5 +1,12 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-08-23  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * MainWindow.cpp: Make hiding and showing of menu work properly. The
+          same with the Nick List.
+
+        * Tab.cpp/Tab.h: Ditto.
+
 2003-08-21  Morten Brix Pedersen  <morten@wtf.dk>
 
         * ServerWindow.cpp: Implement the connectEntry() function, such that

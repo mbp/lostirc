@@ -447,9 +447,10 @@ void MainWindow::setupMenus()
 
 void MainWindow::hideMenu()
 {
-    // FIXME
-    #warning IMPLEMENT ME hideMenu()
-    _menubar.hide();
+    if (_menubar.is_visible())
+          _menubar.hide();
+    else
+          _menubar.show();
 }
 
 void MainWindow::hideNickList()
@@ -460,7 +461,7 @@ void MainWindow::hideNickList()
     vector<Tab*> tabs;
 
     _notebook.Tabs(tabs);
-    std::for_each(tabs.begin(), tabs.end(), std::mem_fun(&Tab::updateNickList));
+    std::for_each(tabs.begin(), tabs.end(), std::mem_fun(&Tab::toggleNickList));
 }
 
 void MainWindow::openServerWindow()

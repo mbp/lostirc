@@ -115,10 +115,12 @@ void Tab::removeHighlight()
     setLabelName();
 }
 
-void Tab::addOrRemoveNickList()
+void Tab::toggleNickList()
 {
     if (isType(QUERY) || isType(SERVER) || !AppWin->hasNickList())
           _nicklist.hide();
+    else if (AppWin->hasNickList())
+          _nicklist.show();
 }
 
 void Tab::insertUser(const Glib::ustring& user, IRC::UserMode m)

@@ -1,3 +1,8 @@
+NEW BUGS:
+
+  * Segfaults on CTRL-W. (Seems to be the re-occuring gtkmm/g++-3.3 bug)
+  * The text "Disconnected." appears when connecting to a new server.
+
 CRITICAL: 
 ---------
   * Implement DCC CHAT

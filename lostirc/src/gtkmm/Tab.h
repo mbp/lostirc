@@ -60,9 +60,9 @@ public:
     void setInActive();
     void setActive();
     bool isActive() const { return _isActive; }
-    void updateNickList() { addOrRemoveNickList(); }
+    void toggleNickList();
 
-    void setType(Type type) { _type = type; addOrRemoveNickList(); }
+    void setType(Type type) { _type = type; toggleNickList(); }
     bool isType(Type type) const { return type == _type; }
 
     void highlightNick();
@@ -73,7 +73,6 @@ public:
 
 private:
     void setLabelName();
-    void addOrRemoveNickList();
             
     ServerConnection *_conn;
 
