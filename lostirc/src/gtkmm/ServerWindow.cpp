@@ -100,7 +100,7 @@ ServerWindow::ServerWindow(Gtk::Window& parent)
     buttbox->pack_end(*closebutton, Gtk::PACK_SHRINK);
 
     Gtk::Label *servlabel = manage(new Gtk::Label());
-    servlabel->set_markup("<b>Servers</b>");
+    servlabel->set_markup(_("<b>Servers</b>"));
     get_vbox()->pack_start(_pref_table, Gtk::PACK_SHRINK, 5);
     get_vbox()->pack_start(*manage(new Gtk::HSeparator()), Gtk::PACK_SHRINK, 5);
     get_vbox()->pack_start(*servlabel, Gtk::PACK_SHRINK, 5);

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-05 19:34+0200\n"
+"POT-Creation-Date: 2004-08-28 01:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -80,11 +80,11 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:293 src/gtkmm/MainWindow.cpp:309
+#: src/gtkmm/MainWindow.cpp:295 src/gtkmm/MainWindow.cpp:305
 msgid "server"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:332
+#: src/gtkmm/MainWindow.cpp:328
 msgid ""
 "Locale conversion error. An error occured while converting text from UTF-8 "
 "to your current locale.\n"
@@ -95,14 +95,14 @@ msgid ""
 "If you believe this is a bug, please report it to the application author."
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:336
+#: src/gtkmm/MainWindow.cpp:332
 msgid ""
 "\n"
 "\n"
 "Your current locale (seems) to be: "
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:340
+#: src/gtkmm/MainWindow.cpp:336
 msgid ""
 "Encoding conversion error. An error occured while converting text from UTF-8 "
 "to the user-defined encoding.\n"
@@ -113,77 +113,77 @@ msgid ""
 "If you believe this is a bug, please report it to the application author."
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:342
+#: src/gtkmm/MainWindow.cpp:338
 msgid ""
 "\n"
 "\n"
 "I was trying to convert to: "
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:346
+#: src/gtkmm/MainWindow.cpp:342
 msgid ""
 "\n"
 "\n"
 "(Note: You'll only see this warning once per LostIRC session)"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:384
+#: src/gtkmm/MainWindow.cpp:380
 msgid "_LostIRC"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:385
+#: src/gtkmm/MainWindow.cpp:381
 msgid "_New Server Tab"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:388
+#: src/gtkmm/MainWindow.cpp:384
 msgid "Clear Window"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:390
+#: src/gtkmm/MainWindow.cpp:386
 msgid "Clear All Windows"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:392
+#: src/gtkmm/MainWindow.cpp:388
 msgid "Close Current Tab"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:398
+#: src/gtkmm/MainWindow.cpp:394
 msgid "_View"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:399
+#: src/gtkmm/MainWindow.cpp:395
 msgid "_Menubar"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:400
+#: src/gtkmm/MainWindow.cpp:396
 msgid "Status_bar"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:401
+#: src/gtkmm/MainWindow.cpp:397
 msgid "_User List"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:402
+#: src/gtkmm/MainWindow.cpp:398
 msgid "_Server List"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:403
+#: src/gtkmm/MainWindow.cpp:399
 msgid "_DCC Transfers"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:406
+#: src/gtkmm/MainWindow.cpp:402
 msgid "_Help"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:407
+#: src/gtkmm/MainWindow.cpp:403
 msgid "_Introduction"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:408
+#: src/gtkmm/MainWindow.cpp:404
 msgid "_About"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:496
+#: src/gtkmm/MainWindow.cpp:492
 msgid ""
 "LostIRC Quick Introduction\n"
 "\n"
@@ -204,7 +204,7 @@ msgid ""
 "    /KEYBINDINGS"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:510
+#: src/gtkmm/MainWindow.cpp:506
 msgid "LostIRC "
 msgstr ""
 
@@ -214,6 +214,66 @@ msgstr ""
 
 #: src/gtkmm/MainNotebook.cpp:148
 msgid " (currently away)"
+msgstr ""
+
+#: src/gtkmm/ServerWindow.cpp:41
+msgid "LostIRC Server Window"
+msgstr ""
+
+#: src/gtkmm/ServerWindow.cpp:54 src/gtkmm/ServerWindow.cpp:259
+msgid "Nickname:"
+msgstr ""
+
+#: src/gtkmm/ServerWindow.cpp:62
+msgid "Real name:"
+msgstr ""
+
+#: src/gtkmm/ServerWindow.cpp:76
+msgid "Auto-connect"
+msgstr ""
+
+#: src/gtkmm/ServerWindow.cpp:77
+msgid "Hostname"
+msgstr ""
+
+#: src/gtkmm/ServerWindow.cpp:78
+msgid "Port"
+msgstr ""
+
+#: src/gtkmm/ServerWindow.cpp:84
+msgid "_Connect"
+msgstr ""
+
+#: src/gtkmm/ServerWindow.cpp:88
+msgid "_Modify"
+msgstr ""
+
+#: src/gtkmm/ServerWindow.cpp:103
+msgid "<b>Servers</b>"
+msgstr ""
+
+#: src/gtkmm/ServerWindow.cpp:218
+msgid "LostIRC Server Edit"
+msgstr ""
+
+#: src/gtkmm/ServerWindow.cpp:219
+msgid "_Connect automatically"
+msgstr ""
+
+#: src/gtkmm/ServerWindow.cpp:237
+msgid "Hostname:"
+msgstr ""
+
+#: src/gtkmm/ServerWindow.cpp:244
+msgid "Port:"
+msgstr ""
+
+#: src/gtkmm/ServerWindow.cpp:252
+msgid "Password:"
+msgstr ""
+
+#: src/gtkmm/ServerWindow.cpp:266
+msgid "Commands to perform when connected:"
 msgstr ""
 
 #: src/gtkmm/StatusBar.cpp:39
@@ -288,36 +348,56 @@ msgstr ""
 msgid "DCC"
 msgstr ""
 
+#: src/gtkmm/Prefs.cpp:72
+msgid "Colours"
+msgstr ""
+
 #: src/gtkmm/Prefs.cpp:79
 msgid "IRC username (ident):"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:90
+#: src/gtkmm/Prefs.cpp:98
 msgid "Encoding to use on IRC:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:100
+#: src/gtkmm/Prefs.cpp:108
 msgid "Main window font:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:110
+#: src/gtkmm/Prefs.cpp:118
 msgid "Nick-completion character:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:118
+#: src/gtkmm/Prefs.cpp:126
 msgid "Words to highlight on (space seperated):"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:126
+#: src/gtkmm/Prefs.cpp:134
 msgid "Maximium number of lines to cache:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:148
+#: src/gtkmm/Prefs.cpp:156
 msgid "DCC IP address:"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:156
+#: src/gtkmm/Prefs.cpp:164
 msgid "DCC Port (0 = random):"
+msgstr ""
+
+#: src/gtkmm/Prefs.cpp:171
+msgid "Pick a colorscheme"
+msgstr ""
+
+#: src/gtkmm/Prefs.cpp:172
+msgid "Changes to colorschemes only apply to newly created tabs"
+msgstr ""
+
+#: src/gtkmm/Prefs.cpp:173
+msgid "White on black"
+msgstr ""
+
+#: src/gtkmm/Prefs.cpp:174
+msgid "Black on white"
 msgstr ""
 
 #: src/gtkmm/NickList.cpp:57

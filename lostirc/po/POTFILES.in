@@ -8,6 +8,7 @@ src/gtkmm/GuiCommands.cpp
 src/gtkmm/MainWindow.cpp
 src/gtkmm/TextWidget.cpp
 src/gtkmm/MainNotebook.cpp
+src/gtkmm/ServerWindow.cpp
 src/gtkmm/StatusBar.cpp
 src/gtkmm/DCCList.cpp
 src/gtkmm/Prefs.cpp
@@ -29,6 +30,7 @@ src/gtkmm/GuiCommands.h
 src/gtkmm/TextWidget.h
 src/gtkmm/Prefs.h
 src/gtkmm/Tab.h
+src/gtkmm/ServerWindow.h
 src/gtkmm/StatusBar.h
 src/gtkmm/MainWindow.h
 src/gtkmm/DCCList.h

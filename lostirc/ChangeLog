@@ -1,5 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
+2004-08-28  Morten Brix Pedersen  <morten@wtf.dk>
+	* src/gtkmm/ServerWindow.cpp: Marked a missing string translateable.
+	* po/POTFILES.in: Added missing ServerWindow files.
+	* po/da.po: Updated.
+
 2004-08-02  Morten Brix Pedersen  <morten@wtf.dk>
 	* configure.ac: Bump version and release 0.4.1.
 
