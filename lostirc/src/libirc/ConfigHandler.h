@@ -35,7 +35,7 @@ struct autoJoin {
 
 class ConfigHandler {
     std::map<std::string, std::string> _settings;
-    std::vector<struct autoJoin> _servers;
+    std::vector<struct autoJoin*> _servers;
 
 public:
     /* read all configuration files */
@@ -46,7 +46,7 @@ public:
     std::string getParam(const std::string& param);
 
     /* return "auto-join list" */
-    std::vector<struct autoJoin> getServers() { return _servers; }
+    std::vector<struct autoJoin*> getServers() { return _servers; }
 
 private:
     bool readEvents(const std::string& filename);

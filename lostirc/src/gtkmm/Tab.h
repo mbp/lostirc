@@ -20,6 +20,7 @@
 #define TAB_H
 
 #include <gtk--/scrolledwindow.h>
+#include <gtk--/notebook.h>
 #include <gtk--/entry.h>
 #include <gtk--/box.h>
 #include <gtk--/label.h>
@@ -125,12 +126,18 @@ private:
 
 };
 
-class Prefs : public Gtk::VBox
+class Prefs : public Gtk::Notebook
 {
+    Gtk::CList *clist;
+    Gtk::Entry *passentry;
+    Gtk::Entry *portentry;
+    Gtk::Entry *hostentry;
+    Gtk::Entry *nickentry;
     Tab *_t;
 
     void endPrefs();
     void savePrefs();
+    void onSelectRow(int row, int col, GdkEvent* e);
 
 public:
     Prefs(Tab *t);

@@ -1,3 +1,14 @@
+LostIRC (0.0.4)
+  * /TOPIC and /KICK was not working properly, the topic and kick message
+    could not be set if it contained spaces
+  * When getting a CTCP NOTICE from a user, now show the actual nick it was
+    received from
+  * When whoising a person, the idle time and signon time is now displayed in
+    a more human-readable format
+  * /LIST is now implemented
+  * The /NAMES command now works better for channels you are already on
+  * The usual code improvements
+
 LostIRC (0.0.3) - Mon Feb, 18th 2002
   * Implement /kick
   * Implement /names

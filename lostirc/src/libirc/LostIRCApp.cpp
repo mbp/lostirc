@@ -59,12 +59,12 @@ LostIRCApp::~LostIRCApp()
 
 void LostIRCApp::start()
 {
-    vector<struct autoJoin> servers = _cfg.getServers();
-    vector<struct autoJoin>::iterator i;
+    vector<struct autoJoin*> servers = _cfg.getServers();
+    vector<struct autoJoin*>::iterator i;
 
     for (i = servers.begin(); i != servers.end(); ++i) {
-        ServerConnection *conn = newServer(i->hostname, i->port);
-        conn->Session.cmds = i->cmds;
+        ServerConnection *conn = newServer((*i)->hostname, (*i)->port);
+        conn->Session.cmds = (*i)->cmds;
     }
 }
 

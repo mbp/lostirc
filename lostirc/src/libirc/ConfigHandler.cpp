@@ -96,12 +96,12 @@ bool ConfigHandler::readServers(const string& filename)
 
             if (param == "hostname") {
                 if (!server.empty()) {
-                    struct autoJoin j;
-                    j.hostname = server;
-                    j.port = port ? port : 6667;
-                    j.password = password;
-                    j.cmds = tmpcmds;
-                    j.nick = nick;
+                    struct autoJoin *j = new autoJoin;
+                    j->hostname = server;
+                    j->port = port ? port : 6667;
+                    j->password = password;
+                    j->cmds = tmpcmds;
+                    j->nick = nick;
 
                     port = 0;
                     password = "";
@@ -123,12 +123,12 @@ bool ConfigHandler::readServers(const string& filename)
         }
     }
     if (!server.empty()) {
-        struct autoJoin j;
-        j.hostname = server;
-        j.port = port ? port : 6667;
-        j.password = password;
-        j.cmds = tmpcmds;
-        j.nick = nick;
+        struct autoJoin *j = new autoJoin;
+        j->hostname = server;
+        j->port = port ? port : 6667;
+        j->password = password;
+        j->cmds = tmpcmds;
+        j->nick = nick;
 
         _servers.push_back(j);
     } 

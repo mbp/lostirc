@@ -410,32 +410,64 @@ void Tab::endPrefs(Prefs *p)
 }
 
 Prefs::Prefs(Tab *t)
-    : Gtk::VBox(), _t(t)
+    : Gtk::Notebook(), _t(t)
 {
 
-    Gtk::HBox *hbox = manage(new Gtk::HBox);
-    Gtk::HBox *hbox2 = manage(new Gtk::HBox);
-    Gtk::CList *clist = manage(new Gtk::CList(1));
-    vector<struct autoJoin> servers = GuiCommands::mw->getApp()->getCfg().getServers();
-    vector<struct autoJoin>::iterator i;
+    Gtk::VBox *performbox = manage(new Gtk::VBox());
+    Gtk::VBox *prefsbox = manage(new Gtk::VBox());
+    Gtk::HBox *serverhbox = manage(new Gtk::HBox());
+    Gtk::HBox *buttons = manage(new Gtk::HBox());
+    clist = manage(new Gtk::CList(1));
+    clist->select_row.connect(slot(this, &Prefs::onSelectRow));
+
+    vector<struct autoJoin*> servers = GuiCommands::mw->getApp()->getCfg().getServers();
+    vector<struct autoJoin*>::iterator i;
 
     for (i = servers.begin(); i != servers.end(); ++i) {
         vector<string> v; // FIXME: ugly as hell.
-        v.push_back(i->hostname);
+        v.push_back((*i)->hostname);
         clist->rows().push_back(v);
+        clist->rows().back().set_data(*i);
     }
-    hbox->pack_start(*clist);
-    Gtk::VBox *vbox = manage(new Gtk::VBox());
-    hbox->pack_start(*vbox);
+    serverhbox->pack_start(*clist);
+    Gtk::VBox *serverinfobox = manage(new Gtk::VBox());
+    serverhbox->pack_start(*serverinfobox);
+
+    /* hostname */
+    hostentry = manage(new Gtk::Entry());
+    Gtk::Frame *frame1 = manage(new Gtk::Frame("Hostname"));
+    frame1->add(*hostentry);
+    serverinfobox->pack_start(*frame1, 0, 0);
+
+    /* port */
+    portentry = manage(new Gtk::Entry());
+    Gtk::Frame *frame2 = manage(new Gtk::Frame("Port"));
+    frame2->add(*portentry);
+    serverinfobox->pack_start(*frame2, 0, 0);
+
+    /* password */
+    passentry = manage(new Gtk::Entry());
+    Gtk::Frame *frame3 = manage(new Gtk::Frame("Password"));
+    frame3->add(*passentry);
+    serverinfobox->pack_start(*frame3, 0, 0);
+
+    /* nick */
+    nickentry = manage(new Gtk::Entry());
+    Gtk::Frame *frame4 = manage(new Gtk::Frame("Nick"));
+    frame4->add(*nickentry);
+    serverinfobox->pack_start(*frame4, 0, 0);
 
     Gtk::Button *_buttonsave = manage(new Gtk::Button("Save prefs"));
     _buttonsave->clicked.connect(slot(this, &Prefs::savePrefs));
     Gtk::Button *_buttonclose = manage(new Gtk::Button("Close prefs"));
     _buttonclose->clicked.connect(slot(this, &Prefs::endPrefs));
-    hbox2->pack_start(*_buttonsave);
-    hbox2->pack_start(*_buttonclose);
-    pack_start(*hbox, 1, 1);
-    pack_start(*hbox2, 0, 0);
+    buttons->pack_start(*_buttonsave);
+    buttons->pack_start(*_buttonclose);
+    performbox->pack_start(*serverhbox, 1, 1);
+    performbox->pack_start(*buttons, 0, 0);
+
+    pages().push_back(Gtk::Notebook_Helpers::TabElem(*performbox, "Autojoin servers"));
+    pages().push_back(Gtk::Notebook_Helpers::TabElem(*prefsbox, "Preferences"));
     show_all();
 }
 
@@ -446,5 +478,15 @@ void Prefs::endPrefs()
 
 void Prefs::savePrefs()
 {
+    // FIXME
     endPrefs();
+}
+
+void Prefs::onSelectRow(int r, int col, GdkEvent *e)
+{
+    struct autoJoin *a = static_cast<struct autoJoin*>(clist->row(r).get_data());
+    hostentry->set_text(a->hostname);
+    passentry->set_text(a->password);
+    //portentry->set_text((char *)a->port);
+    nickentry->set_text(a->nick);
 }
