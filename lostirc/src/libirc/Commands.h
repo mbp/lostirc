@@ -60,7 +60,7 @@ public:
     static void Quote(ServerConnection *conn, const std::string& params);
     static void commands(ServerConnection *conn, const std::string& params);
 //    static void Exec(ServerConnection *conn, const std::string& params);
-    static bool commandCompletion(const std::string& word, string& str);
+    static bool commandCompletion(const std::string& word, std::string& str);
 
     static LostIRCApp *app;
 };
