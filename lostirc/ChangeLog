@@ -1,5 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
+2004-06-05  Morten Brix Pedersen  <morten@wtf.dk>
+	* MainNotebook.cpp: Implement simple sorting of tabs, using bubble
+	sort.
+
 2004-05-16  Morten Brix Pedersen  <morten@wtf.dk>
 	* Commands.cpp: Don't crash on /DCC SEND.
 

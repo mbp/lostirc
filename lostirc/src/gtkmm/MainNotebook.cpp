@@ -51,7 +51,30 @@ Tab* MainNotebook::addTab(Tab::Type type, const ustring& name, ServerConnection 
     tab->setType(type);
     tab->setName(name);
 
+    sort();
     return tab;
+}
+
+void MainNotebook::sort()
+{
+    // Bubble sort.
+    // TODO: this bubble sort can be made more efficient! or changed to
+    // quicksort.
+    Gtk::Notebook_Helpers::PageList::iterator i, j;
+
+    int lastIndex = pages().size()-1;
+    for (int i = 1; i <= pages().size(); ++i)
+    {
+        for (int j = 0; j < lastIndex; ++j)
+        {
+            Tab* tab1 = static_cast<Tab*>(get_nth_page(j));
+            Tab* tab2 = static_cast<Tab*>(get_nth_page(j+1));
+
+            if (tab1->getConn() > tab2->getConn()) {
+                reorder_child(*tab1, j+1);
+            }
+        }
+    }
 }
 
 Tab* MainNotebook::getCurrent(ServerConnection *conn)

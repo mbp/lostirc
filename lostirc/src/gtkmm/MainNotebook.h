@@ -45,6 +45,7 @@ public:
     int countTabs(ServerConnection *conn);
     void updateTitle(Tab *tab = 0);
     void updateStatus(Tab *tab = 0);
+    void sort();
 
 private:
     void onSwitchPage(GtkNotebookPage *p, unsigned int n);
