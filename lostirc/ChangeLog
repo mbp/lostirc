@@ -1,3 +1,15 @@
+LostIRC (0.0.3)
+  * Implement /kick
+  * Implement /names
+  * No longer crash when doing /quote names #chan
+  * When kicked from a channel, it's properly removed so you don't receive
+    messages in that tab
+  * No longer crash when connecting to some unreal ircd servers
+  * When you join a new channel, or a query gets started and you are away, the
+    "You are away" msg will still appear.
+  * The port when connecting is now displayed correctly
+  * Many code cleanups
+
 LostIRC (0.0.2) - Sun Feb, 3rd 2002
   * Code cleanups
   * It's now possible to connect to a server on another port than 6667, and to
