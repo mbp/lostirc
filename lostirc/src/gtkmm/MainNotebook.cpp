@@ -24,9 +24,9 @@ using Glib::ustring;
 using std::vector;
 
 MainNotebook::MainNotebook()
-    : Gtk::Notebook()
 {
     set_tab_pos(Gtk::POS_BOTTOM);
+    set_scrollable(true);
     fontdescription = Pango::FontDescription(App->options.font);
     signal_switch_page().connect(SigC::slot(*this, &MainNotebook::onSwitchPage));
 }

@@ -1,3 +1,8 @@
+LostIRC (x.x.x)
+  * When you had more tabs than there could be on the screen, the window
+    would simply be resized to a larger width which caused problems. The
+    tabs are now scrollable with arrows.
+
 LostIRC (0.2.3) - Thu Dec, 19th 2002
   * The "Merrry christmas and happy new year" release - see you in 2003!
   * WHOIS output is now formatted much nicer.

@@ -1,5 +1,12 @@
 For a summary of changes between releases - see the NEWS file.
 
+2002-12-21  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * configure.in: Bump to version 0.2.4pre.
+        * Notebook.cpp: Use arrows when tabs can no longer fit into the
+          window. set_scrollable(true).
+        * Notebook.cpp: Don't explicitly call Gtk::Notebook() constructor.
+
 2002-12-19  Morten Brix Pedersen  <morten@wtf.dk>
 
         * configure.in: Bump to version 0.2.3 and release.
