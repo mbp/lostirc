@@ -127,7 +127,7 @@ void Tab::parseAndInsert(const string& str)
 
 void Tab::insertWithColor(int color, const string& str)
 {   
-    Gdk_Color colors[8];
+    Gdk_Color colors[10];
 
     colors[0] = Gdk_Color("#C5C2C5");
     colors[1] = Gdk_Color("#FFFFFF");
