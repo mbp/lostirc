@@ -38,6 +38,7 @@ ServerConnection::ServerConnection(LostIRCApp *app, const string& nick, const st
     Session.realname = realname;
     Session.isConnected = false;
     Session.hasRegistered = false;
+    Session.isAway = false;
 }
 
 ServerConnection::~ServerConnection()
