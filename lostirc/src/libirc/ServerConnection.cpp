@@ -112,6 +112,10 @@ void ServerConnection::doCleanup()
 
 void ServerConnection::disconnect()
 {
+    #ifdef DEBUG
+    App->log << "ServerConnection::disconnect()" << std::endl;
+    #endif
+
     doCleanup();
 
     FE::emit(FE::get(SERVMSG) << "Disconnected.", FE::ALL, this);
@@ -120,6 +124,10 @@ void ServerConnection::disconnect()
 
 void ServerConnection::connect()
 {
+    #ifdef DEBUG
+    App->log << "ServerConnection::connect()" << std::endl;
+    #endif
+
     doCleanup();
 
     FE::emit(FE::get(CONNECTING) << Session.host << Session.port, FE::CURRENT, this);
