@@ -670,14 +670,14 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             break;
 
         case 305: // RPL_UNAWAY
-            App->fe->away(false, _conn);
             _conn->Session.isAway = false;
+            App->fe->away(false, _conn);
             FE::emit(FE::get(SERVMSG) << rest, FE::CURRENT, _conn);
             break;
 
         case 306: // RPL_NOWAWAY
-            App->fe->away(true, _conn);
             _conn->Session.isAway = true;
+            App->fe->away(true, _conn);
             FE::emit(FE::get(SERVMSG) << rest, FE::CURRENT, _conn);
             break;
 
