@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LostIRC 0.3.2pre\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-02 03:54+0100\n"
+"POT-Creation-Date: 2004-01-22 04:39+0100\n"
 "PO-Revision-Date: 2004-01-01 19:25+0100\n"
 "Last-Translator: Morten Brix Pedersen <morten@wtf.dk>\n"
 "Language-Team: Danish <dansk@¿lid.dk>\n"
@@ -494,106 +494,114 @@ msgstr "/DEVOICE <kanal> <navne>, fjern lyd fra en eller flere navne."
 msgid "Not found key, `"
 msgstr "Ingen nøgle fundet, `"
 
-#: src/libirc/Socket.cpp:68 src/libirc/Socket.cpp:75
+#: src/libirc/Socket.cpp:64 src/libirc/Socket.cpp:71
 msgid "Error writing to pipe: "
 msgstr "Fejl ved skrivning til rør: "
 
-#: src/libirc/Socket.cpp:125
+#: src/libirc/Socket.cpp:107
 msgid "An error occured while reading from pipe (Internal error 2)"
 msgstr "En fejl opstod, ved at læse fra rør (Intern fejl 2)"
 
-#: src/libirc/Socket.cpp:135
+#: src/libirc/Socket.cpp:117
 msgid "An error occured while reading from pipe (Internal error 3)"
 msgstr "En fejl opstod, ved at læse fra rør (Intern fejl 3)"
 
-#: src/libirc/Socket.cpp:189
+#: src/libirc/Socket.cpp:276
 msgid "Message not sent because of locale problems"
 msgstr "Besked ikke sendt, pga. locale problemer"
 
-#: src/libirc/Parser.cpp:850
+#: src/libirc/Parser.cpp:855
 msgid "idle: "
 msgstr "ubenyttet: "
 
-#: src/libirc/Parser.cpp:854
+#: src/libirc/Parser.cpp:859
 msgid ", signon time: "
 msgstr ", login tid: "
 
-#: src/libirc/DCC.cpp:58
+#: src/libirc/DCC.cpp:51
+#, fuzzy
+msgid "DCC connected. Receiving file..."
+msgstr "Forbundet. Logger ind..."
+
+#: src/libirc/DCC.cpp:57
+#, fuzzy
+msgid "Couldn't connect: "
+msgstr "Kunne ikke etablere forbindelse:"
+
+#: src/libirc/DCC.cpp:68
 msgid "Receiving from:"
 msgstr "Modtager fra:"
 
-#: src/libirc/DCC.cpp:61
-msgid "Couldn't connect:"
-msgstr "Kunne ikke etablere forbindelse:"
-
-#: src/libirc/DCC.cpp:79
-msgid "DCC connection closed."
-msgstr "DCC forbindelse lukket."
-
-#: src/libirc/DCC.cpp:82
-msgid "Couldn't receive:"
-msgstr "Kunne ikke modtage:"
-
-#: src/libirc/DCC.cpp:106
+#: src/libirc/DCC.cpp:101
 msgid "File received successfully:"
 msgstr "Fil modtaget korrekt:"
 
-#: src/libirc/DCC.cpp:159
-msgid "Couldn't bind:"
-msgstr "Kunne ikke binde:"
+#: src/libirc/DCC.cpp:109
+#, fuzzy
+msgid "Couldn't receive: "
+msgstr "Kunne ikke modtage:"
 
-#: src/libirc/DCC.cpp:177
+#: src/libirc/DCC.cpp:114
+msgid "DCC connection closed."
+msgstr "DCC forbindelse lukket."
+
+#: src/libirc/DCC.cpp:160
 msgid "DCC SEND request sent. Sending from:"
 msgstr "DCC SEND forespørgsel sendt. Sender fra:"
 
-#: src/libirc/DCC.cpp:195
+#: src/libirc/DCC.cpp:170
+#, fuzzy
+msgid "Couldn't bind: "
+msgstr "Kunne ikke binde:"
+
+#: src/libirc/DCC.cpp:176
 msgid "Connection accepted."
 msgstr "Forbindelse accepteret."
 
-#: src/libirc/DCC.cpp:216
-msgid "Couldn't send:"
-msgstr "Kunne ikke sende:"
-
-#: src/libirc/DCC.cpp:235
+#: src/libirc/DCC.cpp:205
 msgid "File sent successfully:"
 msgstr "Fil sendt korrekt:"
 
-#: src/libirc/DCC.cpp:259
+#: src/libirc/DCC.cpp:214
+#, fuzzy
+msgid "Couldn't send: "
+msgstr "Kunne ikke sende:"
+
+#: src/libirc/DCC.cpp:234
 msgid "Incoming file has zero size. Sender:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:278
+#: src/libirc/DCC.cpp:253
 msgid "File not found:"
 msgstr "Fil ikke fundet:"
 
-#: src/libirc/DCC.cpp:281
+#: src/libirc/DCC.cpp:256
 msgid "File has zero size:"
 msgstr ""
 
-#: src/libirc/ServerConnection.cpp:122
+#: src/libirc/ServerConnection.cpp:118
 msgid "Disconnected."
 msgstr "Forbindelse afbrudt."
 
-#: src/libirc/ServerConnection.cpp:143
+#: src/libirc/ServerConnection.cpp:139
 msgid "Failed connecting: "
 msgstr "Kunne ikke forbinde: "
 
-#: src/libirc/ServerConnection.cpp:149
+#: src/libirc/ServerConnection.cpp:145
 msgid "Resolved host. Connecting.."
 msgstr "Værtsnavn slået op. Forbinder.."
 
 #: src/libirc/ServerConnection.cpp:155
-msgid "Failed connecting:"
-msgstr "Kunne ikke forbinde:"
-
-#: src/libirc/ServerConnection.cpp:237
-msgid "Failed to receive: "
-msgstr "Kunne ikke modtage: "
-
-#: src/libirc/ServerConnection.cpp:252
 msgid "Connected. Logging in..."
 msgstr "Forbundet. Logger ind..."
 
-#: src/libirc/LostIRCApp.h:54
+#: src/libirc/ServerConnection.cpp:202
+msgid "Failed to receive: "
+msgstr "Kunne ikke modtage: "
+
+#: src/libirc/LostIRCApp.h:56
 msgid "Logging to `"
 msgstr "Logger til `"
+
+#~ msgid "Failed connecting:"
+#~ msgstr "Kunne ikke forbinde:"
