@@ -2,6 +2,11 @@ For a summary of changes between releases - see the NEWS file.
 
 2002-11-25  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * ServerConnection.h: Make copy ctr and operator= private to avoid
+          copying/pass-by-value.
+
+2002-11-25  Morten Brix Pedersen  <morten@wtf.dk>
+
         * FrontEnd.h/MainWindow.h: Add connected() method.
         * ServerConnection.cpp/Parser.cpp: Call connected() when host is
           resolved and when we receive the first line from the server.

@@ -116,6 +116,11 @@ private:
     SigC::Connection signal_write;
     SigC::Connection signal_connection;
     SigC::Connection signal_autoreconnect;
+
+    // Copy-ctr private to avoid copying.
+    ServerConnection(const ServerConnection&);
+    // operator= - ditto.
+    ServerConnection& operator=(const ServerConnection&);
 };
 
 #endif
