@@ -22,7 +22,6 @@
 #include <config.h>
 #include <gtkmm/box.h>
 #include <gtkmm/messagedialog.h>
-#include <gtkmm/stock.h>
 #include <gdk/gdkkeysyms.h>
 #include "DCCList.h"
 #include "MainWindow.h"
@@ -346,14 +345,14 @@ void MainWindow::localeError(bool tried_custom_encoding)
 
 void MainWindow::openPrefs()
 {
-    if (prefs.get()) {
-          prefs->present();
+    if (prefswin.get()) {
+          prefswin->present();
     } else {
         std::auto_ptr<Prefs> dialog(new Prefs(*this));
 
         dialog->show();
 
-        prefs = dialog;
+        prefswin = dialog;
     }
 }
 
@@ -370,15 +369,17 @@ void MainWindow::openDccWindow()
     }
 }
 
-
-void MainWindow::closePrefs()
+void MainWindow::openServerWindow()
 {
+    if (serverwin.get()) {
+          serverwin->present();
+    } else {
+        std::auto_ptr<ServerWindow> dialog(new ServerWindow(*this));
 
-}
+        dialog->show();
 
-void MainWindow::closeDccWindow()
-{
-
+        serverwin = dialog;
+    }
 }
 
 bool MainWindow::on_key_press_event(GdkEventKey* e)
@@ -419,6 +420,8 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
             openPrefs();
         } else if (e->keyval == GDK_d) {
             openDccWindow();
+        } else if (e->keyval == GDK_s) {
+            openServerWindow();
         } else if (e->keyval == GDK_h) {
             // find highlight mark
             notebook.getCurrent()->getText().scrollToHighlightMark();

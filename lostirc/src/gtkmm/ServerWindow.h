@@ -16,8 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef PREFS_H
-#define PREFS_H
+#ifndef SERVERWINDOW_H
+#define SERVERWINDOW_H
 
 #include <gtkmm/notebook.h>
 #include <gtkmm/dialog.h>
@@ -32,42 +32,19 @@
 #include <gtkmm/fontselection.h>
 #include "MainWindow.h"
 
-class Prefs : public Gtk::Dialog
+class ServerWindow : public Gtk::Dialog
 {
 public:
-    Prefs(Gtk::Window& parent);
-    virtual ~Prefs() { }
+    ServerWindow(Gtk::Window& parent);
+    virtual ~ServerWindow() { }
 
 private:
-    void saveSettings();
     void saveEntry();
-    void openFontWindow();
     void removeEntry();
     void addEntry();
     void onChangeRow();
     void clearEntries();
-    virtual void on_response(int) { saveSettings(); hide(); }
-
-    Gtk::VBox* addPage(const Glib::ustring& str);
-
-    // General
-    Gtk::Entry ircnickentry;
-    Gtk::Entry realnameentry;
-    Gtk::Entry ircuserentry;
-    Gtk::Combo encodingcombo;
-    Gtk::Entry fontentry;
-
-    // Preferences
-    Gtk::Entry nickcompletionentry;
-    Gtk::Entry dccipentry;
-    Gtk::Entry dccportentry;
-    Gtk::Entry highlightentry;
-    Gtk::Adjustment bufferadj;
-    Gtk::SpinButton bufferspin;
-    Gtk::CheckButton highlightingbutton;
-    Gtk::CheckButton stripcolorsbutton;
-    Gtk::CheckButton stripothersbutton;
-    Gtk::CheckButton loggingbutton;
+    virtual void on_response(int) { hide(); }
 
     // Auto-join 
     Gtk::Entry nickentry;
@@ -96,8 +73,6 @@ private:
     ModelColumns _columns;
     Glib::RefPtr<Gtk::ListStore> _liststore;
     Gtk::TreeView _treeview;
-    Gtk::Table _general_table;
-    Gtk::Table _prefs_table;
     Gtk::Table _server_options_table;
 };
 

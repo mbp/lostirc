@@ -1,3 +1,12 @@
+LostIRC (x.x.x)
+  * The user interface has been totally reworked to conform to the GNOME
+    Human Interface Guidelines 1.0 (the HIG). Among many things, this means
+    that:
+     - Preferences now opens in a dialog window.
+     - DCC transfers now opens in a dialog window.
+     - The server settings has been moved to its own dialog window.
+  * The default font for the main window is now "Sans 10".
+
 LostIRC (0.2.7) - Mon Jun, 9th 2003
   * Now includes a fancy LostIRC icon.
   * Another compiliation fix for FreeBSD 5.0.

@@ -2,6 +2,17 @@ For a summary of changes between releases - see the NEWS file.
 
 2003-06-15  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * ConfigHandler.cpp: Make the default font "Sans 10".
+        * ServerWindow.cpp: Move server preferences from Preference Window to
+          its own Server Window.
+        * Prefs.cpp: Remove "Apply" and "Cancel" buttons from Preferences
+          window. Use instant apply instead.
+        * Prefs.cpp: Remove the font selection page, and instead open font
+          preferences in a seperate window.
+        * Prefs.cpp: Make buffer size a SpinButton instead of text entry.
+
+2003-06-15  Morten Brix Pedersen  <morten@wtf.dk>
+
         * lostirc.desktop: Change description to follow the GNOME HIG
           suggestions.
         * MainWindow.cpp/MainNotebook.cpp: Remove version number from window

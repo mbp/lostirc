@@ -70,7 +70,6 @@ public:
     void removeHighlight();
 
     bool isHighlighted;
-    bool hasDCCList;
 
 private:
     void setLabelName();

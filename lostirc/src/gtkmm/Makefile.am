@@ -5,6 +5,7 @@ lostirc_SOURCES =  main.cpp \
                    MainNotebook.h MainNotebook.cpp \
                    Tab.h Tab.cpp \
                    Prefs.h Prefs.cpp \
+                   ServerWindow.h ServerWindow.cpp \
                    GuiCommands.h GuiCommands.cpp \
                    Entry.cpp Entry.h \
                    StatusBar.cpp StatusBar.h \

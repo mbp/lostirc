@@ -29,6 +29,7 @@
 #include <FrontEnd.h>
 #include "Prefs.h"
 #include "DCCList.h"
+#include "ServerWindow.h"
 #include "MainNotebook.h"
 #include "StatusBar.h"
 
@@ -66,13 +67,13 @@ public:
     void dccStatusChanged(DCC *dcc);
     void localeError(bool tried_custom_encoding);
     void openPrefs();
-    void closePrefs();
     void openDccWindow();
-    void closeDccWindow();
+    void openServerWindow();
 
     StatusBar statusbar;
-    std::auto_ptr<Prefs> prefs;
+    std::auto_ptr<Prefs> prefswin;
     std::auto_ptr<DCCWindow> dccwin;
+    std::auto_ptr<ServerWindow> serverwin;
 };
 
 extern MainWindow* AppWin;

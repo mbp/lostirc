@@ -238,7 +238,7 @@ Options::Options(const char *filename)
     dccip(this, "dccip"),
     dccport(this, "dccport", 0),
     highlight_words(this, "highlight_words"),
-    font(this, "font"),
+    font(this, "font", "Sans 10"),
     limited_highlighting(this, "limited_highlighting", false),
     strip_colors(this, "strip_colors", true),
     strip_boldandunderline(this, "strip_boldandunderline", false),
