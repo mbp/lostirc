@@ -16,11 +16,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <string>
-#include <sstream>
-
 #ifndef COMMANDS_H
 #define COMMANDS_H
+
+#include <string>
+#include <sstream>
 
 using namespace std;
 

@@ -187,11 +187,9 @@ void MainNotebook::fontSelectionOk()
         }
     }
     destroyFontSelection(fontdialog);
-
 }
 
 void MainNotebook::destroyFontSelection(Gtk::FontSelectionDialog *w)
 {
     gtk_widget_destroy((GtkWidget*)w->gtkobj());
-
 }

@@ -16,14 +16,14 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#ifndef CONFIGHANDLER_H
+#define CONFIGHANDLER_H
+
 #include <fstream>
 #include <string>
 #include <iostream>
 #include <map>
 #include "Utils.h"
-
-#ifndef CONFIGHANDLER_H
-#define CONFIGHANDLER_H
 
 using namespace std;
 

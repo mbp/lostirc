@@ -16,13 +16,13 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#ifndef UTILS_H
+#define UTILS_H
+
 #include <vector>
 #include <string> 
 #include <algorithm>
 #include <cctype>
-
-#ifndef UTILS_H
-#define UTILS_H
 
 using namespace std;
 namespace Utils {

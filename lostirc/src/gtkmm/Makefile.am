@@ -4,7 +4,8 @@ lostirc_SOURCES =  main.cpp \
                    MainWindow.h MainWindow.cpp \
                    MainNotebook.h MainNotebook.cpp \
                    Tab.h Tab.cpp \
-                   GuiCommands.h GuiCommands.cpp
+                   GuiCommands.h GuiCommands.cpp \
+                   Entry.cpp Entry.h
 
 lostirc_LDADD = ../libirc/libirc.a
 

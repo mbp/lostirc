@@ -16,15 +16,15 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#ifndef SOCKET_H
+#define SOCKET_H
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <iostream>
 #include <string>
-
-#ifndef SOCKET_H
-#define SOCKET_H
 
 using namespace std;
 

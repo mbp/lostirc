@@ -16,15 +16,15 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#ifndef MAINNOTEBOOK_H
+#define MAINNOTEBOOK_H
+
 #include <gtk--/notebook.h>
 #include <gtk--/style.h>
 #include <gtk--/fontselection.h>
 #include <ServerConnection.h>
 #include <vector>
 #include "Tab.h"
-
-#ifndef MAINNOTEBOOK_H
-#define MAINNOTEBOOK_H
 
 class MainWindow;
 

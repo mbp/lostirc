@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright (C) 2001 Morten Brix Pedersen <morten@wtf.dk>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,23 +16,27 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef GUICOMMANDS_H
-#define GUICOMMANDS_H
+#ifndef ENTRY_H
+#define ENTRY_H
 
-#include <Commands.h>
-#include <Utils.h>
 #include <vector>
-#include "MainNotebook.h"
+#include "Tab.h"
 
-class GuiCommands : public Commands
+class Tab;
+
+class Entry : public Gtk::Entry
 {
-public:
-    static bool send(ServerConnection *conn, string cmd, const string &params);
-    static bool Query(ServerConnection *conn, const string& params);
-    static bool Me(ServerConnection *conn, const string& params);
-    static bool SetFont(ServerConnection *conn, const string& params);
 
-    static MainNotebook *nb;
+public:
+    Entry(Tab *tab);
+
+    gint on_key_press_event(GdkEventKey* e);
+private:
+    void onEntry();
+    void printText(const string& msg);
+    vector<string> _entries;
+    vector<string>::reverse_iterator i;
+    Tab* _tab;
 
 };
 #endif

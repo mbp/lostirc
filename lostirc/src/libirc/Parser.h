@@ -16,6 +16,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#ifndef PARSER_H
+#define PARSER_H
+
 #include <string>
 #include <vector>
 #include <sstream>
@@ -23,9 +26,6 @@
 #include "InOut.h"
 
 // This class takes care of parsing incoming messages from the server
-
-#ifndef PARSER_H
-#define PARSER_H
 
 class ServerConnection;
 

@@ -16,13 +16,13 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#ifndef INOUT_H
+#define INOUT_H
+
 #include <vector>
 #include <string>
 #include <sigc++/signal_system.h>
 #include <sys/utsname.h>
-
-#ifndef INOUT_H
-#define INOUT_H
 
 class ServerConnection;
 

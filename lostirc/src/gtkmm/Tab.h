@@ -16,6 +16,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#ifndef TAB_H
+#define TAB_H
+
 #include <gtk--/scrolledwindow.h>
 #include <gtk--/entry.h>
 #include <gtk--/box.h>
@@ -25,13 +28,10 @@
 #include <gtk--/style.h>
 #include <vector>
 #include <gdk/gdkkeysyms.h>
-
-#ifndef CHANNELTAB_H
-#define CHANNELTAB_H
+#include "Entry.h"
 
 class MainNotebook;
 class ServerConnection;
-class Entry;
 
 using namespace std;
 
@@ -114,21 +114,4 @@ private:
 
 };
 
-
-class Entry : public Gtk::Entry
-{
-
-public:
-    Entry(Tab *tab);
-
-    gint on_key_press_event(GdkEventKey* e);
-private:
-    void onEntry();
-    void printText(const string& msg);
-    vector<string> _entries;
-    vector<string>::reverse_iterator i;
-    Tab* _tab;
-
-};
 #endif
-

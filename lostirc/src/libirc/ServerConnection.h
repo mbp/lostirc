@@ -16,15 +16,15 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#ifndef SERVERCONNECTION_H
+#define SERVERCONNECTION_H
+
 #include <string>
 #include <glib.h>
 #include <unistd.h>
 #include "Socket.h"
 #include "Parser.h"
 #include "InOut.h"
-
-#ifndef SERVERCONNECTION_H
-#define SERVERCONNECTION_H
 
 class ServerConnection
 {

@@ -16,6 +16,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
 #include <gtk--/main.h>
 #include <gtk--/window.h>
 #include <gtk--/box.h>
@@ -25,9 +28,6 @@
 #include <ServerConnection.h>
 #include <InOut.h>
 #include "MainNotebook.h"
-
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
 
 class MainWindow : public Gtk::Window
 {
