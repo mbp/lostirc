@@ -32,7 +32,6 @@ MainWindow::MainWindow()
 {
     AppWin = this;
     set_title("LostIRC "VERSION);
-    set_resizable(true);
 
     int width = Util::stoi(app.getCfg().getOpt("window_width"));
     int height = Util::stoi(app.getCfg().getOpt("window_height"));
@@ -52,7 +51,6 @@ MainWindow::MainWindow()
     int num_of_servers = app.start();
     if (num_of_servers == 0) {
         // Construct initial tab
-        //App->newServer();
         Tab *tab = newServer();
         *tab << "\0037\nWelcome to LostIRC "VERSION"!\n\nYou use the client mainly by typing in commands and text in the entry-bar shown below.\n\nYou can connect to a server using:\n    \0038/SERVER <hostname>\n\n\0037Then join a channel:\n    \0038/JOIN <channel-name>\n\n\0037The rest of the commands is available with:\n    \0038/COMMANDS\0037.\n\n\0037Available keybindings:\n    \0038Alt + [1-9] - switch tabs from 1-9.\n    Alt + n - create new server tab.\n    Alt + c - close current tab.\n    Alt + p - open preferences.\n    Tab - nick-completion and command-completion.\n";
     }
