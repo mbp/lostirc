@@ -134,8 +134,8 @@ public:
 
     ~Value() { delete valueptr; }
 
-    Value<T>& operator=(const T& val) { *valueptr = val; return *this; holder->writeConfigFile(); }
-    Value<T>& operator=(const std::string& val) { *valueptr = val; return *this; holder->writeConfigFile(); }
+    Value<T>& operator=(const T& val) { *valueptr = val; holder->writeConfigFile(); return *this; }
+    Value<T>& operator=(const std::string& val) { *valueptr = val; holder->writeConfigFile(); return *this; }
     operator T() { return *(*valueptr); }
     T* operator->() { return valueptr->get(); }
     ConfigValue<T>& operator() () { return *valueptr; }
@@ -160,7 +160,7 @@ public:
 
     ~Value() { delete valueptr; }
 
-    Value<std::string>& operator=(const std::string& val) { *valueptr = val; return *this; holder->writeConfigFile(); }
+    Value<std::string>& operator=(const std::string& val) { *valueptr = val; holder->writeConfigFile(); return *this; }
     operator std::string() { return *(*valueptr); }
     std::string* operator->() { return valueptr->get(); }
     ConfigValue<std::string>& operator() () { return *valueptr; }
