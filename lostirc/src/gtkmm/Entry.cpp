@@ -132,7 +132,7 @@ gint Entry::on_key_press_event(GdkEventKey* e)
                 // Nick-completetion
                 if (pos == 0) {
                     set_text("");
-                    append_text(str + AppWin->getApp()->getCfg().getOpt("nickcompletion_character") + " ");
+                    append_text(str + AppWin->getApp().getCfg().getOpt("nickcompletion_character") + " ");
                 } else {
                     set_text(line.substr(0, pos + 1));
                     append_text(str);

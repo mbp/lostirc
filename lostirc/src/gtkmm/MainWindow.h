@@ -30,8 +30,8 @@
 
 class MainWindow : public Gtk::Window, public FrontEnd
 {
-    LostIRCApp *_app;
-    MainNotebook* _nb;
+    LostIRCApp app;
+    MainNotebook notebook;
 
 public:
     MainWindow();
@@ -41,8 +41,8 @@ public:
 
     gint on_key_press_event(GdkEventKey* e);
     virtual gint on_key_press_event_impl(GdkEventKey* e) { return 0; }
-    MainNotebook* getNotebook() { return _nb; }
-    LostIRCApp* getApp() { return _app; }
+    MainNotebook& getNotebook() { return notebook; }
+    LostIRCApp& getApp() { return app; }
     Tab* newServer();
 
     // Methods implemented for the abstract base class 'FrontEnd' 

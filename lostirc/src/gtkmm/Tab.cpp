@@ -125,7 +125,7 @@ void Tab::setStyle() {
 
 Tab& Tab::operator<<(const string& str)
 {
-    AppWin->getNotebook()->onInserted(this);
+    AppWin->getNotebook().onInserted(this);
 
     // Add timestamp 
     time_t timeval = time(0);

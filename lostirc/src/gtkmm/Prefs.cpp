@@ -41,21 +41,21 @@ Prefs::Prefs()
 
     // IRC nick
     ircnickentry = manage(new Gtk::Entry());
-    ircnickentry->set_text(AppWin->getApp()->getCfg().getOpt("nick"));
+    ircnickentry->set_text(AppWin->getApp().getCfg().getOpt("nick"));
     Gtk::Frame *frame20 = manage(new Gtk::Frame("Nickname"));
     frame20->add(*ircnickentry);
     generalbox->pack_start(*frame20, 0, 0);
 
     // IRC nick
     realnameentry = manage(new Gtk::Entry());
-    realnameentry->set_text(AppWin->getApp()->getCfg().getOpt("realname"));
+    realnameentry->set_text(AppWin->getApp().getCfg().getOpt("realname"));
     Gtk::Frame *frame21 = manage(new Gtk::Frame("Real name"));
     frame21->add(*realnameentry);
     generalbox->pack_start(*frame21, 0, 0);
 
     // IRC nick
     ircuserentry = manage(new Gtk::Entry());
-    ircuserentry->set_text(AppWin->getApp()->getCfg().getOpt("ircuser"));
+    ircuserentry->set_text(AppWin->getApp().getCfg().getOpt("ircuser"));
     Gtk::Frame *frame22 = manage(new Gtk::Frame("IRC username (ident)"));
     frame22->add(*ircuserentry);
     generalbox->pack_start(*frame22, 0, 0);
@@ -66,21 +66,21 @@ Prefs::Prefs()
 
     // nickcompletion character
     nickcompletionentry = manage(new Gtk::Entry(1));
-    nickcompletionentry->set_text(AppWin->getApp()->getCfg().getOpt("nickcompletion_character"));
+    nickcompletionentry->set_text(AppWin->getApp().getCfg().getOpt("nickcompletion_character"));
     Gtk::Frame *frame10 = manage(new Gtk::Frame("Nick-completion character"));
     frame10->add(*nickcompletionentry);
     prefsbox->pack_start(*frame10, 0, 0);
 
     // DCC ip
     dccipentry = manage(new Gtk::Entry());
-    dccipentry->set_text(AppWin->getApp()->getCfg().getOpt("dccip"));
+    dccipentry->set_text(AppWin->getApp().getCfg().getOpt("dccip"));
     Gtk::Frame *frame11 = manage(new Gtk::Frame("DCC IP-Address"));
     frame11->add(*dccipentry);
     prefsbox->pack_start(*frame11, 0, 0);
 
     // Highligted words
     highlightentry = manage(new Gtk::Entry());
-    highlightentry->set_text(AppWin->getApp()->getCfg().getOpt("highlight_words"));
+    highlightentry->set_text(AppWin->getApp().getCfg().getOpt("highlight_words"));
     Gtk::Frame *frame12 = manage(new Gtk::Frame("Words to highlight on (space seperated)"));
     frame12->add(*highlightentry);
     prefsbox->pack_start(*frame12, 0, 0);
@@ -95,7 +95,7 @@ Prefs::Prefs()
     clist->select_row.connect(slot(this, &Prefs::onSelectRow));
     clist->unselect_row.connect(slot(this, &Prefs::onUnSelectRow));
 
-    vector<struct autoJoin*> servers = AppWin->getApp()->getCfg().getServers();
+    vector<struct autoJoin*> servers = AppWin->getApp().getCfg().getServers();
     vector<struct autoJoin*>::const_iterator i;
 
     for (i = servers.begin(); i != servers.end(); ++i) {
@@ -188,12 +188,12 @@ void Prefs::endPrefs()
 
 void Prefs::saveSettings()
 {
-    AppWin->getApp()->getCfg().setOpt("nickcompletion_character", nickcompletionentry->get_text());
-    AppWin->getApp()->getCfg().setOpt("dccip", dccipentry->get_text());
-    AppWin->getApp()->getCfg().setOpt("highlight_words", highlightentry->get_text());
-    AppWin->getApp()->getCfg().setOpt("realname", realnameentry->get_text());
-    AppWin->getApp()->getCfg().setOpt("ircuser", ircuserentry->get_text());
-    AppWin->getApp()->getCfg().setOpt("nick", ircnickentry->get_text());
+    AppWin->getApp().getCfg().setOpt("nickcompletion_character", nickcompletionentry->get_text());
+    AppWin->getApp().getCfg().setOpt("dccip", dccipentry->get_text());
+    AppWin->getApp().getCfg().setOpt("highlight_words", highlightentry->get_text());
+    AppWin->getApp().getCfg().setOpt("realname", realnameentry->get_text());
+    AppWin->getApp().getCfg().setOpt("ircuser", ircuserentry->get_text());
+    AppWin->getApp().getCfg().setOpt("nick", ircnickentry->get_text());
 }
 
 void Prefs::saveEntry()
@@ -203,7 +203,7 @@ void Prefs::saveEntry()
         // we need to add a new one
         a = new autoJoin();
 
-        AppWin->getApp()->getCfg().addServer(a);
+        AppWin->getApp().getCfg().addServer(a);
 
         vector<string> v; // FIXME: ugly as hell.
         v.push_back(hostentry->get_text());
@@ -236,7 +236,7 @@ void Prefs::saveEntry()
     while (getline(ss, tmp))
           a->cmds.push_back(tmp);
 
-    AppWin->getApp()->getCfg().writeServers();
+    AppWin->getApp().getCfg().writeServers();
 
     clist->unselect_all();
     clist->select_row(clist->find_row_from_data(a));
@@ -274,8 +274,8 @@ void Prefs::removeEntry()
 {
     struct autoJoin *a = static_cast<struct autoJoin*>(clist->selection().front().get_data());
     clist->remove_row(clist->find_row_from_data(a));
-    AppWin->getApp()->getCfg().removeServer(a);
-    AppWin->getApp()->getCfg().writeServers();
+    AppWin->getApp().getCfg().removeServer(a);
+    AppWin->getApp().getCfg().writeServers();
 }
 
 void Prefs::addEntry()

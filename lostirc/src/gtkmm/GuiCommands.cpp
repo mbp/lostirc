@@ -56,20 +56,20 @@ void Query(ServerConnection *conn, const string& params)
     if (params.length() == 0) {
         throw CommandException("/QUERY <nick>, start a query(tab) with a user");
     } else {
-        AppWin->getNotebook()->addQueryTab(params, conn);
+        AppWin->getNotebook().addQueryTab(params, conn);
     }
 }
 
 void Me(ServerConnection *conn, const string& params)
 {
-    string to = AppWin->getNotebook()->getCurrent()->getLabel()->get_text();
+    string to = AppWin->getNotebook().getCurrent()->getLabel()->get_text();
     string param = to + " " + params;
     return Commands::Me(conn, param);
 }
 
 void SetFont(ServerConnection *conn, const string& params)
 {
-    AppWin->getNotebook()->setFont();
+    AppWin->getNotebook().setFont();
 }
 
 void NewServer(ServerConnection *conn, const string& params)
@@ -79,12 +79,12 @@ void NewServer(ServerConnection *conn, const string& params)
 
 void Part(ServerConnection *conn, const string& params)
 {
-    Commands::Part(conn, AppWin->getNotebook()->getCurrent()->getLabel()->get_text() + " " + params);
+    Commands::Part(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
 }
 
 void Topic(ServerConnection *conn, const string& params)
 {
-    Commands::Topic(conn, AppWin->getNotebook()->getCurrent()->getLabel()->get_text() + " " + params);
+    Commands::Topic(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
 }
 
 void commands(ServerConnection *conn, const string& params)

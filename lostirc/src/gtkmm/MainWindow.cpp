@@ -28,23 +28,31 @@ using std::string;
 MainWindow* AppWin = 0;
 
 MainWindow::MainWindow()
-: Gtk::Window(GTK_WINDOW_TOPLEVEL), _app (new LostIRCApp(this)), _nb(new MainNotebook())
+: Gtk::Window(GTK_WINDOW_TOPLEVEL), app(this)
 {
     AppWin = this;
     set_policy(1, 1, 0); // Policy for main window: user resizeable
     set_title("LostIRC "VERSION);
-    set_usize(600, 400);
+
+    int width = Util::stoi(app.getCfg().getOpt("window_width"));
+    int height = Util::stoi(app.getCfg().getOpt("window_height"));
+    if (width != 0 && height != 0) {
+        set_usize(width, height);
+    } else {
+        set_usize(600, 400);
+    }
+
     key_press_event.connect(slot(this, &MainWindow::on_key_press_event));
     
     Gtk::VBox *_vbox1 = manage(new Gtk::VBox());
 
-    _vbox1->pack_start(*_nb, 1, 1);
+    _vbox1->pack_start(notebook);
 
     add(*_vbox1);
 
     show_all();
 
-    int num_of_servers = _app->start();
+    int num_of_servers = app.start();
     if (num_of_servers == 0) {
         // Construct initial tab
         Tab *tab = newServer();
@@ -54,8 +62,16 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
-    delete _nb;
-    delete _app;
+    // Save the width and height of the windows
+    int width, height;
+
+    width = this->width();
+    height = this->height();
+
+    if (width && height) {
+        app.getCfg().setOpt("window_width", width);
+        app.getCfg().setOpt("window_height", height);
+    }
 
     AppWin = 0;
 }
@@ -64,13 +80,13 @@ void MainWindow::displayMessage(const string& msg, FE::Destination d)
 {
 
     if (d == FE::CURRENT) {
-        Tab *tab = _nb->getCurrent();
+        Tab *tab = notebook.getCurrent();
 
         *tab << msg;
     } else if (d == FE::ALL) {
         vector<Tab*> tabs;
         vector<Tab*>::const_iterator i;
-        _nb->Tabs(tabs);
+        notebook.Tabs(tabs);
 
         for (i = tabs.begin(); i != tabs.end(); ++i) {
             *(*i) << msg;
@@ -82,13 +98,13 @@ void MainWindow::displayMessage(const string& msg, FE::Destination d)
 void MainWindow::displayMessage(const string& msg, FE::Destination d, ServerConnection *conn)
 {
     if (d == FE::CURRENT) {
-        Tab *tab = _nb->getCurrent(conn);
+        Tab *tab = notebook.getCurrent(conn);
 
         *tab << msg;
     } else if (d == FE::ALL) {
         vector<Tab*> tabs;
         vector<Tab*>::const_iterator i;
-        _nb->findTabs(conn, tabs);
+        notebook.findTabs(conn, tabs);
 
         for (i = tabs.begin(); i != tabs.end(); ++i) {
             *(*i) << msg;
@@ -98,13 +114,13 @@ void MainWindow::displayMessage(const string& msg, FE::Destination d, ServerConn
 
 void MainWindow::displayMessage(const string& msg, ChannelBase& chan, ServerConnection *conn)
 {
-    Tab *tab = _nb->findTab(chan.getName(), conn);
+    Tab *tab = notebook.findTab(chan.getName(), conn);
 
     // if the channel doesn't exist, it's probably a query. (the channel is
     // created on join) - there is also a hack here to ensure that it's not
     // a channel
     if (!tab && chan.getName().at(0) != '#') {
-        tab = _nb->addQueryTab(chan.getName(), conn);
+        tab = notebook.addQueryTab(chan.getName(), conn);
     }
 
     if (tab)
@@ -113,9 +129,9 @@ void MainWindow::displayMessage(const string& msg, ChannelBase& chan, ServerConn
 
 void MainWindow::join(const string& nick, Channel& chan, ServerConnection *conn)
 {
-    Tab *tab = _nb->findTab(chan.getName(), conn);
+    Tab *tab = notebook.findTab(chan.getName(), conn);
     if (!tab) {
-        tab = _nb->addChannelTab(chan.getName(), conn);
+        tab = notebook.addChannelTab(chan.getName(), conn);
         return;
     }
     tab->insertUser(nick);
@@ -123,7 +139,7 @@ void MainWindow::join(const string& nick, Channel& chan, ServerConnection *conn)
 
 void MainWindow::part(const string& nick, Channel& chan, ServerConnection *conn)
 {
-    Tab *tab = _nb->findTab(chan.getName(), conn);
+    Tab *tab = notebook.findTab(chan.getName(), conn);
     if (tab) {
         if (nick == conn->Session.nick) {
             // It's us who's parting
@@ -135,7 +151,7 @@ void MainWindow::part(const string& nick, Channel& chan, ServerConnection *conn)
 
 void MainWindow::kick(const string& kicker, Channel& chan, const string& nick, const string& msg, ServerConnection *conn)
 {
-    Tab *tab = _nb->findTab(chan.getName(), conn);
+    Tab *tab = notebook.findTab(chan.getName(), conn);
     if (nick == conn->Session.nick) {
         // It's us who's been kicked
         tab->setInActive();
@@ -149,7 +165,7 @@ void MainWindow::quit(const string& nick, vector<ChannelBase*> chans, ServerConn
     vector<ChannelBase*>::const_iterator i;
 
     for (i = chans.begin(); i != chans.end(); ++i) {
-        if (Tab *tab = _nb->findTab((*i)->getName(), conn))
+        if (Tab *tab = notebook.findTab((*i)->getName(), conn))
             tab->removeUser(nick);
     }
 }
@@ -159,14 +175,14 @@ void MainWindow::nick(const string& nick, const string& to, vector<ChannelBase*>
     vector<ChannelBase*>::const_iterator i;
 
     for (i = chans.begin(); i != chans.end(); ++i) {
-        if (Tab *tab = _nb->findTab((*i)->getName(), conn))
+        if (Tab *tab = notebook.findTab((*i)->getName(), conn))
               tab->renameUser(nick, to);
     }
 }
 
 void MainWindow::CUMode(const string& nick, Channel& chan, const std::vector<User>& users, ServerConnection *conn)
 {
-    Tab *tab = _nb->findTab(chan.getName(), conn);
+    Tab *tab = notebook.findTab(chan.getName(), conn);
 
     std::vector<User>::const_iterator i;
     for (i = users.begin(); i != users.end(); ++i) {
@@ -177,7 +193,7 @@ void MainWindow::CUMode(const string& nick, Channel& chan, const std::vector<Use
 
 void MainWindow::names(Channel& c, ServerConnection *conn)
 {
-    Tab *tab = _nb->findTab(c.getName(), conn);
+    Tab *tab = notebook.findTab(c.getName(), conn);
 
     std::vector<User*> users = c.getUsers();
     std::vector<User*>::const_iterator i;
@@ -189,17 +205,17 @@ void MainWindow::names(Channel& c, ServerConnection *conn)
 
 void MainWindow::highlight(ChannelBase& chan, ServerConnection* conn)
 {
-    Tab *tab = _nb->findTab(chan.getName(), conn);
+    Tab *tab = notebook.findTab(chan.getName(), conn);
 
     if (tab)
-          _nb->highlight(tab);
+          notebook.highlight(tab);
 }
 
 void MainWindow::away(bool away, ServerConnection* conn)
 {
     vector<Tab*> tabs;
 
-    _nb->findTabs(conn, tabs);
+    notebook.findTabs(conn, tabs);
     if (away) {
         std::for_each(tabs.begin(), tabs.end(), std::mem_fun(&Tab::setAway));
     } else {
@@ -211,7 +227,7 @@ void MainWindow::disconnected(ServerConnection* conn)
 {
     vector<Tab*> tabs;
 
-    _nb->findTabs(conn, tabs);
+    notebook.findTabs(conn, tabs);
 
     std::for_each(tabs.begin(), tabs.end(), std::mem_fun(&Tab::setInActive));
 }
@@ -220,13 +236,13 @@ void MainWindow::newTab(ServerConnection *conn)
 {
     string name = "server";
     conn->Session.servername = name;
-    Tab *tab = _nb->addChannelTab(name, conn);
-    _nb->show_all();
+    Tab *tab = notebook.addChannelTab(name, conn);
+    notebook.show_all();
     // XXX: this is a hack for a "bug" in the gtkmm code which makes the
     // application crash in the start when no pages exists, even though we
     // added one above... doing set_page(0) will somehow add it fully.
-    if (_nb->get_current_page_num() == -1) {
-        _nb->set_page(0);
+    if (notebook.get_current_page_num() == -1) {
+        notebook.set_page(0);
     }
     tab->setInActive();
 }
@@ -234,9 +250,9 @@ void MainWindow::newTab(ServerConnection *conn)
 Tab* MainWindow::newServer()
 {
     string name = "server";
-    ServerConnection *conn = _app->newServer();
+    ServerConnection *conn = app.newServer();
     conn->Session.servername = name;
-    Tab *tab = _nb->addChannelTab(name, conn);
+    Tab *tab = notebook.addChannelTab(name, conn);
     tab->setInActive();
     return tab;
 }
@@ -245,51 +261,51 @@ gint MainWindow::on_key_press_event(GdkEventKey* e)
 {
     // Default keybindings. Still needs work.
     if ((e->keyval == GDK_0) && (e->state & GDK_MOD1_MASK)) {
-        _nb->set_page(9);
+        notebook.set_page(9);
     }
     else if ((e->keyval == GDK_1) && (e->state & GDK_MOD1_MASK)) {
-        _nb->set_page(0);
+        notebook.set_page(0);
     }
     else if ((e->keyval == GDK_2) && (e->state & GDK_MOD1_MASK)) {
-        _nb->set_page(1);
+        notebook.set_page(1);
     }
     else if ((e->keyval == GDK_3) && (e->state & GDK_MOD1_MASK)) {
-        _nb->set_page(2);
+        notebook.set_page(2);
     }
     else if ((e->keyval == GDK_4) && (e->state & GDK_MOD1_MASK)) {
-        _nb->set_page(3);
+        notebook.set_page(3);
     }
     else if ((e->keyval == GDK_5) && (e->state & GDK_MOD1_MASK)) {
-        _nb->set_page(4);
+        notebook.set_page(4);
     }
     else if ((e->keyval == GDK_6) && (e->state & GDK_MOD1_MASK)) {
-        _nb->set_page(5);
+        notebook.set_page(5);
     }
     else if ((e->keyval == GDK_7) && (e->state & GDK_MOD1_MASK)) {
-        _nb->set_page(6);
+        notebook.set_page(6);
     }
     else if ((e->keyval == GDK_8) && (e->state & GDK_MOD1_MASK)) {
-        _nb->set_page(7);
+        notebook.set_page(7);
     }
     else if ((e->keyval == GDK_9) && (e->state & GDK_MOD1_MASK)) {
-        _nb->set_page(8);
+        notebook.set_page(8);
     }
     else if ((e->keyval == GDK_c) && (e->state & GDK_MOD1_MASK)) {
-        TabChannel *tab = dynamic_cast<TabChannel*>(_nb->getCurrent());
+        TabChannel *tab = dynamic_cast<TabChannel*>(notebook.getCurrent());
         if (tab && tab->getConn()->Session.isConnected && tab->isActive()) {
             // It's a channel, so we need to part it
             tab->getConn()->sendPart(tab->getLabel()->get_text(), "");
         } else {
             // Query
-            _nb->getCurrent()->getConn()->removeChannel(_nb->getCurrent()->getLabel()->get_text());
+            notebook.getCurrent()->getConn()->removeChannel(notebook.getCurrent()->getLabel()->get_text());
         }
-        _nb->closeCurrent();
+        notebook.closeCurrent();
     }
     else if ((e->keyval == GDK_p) && (e->state & GDK_MOD1_MASK)) {
-        if (!_nb->getCurrent()->hasPrefs) {
-            _nb->getCurrent()->startPrefs();
+        if (!notebook.getCurrent()->hasPrefs) {
+            notebook.getCurrent()->startPrefs();
         } else {
-            _nb->getCurrent()->endPrefs();
+            notebook.getCurrent()->endPrefs();
         }
     }
     else if ((e->keyval == GDK_n) && (e->state & GDK_MOD1_MASK)) {
@@ -299,13 +315,13 @@ gint MainWindow::on_key_press_event(GdkEventKey* e)
         Gtk::Main::quit();
     }
     else if (e->keyval == GDK_Up || e->keyval == GDK_Tab || e->keyval == GDK_Down) {
-        if (!_nb->getCurrent()->hasPrefs) {
-            _nb->getCurrent()->getEntry()->on_key_press_event(e);
+        if (!notebook.getCurrent()->hasPrefs) {
+            notebook.getCurrent()->getEntry()->on_key_press_event(e);
             gtk_signal_emit_stop_by_name(GTK_OBJECT(this->gtkobj()), "key_press_event");
         }
     }
     else if ((e->keyval == GDK_f) && (e->state & GDK_MOD1_MASK)) {
-        _nb->setFont();
+        notebook.setFont();
     }
     return 0;
 }
