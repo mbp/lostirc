@@ -24,25 +24,21 @@
 using std::string;
 using std::vector;
 
-ServerConnection::ServerConnection(LostIRCApp *app, const string& host, int port, const string& nick, bool connect = false)
+ServerConnection::ServerConnection(LostIRCApp *app, const string& host, const string& nick, int port = 6667, bool connect = false)
     : _app(app), _socket(new Socket()), _p(new Parser(_app,this))
 {
     Session.nick = nick;
-    _app->evtNewTab(this);
-
-    if (connect)
-          Connect(host, port);
-}
-
-ServerConnection::ServerConnection(LostIRCApp *app, const string& nick, const string& realname)
-    : _app(app), _socket(new Socket()), _p(new Parser(_app,this))
-{
-    Session.nick = nick;
-    Session.realname = realname;
+    Session.servername = host;
+    Session.host = host;
+    Session.port = port;
     Session.isConnected = false;
     Session.hasRegistered = false;
     Session.isAway = false;
+
     _app->evtNewTab(this);
+
+    if (connect)
+          Connect();
 }
 
 ServerConnection::~ServerConnection()
@@ -54,13 +50,21 @@ ServerConnection::~ServerConnection()
 bool ServerConnection::Connect(const string &host, int port = 6667, const string& pass = "")
 {
     Session.servername = host;
+    Session.host = host;
     Session.password = pass;
+    Session.port = port;
 
-    _app->getEvts()->emit(_app->getEvts()->get(CONNECTING) << host << port, this);
+    return Connect();
+}
+
+bool ServerConnection::Connect()
+{
+
+    _app->getEvts()->emit(_app->getEvts()->get(CONNECTING) << Session.host << Session.port, this);
     
     try {
 
-        _socket->connect(host, port);
+        _socket->connect(Session.host, Session.port);
 
     } catch (SocketException &e) {
         Session.isConnected = false;
@@ -73,17 +77,25 @@ bool ServerConnection::Connect(const string &host, int port = 6667, const string
     Session.isConnected = true;
 
     // This is a temporary watch to see when we can write, when we can
-    // write - we are (hopefull) connected
+    // write - we are (hopefully) connected
     g_io_add_watch(g_io_channel_unix_new(_socket->getfd()),
                    GIOCondition (G_IO_OUT),
                    &ServerConnection::write, this);
 
     // This watch makes sure we read data when it's available
+    // FIXME: should this be moved to ServerConnection::write?
     g_io_add_watch(g_io_channel_unix_new(_socket->getfd()),
                    GIOCondition (G_IO_IN | G_IO_ERR | G_IO_HUP | G_IO_NVAL),
                    &ServerConnection::readdata, this);
 
     return true;
+}
+
+gboolean ServerConnection::auto_reconnect(gpointer data)
+{
+    ServerConnection& conn = *(static_cast<ServerConnection*>(data));
+    conn.Connect();
+    return (FALSE);
 }
 
 gboolean ServerConnection::readdata(GIOChannel* io_channel, GIOCondition cond, gpointer data)
@@ -129,6 +141,7 @@ gboolean ServerConnection::readdata(GIOChannel* io_channel, GIOCondition cond, g
     } catch (SocketException &e) {
         conn._app->getEvts()->emit(conn._app->getEvts()->get(SERVMSG) << e.what(), &conn);
         conn.Session.isConnected = false;
+        g_timeout_add(2000, &ServerConnection::auto_reconnect, &conn);
         return (FALSE);
     }
 }
@@ -147,7 +160,7 @@ gboolean ServerConnection::write(GIOChannel* io_channel, GIOCondition cond, gpoi
           conn.sendPass(conn.Session.password);
 
     conn.sendNick(conn.Session.nick);
-    conn.sendUser(conn.Session.nick, hostname, conn.Session.servername, conn.Session.realname);
+    conn.sendUser(conn.Session.nick, hostname, conn.Session.host, conn.Session.realname);
 
     return (FALSE);
 }

@@ -31,11 +31,11 @@ class ServerConnection
 {
 
 public:
-    ServerConnection(LostIRCApp *app, const std::string& host, int port, const std::string& nick, bool connect = false);
-    ServerConnection(LostIRCApp *app, const std::string& nick, const std::string& realname);
+    ServerConnection(LostIRCApp *app, const std::string& host, const std::string& nick, int port = 6667, bool connect = false);
     ~ServerConnection();
 
     bool Connect(const std::string& host, int port = 6667, const std::string& pass = "");
+    bool Connect();
     bool sendPong(const std::string& crap);
     bool sendUser(const std::string& nick, const std::string& localhost, const std::string& remotehost, const std::string& name);
     bool sendNick(const std::string& nick);
@@ -68,6 +68,7 @@ public:
 
     static gboolean readdata(GIOChannel *, GIOCondition, gpointer);
     static gboolean write(GIOChannel *, GIOCondition, gpointer);
+    static gboolean auto_reconnect(gpointer);
 
     // Session struct for all ServerConnections
     struct {
@@ -77,7 +78,9 @@ public:
         bool isConnected;
         bool hasRegistered;
         bool isAway;
+        int port;
         std::string servername;
+        std::string host;
         std::vector<Channel*> channels;
         std::vector<std::string> cmds;
     } Session;

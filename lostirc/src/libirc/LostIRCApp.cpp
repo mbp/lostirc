@@ -68,21 +68,22 @@ int LostIRCApp::start()
               conn->Session.password = (*i)->password;
         if (!(*i)->nick.empty())
               conn->Session.nick = (*i)->nick;
-        conn->Connect((*i)->hostname, (*i)->port);
+        conn->Connect();
     }
     return servers.size();
 }
 
 ServerConnection* LostIRCApp::newServer(const string& host, int port)
 {
-    ServerConnection *conn = new ServerConnection(this, host, port, _cfg.getOpt("nick"));
+    ServerConnection *conn = new ServerConnection(this, host, _cfg.getOpt("nick"), port);
     _servers.push_back(conn);
     return conn;
 }
 
 ServerConnection* LostIRCApp::newServer()
 {
-    ServerConnection *conn = new ServerConnection(this, _cfg.getOpt("nick"), realname);
+    ServerConnection *conn = new ServerConnection(this, "", _cfg.getOpt("nick"));
+    conn->Session.realname = realname;
     _servers.push_back(conn);
     return conn;
 }
