@@ -16,9 +16,16 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#ifndef WIN32
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#else
+#include <sys/types.h>
+#include <sys/stat.h>
+#define stat _stat
+#endif
+
 #include <iostream>
 #include <sstream>
 #include <glibmm/fileutils.h>
@@ -246,14 +253,8 @@ int DCC_queue::addDccSendOut(const Glib::ustring& file, const Glib::ustring& nic
 {
     Glib::ustring filename = expandHome(file);
 
-    struct stat st;
-    int retval = stat(filename.c_str(), &st);
-
-    if (retval == -1) {
-        FE::emit(FE::get(CLIENTMSG) << _("File not found:") << filename, FE::CURRENT);
-        return 0;
-    } else if (st.st_size == 0) {
-        FE::emit(FE::get(CLIENTMSG) << _("File has zero size:") << filename, FE::CURRENT);
+    if (!Glib::file_test(filename.c_str(), Glib::FILE_TEST_EXISTS)) {
+        FE::emit(FE::get(CLIENTMSG) << _("File not found: ") << filename, FE::CURRENT);
         return 0;
     } else {
         DCC_Send_Out *d = new DCC_Send_Out(filename, nick, conn);

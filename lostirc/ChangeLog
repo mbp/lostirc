@@ -1,5 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
+2004-01-27  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * DCC.cpp: Make it compile on Windows.
+
 2004-01-25  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Socket.cpp/Socket.h/FrontEnd.cpp: Commit some of Thomas Johansson
