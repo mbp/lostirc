@@ -1,6 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
 2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * README: Update with a better description.
+
+2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Entry.cpp: When typing in text when not connected or no channel
           join, mention a /SERVER and /JOIN example.
