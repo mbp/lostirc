@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: LostIRC 0.2.5pre\n"
-"POT-Creation-Date: 2003-01-12 12:54+0100\n"
+"POT-Creation-Date: 2003-01-15 17:06+0100\n"
 "PO-Revision-Date: 2003-01-03 19:25+0100\n"
 "Last-Translator: Michael Kristensen <tazz@wtf.dk>\n"
 "Language-Team: Danish\n"
@@ -550,23 +550,23 @@ msgstr "Fil modtaget korrekt:"
 msgid "File not found:"
 msgstr "Fil ikke fundet:"
 
-#: src/libirc/DCC.cpp:160
+#: src/libirc/DCC.cpp:161
 msgid "Couldn't bind:"
 msgstr "Kunne ikke binde:"
 
-#: src/libirc/DCC.cpp:178
+#: src/libirc/DCC.cpp:179
 msgid "DCC SEND request sent. Sending from:"
 msgstr "DCC SEND forespørgsel sendt. Sender fra:"
 
-#: src/libirc/DCC.cpp:197
+#: src/libirc/DCC.cpp:198
 msgid "Connection accepted."
 msgstr "Forbindelse accepteret."
 
-#: src/libirc/DCC.cpp:218
+#: src/libirc/DCC.cpp:219
 msgid "Couldn't send:"
 msgstr "Kunne ikke sende:"
 
-#: src/libirc/DCC.cpp:237
+#: src/libirc/DCC.cpp:238
 msgid "File sent successfully:"
 msgstr "Fil sendt korrekt:"
 

@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-01-12 12:54+0100\n"
+"POT-Creation-Date: 2003-01-15 17:06+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -486,23 +486,23 @@ msgstr ""
 msgid "File not found:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:160
+#: src/libirc/DCC.cpp:161
 msgid "Couldn't bind:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:178
+#: src/libirc/DCC.cpp:179
 msgid "DCC SEND request sent. Sending from:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:197
+#: src/libirc/DCC.cpp:198
 msgid "Connection accepted."
 msgstr ""
 
-#: src/libirc/DCC.cpp:218
+#: src/libirc/DCC.cpp:219
 msgid "Couldn't send:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:237
+#: src/libirc/DCC.cpp:238
 msgid "File sent successfully:"
 msgstr ""
 
