@@ -328,10 +328,16 @@ void Parser::Notice(const ustring& from, const ustring& to, const ustring& rest)
 
     } else {
         // Normal notice
-        if (to == _conn->Session.nick)
-              FE::emit(FE::get(NOTICEPRIV) << findNick(from) << rest, FE::CURRENT, _conn);
-        else
-              FE::emit(FE::get(NOTICEPUBL) << findNick(from) << to << rest, FE::CURRENT, _conn);
+        if (to == _conn->Session.nick) {
+            FE::emit(FE::get(NOTICEPRIV) << findNick(from) << rest, FE::CURRENT, _conn);
+        } else {
+            Channel *c = _conn->findChannel(to);
+            if (c)
+                  FE::emit(FE::get(NOTICEPUBL) << findNick(from) << to << rest, *c, _conn);
+            else
+                  FE::emit(FE::get(NOTICEPUBL) << findNick(from) << to << rest, FE::CURRENT, _conn);
+
+        }
     }
 }
 

@@ -1,6 +1,11 @@
 For a summary of changes between releases - see the NEWS file.
 
 2002-12-23  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Parser.cpp: Notices not sent to the user, are now sent to the
+          correct channel instead of FE:CURRENT.
+
+2002-12-23  Morten Brix Pedersen  <morten@wtf.dk>
         
         * TextWidget.cpp: Add code to scroll up/down.
         * MainWindow.cpp: Catch Page_Up and Page_Down keys.
