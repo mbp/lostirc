@@ -288,7 +288,7 @@ bool Commands::Exec(ServerConnection *conn, const string& params)
 
         fread(buf, 1, 4028, f);
 
-        cout << buf << endl;
+        std::cout << buf << std::endl;
 
         return true;
     } else if (!params.empty()) {

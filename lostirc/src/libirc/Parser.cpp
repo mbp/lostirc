@@ -78,7 +78,7 @@ void Parser::parseLine(string& data)
         cout << "\t[from '" << from << "']";
         cout << " [command '" << command << "']";
         cout << " [param '" << param << "']"; 
-        cout << " [rest '" << rest << "']" << endl;
+        cout << " [rest '" << rest << "']" << std::endl;
         #endif
 
         // Redirect to the right parsing function...
@@ -129,7 +129,7 @@ void Parser::parseLine(string& data)
         #ifdef DEBUG
         cout << "\t[command '" << command << "']";
         cout << " [param '" << param << "']";
-        cout << " [rest '" << rest << "']" << endl;
+        cout << " [rest '" << rest << "']" << std::endl;
         #endif
 
         // Redirect to the right parsing function... 

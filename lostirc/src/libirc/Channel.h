@@ -35,7 +35,7 @@ class Channel {
 
 public:
     void setName(const std::string& n) { name = n; }
-    string getName() { return name; }
+    std::string getName() { return name; }
     int addUser(const std::string& u);
     void removeUser(const std::string& u);
     bool findUser(const std::string& u);

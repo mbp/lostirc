@@ -30,7 +30,7 @@ LostIRCApp::LostIRCApp()
     _evts = new Events(this);
     uname(&uname_info);
     if (!_cfg.readConfig())
-          cerr << "Failed reading config file ~/.lostircrc" << endl;
+          std::cerr << "Failed reading config file ~/.lostircrc" << std::endl;
 
     nick = getenv("USER");
     struct passwd *p = getpwnam(nick.c_str());

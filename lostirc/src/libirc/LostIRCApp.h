@@ -32,8 +32,8 @@ using namespace SigC;
 
 class LostIRCApp
 {
-    string nick;
-    string realname;
+    std::string nick;
+    std::string realname;
 
 public:
     LostIRCApp();
@@ -62,7 +62,7 @@ public:
 
     // Emitted when we receive all the names from the channel
     Signal3<void, const std::string&, const std::vector<std::vector<std::string> >&, ServerConnection*> evtNames;
-    Signal4<void, const std::string&, const std::string&, const vector<vector<std::string> >&, ServerConnection*> evtCUMode;
+    Signal4<void, const std::string&, const std::string&, const std::vector<std::vector<std::string> >&, ServerConnection*> evtCUMode;
     Signal5<void, const std::string&, const std::string&, const std::string&, const std::string&, ServerConnection*> evtKick;
 
     // Emitted when the frontend needs to diplay a message

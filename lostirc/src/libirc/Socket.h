@@ -36,7 +36,7 @@ public:
 
     bool connect(const std::string& host, int port);
     bool send(const std::string& data);
-    string receive();
+    std::string receive();
     void setNonBlocking();
     void setBlocking();
     int getfd();

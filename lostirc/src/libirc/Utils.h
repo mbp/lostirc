@@ -27,8 +27,8 @@ namespace Utils {
     void Tokenize(const std::string& str, std::vector<std::string>& tokens,
             const std::string& delimiters = " ");
 
-    string toupper(std::string& str);
-    string tolower(std::string& str);
+    std::string toupper(std::string& str);
+    std::string tolower(std::string& str);
     int stoi(const std::string& str);
     bool isDigit(const std::string& str);
 }

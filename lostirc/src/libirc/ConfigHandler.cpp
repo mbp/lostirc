@@ -26,7 +26,7 @@ using std::map;
 bool ConfigHandler::readConfig()
 {
     string home(getenv("HOME"));
-    ifstream in(string(home + "/.lostircrc").c_str());
+    std::ifstream in(string(home + "/.lostircrc").c_str());
 
     if (in) {
         string str;
@@ -67,15 +67,15 @@ bool ConfigHandler::readConfig()
 bool ConfigHandler::setParam(const string& param, const string& value)
 {
     #ifdef DEBUG
-    cout << "trying to set '" + param + "' to: '" + value + "'" << endl;
+    std::cout << "trying to set '" + param + "' to: '" + value + "'" << std::endl;
     #endif
     string home(getenv("HOME"));
-    ofstream out(string(home + "/.lostircrc").c_str(), ios::app);
+    std::ofstream out(string(home + "/.lostircrc").c_str(), std::ios::app);
 
     if (!out)
           return false;
 
-    out << param << " = " << value << endl;
+    out << param << " = " << value << std::endl;
 
     return true;
 }
@@ -123,7 +123,7 @@ bool ConfigHandler::setDefaults()
 bool ConfigHandler::writeConfig()
 {
     string home(getenv("HOME"));
-    ofstream out(string(home + "/.lostircrc").c_str());
+    std::ofstream out(string(home + "/.lostircrc").c_str());
 
     if (!out)
           return false;
@@ -131,7 +131,7 @@ bool ConfigHandler::writeConfig()
     map<string, string>::const_iterator i;
 
     for (i = _settings.begin(); i != _settings.end(); ++i) {
-        out << (*i).first << " = " << (*i).second << endl;
+        out << (*i).first << " = " << (*i).second << std::endl;
     }
     return true;
 }

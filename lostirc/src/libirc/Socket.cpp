@@ -24,7 +24,6 @@
 #include "Socket.h"
 
 using std::string;
-using std::cerr;
 
 Socket::Socket()
 {
@@ -68,7 +67,7 @@ bool Socket::send(const string& data)
 
     if (::send(fd, msg, size, 0) > 0) {
         #ifdef DEBUG
-        cout << ">> " << msg << endl;
+        std::cout << ">> " << msg << std::endl;
         #endif
         return true;
     } else {
@@ -92,7 +91,7 @@ string Socket::receive()
 
         switch(i) {
             case 0:
-                cerr << "0.. returning." << endl;
+                std::cerr << "0.. returning." << std::endl;
                 error = "Disconnected.";
                 return "";
             case -1:
@@ -103,7 +102,7 @@ string Socket::receive()
                     return buf;
                 } else {
                     error = "Disconnected.";
-                    cerr << error << endl;
+                    std::cerr << error << std::endl;
                     return "";
                 }
         }

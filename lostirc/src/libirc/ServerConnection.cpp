@@ -21,6 +21,7 @@
 #include "Events.h"
 
 using std::string;
+using std::vector;
 
 ServerConnection::ServerConnection(LostIRCApp *app, const string& host, int port, const string& nick)
     : _app(app), _socket(new Socket()), _p(new Parser(_app,this))
