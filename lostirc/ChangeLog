@@ -2,6 +2,12 @@ For a summary of changes between releases - see the NEWS file.
 
 2002-12-24  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * Commands.cpp/GuiCommand.cpp: Don't require connection to /EXIT.
+        * MainWindow.cpp: Add extra note to locale message.
+        * Socket.cpp: Insert an error when the message couldn't be sent.
+
+2002-12-24  Morten Brix Pedersen  <morten@wtf.dk>
+
         * ServerConnection.cpp: Add extra bool flag to sendMsg() whether or
           not to send the message to the GUI as well, prevents a bug in /MSG
           where the message was outputted to the current channel.

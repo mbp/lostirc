@@ -62,7 +62,7 @@ const struct UserCommands cmds[] = {
     { "DEOP",     Commands::Deop,       true },
     { "VOICE",    Commands::Voice,      true },
     { "DEVOICE",  Commands::Devoice,    true },
-    { "EXIT",     Commands::Exit,       true },
+    { "EXIT",     Commands::Exit,       false },
     { 0,        0,                      false }
 };
 

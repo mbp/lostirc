@@ -316,12 +316,15 @@ void MainWindow::doneDCC(DCC *dcc)
 void MainWindow::localeError()
 {
     Glib::ustring msg = "Locale conversion error. An error occured while converting text from UTF-8 to your current locale.\n\nThis is most likely because your locale is set to a value which doesn't support the character(s) converting to.\n\nIf you believe this is a bug, please report it to the application author.";
-    
+
     char *locale = std::getenv("LANG");
     if (locale != NULL) {
         msg += "\n\nYour current locale (seems) to be: ";
         msg += locale;
     }
+
+    msg += "\n\n(Note: You'll only see this warning once per LostIRC session)";
+
 
     Gtk::MessageDialog mdialog(*this, msg, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_CLOSE);
     mdialog.run();

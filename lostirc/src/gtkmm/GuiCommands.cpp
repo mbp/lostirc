@@ -38,7 +38,7 @@ const struct UserCommands guicmds[] = {
     { "DEOP",      GuiCommands::Deop,     true },
     { "VOICE",     GuiCommands::Voice,    true },
     { "DEVOICE",   GuiCommands::Devoice,  true },
-    { "EXIT",      GuiCommands::Exit,     true },
+    { "EXIT",      GuiCommands::Exit,     false },
     { "COMMANDS",  GuiCommands::displayCommands, false },
     { 0,        0, false                        }
 };

@@ -170,6 +170,13 @@ void Socket::disconnect()
 bool Socket::send(const ustring& data)
 {
     const std::string msg = Util::convert_from_utf8(data);
+
+    if (msg.empty()) {
+        FE::emit(FE::get(ERROR) << "Message not sent because of locale problems", FE::CURRENT);
+        return false;
+    }
+
+    std::cout << msg.length() << std::endl;
     #ifdef DEBUG
     App->log << ">> " << data << std::flush;
     #endif
