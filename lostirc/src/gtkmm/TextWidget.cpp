@@ -72,16 +72,30 @@ TextWidget& TextWidget::operator<<(const ustring& line)
     char tim[11];
     strftime(tim, 10, "%H:%M:%S ", localtime(&timeval));
 
-    insertText(0, 1, ustring(tim));
+    insertText(0, 1, false, false, ustring(tim));
 
     bool fgcolor = false;
     bool bgcolor = false;
+    bool bold = false;
+    bool underline = false;
     int numbercount = 0;
     Glib::ustring fgnumber;
     Glib::ustring bgnumber;
     for (int i = 0; i < line.length(); ++i)
     {
-        if (line[i] == '\003') {
+        if (line[i] == '\017') { // RESET
+            bgcolor = false;
+            fgcolor = false;
+            bold = false;
+            underline = false;
+            numbercount = 0;
+            fgnumber.clear();
+            bgnumber.clear();
+        } else if (line[i] == '\002') { // BOLD
+            bold = !bold;
+        } else if (line[i] == '\037') { // UNDERLINE
+            underline = !underline;
+        } else if (line[i] == '\003') { // COLOR
             fgcolor = true;
             numbercount = 0;
             fgnumber.clear();
@@ -108,13 +122,13 @@ TextWidget& TextWidget::operator<<(const ustring& line)
 
             Glib::ustring text;
             text = line[i];
-            insertText(Util::stoi(fgnumber), Util::stoi(bgnumber), text);
+            insertText(Util::stoi(fgnumber), Util::stoi(bgnumber), bold, underline, text);
         }   
     } 
     return *this;
 }
 
-void TextWidget::insertText(int fgcolor, int bgcolor, const ustring& str)
+void TextWidget::insertText(int fgcolor, int bgcolor, bool bold, bool underline, const ustring& str)
 {
     // see if the scrollbar is located in the bottom, then we need to scroll
     // after insert
@@ -127,7 +141,7 @@ void TextWidget::insertText(int fgcolor, int bgcolor, const ustring& str)
         fgcolor = fgColorMap.size() - 1;
 
     // Insert the text
-    realInsert(fgcolor, bgcolor, str);
+    realInsert(fgcolor, bgcolor, bold, underline, str);
     Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
 
     if (scroll)
@@ -139,7 +153,7 @@ void TextWidget::insertText(int fgcolor, int bgcolor, const ustring& str)
           buffer->erase(buffer->begin(), buffer->get_iter_at_line(buffer->get_line_count() - buffer_size));
 }
 
-void TextWidget::realInsert(int fgcolor, int bgcolor, const ustring& line)
+void TextWidget::realInsert(int fgcolor, int bgcolor, bool bold, bool underline, const ustring& line)
 {
     // This function has the purpose to insert the line - but first check to
     // see whether we have an URL.
@@ -148,6 +162,10 @@ void TextWidget::realInsert(int fgcolor, int bgcolor, const ustring& line)
     std::vector< Glib::RefPtr<Gtk::TextTag> > tags;
     tags.push_back(fgColorMap[fgcolor]);
     tags.push_back(bgColorMap[bgcolor]);
+    if (bold)
+          tags.push_back(boldtag);
+    if (underline)
+          tags.push_back(underlinetag);
 
     ustring::size_type pos1;
 
@@ -249,4 +267,9 @@ void TextWidget::initializeColorMap()
     underlinetag->property_underline() = Pango::UNDERLINE_SINGLE;
     underlinetag->property_foreground() = convert_to_utf8(App->colors.color0);
     _textview.get_buffer()->get_tag_table()->add(underlinetag);
+
+    // Create a bold-tag
+    boldtag = Gtk::TextTag::create();
+    boldtag->property_weight() = Pango::WEIGHT_BOLD;
+    _textview.get_buffer()->get_tag_table()->add(boldtag);
 }

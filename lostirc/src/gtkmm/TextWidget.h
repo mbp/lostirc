@@ -39,8 +39,8 @@ public:
     void setFont(const Pango::FontDescription& font);
 
 private:
-    void insertText(int fgcolor, int bgcolor, const Glib::ustring& str);
-    void realInsert(int color, int bgcolor, const Glib::ustring& str);
+    void insertText(int fgcolor, int bgcolor, bool bold, bool underline, const Glib::ustring& str);
+    void realInsert(int color, int bgcolor, bool bold, bool underline, const Glib::ustring& str);
     void setStyle();
 
     void initializeColorMap();
@@ -52,6 +52,7 @@ private:
     std::map<int, Glib::RefPtr<Gtk::TextTag> > fgColorMap;
     std::map<int, Glib::RefPtr<Gtk::TextTag> > bgColorMap;
     Glib::RefPtr<Gtk::TextTag> underlinetag;
+    Glib::RefPtr<Gtk::TextTag> boldtag;
 
     std::string _fallback_encoding;
 
