@@ -1,5 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-12-26  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * MainWindow.cpp: Add very simplish About-dialog.
+        * configure.ac: Bump gettext version number.
+
 2003-12-03  Morten Brix Pedersen  <morten@wtf.dk>
 
         * MainWindow.cpp: Close "Introduction" window when clicking "Close".

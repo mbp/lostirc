@@ -51,12 +51,15 @@ class MainWindow : public Gtk::Window, public FrontEnd
     std::auto_ptr<DCCWindow> _dccwin;
     std::auto_ptr<ServerWindow> _serverwin;
     std::auto_ptr<Gtk::Dialog> _helpwin;
+    std::auto_ptr<Gtk::Dialog> _aboutwin;
 
     void openPrefs();
     void openDccWindow();
     void openServerWindow();
     void openHelpIntro();
     void hideHelpIntro(int response);
+    void openAboutWindow();
+    void hideAboutWindow(int response);
     void newServerTab();
     void setupMenus();
     void closeCurrentTab();

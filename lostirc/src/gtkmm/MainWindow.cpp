@@ -440,7 +440,7 @@ void MainWindow::setupMenus()
         menulist.push_back(Gtk::Menu_Helpers::SeparatorElem::SeparatorElem());
 
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-                    _("_About")));
+                    _("_About"), SigC::slot(*this, &MainWindow::openAboutWindow)));
     }
 
     _menubar.items().push_back(Gtk::Menu_Helpers::MenuElem(_("_LostIRC"), _firstmenu));
@@ -485,7 +485,6 @@ void MainWindow::openHelpIntro()
     if (_helpwin.get()) {
           _helpwin->present();
     } else {
-        //std::auto_ptr<Gtk::Dialog> dialog(new Gtk::Dialog(_("LostIRC Quick Introduction"), *this, false));
         std::auto_ptr<Gtk::MessageDialog> dialog(new Gtk::MessageDialog(_("LostIRC Quick Introduction\n\nThis help window is a quick guide to get you going with LostIRC.\nMove this window away from the LostIRC window, and use it as a quick reference window until you know the general idea.\n\nYou can connect to a server using:\n    /SERVER <hostname / ip>\n\n...and then join a channel:\n    /JOIN <channel-name>\n\nA list of all commands are available with:\n    /COMMANDS\n\nAnd you should really check out the list of key bindings:\n    /KEYBINDINGS"), Gtk::MESSAGE_INFO, Gtk::BUTTONS_CLOSE, false));
 
         dialog->signal_response().connect(slot(*this, &MainWindow::hideHelpIntro));
@@ -495,9 +494,28 @@ void MainWindow::openHelpIntro()
     }
 }
 
+void MainWindow::openAboutWindow()
+{
+    if (_aboutwin.get()) {
+          _aboutwin->present();
+    } else {
+        std::auto_ptr<Gtk::MessageDialog> dialog(new Gtk::MessageDialog(_("LostIRC "VERSION), Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, false));
+
+        dialog->signal_response().connect(slot(*this, &MainWindow::hideAboutWindow));
+        dialog->show();
+
+        _aboutwin = dialog;
+    }
+}
+
 void MainWindow::hideHelpIntro(int response)
 {
     _helpwin->hide();
+}
+
+void MainWindow::hideAboutWindow(int response)
+{
+    _aboutwin->hide();
 }
 
 void MainWindow::newServerTab()
