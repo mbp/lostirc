@@ -72,7 +72,7 @@ gboolean DCC_Send_In::onReadData(GIOChannel* io_channel, GIOCondition cond, gpoi
     char buf[4096];
     int retval = recv(dcc.fd, buf, sizeof(buf), 0);
 
-    if (retval == 0) std::cout << "DCC_Send_In::onReadData(): no bytes received?!" << std::endl;
+    if (retval == 0) App->log << "DCC_Send_In::onReadData(): no bytes received?!" << std::endl;
     else if (retval == -1) {
         if (!(errno == EAGAIN || errno == EWOULDBLOCK)) {
             FE::emit(FE::get(SERVMSG2) << "Couldn't receive:" << strerror(errno), FE::CURRENT);
@@ -89,13 +89,13 @@ gboolean DCC_Send_In::onReadData(GIOChannel* io_channel, GIOCondition cond, gpoi
         send(dcc.fd, (char *)&pos, 4, 0);
 
         #ifdef DEBUG
-        std::cout << "DCC_Send_In::onReadData(): _pos: " << dcc._pos << std::endl;
-        std::cout << "DCC_Send_In::onReadData(): _size: " << dcc._size << std::endl;
+        App->log << "DCC_Send_In::onReadData(): _pos: " << dcc._pos << std::endl;
+        App->log << "DCC_Send_In::onReadData(): _size: " << dcc._size << std::endl;
         #endif
 
         if (dcc._pos >= dcc._size) {
             #ifdef DEBUG
-            std::cout << "DCC_Send_In::onReadData(): done receiving!" << std::endl;
+            App->log << "DCC_Send_In::onReadData(): done receiving!" << std::endl;
             #endif
             dcc._outfile.close();
             FE::emit(FE::get(SERVMSG2) << "File received successfully:" << dcc._filename, FE::CURRENT);
@@ -139,8 +139,8 @@ DCC_Send_Out::DCC_Send_Out(const std::string& filename, const std::string& nick,
 
 
         #ifdef DEBUG
-        std::cout << "DCC_Send_Out::DCC_Send_Out(): size: " << st.st_size << std::endl;
-        std::cout << "DCC_Send_Out::DCC_Send_Out(): ip: " << _localip << std::endl;
+        App->log << "DCC_Send_Out::DCC_Send_Out(): size: " << st.st_size << std::endl;
+        App->log << "DCC_Send_Out::DCC_Send_Out(): ip: " << _localip << std::endl;
         #endif
 
         fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -157,7 +157,7 @@ DCC_Send_Out::DCC_Send_Out(const std::string& filename, const std::string& nick,
         getsockname(fd, (struct sockaddr *) &sockaddr, &add_len);
 
         #ifdef DEBUG
-        std::cout << "DCC_Send_Out::DCC_Send_Out(): new port: " << ntohs(sockaddr.sin_port) << std::endl;
+        App->log << "DCC_Send_Out::DCC_Send_Out(): new port: " << ntohs(sockaddr.sin_port) << std::endl;
         #endif
 
         std::ostringstream ss;
@@ -215,14 +215,14 @@ gboolean DCC_Send_Out::onSendData(GIOChannel* io_channel, GIOCondition cond, gpo
         dcc._pos += read_chars;
 
         #ifdef DEBUG
-        std::cout << "DCC_Send_Out::onSendData(): retval: " << retval << std::endl;
-        std::cout << "DCC_Send_Out::onSendData(): _pos: " << dcc._pos << std::endl;
-        std::cout << "DCC_Send_Out::onSendData(): _size: " << dcc._size << std::endl;
+        App->log << "DCC_Send_Out::onSendData(): retval: " << retval << std::endl;
+        App->log << "DCC_Send_Out::onSendData(): _pos: " << dcc._pos << std::endl;
+        App->log << "DCC_Send_Out::onSendData(): _size: " << dcc._size << std::endl;
         #endif
 
         if (dcc._pos >= dcc._size) {
             #ifdef DEBUG
-            std::cout << "DCC_Send_Out::onSendData(): done sending!" << std::endl;
+            App->log << "DCC_Send_Out::onSendData(): done sending!" << std::endl;
             #endif
             dcc._infile.close();
             FE::emit(FE::get(SERVMSG2) << "File sent successfully:" << dcc._filename, FE::CURRENT);

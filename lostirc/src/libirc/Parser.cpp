@@ -66,7 +66,7 @@ Parser::Parser(ServerConnection *conn)
 void Parser::parseLine(string& data)
 {
     #ifdef DEBUG
-    std::cout << "<< " << data << std::endl;
+    App->log << "<< " << data << std::endl;
     #endif
     // Erase \r and \n, we dont need them when parsing the messages.
     data.erase(data.find_last_not_of("\r\n") + 1);
@@ -105,10 +105,10 @@ void Parser::parseLine(string& data)
         }
 
         #ifdef DEBUG
-        std::cout << "\t[from '" << from << "']";
-        std::cout << " [command '" << command << "']";
-        std::cout << " [param '" << param << "']"; 
-        std::cout << " [rest '" << rest << "']" << std::endl;
+        App->log << "\t[from '" << from << "']";
+        App->log << " [command '" << command << "']";
+        App->log << " [param '" << param << "']"; 
+        App->log << " [rest '" << rest << "']" << std::endl;
         #endif
 
         // Redirect to the right parsing function...
@@ -164,9 +164,9 @@ void Parser::parseLine(string& data)
         string rest = data.substr(pos2 + 1);
 
         #ifdef DEBUG
-        std::cout << "\t[command '" << command << "']";
-        std::cout << " [param '" << param << "']";
-        std::cout << " [rest '" << rest << "']" << std::endl;
+        App->log << "\t[command '" << command << "']";
+        App->log << " [param '" << param << "']";
+        App->log << " [rest '" << rest << "']" << std::endl;
         #endif
 
         // Redirect to the right parsing function... 

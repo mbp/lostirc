@@ -48,6 +48,10 @@ public:
     DCC_queue& getDcc() { return _dcc_queue; }
     const std::vector<ServerConnection*>& getServers() { return _servers; }
 
+#ifdef DEBUG
+    std::ofstream log;
+#endif
+
     FrontEnd* fe;
 
 private:

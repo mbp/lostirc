@@ -162,7 +162,7 @@ void ServerConnection::on_host_resolved()
 gboolean ServerConnection::autoReconnect(gpointer data)
 {
     #ifdef DEBUG
-    std::cout << "ServerConnection::autoReconnect(): reconnecting." << std::endl;
+    App->log << "ServerConnection::autoReconnect(): reconnecting." << std::endl;
     #endif
     ServerConnection& conn = *(static_cast<ServerConnection*>(data));
     conn.connect();
@@ -176,7 +176,7 @@ gboolean ServerConnection::connectionCheck(gpointer data)
     if (conn.Session.sentLagCheck) {
         // disconnected! last lag check was never replied to
         #ifdef DEBUG
-        std::cout << "ServerConnection::connectionCheck(): disconnected." << std::endl;
+        App->log << "ServerConnection::connectionCheck(): disconnected." << std::endl;
         #endif
         conn.disconnect();
         conn.connect();
@@ -184,7 +184,7 @@ gboolean ServerConnection::connectionCheck(gpointer data)
         return FALSE;
     } else {
         #ifdef DEBUG
-        std::cout << "ServerConnection::connectionCheck(): still on" << std::endl;
+        App->log << "ServerConnection::connectionCheck(): still on" << std::endl;
         #endif
         conn.sendPing();
         conn.Session.sentLagCheck = true;
@@ -196,7 +196,7 @@ gboolean ServerConnection::onReadData(GIOChannel* io_channel, GIOCondition cond,
 {
     ServerConnection& conn = *(static_cast<ServerConnection*>(data));
     #ifdef DEBUG
-    std::cout << "ServerConnection::onReadData(): reading.." << std::endl;
+    App->log << "ServerConnection::onReadData(): reading.." << std::endl;
     #endif
 
     try {

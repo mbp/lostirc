@@ -27,6 +27,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <glib.h>
+#include "LostIRCApp.h"
 #include "Socket.h"
 
 using std::string;
@@ -170,13 +171,13 @@ void Socket::disconnect()
 bool Socket::send(const string& data)
 {
     #ifdef DEBUG
-    std::cout << ">> " << data << std::flush;
+    App->log << ">> " << data << std::flush;
     #endif
     if (::send(fd, data.c_str(), data.length(), 0) > 0) {
         return true;
     } else {
         #ifdef DEBUG
-        std::cout << " -- send failed! (" << strerror(errno) << ")" << std::endl;
+        App->log << " -- send failed! (" << strerror(errno) << ")" << std::endl;
         #endif
         return false;
     }
