@@ -91,10 +91,10 @@ void Parser::parseLine(ustring& data)
         ustring command = data.substr(pos1 + 1, (pos2 - 1) - pos1);
 
         // Check whether there is any params
-        ustring::size_type pos3 = data.find(" :", pos2 + 1);
+        ustring::size_type pos3 = data.find(" :", pos2);
         ustring param;
 
-        if ((pos3 - 2) != pos2) {
+        if (pos3 != pos2) {
             // We have params
             param = data.substr(pos2 + 1, (pos3 - 1) - pos2);
         }
@@ -374,7 +374,7 @@ void Parser::Join(const ustring& nick, const ustring& param, const ustring& rest
 
     // Some clients/servers/bouncers might accidently send the channel name
     // in the 'rest' string, a bug there, but we would like to avoid a
-    // segfault here. I noticed the same hack in the xchat sources.
+    // segfault here. I noticed the same hack in the xchat source.
     if (chan.empty() && !rest.empty())
         chan = getWord(rest, 1);
 
