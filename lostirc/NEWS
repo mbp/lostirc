@@ -4,6 +4,9 @@ LostIRC - (x.x.x)
   * The chosen colorscheme is now correctly remembered in the server window.
   * When using CTRL-PageUp and CTRL-PageDown to browse through tabs,
     unexpected scrolling will no longer appear.
+  * +q (quiet on freenode) modes set on a channel was not being displayed.
+    Fixed.
+  * More keybindings are now listed in /KEYBINDINGS.
   * Updated Danish translation.
 
 LostIRC - (0.4.1) - Mon Aug, 2nd 2004

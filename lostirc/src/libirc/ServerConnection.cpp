@@ -92,6 +92,7 @@ void ServerConnection::doCleanup()
     // called when we get disconnected or connect to a new server, need to
     // clean various things up.
     Session.isConnected = false;
+    Session.isConnecting = false;
     Session.hasRegistered = false;
     Session.isAway = false;
     Session.endOfMotd = false;
@@ -128,6 +129,8 @@ void ServerConnection::connect()
     doCleanup();
     App->fe->disconnected(this);
 
+    Session.isConnecting = true;
+
     FE::emit(FE::get(CONNECTING) << Session.host << Session.port, FE::CURRENT, this);
 
     _socket.connect(Session.host, Session.port);
@@ -147,6 +150,7 @@ void ServerConnection::on_host_resolved()
 
 void ServerConnection::on_connected(Glib::IOCondition cond)
 {
+    Session.isConnecting = false;
     Session.isConnected = true;
     App->fe->connected(this);
 

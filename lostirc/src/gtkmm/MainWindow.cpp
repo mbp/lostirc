@@ -297,7 +297,9 @@ void MainWindow::newTab(ServerConnection *conn)
     conn->Session.servername = name;
     Tab *tab = 0;
     Tab *currenttab = getNotebook().getCurrent();
-    if (currenttab != 0 && !currenttab->getConn()->Session.isConnected &&
+    if (currenttab != 0 &&
+            !currenttab->getConn()->Session.isConnected &&
+            !currenttab->getConn()->Session.isConnecting &&
             currenttab->isType(Tab::SERVER)) {
         tab = currenttab;
         tab->setName(name);

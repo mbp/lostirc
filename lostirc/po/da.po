@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LostIRC 0.4.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-28 01:53+0200\n"
+"POT-Creation-Date: 2004-09-08 19:10+0200\n"
 "PO-Revision-Date: 2004-08-27 23:55+0200\n"
 "Last-Translator: Morten Brix Pedersen <morten@wtf.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -81,9 +81,10 @@ msgid ""
 "    CTRL-End/Home - go to bottom or top of text box\n"
 "    CTRL-H - Scroll back to previous highlight (if any)\n"
 "\n"
+"    CTRL-M - show/hide menubar\n"
 "    CTRL-P - open preferences\n"
+"    CTRL-S - open server window\n"
 "    CTRL-Q - quit LostIRC\n"
-"\n"
 msgstr ""
 "7Tilgængelig tastaturbindinger:\n"
 "    8CTRL-[1-9] - skift faneblad fra 1-9\n"
@@ -98,15 +99,17 @@ msgstr ""
 "    CTRL-End/Home - gå til bunden eller toppen af tekstboksen\n"
 "    CTRL-H - Kør op til sidste anmærkning (hvis nogen)\n"
 "\n"
+"    CTRL-M - vis/skjul menulinje\n"
 "    CTRL-P - åben indstillinger\n"
+"    CTRL-S - åben servervindue\n"
 "    CTRL-Q - afslut LostIRC\n"
 "\n"
 
-#: src/gtkmm/MainWindow.cpp:295 src/gtkmm/MainWindow.cpp:305
+#: src/gtkmm/MainWindow.cpp:296 src/gtkmm/MainWindow.cpp:316
 msgid "server"
 msgstr "server"
 
-#: src/gtkmm/MainWindow.cpp:328
+#: src/gtkmm/MainWindow.cpp:339
 msgid ""
 "Locale conversion error. An error occured while converting text from UTF-8 "
 "to your current locale.\n"
@@ -124,7 +127,7 @@ msgstr ""
 "\n"
 "Hvis du tror dette er en fejl, raportér det venligst til programmets ejer."
 
-#: src/gtkmm/MainWindow.cpp:332
+#: src/gtkmm/MainWindow.cpp:343
 msgid ""
 "\n"
 "\n"
@@ -134,7 +137,7 @@ msgstr ""
 "\n"
 "Dit nuværende locale (ser ud til) at være: "
 
-#: src/gtkmm/MainWindow.cpp:336
+#: src/gtkmm/MainWindow.cpp:347
 msgid ""
 "Encoding conversion error. An error occured while converting text from UTF-8 "
 "to the user-defined encoding.\n"
@@ -152,7 +155,7 @@ msgstr ""
 "\n"
 "Hvis du tror dette er en fejl, raportér det venligst til programmets ejer."
 
-#: src/gtkmm/MainWindow.cpp:338
+#: src/gtkmm/MainWindow.cpp:349
 msgid ""
 "\n"
 "\n"
@@ -162,7 +165,7 @@ msgstr ""
 "\n"
 "Jeg prøvede at konvertere til: "
 
-#: src/gtkmm/MainWindow.cpp:342
+#: src/gtkmm/MainWindow.cpp:353
 msgid ""
 "\n"
 "\n"
@@ -172,63 +175,63 @@ msgstr ""
 "\n"
 "(OBS: Du vil kun se denne advarsel en gang per LostIRC session)"
 
-#: src/gtkmm/MainWindow.cpp:380
+#: src/gtkmm/MainWindow.cpp:391
 msgid "_LostIRC"
 msgstr "_LostIRC"
 
-#: src/gtkmm/MainWindow.cpp:381
+#: src/gtkmm/MainWindow.cpp:392
 msgid "_New Server Tab"
 msgstr "_Nyt server-faneblad"
 
-#: src/gtkmm/MainWindow.cpp:384
+#: src/gtkmm/MainWindow.cpp:395
 msgid "Clear Window"
 msgstr "Ryd vindue"
 
-#: src/gtkmm/MainWindow.cpp:386
+#: src/gtkmm/MainWindow.cpp:397
 msgid "Clear All Windows"
 msgstr "Ryd alle vinduer"
 
-#: src/gtkmm/MainWindow.cpp:388
+#: src/gtkmm/MainWindow.cpp:399
 msgid "Close Current Tab"
 msgstr "Luk nuværende faneblad"
 
-#: src/gtkmm/MainWindow.cpp:394
+#: src/gtkmm/MainWindow.cpp:405
 msgid "_View"
 msgstr "_Vis"
 
-#: src/gtkmm/MainWindow.cpp:395
+#: src/gtkmm/MainWindow.cpp:406
 msgid "_Menubar"
 msgstr "_Menulinje"
 
-#: src/gtkmm/MainWindow.cpp:396
+#: src/gtkmm/MainWindow.cpp:407
 msgid "Status_bar"
 msgstr "Statuslinje"
 
-#: src/gtkmm/MainWindow.cpp:397
+#: src/gtkmm/MainWindow.cpp:408
 msgid "_User List"
 msgstr "_Brugerliste"
 
-#: src/gtkmm/MainWindow.cpp:398
+#: src/gtkmm/MainWindow.cpp:409
 msgid "_Server List"
 msgstr "_Serverliste"
 
-#: src/gtkmm/MainWindow.cpp:399
+#: src/gtkmm/MainWindow.cpp:410
 msgid "_DCC Transfers"
 msgstr "_DCC overførsler"
 
-#: src/gtkmm/MainWindow.cpp:402
+#: src/gtkmm/MainWindow.cpp:413
 msgid "_Help"
 msgstr "_Hjælp"
 
-#: src/gtkmm/MainWindow.cpp:403
+#: src/gtkmm/MainWindow.cpp:414
 msgid "_Introduction"
 msgstr "_Introduktion"
 
-#: src/gtkmm/MainWindow.cpp:404
+#: src/gtkmm/MainWindow.cpp:415
 msgid "_About"
 msgstr "_Om"
 
-#: src/gtkmm/MainWindow.cpp:492
+#: src/gtkmm/MainWindow.cpp:503
 msgid ""
 "LostIRC Quick Introduction\n"
 "\n"
@@ -266,7 +269,7 @@ msgstr ""
 "Og du bør virkelig kigge på listen med tastaturbindinger:\n"
 "    /KEYBINDINGS"
 
-#: src/gtkmm/MainWindow.cpp:506
+#: src/gtkmm/MainWindow.cpp:517
 msgid "LostIRC "
 msgstr "LostIRC "
 
@@ -282,7 +285,7 @@ msgstr " (væk i øjeblikket)"
 msgid "LostIRC Server Window"
 msgstr "LostIRC servervindue"
 
-#: src/gtkmm/ServerWindow.cpp:54 src/gtkmm/ServerWindow.cpp:259
+#: src/gtkmm/ServerWindow.cpp:54 src/gtkmm/ServerWindow.cpp:260
 msgid "Nickname:"
 msgstr "Kælenavn:"
 
@@ -314,27 +317,27 @@ msgstr "_Redigér"
 msgid "<b>Servers</b>"
 msgstr "<b>Servere</b>"
 
-#: src/gtkmm/ServerWindow.cpp:218
+#: src/gtkmm/ServerWindow.cpp:219
 msgid "LostIRC Server Edit"
 msgstr "LostIRC serverredigering"
 
-#: src/gtkmm/ServerWindow.cpp:219
+#: src/gtkmm/ServerWindow.cpp:220
 msgid "_Connect automatically"
 msgstr "_Forbind automatisk"
 
-#: src/gtkmm/ServerWindow.cpp:237
+#: src/gtkmm/ServerWindow.cpp:238
 msgid "Hostname:"
 msgstr "Værtsnavn:"
 
-#: src/gtkmm/ServerWindow.cpp:244
+#: src/gtkmm/ServerWindow.cpp:245
 msgid "Port:"
 msgstr "Port:"
 
-#: src/gtkmm/ServerWindow.cpp:252
+#: src/gtkmm/ServerWindow.cpp:253
 msgid "Password:"
 msgstr "Adgangskode:"
 
-#: src/gtkmm/ServerWindow.cpp:266
+#: src/gtkmm/ServerWindow.cpp:267
 msgid "Commands to perform when connected:"
 msgstr "Kommandoer der skal udføres efter forbindelse:"
 
@@ -608,11 +611,11 @@ msgstr "En fejl opstod, ved at læse fra rør (Intern fejl 2)"
 msgid "An error occured while reading from pipe (Internal error 3)"
 msgstr "En fejl opstod, ved at læse fra rør (Intern fejl 3)"
 
-#: src/libirc/Parser.cpp:855
+#: src/libirc/Parser.cpp:838
 msgid "idle: "
 msgstr "ubenyttet: "
 
-#: src/libirc/Parser.cpp:859
+#: src/libirc/Parser.cpp:842
 msgid ", signon time: "
 msgstr ", login tid: "
 
@@ -668,41 +671,26 @@ msgstr "Indgående fil er tom. Sender:"
 msgid "File not found: "
 msgstr "Fil ikke fundet: "
 
-#: src/libirc/ServerConnection.cpp:118
+#: src/libirc/ServerConnection.cpp:119
 msgid "Disconnected."
 msgstr "Forbindelse afbrudt."
 
-#: src/libirc/ServerConnection.cpp:139
+#: src/libirc/ServerConnection.cpp:142
 msgid "Failed connecting: "
 msgstr "Kunne ikke forbinde: "
 
-#: src/libirc/ServerConnection.cpp:145
+#: src/libirc/ServerConnection.cpp:148
 msgid "Resolved host. Connecting.."
 msgstr "Værtsnavn slået op. Forbinder.."
 
-#: src/libirc/ServerConnection.cpp:155
+#: src/libirc/ServerConnection.cpp:159
 msgid "Connected. Logging in..."
 msgstr "Forbundet. Logger ind..."
 
-#: src/libirc/ServerConnection.cpp:202
+#: src/libirc/ServerConnection.cpp:206
 msgid "Failed to receive: "
 msgstr "Kunne ikke modtage: "
 
 #: src/libirc/LostIRCApp.h:56
 msgid "Logging to `"
 msgstr "Logger til `"
-
-#~ msgid "_Hide Menubar"
-#~ msgstr "_Skjul menulinje"
-
-#~ msgid "_Show Menubar"
-#~ msgstr "_Vis menulinje"
-
-#~ msgid "Browse..."
-#~ msgstr "Gennemse..."
-
-#~ msgid "Filesize"
-#~ msgstr "Filstørrelse"
-
-#~ msgid "Progress"
-#~ msgstr "pct. udført"

@@ -96,6 +96,7 @@ public:
         Glib::ustring password;
         Glib::ustring awaymsg;
         bool isConnected;
+        bool isConnecting;
         bool hasRegistered;
         bool isAway;
         bool endOfMotd;

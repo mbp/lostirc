@@ -1,5 +1,14 @@
 For a summary of changes between releases - see the NEWS file.
 
+2004-09-08  Morten Brix Pedersen  <morten@wtf.dk>
+ 	* src/gtkmm/GuiCommands.cpp: List a few more keybindings in
+	/KEYBINDINGS.
+	* src/libirc/Parser.cpp: Remove some old +q code, I noticed that it
+	was not possible to see +q mode changes.
+	* ServerConnection/MainWindow: Create new tabs when connecting as
+	well.
+	* po/da.po: Update.
+
 2004-08-28  Morten Brix Pedersen  <morten@wtf.dk>
 	* src/gtkmm/Prefs.cpp: Remember which colorscheme was picked.
 	* src/gtkmm/MainWindow.cpp: Don't scroll when the user is holding

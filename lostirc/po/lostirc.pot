@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-28 01:53+0200\n"
+"POT-Creation-Date: 2004-09-08 19:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,16 +75,17 @@ msgid ""
 "    CTRL-End/Home - go to bottom or top of text box\n"
 "    CTRL-H - Scroll back to previous highlight (if any)\n"
 "\n"
+"    CTRL-M - show/hide menubar\n"
 "    CTRL-P - open preferences\n"
+"    CTRL-S - open server window\n"
 "    CTRL-Q - quit LostIRC\n"
-"\n"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:295 src/gtkmm/MainWindow.cpp:305
+#: src/gtkmm/MainWindow.cpp:296 src/gtkmm/MainWindow.cpp:316
 msgid "server"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:328
+#: src/gtkmm/MainWindow.cpp:339
 msgid ""
 "Locale conversion error. An error occured while converting text from UTF-8 "
 "to your current locale.\n"
@@ -95,14 +96,14 @@ msgid ""
 "If you believe this is a bug, please report it to the application author."
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:332
+#: src/gtkmm/MainWindow.cpp:343
 msgid ""
 "\n"
 "\n"
 "Your current locale (seems) to be: "
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:336
+#: src/gtkmm/MainWindow.cpp:347
 msgid ""
 "Encoding conversion error. An error occured while converting text from UTF-8 "
 "to the user-defined encoding.\n"
@@ -113,77 +114,77 @@ msgid ""
 "If you believe this is a bug, please report it to the application author."
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:338
+#: src/gtkmm/MainWindow.cpp:349
 msgid ""
 "\n"
 "\n"
 "I was trying to convert to: "
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:342
+#: src/gtkmm/MainWindow.cpp:353
 msgid ""
 "\n"
 "\n"
 "(Note: You'll only see this warning once per LostIRC session)"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:380
+#: src/gtkmm/MainWindow.cpp:391
 msgid "_LostIRC"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:381
+#: src/gtkmm/MainWindow.cpp:392
 msgid "_New Server Tab"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:384
+#: src/gtkmm/MainWindow.cpp:395
 msgid "Clear Window"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:386
+#: src/gtkmm/MainWindow.cpp:397
 msgid "Clear All Windows"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:388
+#: src/gtkmm/MainWindow.cpp:399
 msgid "Close Current Tab"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:394
+#: src/gtkmm/MainWindow.cpp:405
 msgid "_View"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:395
+#: src/gtkmm/MainWindow.cpp:406
 msgid "_Menubar"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:396
+#: src/gtkmm/MainWindow.cpp:407
 msgid "Status_bar"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:397
+#: src/gtkmm/MainWindow.cpp:408
 msgid "_User List"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:398
+#: src/gtkmm/MainWindow.cpp:409
 msgid "_Server List"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:399
+#: src/gtkmm/MainWindow.cpp:410
 msgid "_DCC Transfers"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:402
+#: src/gtkmm/MainWindow.cpp:413
 msgid "_Help"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:403
+#: src/gtkmm/MainWindow.cpp:414
 msgid "_Introduction"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:404
+#: src/gtkmm/MainWindow.cpp:415
 msgid "_About"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:492
+#: src/gtkmm/MainWindow.cpp:503
 msgid ""
 "LostIRC Quick Introduction\n"
 "\n"
@@ -204,7 +205,7 @@ msgid ""
 "    /KEYBINDINGS"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:506
+#: src/gtkmm/MainWindow.cpp:517
 msgid "LostIRC "
 msgstr ""
 
@@ -220,7 +221,7 @@ msgstr ""
 msgid "LostIRC Server Window"
 msgstr ""
 
-#: src/gtkmm/ServerWindow.cpp:54 src/gtkmm/ServerWindow.cpp:259
+#: src/gtkmm/ServerWindow.cpp:54 src/gtkmm/ServerWindow.cpp:260
 msgid "Nickname:"
 msgstr ""
 
@@ -252,27 +253,27 @@ msgstr ""
 msgid "<b>Servers</b>"
 msgstr ""
 
-#: src/gtkmm/ServerWindow.cpp:218
+#: src/gtkmm/ServerWindow.cpp:219
 msgid "LostIRC Server Edit"
 msgstr ""
 
-#: src/gtkmm/ServerWindow.cpp:219
+#: src/gtkmm/ServerWindow.cpp:220
 msgid "_Connect automatically"
 msgstr ""
 
-#: src/gtkmm/ServerWindow.cpp:237
+#: src/gtkmm/ServerWindow.cpp:238
 msgid "Hostname:"
 msgstr ""
 
-#: src/gtkmm/ServerWindow.cpp:244
+#: src/gtkmm/ServerWindow.cpp:245
 msgid "Port:"
 msgstr ""
 
-#: src/gtkmm/ServerWindow.cpp:252
+#: src/gtkmm/ServerWindow.cpp:253
 msgid "Password:"
 msgstr ""
 
-#: src/gtkmm/ServerWindow.cpp:266
+#: src/gtkmm/ServerWindow.cpp:267
 msgid "Commands to perform when connected:"
 msgstr ""
 
@@ -542,11 +543,11 @@ msgstr ""
 msgid "An error occured while reading from pipe (Internal error 3)"
 msgstr ""
 
-#: src/libirc/Parser.cpp:855
+#: src/libirc/Parser.cpp:838
 msgid "idle: "
 msgstr ""
 
-#: src/libirc/Parser.cpp:859
+#: src/libirc/Parser.cpp:842
 msgid ", signon time: "
 msgstr ""
 
@@ -602,23 +603,23 @@ msgstr ""
 msgid "File not found: "
 msgstr ""
 
-#: src/libirc/ServerConnection.cpp:118
+#: src/libirc/ServerConnection.cpp:119
 msgid "Disconnected."
 msgstr ""
 
-#: src/libirc/ServerConnection.cpp:139
+#: src/libirc/ServerConnection.cpp:142
 msgid "Failed connecting: "
 msgstr ""
 
-#: src/libirc/ServerConnection.cpp:145
+#: src/libirc/ServerConnection.cpp:148
 msgid "Resolved host. Connecting.."
 msgstr ""
 
-#: src/libirc/ServerConnection.cpp:155
+#: src/libirc/ServerConnection.cpp:159
 msgid "Connected. Logging in..."
 msgstr ""
 
-#: src/libirc/ServerConnection.cpp:202
+#: src/libirc/ServerConnection.cpp:206
 msgid "Failed to receive: "
 msgstr ""
 
