@@ -23,6 +23,10 @@ LostIRC (x.x.x)
   * Gettext support added, making LostIRC translate-able to other languages
     than English (see po/ directory).
   * A bug which caused non-UTF8 compatible nicknames to fail has been fixed.
+  * Fixed a problem where PowerPC systems would get a "Unknown host" when
+    connecting.
+  * Fix a problem when using GTK+ 2.2 and focus wasn't given to the entry
+    box when clicking on a tab.
 
 LostIRC (0.2.4) - Sun Dec, 29th 2002
   * The "Less bugs and more features for 2003" release.

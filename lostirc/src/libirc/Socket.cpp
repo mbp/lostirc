@@ -98,8 +98,6 @@ bool Socket::on_host_resolve(Glib::IOCondition cond, int readpipe)
 
     if (bytes_read == -1) {
         on_error(strerror(errno));
-    } else if (buf[0] == 0) {
-        on_error(_("Unknown host"));
     } else if (size_to_be_read != bytes_read) {
         sleep(1);
         int new_retval = read(readpipe, &buf[bytes_read], size_to_be_read - bytes_read);

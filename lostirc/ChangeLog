@@ -1,5 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-01-09  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Socket.cpp: Don't check if the first element in the array is 0, the
+          check is not needed and it seems to cause problems on PowerPC.
+
 2003-01-08  Morten Brix Pedersen  <morten@wtf.dk>
 
         * MainNotebook.cpp: The default behaviour when changing tabs in GTK+
