@@ -22,9 +22,8 @@
 #include "Tab.h"
 #include <algorithm>
 #include <sstream>
-#include <gtk--/frame.h>
-#include <gtk--/button.h>
 #include "GuiCommands.h"
+#include "Prefs.h"
 
 using std::vector;
 using std::string;
@@ -73,7 +72,6 @@ Tab::Tab(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
     _scrollwindow->set_policy(GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
     _scrollwindow->add(*_text);
 
-    //_away = manage(new Gtk::Label("You are away"));
     setStyle();
 
     _hbox->pack_start(*_scrollwindow);
@@ -93,31 +91,6 @@ Tab::Tab(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
 Tab::~Tab()
 {
     delete _current_cx;
-}
-
-Gtk::Text* Tab::getText()
-{
-    return _text;
-}
-
-Gtk::HBox* Tab::getHBox()
-{
-    return _hbox;
-}
-
-Gtk::Label* Tab::getLabel()
-{
-    return _label;
-}
-
-Entry* Tab::getEntry()
-{
-    return _entry;
-}
-
-ServerConnection* Tab::getConn()
-{
-    return _conn;
 }
 
 void Tab::setFont(Gdk_Font *font)
@@ -386,7 +359,7 @@ bool TabChannel::nickCompletion(const string& word, string& str)
     if (matches == 1) {
         return true;
     } else if (matches > 1) {
-        str = nicks + "\n";
+        str = nicks + '\n';
         return false;
     } else if (matches == 0) {
         str = "";
@@ -407,86 +380,4 @@ void Tab::endPrefs(Prefs *p)
     remove(*p);
     pack_start(*_hbox);
     pack_start(*_hbox2, 0, 1);
-}
-
-Prefs::Prefs(Tab *t)
-    : Gtk::Notebook(), _t(t)
-{
-
-    Gtk::VBox *performbox = manage(new Gtk::VBox());
-    Gtk::VBox *prefsbox = manage(new Gtk::VBox());
-    Gtk::HBox *serverhbox = manage(new Gtk::HBox());
-    Gtk::HBox *buttons = manage(new Gtk::HBox());
-    clist = manage(new Gtk::CList(1));
-    clist->select_row.connect(slot(this, &Prefs::onSelectRow));
-
-    vector<struct autoJoin*> servers = GuiCommands::mw->getApp()->getCfg().getServers();
-    vector<struct autoJoin*>::iterator i;
-
-    for (i = servers.begin(); i != servers.end(); ++i) {
-        vector<string> v; // FIXME: ugly as hell.
-        v.push_back((*i)->hostname);
-        clist->rows().push_back(v);
-        clist->rows().back().set_data(*i);
-    }
-    serverhbox->pack_start(*clist);
-    Gtk::VBox *serverinfobox = manage(new Gtk::VBox());
-    serverhbox->pack_start(*serverinfobox);
-
-    /* hostname */
-    hostentry = manage(new Gtk::Entry());
-    Gtk::Frame *frame1 = manage(new Gtk::Frame("Hostname"));
-    frame1->add(*hostentry);
-    serverinfobox->pack_start(*frame1, 0, 0);
-
-    /* port */
-    portentry = manage(new Gtk::Entry());
-    Gtk::Frame *frame2 = manage(new Gtk::Frame("Port"));
-    frame2->add(*portentry);
-    serverinfobox->pack_start(*frame2, 0, 0);
-
-    /* password */
-    passentry = manage(new Gtk::Entry());
-    Gtk::Frame *frame3 = manage(new Gtk::Frame("Password"));
-    frame3->add(*passentry);
-    serverinfobox->pack_start(*frame3, 0, 0);
-
-    /* nick */
-    nickentry = manage(new Gtk::Entry());
-    Gtk::Frame *frame4 = manage(new Gtk::Frame("Nick"));
-    frame4->add(*nickentry);
-    serverinfobox->pack_start(*frame4, 0, 0);
-
-    Gtk::Button *_buttonsave = manage(new Gtk::Button("Save prefs"));
-    _buttonsave->clicked.connect(slot(this, &Prefs::savePrefs));
-    Gtk::Button *_buttonclose = manage(new Gtk::Button("Close prefs"));
-    _buttonclose->clicked.connect(slot(this, &Prefs::endPrefs));
-    buttons->pack_start(*_buttonsave);
-    buttons->pack_start(*_buttonclose);
-    performbox->pack_start(*serverhbox, 1, 1);
-    performbox->pack_start(*buttons, 0, 0);
-
-    pages().push_back(Gtk::Notebook_Helpers::TabElem(*performbox, "Autojoin servers"));
-    pages().push_back(Gtk::Notebook_Helpers::TabElem(*prefsbox, "Preferences"));
-    show_all();
-}
-
-void Prefs::endPrefs()
-{
-    _t->endPrefs(this);
-}
-
-void Prefs::savePrefs()
-{
-    // FIXME
-    endPrefs();
-}
-
-void Prefs::onSelectRow(int r, int col, GdkEvent *e)
-{
-    struct autoJoin *a = static_cast<struct autoJoin*>(clist->row(r).get_data());
-    hostentry->set_text(a->hostname);
-    passentry->set_text(a->password);
-    //portentry->set_text((char *)a->port);
-    nickentry->set_text(a->nick);
 }

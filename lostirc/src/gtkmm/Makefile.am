@@ -4,6 +4,7 @@ lostirc_SOURCES =  main.cpp \
                    MainWindow.h MainWindow.cpp \
                    MainNotebook.h MainNotebook.cpp \
                    Tab.h Tab.cpp \
+                   Prefs.h Prefs.cpp \
                    GuiCommands.h GuiCommands.cpp \
                    Entry.cpp Entry.h
 

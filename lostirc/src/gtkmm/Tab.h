@@ -42,12 +42,12 @@ public:
     Tab(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font);
     ~Tab();
 
-    Gtk::Text*                  getText();
-    Gtk::HBox*                  getHBox();
-    Gtk::Label*                 getLabel();
+    Gtk::Text*                  getText() { return _text; }
+    Gtk::HBox*                  getHBox() { return _hbox; }
+    Gtk::Label*                 getLabel() { return _label; }
     virtual Gtk::CList*         getCList() { return 0; }
-    Entry*                      getEntry();
-    ServerConnection*           getConn();
+    Entry*                      getEntry() { return _entry; }
+    ServerConnection*           getConn() { return _conn; }
 
     void setAway();
     void setUnAway();
@@ -124,23 +124,6 @@ public:
 private:
     void updateUserNumber();
 
-};
-
-class Prefs : public Gtk::Notebook
-{
-    Gtk::CList *clist;
-    Gtk::Entry *passentry;
-    Gtk::Entry *portentry;
-    Gtk::Entry *hostentry;
-    Gtk::Entry *nickentry;
-    Tab *_t;
-
-    void endPrefs();
-    void savePrefs();
-    void onSelectRow(int row, int col, GdkEvent* e);
-
-public:
-    Prefs(Tab *t);
 };
 
 #endif
