@@ -72,7 +72,7 @@ namespace Commands
     void Devoice(ServerConnection* conn, const std::string& params);
     bool commandCompletion(const std::string& word, std::string& str);
 
-    std::string assignModes(char sign, char mode, istringstream& ss);
+    std::string assignModes(char sign, char mode, std::istringstream& ss);
 
 }
 

@@ -1,6 +1,7 @@
 LostIRC (x.x.x)
   * A segfault which appeared when the enviroment variable USER wasn't set,
     has been fixed (thanks, Gabriele Giorgetti)
+  * gcc 3.1 compilation fix
 
 LostIRC (0.1.3) - Fri Jul 12th 2002
   * New welcome-screen.
