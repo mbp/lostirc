@@ -1,0 +1,11 @@
+INSTALLATION
+------------
+
+You need to have 'libgtkmm-dev', 'libsigc++-dev' and 'libglib1.2-dev'
+installed.
+
+Then execute these commands:
+  
+   $ ./configure
+   $ make
+   $ src/gtkmm/lostirc
