@@ -26,8 +26,7 @@ DCC_Send_In::DCC_Send_In(const std::string& filename, unsigned long address, uns
 : _outfile(), _filename(filename), _address(address), _port(port),
   _size(size), _pos(0)
 {
-    std::string home(getenv("HOME"));
-    _downloaddir = home + "/.lostirc/downloads/";
+    _downloaddir = App->getCfg().home + "/.lostirc/downloads/";
     mkdir(_downloaddir.c_str(), 0700);
 
     _filename = _downloaddir + _filename;

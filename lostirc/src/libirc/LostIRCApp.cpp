@@ -40,14 +40,27 @@ LostIRCApp::LostIRCApp(FrontEnd *f)
 
     struct passwd *pwentry = getpwuid(getuid());
 
-    if (_cfg.getOpt("nick").empty())
-          _cfg.setOpt("nick", pwentry->pw_name);
+    if (pwentry != NULL) {
 
-    if (_cfg.getOpt("ircuser").empty())
-          _cfg.setOpt("ircuser", pwentry->pw_name);
+        if (_cfg.getOpt("nick").empty())
+              _cfg.setOpt("nick", pwentry->pw_name);
 
-    if (_cfg.getOpt("realname").empty())
-          _cfg.setOpt("realname", pwentry->pw_gecos);
+        if (_cfg.getOpt("ircuser").empty())
+              _cfg.setOpt("ircuser", pwentry->pw_name);
+
+        if (_cfg.getOpt("realname").empty())
+              _cfg.setOpt("realname", pwentry->pw_gecos);
+
+    } else {
+        if (_cfg.getOpt("nick").empty())
+              _cfg.setOpt("nick", "Somebody");
+
+        if (_cfg.getOpt("ircuser").empty())
+              _cfg.setOpt("ircuser", "unknown");
+
+        if (_cfg.getOpt("realname").empty())
+              _cfg.setOpt("realname", "");
+    }
 }
 
 LostIRCApp::~LostIRCApp()

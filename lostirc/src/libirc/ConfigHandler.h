@@ -40,8 +40,6 @@ class ConfigHandler {
 public:
     ConfigHandler();
     ~ConfigHandler();
-    /* read all configuration files */
-    bool readConfig();
 
     /* ~/.lostirc/events.conf */
     bool setEvt(const std::string& key, const std::string& value);
@@ -61,6 +59,8 @@ public:
 
     /* write server list */
     bool writeServers();
+
+    std::string home;
 
 private:
     bool readOptions(const std::string& filename);

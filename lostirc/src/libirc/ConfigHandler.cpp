@@ -16,11 +16,13 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <pwd.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <algorithm>
 #include <fstream>
 #include <iostream>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include "ConfigHandler.h"
 #include "Events.h"
 
@@ -31,11 +33,25 @@ using std::map;
 
 ConfigHandler::ConfigHandler()
 {
-    string home(getenv("HOME"));
+    // Get home directory
+    if (getenv("HOME") == NULL) {
+        struct passwd *pwentry = getpwuid(getuid());
+        if (pwentry != NULL)
+              home = pwentry->pw_dir;
+        else
+              std::cerr << "Fatal - user doesn't exist. " << std::endl;
+    } else {
+        home = getenv("HOME");
+    }
+
     string configdir = home + "/.lostirc/";
     mkdir(configdir.c_str(), 0700);
 
-    readConfig();
+    readOptions(home + "/.lostirc/options.conf");
+    readEvents(home + "/.lostirc/events.conf");
+    readServers(home + "/.lostirc/perform.conf");
+    writeEvents();
+
 }
 
 ConfigHandler::~ConfigHandler()
@@ -46,16 +62,6 @@ ConfigHandler::~ConfigHandler()
         delete (*i);
         i = _servers.erase(i);
     }
-}
-
-bool ConfigHandler::readConfig()
-{
-    string home(getenv("HOME"));
-    readOptions(home + "/.lostirc/options.conf");
-    readEvents(home + "/.lostirc/events.conf");
-    readServers(home + "/.lostirc/perform.conf");
-    writeEvents();
-    return true; // FIXME
 }
 
 bool ConfigHandler::readEvents(const string& filename)
@@ -97,12 +103,12 @@ bool ConfigHandler::readIniFile(const string& filename, map<string, string> & th
 
 bool ConfigHandler::writeEvents()
 {
-    return writeIniFile(string(string(getenv("HOME")) + "/.lostirc/events.conf"), _events);
+    return writeIniFile(home + "/.lostirc/events.conf", _events);
 }
 
 bool ConfigHandler::writeOptions()
 {
-    return writeIniFile(string(string(getenv("HOME")) + "/.lostirc/options.conf"), _options);
+    return writeIniFile(home + "/.lostirc/options.conf", _options);
 }
 
 bool ConfigHandler::writeIniFile(const string& filename, map<string, string>& themap)
@@ -183,7 +189,6 @@ bool ConfigHandler::readServers(const string& filename)
 
 bool ConfigHandler::writeServers()
 {
-    string home(getenv("HOME"));
     std::ofstream out(string(home + "/.lostirc/perform.conf").c_str());
 
     if (!out)
