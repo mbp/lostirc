@@ -36,8 +36,8 @@ private:
     void onEntry();
     void printText(const std::string& msg);
     std::vector<std::string> _entries;
-    std::vector<std::string>::reverse_iterator i;
     Tab* _tab;
+    std::vector<std::string>::reverse_iterator i;
 
 };
 #endif
