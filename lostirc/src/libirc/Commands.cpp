@@ -144,10 +144,9 @@ bool Commands::Invite(ServerConnection *conn, const string& params)
 
 bool Commands::Msg(ServerConnection *conn, const string& params)
 {
-    string to, msg;
-    stringstream ss(params);
-    ss >> to;
-    ss >> msg;
+    string::size_type pos1 = params.find_first_of(" ");
+    string to = params.substr(0, pos1 + 1);
+    string msg = params.substr(pos1 + 1);
 
     if (msg.length() == 0) {
        error = "Please supply a msg.\n";
