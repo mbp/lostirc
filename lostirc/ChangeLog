@@ -1,6 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
 2004-02-01  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * Remove m4/Makefile.am: Apparently auto-generated.
+
+2004-02-01  Morten Brix Pedersen  <morten@wtf.dk>
 
         * ServerWindow.cpp: Apply patch from Thomas Johannsson making the
         text-field in the server edit dialog slightly bigger, and horizontal
