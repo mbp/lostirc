@@ -1,6 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
 2004-03-18  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * Update Copyright to 2004 in all source files.
+
+2004-03-18  Morten Brix Pedersen  <morten@wtf.dk>
 
         * ConfigHandler.cpp: Add hidestatusbar option.
         * MainWindow.cpp: - Add hideStatusbar() method. 

@@ -9,15 +9,7 @@ NICE-TO-HAVE:
   * ipv6 support
   * When window has lost its focus, then highlight the front tab too.
   * /BAN and /EXEC command.
-  * Virtual functions for Commands, to be overriden. Much more OO-like.
-  * Implement DCC CHAT
   * Recognise URLs (and make them clickable?)
-
-
-SMALL NICETIES:
----------------
-  * A more userfriendly way for choosing a random DCC port (at the moment,
-    you must enter '0').
 
 RANDOM BUGS:
 ------------
@@ -42,13 +34,14 @@ RANDOM BUGS:
     The solution is to wait for gtkmm 2.4, which should support it.
 
   * Should we check for EAGAIN on send()? It seems to always succeed anyway.
-  * Is there an access key for all text entries in preferences?
+
+DCC:
+----
+  * DCC port ranges.
+  * DCC objects should timeout when no response has been given.
+  * DCC CHAT.
 
 WIN32 TODO:
 -----------
   * Doesn't fork() when using gethostbyname(), it should.
 
-DCC:
-----
-  * DCC port ranges.
-  * DCC objects should timeout when no response has been given
