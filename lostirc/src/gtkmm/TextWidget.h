@@ -39,16 +39,18 @@ public:
     void setFont(const Pango::FontDescription& font);
 
 private:
-    void insertWithColor(int color, const Glib::ustring& str);
-    void realInsert(int color, const Glib::ustring& str);
+    void insertText(int fgcolor, int bgcolor, const Glib::ustring& str);
+    void realInsert(int color, int bgcolor, const Glib::ustring& str);
     void setStyle();
 
     void initializeColorMap();
-    void helperInitializer(int i, const Glib::ustring& colorname);
+    Glib::RefPtr<Gtk::TextTag> initializeFG(const Glib::ustring& colorname);
+    Glib::RefPtr<Gtk::TextTag> initializeBG(const Glib::ustring& colorname);
 
     Gtk::TextView _textview;
 
-    std::map<int, Glib::RefPtr<Gtk::TextTag> > colorMap;
+    std::map<int, Glib::RefPtr<Gtk::TextTag> > fgColorMap;
+    std::map<int, Glib::RefPtr<Gtk::TextTag> > bgColorMap;
     Glib::RefPtr<Gtk::TextTag> underlinetag;
 
     std::string _fallback_encoding;

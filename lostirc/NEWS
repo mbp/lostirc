@@ -1,4 +1,7 @@
 LostIRC (x.x.x)
+  * Color-codes are now handled better. Before the background
+    color (e.g. ^C12,5) wasn't being handled and just printed ",5". Now the
+    correct background color is used.
   * By default, color codes are now stripped from incoming messages. As an
     option in preferences, you can turn them on again.
   * Title in window wasn't updated after succesfull connection to server and

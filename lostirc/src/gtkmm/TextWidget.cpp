@@ -72,33 +72,49 @@ TextWidget& TextWidget::operator<<(const ustring& line)
     char tim[11];
     strftime(tim, 10, "%H:%M:%S ", localtime(&timeval));
 
-    insertWithColor(0, ustring(tim));
+    insertText(0, 1, ustring(tim));
 
-    // FIXME: can be done prettier and better with TextBuffer marks
-
-    ustring::size_type lastPos = line.find_first_not_of("\003", 0);
-    ustring::size_type pos = line.find_first_of("\003", lastPos);
-
-    while (ustring::npos != pos || ustring::npos != lastPos)
+    bool fgcolor = false;
+    bool bgcolor = false;
+    int numbercount = 0;
+    Glib::ustring fgnumber;
+    Glib::ustring bgnumber;
+    for (int i = 0; i < line.length(); ++i)
     {
-        // Check for digits
-        if (Util::isDigit(line.substr(lastPos, 2))) {
-            int color = Util::stoi(line.substr(lastPos, 2));
-            insertWithColor(color, line.substr(lastPos + 2, (pos - lastPos) - 2));
-        } else if (Util::isDigit(line.substr(lastPos, 1))) {
-            int color = Util::stoi(line.substr(lastPos, 1));
-            insertWithColor(color, line.substr(lastPos + 1, (pos - lastPos) - 1));
+        if (line[i] == '\003') {
+            fgcolor = true;
+            numbercount = 0;
+            fgnumber.clear();
+            bgnumber.clear();
+        } else if (fgcolor && isdigit(line[i]) && numbercount < 2) {
+            numbercount++;
+            fgnumber += line[i];
+        } else if (fgcolor && line[i] == ',' && numbercount < 3) {
+            numbercount = 0;
+            bgcolor = true;
+            fgcolor = false;
+        } else if (bgcolor && isdigit(line[i]) && numbercount < 2) {
+            numbercount++; 
+            bgnumber += line[i];
         } else {
-            insertWithColor(0, line.substr(lastPos, pos - lastPos));
-        }
+            numbercount = 0;
+            fgcolor = false;
+            bgcolor = false;
 
-        lastPos = line.find_first_not_of("\003", pos);
-        pos = line.find_first_of("\003", lastPos);
-    }
+            if (bgnumber.empty())
+                  bgnumber = "1";
+            if (fgnumber.empty())
+                  fgnumber = "0";
+
+            Glib::ustring text;
+            text = line[i];
+            insertText(Util::stoi(fgnumber), Util::stoi(bgnumber), text);
+        }   
+    } 
     return *this;
 }
 
-void TextWidget::insertWithColor(int color, const ustring& str)
+void TextWidget::insertText(int fgcolor, int bgcolor, const ustring& str)
 {
     // see if the scrollbar is located in the bottom, then we need to scroll
     // after insert
@@ -107,11 +123,11 @@ void TextWidget::insertWithColor(int color, const ustring& str)
           scroll = true;
 
     // FIXME: temp hack.
-    if (color > colorMap.size())
-        color = colorMap.size() - 1;
+    if (fgcolor > fgColorMap.size())
+        fgcolor = fgColorMap.size() - 1;
 
     // Insert the text
-    realInsert(color, str);
+    realInsert(fgcolor, bgcolor, str);
     Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
 
     if (scroll)
@@ -123,11 +139,15 @@ void TextWidget::insertWithColor(int color, const ustring& str)
           buffer->erase(buffer->begin(), buffer->get_iter_at_line(buffer->get_line_count() - buffer_size));
 }
 
-void TextWidget::realInsert(int color, const ustring& line)
+void TextWidget::realInsert(int fgcolor, int bgcolor, const ustring& line)
 {
     // This function has the purpose to insert the line - but first check to
     // see whether we have an URL.
     Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
+
+    std::vector< Glib::RefPtr<Gtk::TextTag> > tags;
+    tags.push_back(fgColorMap[fgcolor]);
+    tags.push_back(bgColorMap[bgcolor]);
 
     ustring::size_type pos1;
 
@@ -148,55 +168,85 @@ void TextWidget::realInsert(int color, const ustring& line)
         ustring::size_type pos2 = line.find(" ", pos1 + 1);
 
         // What's before the URL
-        buffer->insert_with_tag(buffer->end(), line.substr(0, pos1), colorMap[color]);
+        buffer->insert_with_tags(buffer->end(), line.substr(0, pos1), tags),
 
         // The URL
         buffer->insert_with_tag(buffer->end(), line.substr(pos1, pos2 - pos1), underlinetag);
 
         // After the URL
         if (pos2 != ustring::npos)
-              buffer->insert_with_tag(buffer->end(), line.substr(pos2), colorMap[color]);
+              buffer->insert_with_tags(buffer->end(), line.substr(pos2), tags);
     } else {
         // Just insert the line, no URLs were found
-        buffer->insert_with_tag(buffer->end(), line, colorMap[color]);
+        buffer->insert_with_tags(buffer->end(), line, tags);
     }
 }
 
-void TextWidget::helperInitializer(int i, const Glib::ustring& colorname)
+Glib::RefPtr<Gtk::TextTag> TextWidget::initializeFG(const Glib::ustring& colorname)
 {
     Glib::RefPtr<Gtk::TextTag> texttag = Gtk::TextTag::create();
-    Glib::PropertyProxy_WriteOnly<Glib::ustring> fg = texttag->property_foreground();
-    fg.set_value(colorname);
+    texttag->property_foreground() = colorname;
     _textview.get_buffer()->get_tag_table()->add(texttag);
-    colorMap[i] = texttag;
+    return texttag;
+}
+
+Glib::RefPtr<Gtk::TextTag> TextWidget::initializeBG(const Glib::ustring& colorname)
+{
+    Glib::RefPtr<Gtk::TextTag> texttag = Gtk::TextTag::create();
+    texttag->property_background() = colorname;
+    _textview.get_buffer()->get_tag_table()->add(texttag);
+    return texttag;
 }
 
 void TextWidget::initializeColorMap()
 {
-    helperInitializer(0, convert_to_utf8(App->colors.color0));
-    helperInitializer(1, convert_to_utf8(App->colors.color1));
-    helperInitializer(2, convert_to_utf8(App->colors.color2));
-    helperInitializer(3, convert_to_utf8(App->colors.color3));
-    helperInitializer(4, convert_to_utf8(App->colors.color4));
-    helperInitializer(5, convert_to_utf8(App->colors.color5));
-    helperInitializer(6, convert_to_utf8(App->colors.color6));
-    helperInitializer(7, convert_to_utf8(App->colors.color7));
-    helperInitializer(8, convert_to_utf8(App->colors.color8));
-    helperInitializer(9, convert_to_utf8(App->colors.color9));
-    helperInitializer(10, convert_to_utf8(App->colors.color10));
-    helperInitializer(11, convert_to_utf8(App->colors.color11));
-    helperInitializer(12, convert_to_utf8(App->colors.color12));
-    helperInitializer(13, convert_to_utf8(App->colors.color13));
-    helperInitializer(14, convert_to_utf8(App->colors.color14));
-    helperInitializer(15, convert_to_utf8(App->colors.color15));
-    helperInitializer(16, convert_to_utf8(App->colors.color16));
-    helperInitializer(17, convert_to_utf8(App->colors.color17));
-    helperInitializer(18, convert_to_utf8(App->colors.color18));
-    helperInitializer(19, convert_to_utf8(App->colors.color19));
+    int i = 0;
+    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color0));
+    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color1));
+    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color2));
+    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color3));
+    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color4));
+    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color5));
+    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color6));
+    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color7));
+    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color8));
+    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color9));
+    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color10));
+    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color11));
+    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color12));
+    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color13));
+    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color14));
+    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color15));
+    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color16));
+    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color17));
+    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color18));
+    fgColorMap[i++] = initializeFG(convert_to_utf8(App->colors.color19));
+
+    i = 0;
+    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color0));
+    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color1));
+    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color2));
+    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color3));
+    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color4));
+    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color5));
+    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color6));
+    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color7));
+    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color8));
+    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color9));
+    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color10));
+    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color11));
+    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color12));
+    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color13));
+    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color14));
+    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color15));
+    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color16));
+    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color17));
+    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color18));
+    bgColorMap[i++] = initializeBG(convert_to_utf8(App->colors.color19));
 
     // Create a underlined-tag.
     underlinetag = Gtk::TextTag::create();
     underlinetag->property_underline() = Pango::UNDERLINE_SINGLE;
-    underlinetag->property_foreground().set_value(convert_to_utf8(App->colors.color0));
+    underlinetag->property_foreground() = convert_to_utf8(App->colors.color0);
     _textview.get_buffer()->get_tag_table()->add(underlinetag);
 }

@@ -1,5 +1,12 @@
 For a summary of changes between releases - see the NEWS file.
 
+2002-12-05  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * TextWidget.cpp: New parsing code for colored lines. Can now handle
+          background color correctly. It takes one character at the time and
+          inserts it, so I'm afraid that it might be a bit slow. But hey,
+          premature optimizations is the root of all evil.
+
 2002-12-04  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Parser.cpp: Add stripColor() function to remove colors.
