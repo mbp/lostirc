@@ -57,6 +57,7 @@ public:
     bool sendBanlist(const std::string& chan);
     bool sendMe(const std::string& to, const std::string& msg);
     bool sendWho(const std::string& mask);
+    bool sendList(const std::string& params);
     bool sendRaw(const std::string& text);
 
     void addChannel(const std::string& n);

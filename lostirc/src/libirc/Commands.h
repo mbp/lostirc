@@ -54,6 +54,7 @@ public:
     static bool Notice(ServerConnection *conn, const std::string& params);
     static bool Me(ServerConnection *conn, const std::string& params);
     static bool Who(ServerConnection *conn, const std::string& params);
+    static bool List(ServerConnection *conn, const std::string& params);
     static bool Set(ServerConnection *conn, const std::string& params);
     static bool Quote(ServerConnection *conn, const std::string& params);
     static bool commands(ServerConnection *conn, const std::string& params);

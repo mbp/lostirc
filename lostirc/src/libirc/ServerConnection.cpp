@@ -216,6 +216,13 @@ bool ServerConnection::sendWhois(const string& params)
     return _socket->send(msg);
 }
 
+bool ServerConnection::sendList(const string& params)
+{
+    string msg("LIST " + params + "\r\n");
+
+    return _socket->send(msg);
+}
+
 bool ServerConnection::sendQuit(const string& quitmsg)
 {
     if (Session.isConnected) {

@@ -43,6 +43,7 @@ struct UserCommands cmds[] = {
     { "MSG",      Commands::Msg,        1 },
     { "ME",       Commands::Me,         1 },
     { "WHO",      Commands::Who,        1 },
+    { "LIST",     Commands::List,       1 },
     { "SET",      Commands::Set,        0 },
     { "QUOTE",    Commands::Quote,      1 },
     { "COMMANDS", Commands::commands,   0 },
@@ -306,6 +307,17 @@ bool Commands::Who(ServerConnection *conn, const string& params)
         return false;
     } else {
         conn->sendWho(params);
+        return true;
+    }
+}
+
+bool Commands::List(ServerConnection *conn, const string& params)
+{
+    if (params.empty()) {
+        error = "/LIST [channels] [server], list channels on a network, if a channel is supplied, only list that channel. If a server is supplied, forward the request to that IRC server.";
+        return false;
+    } else {
+        conn->sendList(params);
         return true;
     }
 }
