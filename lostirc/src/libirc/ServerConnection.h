@@ -35,10 +35,11 @@ public:
     ServerConnection(LostIRCApp *app, const std::string& nick, const std::string& realname);
     ~ServerConnection();
 
-    bool Connect(const std::string &host, int port = 6667);
+    bool Connect(const std::string& host, int port = 6667, const std::string& pass = "");
     bool sendPong(const std::string& crap);
     bool sendUser(const std::string& nick, const std::string& localhost, const std::string& remotehost, const std::string& name);
     bool sendNick(const std::string& nick);
+    bool sendPass(const std::string& pass);
     bool sendVersion(const std::string& to);
     bool sendMsg(const std::string& to, const std::string& msg);
     bool sendNotice(const std::string& to, const std::string& msg);
@@ -69,6 +70,7 @@ public:
     struct {
         std::string nick;
         std::string realname;
+        std::string password;
         bool isConnected;
         bool hasRegistered;
         bool isAway;

@@ -1,6 +1,8 @@
 LostIRC (0.0.2)
   * Code cleanups
-  * Bans and/or unbans is now being shown properly
+  * It's now possible to connect to a server on another port than 6667, and to
+    define a password
+  * Bans and unbans is now being shown (wasn't being shown at all before)
   * Can now handle incoming invites
 
 LostIRC (0.0.1) - Fri Jan, 25th 2002

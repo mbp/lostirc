@@ -94,8 +94,29 @@ bool Commands::Kick(ServerConnection *conn, const string& params)
 
 bool Commands::Server(ServerConnection *conn, const string& params)
 {
-    conn->Connect(params);
-    return true;
+    if (params.empty()) {
+        error = "/SERVER <host/ip> [port] [password], connect to an IRC server";
+        return false;
+    } else {
+        string host, port, password;
+        stringstream ss(params);
+        ss >> host;
+        ss >> port;
+        ss >> password;
+
+        int p;
+        if (!port.empty())
+              p = Utils::stoi(port);
+
+        if (!port.empty() && !password.empty())
+              conn->Connect(host, p, password);
+        else if (!port.empty())
+              conn->Connect(host, p);
+        else
+              conn->Connect(host);
+
+        return true;
+    }
 }
 
 bool Commands::Nick(ServerConnection *conn, const string& params)

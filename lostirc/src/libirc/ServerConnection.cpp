@@ -46,9 +46,10 @@ ServerConnection::~ServerConnection()
     delete _p;
 }
 
-bool ServerConnection::Connect(const string &host, int port = 6667)
+bool ServerConnection::Connect(const string &host, int port = 6667, const string& pass = "")
 {
     Session.servername = host;
+    Session.password = pass;
 
     if (_socket->connect(host, port)) {
         Session.isConnected = true;
@@ -93,10 +94,12 @@ gboolean ServerConnection::write(GIOChannel* io_channel, GIOCondition cond, gpoi
     gethostname(hostchar, sizeof(hostchar) - 1);
     string hostname(hostchar);
 
-    conn.sendUser(conn.Session.nick, hostname, conn.Session.servername, conn.Session.realname);
-    conn.sendNick(conn.Session.nick);
+    if (!conn.Session.password.empty())
+          conn.sendPass(conn.Session.password);
 
-    std::cout << "write avail" << std::endl;
+    conn.sendNick(conn.Session.nick);
+    conn.sendUser(conn.Session.nick, hostname, conn.Session.servername, conn.Session.realname);
+
     return (FALSE);
 }
 
@@ -146,6 +149,12 @@ bool ServerConnection::sendNick(const string& nick)
         Session.nick = nick;
         return false;
     }
+}
+
+bool ServerConnection::sendPass(const string& pass)
+{
+    string msg("PASS " + pass + "\r\n");
+    return _socket->send(msg);
 }
 
 bool ServerConnection::sendVersion(const string& to)
