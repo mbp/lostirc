@@ -56,7 +56,7 @@ MainWindow::MainWindow()
     if (num_of_servers == 0) {
         // Construct initial tab
         Tab *tab = newServer();
-        *tab << "\00311Welcome to LostIRC!\n\nThis client is mainly keyboard oriented, so don't expect fancy menus and buttons for you to click on.\n\n\0037Available commands:\n\0038/SERVER <hostname> - connect to server.\n/JOIN <channel> - join channel.\n/PART <channel> - part channel.\n/WHOIS <nick> - whois a user.\n/NICK <nick> - change nick.\n/CTCP <nick> <request> - send CTCP requests.\n/AWAY <msg> - go away.\n/QUIT <msg> - quit IRC with <msg>.\n \n\0037Available GUI commands:\n\0038/QUERY <nick> - start query with <nick>.\n \n\0037Available keybindings:\n\0038Alt + [1-9] - switch tabs from 1-9.\nAlt + n - create new server tab.\nAlt + c - close current tab.\nTab - nick-completion and command-completion.\n";
+        *tab << "\0037\nWelcome to LostIRC "VERSION"!\n\nYou use the client mainly by typing in commands and text in the entry-bar shown below.\n\n You can connect to a server using:\n\0038/SERVER <hostname>\n\n\0037Then join a channel:\n\0038/JOIN <channel-name>\n\n\0037The rest of the commands is available with \0038/COMMANDS\0037.\n\n\0037Available keybindings:\n\0038Alt + [1-9] - switch tabs from 1-9.\nAlt + n - create new server tab.\nAlt + c - close current tab.\nAlt + p - open preferences.\nTab - nick-completion and command-completion.\n";
     }
 }
 

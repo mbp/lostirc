@@ -1,4 +1,5 @@
 LostIRC (x.x.x)
+  * New welcome-screen.
   * The size of the window is now saved and restored on next startup.
   * /PART and /TOPIC now uses the current channel name explicitly instead of
     letting the user type it implicitly.
