@@ -9,6 +9,11 @@ LostIRC (x.x.x)
     automatically if it has.
   * When kicked from a channel, or parted it with /part, the tab can now be
     reused when joining the channel again.
+  * When closing a tab where a channel were parted and the channel name was
+    sorrounded by parentes, it will no longer try to send a PART to the
+    server on that channel.
+  * The down-arrow key now works to get the previous things said, like the
+    up-arrow does, just opposite.
 
 LostIRC (0.0.6) - Mon Apr 1st 2002
   * You can now tab-complete commands as well as nicks. /j<tab> becomes /JOIN.
