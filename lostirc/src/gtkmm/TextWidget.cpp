@@ -353,16 +353,11 @@ void TextWidget::populateMenu(Gtk::Menu *contextmenu)
           menulist.push_back(Gtk::Menu_Helpers::MenuElem(
                       _("_Hide Menubar"),
                       Gtk::Menu::AccelKey("<control>m"),
-                      SigC::slot(*this, &TextWidget::hideMenu)));
+                      SigC::slot(*AppWin, &MainWindow::hideMenu)));
     else
           menulist.push_back(Gtk::Menu_Helpers::MenuElem(
                       _("_Show Menubar"),
                       Gtk::Menu::AccelKey("<control>m"),
-                      SigC::slot(*this, &TextWidget::hideMenu)));
+                      SigC::slot(*AppWin, &MainWindow::hideMenu)));
 
-}
-
-void TextWidget::hideMenu()
-{
-    AppWin->hideMenu();
 }

@@ -571,12 +571,17 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
         } else if (e->keyval == GDK_9) {
             _notebook.set_current_page(8);
         } else if (e->keyval == GDK_h) {
-            // find highlight mark
             _notebook.getCurrent()->getText().scrollToHighlightMark();
         } else if (e->keyval == GDK_End) {
             _notebook.getCurrent()->getText().scrollToBottom();
         } else if (e->keyval == GDK_Home) {
             _notebook.getCurrent()->getText().scrollToTop();
+        }
+        if (e->keyval == GDK_Page_Up) {
+            _notebook.prev_page();
+
+        } else if (e->keyval == GDK_Page_Down) {
+            _notebook.next_page();
         }
     } else if (e->state & GDK_MOD1_MASK) {
         // ALT key.
@@ -586,11 +591,9 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
               _notebook.next_page();
     }
     if (e->keyval == GDK_Page_Up) {
-        // scroll up text widget
         _notebook.getCurrent()->getText().scrollUpPage();
 
     } else if (e->keyval == GDK_Page_Down) {
-        // scroll down text widget
         _notebook.getCurrent()->getText().scrollDownPage();
     }
 

@@ -51,7 +51,6 @@ public:
 private:
     void insertText(const TextProperties& tp, const Glib::ustring& str);
     void populateMenu(Gtk::Menu*);
-    void hideMenu();
     void setStyle();
 
     void onResize(GtkAllocation *alloc);

@@ -1,5 +1,14 @@
 For a summary of changes between releases - see the NEWS file.
 
+2004-02-01  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * MainWindow.cpp: Add Ctrl-PgUp/PgDn as alternative keys to browse
+        tabs.
+        * Prefs.cpp: A compilation fix for FreeBSD (hopefully...)
+        * TextWidget.cpp: Remove unneeded function hideMenu() and just call
+        MainWindow::hideMenu() instead.
+        * NEWS: Update.
+
 2004-01-27  Morten Brix Pedersen  <morten@wtf.dk>
 
         * configure.ac: Remove define for socklen_t.
