@@ -328,34 +328,37 @@ bool TabChannel::findUser(const ustring& nick)
     return false;
 }
 
-bool TabChannel::nickCompletion(const ustring& word, ustring& str)
+bool TabChannel::nickCompletion(ustring& word, ustring& str)
 {
+    vector<ustring> nicks;
+
     Gtk::ListStore::iterator i = _liststore->children().begin();
 
-    int matches = 0;
-    ustring nicks;
-    // Convert it to lowercase so we can search ignoring the case
-    ustring lcword = word.casefold();
-    while (i != _liststore->children().end())
+    for (i = _liststore->children().begin(); i != _liststore->children().end(); ++i)
     {
-        ustring nick = i->get_value(_columns.nick);
-
-        ustring lcnick = nick.casefold();
-        if (lcword == lcnick.substr(0, lcword.length())) {
-            str = nick;
-            nicks += nick + " ";
-            matches++;
-        }
-        i++;
+        nicks.push_back(i->get_value(_columns.nick));
     }
 
-    if (matches == 1) {
-        return true;
-    } else if (matches > 1) {
-        str = nicks;
-        return false;
+    std::pair<bool, ustring> result = findPartialString(nicks, word);
+
+    if (result.first) {
+        // Match!
+        word = result.second;
+
+        if (nicks.size() > 1) {
+            // More than one candidate.
+            for (vector<ustring>::const_iterator i = nicks.begin(); i != nicks.end(); ++i)
+                  str += *i + " ";
+
+            return false;
+        } else {
+            // Perfect match.
+            return true;
+        }
+
     } else {
-        str = "";
+        // No match.
+        str = "None.";
         return false;
     }
 }
@@ -411,4 +414,62 @@ void Tab::initializeColorMap()
     underlinetag->property_underline() = Pango::UNDERLINE_SINGLE;
     underlinetag->property_foreground().set_value(Glib::locale_to_utf8(App->colors.color0));
     _textview.get_buffer()->get_tag_table()->add(underlinetag);
+}
+
+
+/* Below is functions to help nick-completion and command-completion */
+
+
+struct notPrefixedBy : public std::binary_function<ustring,ustring,bool> 
+{
+    bool operator() (const ustring& str1, const ustring& str2) const {
+        if (str1.length() >= str2.length() && str2 == str1.substr(0, str2.length()))
+              return false;
+        else
+              return true;
+    }
+};
+
+
+void findCommon(vector<ustring>& vec, const ustring& search, int& atchar)
+{
+
+    if (atchar > search.length())
+          return;
+
+    for (vector<ustring>::const_iterator i = vec.begin(); i != vec.end(); ++i)
+    {
+        if (atchar >= i->length() ||
+                search.substr(0, atchar) != i->substr(0, atchar))
+              return;
+    }
+    findCommon(vec, search, ++atchar);
+
+}
+
+std::pair<bool, ustring> findPartialString(vector<ustring>& vec, const ustring& search)
+{
+    std::pair<bool, ustring> result;
+
+    vec.erase(remove_if(vec.begin(), vec.end(), std::bind2nd(notPrefixedBy(), search)), vec.end());;
+
+    if (vec.size() > 1) {
+        // More than one item, try to find out a common prefix which all
+        // ustrings have.
+
+        int atchar = 1;
+        findCommon(vec, vec[0], atchar);
+
+        result.second = vec[0].substr(0, atchar - 1);
+
+        result.first = true;
+    } else if (vec.size() == 1) {
+        // Perfect match.
+        result.first = true;
+        result.second = vec[0];
+    } else {
+        // No matches.
+        result.first = false;
+    }
+    return result;
 }

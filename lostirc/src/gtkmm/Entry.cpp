@@ -137,13 +137,20 @@ bool Entry::onKeyPress(GdkEventKey* e)
             } else if (_tab->nickCompletion(word, str)) {
                 // Nick-completetion
                 if (pos == 0) {
-                    set_text(str + App->options.nickcompletion_char + " ");
+                    set_text(word + App->options.nickcompletion_char + " ");
                     set_position(-1);
                 } else {
-                    set_text(line.substr(0, pos + 1) + str);
+                    set_text(line.substr(0, pos + 1) + word);
                     set_position(-1);
                 }
             } else {
+                if (pos == 0) {
+                    set_text(word);
+                    set_position(-1);
+                } else {
+                    set_text(line.substr(0, pos + 1) + word);
+                    set_position(-1);
+                }
                 AppWin->statusbar.setText2("<span foreground=\"blue\">Matches:</span> " + str);
             }
         }
