@@ -72,63 +72,55 @@ TextWidget& TextWidget::operator<<(const ustring& line)
     char tim[11];
     strftime(tim, 10, "%H:%M:%S ", localtime(&timeval));
 
-    insertText(0, 1, false, false, ustring(tim));
+    TextProperties tp;
+    tp.clear();
+    tp.fgnumber = "0";
+    tp.bgnumber = "1";
+    insertText(tp, ustring(tim));
 
-    bool fgcolor = false;
-    bool bgcolor = false;
-    bool bold = false;
-    bool underline = false;
-    int numbercount = 0;
-    Glib::ustring fgnumber;
-    Glib::ustring bgnumber;
-    for (int i = 0; i < line.length(); ++i)
+    tp.clear();
+    for (ustring::size_type i = 0; i < line.length(); ++i)
     {
         if (line[i] == '\017') { // RESET
-            bgcolor = false;
-            fgcolor = false;
-            bold = false;
-            underline = false;
-            numbercount = 0;
-            fgnumber.clear();
-            bgnumber.clear();
+            tp.clear();
         } else if (line[i] == '\002') { // BOLD
-            bold = !bold;
+            tp.bold = !tp.bold;
         } else if (line[i] == '\037') { // UNDERLINE
-            underline = !underline;
+            tp.underline = !tp.underline;
         } else if (line[i] == '\003') { // COLOR
-            fgcolor = true;
-            numbercount = 0;
-            fgnumber.clear();
-            bgnumber.clear();
-        } else if (fgcolor && isdigit(line[i]) && numbercount < 2) {
-            numbercount++;
-            fgnumber += line[i];
-        } else if (fgcolor && line[i] == ',' && numbercount < 3) {
-            numbercount = 0;
-            bgcolor = true;
-            fgcolor = false;
-        } else if (bgcolor && isdigit(line[i]) && numbercount < 2) {
-            numbercount++; 
-            bgnumber += line[i];
+            tp.fgcolor = true;
+            tp.numbercount = 0;
+            tp.fgnumber.clear();
+            tp.bgnumber.clear();
+        } else if (tp.fgcolor && isdigit(line[i]) && tp.numbercount < 2) {
+            tp.numbercount++;
+            tp.fgnumber += line[i];
+        } else if (tp.fgcolor && line[i] == ',' && tp.numbercount < 3) {
+            tp.numbercount = 0;
+            tp.bgcolor = true;
+            tp.fgcolor = false;
+        } else if (tp.bgcolor && isdigit(line[i]) && tp.numbercount < 2) {
+            tp.numbercount++; 
+            tp.bgnumber += line[i];
         } else {
-            numbercount = 0;
-            fgcolor = false;
-            bgcolor = false;
+            tp.numbercount = 0;
+            tp.fgcolor = false;
+            tp.bgcolor = false;
 
-            if (bgnumber.empty())
-                  bgnumber = "1";
-            if (fgnumber.empty())
-                  fgnumber = "0";
+            if (tp.bgnumber.empty())
+                  tp.bgnumber = "1";
+            if (tp.fgnumber.empty())
+                  tp.fgnumber = "0";
 
             Glib::ustring text;
             text = line[i];
-            insertText(Util::stoi(fgnumber), Util::stoi(bgnumber), bold, underline, text);
+            insertText(tp, text);
         }   
     } 
     return *this;
 }
 
-void TextWidget::insertText(int fgcolor, int bgcolor, bool bold, bool underline, const ustring& str)
+void TextWidget::insertText(const TextProperties& tp, const ustring& str)
 {
     // see if the scrollbar is located in the bottom, then we need to scroll
     // after insert
@@ -136,12 +128,8 @@ void TextWidget::insertText(int fgcolor, int bgcolor, bool bold, bool underline,
     if (get_vadjustment()->get_value() >= (get_vadjustment()->get_upper() - get_vadjustment()->get_page_size() - 1e-12))
           scroll = true;
 
-    // FIXME: temp hack.
-    if (fgcolor > fgColorMap.size())
-        fgcolor = fgColorMap.size() - 1;
-
     // Insert the text
-    realInsert(fgcolor, bgcolor, bold, underline, str);
+    realInsert(tp, str);
     Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
 
     if (scroll)
@@ -153,20 +141,32 @@ void TextWidget::insertText(int fgcolor, int bgcolor, bool bold, bool underline,
           buffer->erase(buffer->begin(), buffer->get_iter_at_line(buffer->get_line_count() - buffer_size));
 }
 
-void TextWidget::realInsert(int fgcolor, int bgcolor, bool bold, bool underline, const ustring& line)
+void TextWidget::realInsert(const TextProperties& tp, const ustring& line)
 {
     // This function has the purpose to insert the line - but first check to
     // see whether we have an URL.
     Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
 
     std::vector< Glib::RefPtr<Gtk::TextTag> > tags;
-    tags.push_back(fgColorMap[fgcolor]);
-    tags.push_back(bgColorMap[bgcolor]);
-    if (bold)
+    if (Util::stoi(tp.fgnumber) > fgColorMap.size())
+          tags.push_back(fgColorMap[0]);
+    else
+          tags.push_back(fgColorMap[Util::stoi(tp.fgnumber)]);
+
+    if (Util::stoi(tp.bgnumber) > bgColorMap.size())
+          tags.push_back(bgColorMap[1]);
+    else
+          tags.push_back(bgColorMap[Util::stoi(tp.bgnumber)]);
+
+    if (tp.bold)
           tags.push_back(boldtag);
-    if (underline)
+    if (tp.underline)
           tags.push_back(underlinetag);
 
+    buffer->insert_with_tags(buffer->end(), line, tags);
+
+    /* below URL handling is broken at the moment, so disabled. It's broken
+     * because we only receive one character at the time in this function.
     ustring::size_type pos1;
 
     pos1 = line.find("http:");
@@ -198,6 +198,7 @@ void TextWidget::realInsert(int fgcolor, int bgcolor, bool bold, bool underline,
         // Just insert the line, no URLs were found
         buffer->insert_with_tags(buffer->end(), line, tags);
     }
+    */
 }
 
 Glib::RefPtr<Gtk::TextTag> TextWidget::initializeFG(const Glib::ustring& colorname)

@@ -26,6 +26,8 @@
 #include <gtkmm/style.h>
 #include "TextWidget.h"
 
+struct TextProperties;
+
 class TextWidget : public Gtk::ScrolledWindow
 {
 public:
@@ -39,8 +41,8 @@ public:
     void setFont(const Pango::FontDescription& font);
 
 private:
-    void insertText(int fgcolor, int bgcolor, bool bold, bool underline, const Glib::ustring& str);
-    void realInsert(int color, int bgcolor, bool bold, bool underline, const Glib::ustring& str);
+    void insertText(const TextProperties& tp, const Glib::ustring& str);
+    void realInsert(const TextProperties& tp, const Glib::ustring& str);
     void setStyle();
 
     void initializeColorMap();
@@ -57,5 +59,27 @@ private:
     std::string _fallback_encoding;
 
 };
+
+struct TextProperties
+{
+    bool fgcolor;
+    bool bgcolor;
+    bool bold;
+    bool underline;
+    int numbercount;
+    Glib::ustring fgnumber;
+    Glib::ustring bgnumber;
+    void clear()
+    {
+        bgcolor = false;
+        fgcolor = false;
+        bold = false;
+        underline = false;
+        numbercount = 0;
+        fgnumber.clear();
+        bgnumber.clear();
+    }
+};
+
 
 #endif
