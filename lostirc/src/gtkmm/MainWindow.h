@@ -56,6 +56,7 @@ class MainWindow : public Gtk::Window, public FrontEnd
     void openDccWindow();
     void openServerWindow();
     void openHelpIntro();
+    void hideHelpIntro(int response);
     void newServerTab();
     void setupMenus();
     void closeCurrentTab();

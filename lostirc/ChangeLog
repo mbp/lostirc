@@ -2,6 +2,10 @@ For a summary of changes between releases - see the NEWS file.
 
 2003-12-03  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * MainWindow.cpp: Close "Introduction" window when clicking "Close".
+
+2003-12-03  Morten Brix Pedersen  <morten@wtf.dk>
+
         * Prefs.cpp: Remove separator.
         * ServerWindow.cpp: Remove useless spacing in the bottom of the
         window.

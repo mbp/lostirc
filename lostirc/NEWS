@@ -1,5 +1,7 @@
 LostIRC
   * The menubar was accidently not shown by default, not it is.
+  * The "Introduction" window now closes when clicking "Close" as it should.
+  * Some user interface cleanups.
 
 LostIRC (0.3.0) - Fri Nov, 21st 2003
   * The user interface has been totally reworked to conform to the GNOME

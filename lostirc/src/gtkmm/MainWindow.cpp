@@ -488,10 +488,16 @@ void MainWindow::openHelpIntro()
         //std::auto_ptr<Gtk::Dialog> dialog(new Gtk::Dialog(_("LostIRC Quick Introduction"), *this, false));
         std::auto_ptr<Gtk::MessageDialog> dialog(new Gtk::MessageDialog(_("LostIRC Quick Introduction\n\nThis help window is a quick guide to get you going with LostIRC.\nMove this window away from the LostIRC window, and use it as a quick reference window until you know the general idea.\n\nYou can connect to a server using:\n    /SERVER <hostname / ip>\n\n...and then join a channel:\n    /JOIN <channel-name>\n\nA list of all commands are available with:\n    /COMMANDS\n\nAnd you should really check out the list of key bindings:\n    /KEYBINDINGS"), Gtk::MESSAGE_INFO, Gtk::BUTTONS_CLOSE, false));
 
+        dialog->signal_response().connect(slot(*this, &MainWindow::hideHelpIntro));
         dialog->show();
 
         _helpwin = dialog;
     }
+}
+
+void MainWindow::hideHelpIntro(int response)
+{
+    _helpwin->hide();
 }
 
 void MainWindow::newServerTab()
