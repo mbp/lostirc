@@ -1,4 +1,5 @@
 LostIRC (0.1.1) - Thu Jun 20th 2002
+  * A bug where the client consumed 100% CPU has been fixed.
   * Implement /KILL and /WALLOPS. 
   * Improve appearence of some messages (remove ~/.lostirc/events.conf to
     enable them)
