@@ -1,6 +1,9 @@
 LostIRC (x.x.x)
   * Fix a crash which appeared when connecting to a proxy/bouncer.
     (thanks, |TEcHNO|)
+  * Another 100% CPU usage bug has been fixed.
+  * A problem where DNS-resolving wasnt working when starting the client,
+    should now be fixed.
 
 LostIRC (0.1.1) - Thu Jun 20th 2002
   * A bug where the client consumed 100% CPU has been fixed.
