@@ -22,3 +22,7 @@ INCLUDES = $(DEPS_CFLAGS) \
            -DLOSTIRC_DATADIR=\"$(datadir)\"
 
 LIBS = $(DEPS_LIBS)
+
+if PLATFORM_WIN32
+LIBS += -lws2_32
+endif

@@ -2,6 +2,15 @@ For a summary of changes between releases - see the NEWS file.
 
 2004-01-27  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * configure.ac: Remove define for socklen_t.
+                        Add check for Win32 and define PLATFORM_WIN32.
+        * src/gtkmm/Makefile.am: Link with ws2_32 when PLATFORM_WIN32 is
+        defined.
+        * Socket.cpp: Add #define socklen_t int on Windows.
+        * Socket.h: Remove hostname member, unused.
+
+2004-01-27  Morten Brix Pedersen  <morten@wtf.dk>
+
         * DCC.cpp: Make it compile on Windows.
 
 2004-01-25  Morten Brix Pedersen  <morten@wtf.dk>

@@ -43,7 +43,6 @@ class Socket : public SigC::Object
     #endif
     int port;
     struct sockaddr_in sockaddr;
-    Glib::ustring hostname;
 
     // Host resolving
     void resolvehost(const Glib::ustring& host);

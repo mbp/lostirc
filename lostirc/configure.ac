@@ -58,29 +58,19 @@ else
         AM_CONDITIONAL(GNOME, false)
 fi
 
-dnl Check for socklen_t (it should be int on Windows). Taken from gaim
-dnl configure.ac.
-AC_MSG_CHECKING(for socklen_t)
-AC_TRY_COMPILE([
-        #include <sys/types.h>
-        #include <sys/socket.h>
-        socklen_t x;
-], [],
-[       
-        AC_MSG_RESULT(yes)
-], [    
-        AC_TRY_COMPILE([
-                #include <sys/types.h>
-                #include <sys/socket.h>
-                int accept(int, struct sockaddr *, size_t *);
-        ], [], [
-                AC_MSG_RESULT(size_t)
-                AC_DEFINE(socklen_t, size_t, [socklen_t size])
-        ], [    
-                AC_MSG_RESULT(int)
-                AC_DEFINE(socklen_t, int, [socklen_t size])
-        ])
-])
+dnl Used for enabling the "-no-undefined" flag while generating DLLs
+dnl Copied from the official gtk+-2 configure.in
+AC_MSG_CHECKING([for some Win32 platform])
+case "$host" in
+  *-*-mingw*|*-*-cygwin*)
+    platform_win32=yes
+    ;;
+  *)
+    platform_win32=no
+    ;;
+esac
+AC_MSG_RESULT([$platform_win32])
+AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = "yes")
 
 AC_CONFIG_FILES([lostirc.spec Makefile src/Makefile src/libirc/Makefile src/gtkmm/Makefile po/Makefile.in m4/Makefile  intl/Makefile ])
 AC_OUTPUT

@@ -21,6 +21,8 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <arpa/inet.h>
+#else
+#define socklen_t int
 #endif
 
 #include <iostream>
@@ -267,7 +269,6 @@ bool Socket::accepted_connection(Glib::IOCondition cond)
 void Socket::resolvehost(const ustring& host)
 {
     int thepipe[2];
-    hostname = host;
     if (pipe(thepipe) == -1) {
         on_error(strerror(errno));
         return;
