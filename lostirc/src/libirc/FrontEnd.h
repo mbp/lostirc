@@ -68,6 +68,8 @@ public:
     virtual void connected(ServerConnection *conn) = 0;
     virtual void newTab(ServerConnection *conn) = 0;
     virtual void disconnected(ServerConnection *conn) = 0;
+    virtual void newDCC(DCC *dcc) = 0;
+    virtual void doneDCC(DCC *dcc) = 0;
 
 };
 

@@ -40,16 +40,26 @@ class ServerConnection;
 class DCC : public SigC::Object {
 public:
     virtual void go_ahead() = 0;
+
+    virtual std::string getFilename() = 0;
+    virtual unsigned long getSize() = 0;
+    virtual unsigned long getPosition() = 0;
+    virtual std::string getNick() = 0;
 };
 
 class DCC_Send_In : public DCC {
 public:
-    DCC_Send_In(const std::string& filename, unsigned long address, unsigned short port, unsigned long size = 0);
+    DCC_Send_In(const std::string& filename, const std::string& nick, unsigned long address, unsigned short port, unsigned long size = 0);
     virtual ~DCC_Send_In() { }
 
     void go_ahead();
     bool onReadData(Glib::IOCondition cond);
     void getUseableFilename(int i);
+
+    virtual std::string getFilename() { return _filename; }
+    virtual unsigned long getSize() { return _size; }
+    virtual unsigned long getPosition() { return _pos; }
+    virtual std::string getNick() { return _nick; }
 
     int _number_in_queue;
 
@@ -57,6 +67,7 @@ private:
     std::ofstream _outfile;
     std::string _filename;
     std::string _downloaddir;
+    std::string _nick;
     unsigned long _address;
     unsigned short _port;
     unsigned long _size;
@@ -77,10 +88,16 @@ public:
 
     int _number_in_queue;
 
+    virtual std::string getFilename() { return _filename; }
+    virtual unsigned long getSize() { return _size; }
+    virtual unsigned long getPosition() { return _pos; }
+    virtual std::string getNick() { return _nick; }
+
 private:
     std::ifstream _infile;
     std::string _filename;
     std::string _localip;
+    std::string _nick;
 
     int fd;
     int accept_fd;
@@ -103,7 +120,7 @@ public:
         _dccs.push_back(d);
     }*/
 
-    int addDccSendIn(const std::string& filename, unsigned long address, unsigned short port, unsigned long size);
+    int addDccSendIn(const std::string& filename, const std::string& nick, unsigned long address, unsigned short port, unsigned long size);
     int addDccSendOut(const std::string& filename, const std::string& nick, ServerConnection *conn);
 
     void dccDone(int n);

@@ -37,11 +37,10 @@ GTKMM2 STUFF:
 
 DCC:
 ---
-  * Add more events for DCCs (eg. don't use SERVMSG2 that much)
+  * DCCs should use their own events instead of just CLIENTMSG.
   * DCC objects should timeout when no response has been given
   * Possibility to define a different outgoing ip-address
   * Show to the user which ip is being sent
-  * Possibility to track progress of DCCs
 
 DESIGN:
 -------

@@ -19,7 +19,7 @@
 #include "DCCList.h"
 
 DCCList::DCCList()
-    : _columns(),
+    : _activeDccs(0), _columns(),
     _liststore(Gtk::ListStore::create(_columns))
 {
     set_model(_liststore);
@@ -28,7 +28,7 @@ DCCList::DCCList()
     append_column("Filename", _columns.filename);
     append_column("Filesize", _columns.filesize);
     append_column("Fileposition", _columns.fileposition);
-    append_column("From/To", _columns.from);
+    append_column("From/To", _columns.nick);
 
     show_all();
 }
@@ -36,30 +36,51 @@ DCCList::DCCList()
 void DCCList::add(DCC *dcc)
 {
     Gtk::TreeModel::Row row = *_liststore->append();
-    /*row[_columns.filename] = dcc->getFilename();
-    //row[_columns.filesize] = dcc->getSize();
-    //row[_columns.fileposition] = dcc->getPosition();
-    //row[_columns.filefrom] = dcc->getNick();
+    row[_columns.filename] = dcc->getFilename();
+    row[_columns.filesize] = dcc->getSize();
+    row[_columns.fileposition] = dcc->getPosition();
+    row[_columns.nick] = dcc->getNick();
 
-    //row[_columns.dcc_ptr] = dcc;
+    row[_columns.dcc_ptr] = dcc;
 
-    signal_connection = Glib::signal_timeout().connect(
-            SigC::bind(SigC::slot(*this, &DCCList::updateDccData) dcc),
-            1000);
-            */
+    _activeDccs++;
+
+    if (!signal_timeout.connected()) {
+        signal_timeout = Glib::signal_timeout().connect(
+                SigC::slot(*this, &DCCList::updateDccData),
+                1000);
+    }
 }
 
-void DCCList::updateDccDate()
+void DCCList::markDone(DCC *dcc)
 {
-    // find dcc_ptr
+    // TODO: add code to mark dcc_ptr done.
+    _activeDccs--;
 
-    //row[_columns.filename] = dcc->getFilename();
-    //row[_columns.filesize] = dcc->getSize();
-    //row[_columns.fileposition] = dcc->getPosition();
-    //row[_columns.filefrom] = dcc->getNick();
+    updateDccData();
+
+    if (_activeDccs < 1)
+        signal_timeout.disconnect();
 }
 
+bool DCCList::updateDccData()
+{
+    Gtk::TreeModel::Children::iterator iter;
+    for(iter = get_model()->children().begin(); iter != get_model()->children().end(); ++iter)
+    {
+        Gtk::TreeModel::Row row = *iter;
+
+        DCC *dcc = row[_columns.dcc_ptr];
+        if (dcc) {
+            row[_columns.filename] = dcc->getFilename();
+            row[_columns.filesize] = dcc->getSize();
+            row[_columns.fileposition] = dcc->getPosition();
+            row[_columns.nick] = dcc->getNick();
+        }
+    }
+
+    return true;
+}
 
 
 Tab* DCCList::currentTab = 0;
-

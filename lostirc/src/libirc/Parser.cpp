@@ -290,7 +290,7 @@ void Parser::Ctcp(const string& from, const string& param, const string& rest)
             unsigned long size;
             ss3 >> size;
 
-            int n = App->getDcc().addDccSendIn(dcc_filename, address, port, size);
+            int n = App->getDcc().addDccSendIn(dcc_filename, findNick(from), address, port, size);
             FE::emit(FE::get(DCC_RECEIVE) << findNick(from) << dcc_filename << n, FE::CURRENT);
 
         } else if (dcc_type == "CHAT") {

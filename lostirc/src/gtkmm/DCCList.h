@@ -39,30 +39,35 @@ public:
     void closeDCCList() { currentTab->closeDCCList(); }
 
     void add(DCC *dcc);
+    void markDone(DCC *dcc);
+
 private:
     DCCList();
     DCCList(const DCCList&);
     DCCList& operator=(const DCCList&);
     ~DCCList() { }
 
-    void updateDccDate();
+    bool updateDccData();
 
     // what our columned-list contains
     struct ModelColumns : public Gtk::TreeModel::ColumnRecord
     {
         Gtk::TreeModelColumn<Glib::ustring> status;
         Gtk::TreeModelColumn<Glib::ustring> filename;
-        Gtk::TreeModelColumn<Glib::ustring> filesize;
-        Gtk::TreeModelColumn<Glib::ustring> fileposition;
-        Gtk::TreeModelColumn<Glib::ustring> from;
+        Gtk::TreeModelColumn<unsigned long> filesize;
+        Gtk::TreeModelColumn<unsigned long> fileposition;
+        Gtk::TreeModelColumn<Glib::ustring> nick;
 
-        Gtk::TreeModelColumn<DCCList*> *dcc_ptr;
+        Gtk::TreeModelColumn<DCC*> dcc_ptr;
 
         ModelColumns() {
             add(status); add(filename); add(filesize);
-            add(fileposition); add(from);
+            add(fileposition); add(nick); add(dcc_ptr);
         }
     };
+
+    int _activeDccs;
+    SigC::Connection signal_timeout;
 
     ModelColumns _columns;
     Glib::RefPtr<Gtk::ListStore> _liststore;

@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <functional>
 #include "Tab.h"
+#include "DCCList.h"
 #include "MainWindow.h"
 
 using std::vector;
@@ -288,6 +289,17 @@ Tab* MainWindow::newServer()
     Tab *tab = notebook.addTab(convert_to_utf8(name), conn);
     tab->setInActive();
     return tab;
+}
+void MainWindow::newDCC(DCC *dcc)
+{
+    DCCList *dcclist = DCCList::Instance();
+    dcclist->add(dcc); 
+}
+
+void MainWindow::doneDCC(DCC *dcc)
+{
+    DCCList *dcclist = DCCList::Instance();
+    dcclist->markDone(dcc); 
 }
 
 bool MainWindow::on_key_press_event(GdkEventKey* e)

@@ -22,9 +22,9 @@
 #include "ServerConnection.h"
 #include "DCC.h"
 
-DCC_Send_In::DCC_Send_In(const std::string& filename, unsigned long address, unsigned short port, unsigned long size)
-: _outfile(), _filename(filename), _address(address), _port(port),
-  _size(size), _pos(0)
+DCC_Send_In::DCC_Send_In(const std::string& filename, const std::string& nick, unsigned long address, unsigned short port, unsigned long size)
+: _outfile(), _filename(filename), _nick(nick), _address(address),
+    _port(port), _size(size), _pos(0)
 {
     _downloaddir = std::string(App->home) + "/.lostirc/downloads/";
     mkdir(_downloaddir.c_str(), 0700);
@@ -51,10 +51,10 @@ void DCC_Send_In::go_ahead()
     sockaddr.sin_addr.s_addr = htonl(_address);
     memset(&(sockaddr.sin_zero), '\0', 8);
 
-    FE::emit(FE::get(SERVERMSG1) << "Receiving from:" << inet_ntoa(sockaddr.sin_addr), FE::CURRENT);
+    FE::emit(FE::get(CLIENTMSG) << "Receiving from:" << inet_ntoa(sockaddr.sin_addr), FE::CURRENT);
 
     if (::connect(fd, reinterpret_cast<struct sockaddr *>(&sockaddr), sizeof(struct sockaddr)) < 0 && errno != EINPROGRESS) {
-        FE::emit(FE::get(SERVERMSG1) << "Couldn't connect:" << strerror(errno), FE::CURRENT);
+        FE::emit(FE::get(CLIENTMSG) << "Couldn't connect:" << strerror(errno), FE::CURRENT);
         App->getDcc().dccDone(_number_in_queue);
     }
 
@@ -69,10 +69,10 @@ bool DCC_Send_In::onReadData(Glib::IOCondition cond)
     char buf[4096];
     int retval = recv(fd, buf, sizeof(buf), 0);
 
-    if (retval == 0) FE::emit(FE::get(SERVERMSG1) << "DCC connection closed.", FE::CURRENT);
+    if (retval == 0) FE::emit(FE::get(CLIENTMSG) << "DCC connection closed.", FE::CURRENT);
     else if (retval == -1) {
         if (!(errno == EAGAIN || errno == EWOULDBLOCK)) {
-            FE::emit(FE::get(SERVERMSG1) << "Couldn't receive:" << strerror(errno), FE::CURRENT);
+            FE::emit(FE::get(CLIENTMSG) << "Couldn't receive:" << strerror(errno), FE::CURRENT);
             App->getDcc().dccDone(_number_in_queue);
             return false;
         }
@@ -95,7 +95,7 @@ bool DCC_Send_In::onReadData(Glib::IOCondition cond)
             App->log << "DCC_Send_In::onReadData(): done receiving!" << std::endl;
             #endif
             _outfile.close();
-            FE::emit(FE::get(SERVERMSG1) << "File received successfully:" << _filename, FE::CURRENT);
+            FE::emit(FE::get(CLIENTMSG) << "File received successfully:" << _filename, FE::CURRENT);
             App->getDcc().dccDone(_number_in_queue);
             return false;
         }
@@ -119,12 +119,12 @@ void DCC_Send_In::getUseableFilename(int i)
 }
 
 DCC_Send_Out::DCC_Send_Out(const std::string& filename, const std::string& nick, ServerConnection *conn)
-    : _infile(), _filename(filename), _pos(0)
+    : _infile(), _filename(filename), _nick(nick), _pos(0)
 {
     struct stat st;
 
     if (stat(filename.c_str(), &st) == -1) {
-        FE::emit(FE::get(SERVERMSG1) << "File not found:" << filename, FE::CURRENT);
+        FE::emit(FE::get(CLIENTMSG) << "File not found:" << filename, FE::CURRENT);
         // FIXME: add dcc-done?
     } else {
         _size = st.st_size;
@@ -149,7 +149,7 @@ DCC_Send_Out::DCC_Send_Out(const std::string& filename, const std::string& nick,
         memset(&(sockaddr.sin_zero), '\0', 8);
 
         if (bind(fd, reinterpret_cast<struct sockaddr *>(&sockaddr), sizeof(struct sockaddr)) == -1) {
-            FE::emit(FE::get(SERVERMSG1) << "Couldn't bind:" << strerror(errno), FE::CURRENT);
+            FE::emit(FE::get(CLIENTMSG) << "Couldn't bind:" << strerror(errno), FE::CURRENT);
         }
         socklen_t add_len = sizeof(struct sockaddr_in);
         getsockname(fd, (struct sockaddr *) &sockaddr, &add_len);
@@ -166,7 +166,7 @@ DCC_Send_Out::DCC_Send_Out(const std::string& filename, const std::string& nick,
 
         listen(fd, 1);
 
-        FE::emit(FE::get(SERVERMSG1) << "DCC SEND request sent. Sending from:" << _localip, FE::CURRENT);
+        FE::emit(FE::get(CLIENTMSG) << "DCC SEND request sent. Sending from:" << _localip, FE::CURRENT);
 
         Glib::signal_io().connect(
                 SigC::slot(*this, &DCC_Send_Out::onAccept),
@@ -182,7 +182,7 @@ bool DCC_Send_Out::onAccept(Glib::IOCondition cond)
     socklen_t size = sizeof(struct sockaddr_in);
     accept_fd = accept(fd, reinterpret_cast<struct sockaddr *>(&remoteaddr), &size);
 
-    FE::emit(FE::get(SERVERMSG1) << "Connection accepted.", FE::CURRENT);
+    FE::emit(FE::get(CLIENTMSG) << "Connection accepted.", FE::CURRENT);
 
     Glib::signal_io().connect(
             SigC::slot(*this, &DCC_Send_Out::onSendData),
@@ -203,7 +203,7 @@ bool DCC_Send_Out::onSendData(Glib::IOCondition cond)
     int retval = send(accept_fd, buf, read_chars, 0);
     if (retval == -1) {
         if (!(errno == EAGAIN || errno == EWOULDBLOCK)) {
-            FE::emit(FE::get(SERVERMSG1) << "Couldn't send:" << strerror(errno), FE::CURRENT);
+            FE::emit(FE::get(CLIENTMSG) << "Couldn't send:" << strerror(errno), FE::CURRENT);
             App->getDcc().dccDone(_number_in_queue);
             return false;
         }
@@ -221,7 +221,7 @@ bool DCC_Send_Out::onSendData(Glib::IOCondition cond)
             App->log << "DCC_Send_Out::onSendData(): done sending!" << std::endl;
             #endif
             _infile.close();
-            FE::emit(FE::get(SERVERMSG1) << "File sent successfully:" << _filename, FE::CURRENT);
+            FE::emit(FE::get(CLIENTMSG) << "File sent successfully:" << _filename, FE::CURRENT);
             App->getDcc().dccDone(_number_in_queue);
             return false;
         }
@@ -241,11 +241,12 @@ bool DCC_queue::do_dcc(int n)
     return false;
 }
 
-int DCC_queue::addDccSendIn(const std::string& filename, unsigned long address, unsigned short port, unsigned long size)
+int DCC_queue::addDccSendIn(const std::string& filename, const std::string& nick, unsigned long address, unsigned short port, unsigned long size)
 {
-    DCC_Send_In *d = new DCC_Send_In(filename, address, port, size);
+    DCC_Send_In *d = new DCC_Send_In(filename, nick, address, port, size);
     d->_number_in_queue = ++_count;
     _dccs[_count] = d;
+    App->fe->newDCC(d);
     return _count;
 }
 
@@ -254,6 +255,7 @@ int DCC_queue::addDccSendOut(const std::string& filename, const std::string& nic
     DCC_Send_Out *d = new DCC_Send_Out(filename, nick, conn);
     d->_number_in_queue = ++_count;
     _dccs[_count] = d;
+    App->fe->newDCC(d);
     return _count;
 }
 
@@ -261,7 +263,9 @@ void DCC_queue::dccDone(int n)
 {
     std::map<int, DCC*>::iterator i = _dccs.find(n);
     if (i != _dccs.end()) {
+        App->fe->doneDCC(i->second);
         delete i->second;
+        i->second = 0;
         _dccs.erase(i);
     }
 }

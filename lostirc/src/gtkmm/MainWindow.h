@@ -64,6 +64,8 @@ public:
     void connected(ServerConnection *conn);
     void newTab(ServerConnection *conn);
     void disconnected(ServerConnection *conn);
+    void newDCC(DCC *dcc);
+    void doneDCC(DCC *dcc);
 
     StatusBar statusbar;
 };
