@@ -26,19 +26,18 @@ using std::string;
 using std::vector;
 
 LostIRCApp::LostIRCApp()
+    : _cfg()
 {
     Commands::app = this;
     uname(&uname_info);
-    if (!_cfg.readConfig())
-          std::cerr << "Failed reading config file(s)" << std::endl;
 
     _evts = new Events(this);
 
-    if (_cfg.getParam("nick").empty()) {
-        _cfg.setParam("nick", getenv("USER"));
+    if (_cfg.getOpt("nick").empty()) {
+        _cfg.setOpt("nick", getenv("USER"));
     }
 
-    struct passwd *p = getpwnam(_cfg.getParam("nick").c_str());
+    struct passwd *p = getpwnam(_cfg.getOpt("nick").c_str());
     if (p != NULL)
           realname = p->pw_gecos;
 }
@@ -65,22 +64,25 @@ int LostIRCApp::start()
     for (i = servers.begin(); i != servers.end(); ++i) {
         ServerConnection *conn = newServer((*i)->hostname, (*i)->port);
         conn->Session.cmds = (*i)->cmds;
+        if (!(*i)->password.empty())
+              conn->Session.password = (*i)->password;
         if (!(*i)->nick.empty())
               conn->Session.nick = (*i)->nick;
+        conn->Connect((*i)->hostname, (*i)->port);
     }
     return servers.size();
 }
 
 ServerConnection* LostIRCApp::newServer(const string& host, int port)
 {
-    ServerConnection *conn = new ServerConnection(this, host, port, _cfg.getParam("nick"));
+    ServerConnection *conn = new ServerConnection(this, host, port, _cfg.getOpt("nick"));
     _servers.push_back(conn);
     return conn;
 }
 
 ServerConnection* LostIRCApp::newServer()
 {
-    ServerConnection *conn = new ServerConnection(this, _cfg.getParam("nick"), realname);
+    ServerConnection *conn = new ServerConnection(this, _cfg.getOpt("nick"), realname);
     _servers.push_back(conn);
     return conn;
 }

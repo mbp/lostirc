@@ -232,6 +232,7 @@ void Parser::Kick(const string& from, const string& param, const string& msg)
     ss >> nick;
 
     Channel *c = _conn->findChannel(chan);
+    c->removeUser(findNick(nick));
     _evts->emit(_evts->get(KICKED) << nick << chan << findNick(from) << msg, *c, _conn);
     _app->evtKick(findNick(from), *c, nick, msg, _conn);
 

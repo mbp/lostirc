@@ -24,12 +24,14 @@
 using std::string;
 using std::vector;
 
-ServerConnection::ServerConnection(LostIRCApp *app, const string& host, int port, const string& nick)
+ServerConnection::ServerConnection(LostIRCApp *app, const string& host, int port, const string& nick, bool connect = false)
     : _app(app), _socket(new Socket()), _p(new Parser(_app,this))
 {
     Session.nick = nick;
     _app->evtNewTab(this);
-    Connect(host, port);
+
+    if (connect)
+          Connect(host, port);
 }
 
 ServerConnection::ServerConnection(LostIRCApp *app, const string& nick, const string& realname)

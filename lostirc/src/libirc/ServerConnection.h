@@ -31,7 +31,7 @@ class ServerConnection
 {
 
 public:
-    ServerConnection(LostIRCApp *app, const std::string& host, int port, const std::string& nick);
+    ServerConnection(LostIRCApp *app, const std::string& host, int port, const std::string& nick, bool connect = false);
     ServerConnection(LostIRCApp *app, const std::string& nick, const std::string& realname);
     ~ServerConnection();
 

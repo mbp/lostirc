@@ -66,9 +66,9 @@ Events::Events(LostIRCApp *app)
 {
     /* replace all $ with \003 in our events */
     for (int i = 0; event_map[i].s != 0; ++i) {
-        string msg = _app->getCfg().getParam(event_map[i].s);
+        string msg = _app->getCfg().getEvt(event_map[i].s);
         std::replace(msg.begin(), msg.end(), '$', '\003');
-        _app->getCfg().setParam(event_map[i].s, msg);
+        _app->getCfg().setEvt(event_map[i].s, msg);
     }
 
 }
@@ -103,7 +103,7 @@ Tmpl Events::get(Event e)
 {
     for (int i = 0; event_map[i].s != 0; ++i) {
         if (event_map[i].value == e)
-            return Tmpl(_app->getCfg().getParam(event_map[i].s));
+            return Tmpl(_app->getCfg().getEvt(event_map[i].s));
     }
 }
 

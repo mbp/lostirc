@@ -185,7 +185,7 @@ void Commands::Set(ServerConnection *conn, const string& params)
     if (pos1 != string::npos)
           value = params.substr(pos1 + 1);
 
-    app->getCfg().setParam(key, value);
+    app->getCfg().setOpt(key, value);
 }
 
 void Commands::Ctcp(ServerConnection *conn, const string& params)
