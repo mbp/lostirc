@@ -13,6 +13,8 @@ NICE-TO-HAVE:
   * ipv6 support
   * note when window has lost focus; then highlight front-tab
   * /BAN command.
+  * /EXIT command so you can specify a quit message for all servers and then
+    quit the client
 
 RANDOM BUGS:
 ------------

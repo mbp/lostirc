@@ -60,7 +60,7 @@ void send(ServerConnection *conn, string cmd, const string& params)
 
 void Query(ServerConnection *conn, const string& params)
 {
-    if (params.length() == 0) {
+    if (params.empty()) {
         throw CommandException("/QUERY <nick>, start a query(tab) with a user");
     } else {
         AppWin->getNotebook().addQueryTab(params, conn);
@@ -96,32 +96,57 @@ void Topic(ServerConnection *conn, const string& params)
 
 void Kick(ServerConnection *conn, const string& params)
 {
-    Commands::Kick(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+    if (params.empty()) {
+        throw CommandException("/KICK <nick>, kick a user from a channel.");
+
+    } else {
+        Commands::Kick(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+    }
 }
 
 void Banlist(ServerConnection *conn, const string& params)
 {
-    Commands::Banlist(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+    Commands::Banlist(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text());
 }
 
 void Op(ServerConnection *conn, const string& params)
 {
-    Commands::Op(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+    if (params.empty()) {
+        throw CommandException("/OP <nicks>, ops one or more users in the current channel.");
+
+    } else {
+        Commands::Op(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+    }
 }
 
 void Deop(ServerConnection *conn, const string& params)
 {
-    Commands::Deop(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+    if (params.empty()) {
+        throw CommandException("/DEOP <nicks>, deops one or more users in the current channel.");
+
+    } else {
+        Commands::Deop(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+    }
 }
 
 void Voice(ServerConnection *conn, const string& params)
 {
-    Commands::Voice(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+    if (params.empty()) {
+        throw CommandException("/VOICE <nicks>, voices one or more users in the current channel.");
+
+    } else {
+        Commands::Voice(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+    }
 }
 
 void Devoice(ServerConnection *conn, const string& params)
 {
-    Commands::Devoice(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+    if (params.empty()) {
+        throw CommandException("/DEVOICE <nicks>, devoices one or more users in the current channel.");
+
+    } else {
+        Commands::Devoice(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+    }
 }
 
 void commands(ServerConnection *conn, const string& params)
