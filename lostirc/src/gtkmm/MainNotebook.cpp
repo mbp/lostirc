@@ -22,8 +22,8 @@
 using std::string;
 using std::vector;
 
-MainNotebook::MainNotebook(MainWindow *frontend)
-    : Gtk::Notebook(), _fe(frontend)
+MainNotebook::MainNotebook()
+    : Gtk::Notebook()
 {
     set_tab_pos(GTK_POS_BOTTOM);
     switch_page.connect(slot(this, &MainNotebook::switchPage));
@@ -80,9 +80,9 @@ Tab* MainNotebook::getCurrent()
     return tab;
 }
 
-Tab * MainNotebook::findTab(const string& name, ServerConnection *conn)
+Tab * MainNotebook::findTab(const string& name, ServerConnection *conn, bool findInActive = false)
 {
-    Gtk::Notebook_Helpers::Page *p = findPage(name, conn);
+    Gtk::Notebook_Helpers::Page *p = findPage(name, conn, findInActive);
 
     if (p) {
         Tab* tab = dynamic_cast<Tab*>(p->get_child());
@@ -91,7 +91,7 @@ Tab * MainNotebook::findTab(const string& name, ServerConnection *conn)
     return 0;
 }
 
-Gtk::Notebook_Helpers::Page * MainNotebook::findPage(const string& name, ServerConnection *conn)
+Gtk::Notebook_Helpers::Page * MainNotebook::findPage(const string& name, ServerConnection *conn, bool findInActive = false)
 {
     string n = name;
     Gtk::Notebook_Helpers::PageList::iterator i;
@@ -101,6 +101,8 @@ Gtk::Notebook_Helpers::Page * MainNotebook::findPage(const string& name, ServerC
         if (tab->getConn() == conn) {
             string tab_name = (*i)->get_tab_text();
             if ((Util::lower(tab_name) == Util::lower(n)) || n.empty()) {
+                return (*i);
+            } else if (findInActive && Util::lower(tab_name) == string("(" + Util::lower(n) + ")")) {
                 return (*i);
             }
         }
@@ -120,12 +122,12 @@ void MainNotebook::switchPage(Gtk::Notebook_Helpers::Page *p, unsigned int n)
         tab->getEntry()->grab_focus();
         tab->is_highlighted = false;
         if (tab->getConn()->Session.isAway) {
-            _fe->set_title("LostIRC"VERSION" - " + nick + "[currently away] @ " + p->get_tab_text());
+            AppWin->set_title("LostIRC"VERSION" - " + nick + "[currently away] @ " + p->get_tab_text());
         } else {
-            _fe->set_title("LostIRC"VERSION" - " + nick + " @ " + p->get_tab_text());
+            AppWin->set_title("LostIRC"VERSION" - " + nick + " @ " + p->get_tab_text());
         }
     } else {
-        _fe->set_title("LostIRC"VERSION" - " + p->get_tab_text());
+        AppWin->set_title("LostIRC"VERSION" - " + p->get_tab_text());
     }
 }
 
@@ -168,6 +170,18 @@ void MainNotebook::findTabs(const string& nick, ServerConnection *conn, vector<T
     for (i = pages().begin(); i != pages().end(); ++i) {
         Tab *tab = dynamic_cast<Tab*>((*i)->get_child());
         if (tab->getConn() == conn && tab->findUser(nick)) {
+            vec.push_back(tab);
+        }
+    }
+}
+
+void MainNotebook::findTabs(ServerConnection *conn, vector<Tab*>& vec)
+{
+    Gtk::Notebook_Helpers::PageList::iterator i;
+            
+    for (i = pages().begin(); i != pages().end(); ++i) {
+        Tab *tab = dynamic_cast<Tab*>((*i)->get_child());
+        if (tab->getConn() == conn) {
             vec.push_back(tab);
         }
     }

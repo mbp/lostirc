@@ -31,17 +31,18 @@ class MainWindow;
 class MainNotebook : public Gtk::Notebook
 {
 public:
-    MainNotebook(MainWindow *frontend);
+    MainNotebook();
     ~MainNotebook();
 
     TabChannel* addChannelTab(const std::string& name, ServerConnection *conn);
     TabQuery* addQueryTab(const std::string& name, ServerConnection *conn);
     Tab* getCurrent(ServerConnection *conn);
     Tab* getCurrent();
-    Tab* findTab(const std::string& name, ServerConnection *conn);
-    Gtk::Notebook_Helpers::Page* findPage(const std::string& name, ServerConnection *conn);
+    Tab* findTab(const std::string& name, ServerConnection *conn, bool findInActive = false);
+    Gtk::Notebook_Helpers::Page* findPage(const std::string& name, ServerConnection *conn, bool findInActive = false);
 
     void findTabs(const std::string& nick, ServerConnection *conn, std::vector<Tab*>& vec);
+    void findTabs(ServerConnection *conn, std::vector<Tab*>& vec);
     void Tabs(ServerConnection *conn, std::vector<Tab*>& vec);
     void closeCurrent();
     void highlight(Tab *tab);
@@ -58,6 +59,5 @@ private:
     Gtk::FontSelectionDialog *fontdialog;
     Gdk_Font _font;
 
-    MainWindow *_fe;
 };
 #endif

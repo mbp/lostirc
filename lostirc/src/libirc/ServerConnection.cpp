@@ -70,6 +70,7 @@ bool ServerConnection::Connect()
     } catch (SocketException &e) {
         Session.isConnected = false;
         FE::emit(FE::get(SERVMSG2) << "Failed connecting:" << e.what(), FE::CURRENT, this);
+        App->evtDisconnected(this);
         return false;
     }
 
@@ -109,12 +110,14 @@ gboolean ServerConnection::connectionCheck(gpointer data)
     ServerConnection& conn = *(static_cast<ServerConnection*>(data));
 
     if (conn.Session.sentLagCheck) {
+        // disconnected! last lag check was never replied to
+        // FIXME: we might need to disconnect properly as well!
         #ifdef DEBUG
         std::cout << "connectionCheck().. disconnected" << std::endl;
         #endif
-        // disconnected! last lag check was never replied to
+        FE::emit(FE::get(SERVMSG) << "Disconnected.", FE::ALL, &conn);
+        App->evtDisconnected(&conn);
         conn.Connect();
-        // FIXME: we might need to disconnect properly as well!
 
         return FALSE;
     } else {
@@ -168,8 +171,9 @@ gboolean ServerConnection::onReadData(GIOChannel* io_channel, GIOCondition cond,
         return TRUE;
 
     } catch (SocketException &e) {
-        FE::emit(FE::get(SERVMSG) << e.what(), FE::CURRENT, &conn);
+        FE::emit(FE::get(SERVMSG) << e.what(), FE::ALL, &conn);
         conn.Session.isConnected = false;
+        App->evtDisconnected(&conn);
         g_timeout_add(2000, &ServerConnection::autoReconnect, &conn);
         return FALSE;
     }

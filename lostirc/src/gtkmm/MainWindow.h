@@ -57,7 +57,7 @@ private:
     void onPart(const std::string& nick, Channel& chan, ServerConnection *conn);
     void onQuit(const std::string& nick, const std::string& chan, ServerConnection *conn);
     void onNick(const std::string& from, const std::string& to, ServerConnection *conn);
-    void onNotice(const std::string& from, const std::string& to, const std::string& msg, ServerConnection *conn);
+    void onDisconnected(ServerConnection *conn);
     void onKick(const std::string& from, Channel& chan, const std::string& kicker, const std::string& msg,  ServerConnection *conn);
     void onNames(Channel& c, ServerConnection *conn);
     void onMode(const std::string& nick, const std::string& chan, const std::string& topic, ServerConnection *conn);

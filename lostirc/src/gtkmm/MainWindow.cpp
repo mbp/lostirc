@@ -35,7 +35,7 @@ MainWindow::MainWindow()
     
     Gtk::VBox *_vbox1 = manage(new Gtk::VBox());
 
-    _nb = new MainNotebook(this);
+    _nb = new MainNotebook();
     _vbox1->pack_start(*_nb, 1, 1);
 
     add(*_vbox1);
@@ -57,6 +57,7 @@ MainWindow::MainWindow()
     _app->evtCUMode.connect(slot(this, &MainWindow::onCUMode));
     _app->evtAway.connect(slot(this, &MainWindow::onAway));
     _app->evtNewTab.connect(slot(this, &MainWindow::onNewTab));
+    _app->evtDisconnected.connect(slot(this, &MainWindow::onDisconnected));
 
     int num_of_servers = _app->start();
     if (num_of_servers == 0) {
@@ -103,6 +104,14 @@ void MainWindow::onDisplayMessage(const string& msg, FE::Dest d, ServerConnectio
         Tab *tab = _nb->getCurrent(conn);
 
         _nb->insert(tab, msg);
+    } else if (d == FE::ALL) {
+        vector<Tab*> tabs;
+        vector<Tab*>::const_iterator i;
+        _nb->findTabs(conn, tabs);
+
+        for (i = tabs.begin(); i != tabs.end(); ++i) {
+            _nb->insert(*i, msg);
+        }
     }
 }
 
@@ -128,12 +137,14 @@ void MainWindow::onDisplayMessageInQuery(const string& msg, const string& to, Se
 
 void MainWindow::onJoin(const string& nick, Channel& chan, ServerConnection *conn)
 {
-    Tab *tab = _nb->findTab(chan.getName(), conn);
+    Tab *tab = _nb->findTab(chan.getName(), conn, true);
     if (!tab) {
         tab = _nb->addChannelTab(chan.getName(), conn);
-    } else {
-        tab->insertUser(nick);
+        return;
+    } else if (!tab->isInActive()) {
+        tab->setName(chan.getName());
     }
+    tab->insertUser(nick);
 }
 
 void MainWindow::onKick(const string& kicker, Channel& chan, const string& nick, const string& msg, ServerConnection *conn)
@@ -141,8 +152,7 @@ void MainWindow::onKick(const string& kicker, Channel& chan, const string& nick,
     Tab *tab = _nb->findTab(chan.getName(), conn);
     if (nick == conn->Session.nick) {
         // It's us who's been kicked
-        tab->getLabel()->set_text("(" + chan.getName() + ")");
-        tab->is_on_channel = false;
+        tab->setInActive();
     }
     tab->removeUser(nick);
 }
@@ -153,8 +163,7 @@ void MainWindow::onPart(const string& nick, Channel& chan, ServerConnection *con
     if (tab) {
         if (nick == conn->Session.nick) {
             // It's us who's parting
-            tab->getLabel()->set_text("(" + chan.getName() + ")");
-            tab->is_on_channel = false;
+            tab->setInActive();
         }
         tab->removeUser(nick);
     }
@@ -230,6 +239,17 @@ void MainWindow::onAway(bool away, ServerConnection* conn)
         for (i = vec.begin(); i != vec.end(); ++i) {
             (*i)->setUnAway();
         }
+    }
+}
+
+void MainWindow::onDisconnected(ServerConnection* conn)
+{
+    vector<Tab*> tabs;
+    vector<Tab*>::const_iterator i;
+    _nb->findTabs(conn, tabs);
+
+    for (i = tabs.begin(); i != tabs.end(); ++i) {
+        (*i)->setInActive();
     }
 }
 

@@ -82,6 +82,8 @@ public:
     // Emitted when the user is going away
     Signal2<void, bool, ServerConnection*> evtAway;
 
+    Signal1<void, ServerConnection*> evtDisconnected;
+
 
 private:
     std::vector<ServerConnection*> _servers;
