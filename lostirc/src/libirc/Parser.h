@@ -74,7 +74,7 @@ std::string findHost(const std::string& str)
 
 string skipFirstWord(const string& str)
 {
-    return str.substr(str.find_first_of(" "));
+    return str.substr(str.find_first_of(" ") + 1);
 }
 
 std::string getWord(const std::string& str, int n);
