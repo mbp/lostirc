@@ -6,6 +6,8 @@ LostIRC - (x.x.x)
     Calignon)
   * /PART does no longer work in queries. Before it tried to part a channel
     with the user name.
+  * Can now login to the server when the full name in /etc/passwd contains
+    non-ASCII characters.
 
 LostIRC - (0.4.3) - Fri Oct, 15th 2004
   * It is now possible to show/hide the Menubar by using the context menu on

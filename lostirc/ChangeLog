@@ -1,5 +1,8 @@
 For a summary of changes between releases - see the NEWS file.
 
+2005-02-04  Morten Brix Pedersen
+	* LostIRCApp.cpp: Convert entry from passwd file into UTF-8.
+
 2004-11-01  Morten Brix Pedersen
 	* ChangeLog: Remove email addresses from file.
 	* lostirc.desktop: Add French description. Specify UTF-8 encoding.

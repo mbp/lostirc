@@ -39,7 +39,7 @@ LostIRCApp::LostIRCApp(FrontEnd *f)
     uname(&uname_info);
 #endif
 
-    ustring realname = Glib::get_real_name();
+    ustring realname = Util::convert_to_utf8(Glib::get_real_name());
 
     // Only read until the first comma
     if (realname.find(",") != ustring::npos)
