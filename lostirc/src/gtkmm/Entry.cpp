@@ -196,7 +196,7 @@ struct notPrefixedBy : public std::binary_function<ustring,ustring,bool>
 };
 
 
-void findCommon(vector<ustring>& vec, const ustring& search, int& atchar)
+void findCommon(vector<ustring>& vec, const ustring& search, unsigned int& atchar)
 {
     if (atchar > search.length())
           return;
@@ -223,7 +223,7 @@ int autoCompletion(ustring& search, ustring& matches_str, vector<ustring> full_l
 
     } else if (full_list.size() > 1) {
 
-        int atchar = 1;
+        unsigned int atchar = 1;
         findCommon(full_list, full_list[0], atchar);
 
         search = full_list[0].substr(0, atchar);
