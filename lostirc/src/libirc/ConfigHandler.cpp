@@ -238,6 +238,21 @@ bool ConfigHandler::setOpt(const string& key, const string& value)
     return true;
 }
 
+bool ConfigHandler::setOpt(const string& key, int number)
+{
+    stringstream ss;
+    ss << number;
+    string value = ss.str();
+
+    #ifdef DEBUG
+    std::cout << "ConfigHandler::setOpt(): Setting '" + key + "' to: '" + value + "'" << std::endl;
+    #endif
+    _options[key] = value;
+
+    return writeOptions();
+    return true;
+}
+
 string ConfigHandler::getOpt(const string& param)
 {
     map<string, string>::const_iterator i = _options.find(param);

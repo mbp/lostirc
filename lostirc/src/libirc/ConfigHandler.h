@@ -49,6 +49,7 @@ public:
 
     /* ~/.lostirc/options.conf */
     bool setOpt(const std::string& key, const std::string& value);
+    bool setOpt(const std::string& key, int);
     std::string getOpt(const std::string& param);
 
     /* ~/.lostirc/perform.conf */
