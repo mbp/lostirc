@@ -23,9 +23,6 @@
 
 int main(int argc, char** argv)
 {
-    bindtextdomain(PACKAGE, LOCALEDIR);
-    textdomain(PACKAGE);
-
     bool autoconnect = true;
 
     for (int i = 0; i < argc; ++i)
@@ -33,6 +30,10 @@ int main(int argc, char** argv)
                 autoconnect = false;
 
     Gtk::Main app(argc, argv);
+
+    bindtextdomain(PACKAGE, LOCALEDIR);
+    bind_textdomain_codeset (PACKAGE, "UTF-8");
+    textdomain(PACKAGE);
 
     MainWindow window(autoconnect);
 

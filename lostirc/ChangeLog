@@ -1,5 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-01-12  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * main.cpp: Make sure translated strings are in UTF-8, so use
+          bind_textdomain_codeset().
+
 2003-01-09  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Socket.cpp: Don't check if the first element in the array is 0, the

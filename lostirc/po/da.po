@@ -258,7 +258,7 @@ msgstr "Log til fil"
 
 #: src/gtkmm/Prefs.cpp:74
 msgid "General Settings"
-msgstr "Generalle Indstillinger"
+msgstr "Generelle Indstillinger"
 
 #: src/gtkmm/Prefs.cpp:75 src/gtkmm/Prefs.cpp:160
 msgid "Preferences"
@@ -278,7 +278,7 @@ msgstr "Anvend indstillinger"
 
 #: src/gtkmm/Prefs.cpp:84 src/gtkmm/Prefs.cpp:122 src/gtkmm/Prefs.cpp:195
 msgid "Cancel"
-msgstr "Annuler"
+msgstr "Annuller"
 
 #: src/gtkmm/Prefs.cpp:93
 msgid "Nickname"
