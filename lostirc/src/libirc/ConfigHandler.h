@@ -49,6 +49,7 @@ public:
     Value<Glib::ustring> encoding;
     Value<bool> hidenicklist;
     Value<bool> hidemenu;
+    Value<bool> hidestatusbar;
 };
 
 // Color definitions used by frontend.

@@ -64,6 +64,9 @@ MainWindow::MainWindow(bool autoconnect)
     if (_app.options.hidemenu)
           _menubar.hide();
 
+    if (_app.options.hidestatusbar)
+          _statusbar.hide();
+
     if (!_app.cfgservers.hasAutoConnects() || !autoconnect) {
         // Construct initial tab
         newServerTab();
@@ -376,13 +379,6 @@ void MainWindow::setupMenus()
         Gtk::Menu::MenuList& menulist = _firstmenu.items();
 
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-                    _("_Hide Menubar"),
-                    Gtk::Menu::AccelKey("<control>m"),
-                    SigC::slot(*this, &MainWindow::hideMenu)));
-
-        menulist.push_back(Gtk::Menu_Helpers::SeparatorElem::SeparatorElem());
-
-        menulist.push_back(Gtk::Menu_Helpers::MenuElem(
                     _("New Server Tab"),
                     Gtk::Menu::AccelKey("<control>n"),
                     SigC::hide_return(SigC::slot(*this, &MainWindow::newServerTab))));
@@ -411,17 +407,30 @@ void MainWindow::setupMenus()
     { // View menu.
         Gtk::Menu::MenuList& menulist = _viewmenu.items();
 
+
+        menulist.push_back(Gtk::Menu_Helpers::MenuElem(
+                    _("_Menubar"),
+                    Gtk::Menu::AccelKey("<control>m"),
+                    SigC::slot(*this, &MainWindow::hideMenu)));
+
+        menulist.push_back(Gtk::Menu_Helpers::MenuElem(
+                    _("Status_bar"),
+                    Gtk::Menu::AccelKey("<control>b"),
+                    SigC::slot(*this, &MainWindow::hideStatusbar)));
+
+        menulist.push_back(Gtk::Menu_Helpers::SeparatorElem::SeparatorElem());
+
         menulist.push_back(Gtk::Menu_Helpers::CheckMenuElem(
-                    _("User List"),
+                    _("User _List"),
                     Gtk::Menu::AccelKey("<control>l"),
                     SigC::slot(*this, &MainWindow::hideNickList)));
 
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-                    _("Server List"),
+                    _("_Server List"),
                     Gtk::Menu::AccelKey("<control>s"),
                     SigC::slot(*this, &MainWindow::openServerWindow)));
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-                    _("DCC Transfers"),
+                    _("_DCC Transfers"),
                     Gtk::Menu::AccelKey("<control>d"),
                     SigC::slot(*this, &MainWindow::openDccWindow)));
         menulist.push_back(
@@ -457,6 +466,15 @@ void MainWindow::hideMenu()
           _menubar.hide();
     else
           _menubar.show();
+}
+
+void MainWindow::hideStatusbar()
+{
+    _app.options.hidestatusbar = !_app.options.hidestatusbar;
+    if (_app.options.hidestatusbar)
+          _statusbar.hide();
+    else
+          _statusbar.show();
 }
 
 void MainWindow::hideNickList()

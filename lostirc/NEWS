@@ -1,4 +1,6 @@
 LostIRC - (x.x.x)
+  * It is now possible to hide the statusbar in the same way as you can hide
+    the menubar and the user list.
   * You can now send files that contain spaces.
   * The password field for IRC servers are now masked by asterixs.
   * Some minor tweaks to the DCC window.

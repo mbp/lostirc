@@ -72,6 +72,7 @@ public:
     const Gtk::MenuBar& getMenuBar() const { return _menubar; }
     Tab* newServerTab();
     void hideMenu();
+    void hideStatusbar();
 
     StatusBar _statusbar;
 

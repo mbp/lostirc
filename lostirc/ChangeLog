@@ -2,6 +2,14 @@ For a summary of changes between releases - see the NEWS file.
 
 2004-03-18  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * ConfigHandler.cpp: Add hidestatusbar option.
+        * MainWindow.cpp: - Add hideStatusbar() method. 
+                          - Add a Statusbar option to the View menu to
+                          hide/show the statusbar.
+                          - Move the "Hide Menubar" to the View menu.
+
+2004-03-18  Morten Brix Pedersen  <morten@wtf.dk>
+
         * ConfigHandler.cpp: Fix segmentation fault when there is no space
         efter the equal sign in perform.conf. Thanks to Thomas Johansson for
         the bug report.

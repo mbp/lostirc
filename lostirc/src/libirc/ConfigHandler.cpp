@@ -248,7 +248,8 @@ Options::Options(const char *filename)
     logging(this, "logging", false),
     encoding(this, "encoding", "System"),
     hidenicklist(this, "hidenicklist", false),
-    hidemenu(this, "hidemenu", false)
+    hidemenu(this, "hidemenu", false),
+    hidestatusbar(this, "hidestatusbar", false)
 
 {
     readConfigFile();
