@@ -290,61 +290,50 @@ Tab* MainWindow::newServer()
 
 bool MainWindow::on_key_press_event(GdkEventKey* e)
 {
-    // Default keybindings. Still needs work.
-    if ((e->keyval == GDK_0) && (e->state & GDK_CONTROL_MASK)) {
-        notebook.set_current_page(9);
-    }
-    else if ((e->keyval == GDK_1) && (e->state & GDK_CONTROL_MASK)) {
-        notebook.set_current_page(0);
-    }
-    else if ((e->keyval == GDK_2) && (e->state & GDK_CONTROL_MASK)) {
-        notebook.set_current_page(1);
-    }
-    else if ((e->keyval == GDK_3) && (e->state & GDK_CONTROL_MASK)) {
-        notebook.set_current_page(2);
-    }
-    else if ((e->keyval == GDK_4) && (e->state & GDK_CONTROL_MASK)) {
-        notebook.set_current_page(3);
-    }
-    else if ((e->keyval == GDK_5) && (e->state & GDK_CONTROL_MASK)) {
-        notebook.set_current_page(4);
-    }
-    else if ((e->keyval == GDK_6) && (e->state & GDK_CONTROL_MASK)) {
-        notebook.set_current_page(5);
-    }
-    else if ((e->keyval == GDK_7) && (e->state & GDK_CONTROL_MASK)) {
-        notebook.set_current_page(6);
-    }
-    else if ((e->keyval == GDK_8) && (e->state & GDK_CONTROL_MASK)) {
-        notebook.set_current_page(7);
-    }
-    else if ((e->keyval == GDK_9) && (e->state & GDK_CONTROL_MASK)) {
-        notebook.set_current_page(8);
-    }
-    else if ((e->keyval == GDK_c) && (e->state & GDK_CONTROL_MASK)) {
-        Tab *tab = notebook.getCurrent();
-        if (tab->isChannel() && tab->getConn()->Session.isConnected && tab->isActive()) {
-            // It's a channel, so we need to part it
-            tab->getConn()->sendPart(Glib::locale_from_utf8(notebook.getLabel(tab)->get_text()), "");
-        } else {
-            // Query
-            tab->getConn()->removeChannel(Glib::locale_from_utf8(notebook.getLabel(tab)->get_text()));
+    // CTRL key.
+    if (e->state & GDK_CONTROL_MASK) {
+        if (e->keyval == GDK_0) {
+            notebook.set_current_page(9);
+        } else if (e->keyval == GDK_1) {
+            notebook.set_current_page(0);
+        } else if (e->keyval == GDK_2) {
+            notebook.set_current_page(1);
+        } else if (e->keyval == GDK_3) {
+            notebook.set_current_page(2);
+        } else if (e->keyval == GDK_4) {
+            notebook.set_current_page(3);
+        } else if (e->keyval == GDK_5) {
+            notebook.set_current_page(4);
+        } else if (e->keyval == GDK_6) {
+            notebook.set_current_page(5);
+        } else if (e->keyval == GDK_7) {
+            notebook.set_current_page(6);
+        } else if (e->keyval == GDK_8) {
+            notebook.set_current_page(7);
+        } else if (e->keyval == GDK_9) {
+            notebook.set_current_page(8);
+        } else if (e->keyval == GDK_c) {
+            Tab *tab = notebook.getCurrent();
+            if (tab->isChannel() && tab->getConn()->Session.isConnected && tab->isActive()) {
+                // It's a channel, so we need to part it
+                tab->getConn()->sendPart(Glib::locale_from_utf8(notebook.getLabel(tab)->get_text()), "");
+            } else {
+                // Query
+                tab->getConn()->removeChannel(Glib::locale_from_utf8(notebook.getLabel(tab)->get_text()));
+            }
+            notebook.closeCurrent();
+        } else if (e->keyval == GDK_p) {
+            if (!notebook.getCurrent()->hasPrefs) {
+                notebook.getCurrent()->startPrefs();
+            } else {
+                notebook.getCurrent()->endPrefs();
+            }
+        } else if (e->keyval == GDK_n) {
+            newServer();
+        } else if (e->keyval == GDK_q) {
+            // hide() here will quit the application
+            hide();
         }
-        notebook.closeCurrent();
-    }
-    else if ((e->keyval == GDK_p) && (e->state & GDK_CONTROL_MASK)) {
-        if (!notebook.getCurrent()->hasPrefs) {
-            notebook.getCurrent()->startPrefs();
-        } else {
-            notebook.getCurrent()->endPrefs();
-        }
-    }
-    else if ((e->keyval == GDK_n) && (e->state & GDK_CONTROL_MASK)) {
-        newServer();
-    }
-    else if ((e->keyval == GDK_q) && (e->state & GDK_CONTROL_MASK)) {
-        // hide() here will quit the application
-        hide();
     }
     Gtk::Window::on_key_press_event(e);
     return false;
