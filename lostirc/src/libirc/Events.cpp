@@ -37,6 +37,7 @@ struct {
     { 2, "clientmsg", CLIENTMSG },
     { 2, "ctcp", CTCP },
     { 2, "ctcp_multi", CTCP_MULTI },
+    { 2, "ctcp_reply", CTCP_REPLY },
     { 2, "topicchange", TOPICCHANGE },
     { 2, "topicis", TOPICIS },
     { 2, "topictime", TOPICTIME },

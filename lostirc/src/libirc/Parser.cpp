@@ -324,7 +324,8 @@ void Parser::Notice(const string& from, const string& to, const string& rest)
         string::iterator i = remove(tmp.begin(), tmp.end(), '\001');
         string output(tmp.begin(), i);
 
-        FE::emit(FE::get(SERVERMSG1) << findNick(from) << output, FE::CURRENT, _conn);
+        FE::emit(FE::get(CTCP_REPLY) << getWord(output, 1) << findNick(from) << skipFirstWord(output), FE::CURRENT, _conn);
+
     } else {
         // Normal notice
         if (to == _conn->Session.nick)

@@ -94,6 +94,7 @@ public:
     Value<std::string> clientmsg;
     Value<std::string> ctcp;
     Value<std::string> ctcp_multi;
+    Value<std::string> ctcp_reply;
     Value<std::string> topicchange;
     Value<std::string> topicis;
     Value<std::string> topictime;

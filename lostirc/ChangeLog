@@ -2,6 +2,10 @@ For a summary of changes between releases - see the NEWS file.
 
 2002-12-13  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * Added CTCP_REPLY event.
+
+2002-12-13  Morten Brix Pedersen  <morten@wtf.dk>
+
         * Added an extra event for quits without any quit message, so we can
           show it without an empty parentes.
 

@@ -272,6 +272,7 @@ Events::Events(const char *filename)
     clientmsg(this, "clientmsg", "$15-- $16%1 %2"),
     ctcp(this, "ctcp", "$15-- $16CTCP $07%1 $16received from §$00%2"),
     ctcp_multi(this, "ctcp_multi", "$15-- $16CTCP $07%1 $16received from §$00%2§$16 $15($16to §%3§$15)"),
+    ctcp_reply(this, "ctcp_reply", "$15-- $16CTCP $07%1 $16reply from §$00%2§: %3"),
     topicchange(this, "topicchange", "$15-- §$00%1§$16 changes topic to:$00 %2"),
     topicis(this, "topicis", "$15-- $16Topic for §%1§ is:$00 %2"),
     topictime(this, "topictime", "$15-- $16Set by §$00%1§$16 on $00%2"),
