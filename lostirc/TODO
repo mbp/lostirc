@@ -3,7 +3,6 @@ CRITICAL:
   * Implement reading in ServerConnection better (more efficiently)
   * Implement DCC CHAT
   * DCC SEND freezes the client until finished.
-  * When quitting the client with ALT+Q, QUIT isn't send properly.
 
 NICE-TO-HAVE:
 ------------
