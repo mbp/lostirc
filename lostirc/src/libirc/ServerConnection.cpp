@@ -20,7 +20,6 @@
 #include "LostIRCApp.h"
 #include "Events.h"
 #include "Commands.h"
-#include <algorithm>
 
 using std::string;
 using std::vector;
@@ -89,9 +88,45 @@ gboolean ServerConnection::readdata(GIOChannel* io_channel, GIOCondition cond, g
 {
     ServerConnection& conn = *(static_cast<ServerConnection*>(data));
 
-    if (conn.readsocket()) {
+    try {
+
+        char buf[4096];
+        if (conn._socket->receive(buf, 4095)) {
+
+            string str;
+            if (!conn.tmpbuf.empty()) {
+                str = conn.tmpbuf;
+                conn.tmpbuf = "";
+            }
+            str += buf;
+
+            // run through the string we got, take it line by line and pass
+            // each line to parseLine() - if we did not reach the end, save
+            // the rest in a tmp buffer.
+
+            string::size_type lastPos = str.find_first_not_of("\n", 0);
+            string::size_type pos     = str.find_first_of("\n", lastPos);
+
+            while (string::npos != pos || string::npos != lastPos)
+            {
+                if (pos == string::npos && lastPos != str.length()) {
+                    // we reached the last line, but it was not ended with
+                    // \n, lets buffer this
+                    conn.tmpbuf = str.substr(lastPos);
+                    return (TRUE);
+                } else {
+                    string tmp = str.substr(lastPos, pos - lastPos);
+                    conn._p->parseLine(tmp);
+                }
+                lastPos = str.find_first_not_of("\n", pos);
+                pos = str.find_first_of("\n", lastPos);
+            }
+        }
         return (TRUE);
-    } else {
+
+    } catch (SocketException &e) {
+        conn._app->getEvts()->emit(conn._app->getEvts()->get(SERVMSG) << e.what(), &conn);
+        conn.Session.isConnected = false;
         return (FALSE);
     }
 }
@@ -113,51 +148,6 @@ gboolean ServerConnection::write(GIOChannel* io_channel, GIOCondition cond, gpoi
     conn.sendUser(conn.Session.nick, hostname, conn.Session.servername, conn.Session.realname);
 
     return (FALSE);
-}
-
-bool ServerConnection::readsocket()
-{
-    try {
-
-        std::string str;
-        // our buffer
-        if (!tmpbuf.empty()) {
-            str = tmpbuf;
-            tmpbuf = "";
-        }
-
-        if (_socket->receive(str)) {
-
-            // run through the string we got, take it line by line and pass
-            // each line to parseLine() - if we did not reach the end, save
-            // the rest in a tmp buffer.
-            std::string::iterator i = str.begin();
-            std::string::iterator start = i;
-
-            for (; i != str.end(); ++i) {
-                switch (*i) {
-                    case '\r':
-                        break;
-                    case '\n':
-                        if (start != str.begin())
-                              ++start;
-
-                        string newstr(start, i);
-                        _p->parseLine(newstr);
-                        start = i;
-                }
-            }
-            if (start != str.end()) {
-                std::copy(++start, str.end(), back_inserter(tmpbuf));
-            }
-        }
-        return true;
-
-    } catch (SocketException &e) {
-        _app->getEvts()->emit(_app->getEvts()->get(SERVMSG) << e.what(),  this);
-        Session.isConnected = false;
-        return false;
-    }
 }
 
 bool ServerConnection::sendPong(const string& crap)

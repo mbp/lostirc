@@ -68,21 +68,20 @@ bool Socket::send(const string& data)
     }
 }
 
-bool Socket::receive(std::string &str)
+bool Socket::receive(char *buf, int len)
 {
-    char tmpbuf[bufferSize];
-    int retval = recv(fd, tmpbuf, bufferSize, 0);
+    int retval = recv(fd, buf, len, 0);
 
     if (retval == 0) throw SocketException("Disconnected.");
     else if (retval == -1) {
         if (errno == EAGAIN || errno == EWOULDBLOCK) {
             return false;
         } else {
-            throw(strerror(errno));
+            throw SocketException(strerror(errno));
         }
     }
-    tmpbuf[retval] = '\0';
-    str += tmpbuf;
+    buf[retval] = '\0';
+
     return true;
 }
 

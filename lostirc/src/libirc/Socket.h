@@ -30,8 +30,6 @@
 class Socket
 {
     int fd;
-    std::string buf;
-    static const int bufferSize = 4096;
 
 public:
     Socket();
@@ -39,7 +37,7 @@ public:
 
     void connect(const std::string& host, int port);
     bool send(const std::string& data);
-    bool receive(std::string &str);
+    bool receive(char *buf, int len);
     void setNonBlocking();
     void setBlocking();
     int getfd() { return fd; }

@@ -84,7 +84,6 @@ public:
 
 private:
     LostIRCApp *_app;
-    bool readsocket();
     Socket *_socket;
     Parser *_p;
     std::string tmpbuf;

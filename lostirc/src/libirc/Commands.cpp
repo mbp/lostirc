@@ -121,11 +121,15 @@ void Commands::Server(ServerConnection *conn, const string& params)
         throw CommandException("/SERVER <host/ip> [port] [password], connect to an IRC server");
     } else {
         string host, port, password;
-        stringstream ss(params);
+        istringstream ss(params);
         ss >> host;
         ss >> port;
         ss >> password;
 
+        if (conn->Session.isConnected) {
+              conn->sendQuit("");
+              conn->Session.isConnected = false;
+        }
         int p;
         if (!port.empty())
               p = Util::stoi(port);
