@@ -43,6 +43,7 @@ namespace GuiCommands
     void Exit(ServerConnection *conn, const Glib::ustring& params);
     void NewServer(ServerConnection *conn, const Glib::ustring& params);
     void displayCommands(ServerConnection *conn, const Glib::ustring& params);
+    void displayKeybindings(ServerConnection *conn, const Glib::ustring& params);
     std::vector<Glib::ustring> getCommands();
 
 }

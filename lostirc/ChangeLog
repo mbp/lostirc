@@ -1,6 +1,12 @@
 For a summary of changes between releases - see the NEWS file.
 
 2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * GuiCommands.cpp: Add displayKeybindings() to display all key
+          bindings.
+        * MainWindow.cpp: Shorten down introduction text when starting client.
+
+2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
 
         * TextWidget.h/TextWidget.cpp: Implement scrollToBottom() and
           scrollToTop();

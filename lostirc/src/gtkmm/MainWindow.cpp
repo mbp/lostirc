@@ -60,7 +60,7 @@ MainWindow::MainWindow(bool autoconnect)
     if (!app.cfgservers.hasAutoConnects() || !autoconnect) {
         // Construct initial tab
         Tab *tab = newServer();
-        tab->getText() << "\0037\n\002Welcome to LostIRC "VERSION"!\002\n\nYou use the client mainly by typing in commands and text in the entry-box shown below.\n\nYou can connect to a server using:\n    \0038/SERVER <hostname / ip>\n\n\0037Then join a channel:\n    \0038/JOIN <channel-name>\n\n\0037The rest of the commands is available with:\n    \0038/COMMANDS\0037.\n\n\0037Available keybindings:\n    \0038CTRL-[1-9] - switch tabs from 1-9.\n    CTRL-N - create new server tab.\n    CTRL-W - close current window(tab).\n    CTRL-P - open preferences. CTRL-H - Scroll back to previous highlight (if any)\n    Tab - nick-completion and command-completion.\n";
+        tab->getText() << "\0037\002Welcome to LostIRC "VERSION"!\002\n\nYou can now connect to a server using:\n    \0038/SERVER <hostname / ip>\n\n\0037...and then join a channel:\n    \0038/JOIN <channel-name>\n\n\0037A list of all commands are available with:\n    \0038/COMMANDS\0037\n\nAnd you should \002really\002 check out the list of key bindings:\n    \0038/KEYBINDINGS\n\n";
     } else {
         // Auto-connect to servers.
         app.autoConnect();

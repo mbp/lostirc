@@ -4,7 +4,7 @@ CRITICAL:
 
 NICE-TO-HAVE:
 ------------
-  * Implement /help, /help shortcuts and /help commands
+  * Implement /help for all commands.
   * ipv6 support
   * When window has lost its focus, then highlight the front tab too.
   * /BAN and /EXEC command.
