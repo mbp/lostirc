@@ -43,13 +43,10 @@ void Channel::removeUser(const string& u)
 
 bool Channel::findUser(const string& n)
 {
-    cout << "finding: " << n << endl;
     vector<string>::iterator i = std::find(users.begin(), users.end(), n);
 
-    if (i != users.end()) {
-        cout << "found!" << endl;
-        return true;
-    }
+    if (i != users.end())
+          return true;
 
     return false;
 }

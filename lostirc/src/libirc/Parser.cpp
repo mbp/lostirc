@@ -318,7 +318,7 @@ void Parser::Quit(const string& nick, const string& msg)
 void Parser::Nick(const string& from, const string& to)
 {
     vector<string> args;
-    args.push_back(from);
+    args.push_back(findNick(from));
     args.push_back(to);
 
     // Check whethers it's us who has changed nick
@@ -327,6 +327,7 @@ void Parser::Nick(const string& from, const string& to)
     }
     vector<string>::iterator i;
     vector<string> chans = _conn->findUser(findNick(from));
+
     for (i = chans.begin(); i != chans.end(); ++i) {
         _conn->findChannel(*i)->removeUser(findNick(from));
         _conn->findChannel(*i)->addUser(to);

@@ -294,7 +294,6 @@ vector<string> ServerConnection::findUser(const string& n)
 
     for (;i != Session.channels.end(); ++i) {
         if ((*i)->findUser(n)) {
-            cout << "pushing back:" << (*i)->getName() << endl;
             chans.push_back((*i)->getName());
         }
     }

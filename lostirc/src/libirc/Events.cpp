@@ -53,9 +53,6 @@ void Events::emitEvent(const string& name, vector<string>& args, const string& t
                 parsing_arg = false;
         }
     }
-    if (to.empty()) {
-        cerr << "chrash and burn" << endl;
-    }
 
     newmsg += '\n';
 
