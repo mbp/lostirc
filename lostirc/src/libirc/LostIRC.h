@@ -19,6 +19,8 @@
 #ifndef LOSTIRC_H
 #define LOSTIRC_H
 
+#include <config.h>
+
 #if defined(ENABLE_NLS) && !defined(_)
 #  include <libintl.h>
 #  define _(x) gettext(x)

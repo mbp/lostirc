@@ -2,6 +2,12 @@ For a summary of changes between releases - see the NEWS file.
 
 2003-01-12  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * LostIRC.h: Make translations actually work! Forgot to include
+          <config.h> which defines ENABLE_NLS. Thanks to Daniel Elstner for
+          finding this for me.
+
+2003-01-12  Morten Brix Pedersen  <morten@wtf.dk>
+
         * main.cpp: Make sure translated strings are in UTF-8, so use
           bind_textdomain_codeset().
 
