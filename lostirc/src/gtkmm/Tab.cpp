@@ -451,9 +451,7 @@ void Tab::initializeColorMap()
 
     // Create a underlined-tag.
     underlinetag = Gtk::TextTag::create();
-    Glib::PropertyProxy<Pango::Underline> underline = underlinetag->property_underline();
-    underline = Pango::UNDERLINE_SINGLE;
-    Glib::PropertyProxy_WriteOnly<Glib::ustring> fg = underlinetag->property_foreground();
-    fg.set_value(Glib::locale_to_utf8(App->colors.color0));
+    underlinetag->property_underline() = Pango::UNDERLINE_SINGLE;
+    underlinetag->property_foreground().set_value(Glib::locale_to_utf8(App->colors.color0));
     _textview.get_buffer()->get_tag_table()->add(underlinetag);
 }
