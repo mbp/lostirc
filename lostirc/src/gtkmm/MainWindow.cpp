@@ -67,7 +67,7 @@ MainWindow::MainWindow()
     show_all();
     _nb->insert(tab, "\00311Welcome to LostIRC!\n\nThis client is mainly keyboard oriented, so don't expect fancy menus and buttons for you to click on.
 
-\00312Available commands:
+\0037Available commands:
 \0038/SERVER <hostname> - connect to server.
 /JOIN <channel> - join channel.
 /PART <channel> - part channel.
@@ -77,10 +77,10 @@ MainWindow::MainWindow()
 /AWAY <msg> - go away.
 /QUIT <msg> - quit IRC with <msg>.
 
-\00312Available GUI commands:
+\0037Available GUI commands:
 \0038/QUERY <nick> - start query with <nick>.
 
-\00312Available keybindings:
+\0037Available keybindings:
 \0038Alt + [1-9] - switch tabs from 1-9.
 Alt + n - create new server tab.
 Alt + c - close current tab.
@@ -148,7 +148,7 @@ void MainWindow::onQuit(const string& nick, const string& msg, ServerConnection 
     _nb->findTabs(nick, conn, tabs);
 
     for (i = tabs.begin(); i != tabs.end(); ++i) {
-        _nb->insert(*i, "\0035-- " + nick + " has quit (" + msg + ")\n");
+        _nb->insert(*i, "\0033-- " + nick + " has quit (" + msg + ")\n");
         (*i)->removeUser(nick);
     }
 }
@@ -183,7 +183,7 @@ void MainWindow::onCMode(const string& nick, const string& chan, char sign, cons
 
     string::const_iterator i;
     for (i = modes.begin(); i != modes.end(); ++i) {
-        _nb->insert(tab, "\0034-- "  + nick + " sets channel mode " + sign + *i + " on " + chan + "\n");
+        _nb->insert(tab, "\0037-- "  + nick + " sets channel mode " + sign + *i + " on " + chan + "\n");
     }
 }
 
@@ -194,7 +194,7 @@ void MainWindow::onCUMode(const string& nick, const string& chan, const vector<v
     vector<vector<string> >::const_iterator i;
     for (i = users.begin(); i != users.end(); ++i) {
         vector<string> vec = *i;
-        _nb->insert(tab, "\0034-- "  + nick + " sets mode " + vec[0] + " to " + vec[1] + "\n");
+        _nb->insert(tab, "\0037-- "  + nick + " sets mode " + vec[0] + " to " + vec[1] + "\n");
         tab->removeUser(vec[1]);
         tab->insertUser(*i);
     }

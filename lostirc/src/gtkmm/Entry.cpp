@@ -45,15 +45,15 @@ void Entry::onEntry()
         }
 
         if(!GuiCommands::send(_tab->getConn(), msg.substr(1, pos - 1), params)) {
-            _tab->getText()->insert(Commands::error + "\n");
+            _tab->parseAndInsert(Commands::error + "\n");
         }
 
     } else {
         if (!_tab->getConn()->Session.isConnected && msg.size() > 0) {
-            _tab->getText()->insert("Not connected to server.\n");
+            _tab->parseAndInsert("Not connected to server.\n");
         } else if (msg.size() > 0) {
             if(!_tab->is_on_channel) {
-                  _tab->getText()->insert("Not on any channel.\n");
+                  _tab->parseAndInsert("Not on any channel.\n");
                   return;
             }
             printText(msg);

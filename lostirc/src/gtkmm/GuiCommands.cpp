@@ -50,6 +50,7 @@ bool GuiCommands::Query(ServerConnection *conn, const string& params)
         return false;
     } else {
         nb->addQueryTab(params, conn);
+        return true;
     }
 
 }
@@ -65,6 +66,7 @@ bool GuiCommands::Me(ServerConnection *conn, const string& params)
 bool GuiCommands::SetFont(ServerConnection *conn, const string& params)
 {
     nb->setFont();
+    return true;
 }
 
 MainNotebook* GuiCommands::nb;
