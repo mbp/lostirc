@@ -31,12 +31,9 @@ class MainNotebook : public Gtk::Notebook
 public:
     MainNotebook();
 
-    Tab* addTab(const Glib::ustring& name, ServerConnection *conn);
-    Tab* addChannelTab(const Glib::ustring& name, ServerConnection *conn);
-    Tab* addQueryTab(const Glib::ustring& name, ServerConnection *conn);
+    Tab* addTab(Tab::Type type, const Glib::ustring& name, ServerConnection *conn);
     Tab* getCurrent(ServerConnection *conn);
     Tab* getCurrent();
-    Gtk::Label* getLabel(Tab *tab);
     Tab* findTab(const Glib::ustring& name, ServerConnection *conn, bool findInActive = false);
     Tab* findTab(Tab::Type type, ServerConnection *conn, bool findInActive = false);
 
@@ -45,8 +42,6 @@ public:
     void clearAll();
     void Tabs(std::vector<Tab*>& vec);
     void closeCurrent();
-    void highlightNick(Tab *tab);
-    void highlightActivity(Tab *tab);
     void setFont(const Glib::ustring& str);
     int countTabs(ServerConnection *conn);
     void updateTitle(Tab *tab = 0);

@@ -87,7 +87,7 @@ void Entry::sendMsg(const ustring& msg)
         // FIXME - ustring
         string line;
         while (getline(ss, line))
-              _tab->getConn()->sendMsg(AppWin->getNotebook().getLabel(_tab)->get_text(), line);
+              _tab->getConn()->sendMsg(_tab->getName(), line);
     }
 }
 

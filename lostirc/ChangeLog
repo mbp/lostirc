@@ -1,6 +1,23 @@
 For a summary of changes between releases - see the NEWS file.
 
 2003-01-03  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Some more cleanups:
+        * MainNotebook.cpp/.h: Remove addChannelTab() and addQueryTab(),
+          instead we have one function, addTab() which takes the type as the
+          first argument.
+
+          Remove getLabel(), it's now implemented in the Tab class.
+          Remove highlightNick(), ditto.
+          Remove highlightActivity(), ditto.
+
+        * Tab.cpp/.h: Set the labels name from here, using pango markup. Add
+          highlightNick(), highlightActivity() and removeHighlight() member
+          functions.
+
+        * MainWindow.cpp, GuiCommands.cpp: Update to reflect above API changes.
+
+2003-01-03  Morten Brix Pedersen  <morten@wtf.dk>
         
         * NickList.cpp: Translate "user/users".
 

@@ -66,13 +66,13 @@ void Query(ServerConnection *conn, const ustring& params)
     if (params.empty()) {
         throw CommandException(_("/QUERY <nick>, start a query(tab) with a user"));
     } else {
-        AppWin->getNotebook().addQueryTab(params, conn);
+        AppWin->getNotebook().addTab(Tab::QUERY, params, conn);
     }
 }
 
 void Me(ServerConnection *conn, const ustring& params)
 {
-    ustring to = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
+    ustring to = AppWin->getNotebook().getCurrent()->getName();
     ustring param = to + " " + params;
     return Commands::Me(conn, param);
 }
@@ -94,14 +94,14 @@ void NewServer(ServerConnection *conn, const ustring& params)
 
 void Part(ServerConnection *conn, const ustring& params)
 {
-    ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
+    ustring channel = AppWin->getNotebook().getCurrent()->getName();
     ustring param = channel + " " + params;
     Commands::Part(conn, param);
 }
 
 void Topic(ServerConnection *conn, const ustring& params)
 {
-    ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
+    ustring channel = AppWin->getNotebook().getCurrent()->getName();
     ustring param = channel + " " + params;
     Commands::Topic(conn, param);
 }
@@ -112,7 +112,7 @@ void Kick(ServerConnection *conn, const ustring& params)
         throw CommandException(_("/KICK <nick>, kick a user from a channel."));
 
     } else {
-        ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
+        ustring channel = AppWin->getNotebook().getCurrent()->getName();
         ustring param = channel + " " + params;
         Commands::Kick(conn, param);
     }
@@ -120,7 +120,7 @@ void Kick(ServerConnection *conn, const ustring& params)
 
 void Banlist(ServerConnection *conn, const ustring& params)
 {
-    Commands::Banlist(conn, AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text());
+    Commands::Banlist(conn, AppWin->getNotebook().getCurrent()->getName());
 }
 
 void Op(ServerConnection *conn, const ustring& params)
@@ -129,7 +129,7 @@ void Op(ServerConnection *conn, const ustring& params)
         throw CommandException(_("/OP <nicks>, ops one or more users in the current channel."));
 
     } else {
-        ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
+        ustring channel = AppWin->getNotebook().getCurrent()->getName();
         ustring param = channel + " " + params;
         Commands::Op(conn, param);
     }
@@ -141,7 +141,7 @@ void Deop(ServerConnection *conn, const ustring& params)
         throw CommandException(_("/DEOP <nicks>, deops one or more users in the current channel."));
 
     } else {
-        ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
+        ustring channel = AppWin->getNotebook().getCurrent()->getName();
         ustring param = channel + " " + params;
         Commands::Deop(conn, param);
     }
@@ -153,7 +153,7 @@ void Voice(ServerConnection *conn, const ustring& params)
         throw CommandException(_("/VOICE <nicks>, voices one or more users in the current channel."));
 
     } else {
-        ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
+        ustring channel = AppWin->getNotebook().getCurrent()->getName();
         ustring param = channel + " " + params;
         Commands::Voice(conn, param);
     }
@@ -165,7 +165,7 @@ void Devoice(ServerConnection *conn, const ustring& params)
         throw CommandException(_("/DEVOICE <nicks>, devoices one or more users in the current channel."));
 
     } else {
-        ustring channel = AppWin->getNotebook().getLabel(AppWin->getNotebook().getCurrent())->get_text();
+        ustring channel = AppWin->getNotebook().getCurrent()->getName();
         ustring param = channel + " " + params;
         Commands::Devoice(conn, param);
     }

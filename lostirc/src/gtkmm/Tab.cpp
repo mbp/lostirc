@@ -32,10 +32,10 @@
 using std::vector;
 using Glib::ustring;
 
-Tab::Tab(ServerConnection *conn, Pango::FontDescription font)
+Tab::Tab(ServerConnection *conn, Pango::FontDescription font, Gtk::Label *label)
     : Gtk::VBox(), isHighlighted(false), hasPrefs(false),
     _conn(conn), _nicklist(0), _textwidget(font), _isActive(true),
-    _type(UNDEFINED), _entry(this)
+    _type(UNDEFINED), _entry(this), _label(label)
 {
     _hpaned = new Gtk::HPaned();
 
@@ -64,27 +64,52 @@ Tab::~Tab()
 
 void Tab::setInActive()
 {
-    if (isActive()) {
-        Gtk::Label *label = AppWin->getNotebook().getLabel(this);
-        label->set_text("(" + label->get_text() + ")");
-        _isActive = false;
-    }
+    _isActive = false;
+    setLabelName();
 }
 
 void Tab::setActive()
 {
-    Gtk::Label *label = AppWin->getNotebook().getLabel(this);
-
-    if (label->get_text().at(0) == '(') {
-        // Remove the parentes.
-        Glib::ustring text = label->get_text();
-        label->set_text(text.substr(1, text.length() - 2));
-    }
-
     _isActive = true;
+    setLabelName();
 
     if (_nicklist)
           _nicklist->setActive();
+}
+
+void Tab::setName(const Glib::ustring& str)
+{
+    _name = str;
+    setLabelName();
+}
+
+void Tab::setLabelName()
+{
+    if (isActive())
+          _label->set_text(_name);
+    else
+          _label->set_text("(" + _name + ")");
+}
+
+void Tab::highlightNick()
+{
+    if (this != AppWin->getNotebook().getCurrent()) {
+        isHighlighted = true;
+        _label->set_markup("<span foreground=\"blue\">" + _name + "</span>");
+        _textwidget.setHighlightMark();
+    }
+}
+
+void Tab::highlightActivity()
+{
+    if (this != AppWin->getNotebook().getCurrent() && !isHighlighted)
+          _label->set_markup("<span foreground=\"red\">" + _name + "</span>");
+}
+
+void Tab::removeHighlight()
+{
+    isHighlighted = false;
+    _label->set_text(_name);
 }
 
 void Tab::addOrRemoveNickList()
@@ -116,7 +141,7 @@ void Tab::renameUser(const Glib::ustring& from, const Glib::ustring& to)
     if (isType(CHANNEL))
           _nicklist->renameUser(from, to);
     else if (isType(QUERY))
-          AppWin->getNotebook().getLabel(this)->set_text(to);
+          setName(to);
 }
 
 bool Tab::findUser(const Glib::ustring& nick)
@@ -124,8 +149,7 @@ bool Tab::findUser(const Glib::ustring& nick)
     if (isType(CHANNEL))
           return _nicklist->findUser(nick);
     else 
-          return (nick == AppWin->getNotebook().getLabel(this)->get_text());
-    
+          return (nick == getName());
 }
 
 std::vector<Glib::ustring> Tab::getNicks()
@@ -134,7 +158,7 @@ std::vector<Glib::ustring> Tab::getNicks()
           return _nicklist->getNicks();
     else {
         std::vector<Glib::ustring> vec;
-        vec.push_back(AppWin->getNotebook().getLabel(this)->get_text());
+        vec.push_back(getName());
         return vec;
     }
 }

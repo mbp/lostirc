@@ -31,77 +31,36 @@ MainNotebook::MainNotebook()
     signal_switch_page().connect(SigC::slot(*this, &MainNotebook::onSwitchPage));
 }
 
-Tab* MainNotebook::addTab(const ustring& name, ServerConnection *conn)
+Tab* MainNotebook::addTab(Tab::Type type, const ustring& name, ServerConnection *conn)
 {
     Tab *tab = findTab(Tab::SERVER, conn);
 
     if (tab) {
         // If we have a server-tab, reuse it
-        getLabel(tab)->set_text(name);
         tab->setActive();
-    } else {
-        tab = manage(new Tab(conn, fontdescription));
-        pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, name));
-    }
-    show_all();
-    return tab;
-}
-
-Tab* MainNotebook::addChannelTab(const ustring& name, ServerConnection *conn)
-{
-    // First try to find out whether we have a server-tab for this
-    // ServerConnection.
-    Tab *tab = findTab(Tab::SERVER, conn);
-
-    if (tab) {
-        // If we have a "server"-tab, reuse it as a channel-tab.
-        getLabel(tab)->set_text(name);
-        tab->setActive();
-        tab->setType(Tab::CHANNEL);
-    } else if (tab = findTab(name, conn, true)) {
+        tab->setType(type);
+        tab->setName(name);
+    } else if ((tab = findTab(name, conn, true))) {
         // If we find an *inactive* tab, lets reuse it.
         tab->setActive();
-        tab->setType(Tab::CHANNEL);
-        getLabel(tab)->set_text(name);
+        tab->setType(type);
+        tab->setName(name);
     } else {
-        // If not, create a new channel-tab.
-        tab = manage(new Tab(conn, fontdescription));
-        tab->setType(Tab::CHANNEL);
-        pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, name));
+        // FIXME: set name?
+        Gtk::Label *label = manage(new Gtk::Label());
+        tab = manage(new Tab(conn, fontdescription, label));
+        tab->setType(type);
+        pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, *label));
     }
     show_all();
     return tab;
-}
-
-Tab* MainNotebook::addQueryTab(const ustring& name, ServerConnection *conn)
-{
-    Tab *tab = findTab(Tab::SERVER, conn);
-
-    if (tab) {
-        // If we have a server-tab, reuse it
-        getLabel(tab)->set_text(name);
-        tab->setActive();
-        tab->setType(Tab::QUERY);
-    } else {
-        tab = manage(new Tab(conn, fontdescription));
-        tab->setType(Tab::QUERY);
-        pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, name));
-    }
-    show_all();
-    return tab;
-}
-
-Gtk::Label* MainNotebook::getLabel(Tab *tab)
-{
-    return static_cast<Gtk::Label*>(get_tab_label(*tab));
 }
 
 Tab* MainNotebook::getCurrent(ServerConnection *conn)
 {
     Tab *tab = getCurrent();
-    if (tab->getConn() != conn) {
-        tab = findTab("", conn);
-    }
+    if (tab->getConn() != conn)
+          tab = findTab("", conn);
     return tab;
 }
 
@@ -113,16 +72,16 @@ Tab* MainNotebook::getCurrent()
 Tab * MainNotebook::findTab(const ustring& name, ServerConnection *conn, bool findInActive)
 {
     ustring n = name;
-    Gtk::Notebook_Helpers::PageList::iterator i;
+    Gtk::Notebook_Helpers::PageList::const_iterator i;
             
     for (i = pages().begin(); i != pages().end(); ++i) {
         Tab *tab = static_cast<Tab*>(i->get_child());
         if (tab->getConn() == conn) {
-            ustring tab_name = i->get_tab_label_text();
-            if ((Util::lower(tab_name) == Util::lower(n)) || n.empty())
+            ustring tab_name = tab->getName();
+            if ((Util::lower(tab_name) == Util::lower(n)) || n.empty()) {
+                if ((!tab->isActive() && findInActive) || tab->isActive())
                   return static_cast<Tab*>(get_nth_page(i->get_page_num()));
-            else if (findInActive && Util::lower(tab_name) == ustring("(" + Util::lower(n) + ")"))
-                  return static_cast<Tab*>(get_nth_page(i->get_page_num()));
+            }
         }
     }
     return 0;
@@ -130,7 +89,7 @@ Tab * MainNotebook::findTab(const ustring& name, ServerConnection *conn, bool fi
 
 Tab * MainNotebook::findTab(Tab::Type type, ServerConnection *conn, bool findInActive)
 {
-    Gtk::Notebook_Helpers::PageList::iterator i;
+    Gtk::Notebook_Helpers::PageList::const_iterator i;
             
     for (i = pages().begin(); i != pages().end(); ++i) {
         Tab *tab = static_cast<Tab*>(i->get_child());
@@ -144,8 +103,7 @@ void MainNotebook::onSwitchPage(GtkNotebookPage *p, unsigned int n)
 {
     Tab *tab = static_cast<Tab*>(get_nth_page(n));
 
-    getLabel(tab)->modify_fg(Gtk::STATE_NORMAL, Gdk::Color("black"));
-    tab->isHighlighted = false;
+    tab->removeHighlight();
 
     int pos = tab->getEntry().get_position();
     tab->getEntry().grab_focus();
@@ -175,9 +133,9 @@ void MainNotebook::updateTitle(Tab *tab)
           tab = getCurrent();
 
     if (tab->getConn()->Session.isAway)
-          AppWin->set_title("LostIRC "VERSION" - " + getLabel(tab)->get_text() + _(" (currently away)"));
+          AppWin->set_title("LostIRC "VERSION" - " + tab->getName() + _(" (currently away)"));
     else
-          AppWin->set_title("LostIRC "VERSION" - " + getLabel(tab)->get_text());
+          AppWin->set_title("LostIRC "VERSION" - " + tab->getName());
 }
 
 void MainNotebook::closeCurrent()
@@ -196,21 +154,6 @@ void MainNotebook::closeCurrent()
         }
     }
     queue_draw();
-}
-
-void MainNotebook::highlightNick(Tab *tab)
-{
-    if (tab != getCurrent()) {
-        getLabel(tab)->modify_fg(Gtk::STATE_NORMAL, Gdk::Color("blue"));
-        tab->isHighlighted = true;
-    }
-}
-
-void MainNotebook::highlightActivity(Tab *tab)
-{   
-    if (tab != getCurrent() && !tab->isHighlighted) {
-        getLabel(tab)->modify_fg(Gtk::STATE_NORMAL, Gdk::Color("red"));
-    }
 }
 
 void MainNotebook::findTabs(const ustring& nick, ServerConnection *conn, vector<Tab*>& vec)
@@ -251,7 +194,7 @@ int MainNotebook::countTabs(ServerConnection *conn)
 {
     int num = 0;
 
-    Gtk::Notebook_Helpers::PageList::iterator i;
+    Gtk::Notebook_Helpers::PageList::const_iterator i;
 
     for (i = pages().begin(); i != pages().end(); ++i) {
         Tab *tab = static_cast<Tab*>(i->get_child());

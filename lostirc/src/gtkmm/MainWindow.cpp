@@ -99,7 +99,7 @@ void MainWindow::displayMessage(const ustring& msg, FE::Destination d, bool shou
             tab->getText() << msg;
 
             if (shouldHighlight)
-                  notebook.highlightActivity(tab);
+                  tab->highlightActivity();
         }
 
     } else if (d == FE::ALL) {
@@ -111,7 +111,7 @@ void MainWindow::displayMessage(const ustring& msg, FE::Destination d, bool shou
             (*i)->getText() << msg;
 
             if (shouldHighlight)
-                  notebook.highlightActivity(*i);
+                  (*i)->highlightActivity();
         }
     
     }
@@ -127,7 +127,7 @@ void MainWindow::displayMessage(const ustring& msg, FE::Destination d, ServerCon
             tab->getText() << msg;
 
             if (shouldHighlight)
-                  notebook.highlightActivity(tab);
+                  tab->highlightActivity();
         }
 
     } else if (d == FE::ALL) {
@@ -139,7 +139,7 @@ void MainWindow::displayMessage(const ustring& msg, FE::Destination d, ServerCon
             (*i)->getText() << msg;
 
             if (shouldHighlight)
-                  notebook.highlightActivity(*i);
+                  (*i)->highlightActivity();
         }
     }
 }
@@ -153,13 +153,13 @@ void MainWindow::displayMessage(const ustring& msg, ChannelBase& chan, ServerCon
     // a channel
     char p = chan.getName().at(0);
     if (!tab && (p != '#' && p != '&' && p != '!' && p != '+'))
-        tab = notebook.addQueryTab(chan.getName(), conn);
+        tab = notebook.addTab(Tab::QUERY, chan.getName(), conn);
 
     if (tab) {
         tab->getText() << msg;
 
         if (shouldHighlight)
-              notebook.highlightActivity(tab);
+              tab->highlightActivity();
     }
 }
 
@@ -167,7 +167,7 @@ void MainWindow::join(const ustring& nick, Channel& chan, ServerConnection *conn
 {
     Tab *tab = notebook.findTab(chan.getName(), conn);
     if (!tab) {
-        tab = notebook.addChannelTab(chan.getName(), conn);
+        tab = notebook.addTab(Tab::CHANNEL, chan.getName(), conn);
         notebook.updateTitle();
         return;
     }
@@ -245,10 +245,8 @@ void MainWindow::highlight(ChannelBase& chan, ServerConnection* conn)
 {
     Tab *tab = notebook.findTab(chan.getName(), conn);
 
-    if (tab) {
-        notebook.highlightNick(tab);
-        tab->getText().setHighlightMark();
-    }
+    if (tab)
+          tab->highlightNick();
 }
 
 void MainWindow::away(bool away, ServerConnection* conn)
@@ -285,7 +283,7 @@ void MainWindow::newTab(ServerConnection *conn)
 {
     ustring name = _("server");
     conn->Session.servername = name;
-    Tab *tab = notebook.addTab(name, conn);
+    Tab *tab = notebook.addTab(Tab::SERVER, name, conn);
     tab->setType(Tab::SERVER);
     notebook.show_all();
 
@@ -303,7 +301,7 @@ Tab* MainWindow::newServer()
     ustring name = _("server");
     ServerConnection *conn = app.newServer();
     conn->Session.servername = name;
-    Tab *tab = notebook.addTab(name, conn);
+    Tab *tab = notebook.addTab(Tab::SERVER, name, conn);
     tab->setType(Tab::SERVER);
     tab->setInActive();
     return tab;
@@ -365,10 +363,10 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
             Tab *tab = notebook.getCurrent();
             if (tab->isType(Tab::CHANNEL) && tab->getConn()->Session.isConnected && tab->isActive()) {
                 // It's a channel, so we need to part it
-                tab->getConn()->sendPart(notebook.getLabel(tab)->get_text(), "");
+                tab->getConn()->sendPart(tab->getName(), "");
             } else {
                 // Query
-                tab->getConn()->removeChannel(notebook.getLabel(tab)->get_text());
+                tab->getConn()->removeChannel(tab->getName());
             }
             notebook.closeCurrent();
         } else if (e->keyval == GDK_p) {

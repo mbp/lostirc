@@ -40,7 +40,7 @@ class ServerConnection;
 class Tab : public Gtk::VBox
 {
 public:
-    Tab(ServerConnection *conn, Pango::FontDescription font);
+    Tab(ServerConnection *conn, Pango::FontDescription font, Gtk::Label *label);
     ~Tab();
 
     enum Type { UNDEFINED, CHANNEL, QUERY, SERVER };
@@ -48,7 +48,9 @@ public:
     Entry&                      getEntry() { return _entry; }
     TextWidget&                 getText() { return _textwidget; }
     ServerConnection*           getConn() { return _conn; }
+    const Glib::ustring&        getName() { return _name; }
 
+    void setName(const Glib::ustring& str);
     void startPrefs();
     void closePrefs();
 
@@ -63,17 +65,21 @@ public:
 
     void setInActive();
     void setActive();
+    bool isActive() { return _isActive; }
 
     void setType(Type type) { _type = type; addOrRemoveNickList(); }
-
     bool isType(Type type) { return type == _type; }
-    bool isActive() { return _isActive; }
+
+    void highlightNick();
+    void highlightActivity();
+    void removeHighlight();
 
     bool isHighlighted;
     bool hasPrefs;
     bool hasDCCList;
 
 private:
+    void setLabelName();
     void addOrRemoveNickList();
             
     ServerConnection *_conn;
@@ -89,6 +95,8 @@ private:
     Type _type;
 
     Entry _entry;
+    Glib::ustring _name;
+    Gtk::Label *_label;
 };
 
 #endif
