@@ -153,8 +153,12 @@ void MainNotebook::onSwitchPage(GtkNotebookPage *p, unsigned int n)
     Tab *tab = static_cast<Tab*>(get_nth_page(n));
 
     getLabel(tab)->modify_fg(Gtk::STATE_NORMAL, Gdk::Color("black"));
-    tab->getEntry().grab_focus();
     tab->isHighlighted = false;
+
+    int pos = tab->getEntry().get_position();
+    tab->getEntry().grab_focus();
+    tab->getEntry().select_region(0, 0);
+    tab->getEntry().set_position(pos);
 
     updateStatus(tab);
 

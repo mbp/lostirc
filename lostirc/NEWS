@@ -20,6 +20,8 @@ LostIRC (x.x.x)
     JOIN lines.
   * When receiving a file by DCC, the client no longer freezes until the
     transfer is complete.
+  * When switching tabs, any text in the input box would be selected and you
+    had to unselect it before being able to type again. Fixed.
   * Old ChangeLog renamed to NEWS. The NEWS file is now the location of the
     summary of changes between releases while ChangeLog contains the notices
     of the real code changes.

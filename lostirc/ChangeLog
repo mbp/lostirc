@@ -1,6 +1,11 @@
 For a summary of changes between releases - see the NEWS file.
 
 2002-11-27  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * MainNotebook.cpp: Save cursor position, and unselect any selected
+          text when switching tab.
+
+2002-11-27  Morten Brix Pedersen  <morten@wtf.dk>
         
         * MainWindow.cpp: Change CTRL-c to CTRL-w.
 
