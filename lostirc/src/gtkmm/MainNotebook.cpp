@@ -26,14 +26,9 @@ MainNotebook::MainNotebook(MainWindow *frontend)
     GuiCommands::nb = this;
     set_tab_pos(GTK_POS_BOTTOM);
     switch_page.connect(slot(this, &MainNotebook::switchPage));
-
+    _font = Gdk_Font("-b&h-lucidatypewriter-medium-r-normal-*-*-120-*-*-m-*-*-*");
     show_all();
 }
-
-MainNotebook::MainNotebook()
-{
-}
-
 
 TabChannel * MainNotebook::addChannelTab(const string& name, ServerConnection *conn)
 {
@@ -46,7 +41,7 @@ TabChannel * MainNotebook::addChannelTab(const string& name, ServerConnection *c
         return tab;
     } else {
         Gtk::Label *label = new Gtk::Label(name);
-        TabChannel *tab = new TabChannel(label, conn);
+        TabChannel *tab = new TabChannel(label, conn, &_font);
         pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, *label));
         show_all();
         return tab;
@@ -56,7 +51,7 @@ TabChannel * MainNotebook::addChannelTab(const string& name, ServerConnection *c
 TabQuery * MainNotebook::addQueryTab(const string& name, ServerConnection *conn)
 {
     Gtk::Label *label = new Gtk::Label(name);
-    TabQuery *tab = new TabQuery(label, conn);
+    TabQuery *tab = new TabQuery(label, conn, &_font);
     pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, *label));
     show_all();
     return tab;
@@ -165,4 +160,38 @@ void MainNotebook::findTabsContaining(const string& nick, vector<Tab*>& vec)
             vec.push_back(tab);
         }
     }
+}
+
+void MainNotebook::setFont()
+{
+    fontdialog = manage(new Gtk::FontSelectionDialog("Font Selection Dialog"));
+    fontdialog->get_ok_button()->clicked.connect(slot(this, &MainNotebook::fontSelectionOk));
+    fontdialog->get_cancel_button()->clicked.connect(bind(slot(this, &MainNotebook::destroyFontSelection), fontdialog));
+    fontdialog->destroy.connect(bind(slot(this, &MainNotebook::destroyFontSelection), fontdialog));
+    fontdialog->set_preview_text("<John> Hello World!");
+    fontdialog->show();
+}
+
+void MainNotebook::fontSelectionOk()
+{
+    Gtk::Style *style = Gtk::Style::create();
+    _font = fontdialog->get_font();
+
+    if (_font) {
+        Gtk::Notebook_Helpers::PageList::iterator i;
+                
+        for (i = pages().begin(); i != pages().end(); ++i) {
+            Tab *tab = dynamic_cast<Tab*>((*i)->get_child());
+            tab->setFont(&_font);
+            tab->setStyle();
+        }
+    }
+    destroyFontSelection(fontdialog);
+
+}
+
+void MainNotebook::destroyFontSelection(Gtk::FontSelectionDialog *w)
+{
+    gtk_widget_destroy((GtkWidget*)w->gtkobj());
+
 }

@@ -18,19 +18,20 @@
 
 #include <gtk--/notebook.h>
 #include <gtk--/style.h>
-#include <vector>
+#include <gtk--/fontselection.h>
 #include <ServerConnection.h>
+#include <vector>
 #include "Tab.h"
 
 #ifndef MAINNOTEBOOK_H
 #define MAINNOTEBOOK_H
+
 class MainWindow;
 
 class MainNotebook : public Gtk::Notebook
 {
 public:
     MainNotebook(MainWindow *frontend);
-    MainNotebook();
 
     TabChannel* addChannelTab(const string& name, ServerConnection *conn);
     TabQuery* addQueryTab(const string& name, ServerConnection *conn);
@@ -43,11 +44,17 @@ public:
     void closeCurrent();
     void highlight(Tab *tab);
     void insert(Tab *tab, const string& str);
+    void setFont();
 
 private:
     void switchPage(Gtk::Notebook_Helpers::Page *p, unsigned int n);
     void parseAndInsert(const string& str, Gtk::Text *text);
     void insertWithColor(int color, Gtk::Text *text, const string& str);
+    void fontSelectionOk();
+    void destroyFontSelection(Gtk::FontSelectionDialog *w);
+
+    Gtk::FontSelectionDialog *fontdialog;
+    Gdk_Font _font;
 
     MainWindow *_fe;
 

@@ -23,11 +23,12 @@
 #include "Tab.h"
 #include <ctime>
 
-Tab::Tab(Gtk::Label *label, ServerConnection *conn)
-    : Gtk::VBox(), _label(label), _conn(conn), is_highlighted(false)
+Tab::Tab(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
+    : Gtk::VBox(), _label(label), _conn(conn), is_highlighted(false), _font(font)
 {
+    // To hold current context (colors) for Text widget
+    _current_cx = new Gtk::Text::Context;
 
-    _current_cx = new Gtk::Text::Context; // To hold current context (colors) for Text widget
     // Creating HBox; will contain 2 widgets, a scrollwindow and an entry
     _hbox = manage(new Gtk::HBox()); 
     _scrollwindow = manage(new Gtk::ScrolledWindow());
@@ -39,25 +40,7 @@ Tab::Tab(Gtk::Label *label, ServerConnection *conn)
     _scrollwindow->set_policy(GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
     _scrollwindow->add(*_text);
 
-    // Should go into ressource file!
-    GdkColor col1;
-    col1.red   = 0;
-    col1.green = 0;
-    col1.blue  = 0;
-
-    GdkColor col2;
-    col2.red   = 50000;
-    col2.green = 50000;
-    col2.blue  = 50000;
-    
-    Gtk::Style *style = Gtk::Style::create();
-    style->set_font(Gdk_Font(
-                "-b&h-lucidatypewriter-medium-r-normal-*-*-120-*-*-m-*-*-*"));
-    style->set_base(GTK_STATE_NORMAL, col1);
-    style->set_bg(GTK_STATE_NORMAL, col1);
-    style->set_text(GTK_STATE_NORMAL, col2);
-    style->set_fg(GTK_STATE_PRELIGHT, col2);
-    _text->set_style(*style);
+    setStyle();
 
     _hbox->pack_start(*_scrollwindow);
     pack_start(*_hbox);
@@ -88,6 +71,32 @@ Entry* Tab::getEntry()
 ServerConnection* Tab::getConn()
 {
     return _conn;
+}
+
+void Tab::setFont(Gdk_Font *font)
+{
+    _font = font;
+}
+
+void Tab::setStyle() {
+    // Should go into ressource file!
+    GdkColor col1;
+    col1.red   = 0;
+    col1.green = 0;
+    col1.blue  = 0;
+
+    GdkColor col2;
+    col2.red   = 50000;
+    col2.green = 50000;
+    col2.blue  = 50000;
+    
+    Gtk::Style *style = Gtk::Style::create();
+    style->set_font(*_font);
+    style->set_base(GTK_STATE_NORMAL, col1);
+    style->set_bg(GTK_STATE_NORMAL, col1);
+    style->set_text(GTK_STATE_NORMAL, col2);
+    style->set_fg(GTK_STATE_PRELIGHT, col2);
+    _text->set_style(*style);
 }
 
 void Tab::parseAndInsert(const string& str)
@@ -136,14 +145,14 @@ void Tab::insertWithColor(int color, const string& str)
     }
 }
 
-TabQuery::TabQuery(Gtk::Label *label, ServerConnection *conn)
-    : Tab(label, conn)
+TabQuery::TabQuery(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
+    : Tab(label, conn, font)
 {
 
 }
 
-TabChannel::TabChannel(Gtk::Label *label, ServerConnection *conn)
-    : Tab(label, conn)
+TabChannel::TabChannel(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
+    : Tab(label, conn, font)
 {
 
     Gtk::ScrolledWindow *swin = manage(new Gtk::ScrolledWindow());

@@ -21,9 +21,10 @@
 
 
 struct UserCommands guicmds[] = {
-    { "QUERY",     GuiCommands::Query,  0 },
-    { "ME",        GuiCommands::Me,     1 },
-    { 0,        0, 0                      }
+    { "QUERY",     GuiCommands::Query,    0 },
+    { "ME",        GuiCommands::Me,       1 },
+    { "SETFONT",   GuiCommands::SetFont,  0 },
+    { 0,        0, 0                        }
 };
 
 
@@ -61,5 +62,9 @@ bool GuiCommands::Me(ServerConnection *conn, const string& params)
 
 }
 
+bool GuiCommands::SetFont(ServerConnection *conn, const string& params)
+{
+    nb->setFont();
+}
 
 MainNotebook* GuiCommands::nb;

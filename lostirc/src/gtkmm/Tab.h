@@ -38,7 +38,7 @@ using namespace std;
 class Tab : public Gtk::VBox
 {
 public:
-    Tab(Gtk::Label *label, ServerConnection *conn);
+    Tab(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font);
 
     Gtk::Text*                  getText();
     Gtk::HBox*                  getHBox();
@@ -55,6 +55,8 @@ public:
     virtual bool nickCompletion(const string& word, string& str) = 0;
     void parseAndInsert(const string& str);
     void insertWithColor(int color, const string& str);
+    void setStyle();
+    void setFont(Gdk_Font *font);
     bool is_highlighted;
 
 private:
@@ -65,13 +67,14 @@ private:
     ServerConnection *_conn;
     Gtk::ScrolledWindow *_scrollwindow;
     Gtk::Text::Context *_current_cx;
+    Gdk_Font *_font;
 
 };
 
 class TabQuery : public Tab
 {
 public:
-    TabQuery(Gtk::Label *label, ServerConnection *conn);
+    TabQuery(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font);
 
     Gtk::CList*         getCList() { return 0; }
 
@@ -93,7 +96,7 @@ public:
 class TabChannel : public Tab
 {
 public:
-    TabChannel(Gtk::Label *label, ServerConnection *conn);
+    TabChannel(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font);
 
     Gtk::CList*         getCList();
 

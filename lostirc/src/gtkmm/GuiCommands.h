@@ -17,8 +17,8 @@
  */
 
 #include <Commands.h>
-#include <vector>
 #include <Utils.h>
+#include <vector>
 #include "MainNotebook.h"
 
 #ifndef GUICOMMANDS_H
@@ -30,6 +30,7 @@ public:
     static bool send(ServerConnection *conn, string cmd, const string &params);
     static bool Query(ServerConnection *conn, const string& params);
     static bool Me(ServerConnection *conn, const string& params);
+    static bool SetFont(ServerConnection *conn, const string& params);
 
     static MainNotebook *nb;
 
