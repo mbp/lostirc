@@ -2,6 +2,13 @@ For a summary of changes between releases - see the NEWS file.
 
 2002-12-13  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * ConfigHandler.cpp: Don't use bold for nicks anyway. Just plain
+          white. I think it was too disturbing and I got focused way to much
+          on the very light and bold nicks everytime a person joined the
+          channel.
+
+2002-12-13  Morten Brix Pedersen  <morten@wtf.dk>
+
         * Added CTCP_REPLY event.
 
 2002-12-13  Morten Brix Pedersen  <morten@wtf.dk>
