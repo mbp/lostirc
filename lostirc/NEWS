@@ -4,6 +4,8 @@ LostIRC - (x.x.x)
   * CTRL-PageUp/PageDown can now be used to browse tabs.
   * Lots of code contributed by Thomas Johansson to make the Windows port a
     step closer.
+  * Channel-autocompletion added (by typing #<tab-key>). (thanks, Thojas
+    Johansson).
 
 LostIRC - (0.3.1) - Fri Dec, 26th 2003
   * Added a very simplish About-dialog.
