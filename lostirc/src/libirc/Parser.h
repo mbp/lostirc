@@ -51,7 +51,7 @@ private:
     void Mode(const std::string& from, const std::string& param, const std::string& rest);
     void CMode(const std::string& from, const std::string& param);
     void Join(const std::string& nick, const std::string& chan);
-    void Part(const std::string& nick, const std::string& chan);
+    void Part(const std::string& nick, const std::string& chan, const std::string& rest);
     void Quit(const std::string& nick, const std::string& msg);
     void Nick(const std::string& from, const std::string& to);
     void Invite(const std::string& from, const std::string& to);

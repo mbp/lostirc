@@ -226,11 +226,11 @@ bool ConfigHandler::setDefaults()
     setDefault("evt_banlist", "$16-- Ban: $9%1$16 set by: $0%2");
     setDefault("evt_unknown", "$16-- Unknown message: $2%1");
     setDefault("evt_join", "$16-- $0%1$11 $15($9%3$15)$16 has joined $11%2");
-    setDefault("evt_part", "$16-- $0%1$16 $15($9%3$15)$16 has parted $11%2");
+    setDefault("evt_part", "$16-- $0%1$16 $15($9%3$15)$16 has parted $11%2 (%4)");
     setDefault("evt_quit", "$16-- $0%1$16 has quit $11(%2)");
     setDefault("evt_nick", "$16-- $0%1$16 changes nick to %2");
     setDefault("evt_mode", "$16-- $0%1$16 sets mode $5%2$16 %3");
-    setDefault("evt_cmode", "$16-- $0%1$16 sets channel mode $5%2 %3$16 on %4");
+    setDefault("evt_cmode", "$16-- $0%1$16 sets channel mode $5%2$16 on %3");
     setDefault("evt_wallops", "$2WALLOPS -: %1 :- %2");
     setDefault("evt_kicked", "$16-- $0%1$16 was kicked from $11%2$16 by %3 $15($9%4$15)");
     setDefault("evt_opped", "$16-- $0%1$16 gives channel operator status to %2");

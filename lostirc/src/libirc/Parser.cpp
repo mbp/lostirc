@@ -93,7 +93,7 @@ void Parser::parseLine(string& data)
         else if (command == "QUIT")
               Quit(from, rest);
         else if (command == "PART")
-              Part(from, param);
+              Part(from, param, rest);
         else if (command == "MODE")
               Mode(from, param, rest);
         else if (command == "TOPIC")
@@ -255,12 +255,12 @@ void Parser::Join(const string& nick, const string& chan)
     _evts->emit(_evts->get(JOIN) << findNick(nick) << chan << findHost(nick), *c, _conn);
 }
 
-void Parser::Part(const string& nick, const string& chan)
+void Parser::Part(const string& nick, const string& chan, const string& rest)
 {
     Channel *c = _conn->findChannel(chan);
     c->removeUser(findNick(nick));
 
-    _evts->emit(_evts->get(PART) << findNick(nick) << chan << findHost(nick), *c, _conn);
+    _evts->emit(_evts->get(PART) << findNick(nick) << chan << findHost(nick) << rest, *c, _conn);
     _app->evtPart(findNick(nick), *c, _conn);
 
     if (findNick(nick) == _conn->Session.nick) {
@@ -336,7 +336,7 @@ void Parser::CMode(const string& from, const string& param)
 
     if (arguments.empty()) {
         // Received a channel mode, like '#chan +n'
-        _evts->emit(_evts->get(CMODE) << findNick(from) << modes.substr(0, 1) << modes << chan, *c, _conn);
+        _evts->emit(_evts->get(CMODE) << findNick(from) << modes << chan, *c, _conn);
         return;
     }
 
