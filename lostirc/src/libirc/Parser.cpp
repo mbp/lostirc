@@ -801,7 +801,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
 void Parser::Names(const string& chan, const string& names)
 {
     // Find channel from a string like 'nick = #chan'
-    string::size_type pos = chan.find_last_of("#&+!");
+    string::size_type pos = chan.find_first_of("#&+!");
     string channel = chan.substr(pos);
 
     Channel *c = _conn->findChannel(channel);
