@@ -41,6 +41,7 @@ public:
     ~LostIRCApp();
     struct utsname getsysinfo();
 
+    void start();
     ServerConnection* newServer(const std::string& host, int port);
     ServerConnection* newServer();
 
@@ -49,6 +50,7 @@ public:
 
     // Signals 
     
+    Signal1<void, ServerConnection*> evtNewTab;
     // Emitted when a user joins a channel
     Signal3<void, const std::string&, const std::string&, ServerConnection*> evtJoin;
 
@@ -68,7 +70,6 @@ public:
 
     // Emitted when the frontend needs to diplay a message
     Signal3<void, const std::string&, const std::string&, ServerConnection*> evtDisplayMessage;
-    Signal3<void, const std::vector<std::string>&, const std::string&, ServerConnection*> evtDisplayMessageMultiple;
 
     // Emitted when a channel needs to be highlighted
     Signal2<void, const std::string&, ServerConnection*> evtHighlight;

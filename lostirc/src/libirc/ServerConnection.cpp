@@ -27,6 +27,7 @@ ServerConnection::ServerConnection(LostIRCApp *app, const string& host, int port
     : _app(app), _socket(new Socket()), _p(new Parser(_app,this))
 {
     Session.nick = nick;
+    _app->evtNewTab(this);
     Connect(host, port);
 }
 
@@ -38,6 +39,7 @@ ServerConnection::ServerConnection(LostIRCApp *app, const string& nick, const st
     Session.isConnected = false;
     Session.hasRegistered = false;
     Session.isAway = false;
+    _app->evtNewTab(this);
 }
 
 ServerConnection::~ServerConnection()

@@ -52,7 +52,9 @@ MainWindow::MainWindow()
     _app->evtNames.connect(slot(this, &MainWindow::onNames));
     _app->evtCUMode.connect(slot(this, &MainWindow::onCUMode));
     _app->evtAway.connect(slot(this, &MainWindow::onAway));
+    _app->evtNewTab.connect(slot(this, &MainWindow::onNewTab));
 
+    _app->start();
     // Construct initial tab
     string name = "<server>";
     ServerConnection *conn = _app->newServer();
@@ -211,6 +213,15 @@ void MainWindow::onAway(bool away, ServerConnection* conn)
     }
 }
 
+void MainWindow::onNewTab(ServerConnection *conn)
+{
+    string name = "<server>";
+    conn->Session.servername = name;
+    Tab *tab = _nb->addChannelTab(name, conn);
+    _nb->show_all();
+    _nb->set_page(0);
+    tab->is_on_channel = false;
+}
 
 void MainWindow::newServer()
 {

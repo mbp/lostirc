@@ -57,6 +57,16 @@ LostIRCApp::~LostIRCApp()
     }
 }
 
+void LostIRCApp::start()
+{
+    vector<struct autoJoin> servers = _cfg.getServers();
+    vector<struct autoJoin>::iterator i;
+
+    for (i = servers.begin(); i != servers.end(); ++i) {
+        newServer(i->hostname, i->port);
+    }
+}
+
 ServerConnection* LostIRCApp::newServer(const string& host, int port)
 {
     ServerConnection *conn = new ServerConnection(this, host, port, _cfg.getParam("nick"));

@@ -62,6 +62,7 @@ private:
     void onCUMode(const string& nick, const string& chan, const map<string, IRC::UserMode>& users, ServerConnection *conn);
     void onHighlight(const string& to, ServerConnection *conn);
     void onAway(bool away, ServerConnection *conn);
+    void onNewTab(ServerConnection *conn);
 
 };
 #endif
