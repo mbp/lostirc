@@ -2,6 +2,10 @@ For a summary of changes between releases - see the NEWS file.
 
 2002-12-19  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * configure.in: Bump to version 0.2.3 and release.
+
+2002-12-19  Morten Brix Pedersen  <morten@wtf.dk>
+
         * Tab.h/Tab.cpp: Remove unused ScrolledWindow member. Move members
           round a bit.
 

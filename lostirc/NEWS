@@ -6,18 +6,20 @@ LostIRC (x.x.x)
     correctly.
   * By default, color codes are now stripped from incoming messages. As an
     option in preferences, you can turn them on again.
-  * Bold and underline codes are not stripped by defalt. But you can turn
+  * Bold and underline codes are not stripped by default. But you can turn
     them off in preferences.
   * Before, a number in the ident would make the line get colored. Fixed.
     (You need to remove ~/.lostirc/events.conf first).
   * The default colors for messages and events has been changed. You'll need
     to remove ~/.lostirc/events.conf first to get the new ones.
-  * Title in window wasn't updated after succesfull connection to server and
-    joining a channel after that, fixed.
+  * Title in window wasn't updated after a succesfull connection to server
+    and joining a channel after that, fixed.
   * The auto-connect feature in preferences has been improved GUI-wise. It's
     now also possible to disable/enable automatic connection to the servers.
   * When using a mal-functioning locale, show an error to the screen when
     conversion to the locale fails.
+  * There is now a preliminary and experimtal DCC status list available with
+    CTRL-d.
   * Man-page updated with a better description.
 
 LostIRC (0.2.2) - Sun Dec, 1st 2002
