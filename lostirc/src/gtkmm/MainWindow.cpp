@@ -288,18 +288,17 @@ gint MainWindow::on_key_press_event(GdkEventKey* e)
     }
     else if ((e->keyval == GDK_c) && (e->state & GDK_MOD1_MASK)) {
         TabChannel *tab = dynamic_cast<TabChannel*>(_nb->getCurrent());
-        if (tab) {
+        if (tab && tab->getConn()->Session.isConnected) {
             // It's a channel, so we need to part it
-            if (tab->getConn()->Session.isConnected) {
-                tab->getConn()->sendPart(tab->getLabel()->get_text());
-            }
+            tab->getConn()->sendPart(tab->getLabel()->get_text());
         }
         _nb->closeCurrent();
     }
     else if ((e->keyval == GDK_p) && (e->state & GDK_MOD1_MASK)) {
-        TabChannel *tab = dynamic_cast<TabChannel*>(_nb->getCurrent());
-        if (tab && !tab->hasPrefs) {
-            tab->startPrefs();
+        if (!_nb->getCurrent()->hasPrefs) {
+            _nb->getCurrent()->startPrefs();
+        } else {
+            _nb->getCurrent()->endPrefs();
         }
     }
     else if ((e->keyval == GDK_n) && (e->state & GDK_MOD1_MASK)) {
