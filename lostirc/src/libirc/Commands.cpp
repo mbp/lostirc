@@ -130,12 +130,13 @@ bool Commands::Mode(ServerConnection *conn, const string& params)
     }
 }
 
-bool Commands::Ctcp(ServerConnection *conn, const string& msg)
+bool Commands::Ctcp(ServerConnection *conn, const string& params)
 {
-    string to, action;
-    stringstream ss(msg);
-    ss >> to;
-    ss >> action;
+    string::size_type pos1 = params.find_first_of(" ");
+    string to = params.substr(0, pos1);
+    string action;
+    if (pos1 != string::npos)
+          action = params.substr(pos1 + 1);
 
     if (action.empty()) {
         error = "/CTCP <nick> <message>, sends a CTCP message to a user";
@@ -185,7 +186,9 @@ bool Commands::Topic(ServerConnection *conn, const string& params)
 {
     string::size_type pos1 = params.find_first_of(" ");
     string chan = params.substr(0, pos1);
-    string topic = params.substr(pos1 + 1);
+    string topic;
+    if (pos1 != string::npos)
+          topic = params.substr(pos1 + 1);
 
     if (chan.empty()) {
         error = "/TOPIC <channel> [topic], view or change topic for a channel.";
