@@ -3,10 +3,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: LostIRC 0.3.2\n"
+"Project-Id-Version: LostIRC 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-18 02:52+0100\n"
-"PO-Revision-Date: 2004-03-18 02:55+0100\n"
+"POT-Creation-Date: 2004-06-05 19:34+0200\n"
+"PO-Revision-Date: 2004-06-13 20:52+0200\n"
 "Last-Translator: Morten Brix Pedersen <morten@wtf.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -100,11 +100,11 @@ msgstr ""
 "    CTRL-Q - afslut LostIRC\n"
 "\n"
 
-#: src/gtkmm/MainWindow.cpp:291 src/gtkmm/MainWindow.cpp:307
+#: src/gtkmm/MainWindow.cpp:293 src/gtkmm/MainWindow.cpp:309
 msgid "server"
 msgstr "server"
 
-#: src/gtkmm/MainWindow.cpp:330
+#: src/gtkmm/MainWindow.cpp:332
 msgid ""
 "Locale conversion error. An error occured while converting text from UTF-8 "
 "to your current locale.\n"
@@ -122,7 +122,7 @@ msgstr ""
 "\n"
 "Hvis du tror dette er en fejl, raportér det venligst til programmets ejer."
 
-#: src/gtkmm/MainWindow.cpp:334
+#: src/gtkmm/MainWindow.cpp:336
 msgid ""
 "\n"
 "\n"
@@ -132,7 +132,7 @@ msgstr ""
 "\n"
 "Dit nuværende locale (ser ud til) at være: "
 
-#: src/gtkmm/MainWindow.cpp:338
+#: src/gtkmm/MainWindow.cpp:340
 msgid ""
 "Encoding conversion error. An error occured while converting text from UTF-8 "
 "to the user-defined encoding.\n"
@@ -150,7 +150,7 @@ msgstr ""
 "\n"
 "Hvis du tror dette er en fejl, raportér det venligst til programmets ejer."
 
-#: src/gtkmm/MainWindow.cpp:340
+#: src/gtkmm/MainWindow.cpp:342
 msgid ""
 "\n"
 "\n"
@@ -160,7 +160,7 @@ msgstr ""
 "\n"
 "Jeg prøvede at konvertere til: "
 
-#: src/gtkmm/MainWindow.cpp:344
+#: src/gtkmm/MainWindow.cpp:346
 msgid ""
 "\n"
 "\n"
@@ -170,63 +170,63 @@ msgstr ""
 "\n"
 "(OBS: Du vil kun se denne advarsel en gang per LostIRC session)"
 
-#: src/gtkmm/MainWindow.cpp:382
-msgid "New Server Tab"
-msgstr "Ny server-faneblad"
-
-#: src/gtkmm/MainWindow.cpp:387
-msgid "Clear Window"
-msgstr "Ryd vindue"
-
-#: src/gtkmm/MainWindow.cpp:391
-msgid "Clear All Windows"
-msgstr "Ryd alle vinduer"
-
-#: src/gtkmm/MainWindow.cpp:395
-msgid "Close Current Tab"
-msgstr "Luk nuværende faneblad"
-
-#: src/gtkmm/MainWindow.cpp:412
-msgid "_Menubar"
-msgstr "_Menulinje"
-
-#: src/gtkmm/MainWindow.cpp:417
-msgid "Status_bar"
-msgstr "Statulinje"
-
-#: src/gtkmm/MainWindow.cpp:424
-msgid "User _List"
-msgstr "Bruger_liste"
-
-#: src/gtkmm/MainWindow.cpp:429
-msgid "_Server List"
-msgstr "_Serverliste"
-
-#: src/gtkmm/MainWindow.cpp:433
-msgid "_DCC Transfers"
-msgstr "_DCC overførsler"
-
-#: src/gtkmm/MainWindow.cpp:448
-msgid "_Introduction"
-msgstr "_Introduktion"
-
-#: src/gtkmm/MainWindow.cpp:453
-msgid "_About"
-msgstr "_Om"
-
-#: src/gtkmm/MainWindow.cpp:456
+#: src/gtkmm/MainWindow.cpp:384
 msgid "_LostIRC"
 msgstr "_LostIRC"
 
-#: src/gtkmm/MainWindow.cpp:457
+#: src/gtkmm/MainWindow.cpp:385
+msgid "_New Server Tab"
+msgstr "_Nyt server-faneblad"
+
+#: src/gtkmm/MainWindow.cpp:388
+msgid "Clear Window"
+msgstr "Ryd vindue"
+
+#: src/gtkmm/MainWindow.cpp:390
+msgid "Clear All Windows"
+msgstr "Ryd alle vinduer"
+
+#: src/gtkmm/MainWindow.cpp:392
+msgid "Close Current Tab"
+msgstr "Luk nuværende faneblad"
+
+#: src/gtkmm/MainWindow.cpp:398
 msgid "_View"
 msgstr "_Vis"
 
-#: src/gtkmm/MainWindow.cpp:458
+#: src/gtkmm/MainWindow.cpp:399
+msgid "_Menubar"
+msgstr "_Menulinje"
+
+#: src/gtkmm/MainWindow.cpp:400
+msgid "Status_bar"
+msgstr "Statulinje"
+
+#: src/gtkmm/MainWindow.cpp:401
+msgid "_User List"
+msgstr "_Brugerliste"
+
+#: src/gtkmm/MainWindow.cpp:402
+msgid "_Server List"
+msgstr "_Serverliste"
+
+#: src/gtkmm/MainWindow.cpp:403
+msgid "_DCC Transfers"
+msgstr "_DCC overførsler"
+
+#: src/gtkmm/MainWindow.cpp:406
 msgid "_Help"
 msgstr "_Hjælp"
 
-#: src/gtkmm/MainWindow.cpp:507
+#: src/gtkmm/MainWindow.cpp:407
+msgid "_Introduction"
+msgstr "_Introduktion"
+
+#: src/gtkmm/MainWindow.cpp:408
+msgid "_About"
+msgstr "_Om"
+
+#: src/gtkmm/MainWindow.cpp:496
 msgid ""
 "LostIRC Quick Introduction\n"
 "\n"
@@ -264,23 +264,15 @@ msgstr ""
 "Og du bør virkelig kigge på listen med tastaturbindinger:\n"
 "    /KEYBINDINGS"
 
-#: src/gtkmm/MainWindow.cpp:521
+#: src/gtkmm/MainWindow.cpp:510
 msgid "LostIRC "
 msgstr "LostIRC "
 
-#: src/gtkmm/TextWidget.cpp:354
-msgid "_Hide Menubar"
-msgstr "_Skjul menulinje"
-
-#: src/gtkmm/TextWidget.cpp:359
-msgid "_Show Menubar"
-msgstr "_Vis menulinje"
-
-#: src/gtkmm/MainNotebook.cpp:113
+#: src/gtkmm/MainNotebook.cpp:136
 msgid " <span foreground=\"red\">(away: "
 msgstr " <span foreground=\"red\">(væk: "
 
-#: src/gtkmm/MainNotebook.cpp:125
+#: src/gtkmm/MainNotebook.cpp:148
 msgid " (currently away)"
 msgstr " (væk i øjeblikket)"
 
@@ -364,31 +356,27 @@ msgstr "IRC brugernavn (ident):"
 msgid "Encoding to use on IRC:"
 msgstr "Tegnsæt der skal bruges på IRC:"
 
-#: src/gtkmm/Prefs.cpp:101
-msgid "Browse..."
-msgstr "Gennemse..."
-
-#: src/gtkmm/Prefs.cpp:105
+#: src/gtkmm/Prefs.cpp:100
 msgid "Main window font:"
 msgstr "Skriftstørrelse til hovedvindue:"
 
-#: src/gtkmm/Prefs.cpp:115
+#: src/gtkmm/Prefs.cpp:110
 msgid "Nick-completion character:"
 msgstr "Navnefærdiggørelsesbogstav:"
 
-#: src/gtkmm/Prefs.cpp:123
+#: src/gtkmm/Prefs.cpp:118
 msgid "Words to highlight on (space seperated):"
 msgstr "Ord der skal anmærkes på (mellemrumssepareret):"
 
-#: src/gtkmm/Prefs.cpp:131
+#: src/gtkmm/Prefs.cpp:126
 msgid "Maximium number of lines to cache:"
 msgstr "Maksimum linier, der skal gemmes:"
 
-#: src/gtkmm/Prefs.cpp:153
+#: src/gtkmm/Prefs.cpp:148
 msgid "DCC IP address:"
 msgstr "DCC IP-adresse:"
 
-#: src/gtkmm/Prefs.cpp:161
+#: src/gtkmm/Prefs.cpp:156
 msgid "DCC Port (0 = random):"
 msgstr "DCC Port (0 = tilfældig):"
 
@@ -498,19 +486,23 @@ msgstr "/DCC <handlinger>, udfør en DCC-handling."
 msgid "No DCC with that number"
 msgstr "Ingen DCC med det nummer"
 
-#: src/libirc/Commands.cpp:458
+#: src/libirc/Commands.cpp:438
+msgid "Missing filename"
+msgstr "Manglende filnavn"
+
+#: src/libirc/Commands.cpp:462
 msgid "/OP <channel> <nicks>, give operator status to one or more nicks."
 msgstr "/OP <kanal> <navne>, giv operator status til en eller flere navne."
 
-#: src/libirc/Commands.cpp:474
+#: src/libirc/Commands.cpp:478
 msgid "/DEOP <channel> <nicks>, remove operator status from one or more nicks."
 msgstr "/DEOP <kanal> <navne>, fjern operator status fra en eller flere navne."
 
-#: src/libirc/Commands.cpp:490
+#: src/libirc/Commands.cpp:494
 msgid "/VOICE <channel> <nicks>, gives voice to one or more nicks."
 msgstr "/VOICE <kanal> <navne>, giv lyd til en eller flere navne."
 
-#: src/libirc/Commands.cpp:506
+#: src/libirc/Commands.cpp:510
 msgid "/DEVOICE <channel> <nicks>, removes voice from one or more nicks."
 msgstr "/DEVOICE <kanal> <navne>, fjern lyd fra en eller flere navne."
 
@@ -518,19 +510,19 @@ msgstr "/DEVOICE <kanal> <navne>, fjern lyd fra en eller flere navne."
 msgid "Not found key, `"
 msgstr "Ingen nøgle fundet, `"
 
-#: src/libirc/Socket.cpp:111
+#: src/libirc/Socket.cpp:110
 msgid "Message not sent because of locale problems"
 msgstr "Besked ikke sendt, pga. locale problemer"
 
-#: src/libirc/Socket.cpp:286 src/libirc/Socket.cpp:293
+#: src/libirc/Socket.cpp:285 src/libirc/Socket.cpp:292
 msgid "Error writing to pipe: "
 msgstr "Fejl ved skrivning til rør: "
 
-#: src/libirc/Socket.cpp:328
+#: src/libirc/Socket.cpp:327
 msgid "An error occured while reading from pipe (Internal error 2)"
 msgstr "En fejl opstod, ved at læse fra rør (Intern fejl 2)"
 
-#: src/libirc/Socket.cpp:338
+#: src/libirc/Socket.cpp:337
 msgid "An error occured while reading from pipe (Internal error 3)"
 msgstr "En fejl opstod, ved at læse fra rør (Intern fejl 3)"
 
@@ -617,6 +609,15 @@ msgstr "Kunne ikke modtage: "
 #: src/libirc/LostIRCApp.h:56
 msgid "Logging to `"
 msgstr "Logger til `"
+
+#~ msgid "_Hide Menubar"
+#~ msgstr "_Skjul menulinje"
+
+#~ msgid "_Show Menubar"
+#~ msgstr "_Vis menulinje"
+
+#~ msgid "Browse..."
+#~ msgstr "Gennemse..."
 
 #~ msgid "Filesize"
 #~ msgstr "Filstørrelse"
