@@ -18,7 +18,6 @@
 
 #include "MainNotebook.h"
 #include "MainWindow.h"
-#include "GuiCommands.h"
 
 using std::string;
 using std::vector;
@@ -26,7 +25,6 @@ using std::vector;
 MainNotebook::MainNotebook(MainWindow *frontend)
     : Gtk::Notebook(), _fe(frontend)
 {
-    GuiCommands::nb = this;
     set_tab_pos(GTK_POS_BOTTOM);
     switch_page.connect(slot(this, &MainNotebook::switchPage));
     _font = Gdk_Font("-b&h-lucidatypewriter-medium-r-normal-*-*-120-*-*-m-*-*-*");

@@ -24,6 +24,8 @@ struct UserCommands guicmds[] = {
     { "QUERY",     GuiCommands::Query,    0 },
     { "ME",        GuiCommands::Me,       1 },
     { "SETFONT",   GuiCommands::SetFont,  0 },
+    { "NEWSERVER", GuiCommands::NewServer, 0 },
+    { "COMMANDS",  GuiCommands::commands, 0 },
     { 0,        0, 0                        }
 };
 
@@ -49,22 +51,38 @@ bool GuiCommands::Query(ServerConnection *conn, const string& params)
         Commands::error = "Missing name, syntax is /QUERY <nick>";
         return false;
     } else {
-        nb->addQueryTab(params, conn);
+        mw->getNotebook()->addQueryTab(params, conn);
         return true;
     }
 }
 
 bool GuiCommands::Me(ServerConnection *conn, const string& params)
 {
-    string to = nb->getCurrent()->getLabel()->get_text();
+    string to = mw->getNotebook()->getCurrent()->getLabel()->get_text();
     string param = to + " " + params;
     return Commands::Me(conn, param);
 }
 
 bool GuiCommands::SetFont(ServerConnection *conn, const string& params)
 {
-    nb->setFont();
+    mw->getNotebook()->setFont();
     return true;
 }
 
-MainNotebook* GuiCommands::nb;
+bool GuiCommands::NewServer(ServerConnection *conn, const string& params)
+{
+    mw->newServer();
+    return true;
+}
+
+bool GuiCommands::commands(ServerConnection *conn, const string& params)
+{
+    for (int i = 0; guicmds[i].cmd != 0; ++i) {
+        Commands::error += " \00311[\0030";
+        Commands::error += guicmds[i].cmd;
+        Commands::error += "\00311]";
+    }
+    return Commands::commands(conn, params);
+}
+
+MainWindow* GuiCommands::mw;

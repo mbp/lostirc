@@ -549,7 +549,6 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         break;
 
     case 301: // RPL_AWAY
-        _app->evtAway(true, _conn);
         Away(from, param, rest);
         break;
 
@@ -558,7 +557,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         Selfaway(rest);
         break;
 
-    case 306: // RPL_NOUNAWAY
+    case 306: // RPL_NOWAWAY
         _app->evtAway(true, _conn);
         Selfaway(rest);
         break;

@@ -22,7 +22,7 @@
 #include <Commands.h>
 #include <Utils.h>
 #include <vector>
-#include "MainNotebook.h"
+#include "MainWindow.h"
 
 class GuiCommands : public Commands
 {
@@ -31,8 +31,10 @@ public:
     static bool Query(ServerConnection *conn, const string& params);
     static bool Me(ServerConnection *conn, const string& params);
     static bool SetFont(ServerConnection *conn, const string& params);
+    static bool NewServer(ServerConnection *conn, const string& params);
+    static bool commands(ServerConnection *conn, const string& params);
 
-    static MainNotebook *nb;
+    static MainWindow *mw;
 
 };
 #endif

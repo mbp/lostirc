@@ -18,6 +18,7 @@
 
 #include "Tab.h"
 #include "MainWindow.h"
+#include "GuiCommands.h"
 
 using std::vector;
 using std::string;
@@ -25,6 +26,7 @@ using std::string;
 MainWindow::MainWindow()
 : Gtk::Window(GTK_WINDOW_TOPLEVEL), isAway(false)
 {
+    GuiCommands::mw = this;
     set_policy(1, 1, 0); // Policy for main window: user resizeable
     set_usize(400, 200);
     key_press_event.connect(slot(this, &MainWindow::on_key_press_event));

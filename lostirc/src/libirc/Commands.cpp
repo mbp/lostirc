@@ -41,6 +41,7 @@ struct UserCommands cmds[] = {
     { "ME",       Commands::Me,         1 },
     { "WHO",      Commands::Who,        1 },
     { "QUOTE",    Commands::Quote,      1 },
+    { "COMMANDS", Commands::commands,   0 },
     { 0,        0,                      0 }
 };
 
@@ -261,6 +262,16 @@ bool Commands::Quote(ServerConnection *conn, const string& params)
        conn->sendRaw(params);
        return true;
     }
+}
+
+bool Commands::commands(ServerConnection *conn, const string& params)
+{
+    for (int i = 0; cmds[i].cmd != 0; ++i) {
+        Commands::error += " \00311[\0030";
+        Commands::error += cmds[i].cmd;
+        Commands::error += "\00311]";
+    }
+    return false;
 }
 
 string Commands::error;
