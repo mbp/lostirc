@@ -20,6 +20,9 @@
 #define SOCKET_H
 
 #include <netdb.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 #include <string>
 #include <exception>
 #include <sigc++/signal_system.h>
