@@ -20,6 +20,7 @@
 #include "LostIRCApp.h"
 #include "Events.h"
 #include "Commands.h"
+#include <algorithm>
 
 using std::string;
 using std::vector;
@@ -54,28 +55,34 @@ bool ServerConnection::Connect(const string &host, int port = 6667, const string
     Session.servername = host;
     Session.password = pass;
 
-    _app->getEvts()->emit(_app->getEvts()->get(CONNECTING) << host << port, "", this);
+    _app->getEvts()->emit(_app->getEvts()->get(CONNECTING) << host << port, this);
     
-    if (_socket->connect(host, port)) {
-        Session.isConnected = true;
+    try {
 
-        // This is a temporary watch to see when we can write, when we can
-        // write - we are (hopefull) connected
-        g_io_add_watch(g_io_channel_unix_new(_socket->getfd()),
-                       GIOCondition (G_IO_OUT),
-                       &ServerConnection::write, this);
+        _socket->connect(host, port);
 
-        // This watch makes sure we read data when it's available
-        g_io_add_watch(g_io_channel_unix_new(_socket->getfd()),
-                       GIOCondition (G_IO_IN | G_IO_ERR | G_IO_HUP | G_IO_NVAL),
-                       &ServerConnection::readdata, this);
-
-        return true;
-    } else {
+    } catch (SocketException &e) {
         Session.isConnected = false;
-        _app->getEvts()->emit(_app->getEvts()->get(SERVMSG) << "Failed connecting: " + _socket->error, "", this);
+        _app->getEvts()->emit(_app->getEvts()->get(SERVMSG2) << "Failed connecting:" << e.what(), this);
         return false;
     }
+
+    // we got connected
+
+    Session.isConnected = true;
+
+    // This is a temporary watch to see when we can write, when we can
+    // write - we are (hopefull) connected
+    g_io_add_watch(g_io_channel_unix_new(_socket->getfd()),
+                   GIOCondition (G_IO_OUT),
+                   &ServerConnection::write, this);
+
+    // This watch makes sure we read data when it's available
+    g_io_add_watch(g_io_channel_unix_new(_socket->getfd()),
+                   GIOCondition (G_IO_IN | G_IO_ERR | G_IO_HUP | G_IO_NVAL),
+                   &ServerConnection::readdata, this);
+
+    return true;
 }
 
 gboolean ServerConnection::readdata(GIOChannel* io_channel, GIOCondition cond, gpointer data)
@@ -110,19 +117,47 @@ gboolean ServerConnection::write(GIOChannel* io_channel, GIOCondition cond, gpoi
 
 bool ServerConnection::readsocket()
 {
-    string data = _socket->receive();
+    try {
 
-    if (_socket->isBlocking) {
+        std::string str;
+        // our buffer
+        if (!tmp.empty()) {
+            str = tmp;
+            tmp = "";
+        }
+
+        if (_socket->receive(str)) {
+
+            // run through the string we got, take it line by line and pass
+            // each line to parseLine() - if we did not reach the end, save
+            // the rest in a tmp buffer.
+            std::string::iterator i = str.begin();
+            std::string::iterator start = i;
+
+            for (; i != str.end(); ++i) {
+                switch (*i) {
+                    case '\r':
+                        break;
+                    case '\n':
+                        if (start != str.begin())
+                              ++start;
+
+                        string newstr(start, i);
+                        _p->parseLine(newstr);
+                        start = i;
+                }
+            }
+            if (start != str.end()) {
+                std::copy(++start, str.end(), back_inserter(tmp));
+            }
+        }
         return true;
-    } else if (!data.empty()) {
-        _p->parseLine(data);
-        return true;
-    } else {
-        _app->getEvts()->emit(_app->getEvts()->get(SERVMSG) << _socket->error, "", this);
+
+    } catch (SocketException &e) {
+        _app->getEvts()->emit(_app->getEvts()->get(SERVMSG) << e.what(),  this);
         Session.isConnected = false;
         return false;
     }
-
 }
 
 bool ServerConnection::sendPong(const string& crap)

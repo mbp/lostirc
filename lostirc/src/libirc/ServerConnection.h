@@ -87,6 +87,7 @@ private:
     bool readsocket();
     Socket *_socket;
     Parser *_p;
+    string tmp;
 };
 
 #endif

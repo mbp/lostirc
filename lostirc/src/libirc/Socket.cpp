@@ -36,12 +36,11 @@ Socket::~Socket()
     close();
 }
 
-bool Socket::connect(const string& host, int port)
+void Socket::connect(const string& host, int port)
 {
     struct hostent *he;
     if ((he = gethostbyname(host.c_str())) == NULL) {
-        error = strerror(errno);
-        return false;
+        throw SocketException(strerror(errno));
     }
 
     struct sockaddr_in addr;
@@ -51,10 +50,10 @@ bool Socket::connect(const string& host, int port)
     memset(&(addr.sin_zero), '\0', 8); // zero the rest of the struct
 
     if (::connect(fd, (struct sockaddr *)&addr, sizeof(struct sockaddr)) == 0 || errno == EINPROGRESS) {
-        return true;
+        return;
+    } else {
+        throw SocketException(strerror(errno));
     }
-    error = strerror(errno);
-    return false;
 }
 
 bool Socket::send(const string& data)
@@ -69,45 +68,22 @@ bool Socket::send(const string& data)
     }
 }
 
-string Socket::receive()
+bool Socket::receive(std::string &str)
 {
-    if (isBlocking)
-          isBlocking = false;
-    else
-          buf = ""; // FIXME: why isn't there a clear() on gcc 2.95.4?
+    char tmpbuf[bufferSize];
+    int retval = recv(fd, tmpbuf, bufferSize, 0);
 
-    while (1)
-    {
-        char r;
-
-        switch(recv(fd, &r, 1, 0)) {
-            case 0:
-                std::cerr << "0.. returning." << std::endl;
-                error = "Disconnected.";
-                return "";
-            case -1:
-                if (errno == EAGAIN) {
-                    // It's just blocking. Return false and set isBlocking
-                    // to true
-                    isBlocking = true;
-                    return buf;
-                } else {
-                    error = "Disconnected: ";
-                    error += strerror(errno);
-                    std::cerr << error << std::endl;
-                    return "";
-                }
-        }
-
-        buf += r;
-
-        if (r == '\n') {
-            #ifdef DEBUG
-            std::cout << "<< " << buf << std::endl;
-            #endif
-            return buf;
+    if (retval == 0) throw SocketException("Disconnected.");
+    else if (retval == -1) {
+        if (errno == EAGAIN || errno == EWOULDBLOCK) {
+            return false;
+        } else {
+            throw(strerror(errno));
         }
     }
+    tmpbuf[retval] = '\0';
+    str += tmpbuf;
+    return true;
 }
 
 int Socket::close()

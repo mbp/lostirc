@@ -30,21 +30,30 @@ class Socket
 {
     int fd;
     std::string buf;
+    static const int bufferSize = 4096;
 
 public:
     Socket();
     ~Socket();
 
-    bool connect(const std::string& host, int port);
+    void connect(const std::string& host, int port);
     bool send(const std::string& data);
-    std::string receive();
+    bool receive(std::string &str);
     void setNonBlocking();
     void setBlocking();
     int getfd() { return fd; }
     int close();
     std::string error;
+};
 
-    bool isBlocking;
+class SocketException : public std::exception
+{
+    const char *error;
+public:
+    SocketException(const char *e) : error(e) { }
+    const char * what() const throw() {
+        return error;
+    }
 
 };
 #endif
