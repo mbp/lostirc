@@ -32,7 +32,14 @@ public:
     void setText1(const Glib::ustring& str) { _label.set_markup(str); }
     void clearText1() { _label.set_text(""); }
 
-    void setText2(const Glib::ustring& str) { _notifylabel.set_markup(str);
+    void setText2(const Glib::ustring& str) {
+        Glib::ustring realstr = str;
+        if (realstr.length() > 100) {
+            realstr = realstr.substr(0, 100);
+            realstr += "...";
+        }
+        
+        _notifylabel.set_markup(realstr);
         signal_timeout.disconnect();
         signal_timeout = Glib::signal_timeout().connect(
                 sigc::mem_fun(*this, &StatusBar::onText2Timeout),
@@ -40,7 +47,7 @@ public:
     }
     void clearText2() { _notifylabel.set_text(""); }
 
-
+    #if 0
     /* TODO: statusbar disabled for now since it doesn't support pango
      * markup.
     void setText2(const Glib::ustring& str) {
@@ -57,7 +64,7 @@ public:
 
     void clearText2() { _statusbar.pop(); }
     */
-
+    #endif
 
 private:
     bool onText2Timeout() { clearText2(); return false; }

@@ -1,6 +1,8 @@
 LostIRC - (x.x.x)
   * Support for colorschemes added.
   * On startup, focus is set to the input entry as it should be.
+  * The window no longer grows very big when too many matches has been found
+    on tab-completion.
   * French translation added (thanks, Bruno Dusausoy)
 
 LostIRC - (0.4.0) - Sun Jun, 6th 2004
