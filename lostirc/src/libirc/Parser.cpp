@@ -237,6 +237,7 @@ void Parser::Join(const string& nick, const string& chan)
           _conn->addChannel(chan); // Add channel to ServerConn
           
     _conn->findChannel(chan)->addUser(findNick(nick));
+
     _app->evtJoin(findNick(nick), chan, _conn); // Send join to frontend
 
     _evts->emit(_evts->get(JOIN) << findNick(nick) << chan << findHost(nick), chan, _conn);
@@ -275,6 +276,7 @@ void Parser::Nick(const string& from, const string& to)
     if (findNick(from) == _conn->Session.nick) {
         _conn->Session.nick = to;
     }
+
     vector<string>::iterator i;
     vector<string> chans = _conn->findUser(findNick(from));
 
@@ -487,231 +489,129 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
 {
     switch(n)
     {
-    case 1: // RPL_WELCOME
-        _conn->Session.servername = from;
-        _conn->Session.hasRegistered = 1;
-        ServMsg(from, param, rest);
-        break;
+        case 1:   // RPL_WELCOME
+            _conn->Session.servername = from;
+            _conn->Session.hasRegistered = 1;
+            _conn->Session.nick = param;
+            ServMsg(from, param, rest);
+            break;
 
-    case 2: // RPL_YOURHOST
-        ServMsg(from, param, rest);
-        break;
+        case 2:   // RPL_YOURHOST
+        case 3:   // RPL_CREATED
+        case 4:   // RPL_MYINFO
+        case 5:   // RPL_MYINFO
+        case 251: // RPL_LUSERCLIENT
+        case 252: // RPL_LUSEROP
+        case 253: // RPL_LUSERUNKNOWN
+            ServMsg(from, param, rest);
+            break;
 
-    case 3: // RPL_CREATED
-        ServMsg(from, param, rest);
-        break;
+        case 254: // RPL_LUSERCHANNELS
+            ServMsg(from, param.substr(param.find_last_of(" ")), rest);
+            break;
 
-    case 4: // RPL_MYINFO
-        ServMsg(from, param, rest);
-        break;
-    
-    case 5: // RPL_MYINFO
-        ServMsg(from, param, rest);
-        break;
+        case 255: // RPL_LUSERME
+            ServMsg(from, param, rest);
+            break;
 
-    case 251: // RPL_LUSERCLIENT
-        ServMsg(from, param, rest);
-        break;
+        case 301: // RPL_AWAY
+            Away(from, param, rest);
+            break;
 
-    case 252: // RPL_LUSEROP
-        ServMsg(from, param, rest);
-        break;
-    
-    case 253: // RPL_LUSERUNKNOWN
-        ServMsg(from, param, rest);
-        break;
-    
-    case 254: // RPL_LUSERCHANNELS
-        ServMsg(from, param.substr(param.find_last_of(" ")), rest);
-        break;
+        case 305: // RPL_UNAWAY
+            _app->evtAway(false, _conn);
+            _conn->Session.isAway = false;
+            Selfaway(rest);
+            break;
 
-    case 255: // RPL_LUSERME
-        ServMsg(from, param, rest);
-        break;
+        case 306: // RPL_NOWAWAY
+            _app->evtAway(true, _conn);
+            _conn->Session.isAway = true;
+            Selfaway(rest);
+            break;
 
-    case 301: // RPL_AWAY
-        Away(from, param, rest);
-        break;
+        case 332: // RPL_TOPIC
+            Topic(param, rest);
+            break;
 
-    case 305: // RPL_UNAWAY
-        _app->evtAway(false, _conn);
-        _conn->Session.isAway = false;
-        Selfaway(rest);
-        break;
+        case 333:
+            TopicTime(param);
+            break;
 
-    case 306: // RPL_NOWAWAY
-        _app->evtAway(true, _conn);
-        _conn->Session.isAway = true;
-        Selfaway(rest);
-        break;
+        case 367: // RPL_BANLIST
+            Banlist(param);
+            break;
 
-    case 332: // RPL_TOPIC
-        Topic(param, rest);
-        break;
+        case 368: // RPL_END_OF_BANLIST
+            _evts->emit(_evts->get(SERVMSG) << rest, "", _conn);
+            break;
 
-    case 333:
-        TopicTime(param);
-        break;
+        case 372: // RPL_MOTD
+        case 375: // RPL_MOTDSTART
+        case 376: // RPL_ENDOFMOTD
+            ServMsg(from, param, rest);
+            break;
 
-    case 367: // RPL_BANLIST
-        Banlist(param);
-        break;
-                        
-    case 368: // RPL_END_OF_BANLIST
-        _evts->emit(_evts->get(SERVMSG) << rest, "", _conn);
-        break;
-    
-    case 372: // RPL_MOTD
-        ServMsg(from, param, rest);
-        break;
+        case 401: // ERR_NOSUCNICK
+        case 403: // ERR_NOSUCHCHANNEL
+        case 404: // ERR_CANNOTSENDTOCHAN
+        case 405: // ERR_TOOMANYCHANNELS
+            Errhandler(from, param, rest);
+            break;
 
-    case 375: // RPL_MOTDSTART
-        ServMsg(from, param, rest);
-        break;
+        case 412: // ERR_NOTEXTTOSEND (or something)
+            ServMsg(from, param, rest);
+            break;
 
-    case 376: // RPL_ENDOFMOTD
-        ServMsg(from, param, rest);
-        break;
-    
-    case 401: // ERR_NOSUCNICK
-        Errhandler(from, param, rest);
-        break;
+        case 422: // ERR_NOTONCHANNEL
+            Errhandler(from, param, rest);
+            break;
 
-    case 403: // ERR_NOSUCHCHANNEL
-        Errhandler(from, param, rest);
-        break;
+        case 433: // ERR_NICKNAMEINUSE
+            // Apply a _ to the nickname - XXX: also send msg to frontend?
+            _conn->sendNick(_conn->Session.nick += "_");
+            break;
 
-    case 404: // ERR_CANNOTSENDTOCHAN
-        Errhandler(from, param, rest);
-        break;
+        case 438: // Nick change to fast
+        case 442: // ERR_NOTONCHANNEL
+        case 443: // ERR_USERONCHANNEL
+        case 451: // ERR_NOTREGISTERED
+        case 461: // ERR_NEEDMOREPARAMS
+        case 462: // ERR_ALLREADYREGISTERED
+        case 464: // ERR_PASSWDMISMATCH
+        case 465: // ERR_YOUREBANNEDCREEP
+        case 467: // ERR_KEYSET
+        case 471: // ERR_CHANNELISFULL
+        case 472: // ERR_UNKNOWMODE
+        case 473: // ERR_INVITEONLYCHAN
+        case 474: // ERR_BANNEDFROMCHAN
+        case 475: // ERR_BADCHANNELKEY
+        case 481: // ERR_NOPRIVILEGES
+        case 482: // ERR_CHANOPRIVSNEEDED
+        case 491: // ERR_NOOPERHOST
+        case 501: // ERR_UMODEUNKNOWNFLAG
+        case 502: // ERR_USERSDONTMATCH
+            Errhandler(from, param, rest);
+            break;
 
-    case 405: // ERR_TOOMANYCHANNELS
-        Errhandler(from, param, rest);
-        break;
+        case 353: // RPL_NAMREPLY
+            Names(param, rest);
+            break;
 
-    case 412: // ERR_NOTEXTTOSEND (or something)
-        ServMsg(from, param, rest);
-        break;
+        case 366: // RPL_ENDOFNAMES
+            break; // Ignored.
 
-    case 422: // ERR_NOTONCHANNEL
-        Errhandler(from, param, rest);
-        break;
+        case 311: // RPL_WHOISUSER
+        case 312: // RPL_WHOISSERVER
+        case 313: // RPL_WHOISOPERATOR
+        case 317: // RPL_WHOISIDLE
+        case 318: // RPL_ENDOFWHOIS
+        case 319: // RPL_WHOISCHANNELS
+            Whois(from, param, rest);
+            break;
 
-    case 433: // ERR_NICKNAMEINUSE
-        // Apply a _ to the nickname - XXX: also send msg to frontend?
-        _conn->sendNick(_conn->Session.nick += "_");
-        break;
-        
-    case 438: // Nick change to fast
-        Errhandler(from, param, rest);
-        break;
-        
-    case 442: // ERR_NOTONCHANNEL
-        Errhandler(from, param, rest);
-        break;
-
-    case 443: // ERR_USERONCHANNEL
-        Errhandler(from, param, rest);
-        break;
-
-    case 451: // ERR_NOTREGISTERED
-        Errhandler(from, param, rest);
-        break;
-
-    case 461: // ERR_NEEDMOREPARAMS
-        Errhandler(from, param, rest);
-        break;
-
-    case 462: // ERR_ALLREADYREGISTERED
-        Errhandler(from, param, rest);
-        break;
-
-    case 464: // ERR_PASSWDMISMATCH
-        Errhandler(from, param, rest);
-        break;
-
-    case 465: // ERR_YOUREBANNEDCREEP
-        Errhandler(from, param, rest);
-        break;
-
-    case 467: // ERR_KEYSET
-        Errhandler(from, param, rest);
-        break;
-
-    case 471: // ERR_CHANNELISFULL
-        Errhandler(from, param, rest);
-        break;
-
-    case 472: // ERR_UNKNOWMODE
-        Errhandler(from, param, rest);
-        break;
-
-    case 473: // ERR_INVITEONLYCHAN
-        Errhandler(from, param, rest);
-        break;
-
-    case 474: // ERR_BANNEDFROMCHAN
-        Errhandler(from, param, rest);
-        break;
-
-    case 475: // ERR_BADCHANNELKEY
-        Errhandler(from, param, rest);
-        break;
-
-    case 481: // ERR_NOPRIVILEGES
-        Errhandler(from, param, rest);
-        break;
-
-    case 482: // ERR_CHANOPRIVSNEEDED
-        Errhandler(from, param, rest);
-        break;
-
-    case 491: // ERR_NOOPERHOST
-        Errhandler(from, param, rest);
-        break;
-
-    case 501: // ERR_UMODEUNKNOWNFLAG
-        Errhandler(from, param, rest);
-        break;
-
-    case 502: // ERR_USERSDONTMATCH
-        Errhandler(from, param, rest);
-        break;
-
-    case 353: // RPL_NAMREPLY
-        Names(param, rest);
-        break;
-
-    case 366: // RPL_ENDOFNAMES
-        break; // Ignored.
-
-    case 311: // RPL_WHOISUSER
-
-        Whois(from, param, rest);
-        break;
-
-    case 312: // RPL_WHOISSERVER
-        Whois(from, param, rest);
-        break;
-
-    case 313: // RPL_WHOISOPERATOR
-        Whois(from, param, rest);
-        break;
-
-    case 317: // RPL_WHOISIDLE
-        Whois(from, param, rest);
-        break;
-
-    case 318: // RPL_ENDOFWHOIS
-        Whois(from, param, rest);
-        break;
-
-    case 319: // RPL_WHOISCHANNELS
-        Whois(from, param, rest);
-        break;
-
-    default:
-        _evts->emit(_evts->get(SERVMSG) << from + " " + param + " " + rest, "", _conn);
+        default:
+            _evts->emit(_evts->get(SERVMSG) << from + " " + param + " " + rest, "", _conn);
     }
 
 }
