@@ -142,6 +142,7 @@ void MainWindow::onJoin(const string& nick, Channel& chan, ServerConnection *con
         tab = _nb->addChannelTab(chan.getName(), conn);
         return;
     } else if (!tab->isInActive()) {
+        tab->setActive();
         tab->setName(chan.getName());
     }
     tab->insertUser(nick);
