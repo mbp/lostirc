@@ -136,7 +136,7 @@ void MainWindow::displayMessage(const ustring& msg, ChannelBase& chan, ServerCon
     // created on join) - there is also a hack here to ensure that it's not
     // a channel
     char p = chan.getName().at(0);
-    if (!tab && (p != '#' && p != '&' && p != '!' && p != '+'))
+    if (!tab && !conn->isChannelPrefix(p))
         tab = _notebook.addTab(Tab::QUERY, chan.getName(), conn);
 
     if (tab) {

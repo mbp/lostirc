@@ -89,6 +89,10 @@ public:
     bool autoReconnect();
     bool connectionCheck();
 
+    bool isChannelPrefix(char p) {
+        return supports.chantypes.find_first_of(p) != Glib::ustring::npos;
+    }
+
     // Session struct for all ServerConnections
     struct Sessioninfo {
         Glib::ustring nick;

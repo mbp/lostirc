@@ -42,8 +42,8 @@ public:
     void closeCurrent();
     void setFont(const Glib::ustring& str);
     int countTabs(ServerConnection *conn);
-    void updateTitle(Tab *tab = 0);
-    void updateStatus(Tab *tab = 0);
+    void updateTitle();
+    void updateStatus();
     void sort();
 
 private:

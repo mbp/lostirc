@@ -58,8 +58,6 @@ Tab* MainNotebook::addTab(Tab::Type type, const ustring& name, ServerConnection 
 void MainNotebook::sort()
 {
     // Bubble sort.
-    // TODO: this bubble sort can be made more efficient! or changed to
-    // quicksort.
     Gtk::Notebook_Helpers::PageList::iterator i, j;
 
     int lastIndex = pages().size()-1;
@@ -118,18 +116,14 @@ Tab * MainNotebook::findTab(Tab::Type type, ServerConnection *conn)
 
 void MainNotebook::onSwitchPage(GtkNotebookPage *p, unsigned int n)
 {
-    Tab *tab = static_cast<Tab*>(get_nth_page(n));
-
-    tab->removeHighlight();
-
-    updateStatus(tab);
-    updateTitle(tab);
+    updateStatus();
+    updateTitle();
 }
 
-void MainNotebook::updateStatus(Tab *tab)
+void MainNotebook::updateStatus()
 {
-    if (!tab)
-          tab = getCurrent();
+    Tab *tab = getCurrent();
+    tab->removeHighlight();
 
     Glib::ustring networkname = tab->getConn()->Session.servername;
     if (!tab->getConn()->supports.network.empty())
@@ -142,10 +136,9 @@ void MainNotebook::updateStatus(Tab *tab)
 
 }
 
-void MainNotebook::updateTitle(Tab *tab)
+void MainNotebook::updateTitle()
 {
-    if (!tab)
-          tab = getCurrent();
+    Tab *tab = getCurrent();
 
     if (tab->getConn()->Session.isAway)
           AppWin->set_title(tab->getName() +  _(" (currently away)") + " - LostIRC");
@@ -169,7 +162,6 @@ void MainNotebook::closeCurrent()
             pages().erase(get_current());
         }
     }
-    queue_draw();
 }
 
 void MainNotebook::findTabs(const ustring& nick, vector<Tab*>& vec, ServerConnection *conn)

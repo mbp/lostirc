@@ -1,6 +1,12 @@
 For a summary of changes between releases - see the NEWS file.
 
 2004-10-14  Morten Brix Pedersen  <morten@wtf.dk>
+	* ServerConnection.h: Add isChannelPrefix function, to check whether
+	a character is in the serverconnections chantypes.
+	* MainNotebook.cpp: Don't take Tab* as an argument to updateStatus
+	and updateTitle. Not used at all.
+
+2004-10-14  Morten Brix Pedersen  <morten@wtf.dk>
 	* TextWidget.cpp: Add the hide/show menubar feature again.
 
 2004-10-14  Morten Brix Pedersen  <morten@wtf.dk>

@@ -5,12 +5,15 @@ LostIRC - (x.x.x)
     the full message wasn't being outputted. Fixed.
   * If a server supplies a network name, show that in the status bar instead
     of the hostname of the connected server.
-  * Fixed a bug where auto-connecting to multiple server would have only
+  * Fixed a bug where auto-connecting to multiple servers would have only
     text outputted to the first tab.
   * Fixed segmentation fault where both a mode for a channel and mode for a
-    user was being set in the same MODE command.
+    user was being set in the same MODE command. Thanks to Christian
+    Jørgensen for testing.
   * Fixed segmentation fault which occured when only one empty line existed
     in automatic perform for a server. Thanks Martin Calignon for reporting.
+  * The client now more intelligently checks what a server supports of
+    user prefixes, channel prefixes and channel modes.
 
 LostIRC - (0.4.2) - Wed Sep, 8th 2004
   * On start up without connecting to any servers automatically, open the
