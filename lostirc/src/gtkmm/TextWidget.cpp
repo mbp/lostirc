@@ -42,6 +42,8 @@ TextWidget::TextWidget(Pango::FontDescription font)
     pos = buffer->create_mark(buffer->end());
     get_vscrollbar()->signal_size_allocate().connect(SigC::slot(*this, &TextWidget::onResize));
     get_vscrollbar()->signal_value_changed().connect(SigC::slot(*this, &TextWidget::onScroll));
+
+    _textview.signal_populate_popup().connect(SigC::slot(*this, &TextWidget::populateMenu));
 }
 
 void TextWidget::onResize(GtkAllocation *alloc)
@@ -341,4 +343,26 @@ void TextWidget::initializeColorMap()
     boldtag = Gtk::TextTag::create();
     boldtag->property_weight() = Pango::WEIGHT_BOLD;
     _textview.get_buffer()->get_tag_table()->add(boldtag);
+}
+
+void TextWidget::populateMenu(Gtk::Menu *contextmenu)
+{
+    Gtk::Menu::MenuList& menulist = contextmenu->items();
+
+    if (AppWin->_menubar.is_visible())
+          menulist.push_back(Gtk::Menu_Helpers::MenuElem(
+                      _("_Hide Menubar"),
+                      Gtk::Menu::AccelKey("<control>m"),
+                      SigC::slot(*this, &TextWidget::hideMenu)));
+    else
+          menulist.push_back(Gtk::Menu_Helpers::MenuElem(
+                      _("_Show Menubar"),
+                      Gtk::Menu::AccelKey("<control>m"),
+                      SigC::slot(*this, &TextWidget::hideMenu)));
+
+}
+
+void TextWidget::hideMenu()
+{
+    AppWin->hideMenu();
 }

@@ -42,7 +42,6 @@ class MainWindow : public Gtk::Window, public FrontEnd
     LostIRCApp _app;
     MainNotebook _notebook;
 
-    Gtk::MenuBar _menubar;
     Gtk::Menu _firstmenu;
     Gtk::Menu _viewmenu;
     Gtk::Menu _helpmenu;
@@ -57,7 +56,6 @@ class MainWindow : public Gtk::Window, public FrontEnd
     void openServerWindow();
     void openHelpIntro();
     void newServerTab();
-    void hideMenu();
     void setupMenus();
     void closeCurrentTab();
     void hideNickList();
@@ -70,6 +68,7 @@ public:
 
     MainNotebook& getNotebook() { return _notebook; }
     Tab* newServer();
+    void hideMenu();
     void clearWindow();
     void clearAllWindows();
 
@@ -96,6 +95,7 @@ public:
     bool hasNickList() const { return _nickList; }
 
     StatusBar _statusbar;
+    Gtk::MenuBar _menubar;
 };
 
 extern MainWindow* AppWin;

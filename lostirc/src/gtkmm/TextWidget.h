@@ -25,6 +25,7 @@
 #include <gtkmm/textbuffer.h>
 #include <gtkmm/textmark.h>
 #include <gtkmm/textview.h>
+#include <gtkmm/menu.h>
 
 
 class TextWidget : public Gtk::ScrolledWindow
@@ -49,6 +50,8 @@ public:
 
 private:
     void insertText(const TextProperties& tp, const Glib::ustring& str);
+    void populateMenu(Gtk::Menu*);
+    void hideMenu();
     void setStyle();
 
     void onResize(GtkAllocation *alloc);
