@@ -1,5 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-06-01  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Entry.cpp: Remove the empty entry pushed back into entries, avoid
+          segmentation fault.
+
 2003-05-31  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Parser.cpp: Include <cassert> to fix compilation with gcc 3.3.
@@ -64,7 +69,7 @@ For a summary of changes between releases - see the NEWS file.
 
           More to come...
 
-2003-03-16  Morten Brix Pedersen  <michael@wtf.dk>
+2003-03-16  Morten Brix Pedersen  <morten@wtf.dk>
 
         * DCC.cpp: When sending a file, ensure that a file exists and its size
           > 0 before creating DCC_Send_Out object (This is to ensure that
