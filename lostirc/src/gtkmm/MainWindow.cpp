@@ -42,13 +42,14 @@ MainWindow::MainWindow()
 
     add(*_vbox1);
 
+    show_all();
+
     int num_of_servers = _app->start();
     if (num_of_servers == 0) {
         // Construct initial tab
         Tab *tab = newServer();
         *tab << "\00311Welcome to LostIRC!\n\nThis client is mainly keyboard oriented, so don't expect fancy menus and buttons for you to click on.\n\n\0037Available commands:\n\0038/SERVER <hostname> - connect to server.\n/JOIN <channel> - join channel.\n/PART <channel> - part channel.\n/WHOIS <nick> - whois a user.\n/NICK <nick> - change nick.\n/CTCP <nick> <request> - send CTCP requests.\n/AWAY <msg> - go away.\n/QUIT <msg> - quit IRC with <msg>.\n \n\0037Available GUI commands:\n\0038/QUERY <nick> - start query with <nick>.\n \n\0037Available keybindings:\n\0038Alt + [1-9] - switch tabs from 1-9.\nAlt + n - create new server tab.\nAlt + c - close current tab.\nTab - nick-completion and command-completion.\n";
     }
-    show_all();
 }
 
 MainWindow::~MainWindow()
