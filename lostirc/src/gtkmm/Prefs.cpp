@@ -50,7 +50,7 @@ Prefs::Prefs()
     buttgeneral2->signal_clicked().connect(slot(*this, &Prefs::cancelGeneral));
     hboxgeneral->pack_end(*buttgeneral2, Gtk::PACK_SHRINK);
     hboxgeneral->pack_end(*buttgeneral1, Gtk::PACK_SHRINK);
-    generalbox->pack_end(*hboxgeneral, Gtk::FILL);
+    generalbox->pack_end(*hboxgeneral, Gtk::PACK_EXPAND_WIDGET);
 
     // IRC nick
     ircnickentry.set_text(Glib::locale_to_utf8(App->options.nick));
@@ -82,7 +82,7 @@ Prefs::Prefs()
     buttprefs2->signal_clicked().connect(slot(*this, &Prefs::cancelPreferences));
     hboxprefs->pack_end(*buttprefs2, Gtk::PACK_SHRINK);
     hboxprefs->pack_end(*buttprefs1, Gtk::PACK_SHRINK);
-    prefsbox->pack_end(*hboxprefs, Gtk::FILL);
+    prefsbox->pack_end(*hboxprefs, Gtk::PACK_EXPAND_WIDGET);
 
     // nickcompletion character
     nickcompletionentry.set_max_length(1);
@@ -129,7 +129,7 @@ Prefs::Prefs()
     buttfont2->signal_clicked().connect(slot(*this, &Prefs::cancelFont));
     hboxfont->pack_end(*buttfont2, Gtk::PACK_SHRINK);
     hboxfont->pack_end(*buttfont1, Gtk::PACK_SHRINK);
-    fontbox->pack_end(*hboxfont, Gtk::FILL);
+    fontbox->pack_end(*hboxfont, Gtk::PACK_EXPAND_WIDGET);
 
     fontsel.set_preview_text("<" + ircnickentry.get_text() + "> Hello World!");
     if (!App->options.font->empty())
@@ -210,7 +210,7 @@ Prefs::Prefs()
     Gtk::HBox *bottommenubox = manage(new Gtk::HBox());
     bottommenubox->pack_end(*closebutt, Gtk::PACK_SHRINK);
 
-    pack_start(*bottommenubox, Gtk::FILL);
+    pack_start(*bottommenubox, Gtk::PACK_EXPAND_WIDGET);
 
     show_all();
     removebutton->hide();
