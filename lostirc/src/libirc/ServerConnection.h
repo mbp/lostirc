@@ -49,10 +49,11 @@ public:
     bool sendAway(const string& params);
     bool sendInvite(const string& to, const string& params);
     bool sendBanlist(const string& chan);
+    bool sendMe(const string& to, const string& msg);
 
     static gboolean readdata(GIOChannel *, GIOCondition, gpointer);
 
-    /* Session struct for all ServerConnections */
+    // Session struct for all ServerConnections
     struct {
         string nick;
         string realname;

@@ -29,6 +29,7 @@ class GuiCommands : public Commands
 public:
     static bool send(ServerConnection *conn, string cmd, const string &params);
     static bool Query(ServerConnection *conn, const string& params);
+    static bool Me(ServerConnection *conn, const string& params);
 
     static MainNotebook *nb;
 

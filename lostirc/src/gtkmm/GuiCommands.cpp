@@ -22,6 +22,7 @@
 
 struct UserCommands guicmds[] = {
     { "QUERY",     GuiCommands::Query,  0 },
+    { "ME",        GuiCommands::Me,     1 },
     { 0,        0, 0                      }
 };
 
@@ -51,5 +52,14 @@ bool GuiCommands::Query(ServerConnection *conn, const string& params)
     }
 
 }
+
+bool GuiCommands::Me(ServerConnection *conn, const string& params)
+{
+    string to = nb->getCurrent()->getLabel()->get_text();
+    string param = to + " " + params;
+    return Commands::Me(conn, param);
+
+}
+
 
 MainNotebook* GuiCommands::nb;

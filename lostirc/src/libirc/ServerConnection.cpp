@@ -221,3 +221,10 @@ bool ServerConnection::sendBanlist(const string& chan)
 
     return _socket->send(msg);
 }
+
+bool ServerConnection::sendMe(const string& to, const string& message)
+{
+    string msg("PRIVMSG " + to + " :\001ACTION " + message + "\001\r\n");
+
+    return _socket->send(msg);
+}

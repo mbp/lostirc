@@ -33,6 +33,7 @@ struct UserCommands cmds[] = {
     { "INVITE",   Commands::Invite,     1 },
     { "BANLIST",  Commands::Banlist,    1 },
     { "MSG",      Commands::Msg,        1 },
+    { "ME",       Commands::Me,         1 },
     { 0,        0,                      0 }
 };
 
@@ -154,6 +155,22 @@ bool Commands::Msg(ServerConnection *conn, const string& params)
     } else {
        conn->sendMsg(to, msg);
        return true;
+    }
+}
+
+bool Commands::Me(ServerConnection *conn, const string& params)
+{
+    string::size_type pos1 = params.find_first_of(" ");
+    string to = params.substr(0, pos1 + 1);
+    string msg = params.substr(pos1 + 1);
+
+    if (msg.length() == 0) {
+       error = "Please supply a msg.\n";
+       return false;
+    } else {
+       conn->sendMe(to, msg);
+       error = "* " + conn->Session.nick + " " + msg;
+       return false;
     }
 }
 
