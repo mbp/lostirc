@@ -2,6 +2,11 @@ For a summary of changes between releases - see the NEWS file.
 
 2004-01-25  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * Socket.cpp/Socket.h/FrontEnd.cpp: Commit some of Thomas Johansson
+        work on porting LostIRC to Windows.
+
+2004-01-25  Morten Brix Pedersen  <morten@wtf.dk>
+
         * ABOUT-NLS: Removed from CVS version control. Apparently it gets
         copied to the source directory everytime on autogen.
 

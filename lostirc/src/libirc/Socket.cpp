@@ -16,14 +16,17 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <iostream>
-#include <string>
-#include <cerrno>
-#include <cstdio>
+#ifndef WIN32
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <arpa/inet.h>
+#endif
+
+#include <iostream>
+#include <string>
+#include <cerrno>
+#include <cstdio>
 #include <glibmm/main.h>
 #include <glibmm/convert.h>
 #include "LostIRCApp.h"
@@ -33,15 +36,233 @@ using Glib::ustring;
 using SigC::slot;
 
 Socket::Socket()
+#ifndef WIN32
     : fd(-1), resolve_pid(0)
+#endif 
 {
     on_host_resolved.connect(SigC::slot(*this, &Socket::host_resolved));
+
+    #ifdef WIN32
+    WORD sockversion = MAKEWORD(2, 0);
+    WSADATA wsadata;   	
+    WSAStartup(sockversion, &wsadata);
+    #endif
 }
 
 Socket::~Socket()
 {
     close();
+
+    #ifdef WIN32
+    WSACleanup();
+    #endif
 }
+
+void Socket::connect(const ustring& host, int p)
+{
+    port = p;
+
+    // Before connecting, we need to resolve the hostname. When the hostname
+    // is resolved, host_resolved() will be called which then does the real
+    // connect.
+    resolvehost(host);
+}
+
+void Socket::connect(unsigned long address, int p)
+{
+    port = p;
+
+    sockaddr.sin_addr.s_addr = htonl(address);
+    on_host_resolved();
+}
+
+void Socket::disconnect()
+{
+    if (signal_write.connected())
+          signal_write.disconnect();
+    if (signal_read.connected())
+          signal_read.disconnect();
+    close();
+}
+
+// FIXME: the return value of this function is always 0.
+int Socket::close()
+{
+    #ifndef WIN32
+    if (fd != -1) {
+        ::close(fd);
+        fd = -1;
+    }
+    #else
+    if (closesocket(fd) == SOCKET_ERROR)
+        return -1;
+    #endif
+
+    return 0;
+}
+
+bool Socket::send(const ustring& data)
+{
+    const std::string msg = Util::convert_from_utf8(data);
+
+    if (msg.empty()) {
+        FE::emit(FE::get(ERRORMSG) << _("Message not sent because of locale problems"), FE::CURRENT);
+        return false;
+    }
+
+    #ifdef DEBUG
+    App->log << ">> " << data << std::flush;
+    #endif
+
+    int tmp = 0;
+    return send(msg.c_str(), msg.length(), tmp);
+}
+
+bool Socket::send(const char *buf, int len, int& sent)
+{
+    sent = ::send(fd, buf, len, 0);
+
+    if (sent == -1) {
+        #ifndef WIN32
+        if (!(errno == EAGAIN || errno == EWOULDBLOCK)) {
+            throw(SocketException(strerror(errno)));
+        }
+        #else
+        int errorcode = WSAGetLastError();
+        if (!(errorcode == WSATRY_AGAIN || errorcode == WSAEWOULDBLOCK))
+            throw(SocketException(strerror(errorcode)));
+        #endif
+    }
+
+    return true;
+}
+
+bool Socket::receive(char *buf, int len, int& received)
+{
+    received = recv(fd, buf, len, 0);
+
+    if (received == 0) {
+        throw SocketDisconnected();
+    }
+    else if (received == -1) {
+        #ifndef WIN32
+        if (errno == EAGAIN || errno == EWOULDBLOCK) {
+            return false;
+        } else {
+            throw SocketException(strerror(errno));
+        }
+        #else
+        int errorcode = WSAGetLastError();
+        if (errorcode == WSATRY_AGAIN || errorcode == WSAEWOULDBLOCK)
+            return false;
+        else
+            throw(SocketException(strerror(errorcode)));
+        #endif
+    }
+    buf[received] = '\0';
+
+    return true;
+}
+
+
+bool Socket::data_pending(Glib::IOCondition)
+{
+    on_data_pending();
+    return true;
+}
+
+bool Socket::can_send_data(Glib::IOCondition cond)
+{
+    on_can_send_data();
+    return true;
+}
+
+bool Socket::connected(Glib::IOCondition cond)
+{
+    // We can write to the socket, so we must be connected!
+    on_connected(cond);
+
+    // Watch for incoming data from now on
+    signal_read = Glib::signal_io().connect(
+            SigC::slot(*this, &Socket::data_pending),
+            fd,
+            Glib::IO_IN | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL);
+
+    return false;
+}
+
+const char * Socket::getLocalIP()
+{
+    struct sockaddr_in localaddr;
+    socklen_t add_len = sizeof(struct sockaddr_in);
+    getsockname(fd, reinterpret_cast<struct sockaddr *>(&localaddr), &add_len);
+    return inet_ntoa(localaddr.sin_addr);
+}
+
+const char * Socket::getRemoteIP()
+{
+    return inet_ntoa(sockaddr.sin_addr);
+}
+
+
+void Socket::host_resolved()
+{
+    fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    #ifndef WIN32
+    if (fd == -1)
+        on_error(strerror(errno));
+    #else
+    if (fd == INVALID_SOCKET) {
+        WSACleanup();
+        on_error(strerror(WSAGetLastError()));
+    }
+    #endif
+
+    setNonBlocking();
+
+    sockaddr.sin_family = AF_INET;
+    sockaddr.sin_port = htons(port);
+    memset(&(sockaddr.sin_zero), '\0', 8); // zero the rest of the struct
+
+    #ifndef WIN32
+    if (::connect(fd, reinterpret_cast<struct sockaddr *>(&sockaddr), sizeof(struct sockaddr)) == 0 || errno == EINPROGRESS) {
+    #else
+    if (::connect(fd, reinterpret_cast<struct sockaddr *>(&sockaddr), sizeof(struct sockaddr)) == 0 || WSAGetLastError() == WSAEINPROGRESS) {
+    #endif
+        // This is a temporary watch to see when we can write, when we can
+        // write - we are (hopefully) connected
+        Glib::signal_io().connect(
+                SigC::slot(*this, &Socket::connected),
+                fd,
+                Glib::IO_OUT | Glib::IO_IN | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_PRI | Glib::IO_NVAL);
+    } else {
+        #ifndef WIN32
+        on_error(strerror(errno));
+        #else
+        on_error(strerror(WSAGetLastError()));
+        #endif
+    }
+}
+
+bool Socket::accepted_connection(Glib::IOCondition cond)
+{
+    struct sockaddr_in remoteaddr;
+    socklen_t size = sizeof(struct sockaddr_in);
+    int accept_fd = accept(fd, reinterpret_cast<struct sockaddr *>(&remoteaddr), &size);
+
+    ::close(fd);
+    fd = accept_fd;
+
+    signal_write = Glib::signal_io().connect(
+                SigC::slot(*this, &Socket::can_send_data),
+                fd,
+                Glib::IO_OUT | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL);
+
+    on_accepted_connection();
+    return false;
+}
+
+#ifndef WIN32
 
 void Socket::resolvehost(const ustring& host)
 {
@@ -67,7 +288,7 @@ void Socket::resolvehost(const ustring& host)
 
             int size = sizeof(struct in_addr);
             if (write(thepipe[1], &size, sizeof(int)) == -1 ||
-                    write(thepipe[1], &ia, sizeof(struct in_addr)) == -1)
+                write(thepipe[1], &ia, sizeof(struct in_addr)) == -1)
                   std::cerr << _("Error writing to pipe: ") << strerror(errno) << std::endl;
 
         }
@@ -85,7 +306,6 @@ void Socket::resolvehost(const ustring& host)
     } else {
         on_error(strerror(errno));
     }
-
 }
 
 bool Socket::on_host_resolve(Glib::IOCondition cond, int readpipe)
@@ -138,24 +358,6 @@ bool Socket::on_host_resolve(Glib::IOCondition cond, int readpipe)
     return false;
 }
 
-void Socket::connect(const ustring& host, int p)
-{
-    port = p;
-
-    // Before connecting, we need to resolve the hostname. When the hostname
-    // is resolved, host_resolved() will be called which then does the real
-    // connect.
-    resolvehost(host);
-}
-
-void Socket::connect(unsigned long address, int p)
-{
-    port = p;
-
-    sockaddr.sin_addr.s_addr = htonl(address);
-    host_resolved();
-}
-
 bool Socket::bind(int p)
 {
     fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -182,159 +384,11 @@ bool Socket::bind(int p)
         listen(fd, 1);
 
         Glib::signal_io().connect(
-                SigC::slot(*this, &Socket::accepted_connection),
-                fd,
+                SigC::slot(*this, &Socket::accepted_connection), fd,
                 Glib::IO_IN | Glib::IO_ERR | Glib::IO_OUT | Glib::IO_HUP | Glib::IO_NVAL);
 
         return true;
     }
-
-}
-
-bool Socket::accepted_connection(Glib::IOCondition cond)
-{
-    struct sockaddr_in remoteaddr;
-    socklen_t size = sizeof(struct sockaddr_in);
-    int accept_fd = accept(fd, reinterpret_cast<struct sockaddr *>(&remoteaddr), &size);
-
-    ::close(fd);
-    fd = accept_fd;
-
-    signal_write = Glib::signal_io().connect(
-                SigC::slot(*this, &Socket::can_send_data),
-                fd,
-                Glib::IO_OUT | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL);
-
-    on_accepted_connection();
-    return false;
-}
-
-bool Socket::can_send_data(Glib::IOCondition cond)
-{
-    on_can_send_data();
-    return true;
-}
-
-void Socket::host_resolved()
-{
-    fd = socket(AF_INET, SOCK_STREAM, 0);
-    if (fd == -1)
-        on_error(strerror(errno));
-
-    setNonBlocking();
-
-    sockaddr.sin_family = AF_INET;
-    sockaddr.sin_port = htons(port);
-    memset(&(sockaddr.sin_zero), '\0', 8); // zero the rest of the struct
-
-    if (::connect(fd, reinterpret_cast<struct sockaddr *>(&sockaddr), sizeof(struct sockaddr)) == 0 || errno == EINPROGRESS) {
-        // This is a temporary watch to see when we can write, when we can
-        // write - we are (hopefully) connected
-        Glib::signal_io().connect(
-                SigC::slot(*this, &Socket::connected),
-                fd,
-                Glib::IO_OUT | Glib::IO_IN | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_PRI | Glib::IO_NVAL);
-    } else {
-        on_error(strerror(errno));
-    }
-}
-
-bool Socket::connected(Glib::IOCondition cond)
-{
-    // We can write to the socket, so we must be connected!
-    on_connected(cond);
-
-    // Watch for incoming data from now on
-    signal_read = Glib::signal_io().connect(
-            SigC::slot(*this, &Socket::data_pending),
-            fd,
-            Glib::IO_IN | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL);
-
-    return false;
-}
-
-void Socket::disconnect()
-{
-    if (signal_write.connected())
-          signal_write.disconnect();
-    if (signal_read.connected())
-          signal_read.disconnect();
-    close();
-}
-
-bool Socket::data_pending(Glib::IOCondition)
-{
-    on_data_pending();
-    return true;
-}
-
-bool Socket::send(const ustring& data)
-{
-    const std::string msg = Util::convert_from_utf8(data);
-
-    if (msg.empty()) {
-        FE::emit(FE::get(ERRORMSG) << _("Message not sent because of locale problems"), FE::CURRENT);
-        return false;
-    }
-
-    #ifdef DEBUG
-    App->log << ">> " << data << std::flush;
-    #endif
-
-    int tmp = 0;
-    return send(msg.c_str(), msg.length(), tmp);
-}
-
-bool Socket::send(const char *buf, int len, int& sent)
-{
-    sent = ::send(fd, buf, len, 0);
-
-    if (sent == -1) {
-        if (!(errno == EAGAIN || errno == EWOULDBLOCK)) {
-            throw(SocketException(strerror(errno)));
-        }
-    }
-    return true;
-}
-
-const char * Socket::getLocalIP()
-{
-    struct sockaddr_in localaddr;
-    socklen_t add_len = sizeof(struct sockaddr_in);
-    getsockname(fd, reinterpret_cast<struct sockaddr *>(&localaddr), &add_len);
-    return inet_ntoa(localaddr.sin_addr);
-}
-
-const char * Socket::getRemoteIP()
-{
-    return inet_ntoa(sockaddr.sin_addr);
-}
-
-bool Socket::receive(char *buf, int len, int& received)
-{
-    received = recv(fd, buf, len, 0);
-
-    if (received == 0) throw SocketDisconnected();
-    else if (received == -1) {
-        if (errno == EAGAIN || errno == EWOULDBLOCK) {
-            return false;
-        } else {
-            throw SocketException(strerror(errno));
-        }
-    }
-    buf[received] = '\0';
-
-    return true;
-}
-
-// FIXME: the return value of this function is always 0.
-int Socket::close()
-{
-    if (fd != -1) {
-        ::close(fd);
-        fd = -1;
-    }
-    return 0;
 }
 
 void Socket::setNonBlocking()
@@ -351,3 +405,34 @@ void Socket::setBlocking()
 {
     fcntl(fd, F_SETFL, 0);
 }
+
+#else 
+
+void Socket::resolvehost(const ustring& host)
+{
+    struct hostent *he = gethostbyname(host.c_str());
+    sockaddr.sin_addr = *reinterpret_cast<in_addr*>(he->h_addr);
+    on_host_resolved();
+}
+
+bool Socket::bind(int p)
+{
+    // TODO: Implementation.
+    return false;
+}
+
+void Socket::setNonBlocking()
+{
+    long unsigned set_nb_param = 1;
+    if (::ioctlsocket(fd, FIONBIO, &set_nb_param) == SOCKET_ERROR)
+        throw SocketException("Could not switch socket to non-blocking mode.");
+}
+
+void Socket::setBlocking()
+{
+    long unsigned set_nb_param = 0;
+    if (::ioctlsocket(fd, FIONBIO, &set_nb_param) == SOCKET_ERROR)
+        throw SocketException("Could not switch socket to blocking mode.");
+}
+
+#endif

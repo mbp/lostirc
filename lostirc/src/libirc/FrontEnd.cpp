@@ -156,7 +156,11 @@ void logToFile(const Glib::ustring& msg, ChannelBase& chan, ServerConnection *co
 {
     // log message to a channel-specific file.
 
+    #ifndef WIN32
     mkdir(App->logdir.c_str(), 0700);
+    #else
+    mkdir(App->logdir.c_str());
+    #endif
 
     Glib::ustring filename = App->logdir + chan.getName() + "_" + conn->Session.servername + ".log";
 
