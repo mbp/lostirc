@@ -52,8 +52,8 @@ void NickList::updateUserNumber()
     size_t size = _liststore->children().size();
     if (size > 0) {
         std::stringstream ss;
-        ss << size;
-        set_label(ss.str() + " users");
+        ss << size << (size == 1 ? " user" : " users");
+        set_label(ss.str());
     } else {
         set_label("Not on channel");
     }

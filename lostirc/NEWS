@@ -1,6 +1,8 @@
 LostIRC (x.x.x)
   * When no real name was set, some IRC servers refused the user to connect.
     Now real name is set to the users nick if not specified.
+  * When only one user is on a channel, the plural s from "users" is now
+    removed (thanks, Michael Kristensen)
 
 LostIRC (0.2.4) - Sun Dec, 29th 2002
   * The "Less bugs and more features for 2003" release.

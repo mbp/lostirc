@@ -2,6 +2,10 @@ For a summary of changes between releases - see the NEWS file.
 
 2002-12-29  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * NickList.cpp: remove plural s when only one user is on the channel.
+
+2002-12-29  Morten Brix Pedersen  <morten@wtf.dk>
+
         * configure.in: Bump version to 0.2.5pre.
         * ServerConnection.cpp: When no real name has been set, use the
           nickname.
