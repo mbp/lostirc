@@ -28,42 +28,40 @@ bool ConfigHandler::readConfig()
     string home(getenv("HOME"));
     ifstream in(string(home + "/.lostircrc").c_str());
 
-    if (in.fail())
-          return false;
+    if (in) {
+        string str;
+        while (getline(in, str)) {
+            vector<string> vec;
+            Utils::Tokenize(str, vec);
+            vector<string>::const_iterator i = vec.begin();
 
-    string str;
-    while (getline(in, str)) {
-        vector<string> vec;
-        Utils::Tokenize(str, vec);
-        vector<string>::const_iterator i = vec.begin();
-
-        string _tmpparam;
-        string _tmpvalue;
-        /* parse a string in the form 'value = param param param' */
-        while (i != vec.end())
-        {
-            if (*i == "=") {
-                ++i;
-                while (i != vec.end())
-                {
-                    _tmpvalue += *i + " ";
+            string _tmpparam;
+            string _tmpvalue;
+            /* parse a string in the form 'value = param param param' */
+            while (i != vec.end())
+            {
+                if (*i == "=") {
                     ++i;
+                    while (i != vec.end())
+                    {
+                        _tmpvalue += *i + " ";
+                        ++i;
+                    }
+                    if (_tmpvalue.size() > 0) {
+                        _tmpvalue = _tmpvalue.substr(0, _tmpvalue.size() - 1);
+                    }
+                    _settings.insert(make_pair(_tmpparam, _tmpvalue));
+                    break;
+                } else {
+                    _tmpparam = *i;
                 }
-                if (_tmpvalue.size() > 0) {
-                    _tmpvalue = _tmpvalue.substr(0, _tmpvalue.size() - 1);
-                }
-                _settings.insert(make_pair(_tmpparam, _tmpvalue));
-                break;
-            } else {
-                _tmpparam = *i;
-            }
 
-            ++i;
+                ++i;
+            }
+            
         }
-        
     }
-    setDefaults();
-    return true;
+    return setDefaults();
 }
 
 bool ConfigHandler::setParam(const string& param, const string& value)
@@ -74,7 +72,10 @@ bool ConfigHandler::setParam(const string& param, const string& value)
     string home(getenv("HOME"));
     ofstream out(string(home + "/.lostircrc").c_str(), ios::app);
 
-    out << param + " = " + value << endl;
+    if (!out)
+          return false;
+
+    out << param << " = " << value << endl;
 
     return true;
 }
@@ -112,7 +113,7 @@ bool ConfigHandler::setDefaults()
     _settings["evt_wallops"] = "$2WALLOPS -: %1 :- %2";
     _settings["evt_kicked"] = "$8-- %1 was kicked from %2 by %3 (%4)";
 
-    writeConfig();
+    return writeConfig();
 
 }
 
@@ -121,9 +122,13 @@ bool ConfigHandler::writeConfig()
     string home(getenv("HOME"));
     ofstream out(string(home + "/.lostircrc").c_str());
 
+    if (!out)
+          return false;
+
     map<string, string>::const_iterator i;
 
     for (i = _settings.begin(); i != _settings.end(); ++i) {
         out << (*i).first << " = " << (*i).second << endl;
     }
+    return true;
 }
