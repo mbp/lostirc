@@ -16,6 +16,7 @@ NICE-TO-HAVE:
 RANDOM BUGS:
 ------------
   * Should we check for EAGAIN on send()? It seems to always suceeed anyway.
+  * When someone has an ident starting with a number, it gets colored. Bug.
 
   * This has to be removed from 'configure' at release time, or else the
     configure script fails on Red Hat/Mandrake:
