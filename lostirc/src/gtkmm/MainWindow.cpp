@@ -168,21 +168,6 @@ void MainWindow::onCUMode(const string& nick, const string& chan, const vector<s
 
     vector<struct Mode>::const_iterator i;
     for (i = users.begin(); i != users.end(); ++i) {
-        switch (i->mode)
-        {
-            case IRC::OP:
-                _nb->insert(tab, "\00316-- \0030"  + nick + "\00316 gives channel operator status to " + (*i).nick + "\n");
-                break;
-            case IRC::DEOP:
-                _nb->insert(tab, "\00316-- \0030"  + nick + "\00316 removes channel operator status from " + (*i).nick + "\n");
-                break;
-            case IRC::VOICE:
-                _nb->insert(tab, "\00316-- \0030"  + nick + "\00316 gives voice to " + (*i).nick + "\n");
-                break;
-            case IRC::DEVOICE:
-                _nb->insert(tab, "\00316-- \0030"  + nick + "\00316 removes voice from " + (*i).nick + "\n");
-                break;
-        }
         tab->removeUser(i->nick);
         tab->insertUser(*i);
     }

@@ -110,6 +110,12 @@ bool ConfigHandler::setDefaults()
     setDefault("evt_cmode", "$16-- $0%1$16 sets channel mode $5%2 %3$16 on %4");
     setDefault("evt_wallops", "$2WALLOPS -: %1 :- %2");
     setDefault("evt_kicked", "$16-- $0%1$16 was kicked from $11%2$16 by %3 $15($9%4$15)");
+    setDefault("evt_opped", "$16-- $0%1$16 gives channel operator status to %2");
+    setDefault("evt_deopped", "$16-- $0%1$16 removes channel operator status from %2");
+    setDefault("evt_voiced", "$16-- $0%1$16 gives voice to %2");
+    setDefault("evt_devoiced", "$16-- $0%1$16 removes voice from %2");
+    setDefault("evt_banned", "$16-- $0%1$16 sets ban on %2");
+    setDefault("evt_unbanned", "$16-- $0%1$16 unbans %2");
 
     return writeConfig();
 }

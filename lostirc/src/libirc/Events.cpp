@@ -31,7 +31,7 @@ void Events::emitEvent(const string& name, vector<string>& args, const string& t
     string msg = _app->getCfg().getParam("evt_" + name);
     std::replace(msg.begin(), msg.end(), '$', '\003');
 
-    bool parsing_arg;
+    bool parsing_arg = false;
     string::const_iterator i;
     for (i = msg.begin(); i != msg.end(); ++i) {
         switch (*i) {

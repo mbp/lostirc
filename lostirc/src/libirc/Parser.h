@@ -75,14 +75,14 @@ private:
 
 namespace IRC
 {
-    enum Mode {
-        OP, VOICE, DEOP, DEVOICE
+    enum UserMode {
+        OP, VOICE, DEOP, DEVOICE, BAN, UNBAN
     };
 }
 
 struct Mode {
     std::string nick;
-    IRC::Mode mode;
+    IRC::UserMode mode;
 };
 
 #endif

@@ -384,7 +384,6 @@ void Parser::CMode(const string& from, const string& param)
     while (ss >> buf)
           arguments.push_back(buf);
 
-
     if (arguments.empty()) {
         // Received a channel mode, like '#chan +n'
         vector<string> args;
@@ -399,8 +398,7 @@ void Parser::CMode(const string& from, const string& param)
 
     bool sign = false; // Used to track whether we get a + or a -
     vector<string>::iterator arg_i = arguments.begin();
-    string::iterator i;
-    for (i = modes.begin(); i != modes.end(); ++i) {
+    for (string::const_iterator i = modes.begin(); i != modes.end(); ++i) {
         switch (*i)
         {
             case '+':
@@ -413,24 +411,60 @@ void Parser::CMode(const string& from, const string& param)
                 {
                 struct Mode m;
                 sign ? (m.mode = IRC::OP) : (m.mode = IRC::DEOP);
-                m.nick = *arg_i;
+                m.nick = *arg_i++;
 
                 modesvec.push_back(m);
-                arg_i++;
                 }
                 break;
             case 'v':
                 {
                 struct Mode m;
                 sign ? (m.mode = IRC::VOICE) : (m.mode = IRC::DEVOICE);
-                m.nick = *arg_i;
+                m.nick = *arg_i++;
 
                 modesvec.push_back(m);
-                arg_i++;
                 }
                 break;
+            case 'b':
+                {
+                struct Mode m;
+                sign ? (m.mode = IRC::BAN) : (m.mode = IRC::UNBAN);
+                m.nick = *arg_i++;
+
+                modesvec.push_back(m);
+                break;
+                }
         }
 
+    }
+
+    // Go through our modes and send the proper msg to the client
+    vector<struct Mode>::iterator i;
+    for (i = modesvec.begin(); i != modesvec.end(); ++i) {
+        vector<string> args;
+        args.push_back(findNick(from));
+        args.push_back(i->nick);
+        switch (i->mode)
+        {
+            case IRC::OP:
+                     _evts->emitEvent("opped", args, chan, _conn);
+                     break;
+            case IRC::DEOP:
+                     _evts->emitEvent("deopped", args, chan, _conn);
+                     break;
+            case IRC::VOICE:
+                     _evts->emitEvent("voiced", args, chan, _conn);
+                     break;
+            case IRC::DEVOICE:
+                     _evts->emitEvent("devoiced", args, chan, _conn);
+                     break;
+            case IRC::BAN:
+                     _evts->emitEvent("banned", args, chan, _conn);
+                     break;
+            case IRC::UNBAN:
+                     _evts->emitEvent("unbanned", args, chan, _conn);
+                     break;
+        }
     }
 
     // Channel user mode

@@ -314,6 +314,9 @@ void TabChannel::insertUser(const Mode& m)
         case IRC::VOICE:
             tmp.push_back("+");
             break;
+        case IRC::BAN:
+        case IRC::UNBAN:
+            return;
         default:
             tmp.push_back(" ");
     }
