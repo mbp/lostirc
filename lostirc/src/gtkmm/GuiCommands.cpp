@@ -25,6 +25,10 @@ using std::string;
 
 struct UserCommands guicmds[] = {
     { "QUERY",     GuiCommands::Query,    0 },
+    { "CLEAR",     GuiCommands::Clear,    0 },
+    { "CLEARALL",  GuiCommands::ClearAll, 0 },
+    { "SETFONT",   GuiCommands::SetFont,  0 },
+    { "NEWSERVER", GuiCommands::NewServer, 0 },
     { "ME",        GuiCommands::Me,       1 },
     { "PART",      GuiCommands::Part,     1 },
     { "TOPIC",     GuiCommands::Topic,    1 },
@@ -35,8 +39,6 @@ struct UserCommands guicmds[] = {
     { "DEOP",      GuiCommands::Deop,     1 },
     { "VOICE",     GuiCommands::Voice,    1 },
     { "DEVOICE",   GuiCommands::Devoice,  1 },
-    { "SETFONT",   GuiCommands::SetFont,  0 },
-    { "NEWSERVER", GuiCommands::NewServer, 0 },
     { "COMMANDS",  GuiCommands::commands, 0 },
     { 0,        0, 0                        }
 };
@@ -77,6 +79,16 @@ void Me(ServerConnection *conn, const string& params)
 void SetFont(ServerConnection *conn, const string& params)
 {
     // FIXME AppWin->getNotebook().setFont();
+}
+
+void Clear(ServerConnection *conn, const string& params)
+{
+    AppWin->getNotebook().getCurrent()->clearText();
+}
+
+void ClearAll(ServerConnection *conn, const string& params)
+{
+    AppWin->getNotebook().clearAll();
 }
 
 void NewServer(ServerConnection *conn, const string& params)

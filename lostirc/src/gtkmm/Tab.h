@@ -73,6 +73,7 @@ public:
         isOnChannel = true;
     }
     bool isActive() { return isOnChannel; }
+    void clearText();
     bool isHighlighted;
     bool hasPrefs;
 

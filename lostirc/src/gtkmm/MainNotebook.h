@@ -40,6 +40,7 @@ public:
 
     void findTabs(const std::string& nick, ServerConnection *conn, std::vector<Tab*>& vec);
     void findTabs(ServerConnection *conn, std::vector<Tab*>& vec);
+    void clearAll();
     void Tabs(std::vector<Tab*>& vec);
     void closeCurrent();
     void highlight(Tab *tab);

@@ -3,6 +3,8 @@ LostIRC (x.x.x)
   * There is now a limit of 500 lines in the text windows - this can be
     specified using preferences. This makes sure the client doesn't use a huge
     amount of RAM.
+  * /CLEAR and /CLEARALL is implemented to clear all text from the current
+    window and all windows.
 
 LostIRC (0.1.4) - Sat Jul 13th 2002
   * A segfault which appeared when the enviroment variable USER wasn't set,

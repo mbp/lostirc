@@ -212,6 +212,16 @@ int MainNotebook::countTabs(ServerConnection *conn)
     return num;
 }
 
+void MainNotebook::clearAll()
+{
+    Gtk::Notebook_Helpers::PageList::iterator i;
+
+    for (i = pages().begin(); i != pages().end(); ++i) {
+        Tab *tab = static_cast<Tab*>(i->get_child());
+        tab->clearText();
+    }
+}
+
 /* FIXME
 void MainNotebook::setFont()
 {

@@ -164,6 +164,14 @@ void Tab::insertText(const ustring& str)
     insertWithColor(0, str);
 }
 
+void Tab::clearText()
+{
+    Glib::RefPtr<Gtk::TextBuffer> buf = _textview.get_buffer();
+    Gtk::TextBuffer::iterator begin = buf->begin();
+    Gtk::TextBuffer::iterator end = buf->end();
+    buf->delete_text(begin, end);
+}
+
 void Tab::setAway()
 {
     setUnAway();
