@@ -29,15 +29,10 @@ LostIRCApp* App;
 LostIRCApp::LostIRCApp(FrontEnd *f)
     : 
 #ifdef DEBUG
-    log("lostirc-"VERSION".log"),
+    log(),
 #endif
     fe(f), _cfg(), _dcc_queue()
 {
-    #ifdef DEBUG
-    std::cout << "Logging to `" << "lostirc-"VERSION".log" << "'." << std::endl;
-    assert(log);
-    #endif
-
     App = this;
     uname(&uname_info);
 

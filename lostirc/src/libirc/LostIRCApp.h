@@ -30,6 +30,42 @@
 class ServerConnection;
 class FrontEnd;
 
+#ifdef DEBUG
+class Log : public std::ofstream
+{
+    std::string _filename;
+public:
+    Log()
+    {
+        _filename = "lostirc-"VERSION".log";
+        struct stat st;
+        if (stat(_filename.c_str(), &st) == 0) {
+            getUseableFilename(1);
+        }
+        std::cout << "Logging to `" << _filename << "'." << std::endl;
+        open(_filename.c_str());
+        assert(good());
+
+    }
+
+private:
+    void getUseableFilename(int i)
+    {
+        struct stat st;
+        std::stringstream ss;
+        std::string myint;
+        ss << i;
+        ss >> myint;
+        std::string newfilename = _filename + "." + myint;
+        if (stat(newfilename.c_str(), &st) == 0)
+              getUseableFilename(++i);
+        else
+              _filename = newfilename;
+    }
+
+};
+#endif
+
 class LostIRCApp
 {
 
@@ -49,7 +85,7 @@ public:
     const std::vector<ServerConnection*>& getServers() { return _servers; }
 
 #ifdef DEBUG
-    std::ofstream log;
+    Log log;
 #endif
 
     FrontEnd* fe;
