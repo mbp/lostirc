@@ -40,7 +40,7 @@ public:
     void setNonBlocking();
     void setBlocking();
     int getfd();
-    void close();
+    int close();
     std::string error;
 
     bool isBlocking;

@@ -30,7 +30,6 @@ Socket::Socket()
 {
     // Get us a file descriptor
     fd = socket(AF_INET, SOCK_STREAM, 0);
-
 }
 
 Socket::~Socket()
@@ -120,9 +119,9 @@ int Socket::getfd()
     return fd;
 }
 
-void Socket::close()
+int Socket::close()
 {
-    ::close(fd);
+    return ::close(fd);
 }
 
 void Socket::setNonBlocking()
