@@ -1,10 +1,11 @@
-LostIRC (0.2.x)
+LostIRC (0.2.6) - Mon Apr, 28th 2003
   * A progress field is now located in the list of DCCs (thanks, Michael
     Kristensen)
   * Your previous window position wasn't remembered if you had your window
     located in an x or y value that equaled 0, fixed. (thanks, Michael
     Kristensen)
   * Compilation fixes for FreeBSD 5.0
+  * Some changes that help compilation on Win32 (not done yet).
 
 LostIRC (0.2.5) - Thu Jan, 16th 2003
   * When the window was resized, the scrollbar moved unwanted away from the

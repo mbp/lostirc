@@ -1,5 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-04-28  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * configure.in: Bump version to 0.2.6 and release.
+
 2003-04-18  Morten Brix Pedersen  <morten@wtf.dk>
 
         * TextWidget.h: Remove inclusion of TextWidget.h

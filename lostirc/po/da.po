@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: LostIRC 0.2.5pre\n"
-"POT-Creation-Date: 2003-03-17 10:42+0100\n"
+"POT-Creation-Date: 2003-04-28 23:37+0200\n"
 "PO-Revision-Date: 2003-01-03 19:25+0100\n"
 "Last-Translator: Michael Kristensen <tazz@wtf.dk>\n"
 "Language-Team: Danish\n"
@@ -510,15 +510,15 @@ msgstr "Ingen nøgle fundet, `"
 msgid "Error writing to pipe: "
 msgstr "Fejl ved skrivning til rør: "
 
-#: src/libirc/Socket.cpp:123
+#: src/libirc/Socket.cpp:125
 msgid "An error occured while reading from pipe (Internal error 2)"
 msgstr "En fejl opstod, ved at læse fra rør (Intern fejl 2)"
 
-#: src/libirc/Socket.cpp:133
+#: src/libirc/Socket.cpp:135
 msgid "An error occured while reading from pipe (Internal error 3)"
 msgstr "En fejl opstod, ved at læse fra rør (Intern fejl 3)"
 
-#: src/libirc/Socket.cpp:187
+#: src/libirc/Socket.cpp:189
 msgid "Message not sent because of locale problems"
 msgstr "Besked ikke sendt, pga. locale problemer"
 
@@ -530,55 +530,55 @@ msgstr "ubenyttet: "
 msgid ", signon time: "
 msgstr ", login tid: "
 
-#: src/libirc/DCC.cpp:54
+#: src/libirc/DCC.cpp:58
 msgid "Receiving from:"
 msgstr "Modtager fra:"
 
-#: src/libirc/DCC.cpp:57
+#: src/libirc/DCC.cpp:61
 msgid "Couldn't connect:"
 msgstr "Kunne ikke etablere forbindelse:"
 
-#: src/libirc/DCC.cpp:75
+#: src/libirc/DCC.cpp:79
 msgid "DCC connection closed."
 msgstr "DCC forbindelse lukket."
 
-#: src/libirc/DCC.cpp:78
+#: src/libirc/DCC.cpp:82
 msgid "Couldn't receive:"
 msgstr "Kunne ikke modtage:"
 
-#: src/libirc/DCC.cpp:102
+#: src/libirc/DCC.cpp:106
 msgid "File received successfully:"
 msgstr "Fil modtaget korrekt:"
 
-#: src/libirc/DCC.cpp:156
+#: src/libirc/DCC.cpp:160
 msgid "Couldn't bind:"
 msgstr "Kunne ikke binde:"
 
-#: src/libirc/DCC.cpp:174
+#: src/libirc/DCC.cpp:178
 msgid "DCC SEND request sent. Sending from:"
 msgstr "DCC SEND forespørgsel sendt. Sender fra:"
 
-#: src/libirc/DCC.cpp:192
+#: src/libirc/DCC.cpp:196
 msgid "Connection accepted."
 msgstr "Forbindelse accepteret."
 
-#: src/libirc/DCC.cpp:213
+#: src/libirc/DCC.cpp:217
 msgid "Couldn't send:"
 msgstr "Kunne ikke sende:"
 
-#: src/libirc/DCC.cpp:232
+#: src/libirc/DCC.cpp:236
 msgid "File sent successfully:"
 msgstr "Fil sendt korrekt:"
 
-#: src/libirc/DCC.cpp:256
+#: src/libirc/DCC.cpp:260
 msgid "Incoming file has zero size. Sender:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:275
+#: src/libirc/DCC.cpp:279
 msgid "File not found:"
 msgstr "Fil ikke fundet:"
 
-#: src/libirc/DCC.cpp:278
+#: src/libirc/DCC.cpp:282
 msgid "File has zero size:"
 msgstr ""
 
