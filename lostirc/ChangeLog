@@ -1,5 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-10-26  Peter Hille <peter@das-system.ath.cx>
+
+        * Add support for "channel owner" (+q) and "channel admin" (+a) status
+        modes.
+
 2003-10-16  Morten Brix Pedersen  <morten@wtf.dk>
 
         * ConfigHandler.cpp: Add options 'hidenicklist' and 'hidemenu'

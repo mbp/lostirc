@@ -40,7 +40,11 @@ namespace algo
 
 IRC::UserMode User::getMode() const
 {
-    if (state & IRC::OP)
+    if (state & IRC::OWNER)
+          return IRC::OWNER;
+    else if (state & IRC::ADMIN)
+          return IRC::ADMIN;
+    else if (state & IRC::OP)
           return IRC::OP;
     else if (state & IRC::HALFOP)
           return IRC::HALFOP;

@@ -119,6 +119,10 @@ public:
     Value<Glib::ustring> kicked;
     Value<Glib::ustring> opped;
     Value<Glib::ustring> deopped;
+    Value<Glib::ustring> admined;
+    Value<Glib::ustring> deadmined;
+    Value<Glib::ustring> ownered;
+    Value<Glib::ustring> deownered;
     Value<Glib::ustring> voiced;
     Value<Glib::ustring> devoiced;
     Value<Glib::ustring> halfopped;

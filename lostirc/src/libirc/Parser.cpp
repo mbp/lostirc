@@ -531,6 +531,34 @@ void Parser::CMode(const ustring& from, const ustring& param)
             case '-':
                 sign = false;
                 break;
+            case 'a':
+                {
+                    Event e;
+                    IRC::UserMode mode = IRC::ADMIN;
+                    sign ? (e = ADMINED) : (e = DEADMINED);
+                    ustring nick = *arg_i++;
+
+                    User *user = chan->getUser(nick);
+                    sign ? (user->setMode(mode)) : (user->removeMode(mode));
+
+                    modesvec.push_back(*user);
+                    FE::emit(FE::get(e) << findNick(from) << nick, *chan, _conn);
+                }
+                break;
+            case 'q':
+                {
+                    Event e;
+                    IRC::UserMode mode = IRC::OWNER;
+                    sign ? (e = OWNERED) : (e = DEOWNERED);
+                    ustring nick = *arg_i++;
+
+                    User *user = chan->getUser(nick);
+                    sign ? (user->setMode(mode)) : (user->removeMode(mode));
+
+                    modesvec.push_back(*user);
+                    FE::emit(FE::get(e) << findNick (from) << nick, *chan, _conn);
+                }
+                break;
             case 'o':
                 {
                 Event e;
@@ -873,7 +901,11 @@ void Parser::Names(const ustring& chan, const ustring& names)
 
         for (i = nicks.begin(); i != nicks.end(); ++i)
         {
-            if ((*i)[0] == '@')
+            if ((*i)[0] == '*')
+                  c->addUser(i->substr(1), IRC::OWNER);
+            else if ((*i)[0] == '!')
+                  c->addUser(i->substr(1), IRC::ADMIN);
+            else if ((*i)[0] == '@')
                   c->addUser(i->substr(1), IRC::OP);
             else if ((*i)[0] == '+')
                   c->addUser(i->substr(1), IRC::VOICE);

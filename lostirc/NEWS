@@ -12,6 +12,8 @@ LostIRC (x.x.x)
   * The default font for the main window is now "Sans 10".
   * The "limited highlighting" option has been removed.
   * Fix problem with duplicates in the user list.
+  * Support for "channel owner" (+q) and "channel admin" (+a) status
+  modes has been added (thanks, Peter Hille)
 
 LostIRC (0.2.7) - Mon Jun, 9th 2003
   * Now includes a fancy LostIRC icon.

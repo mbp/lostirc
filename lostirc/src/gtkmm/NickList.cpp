@@ -68,17 +68,25 @@ void NickList::insertUser(const ustring& nick, IRC::UserMode m)
 
     switch (m)
     {
+        case IRC::OWNER:
+            row[_columns.status] = "*";
+            row[_columns.priority] = 5;
+            break;
+        case IRC::ADMIN:
+            row[_columns.status] = "!";
+            row[_columns.priority] = 4;
+            break;
         case IRC::OP:
             row[_columns.status] = "@";
             row[_columns.priority] = 3;
             break;
         case IRC::VOICE:
             row[_columns.status] = "+";
-            row[_columns.priority] = 2;
+            row[_columns.priority] = 1;
             break;
         case IRC::HALFOP:
             row[_columns.status] = "%";
-            row[_columns.priority] = 1;
+            row[_columns.priority] = 2;
             break;
         case IRC::NONE:
             row[_columns.status] = " ";
