@@ -12,7 +12,7 @@ LIBS="$LIBS `gtkmm-config --libs`"
 
 # Add ./configure --enable-debug
 AC_ARG_ENABLE(debug,
-        [  --enable-debug          compile with debugging (for development)],
+        [  --enable-debug           compile with debugging (for development)],
         debug=$enable_debug,
         debug=no
 )

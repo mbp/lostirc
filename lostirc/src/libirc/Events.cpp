@@ -74,7 +74,6 @@ void Events::emitEvent(const string& name, const string& arg, const vector<strin
     vector<string>::const_iterator i;
 
     for (i = to.begin(); i != to.end(); ++i) {
-        cout << "to: " << *i << endl;
         string to = *i;
         emitEvent(name, args, to, conn);
     }
@@ -85,7 +84,6 @@ void Events::emitEvent(const string& name, vector<string>& arg, const vector<str
     vector<string>::const_iterator i;
 
     for (i = to.begin(); i != to.end(); ++i) {
-        cout << "to: " << *i << endl;
         string to = *i;
         emitEvent(name, arg, to, conn);
     }

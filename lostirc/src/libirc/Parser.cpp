@@ -776,9 +776,13 @@ void Parser::Names(const string& chan, const string& names)
         if (buf[0] == '@' || buf[0] == '+') {
             vec.push_back(buf.substr(0, 1));
             vec.push_back(buf.substr(1));
+            // Add to internal Channel's, XXX this should be fixed so it doesn't
+            // have to search for the channel every time
+            _conn->findChannel(channel)->addUser(buf.substr(1));
         } else {
             vec.push_back(" ");
             vec.push_back(buf);
+            _conn->findChannel(channel)->addUser(buf);
         }
         vecvec.push_back(vec);
     }

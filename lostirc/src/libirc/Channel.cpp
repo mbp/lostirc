@@ -27,7 +27,6 @@ using std::pair;
 
 int Channel::addUser(const string& u)
 {
-    cout << u << endl;
     //usersIter i = users.begin();
     users.push_back(u);
     return 1;
