@@ -54,7 +54,7 @@ void Entry::onEntry()
 
         try {
 
-            GuiCommands::send(_tab->getConn(), Util::upper(Glib::locale_from_utf8(msg.substr(1, pos - 1))), Glib::locale_from_utf8(params));
+            GuiCommands::send(_tab->getConn(), Util::upper(msg.substr(1, pos - 1)), params);
 
         } catch (CommandException& ce) {
 

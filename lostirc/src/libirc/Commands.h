@@ -26,9 +26,10 @@
 
 class ServerConnection;
 
+template<typename stringType>
 struct UserCommands {
     const char *cmd;
-    void (*function)(ServerConnection *, const std::string&);
+    void (*function)(ServerConnection *, const stringType&);
     const bool reqConnected;
 };
 

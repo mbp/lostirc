@@ -2,6 +2,15 @@ For a summary of changes between releases - see the NEWS file.
 
 2002-11-23  Morten Brix Pedersen  <morten@wtf.dk>
         
+        * GuiCommmands.cpp: Remove SetFont() function which isn't used
+        * Commands.h: Make UserCommands a templated type so both std::string
+          and Glib::ustring instances of it can be made.
+        * Entry.cpp: Don't do the Glib::locale_from_utf8() conversion here, do
+          it in GuiCommands.cpp. Fixes bug with creating queries with special
+          characters.
+
+2002-11-23  Morten Brix Pedersen  <morten@wtf.dk>
+        
         * GuiCommands.cpp/Commands.cpp: Use a set<> instead of a vector<> in
           getCommands() to void duplicate command-entries.
         * GuiCommands.cpp/Commands.cpp: rename commands() to displayCommands()

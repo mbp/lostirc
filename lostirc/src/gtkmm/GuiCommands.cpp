@@ -21,13 +21,12 @@
 #include "GuiCommands.h"
 #include "Tab.h"
 
-using std::string;
+using Glib::ustring;
 
-const struct UserCommands guicmds[] = {
+const struct UserCommands<ustring> guicmds[] = {
     { "QUERY",     GuiCommands::Query,    false },
     { "CLEAR",     GuiCommands::Clear,    false },
     { "CLEARALL",  GuiCommands::ClearAll, false },
-    { "SETFONT",   GuiCommands::SetFont,  false },
     { "NEWSERVER", GuiCommands::NewServer, false },
     { "ME",        GuiCommands::Me,       true },
     { "PART",      GuiCommands::Part,     true },
@@ -46,7 +45,7 @@ const struct UserCommands guicmds[] = {
 
 namespace GuiCommands {
 
-void send(ServerConnection *conn, string cmd, const string& params)
+void send(ServerConnection *conn, ustring cmd, const ustring& params)
 {
     for (int i = 0; guicmds[i].cmd != 0; ++i) {
         if (guicmds[i].cmd == cmd) {
@@ -58,10 +57,10 @@ void send(ServerConnection *conn, string cmd, const string& params)
         }
     }
 
-    Commands::send(conn, cmd, params);
+    Commands::send(conn, Glib::locale_from_utf8(cmd), Glib::locale_from_utf8(params));
 }
 
-void Query(ServerConnection *conn, const string& params)
+void Query(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
         throw CommandException("/QUERY <nick>, start a query(tab) with a user");
@@ -70,105 +69,114 @@ void Query(ServerConnection *conn, const string& params)
     }
 }
 
-void Me(ServerConnection *conn, const string& params)
+void Me(ServerConnection *conn, const ustring& params)
 {
-    string to = AppWin->getNotebook().getCurrent()->getLabel()->get_text();
-    string param = to + " " + params;
-    return Commands::Me(conn, param);
+    ustring to = AppWin->getNotebook().getCurrent()->getLabel()->get_text();
+    ustring param = to + " " + params;
+    return Commands::Me(conn, Glib::locale_from_utf8(param));
 }
 
-void SetFont(ServerConnection *conn, const string& params)
-{
-    // FIXME AppWin->getNotebook().setFont();
-}
-
-void Clear(ServerConnection *conn, const string& params)
+void Clear(ServerConnection *conn, const ustring& params)
 {
     AppWin->getNotebook().getCurrent()->clearText();
 }
 
-void ClearAll(ServerConnection *conn, const string& params)
+void ClearAll(ServerConnection *conn, const ustring& params)
 {
     AppWin->getNotebook().clearAll();
 }
 
-void NewServer(ServerConnection *conn, const string& params)
+void NewServer(ServerConnection *conn, const ustring& params)
 {
     AppWin->newServer();
 }
 
-void Part(ServerConnection *conn, const string& params)
+void Part(ServerConnection *conn, const ustring& params)
 {
-    Commands::Part(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+    ustring channel = AppWin->getNotebook().getCurrent()->getLabel()->get_text();
+    ustring param = channel + " " + params;
+    Commands::Part(conn, Glib::locale_from_utf8(param));
 }
 
-void Topic(ServerConnection *conn, const string& params)
+void Topic(ServerConnection *conn, const ustring& params)
 {
-    Commands::Topic(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+    ustring channel = AppWin->getNotebook().getCurrent()->getLabel()->get_text();
+    ustring param = channel + " " + params;
+    Commands::Topic(conn, Glib::locale_from_utf8(param));
 }
 
-void Kick(ServerConnection *conn, const string& params)
+void Kick(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
         throw CommandException("/KICK <nick>, kick a user from a channel.");
 
     } else {
-        Commands::Kick(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+        ustring channel = AppWin->getNotebook().getCurrent()->getLabel()->get_text();
+        ustring param = channel + " " + params;
+        Commands::Kick(conn, Glib::locale_from_utf8(param));
     }
 }
 
-void Banlist(ServerConnection *conn, const string& params)
+void Banlist(ServerConnection *conn, const ustring& params)
 {
-    Commands::Banlist(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text());
+    Commands::Banlist(conn, Glib::locale_from_utf8(AppWin->getNotebook().getCurrent()->getLabel()->get_text()));
 }
 
-void Op(ServerConnection *conn, const string& params)
+void Op(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
         throw CommandException("/OP <nicks>, ops one or more users in the current channel.");
 
     } else {
-        Commands::Op(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+        ustring channel = AppWin->getNotebook().getCurrent()->getLabel()->get_text();
+        ustring param = channel + " " + params;
+        Commands::Op(conn, Glib::locale_from_utf8(param));
     }
 }
 
-void Deop(ServerConnection *conn, const string& params)
+void Deop(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
         throw CommandException("/DEOP <nicks>, deops one or more users in the current channel.");
 
     } else {
-        Commands::Deop(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+        ustring channel = AppWin->getNotebook().getCurrent()->getLabel()->get_text();
+        ustring param = channel + " " + params;
+        Commands::Deop(conn, Glib::locale_from_utf8(param));
     }
 }
 
-void Voice(ServerConnection *conn, const string& params)
+void Voice(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
         throw CommandException("/VOICE <nicks>, voices one or more users in the current channel.");
 
     } else {
-        Commands::Voice(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+        ustring channel = AppWin->getNotebook().getCurrent()->getLabel()->get_text();
+        ustring param = channel + " " + params;
+        Commands::Voice(conn, Glib::locale_from_utf8(param));
     }
 }
 
-void Devoice(ServerConnection *conn, const string& params)
+void Devoice(ServerConnection *conn, const ustring& params)
 {
     if (params.empty()) {
         throw CommandException("/DEVOICE <nicks>, devoices one or more users in the current channel.");
 
     } else {
-        Commands::Devoice(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+        ustring channel = AppWin->getNotebook().getCurrent()->getLabel()->get_text();
+        ustring param = channel + " " + params;
+        Commands::Devoice(conn, Glib::locale_from_utf8(param));
     }
 }
 
-void Exit(ServerConnection *conn, const string& params)
+void Exit(ServerConnection *conn, const ustring& params)
 {
-    Commands::Exit(conn, params);
+    Commands::Exit(conn, Glib::locale_from_utf8(params));
     AppWin->hide();
 }
 
-void displayCommands(ServerConnection *conn, const string& params)
+void displayCommands(ServerConnection *conn, const ustring& params)
 {
     std::vector<Glib::ustring> commands = getCommands();
 

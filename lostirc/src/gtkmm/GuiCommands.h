@@ -27,23 +27,22 @@
 namespace GuiCommands
 {
 
-    void send(ServerConnection *conn, std::string cmd, const std::string &params);
-    void Query(ServerConnection *conn, const std::string& params);
-    void Clear(ServerConnection *conn, const std::string& params);
-    void ClearAll(ServerConnection *conn, const std::string& params);
-    void Me(ServerConnection *conn, const std::string& params);
-    void Part(ServerConnection *conn, const std::string& params);
-    void Topic(ServerConnection *conn, const std::string& params);
-    void Kick(ServerConnection *conn, const std::string& params);
-    void Banlist(ServerConnection *conn, const std::string& params);
-    void Op(ServerConnection *conn, const std::string& params);
-    void Deop(ServerConnection *conn, const std::string& params);
-    void Voice(ServerConnection *conn, const std::string& params);
-    void Devoice(ServerConnection *conn, const std::string& params);
-    void Exit(ServerConnection *conn, const std::string& params);
-    void SetFont(ServerConnection *conn, const std::string& params);
-    void NewServer(ServerConnection *conn, const std::string& params);
-    void displayCommands(ServerConnection *conn, const std::string& params);
+    void send(ServerConnection *conn, Glib::ustring cmd, const Glib::ustring &params);
+    void Query(ServerConnection *conn, const Glib::ustring& params);
+    void Clear(ServerConnection *conn, const Glib::ustring& params);
+    void ClearAll(ServerConnection *conn, const Glib::ustring& params);
+    void Me(ServerConnection *conn, const Glib::ustring& params);
+    void Part(ServerConnection *conn, const Glib::ustring& params);
+    void Topic(ServerConnection *conn, const Glib::ustring& params);
+    void Kick(ServerConnection *conn, const Glib::ustring& params);
+    void Banlist(ServerConnection *conn, const Glib::ustring& params);
+    void Op(ServerConnection *conn, const Glib::ustring& params);
+    void Deop(ServerConnection *conn, const Glib::ustring& params);
+    void Voice(ServerConnection *conn, const Glib::ustring& params);
+    void Devoice(ServerConnection *conn, const Glib::ustring& params);
+    void Exit(ServerConnection *conn, const Glib::ustring& params);
+    void NewServer(ServerConnection *conn, const Glib::ustring& params);
+    void displayCommands(ServerConnection *conn, const Glib::ustring& params);
     std::vector<Glib::ustring> getCommands();
 
 }

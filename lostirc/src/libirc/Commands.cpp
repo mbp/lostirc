@@ -27,7 +27,7 @@ using std::string;
 using std::stringstream;
 using std::istringstream;
 
-const struct UserCommands cmds[] = {
+const struct UserCommands<string> cmds[] = {
     { "SERVER",   Commands::Server,     false },
     { "DISCONNECT", Commands::Disconnect,     false },
     { "JOIN",     Commands::Join,       true },
