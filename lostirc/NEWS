@@ -1,6 +1,6 @@
 LostIRC (x.x.x)
   * When the window was resized, the scrollbar moved unwanted away from the
-  * bottom of the text box. Fixed (thanks, Jonathan James Taylor)
+    bottom of the text box. Fixed (thanks, Jonathan James Taylor)
   * When no real name was set, some IRC servers refused the user to connect.
     Now real name is set to the users nick if not specified.
   * When only one user is on a channel, the plural s from "users" is now

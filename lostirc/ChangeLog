@@ -1,5 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
+
+         * Add 2003 to copyright in source and header files.
+
 2003-01-01  Jonathan James Taylor  <jonathan.taylor@utoronto.ca>
 
         * TextWidget.h/TextWidget.cpp: There is now a Mark that we can
