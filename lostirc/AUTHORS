@@ -12,3 +12,6 @@ LostIRC author(s) and contributors
 * Juan Salaverria
         FreeBSD port.
 
+* Daniel Elstner
+        Patch to fix UTF-8 and locales problem.
+

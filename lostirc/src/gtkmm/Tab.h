@@ -81,6 +81,7 @@ private:
     void insertWithColor(int color, const Glib::ustring& str);
     void realInsert(int color, const Glib::ustring& str);
 
+    std::string _fallback_encoding;
     bool isOnChannel;
     Gtk::Label *_label;
     ServerConnection *_conn;

@@ -31,6 +31,7 @@ using Glib::ustring;
 
 Tab::Tab(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font)
     : Gtk::VBox(), isHighlighted(false), hasPrefs(false),
+      _fallback_encoding("ISO-8859-15"),
       isOnChannel(true), _label(label), _conn(conn), _entry(this)
 {
     _vbox = new Gtk::VBox();
@@ -83,14 +84,39 @@ void Tab::setStyle() {
 
 Tab& Tab::operator<<(const char * str)
 {
-    // Convert the string to utf8 and pass it on to the real operator <<
-    return operator<<(Glib::locale_to_utf8(str));
+    return operator<<(std::string(str));
 }
 
 Tab& Tab::operator<<(const std::string& str)
 {
-    // Convert the string to utf8 and pass it on to the real operator <<
-    return operator<<(Glib::locale_to_utf8(str));
+    Glib::ustring str_utf8 (str);
+
+    if (!str_utf8.validate()) // invalid UTF-8?
+    {
+        bool did_conversion = false;
+
+        if (!Glib::get_charset()) // locale charset is not UTF-8?
+        {
+            try // ignore errors -- go on with the fallback if the conversion fails
+            {
+                str_utf8 = Glib::locale_to_utf8(str);
+                did_conversion = true;
+            }
+            catch(const Glib::ConvertError&)
+            {}
+        }
+
+        if (!did_conversion)
+        {
+            // Fallback conversion -- used either if the conversion from the
+            // current locale's encoding failed, or if the user is running a
+            // UTF-8 locale.
+            str_utf8 = Glib::convert(str, "UTF-8", _fallback_encoding);
+        }
+    }
+
+    // Pass on to the real operator <<
+    return operator<<(str_utf8);
 }
 
 Tab& Tab::operator<<(const ustring& line)
