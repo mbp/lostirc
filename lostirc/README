@@ -3,8 +3,8 @@ README - LostIRC
 
 LostIRC is a simple, yet very useful IRC client. It has features such as
 tab-autocompletion, multiple server support, automatic joining of
-servers/channels and DCC sending which should cover the needs of most
-people. Another goal that the application has in mind, is 100% keyboard
+servers/channels, logging and DCC sending which should cover the needs of
+most people. Another goal that the application has in mind, is 100% keyboard
 controlability. It was written using the gtkmm GUI library.
 
 LostIRC is licensed under the GPL. See included COPYING file.
