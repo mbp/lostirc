@@ -33,7 +33,6 @@ RANDOM BUGS:
 
 WAITING FOR GTKMM2:
 -------------------
-  * Should have a limit on the text-buffer, not go on forever.
   * /CLEAR, /CLEARALL.
   * scrollbar has weird behaviour when resizing window
   * strip all mIRC color-codes from ALL strings, don't show colors at all.

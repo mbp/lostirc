@@ -82,6 +82,12 @@ Prefs::Prefs()
     frame12->add(highlightentry);
     prefsbox->pack_start(*frame12, Gtk::SHRINK);
 
+    // Buffer size for text
+    bufferentry.set_text(AppWin->getApp().getCfg().getOpt("buffer_size"));
+    Gtk::Frame *frame13 = manage(new Gtk::Frame("Maximum number of lines to save"));
+    frame13->add(bufferentry);
+    prefsbox->pack_start(*frame13, Gtk::SHRINK);
+
     notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*prefsbox, "Preferences"));
 
     // Autojoin/perform-tab
@@ -183,6 +189,7 @@ void Prefs::saveSettings()
     AppWin->getApp().getCfg().setOpt("nickcompletion_character", nickcompletionentry.get_text());
     AppWin->getApp().getCfg().setOpt("dccip", dccipentry.get_text());
     AppWin->getApp().getCfg().setOpt("highlight_words", highlightentry.get_text());
+    AppWin->getApp().getCfg().setOpt("buffer_size", bufferentry.get_text());
     AppWin->getApp().getCfg().setOpt("realname", realnameentry.get_text());
     AppWin->getApp().getCfg().setOpt("ircuser", ircuserentry.get_text());
     AppWin->getApp().getCfg().setOpt("nick", ircnickentry.get_text());

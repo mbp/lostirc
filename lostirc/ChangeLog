@@ -1,5 +1,8 @@
 LostIRC (x.x.x)
   * Ported to gtkmm2, now depends on sigc++ 1.1 and gtkmm1.3.
+  * There is now a limit of 500 lines in the text windows - this can be
+    specified using preferences. This makes sure the client doesn't use a huge
+    amount of RAM.
 
 LostIRC (0.1.4) - Sat Jul 13th 2002
   * A segfault which appeared when the enviroment variable USER wasn't set,

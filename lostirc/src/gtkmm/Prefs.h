@@ -53,22 +53,29 @@ private:
     void onUnSelectRow();
     void clearEntries();
 
-    Gtk::Entry passentry;
-    Gtk::Entry portentry;
-    Gtk::Entry hostentry;
-    Gtk::Entry nickcompletionentry;
+    // General
     Gtk::Entry ircnickentry;
     Gtk::Entry realnameentry;
     Gtk::Entry ircuserentry;
+
+    // Preferences
+    Gtk::Entry nickcompletionentry;
     Gtk::Entry dccipentry;
     Gtk::Entry highlightentry;
+    Gtk::Entry bufferentry;
+
+    // Auto-join 
     Gtk::Entry nickentry;
+    Gtk::Entry passentry;
+    Gtk::Entry portentry;
+    Gtk::Entry hostentry;
     Gtk::TextView cmdtext;
-    Gtk::HBox savehbox;
     Gtk::Notebook notebook;
 
     Gtk::Button *removebutton;
     Gtk::Button *addnewbutton;
+
+    Gtk::HBox savehbox;
 
     // what our columned-list contains
     struct ModelColumns : public Gtk::TreeModel::ColumnRecord

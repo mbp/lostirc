@@ -142,7 +142,6 @@ bool Entry::onKeyPress(GdkEventKey* e)
                     set_position(-1);
                 }
             } else {
-                std::cout << "text: '" << str << "'" << std::endl;
                 _tab->insertText(str);
             }
         }
