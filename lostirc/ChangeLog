@@ -1,5 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
+2004-01-21  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * configure.ac: Modify more text for --enable-logdebug option.
+
 2003-01-02  Morten Brix Pedersen  <morten@wtf.dk>
 
         * TODO: Update.

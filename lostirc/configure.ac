@@ -20,7 +20,7 @@ AC_ARG_ENABLE(logdebug,
         logdebug=$enable_logdebug,
         logdebug=no
 )
-AC_MSG_CHECKING(whether to log debug info to stdout)
+AC_MSG_CHECKING(whether to log debug info to a file)
 if test "x$logdebug" = xyes; then
         AC_MSG_RESULT(yes)
         AC_DEFINE(DEBUG, [], whether to log debug info to a file)
