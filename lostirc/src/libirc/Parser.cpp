@@ -68,8 +68,6 @@ void Parser::parseLine(ustring& data)
     #ifdef DEBUG
     App->log << "<< " << data << std::endl;
     #endif
-    // Erase \r and \n, we dont need them when parsing the messages.
-    data.erase(data.find_last_not_of("\r\n") + 1);
     if (App->options.strip_colors)
           data = stripColors(data);
 

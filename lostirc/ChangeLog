@@ -2,6 +2,15 @@ For a summary of changes between releases - see the NEWS file.
 
 2002-12-23  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * Socket.cpp/Socket.h: Add extra 'int& received' argument to
+          receive().
+        * ServerConnection.cpp: Parse lines from server more efficiently/fast
+          using plain C-style strings.
+        * Parser.cpp: No need to erase \r and \n, done in ServerConnection
+          now.
+
+2002-12-23  Morten Brix Pedersen  <morten@wtf.dk>
+
         * Parser.cpp: Notices not sent to the user, are now sent to the
           correct channel instead of FE:CURRENT.
 

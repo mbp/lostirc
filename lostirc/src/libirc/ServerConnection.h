@@ -109,7 +109,8 @@ public:
 private:
     Socket _socket;
     Parser _parser;
-    std::string tmpbuf;
+    char _tmpbuf[520];
+    int _bufpos;
 
     void doCleanup();
 

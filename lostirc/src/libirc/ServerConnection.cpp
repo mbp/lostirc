@@ -17,6 +17,7 @@
  */
 
 #include <iostream>
+#include <cstring>
 #include <functional>
 #include <algorithm>
 #include <unistd.h>
@@ -87,6 +88,7 @@ void ServerConnection::doCleanup()
     Session.isAway = false;
     Session.endOfMotd = false;
     Session.sentLagCheck = false;
+    _bufpos = 0;
 
     if (signal_write.connected())
           signal_write.disconnect();
@@ -200,35 +202,26 @@ bool ServerConnection::onReadData(Glib::IOCondition)
     try {
 
         char buf[4096];
-        if (_socket.receive(buf, 4095)) {
+        int received = 0;
+        if (_socket.receive(buf, 4095, received)) {
 
-            ustring str;
-            if (!tmpbuf.empty()) {
-                str = Util::convert_to_utf8(tmpbuf);
-                tmpbuf = "";
-            }
-            str += Util::convert_to_utf8(buf);
-
-            // run through the ustring we got, take it line by line and pass
-            // each line to parseLine() - if we did not reach the end, save
-            // the rest in a tmp buffer.
-
-            ustring::size_type lastPos = str.find_first_not_of("\n", 0);
-            ustring::size_type pos     = str.find_first_of("\n", lastPos);
-
-            while (ustring::npos != pos || ustring::npos != lastPos)
-            {
-                if (pos == ustring::npos && lastPos != str.length()) {
-                    // we reached the last line, but it was not ended with
-                    // \n, lets buffer this
-                    tmpbuf = str.substr(lastPos);
-                    return true;
+            for (int i = 0; i < received; ++i) {
+                if (buf[i] == '\r') {
+                    // Skip.
+                } else if (buf[i] == '\n') {
+                    // Send line to parser
+                    _tmpbuf[_bufpos] = '\0';
+                    std::string str(_tmpbuf, _bufpos);
+                    Glib::ustring str_utf8 = Util::convert_to_utf8(str);
+                    _parser.parseLine(str_utf8);
+                    _bufpos = 0;
                 } else {
-                    ustring tmp = str.substr(lastPos, pos - lastPos);
-                    _parser.parseLine(tmp);
+                    if (_bufpos < 520) {
+                        _tmpbuf[_bufpos] = buf[i];
+                        // Ignore line if it's too long.
+                        _bufpos++;
+                    }
                 }
-                lastPos = str.find_first_not_of("\n", pos);
-                pos = str.find_first_of("\n", lastPos);
             }
         }
         return true;

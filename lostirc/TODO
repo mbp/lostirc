@@ -1,6 +1,5 @@
 CRITICAL: 
 ---------
-  * Implement reading in ServerConnection better (more efficiently)
   * Implement DCC CHAT
   * After being disconnected, queries have a () around them.
 
@@ -16,6 +15,10 @@ NICE-TO-HAVE:
     to find highlights after being away for a day from the client)
   * Some way to seperate tabs from each other, so they are server sorted.
   * Recognise URLs (and make them clickable?)
+  * Add gettext/.po support.
+  * Add support for choosing which encoding to use. Now if a user has a
+    UTF-8 locale, he will also send his text in UTF-8, causing most other
+    locales (and Windows, mIRC) to fail reading the string.
 
 RANDOM BUGS:
 ------------

@@ -43,7 +43,7 @@ public:
     bool on_host_resolve(Glib::IOCondition cond, int readpipe);
     void disconnect();
     bool send(const Glib::ustring& data);
-    bool receive(char *buf, int len);
+    bool receive(char *buf, int len, int& received);
     void setNonBlocking();
     void setBlocking();
     int getfd() { return fd; }

@@ -190,19 +190,19 @@ const char * Socket::getLocalIP()
     return inet_ntoa(localaddr.sin_addr);
 }
 
-bool Socket::receive(char *buf, int len)
+bool Socket::receive(char *buf, int len, int& received)
 {
-    int retval = recv(fd, buf, len, 0);
+    received = recv(fd, buf, len, 0);
 
-    if (retval == 0) throw SocketDisconnected();
-    else if (retval == -1) {
+    if (received == 0) throw SocketDisconnected();
+    else if (received == -1) {
         if (errno == EAGAIN || errno == EWOULDBLOCK) {
             return false;
         } else {
             throw SocketException(strerror(errno));
         }
     }
-    buf[retval] = '\0';
+    buf[received] = '\0';
 
     return true;
 }
