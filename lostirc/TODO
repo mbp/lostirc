@@ -2,6 +2,7 @@ NEW STUFF:
 ---------
  - need to save the setting for menu hidden and nicklist hidden.
  - need to make "colors" work (or just #ifdef 0 them until then)
+ - nicklist reappears from time to time (try ctrl-n)
 
 HIG:
 

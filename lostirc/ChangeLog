@@ -1,5 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-10-02  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * MainNotebook.cpp: Add a missing '-' in the title when away.
+
 2003-09-28  Morten Brix Pedersen  <morten@wtf.dk>
 
         * MainWindow.h: Fix mysterious error when quitting LostIRC.

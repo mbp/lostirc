@@ -123,7 +123,7 @@ void MainNotebook::updateTitle(Tab *tab)
           tab = getCurrent();
 
     if (tab->getConn()->Session.isAway)
-          AppWin->set_title(tab->getName() +  _(" (currently away)") + " LostIRC");
+          AppWin->set_title(tab->getName() +  _(" (currently away)") + " - LostIRC");
     else
           AppWin->set_title(tab->getName() + " - LostIRC");
 }
