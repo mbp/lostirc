@@ -91,6 +91,7 @@ void ServerConnection::doCleanup()
     Session.hasRegistered = false;
     Session.isAway = false;
     Session.endOfMotd = false;
+    Session.sentLagCheck = false;
 
     if (_writeid > 0) {
         g_source_remove(_writeid);
