@@ -382,7 +382,7 @@ void Parser::Part(const string& nick, const string& param, string& rest)
     // segfault here. I noticed the same hack in the xchat sources.
     if (chan.empty() && !rest.empty()) {
         chan = getWord(rest, 1);
-        rest.clear();
+        rest = "";
     }
 
     Channel *c = _conn->findChannel(chan);
