@@ -1,4 +1,4 @@
-LostIRC (x.x.x)
+LostIRC (0.1.2) - Tue Jun 27th 2002
   * Fix a crash which appeared when connecting to a proxy/bouncer.
     (thanks, |TEcHNO|)
   * Another 100% CPU usage bug has been fixed.
