@@ -126,14 +126,14 @@ bool Servers::writeServersFile()
     vector<ustring>::const_iterator ivec;
 
     for (i = _servers.begin(); i != _servers.end(); ++i) {
-        out << "hostname = " << (*i)->hostname << std::endl;
+        out << "hostname = " << (*i)->hostname.raw() << std::endl;
         out << "port = " << (*i)->port << std::endl;
-        out << "password = " << (*i)->password << std::endl;
-        out << "nick = " << (*i)->nick << std::endl;
+        out << "password = " << (*i)->password.raw() << std::endl;
+        out << "nick = " << (*i)->nick.raw() << std::endl;
         out << "auto_connect = " << static_cast<int>((*i)->auto_connect) << std::endl;
 
         for (ivec = (*i)->cmds.begin(); ivec != (*i)->cmds.end(); ++ivec)
-              out << "cmd = " << *ivec << std::endl;
+              out << "cmd = " << (*ivec).raw() << std::endl;
 
         out << std::endl;
     }
@@ -216,8 +216,9 @@ bool baseConfig::writeConfigFile()
     #endif
     map<ustring, baseConfigValue*>::const_iterator i;
 
-    for (i = configvalues.begin(); i != configvalues.end(); ++i) {
-        out << i->first << " = " << i->second->getString() << std::endl;
+    for (i = configvalues.begin(); i != configvalues.end(); ++i)
+    {
+        out << i->first.raw() << " = " << i->second->getString().raw() << std::endl;
     }
     return true;
 

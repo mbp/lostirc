@@ -1,5 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
+2002-12-23  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * ConfigHandler.cpp: Use raw() on strings saved to files so we ensure
+          that we save in UTF-8 and to avoid problems with locales.
+
 2002-12-21  Morten Brix Pedersen  <morten@wtf.dk>
 
         * configure.in: Bump to version 0.2.4pre.
