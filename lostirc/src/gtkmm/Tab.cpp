@@ -68,6 +68,7 @@ Tab::Tab(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
 
     // Attaching Gtk::Text to scollwindow
     _text = manage(new Gtk::Text());
+    _text->unset_flags(GTK_CAN_FOCUS);
     _text->set_word_wrap(true);
     _scrollwindow->set_policy(GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
     _scrollwindow->add(*_text);
@@ -376,6 +377,7 @@ void Tab::startPrefs()
     remove(*_hbox);
     Prefs *p = manage(new Prefs(this));
     pack_start(*p);
+    hasPrefs = true;
 }
 
 void Tab::endPrefs(Prefs *p)
@@ -383,6 +385,7 @@ void Tab::endPrefs(Prefs *p)
     remove(*p);
     pack_start(*_hbox);
     pack_start(*_hbox2, 0, 1);
+    hasPrefs = false;
 }
 
 gint sortFunc(GtkCList *clist, gconstpointer ptr1, gconstpointer ptr2)

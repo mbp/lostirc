@@ -66,6 +66,7 @@ public:
     void setFont(Gdk_Font *font);
     bool is_highlighted;
     bool is_on_channel;
+    bool hasPrefs;
 
 private:
     Gtk::Label *_label;

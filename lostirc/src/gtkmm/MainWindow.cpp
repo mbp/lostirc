@@ -309,7 +309,9 @@ gint MainWindow::on_key_press_event(GdkEventKey* e)
         Gtk::Main::quit();
     }
     if (e->keyval == GDK_Up || e->keyval == GDK_Tab || e->keyval == GDK_Down) {
-        _nb->getCurrent()->getEntry()->on_key_press_event(e);
-        gtk_signal_emit_stop_by_name(GTK_OBJECT(this->gtkobj()), "key_press_event");
+        if (!_nb->getCurrent()->hasPrefs) {
+            _nb->getCurrent()->getEntry()->on_key_press_event(e);
+            gtk_signal_emit_stop_by_name(GTK_OBJECT(this->gtkobj()), "key_press_event");
+        }
     }
 }
