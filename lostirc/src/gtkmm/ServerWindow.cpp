@@ -248,6 +248,7 @@ ServerEditDialog::ServerEditDialog(Gtk::Window& parent, Server* server)
     row++;
 
     // password
+    passentry.set_visibility(false);
     Gtk::Label *label3 = manage(new Gtk::Label(_("Password:"), Gtk::ALIGN_LEFT));
     _server_options_table.attach(*label3, 0, 1, row, row + 1);
     _server_options_table.attach(passentry, 1, 2, row, row + 1);

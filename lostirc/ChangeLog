@@ -1,5 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
+2004-03-01  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * ServerWindow.cpp: Make the password field masked by asterixs.
+
 2004-02-13  Morten Brix Pedersen  <morten@wtf.dk>
 
         * configure.ac: Version 0.3.3pre.
