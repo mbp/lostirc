@@ -1,4 +1,4 @@
-LostIRC - (x.x.x)
+LostIRC - (0.4.1) - Mon Aug, 2nd 2004
   * Support for colorschemes added.
   * On startup, focus is set to the input entry as it should be.
   * The window no longer grows very big when too many matches has been found

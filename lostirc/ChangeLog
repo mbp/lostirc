@@ -1,6 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
 2004-08-02  Morten Brix Pedersen  <morten@wtf.dk>
+	* configure.ac: Bump version and release 0.4.1.
+
+2004-08-02  Morten Brix Pedersen  <morten@wtf.dk>
 	* StatusBar.cpp: Crop strings which are too long in statusbar. This
 	prevents the window from growing very big.
 
