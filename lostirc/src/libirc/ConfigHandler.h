@@ -35,6 +35,8 @@ public:
     Value<int> buffer_size;
     Value<int> window_width;
     Value<int> window_height;
+    Value<int> window_x;
+    Value<int> window_y;
     Value<std::string> realname;
     Value<std::string> nick;
     Value<std::string> ircuser;

@@ -35,11 +35,16 @@ MainWindow::MainWindow()
 
     int width = app.options.window_width;
     int height = app.options.window_height;
-    if (width != 0 && height != 0) {
-        set_default_size(width, height);
-    } else {
-        set_default_size(600, 400);
-    }
+    if (width && height)
+          set_default_size(width, height);
+    else
+          set_default_size(600, 400);
+
+    int x = app.options.window_x;
+    int y = app.options.window_y;
+
+    if (x && y)
+          move(x, y);
     
     add(notebook);
     show_all();
@@ -63,6 +68,13 @@ MainWindow::~MainWindow()
     if (width && height) {
         app.options.window_width = width;
         app.options.window_height = height;
+    }
+
+    int x, y;
+    get_window()->get_root_origin(x, y);
+    if (x && y) {
+        app.options.window_x = x;
+        app.options.window_y = y;
     }
 
     AppWin = 0;

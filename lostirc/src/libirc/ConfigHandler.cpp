@@ -213,6 +213,8 @@ Options::Options(const char *filename)
     buffer_size(this, "buffer_size", 500),
     window_width(this, "window_width", 0),
     window_height(this, "window_height", 0),
+    window_x(this, "window_x", 0),
+    window_y(this, "window_y", 0),
     realname(this, "realname"),
     nick(this, "nick"),
     ircuser(this, "ircuser"),
