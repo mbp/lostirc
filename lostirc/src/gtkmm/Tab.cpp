@@ -61,6 +61,7 @@ Tab::Tab(Gtk::Label *label, ServerConnection *conn, Pango::FontDescription font)
     setStyle();
 
     _textview.modify_font(font);
+    _textview.signal_size_allocate().connect(SigC::slot(*this, &Tab::onSizeAllocate));
 }
 
 Tab::~Tab()
@@ -222,6 +223,7 @@ void Tab::endPrefs()
     Prefs::currentTab = 0;
     pack_start(*_hbox);
     pack_start(*_hbox2, Gtk::FILL);
+    _entry.grab_focus();
     hasPrefs = false;
 }
 
