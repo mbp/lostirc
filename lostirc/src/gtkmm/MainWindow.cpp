@@ -21,6 +21,8 @@
 #include <cstdlib>
 #include <config.h>
 #include <gtkmm/box.h>
+#include <gtkmm/messagedialog.h>
+#include <gtkmm/actiongroup.h>
 #include <gdk/gdkkeysyms.h>
 #include <sigc++/retype_return.h>
 #include "DCCList.h"
@@ -54,7 +56,7 @@ MainWindow::MainWindow(bool autoconnect)
     setupMenus();
     Gtk::VBox *vbox = manage(new Gtk::VBox());
 
-    vbox->pack_start(_menubar, Gtk::PACK_SHRINK);
+    vbox->pack_start(*_uimanager->get_widget("/MenuBar"), Gtk::PACK_SHRINK);
     vbox->pack_start(_notebook, Gtk::PACK_EXPAND_WIDGET);
     vbox->pack_start(_statusbar, Gtk::PACK_SHRINK);
 
@@ -62,7 +64,7 @@ MainWindow::MainWindow(bool autoconnect)
     show_all();
 
     if (_app.options.hidemenu)
-          _menubar.hide();
+          _uimanager->get_widget("/MenuBar")->hide();
 
     if (_app.options.hidestatusbar)
           _statusbar.hide();
@@ -373,89 +375,73 @@ void MainWindow::openDccWindow()
         _dccwin = dialog;
     }
 }
+
 void MainWindow::setupMenus()
 {
-    { // First menu.
-        Gtk::Menu::MenuList& menulist = _firstmenu.items();
+    _uimanager = Gtk::UIManager::create();
+    Glib::RefPtr<Gtk::ActionGroup> group = Gtk::ActionGroup::create();
 
-        menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-                    _("_New Server Tab"),
-                    Gtk::AccelKey("<control>n"),
-                    sigc::hide_return(sigc::mem_fun(*this, &MainWindow::newServerTab))));
+    group->add(Gtk::Action::create("LostIRCMenu", _("_LostIRC")));
+    group->add(Gtk::Action::create("NewServerTab", _("_New Server Tab")), Gtk::AccelKey("<control>n"), sigc::hide_return(sigc::mem_fun(*this, &MainWindow::newServerTab)));
+    group->add(Gtk::Action::create("ClearWindow", _("Clear Window")),
+            sigc::mem_fun(_notebook, &MainNotebook::clearWindow));
+    group->add(Gtk::Action::create("ClearAllWindows", _("Clear All Windows")),
+            sigc::mem_fun(_notebook, &MainNotebook::clearAll));
+    group->add(Gtk::Action::create("CloseCurrentTab", _("Close Current Tab")),
+            sigc::mem_fun(*this, &MainWindow::closeCurrentTab));
+    group->add(Gtk::Action::create("Quit", Gtk::Stock::QUIT),
+            sigc::mem_fun(*this, &Gtk::Window::hide));
 
-        menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-                    _("Clear Window"),
-                    sigc::mem_fun(_notebook, &MainNotebook::clearWindow)));
+    group->add(Gtk::Action::create("ViewMenu", _("_View")));
+    group->add(Gtk::Action::create("MenuItem", _("_Menubar")), Gtk::AccelKey("<control>m"), sigc::mem_fun(*this, &MainWindow::hideMenu));
+    group->add(Gtk::Action::create("StatusBar", _("Status_bar")), Gtk::AccelKey("<control>b"), sigc::mem_fun(*this, &MainWindow::hideStatusbar));
+    group->add(Gtk::Action::create("UserList", _("_User List")), Gtk::AccelKey("<control>l"), sigc::mem_fun(*this, &MainWindow::hideNickList));
+    group->add(Gtk::Action::create("ServerList", _("_Server List")), Gtk::AccelKey("<control>s"), sigc::mem_fun(*this, &MainWindow::openServerWindow));
+    group->add(Gtk::Action::create("DCCTransfers", _("_DCC Transfers")), Gtk::AccelKey("<control>d"), sigc::mem_fun(*this, &MainWindow::openDccWindow));
+    group->add(Gtk::Action::create("Preferences", Gtk::Stock::PREFERENCES), Gtk::AccelKey("<control>p"), sigc::mem_fun(*this, &MainWindow::openPrefs));
 
-        menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-                    _("Clear All Windows"),
-                    sigc::mem_fun(_notebook, &MainNotebook::clearAll)));
+    group->add(Gtk::Action::create("HelpMenu", _("_Help")));
+    group->add(Gtk::Action::create("Introduction", _("_Introduction")), sigc::mem_fun(*this, &MainWindow::openHelpIntro));
+    group->add(Gtk::Action::create("About", _("_About")), sigc::mem_fun(*this, &MainWindow::openAboutWindow));
 
-        menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-                    _("Close Current Tab"),
-                    Gtk::AccelKey("<control>w"),
-                    sigc::mem_fun(*this, &MainWindow::closeCurrentTab)));
+    _uimanager->insert_action_group(group);
+    add_accel_group(_uimanager->get_accel_group());
 
+    try {
 
-        menulist.push_back(Gtk::Menu_Helpers::SeparatorElem::SeparatorElem());
-        menulist.push_back(
-                Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::QUIT,
-                    Gtk::AccelKey("<control>q"),
-                    sigc::mem_fun(*this, &Gtk::Window::hide)));
+        Glib::ustring ui_info = 
+                "<ui>"
+                "  <menubar name='MenuBar'>"
+                "    <menu action='LostIRCMenu'>"
+                "      <menuitem action='NewServerTab'/>"
+                "      <menuitem action='ClearWindow'/>"
+                "      <menuitem action='ClearAllWindows'/>"
+                "      <menuitem action='CloseCurrentTab'/>"
+                "      <separator/>"
+                "      <menuitem action='Quit'/>"
+                "    </menu>"
+                "    <menu action='ViewMenu'>"
+                "      <menuitem action='MenuItem'/>"
+                "      <menuitem action='StatusBar'/>"
+                "      <separator/>"
+                "      <menuitem action='UserList'/>"
+                "      <menuitem action='ServerList'/>"
+                "      <menuitem action='DCCTransfers'/>"
+                "      <menuitem action='Preferences'/>"
+                "    </menu>"
+                "    <menu action='HelpMenu'>"
+                "      <menuitem action='Introduction'/>"
+                "      <separator/>"
+                "      <menuitem action='About'/>"
+                "    </menu>"
+                "  </menubar>"
+                "</ui>";
+
+        _uimanager->add_ui_from_string(ui_info);
+
+    } catch (const Glib::Error& ex) {
+        std::cerr << "Building menus failed: " << ex.what() << std::endl;
     }
-
-    { // View menu.
-        Gtk::Menu::MenuList& menulist = _viewmenu.items();
-
-
-        menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-                    _("_Menubar"),
-                    Gtk::AccelKey("<control>m"),
-                    sigc::mem_fun(*this, &MainWindow::hideMenu)));
-
-        menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-                    _("Status_bar"),
-                    Gtk::AccelKey("<control>b"),
-                    sigc::mem_fun(*this, &MainWindow::hideStatusbar)));
-
-        menulist.push_back(Gtk::Menu_Helpers::SeparatorElem::SeparatorElem());
-
-        menulist.push_back(Gtk::Menu_Helpers::CheckMenuElem(
-                    _("User _List"),
-                    Gtk::AccelKey("<control>l"),
-                    sigc::mem_fun(*this, &MainWindow::hideNickList)));
-
-        menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-                    _("_Server List"),
-                    Gtk::AccelKey("<control>s"),
-                    sigc::mem_fun(*this, &MainWindow::openServerWindow)));
-        menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-                    _("_DCC Transfers"),
-                    Gtk::AccelKey("<control>d"),
-                    sigc::mem_fun(*this, &MainWindow::openDccWindow)));
-        menulist.push_back(
-                Gtk::Menu_Helpers::StockMenuElem(Gtk::Stock::PREFERENCES,
-                    Gtk::AccelKey("<control>p"),
-                    sigc::mem_fun(*this, &MainWindow::openPrefs)));
-
-
-    }
-
-    { // Help menu.
-        Gtk::Menu::MenuList& menulist = _helpmenu.items();
-
-        menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-                    _("_Introduction"), sigc::mem_fun(*this, &MainWindow::openHelpIntro)));
-
-        menulist.push_back(Gtk::Menu_Helpers::SeparatorElem::SeparatorElem());
-
-        menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-                    _("_About"), sigc::mem_fun(*this, &MainWindow::openAboutWindow)));
-    }
-
-    _menubar.items().push_back(Gtk::Menu_Helpers::MenuElem(_("_LostIRC"), _firstmenu));
-    _menubar.items().push_back(Gtk::Menu_Helpers::MenuElem(_("_View"), _viewmenu));
-    _menubar.items().push_back(Gtk::Menu_Helpers::MenuElem(_("_Help"), _helpmenu));
 }
 
 
@@ -463,9 +449,9 @@ void MainWindow::hideMenu()
 {
     _app.options.hidemenu = !_app.options.hidemenu;
     if (_app.options.hidemenu)
-          _menubar.hide();
+          _uimanager->get_widget("/MenuBar")->hide();
     else
-          _menubar.show();
+          _uimanager->get_widget("/MenuBar")->show();
 }
 
 void MainWindow::hideStatusbar()

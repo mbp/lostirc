@@ -24,8 +24,7 @@
 #include <gtkmm/main.h>
 #include <glibmm/main.h>
 #include <gtkmm/window.h>
-#include <gtkmm/menubar.h>
-#include <gtkmm/messagedialog.h>
+#include <gtkmm/uimanager.h>
 #include <ServerConnection.h>
 #include <LostIRCApp.h>
 #include <FrontEnd.h>
@@ -42,10 +41,7 @@ class MainWindow : public Gtk::Window, public FrontEnd
     LostIRCApp _app;
     MainNotebook _notebook;
 
-    Gtk::MenuBar _menubar;
-    Gtk::Menu _firstmenu;
-    Gtk::Menu _viewmenu;
-    Gtk::Menu _helpmenu;
+    Glib::RefPtr<Gtk::UIManager> _uimanager;
 
     std::auto_ptr<Prefs> _prefswin;
     std::auto_ptr<DCCWindow> _dccwin;
@@ -69,7 +65,7 @@ public:
     virtual ~MainWindow();
 
     MainNotebook& getNotebook() { return _notebook; }
-    const Gtk::MenuBar& getMenuBar() const { return _menubar; }
+    Glib::RefPtr<Gtk::UIManager> getUIManager() { return _uimanager; }
     Tab* newServerTab();
     void hideMenu();
     void hideStatusbar();
