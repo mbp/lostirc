@@ -137,41 +137,65 @@ bool Entry::onKeyPress(GdkEventKey* e)
                 if (matches == 1) {
                     set_text("/" + word + " ");
                     set_position(-1);
-
                 } else if (matches > 1) {
                     set_text("/" + word);
                     set_position(-1);
                     AppWin->_statusbar.setText2(_("<span foreground=\"blue\">Matches:</span> ") + matches_str);
-
                 } else {
                     AppWin->_statusbar.setText2(_("<span foreground=\"blue\">No matches.</span>"));
 
                 }
 
-            } else if (!word.empty()) {
+            } else if (!word.empty() && word.at(0) == '#') {
+                // Get channels
+                vector<ustring> channels(_tab->getConn()->Session.channels.size());
+                for (vector<ChannelBase*>::iterator it = _tab->getConn()->Session.channels.begin(); it != _tab->getConn()->Session.channels.end(); ++it)
+                    channels.push_back((*it)->getName().substr(1));
 
+                // Execute autocompletion
+                ustring matches_str;
+                word = word.substr(1);
+                int matches = autoCompletion(word, matches_str, channels);
+
+                // Parse results
+                if (matches == 1) {
+                    if (pos == 0)
+                        set_text("#" + word);
+                    else
+                        set_text(line.substr(0, pos + 1) + "#" + word);
+
+                    set_position(-1);
+                } else if (matches > 1) {
+                    if (pos == 0)
+                        set_text("#" + word);
+                    else
+                        set_text(line.substr(0, pos + 1) + "#" + word);
+
+                    set_position(-1);
+
+                    AppWin->_statusbar.setText2(_("<span foreground=\"blue\">Matches:</span> ") + matches_str);
+                } else {
+                    AppWin->_statusbar.setText2(_("<span foreground=\"blue\">No matches.</span>"));
+                }
+            } else if (!word.empty()) {
                 ustring matches_str;
                 int matches = autoCompletion(word, matches_str, _tab->getNicks());
 
                 if (matches == 1) {
-
-                    if (pos == 0) {
+                    if (pos == 0)
                         set_text(word + App->options.nickcompletion_char + " ");
-                        set_position(-1);
-                    } else {
+                    else
                         set_text(line.substr(0, pos + 1) + word);
-                        set_position(-1);
-                    }
-
-
+                        
+                    set_position(-1);
                 } else if (matches > 1) {
-                    if (pos == 0) {
+                    if (pos == 0)
                         set_text(word);
-                        set_position(-1);
-                    } else {
+                    else
                         set_text(line.substr(0, pos + 1) + word);
-                        set_position(-1);
-                    }
+                    
+                    set_position(-1);
+
                     AppWin->_statusbar.setText2(_("<span foreground=\"blue\">Matches:</span> ") + matches_str);
                 } else {
                     AppWin->_statusbar.setText2(("<span foreground=\"blue\">No matches.</span>"));

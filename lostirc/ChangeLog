@@ -1,5 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
+2004-02-01  Thomas Johansson  <prencher@prencher.dk>
+
+        * Entry.cpp: Added channel autocompletion.
+                     Syntax cleanup.
+
 2004-02-01  Morten Brix Pedersen  <morten@wtf.dk>
 
         * MainNotebook.cpp: Implement clearWindow() function.
