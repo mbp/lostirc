@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=LostIRC
 Comment=An IRC client
+Comment[da]=En IRC klient
 TryExec=lostirc
 Exec=lostirc
 Icon=gnome-irc.png
