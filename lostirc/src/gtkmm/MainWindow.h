@@ -31,6 +31,8 @@
 
 class MainWindow : public Gtk::Window, public FrontEnd
 {
+    virtual bool on_key_press_event(GdkEventKey* e);
+
     LostIRCApp app;
     MainNotebook notebook;
 
@@ -38,8 +40,6 @@ public:
     MainWindow();
     virtual ~MainWindow();
 
-    virtual bool on_key_press_event(GdkEventKey* e);
-    
     MainNotebook& getNotebook() { return notebook; }
     Tab* newServer();
 
