@@ -19,21 +19,26 @@
 #include "LostIRCApp.h"
 #include "ServerConnection.h"
 #include "Events.h"
+#include "Commands.h"
 #include <pwd.h>
 
 using std::string;
 using std::vector;
 
 LostIRCApp::LostIRCApp()
+    : _evts(new Events(this))
 {
-    _evts = new Events(this);
+    Commands::app = this;
     uname(&uname_info);
     if (!_cfg.readConfig())
           std::cerr << "Failed reading config file ~/.lostircrc" << std::endl;
 
-    nick = getenv("USER");
-    struct passwd *p = getpwnam(nick.c_str());
-    realname = p->pw_gecos;
+    if (_cfg.getParam("nick").empty()) {
+        _cfg.setParam("nick", getenv("USER"));
+    }
+    struct passwd *p = getpwnam(_cfg.getParam("nick").c_str());
+    if (p != NULL)
+          realname = p->pw_gecos;
 }
 
 LostIRCApp::~LostIRCApp()
@@ -52,14 +57,14 @@ LostIRCApp::~LostIRCApp()
 
 ServerConnection* LostIRCApp::newServer(const string& host, int port)
 {
-    ServerConnection *conn = new ServerConnection(this, host, port, nick);
+    ServerConnection *conn = new ServerConnection(this, host, port, _cfg.getParam("nick"));
     _servers.push_back(conn);
     return conn;
 }
 
 ServerConnection* LostIRCApp::newServer()
 {
-    ServerConnection *conn = new ServerConnection(this, nick, realname);
+    ServerConnection *conn = new ServerConnection(this, _cfg.getParam("nick"), realname);
     _servers.push_back(conn);
     return conn;
 }

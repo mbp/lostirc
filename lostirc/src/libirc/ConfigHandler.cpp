@@ -64,20 +64,14 @@ bool ConfigHandler::readConfig()
     return setDefaults();
 }
 
-bool ConfigHandler::setParam(const string& param, const string& value)
+bool ConfigHandler::setParam(const string& key, const string& value)
 {
     #ifdef DEBUG
-    std::cout << "trying to set '" + param + "' to: '" + value + "'" << std::endl;
+    std::cout << "trying to set '" + key + "' to: '" + value + "'" << std::endl;
     #endif
-    string home(getenv("HOME"));
-    std::ofstream out(string(home + "/.lostircrc").c_str(), std::ios::app);
+    _settings[key] = value;
 
-    if (!out)
-          return false;
-
-    out << param << " = " << value << std::endl;
-
-    return true;
+    return writeConfig();
 }
 
 string ConfigHandler::getParam(const string& param)
@@ -92,32 +86,40 @@ string ConfigHandler::getParam(const string& param)
 
 bool ConfigHandler::setDefaults()
 {
-    _settings["evt_privmsg"] = "$12<$0%1$12>$0 %2";
-    _settings["evt_privmsg_highlight"] = "$2<$8%1$2>$0 %2";
-    _settings["evt_action"] = "$7* %1$0 %2";
-    _settings["evt_action_highlight"] = "$8* %1$0 %2";
-    _settings["evt_servmsg"] = "$0-- : %1";
-    _settings["evt_servmsg2"] = "$0-- : %1 %2";
-    _settings["evt_ctcp"] = "$16-- CTCP %1 received from $0%2";
-    _settings["evt_topicchange"] = "$16-- $0%1$16 changes topic to:$15 %2";
-    _settings["evt_topicis"] = "$16-- Topic for $11%1$16 is:$0 %2";
-    _settings["evt_topictime"] = "$16-- Set by $0%1$16 on $9%2";
-    _settings["evt_noticepriv"] = "$7NOTICE $0%1$7 : %2";
-    _settings["evt_noticepubl"] = "$7NOTICE $0%1$7 (to %2): %3";
-    _settings["evt_error"] = "$16-- Error:$8 %1";
-    _settings["evt_away"] = "$3User $0%1$3 is away $15($3%2$15)";
-    _settings["evt_banlist"] = "$16-- Ban: $9%1$16 set by: $0%2";
-    _settings["evt_unknown"] = "$16-- Unknown message: $2%1";
-    _settings["evt_join"] = "$16-- $0%1$11 $15($9%3$15)$16 has joined $11%2";
-    _settings["evt_part"] = "$16-- $0%1$16 $15($9%3$15)$16 has parted $11%2";
-    _settings["evt_quit"] = "$16-- $0%1$16 has quit $11(%2)";
-    _settings["evt_nick"] = "$16-- $0%1$16 changes nick to %2";
-    _settings["evt_mode"] = "$16-- $0%1$16 sets mode $5%2$16 %3";
-    _settings["evt_cmode"] = "$16-- $0%1$16 sets channel mode $5%2 %3$16 on %4";
-    _settings["evt_wallops"] = "$2WALLOPS -: %1 :- %2";
-    _settings["evt_kicked"] = "$16-- $0%1$16 was kicked from $11%2$16 by %3 $15($9%4$15)";
+    setDefault("evt_privmsg", "$12<$0%1$12>$0 %2");
+    setDefault("evt_privmsg_highlight", "$2<$8%1$2>$0 %2");
+    setDefault("evt_action", "$7* %1$0 %2");
+    setDefault("evt_action_highlight", "$8* %1$0 %2");
+    setDefault("evt_servmsg", "$0-- : %1");
+    setDefault("evt_servmsg2", "$0-- : %1 %2");
+    setDefault("evt_ctcp", "$16-- CTCP %1 received from $0%2");
+    setDefault("evt_topicchange", "$16-- $0%1$16 changes topic to:$15 %2");
+    setDefault("evt_topicis", "$16-- Topic for $11%1$16 is:$0 %2");
+    setDefault("evt_topictime", "$16-- Set by $0%1$16 on $9%2");
+    setDefault("evt_noticepriv", "$7NOTICE $0%1$7 : %2");
+    setDefault("evt_noticepubl", "$7NOTICE $0%1$7 (to %2): %3");
+    setDefault("evt_error", "$16-- Error:$8 %1");
+    setDefault("evt_away", "$3User $0%1$3 is away $15($3%2$15)");
+    setDefault("evt_banlist", "$16-- Ban: $9%1$16 set by: $0%2");
+    setDefault("evt_unknown", "$16-- Unknown message: $2%1");
+    setDefault("evt_join", "$16-- $0%1$11 $15($9%3$15)$16 has joined $11%2");
+    setDefault("evt_part", "$16-- $0%1$16 $15($9%3$15)$16 has parted $11%2");
+    setDefault("evt_quit", "$16-- $0%1$16 has quit $11(%2)");
+    setDefault("evt_nick", "$16-- $0%1$16 changes nick to %2");
+    setDefault("evt_mode", "$16-- $0%1$16 sets mode $5%2$16 %3");
+    setDefault("evt_cmode", "$16-- $0%1$16 sets channel mode $5%2 %3$16 on %4");
+    setDefault("evt_wallops", "$2WALLOPS -: %1 :- %2");
+    setDefault("evt_kicked", "$16-- $0%1$16 was kicked from $11%2$16 by %3 $15($9%4$15)");
 
     return writeConfig();
+}
+
+void ConfigHandler::setDefault(const string& key, const string& value)
+{
+    map<string, string>::const_iterator i = _settings.find(key);
+
+    if (i == _settings.end())
+          _settings[key] = value;
 }
 
 bool ConfigHandler::writeConfig()

@@ -41,6 +41,7 @@ struct UserCommands cmds[] = {
     { "MSG",      Commands::Msg,        1 },
     { "ME",       Commands::Me,         1 },
     { "WHO",      Commands::Who,        1 },
+    { "SET",      Commands::Set,        0 },
     { "QUOTE",    Commands::Quote,      1 },
     { "COMMANDS", Commands::commands,   0 },
     { "EXEC",     Commands::Exec,       0 },
@@ -128,6 +129,17 @@ bool Commands::Mode(ServerConnection *conn, const string& params)
         conn->sendMode(params);
         return true;
     }
+}
+
+bool Commands::Set(ServerConnection *conn, const string& params)
+{
+    string::size_type pos1 = params.find_first_of(" ");
+    string key = params.substr(0, pos1);
+    string value;
+    if (pos1 != string::npos)
+          value = params.substr(pos1 + 1);
+
+    return app->getCfg().setParam(key, value);
 }
 
 bool Commands::Ctcp(ServerConnection *conn, const string& params)
@@ -311,3 +323,4 @@ bool Commands::Exec(ServerConnection *conn, const string& params)
 }
 
 string Commands::error;
+LostIRCApp* Commands::app;

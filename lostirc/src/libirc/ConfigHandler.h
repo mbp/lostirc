@@ -29,11 +29,12 @@ class ConfigHandler {
 
 public:
     bool readConfig();
-    bool setParam(const std::string& param, const std::string& value);
+    bool setParam(const std::string& key, const std::string& value);
     std::string getParam(const std::string& param);
 
 private:
     bool setDefaults();
+    void ConfigHandler::setDefault(const string& key, const string& value);
     bool writeConfig();
     std::map<std::string, std::string> _settings;
 

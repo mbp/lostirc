@@ -32,7 +32,6 @@ using namespace SigC;
 
 class LostIRCApp
 {
-    std::string nick;
     std::string realname;
 
 public:
