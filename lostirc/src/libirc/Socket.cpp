@@ -27,8 +27,6 @@ using std::string;
 
 Socket::Socket()
 {
-    fd = socket(AF_INET, SOCK_STREAM, 0);
-    setNonBlocking();
 }
 
 Socket::~Socket()
@@ -38,6 +36,9 @@ Socket::~Socket()
 
 void Socket::connect(const string& host, int port)
 {
+    fd = socket(AF_INET, SOCK_STREAM, 0);
+    setNonBlocking();
+
     struct hostent *he;
     if ((he = gethostbyname(host.c_str())) == NULL) {
         throw SocketException(strerror(errno));
