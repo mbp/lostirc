@@ -65,6 +65,7 @@ public:
     virtual void names(Channel& c, ServerConnection *conn) = 0;
     virtual void CUMode(const std::string& nick, Channel& chan, const std::vector<User>& users, ServerConnection *conn) = 0;
     virtual void away(bool away, ServerConnection *conn) = 0;
+    virtual void connected(ServerConnection *conn) = 0;
     virtual void newTab(ServerConnection *conn) = 0;
     virtual void disconnected(ServerConnection *conn) = 0;
 

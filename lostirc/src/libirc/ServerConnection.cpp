@@ -152,6 +152,7 @@ void ServerConnection::on_host_resolved()
     // we got connected
 
     Session.isConnected = true;
+    App->fe->connected(this);
 
     // This is a temporary watch to see when we can write, when we can
     // write - we are (hopefully) connected

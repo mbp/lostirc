@@ -1,12 +1,20 @@
 For a summary of changes between releases - see the NEWS file.
 
-2002-11-24  Michael Kristensen <tazz@wtf.dk>
+2002-11-25  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * FrontEnd.h/MainWindow.h: Add connected() method.
+        * ServerConnection.cpp/Parser.cpp: Call connected() when host is
+          resolved and when we receive the first line from the server.
+        * MainWindow.cpp: update the statusbar when we get connected, and when
+          a nick changed.
+
+2002-11-24  Michael Kristensen  <tazz@wtf.dk>
 
         * DCC.cpp: Sat a option a the DCC-send-socket, so that the same port
           can be reused just after the last use, so that the same port can be
           used continually
 
-2002-11-24  Michael Kristensen <tazz@wtf.dk>
+2002-11-24  Michael Kristensen  <tazz@wtf.dk>
 
         * Prefs.cpp/Prefs.h: Added an option, for the user to choose which
           port DCC will use.

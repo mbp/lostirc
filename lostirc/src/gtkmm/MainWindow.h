@@ -58,6 +58,7 @@ public:
     void names(Channel& c, ServerConnection *conn);
     void highlight(ChannelBase& chan, ServerConnection *conn);
     void away(bool away, ServerConnection *conn);
+    void connected(ServerConnection *conn);
     void newTab(ServerConnection *conn);
     void disconnected(ServerConnection *conn);
 

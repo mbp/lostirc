@@ -677,6 +677,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             _conn->Session.hasRegistered = true;
             _conn->Session.nick = param;
             _conn->addConnectionTimerCheck();
+            App->fe->connected(_conn);
         case 2:   // RPL_YOURHOST
         case 3:   // RPL_CREATED
         case 4:   // RPL_MYINFO

@@ -206,6 +206,7 @@ void MainWindow::nick(const string& nick, const string& to, vector<ChannelBase*>
         if (Tab *tab = notebook.findTab(Glib::locale_to_utf8((*i)->getName()), conn))
               tab->renameUser(Glib::locale_to_utf8(nick), Glib::locale_to_utf8(to));
     }
+    notebook.updateStatus();
 }
 
 void MainWindow::CUMode(const string& nick, Channel& chan, const std::vector<User>& users, ServerConnection *conn)
@@ -243,6 +244,11 @@ void MainWindow::away(bool away, ServerConnection* conn)
 {
     notebook.updateStatus();
     notebook.updateTitle();
+}
+
+void MainWindow::connected(ServerConnection* conn)
+{
+    notebook.updateStatus();
 }
 
 void MainWindow::disconnected(ServerConnection* conn)
