@@ -836,7 +836,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             FE::emit(FE::get(WHOIS_GENERIC) << getWord(param, 2) << rest, FE::CURRENT, _conn);
             break;
         case 330: // QuakeNet "foo is authed as" reply.
-            FE::emit(FE::get(WHOIS_GENERIC) << getWord(param, 2) << rest + getWord(param, 3), FE::CURRENT, _conn);
+            FE::emit(FE::get(WHOIS_GENERIC) << getWord(param, 2) << rest + " " + getWord(param, 3), FE::CURRENT, _conn);
             break;
 
         case 421: // ERR_UNKNOWNCOMMAND
