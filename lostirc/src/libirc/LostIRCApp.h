@@ -32,12 +32,15 @@ using namespace SigC;
 
 class LostIRCApp
 {
+    string nick;
+    string realname;
+
 public:
     LostIRCApp();
     struct utsname getsysinfo();
 
-    ServerConnection* newServer(const std::string& host, int port, const std::string& nick);
-    ServerConnection* newServer(const std::string& nick, const std::string& realname);
+    ServerConnection* newServer(const std::string& host, int port);
+    ServerConnection* newServer();
     void quit();
 
     ConfigHandler& getCfg() { return _cfg; }

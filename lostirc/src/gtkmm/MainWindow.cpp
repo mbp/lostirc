@@ -18,8 +18,6 @@
 
 #include "Tab.h"
 #include "MainWindow.h"
-#include <pwd.h>
-#include <sys/types.h>
 
 using std::vector;
 using std::string;
@@ -54,15 +52,11 @@ MainWindow::MainWindow()
     set_title("LostIRC "VERSION);
 
     // Construct initial tab
-    string nick = getenv("USER");
     string name = "<server>";
-    struct passwd *p = getpwnam(nick.c_str());
-    string realname(p->pw_gecos);
-    ServerConnection *conn = _app->newServer(nick, realname);
+    ServerConnection *conn = _app->newServer();
     conn->Session.servername = name;
     TabChannel *tab = _nb->addChannelTab(name, conn);
     tab->is_on_channel = false;
-    //tab->getText()->insert("Welcome to LostIRC!\n\nThis client is mainly keyboard oriented, so don't expect fancy menus and buttons for you to click on.\n\nTo list all available commands type /COMMANDS.\nTo see all available keybindings type /BINDS.\n\nType /SERVER <hostname> to connect to a server.\n");
     set_usize(600, 400);
     show_all();
     _nb->insert(tab, "\00311Welcome to LostIRC!\n\nThis client is mainly keyboard oriented, so don't expect fancy menus and buttons for you to click on.
@@ -148,7 +142,7 @@ void MainWindow::onQuit(const string& nick, const string& msg, ServerConnection 
     _nb->findTabs(nick, conn, tabs);
 
     for (i = tabs.begin(); i != tabs.end(); ++i) {
-        _nb->insert(*i, "\0033-- " + nick + " has quit (" + msg + ")\n");
+        _nb->insert(*i, "\00316-- \0030" + nick + "\00316 has quit \00315(\0039" + msg + "\00315)\n");
         (*i)->removeUser(nick);
     }
 }
@@ -165,7 +159,7 @@ void MainWindow::onNick(const string& nick, const string& to, ServerConnection *
     _nb->findTabs(nick, conn, tabs);
 
     for (i = tabs.begin(); i != tabs.end(); ++i) {
-        _nb->insert(*i, "\0039-- " + nick + " changes nick to " + to + "\n");
+        _nb->insert(*i, "\00316-- \0030" + nick + "\00316 changes nick to " + to + "\n");
         (*i)->renameUser(nick, to);
     }
 }
@@ -173,7 +167,7 @@ void MainWindow::onNick(const string& nick, const string& to, ServerConnection *
 void MainWindow::onMode(const string& nick, const string& param, const string& mode, ServerConnection *conn)
 {
     Tab *tab = _nb->getCurrent(conn);
-    _nb->insert(tab, "\0037-- " + nick + " sets mode " + mode + " " + param + "\n");
+    _nb->insert(tab, "\00316-- \0030" + nick + "\00316 sets mode \0035" + mode + "\00316 " + param + "\n");
 
 }
 
@@ -183,7 +177,7 @@ void MainWindow::onCMode(const string& nick, const string& chan, char sign, cons
 
     string::const_iterator i;
     for (i = modes.begin(); i != modes.end(); ++i) {
-        _nb->insert(tab, "\0037-- "  + nick + " sets channel mode " + sign + *i + " on " + chan + "\n");
+        _nb->insert(tab, "\00316-- \0030"  + nick + "\00316 sets channel mode \0035" + sign + *i + "\00316 on " + chan + "\n");
     }
 }
 
@@ -194,7 +188,7 @@ void MainWindow::onCUMode(const string& nick, const string& chan, const vector<v
     vector<vector<string> >::const_iterator i;
     for (i = users.begin(); i != users.end(); ++i) {
         vector<string> vec = *i;
-        _nb->insert(tab, "\0037-- "  + nick + " sets mode " + vec[0] + " to " + vec[1] + "\n");
+        _nb->insert(tab, "\00316-- \0030"  + nick + "\00316 sets mode \0035" + vec[0] + "\0030 to " + vec[1] + "\n");
         tab->removeUser(vec[1]);
         tab->insertUser(*i);
     }
@@ -222,13 +216,8 @@ void MainWindow::onHighlight(const string& to, ServerConnection* conn)
 
 void MainWindow::newServer()
 {
-    string nick = getenv("USER");
-
-    struct passwd *p = getpwnam(nick.c_str());
-    string realname(p->pw_gecos);
-
     string name = "<server>";
-    ServerConnection *conn = _app->newServer(nick, realname);
+    ServerConnection *conn = _app->newServer();
     conn->Session.servername = name;
     Tab *tab = _nb->addChannelTab(name, conn);
     tab->is_on_channel = false;

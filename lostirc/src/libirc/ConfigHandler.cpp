@@ -95,23 +95,24 @@ bool ConfigHandler::setDefaults()
 {
     _settings["evt_privmsg"] = "$12<$0%1$12>$0 %2";
     _settings["evt_privmsg_highlight"] = "$2<$8%1$2>$0 %2";
+    _settings["evt_action"] = "$7* %1$0 %2";
+    _settings["evt_action_highlight"] = "$8* %1$0 %2";
     _settings["evt_servmsg"] = "$0-- : %1";
     _settings["evt_servmsg2"] = "$0-- : %1 %2";
-    _settings["evt_ctcp"] = "$8-- CTCP %1 received from $0%2";
-    _settings["evt_topicchange"] = "$13-- $0%1$13 changes topic to: %2";
-    _settings["evt_topicis"] = "$13-- Topic for %1 is: %2";
-    _settings["evt_topictime"] = "$13-- Set by $0%1$13 on %2";
-    _settings["evt_action"] = "$7* %1$0 %2";
+    _settings["evt_ctcp"] = "$16-- CTCP %1 received from $0%2";
+    _settings["evt_topicchange"] = "$16-- $0%1$13 changes topic to: %2";
+    _settings["evt_topicis"] = "$16-- Topic for $11%1$16 is:$0 %2";
+    _settings["evt_topictime"] = "$16-- Set by $0%1$16 on $9%2";
     _settings["evt_noticepriv"] = "$7NOTICE $0%1$7 : %2";
     _settings["evt_noticepubl"] = "$7NOTICE $0%1$7 (to %2): %3";
-    _settings["evt_error"] = "$8Error:$4 %1";
-    _settings["evt_away"] = "$3User $0%1$3 is away (%2)";
-    _settings["evt_banlist"] = "$2Ban: %1 set by: %2";
-    _settings["evt_unknown"] = "$3Unknown message: $2%1";
-    _settings["evt_join"] = "$11-- $0%1$11 $15($9%3$15)$11 has joined %2";
-    _settings["evt_part"] = "$11-- $0%1$11 $15($9%3$15)$11 has parted %2";
+    _settings["evt_error"] = "$16-- Error:$8 %1";
+    _settings["evt_away"] = "$3User $0%1$3 is away $15($3%2$15)";
+    _settings["evt_banlist"] = "$16-- Ban: $9%1$16 set by: $0%2";
+    _settings["evt_unknown"] = "$16-- Unknown message: $2%1";
+    _settings["evt_join"] = "$16-- $0%1$11 $15($9%3$15)$16 has joined $11%2";
+    _settings["evt_part"] = "$16-- $0%1$16 $15($9%3$15)$16 has parted $11%2";
     _settings["evt_wallops"] = "$2WALLOPS -: %1 :- %2";
-    _settings["evt_kicked"] = "$8-- $0%1$8 was kicked from %2 by %3 (%4)";
+    _settings["evt_kicked"] = "$16-- $0%1$16 was kicked from $11%2$16 by %3 $15($9%4$15)";
 
     return writeConfig();
 

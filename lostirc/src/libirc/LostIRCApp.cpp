@@ -20,6 +20,7 @@
 #include "ServerConnection.h"
 #include "Parser.h"
 #include "Events.h"
+#include <pwd.h>
 
 using std::string;
 using std::vector;
@@ -31,16 +32,20 @@ LostIRCApp::LostIRCApp()
     if (!_cfg.readConfig())
           cerr << "Failed reading config file ~/.lostircrc" << endl;
 
+    nick = getenv("USER");
+    struct passwd *p = getpwnam(nick.c_str());
+    realname = p->pw_gecos;
+
 }
 
-ServerConnection* LostIRCApp::newServer(const string& host, int port, const string& nick)
+ServerConnection* LostIRCApp::newServer(const string& host, int port)
 {
     ServerConnection *conn = new ServerConnection(this, host, port, nick);
     _servers.push_back(conn);
     return conn;
 }
 
-ServerConnection* LostIRCApp::newServer(const string& nick, const string& realname)
+ServerConnection* LostIRCApp::newServer()
 {
     ServerConnection *conn = new ServerConnection(this, nick, realname);
     _servers.push_back(conn);
@@ -48,9 +53,9 @@ ServerConnection* LostIRCApp::newServer(const string& nick, const string& realna
 }
 
 struct utsname LostIRCApp::getsysinfo()
-{   
+{
     return uname_info;
-}   
+}
 
 void LostIRCApp::quit()
 {
