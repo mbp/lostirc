@@ -46,7 +46,6 @@ ServerWindow::ServerWindow(Gtk::Window& parent)
 {
     set_default_size(300, 325);
     set_border_width(5);
-    get_vbox()->set_spacing(12);
 
     int row = 1;
 
@@ -81,9 +80,7 @@ ServerWindow::ServerWindow(Gtk::Window& parent)
     updateList();
 
     // Button box.
-    Gtk::HButtonBox *buttbox = manage(new Gtk::HButtonBox());
-    buttbox->set_spacing(6);
-    buttbox->set_layout(Gtk::BUTTONBOX_END);
+    Gtk::HButtonBox *buttbox = manage(new Gtk::HButtonBox(Gtk::BUTTONBOX_END, 6));
     Gtk::Button *connectbutton = manage(create_imagebutton(_("_Connect"), Gtk::Stock::JUMP_TO));
     connectbutton->signal_clicked().connect(slot(*this, &ServerWindow::connectEntry));
     Gtk::Button *addbutton = manage(new Gtk::Button(Gtk::Stock::ADD));
@@ -104,11 +101,11 @@ ServerWindow::ServerWindow(Gtk::Window& parent)
 
     Gtk::Label *servlabel = manage(new Gtk::Label());
     servlabel->set_markup("<b>Servers</b>");
-    get_vbox()->pack_start(_pref_table, Gtk::PACK_SHRINK);
-    get_vbox()->pack_start(*manage(new Gtk::HSeparator()), Gtk::PACK_SHRINK);
-    get_vbox()->pack_start(*servlabel, Gtk::PACK_SHRINK);
-    get_vbox()->pack_start(*swin, Gtk::PACK_EXPAND_WIDGET);
-    get_vbox()->pack_start(*manage(new Gtk::HSeparator()), Gtk::PACK_SHRINK);
+    get_vbox()->pack_start(_pref_table, Gtk::PACK_SHRINK, 5);
+    get_vbox()->pack_start(*manage(new Gtk::HSeparator()), Gtk::PACK_SHRINK, 5);
+    get_vbox()->pack_start(*servlabel, Gtk::PACK_SHRINK, 5);
+    get_vbox()->pack_start(*swin, Gtk::PACK_EXPAND_WIDGET, 5);
+    get_vbox()->pack_start(*manage(new Gtk::HSeparator()), Gtk::PACK_SHRINK, 5);
     get_vbox()->pack_start(*buttbox, Gtk::PACK_SHRINK);
 
     show_all();

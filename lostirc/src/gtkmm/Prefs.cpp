@@ -188,8 +188,6 @@ Prefs::Prefs()
 
 
     // Final setup
-    mainvbox.pack_start(*manage(new Gtk::HSeparator()), Gtk::PACK_SHRINK);
-
     Gtk::HBox *closehbox = manage(new Gtk::HBox());
     Gtk::Button *closebutton = manage(new Gtk::Button(Gtk::Stock::CLOSE));
     closebutton->signal_clicked().connect(slot(*this, &Prefs::onClose));
