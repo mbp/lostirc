@@ -149,9 +149,8 @@ void Tab::insertWithColor(int color, const ustring& str)
     // FIXME: possible performance critical
     int buffer_size = App->options.buffer_size;
     if (buffer_size && buffer->get_line_count() > buffer_size) {
-        Gtk::TextBuffer::iterator start = buffer->get_iter_at_line(0);
         Gtk::TextBuffer::iterator end = buffer->get_iter_at_line(buffer->get_line_count() - buffer_size);
-        buffer->erase(start, end);
+        buffer->erase(buffer->begin(), end);
     }
 }
 
@@ -201,8 +200,8 @@ void Tab::insertText(const ustring& str)
 
 void Tab::clearText()
 {
-    Glib::RefPtr<Gtk::TextBuffer> buf = _textview.get_buffer();
-    buf->erase(buf->begin(), buf->end());
+    Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
+    buffer->erase(buffer->begin(), buffer->end());
 }
 
 void Tab::setAway()
