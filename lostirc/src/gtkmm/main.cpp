@@ -21,6 +21,24 @@
 #include "MainWindow.h"
 #include <LostIRC.h>
 
+void set_lostirc_window_icon()
+{
+    const char *const icon_filename =
+            LOSTIRC_DATADIR G_DIR_SEPARATOR_S "pixmaps" G_DIR_SEPARATOR_S "lostirc.png";
+
+    try
+    {
+        std::list< Glib::RefPtr<Gdk::Pixbuf> > icons;
+        icons.push_back(Gdk::Pixbuf::create_from_file(icon_filename));
+        Gtk::Window::set_default_icon_list(icons);
+    }
+    catch(const Glib::Error& error)
+    {
+        const Glib::ustring what = error.what();
+        g_warning("%s", what.c_str());
+    }
+}
+
 int main(int argc, char** argv)
 {
     bool autoconnect = true;
@@ -30,6 +48,7 @@ int main(int argc, char** argv)
                 autoconnect = false;
 
     Gtk::Main app(argc, argv);
+    set_lostirc_window_icon();
 
     bindtextdomain(PACKAGE, LOCALEDIR);
     bind_textdomain_codeset (PACKAGE, "UTF-8");

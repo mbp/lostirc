@@ -1,7 +1,7 @@
 SUBDIRS = m4 intl po src
 
 EXTRA_DIST = config.rpath  lostirc.desktop \
-             lostirc.1
+             lostirc.1 lostirc.png
 
 dist-hook: lostirc.spec
 	cp lostirc.spec $(distdir)
@@ -15,6 +15,9 @@ if KDE
 Kdedir = $(prefix)/share/applnk
 Kde_DATA = lostirc.desktop
 endif
+
+pixmapdir = $(datadir)/pixmaps
+pixmap_DATA = lostirc.png
 
 man_MANS = lostirc.1
 

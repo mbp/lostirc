@@ -1,5 +1,13 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-05-31  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Parser.cpp: Include <cassert> to fix compilation with gcc 3.3.
+        * lostirc.png: Added.
+        * Makefile.am: Distribute lostirc.png.
+        * main.cpp: Use lostirc.png as window icon.
+        * lostirc.desktop: Use lostirc.png as menu icon.
+
 2003-05-30  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Parser.cpp: Another compilation fix for FreeBSD 5.0.

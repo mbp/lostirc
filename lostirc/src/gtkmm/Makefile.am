@@ -17,6 +17,7 @@ lostirc_LDADD = ../libirc/libirc.a
 INCLUDES = $(DEPS_CFLAGS) \
            -I$(top_srcdir)/src/libirc \
            -I$(top_srcdir)/intl \
-           -DLOCALEDIR=\"$(datadir)/locale\"
+           -DLOCALEDIR=\"$(datadir)/locale\" \
+           -DLOSTIRC_DATADIR=\"$(datadir)\"
 
 LIBS = $(DEPS_LIBS)
