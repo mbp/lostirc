@@ -3,13 +3,13 @@ LostIRC (x.x.x)
   * Using preferences, you can now enable logging. (thanks, Michael
     Kristensen)
   * /EXIT no longer requires you to be connected.
-  * After being reconnecting to a server, queries had a parentes around
+  * After reconnecting to a server, queries had a parentes around
     them. Fixed.
   * Notices sent to channels are now displayed in the channel instead of in
     the current window.
   * Tabs are now scrollable instead of making the window larger when tabs
     exceed the size of the window.
-  * Some locale problems on Red Hat 8 (and possibly others) has been fixed,
+  * Some locale problems on Red Hat 8 (and most likely others) has been fixed,
     which caused LostIRC to abort on startup.
 
 LostIRC (0.2.3) - Thu Dec, 19th 2002
