@@ -196,26 +196,30 @@ void Parser::Privmsg(const string& from, const string& param, const string& rest
     } else {
         // Normal privmsg 
 
-        ChannelBase *c;
+        ChannelBase *chan;
 
         if (param == _conn->Session.nick) {
             // The message was intended for *us*, so its a query.
-            c = _conn->findQuery(findNick(from));
-            if (!c) {
-                c = new Query(findNick(from));
-                _conn->Session.channels.push_back(c);
+            chan = _conn->findQuery(findNick(from));
+            if (!chan) {
+                chan = new Query(findNick(from));
+                _conn->Session.channels.push_back(chan);
             }
 
         } else {
-            c = _conn->findChannel(param);
-            assert(c);
+            chan = _conn->findChannel(param);
+
+            // Even though this should never happen, it happens with some
+            // bouncers.
+            if (!chan)
+                  return;
         }
 
         if (shouldHighlight(rest)) {
-            FE::emit(FE::get(PRIVMSG_HIGHLIGHT) << findNick(from) << rest, *c, _conn);
-            App->fe->highlight(*c, _conn);
+            FE::emit(FE::get(PRIVMSG_HIGHLIGHT) << findNick(from) << rest, *chan, _conn);
+            App->fe->highlight(*chan, _conn);
         } else {
-            FE::emit(FE::get(PRIVMSG) << findNick(from) << rest, *c, _conn);
+            FE::emit(FE::get(PRIVMSG) << findNick(from) << rest, *chan, _conn);
         }
     }
 }
@@ -231,26 +235,30 @@ void Parser::Ctcp(const string& from, const string& param, const string& rest)
     } else if (command == "ACTION") {
         string rest_ = rest.substr(pos + 1, (rest.length() - pos) - 2);
 
-        ChannelBase *c;
+        ChannelBase *chan;
 
         if (param == _conn->Session.nick) {
             // The message was intended for *us*, so its a query.
-            c = _conn->findQuery(findNick(from));
-            if (!c) {
-                c = new Query(findNick(from));
-                _conn->Session.channels.push_back(c);
+            chan = _conn->findQuery(findNick(from));
+            if (!chan) {
+                chan = new Query(findNick(from));
+                _conn->Session.channels.push_back(chan);
             }
 
         } else {
-            c = _conn->findChannel(param);
-            assert(c);
+            chan = _conn->findChannel(param);
+
+            // Even though this should never happen, it happens with some
+            // bouncers.
+            if (!chan)
+                  return;
         }
 
         if (shouldHighlight(rest)) {
-            FE::emit(FE::get(ACTION_HIGHLIGHT) << findNick(from) << rest_, *c, _conn);
-            App->fe->highlight(*c, _conn);
+            FE::emit(FE::get(ACTION_HIGHLIGHT) << findNick(from) << rest_, *chan, _conn);
+            App->fe->highlight(*chan, _conn);
         } else {
-            FE::emit(FE::get(ACTION) << findNick(from) << rest_, *c, _conn);
+            FE::emit(FE::get(ACTION) << findNick(from) << rest_, *chan, _conn);
         }
         return;
 
