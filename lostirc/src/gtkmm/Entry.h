@@ -37,7 +37,7 @@ private:
     void printText(const std::string& msg);
     std::vector<std::string> _entries;
     Tab* _tab;
-    std::vector<std::string>::reverse_iterator i;
+    std::vector<std::string>::iterator i;
 
 };
 #endif

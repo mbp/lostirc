@@ -16,15 +16,15 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <sstream>
 #include "GuiCommands.h"
 #include "Entry.h"
-#include <sstream>
 
 using std::vector;
 using std::string;
 
 Entry::Entry(Tab* tab)
-    : Gtk::Entry(), _tab(tab), i(_entries.rbegin())
+    : Gtk::Entry(), _tab(tab), i(_entries.begin())
 {
     key_press_event.connect(slot(this, &Entry::on_key_press_event));
     activate.connect(slot(this, &Entry::onEntry));
@@ -58,7 +58,7 @@ void Entry::onEntry()
     } else {
         if (!_tab->getConn()->Session.isConnected) {
             _tab->parseAndInsert("Not connected to server.\n");
-        } else if (!_tab->is_on_channel) {
+        } else if (!_tab->isActive()) {
             _tab->parseAndInsert("Not on any channel.\n");
         } else {
             printText(msg);
@@ -66,7 +66,7 @@ void Entry::onEntry()
     }
 
     _entries.push_back(msg);
-    i = _entries.rbegin();
+    i = _entries.begin();
     set_text("");
 }
 
@@ -88,14 +88,23 @@ gint Entry::on_key_press_event(GdkEventKey* e)
 {
     if ((e->keyval == GDK_uparrow) || (e->keyval == GDK_Up)) {
         if (!_entries.empty()) {
-            // Use reverse iterator to go to next element
-            if (i == _entries.rend())
-                  i = _entries.rbegin();
+            // Use iterator to go to next element
+            if (i == _entries.begin())
+                  i = _entries.end() - 1;
+            else
+                  --i;
 
             set_text(*i);
 
-            if (i != _entries.rend())
-                  ++i;
+        }
+    } else if ((e->keyval == GDK_downarrow) || (e->keyval == GDK_Down)) {
+        if (!_entries.empty()) {
+            // Use iterator to go to previous element
+            i++;
+            if (i == _entries.end())
+                  i = _entries.begin();
+
+            set_text(*i);
         }
     } else if ((e->keyval == GDK_Tab)) {
         // Nick completion using Tab key
