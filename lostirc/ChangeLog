@@ -3,7 +3,7 @@ LostIRC (x.x.x)
     Noteable features with gtkmm2:
       * UTF-8 support
       * Improved fonts, e.g. anti aliased fonts when 'GDK_USE_XFT' is set
-        (try `export GDK_USE_XFT=1`)
+        (in bash, try `export GDK_USE_XFT=1`)
       * Cleaner and more attractive default interface
       * Double-buffering in widgets which prevents flickering
 
@@ -32,6 +32,7 @@ LostIRC (x.x.x)
     channel.
   * Colors used by text-window are no longer hard-coded into the code, they
     are now read from ~/.lostirc/colors.conf and can be changed by hand.
+  * The client registered the name with a space in front of it, fixed.
 
 LostIRC (0.1.4) - Sat Jul 13th 2002
   * A segfault which appeared when the enviroment variable USER wasn't set,

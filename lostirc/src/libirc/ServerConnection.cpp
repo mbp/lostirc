@@ -309,7 +309,7 @@ bool ServerConnection::sendPing(const string& crap)
 
 bool ServerConnection::sendUser(const string& nick, const string& localhost, const string& remotehost, const string& name)
 {
-    string msg("USER " + nick + " " + localhost + " " + remotehost + " : " + name + "\r\n");
+    string msg("USER " + nick + " " + localhost + " " + remotehost + " :" + name + "\r\n");
 
     return _socket.send(msg);
 }
