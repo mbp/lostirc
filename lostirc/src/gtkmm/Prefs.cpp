@@ -26,8 +26,8 @@
 using std::vector;
 using std::string;
 
-Prefs::Prefs(Tab *t)
-    : Gtk::Notebook(), tab(t)
+Prefs::Prefs()
+    : Gtk::Notebook()
 {
 
     Gtk::VBox *performbox = manage(new Gtk::VBox());
@@ -119,12 +119,12 @@ Prefs::~Prefs()
 {
     delete removebutton;
     delete addnewbutton;
-
 }
 
 void Prefs::endPrefs()
 {
-    tab->endPrefs(this);
+    currentTab->endPrefs();
+    //tab->endPrefs(this);
 }
 
 void Prefs::saveEntry()
@@ -224,3 +224,6 @@ void Prefs::clearEntries()
     nickentry->set_text("");
     cmdtext->delete_text(0, -1);
 }
+
+Tab* Prefs::currentTab = 0;
+

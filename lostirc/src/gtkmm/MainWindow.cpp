@@ -298,7 +298,7 @@ gint MainWindow::on_key_press_event(GdkEventKey* e)
     }
     else if ((e->keyval == GDK_p) && (e->state & GDK_MOD1_MASK)) {
         TabChannel *tab = dynamic_cast<TabChannel*>(_nb->getCurrent());
-        if (tab) {
+        if (tab && !tab->hasPrefs) {
             tab->startPrefs();
         }
     }
@@ -314,4 +314,5 @@ gint MainWindow::on_key_press_event(GdkEventKey* e)
             gtk_signal_emit_stop_by_name(GTK_OBJECT(this->gtkobj()), "key_press_event");
         }
     }
+    return 0;
 }

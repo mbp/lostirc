@@ -52,7 +52,7 @@ public:
     void setAway();
     void setUnAway();
     void startPrefs();
-    void endPrefs(Prefs *p);
+    void endPrefs();
 
     virtual void insertUser(const std::vector<std::string>& users) = 0;
     virtual void insertUser(const std::string& user, IRC::UserMode m = IRC::NONE) = 0;

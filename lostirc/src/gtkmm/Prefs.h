@@ -26,6 +26,23 @@
 
 class Prefs : public Gtk::Notebook
 {
+public:
+    static Prefs* Instance() {
+        static Prefs p;
+        return &p;
+    }
+
+    // this is an important variable, the Tab that currently has the prefs
+    // is defined here, so when we do endPrefs() we can call the right
+    // endPrefs() member function in the Tab class
+    static Tab* currentTab;
+    void endPrefs();
+private:
+    Prefs();
+    Prefs(const Prefs&);
+    Prefs& operator=(const Prefs&);
+    ~Prefs();
+
     Gtk::CList *clist;
     Gtk::Entry *passentry;
     Gtk::Entry *portentry;
@@ -39,7 +56,6 @@ class Prefs : public Gtk::Notebook
     Gtk::HBox *savehbox;
     Tab *tab;
 
-    void endPrefs();
     void saveEntry();
     void removeEntry();
     void addEntry();
@@ -47,9 +63,6 @@ class Prefs : public Gtk::Notebook
     void onUnSelectRow(int row, int col, GdkEvent* e);
     void clearEntries();
 
-public:
-    Prefs(Tab *t);
-    ~Prefs();
 };
 
 #endif
