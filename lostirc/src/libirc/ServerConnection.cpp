@@ -82,7 +82,7 @@ bool ServerConnection::readsocket()
 {
     string data;
     if (_socket->receive(data)) {
-        if (data.size() > 0) {
+        if (!data.empty()) {
             _p->parseLine(data);
             return true;
         }
@@ -218,6 +218,18 @@ bool ServerConnection::sendAway(const string& params)
 bool ServerConnection::sendInvite(const string& to, const string& params)
 {
     string msg("INVITE " + to + " " + params + "\r\n");
+
+    return _socket->send(msg);
+}
+
+bool ServerConnection::sendTopic(const string& chan, const string& topic)
+{
+    string msg;
+    if (topic.empty()) {
+        msg = "TOPIC " + chan + "\r\n";
+    } else {
+        msg = "TOPIC " + chan + " " + topic + "\r\n";
+    }
 
     return _socket->send(msg);
 }

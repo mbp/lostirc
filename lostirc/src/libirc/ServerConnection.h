@@ -47,6 +47,7 @@ public:
     bool sendQuit(const string& quitmsg);
     bool sendMode(const string& params);
     bool sendCtcp(const string& to, const string& params);
+    bool sendTopic(const string& chan, const string& params);
     bool sendAway(const string& params);
     bool sendInvite(const string& to, const string& params);
     bool sendBanlist(const string& chan);

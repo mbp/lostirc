@@ -31,6 +31,7 @@ struct UserCommands cmds[] = {
     { "CTCP",     Commands::Ctcp,       1 },
     { "AWAY",     Commands::Away,       1 },
     { "INVITE",   Commands::Invite,     1 },
+    { "TOPIC",    Commands::Topic,      1 },
     { "NOTICE",   Commands::Notice,     1 },
     { "BANLIST",  Commands::Banlist,    1 },
     { "MSG",      Commands::Msg,        1 },
@@ -61,41 +62,49 @@ bool Commands::send(ServerConnection *conn, string cmd, const string& params) {
 bool Commands::Join(ServerConnection *conn, const string& params)
 {
     conn->sendJoin(params);
+    return true;
 }
 
 bool Commands::Part(ServerConnection *conn, const string& params)
 {
     conn->sendPart(params);
+    return true;
 }
 
 bool Commands::Quit(ServerConnection *conn, const string& params)
 {
     conn->sendQuit(params);
+    return true;
 }
 
 bool Commands::Kick(ServerConnection *conn, const string& params)
 {
     conn->sendKick(params);
+    return true;
 }
 
 bool Commands::Server(ServerConnection *conn, const string& params)
 {
     conn->Connect(params);
+    return true;
 }
 
 bool Commands::Nick(ServerConnection *conn, const string& params)
 {
     conn->sendNick(params);
+    return true;
 }
 
 bool Commands::Whois(ServerConnection *conn, const string& params)
 {
     conn->sendWhois(params);
+    return true;
 }
 
 bool Commands::Mode(ServerConnection *conn, const string& params)
 {
     conn->sendMode(params);
+    return true;
 }
 
 bool Commands::Ctcp(ServerConnection *conn, const string& msg)
@@ -105,7 +114,7 @@ bool Commands::Ctcp(ServerConnection *conn, const string& msg)
     ss >> to;
     ss >> action;
 
-    if (action.length() == 0) {
+    if (action.empty()) {
         error = "/CTCP <nick> <message>, sends a CTCP message to a user";
         return false;
     } else {
@@ -119,11 +128,13 @@ bool Commands::Ctcp(ServerConnection *conn, const string& msg)
 bool Commands::Away(ServerConnection *conn, const string& params)
 {
     conn->sendAway(params);
+    return true;
 }
 
 bool Commands::Banlist(ServerConnection *conn, const string& chan)
 {
     conn->sendBanlist(chan);
+    return true;
 }
 
 bool Commands::Invite(ServerConnection *conn, const string& params)
@@ -133,13 +144,27 @@ bool Commands::Invite(ServerConnection *conn, const string& params)
     ss >> to;
     ss >> action;
 
-    if (action.length() == 0) {
+    if (action.empty()) {
         error = "/INVITE <nick> <channel>, invites someone to a channel.";
         return false;
     } else {
-        action = Utils::toupper(action);
-
         conn->sendInvite(to, action);
+        return true;
+    }
+}
+
+bool Commands::Topic(ServerConnection *conn, const string& params)
+{
+    string chan, topic;
+    stringstream ss(params);
+    ss >> chan;
+    ss >> topic;
+
+    if (topic.empty()) {
+        error = "/TOPIC <channel> [topic], view or change topic for a channel.";
+        return false;
+    } else {
+        conn->sendTopic(chan, topic);
         return true;
     }
 }
@@ -150,7 +175,7 @@ bool Commands::Msg(ServerConnection *conn, const string& params)
     string to = params.substr(0, pos1 + 1);
     string msg = params.substr(pos1 + 1);
 
-    if (msg.length() == 0) {
+    if (msg.empty()) {
        error = "/MSG <nick/channel> <message>, sends a normal message.";
        return false;
     } else {
@@ -165,7 +190,7 @@ bool Commands::Notice(ServerConnection *conn, const string& params)
     string to = params.substr(0, pos1 + 1);
     string msg = params.substr(pos1 + 1);
 
-    if (msg.length() == 0) {
+    if (msg.empty()) {
        error = "/NOTICE <nick/channel> <message>, sends a notice.";
        return false;
     } else {
@@ -181,7 +206,7 @@ bool Commands::Me(ServerConnection *conn, const string& params)
     string to = params.substr(0, pos1 + 1);
     string msg = params.substr(pos1 + 1);
 
-    if (msg.length() == 0) {
+    if (msg.empty()) {
        error = "/ME <message>, sends the action to the current channel.)";
        return false;
     } else {

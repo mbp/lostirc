@@ -155,7 +155,6 @@ void MainNotebook::insert(Tab *tab, const string& str)
         tab->getLabel()->set_style(*style);
     }
     tab->parseAndInsert(str);
-
 }
 
 void MainNotebook::findTabsContaining(const string& nick, vector<Tab*>& vec)
