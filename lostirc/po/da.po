@@ -294,7 +294,7 @@ msgstr "IRC brugernavn (ident)"
 
 #: src/gtkmm/Prefs.cpp:109
 msgid "General"
-msgstr "General"
+msgstr "Generelt"
 
 #: src/gtkmm/Prefs.cpp:113
 msgid "Encoding to use on IRC"
@@ -580,7 +580,7 @@ msgstr "Kunne ikke forbinde: "
 
 #: src/libirc/ServerConnection.cpp:143
 msgid "Resolved host. Connecting.."
-msgstr "Vært løst. Forbinder.."
+msgstr "Værtsnavn slået op. Forbinder.."
 
 #: src/libirc/ServerConnection.cpp:149
 msgid "Failed connecting:"
