@@ -42,8 +42,7 @@ namespace algo
 }
 
 ServerConnection::ServerConnection(const string& host, const string& nick, int port, bool doconnect)
-    : _socket(new Socket()), _parser(this), _writeid(0),
-    _watchid(0), _connectioncheckid(0), _autoreconnectid(0)
+    : _socket(new Socket()), _parser(this)
 {
     Session.nick = nick;
     Session.servername = host;
@@ -92,18 +91,15 @@ void ServerConnection::doCleanup()
     Session.endOfMotd = false;
     Session.sentLagCheck = false;
 
-    if (_writeid > 0) {
-        g_source_remove(_writeid);
-        _writeid = 0;
-    }
-    if (_watchid > 0) {
-        g_source_remove(_watchid);
-        _watchid = 0;
-    }
-    if (_connectioncheckid > 0) {
-        g_source_remove(_connectioncheckid);
-        _connectioncheckid = 0;
-    }
+    if (signal_write.connected())
+          signal_write.disconnect();
+
+    if (signal_watch.connected())
+          signal_watch.disconnect();
+
+    if (signal_connection.connected())
+          signal_connection.disconnect();
+
     for_each(Session.channels.begin(), Session.channels.end(), algo::deletePointer());
     Session.channels.clear();
 
@@ -161,61 +157,57 @@ void ServerConnection::on_host_resolved()
 
     // This is a temporary watch to see when we can write, when we can
     // write - we are (hopefully) connected
-    _writeid = g_io_add_watch(g_io_channel_unix_new(_socket->getfd()),
-                   GIOCondition (G_IO_OUT | G_IO_IN | G_IO_ERR | G_IO_HUP | G_IO_PRI | G_IO_NVAL),
-                   &ServerConnection::onConnect, this);
-
+    signal_write = Glib::signal_io().connect(
+            SigC::slot(*this, &ServerConnection::onConnect),
+            _socket->getfd(),
+            Glib::IO_OUT | Glib::IO_IN | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_PRI | Glib::IO_NVAL);
 }
 
-gboolean ServerConnection::autoReconnect(gpointer data)
+bool ServerConnection::autoReconnect()
 {
     #ifdef DEBUG
     App->log << "ServerConnection::autoReconnect(): reconnecting." << std::endl;
     #endif
-    ServerConnection& conn = *(static_cast<ServerConnection*>(data));
-    conn.connect();
-    return FALSE;
+    connect();
+    return false;
 }
 
-gboolean ServerConnection::connectionCheck(gpointer data)
+bool ServerConnection::connectionCheck()
 {
-    ServerConnection& conn = *(static_cast<ServerConnection*>(data));
-
-    if (conn.Session.sentLagCheck) {
+    if (Session.sentLagCheck) {
         // disconnected! last lag check was never replied to
         #ifdef DEBUG
         App->log << "ServerConnection::connectionCheck(): disconnected." << std::endl;
         #endif
-        conn.disconnect();
-        conn.connect();
+        disconnect();
+        connect();
 
-        return FALSE;
+        return false;
     } else {
         #ifdef DEBUG
         App->log << "ServerConnection::connectionCheck(): still on" << std::endl;
         #endif
-        conn.sendPing();
-        conn.Session.sentLagCheck = true;
-        return TRUE;
+        sendPing();
+        Session.sentLagCheck = true;
+        return true;
     }
 }
 
-gboolean ServerConnection::onReadData(GIOChannel* io_channel, GIOCondition cond, gpointer data)
+bool ServerConnection::onReadData(Glib::IOCondition)
 {
-    ServerConnection& conn = *(static_cast<ServerConnection*>(data));
     #ifdef DEBUG
-    App->log << "ServerConnection::onReadData(): reading.." << std::endl;
+    App->log << "Serverconnection::onReadData(): reading.." << std::endl;
     #endif
 
     try {
 
         char buf[4096];
-        if (conn._socket->receive(buf, 4095)) {
+        if (_socket->receive(buf, 4095)) {
 
             string str;
-            if (!conn.tmpbuf.empty()) {
-                str = conn.tmpbuf;
-                conn.tmpbuf = "";
+            if (!tmpbuf.empty()) {
+                str = tmpbuf;
+                tmpbuf = "";
             }
             str += buf;
 
@@ -231,76 +223,75 @@ gboolean ServerConnection::onReadData(GIOChannel* io_channel, GIOCondition cond,
                 if (pos == string::npos && lastPos != str.length()) {
                     // we reached the last line, but it was not ended with
                     // \n, lets buffer this
-                    conn.tmpbuf = str.substr(lastPos);
-                    return TRUE;
+                    tmpbuf = str.substr(lastPos);
+                    return true;
                 } else {
                     string tmp = str.substr(lastPos, pos - lastPos);
-                    conn._parser.parseLine(tmp);
+                    _parser.parseLine(tmp);
                 }
                 lastPos = str.find_first_not_of("\n", pos);
                 pos = str.find_first_of("\n", lastPos);
             }
         }
-        return TRUE;
+        return true;
 
     } catch (SocketException &e) {
-        FE::emit(FE::get(SERVMSG3) << "Failed to receive" << e.what(), FE::ALL, &conn);
-        conn.disconnect();
-        conn.addReconnectTimer();
-        return FALSE;
+        FE::emit(FE::get(SERVMSG3) << "Failed to receive" << e.what(), FE::ALL, this);
+        disconnect();
+        addReconnectTimer();
+        return false;
     } catch (SocketDisconnected &e) {
-        conn.disconnect();
-        conn.addReconnectTimer();
-        return FALSE;
+        disconnect();
+        addReconnectTimer();
+        return false;
     }
 }
 
-gboolean ServerConnection::onConnect(GIOChannel* io_channel, GIOCondition cond, gpointer data)
+bool ServerConnection::onConnect(Glib::IOCondition cond)
 {
     // The only purpose of this function is to register us to the server
     // when we are able to write
-    ServerConnection& conn = *(static_cast<ServerConnection*>(data));
-    FE::emit(FE::get(SERVMSG) << "Connected. Logging in...", FE::CURRENT, &conn);
+    FE::emit(FE::get(SERVMSG) << "Connected. Logging in...", FE::CURRENT, this);
 
-    if (cond & G_IO_OUT) {
+    if (cond & Glib::IO_OUT) {
         char hostname[256];
         gethostname(hostname, sizeof(hostname) - 1);
 
-        if (!conn.Session.password.empty())
-              conn.sendPass(conn.Session.password);
+        if (!Session.password.empty())
+              sendPass(Session.password);
 
-        conn.sendNick(conn.Session.nick);
-        conn.sendUser(App->getCfg().getOpt("ircuser"), hostname, conn.Session.host, conn.Session.realname);
+        sendNick(Session.nick);
+        sendUser(App->getCfg().getOpt("ircuser"), hostname, Session.host, Session.realname);
     }
 
     // Watch for incoming data from now on
-    conn._watchid = g_io_add_watch(g_io_channel_unix_new(conn._socket->getfd()),
-                   GIOCondition (G_IO_IN | G_IO_ERR | G_IO_HUP | G_IO_NVAL),
-                   &ServerConnection::onReadData, &conn);
+    signal_watch = Glib::signal_io().connect(
+            SigC::slot(*this, &ServerConnection::onReadData),
+            _socket->getfd(),
+            Glib::IO_IN | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL);
 
-    return FALSE;
+    return false;
 }
 
 void ServerConnection::addConnectionTimerCheck()
 {
-    _connectioncheckid = g_timeout_add(30000, &ServerConnection::connectionCheck, this);
+    signal_connection = Glib::signal_timeout().connect(
+            SigC::slot(*this, &ServerConnection::connectionCheck),
+            30000);
 }
 
 void ServerConnection::addReconnectTimer()
 {
-    if (_autoreconnectid == 0) {
-        _autoreconnectid = g_timeout_add(2000, &ServerConnection::autoReconnect, this);
-    }
+    if (!signal_autoreconnect.connected())
+          signal_autoreconnect = Glib::signal_timeout().connect(
+                  SigC::slot(*this, &ServerConnection::autoReconnect),
+                  2000);
 }
 
-bool ServerConnection::removeReconnectTimer()
+void ServerConnection::removeReconnectTimer()
 {
-    if (_autoreconnectid > 0) {
-        g_source_remove(_autoreconnectid);
-        _autoreconnectid = 0;
-        return true;
-    }
-    return false;
+    if (signal_autoreconnect.connected())
+          signal_autoreconnect.disconnect();
 }
 
 

@@ -20,7 +20,7 @@
 #define SERVERCONNECTION_H
 
 #include <string>
-#include <glib.h>
+#include <glibmm/main.h>
 #include "Socket.h"
 #include "Parser.h"
 #include "Channel.h"
@@ -39,7 +39,7 @@ public:
     void disconnect();
     void addConnectionTimerCheck();
     void addReconnectTimer();
-    bool removeReconnectTimer();
+    void removeReconnectTimer();
     bool sendPong(const std::string& crap);
     bool sendPing(const std::string& crap = "");
     bool sendUser(const std::string& nick, const std::string& localhost, const std::string& remotehost, const std::string& name);
@@ -82,10 +82,10 @@ public:
 
     const char * getLocalIP() { return _socket->getLocalIP(); }
 
-    static gboolean onReadData(GIOChannel *, GIOCondition, gpointer);
-    static gboolean onConnect(GIOChannel *, GIOCondition, gpointer);
-    static gboolean autoReconnect(gpointer);
-    static gboolean connectionCheck(gpointer);
+    bool onReadData(Glib::IOCondition);
+    bool onConnect(Glib::IOCondition);
+    bool autoReconnect();
+    bool connectionCheck();
 
     // Session struct for all ServerConnections
     struct {
@@ -112,10 +112,10 @@ private:
 
     void doCleanup();
 
-    guint _writeid;
-    guint _watchid;
-    guint _connectioncheckid;
-    guint _autoreconnectid;
+    SigC::Connection signal_watch;
+    SigC::Connection signal_write;
+    SigC::Connection signal_connection;
+    SigC::Connection signal_autoreconnect;
 };
 
 #endif
