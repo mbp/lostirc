@@ -327,8 +327,10 @@ void Parser::TopicTime(const string& param)
     string nick = param.substr(pos2 + 1, (pos3 - pos2) - 1);
     string time = param.substr(pos3 + 1);
 
-    string dummy;
-    _io->evtTopicTime(chan, nick, time, _conn);
+    long date = std::atol(time.c_str());
+    time = std::ctime(&date);
+
+    _io->evtTopicTime(chan, nick, time.substr(0, time.size() - 1), _conn);
 }
 
 
