@@ -124,7 +124,6 @@ Prefs::~Prefs()
 void Prefs::endPrefs()
 {
     currentTab->endPrefs();
-    //tab->endPrefs(this);
 }
 
 void Prefs::saveEntry()

@@ -220,9 +220,14 @@ bool ServerConnection::sendJoin(const string& chan)
     return _socket->send(msg);
 }
 
-bool ServerConnection::sendPart(const string& chan)
+bool ServerConnection::sendPart(const string& chan, const string& message)
 {
-    string msg("PART " + chan + "\r\n");
+    string msg;
+    if (!message.empty()) {
+        msg = "PART " + chan + " :" + message + "\r\n";
+    } else {
+        msg = "PART " + chan + "\r\n";
+    }
 
     return _socket->send(msg);
 }

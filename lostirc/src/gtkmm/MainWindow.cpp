@@ -290,7 +290,7 @@ gint MainWindow::on_key_press_event(GdkEventKey* e)
         TabChannel *tab = dynamic_cast<TabChannel*>(_nb->getCurrent());
         if (tab && tab->getConn()->Session.isConnected) {
             // It's a channel, so we need to part it
-            tab->getConn()->sendPart(tab->getLabel()->get_text());
+            tab->getConn()->sendPart(tab->getLabel()->get_text(), "");
         }
         _nb->closeCurrent();
     }

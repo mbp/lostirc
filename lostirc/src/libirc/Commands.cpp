@@ -83,9 +83,15 @@ void Commands::Join(ServerConnection *conn, const string& params)
 void Commands::Part(ServerConnection *conn, const string& params)
 {
     if (params.length() == 0) {
-        throw CommandException("/PART <channel>, part a channel");
+        throw CommandException("/PART <channel> [msg], part a channel - optional with a part message");
     } else {
-        conn->sendPart(params);
+        string::size_type pos1 = params.find_first_of(" ");
+        string chan = params.substr(0, pos1);
+        string msg;
+        if (pos1 != string::npos)
+              msg = params.substr(pos1 + 1);
+
+        conn->sendPart(chan, msg);
     }
 }
 
