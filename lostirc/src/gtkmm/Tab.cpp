@@ -96,8 +96,6 @@ Tab& Tab::operator<<(const std::string& str)
 
 Tab& Tab::operator<<(const ustring& line)
 {
-    AppWin->getNotebook().onInserted(this);
-
     // Add timestamp 
     time_t timeval = time(0);
     char tim[11];

@@ -7,8 +7,6 @@ CRITICAL:
 
 NICE-TO-HAVE:
 ------------
-  * limited tab highlighting, don't mark a tab red when
-    joining/parting/quitting
   * implement /help, /help shortcuts and /help commands
   * ipv6 support
   * note when window has lost focus; then highlight front-tab

@@ -150,7 +150,7 @@ void MainNotebook::closeCurrent()
     queue_draw();
 }
 
-void MainNotebook::highlight(Tab *tab)
+void MainNotebook::highlightNick(Tab *tab)
 {
     if (tab != getCurrent()) {
         tab->getLabel()->modify_fg(Gtk::STATE_NORMAL, Gdk::Color("blue"));
@@ -158,7 +158,7 @@ void MainNotebook::highlight(Tab *tab)
     }
 }
 
-void MainNotebook::onInserted(Tab *tab)
+void MainNotebook::highlightActivity(Tab *tab)
 {   
     if (tab != getCurrent() && !tab->isHighlighted) {
         tab->getLabel()->modify_fg(Gtk::STATE_NORMAL, Gdk::Color("red"));

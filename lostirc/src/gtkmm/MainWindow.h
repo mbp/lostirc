@@ -44,9 +44,9 @@ public:
     Tab* newServer();
 
     // Methods implemented for the abstract base class 'FrontEnd' 
-    void displayMessage(const std::string& msg, FE::Destination d);
-    void displayMessage(const std::string& msg, FE::Destination d, ServerConnection *conn);
-    void displayMessage(const std::string& msg, ChannelBase& to, ServerConnection *conn);
+    void displayMessage(const std::string& msg, FE::Destination d, bool shouldHighlight = true);
+    void displayMessage(const std::string& msg, FE::Destination d, ServerConnection *conn, bool shouldHighlight = true);
+    void displayMessage(const std::string& msg, ChannelBase& to, ServerConnection *conn, bool shouldHighlight = true);
     void join(const std::string& nick, Channel& chan, ServerConnection *conn);
     void part(const std::string& nick, Channel& chan, ServerConnection *conn);
     void kick(const std::string& from, Channel& chan, const std::string& kicker, const std::string& msg,  ServerConnection *conn);

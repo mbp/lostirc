@@ -27,6 +27,9 @@ LostIRC (x.x.x)
     all connected servers and quit the client.
   * The nick-list no longer mentions "0 users" when a channel has parted, but
     "Not on channel"
+  * There is now an "Limited highlighting" feature which can be used if you
+    don't want to mark tabs red on joins/parts etc. but only on talk in a
+    channel.
 
 LostIRC (0.1.4) - Sat Jul 13th 2002
   * A segfault which appeared when the enviroment variable USER wasn't set,

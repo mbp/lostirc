@@ -53,9 +53,9 @@ namespace FE
 class FrontEnd
 {
 public:
-    virtual void displayMessage(const std::string& msg, FE::Destination d) = 0;
-    virtual void displayMessage(const std::string& msg, FE::Destination d, ServerConnection *conn) = 0;
-    virtual void displayMessage(const std::string& msg, ChannelBase& to, ServerConnection *conn) = 0;
+    virtual void displayMessage(const std::string& msg, FE::Destination d, bool shouldHighlight = true) = 0;
+    virtual void displayMessage(const std::string& msg, FE::Destination d, ServerConnection *conn, bool shouldHighlight = true) = 0;
+    virtual void displayMessage(const std::string& msg, ChannelBase& to, ServerConnection *conn, bool shouldHighlight = true) = 0;
     virtual void highlight(ChannelBase& chan, ServerConnection *conn) = 0;
     virtual void join(const std::string& nick, Channel& chan, ServerConnection *conn) = 0;
     virtual void part(const std::string& nick, Channel& chan, ServerConnection *conn) = 0;

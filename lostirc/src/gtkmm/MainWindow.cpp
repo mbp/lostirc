@@ -70,12 +70,16 @@ MainWindow::~MainWindow()
     AppWin = 0;
 }
 
-void MainWindow::displayMessage(const string& msg, FE::Destination d)
+void MainWindow::displayMessage(const string& msg, FE::Destination d, bool shouldHighlight)
 {
     if (d == FE::CURRENT) {
         Tab *tab = notebook.getCurrent();
 
         *tab << msg;
+
+        if (shouldHighlight)
+              notebook.highlightActivity(tab);
+
     } else if (d == FE::ALL) {
         vector<Tab*> tabs;
         vector<Tab*>::const_iterator i;
@@ -83,17 +87,22 @@ void MainWindow::displayMessage(const string& msg, FE::Destination d)
 
         for (i = tabs.begin(); i != tabs.end(); ++i) {
             *(*i) << msg;
+            if (shouldHighlight)
+                  notebook.highlightActivity(*i);
         }
     
     }
 }
 
-void MainWindow::displayMessage(const string& msg, FE::Destination d, ServerConnection *conn)
+void MainWindow::displayMessage(const string& msg, FE::Destination d, ServerConnection *conn, bool shouldHighlight)
 {
     if (d == FE::CURRENT) {
         Tab *tab = notebook.getCurrent(conn);
 
         *tab << msg;
+
+        if (shouldHighlight)
+              notebook.highlightActivity(tab);
     } else if (d == FE::ALL) {
         vector<Tab*> tabs;
         vector<Tab*>::const_iterator i;
@@ -101,11 +110,13 @@ void MainWindow::displayMessage(const string& msg, FE::Destination d, ServerConn
 
         for (i = tabs.begin(); i != tabs.end(); ++i) {
             *(*i) << msg;
+            if (shouldHighlight)
+                  notebook.highlightActivity(*i);
         }
     }
 }
 
-void MainWindow::displayMessage(const string& msg, ChannelBase& chan, ServerConnection *conn)
+void MainWindow::displayMessage(const string& msg, ChannelBase& chan, ServerConnection *conn, bool shouldHighlight)
 {
     Tab *tab = notebook.findTab(chan.getName(), conn);
 
@@ -116,8 +127,12 @@ void MainWindow::displayMessage(const string& msg, ChannelBase& chan, ServerConn
         tab = notebook.addQueryTab(chan.getName(), conn);
     }
 
-    if (tab)
+    if (tab) {
         *tab << msg;
+
+        if (shouldHighlight)
+              notebook.highlightActivity(tab);
+    }
 }
 
 void MainWindow::join(const string& nick, Channel& chan, ServerConnection *conn)
@@ -201,7 +216,7 @@ void MainWindow::highlight(ChannelBase& chan, ServerConnection* conn)
     Tab *tab = notebook.findTab(chan.getName(), conn);
 
     if (tab)
-          notebook.highlight(tab);
+          notebook.highlightNick(tab);
 }
 
 void MainWindow::away(bool away, ServerConnection* conn)

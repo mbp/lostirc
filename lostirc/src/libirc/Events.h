@@ -38,11 +38,12 @@ class Tmpl
     std::vector<std::string> tokens;
 
 public:
-    Tmpl(const std::string& str) : orig(str) { }
+    Tmpl(const std::string& str, const signed p) : orig(str), priority(p) { }
 
     Tmpl& operator<<(const std::string& str) { tokens.push_back(str); return *this; }
     Tmpl& operator<<(int i) { std::stringstream ss; ss << i; tokens.push_back(ss.str()); return *this; }
 
+    const signed priority;
     std::string result();
 };
 

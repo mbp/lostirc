@@ -26,6 +26,7 @@ using std::vector;
 
 Prefs::Prefs()
     : Gtk::VBox(),
+    highlightingbutton("Limited highlighting (don't mark tabs red on joins/parts etc.)"),
     _columns(),
     _liststore(Gtk::ListStore::create(_columns)),
     _treeview(_liststore)
@@ -109,6 +110,14 @@ Prefs::Prefs()
     prefsbox->pack_start(*frame13, Gtk::SHRINK);
 
     notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*prefsbox, "Preferences"));
+
+    // Limited tab highlighting
+    if (!App->getCfg().getOpt("limited_highlighting").empty())
+          highlightingbutton.set_active(true);
+
+    Gtk::Frame *frame14 = manage(new Gtk::Frame());
+    frame14->add(highlightingbutton);
+    prefsbox->pack_start(*frame14, Gtk::SHRINK);
 
     // Font selection
 
@@ -219,6 +228,11 @@ void Prefs::applyPreferences()
     App->getCfg().setOpt("dccip", dccipentry.get_text());
     App->getCfg().setOpt("highlight_words", highlightentry.get_text());
     App->getCfg().setOpt("buffer_size", bufferentry.get_text());
+
+    if (highlightingbutton.get_active())
+        App->getCfg().setOpt("limited_highlighting", "true");
+    else
+        App->getCfg().setOpt("limited_highlighting", "");
 }
 
 void Prefs::applyGeneral()
@@ -240,6 +254,12 @@ void Prefs::cancelPreferences()
     dccipentry.set_text(App->getCfg().getOpt("dccip"));
     highlightentry.set_text(App->getCfg().getOpt("highlight_words"));
     bufferentry.set_text(App->getCfg().getOpt("buffer_size"));
+
+    // Limited tab highlighting
+    if (!App->getCfg().getOpt("limited_highlighting").empty())
+          highlightingbutton.set_active(true);
+    else 
+          highlightingbutton.set_active(false);
 }
 
 void Prefs::cancelGeneral()

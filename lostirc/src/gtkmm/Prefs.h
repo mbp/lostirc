@@ -71,6 +71,7 @@ private:
     Gtk::Entry dccipentry;
     Gtk::Entry highlightentry;
     Gtk::Entry bufferentry;
+    Gtk::CheckButton highlightingbutton;
 
     // Font selection
     Gtk::FontSelection fontsel;

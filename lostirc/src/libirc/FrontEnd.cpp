@@ -20,16 +20,24 @@
 
 // defined in Events.cpp
 extern struct {
-    const char *s;
-    signed int value;
+    const signed int priority;
+    const char *name;
+    const signed int value;
 } event_map[];
 
 namespace FE {
 
 void emit(Tmpl& t, ChannelBase& chan, ServerConnection *conn)
 {
-    std::string msg = t.result(); // FIXME: we shouldn't be doing this operation here
-    App->fe->displayMessage(msg, chan, conn);
+    std::string msg = t.result();
+
+    // If the user has limited_highligthing enabled, only highlight if the
+    // priority is above 1
+    if (!App->getCfg().getOpt("limited_highlighting").empty() && t.priority < 2) {
+        App->fe->displayMessage(msg, chan, conn, false);
+    } else {
+        App->fe->displayMessage(msg, chan, conn);
+    }
 }
 
 void emit(Tmpl& t, const std::vector<ChannelBase*>& to, ServerConnection *conn)
@@ -43,20 +51,34 @@ void emit(Tmpl& t, const std::vector<ChannelBase*>& to, ServerConnection *conn)
 void emit(Tmpl& t, Destination d, ServerConnection *conn)
 {
     std::string msg = t.result();
-    App->fe->displayMessage(msg, d, conn);
+    
+    // If the user has limited_highligthing enabled, only highlight if the
+    // priority is above 1
+    if (!App->getCfg().getOpt("limited_highlighting").empty() && t.priority < 2) {
+        App->fe->displayMessage(msg, d, conn, false);
+    } else {
+        App->fe->displayMessage(msg, d, conn);
+    }
 }
 
 void emit(Tmpl& t, Destination d)
 {
     std::string msg = t.result();
-    App->fe->displayMessage(msg, d);
+    
+    // If the user has limited_highligthing enabled, only highlight if the
+    // priority is above 1
+    if (!App->getCfg().getOpt("limited_highlighting").empty() && t.priority < 2) {
+        App->fe->displayMessage(msg, d, false);
+    } else {
+        App->fe->displayMessage(msg, d);
+    }
 }
 
 Tmpl get(Event e)
 {
-    for (int i = 0; event_map[i].s != 0; ++i) {
+    for (int i = 0; event_map[i].name != 0; ++i) {
         if (event_map[i].value == e)
-            return Tmpl(App->getCfg().getEvt(event_map[i].s));
+            return Tmpl(App->getCfg().getEvt(event_map[i].name), event_map[i].priority);
     }
 }
 

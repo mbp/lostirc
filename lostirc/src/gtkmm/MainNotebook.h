@@ -42,8 +42,8 @@ public:
     void clearAll();
     void Tabs(std::vector<Tab*>& vec);
     void closeCurrent();
-    void highlight(Tab *tab);
-    void onInserted(Tab *tab);
+    void highlightNick(Tab *tab);
+    void highlightActivity(Tab *tab);
     void setFont(const Glib::ustring& str);
     int countTabs(ServerConnection *conn);
     void updateTitle(Tab *tab = 0);
