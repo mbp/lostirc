@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LostIRC 0.4.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-15 15:41+0200\n"
+"POT-Creation-Date: 2005-02-04 18:12+0100\n"
 "PO-Revision-Date: 2004-09-08 19:31+0200\n"
 "Last-Translator: Morten Brix Pedersen <morten@wtf.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -39,34 +39,34 @@ msgstr "Skal være forbundet."
 msgid "/QUERY <nick>, start a query(tab) with a user"
 msgstr "/QUERY <navn>, start en dialog med en bruger"
 
-#: src/gtkmm/GuiCommands.cpp:112
+#: src/gtkmm/GuiCommands.cpp:114
 msgid "/KICK <nick>, kick a user from a channel."
 msgstr "/KICK <navn>, spark en bruger ud fra en kanal."
 
-#: src/gtkmm/GuiCommands.cpp:129
+#: src/gtkmm/GuiCommands.cpp:131
 msgid "/OP <nicks>, ops one or more users in the current channel."
 msgstr ""
 "/OP <navne>, giver operator status til en ellere flere brugere i den "
 "nuværende kanal."
 
-#: src/gtkmm/GuiCommands.cpp:141
+#: src/gtkmm/GuiCommands.cpp:143
 msgid "/DEOP <nicks>, deops one or more users in the current channel."
 msgstr ""
 "/DEOP <navne>, fjerner operator status fra en eller flere bruger i den "
 "nuværende kanal."
 
-#: src/gtkmm/GuiCommands.cpp:153
+#: src/gtkmm/GuiCommands.cpp:155
 msgid "/VOICE <nicks>, voices one or more users in the current channel."
 msgstr ""
 "/VOICE <navne>, giver lyd til en eller flere brugere i den nuværende kanal."
 
-#: src/gtkmm/GuiCommands.cpp:165
+#: src/gtkmm/GuiCommands.cpp:167
 msgid "/DEVOICE <nicks>, devoices one or more users in the current channel."
 msgstr ""
 "/DEVOICE <navne>, fjerner lyd til en eller flere brugere i den nuværende "
 "kanal."
 
-#: src/gtkmm/GuiCommands.cpp:214
+#: src/gtkmm/GuiCommands.cpp:216
 msgid ""
 "7Available keybindings:\n"
 "    8CTRL-[1-9] - switch tabs from 1-9\n"

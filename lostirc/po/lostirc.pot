@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-15 15:41+0200\n"
+"POT-Creation-Date: 2005-02-04 18:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,27 +40,27 @@ msgstr ""
 msgid "/QUERY <nick>, start a query(tab) with a user"
 msgstr ""
 
-#: src/gtkmm/GuiCommands.cpp:112
+#: src/gtkmm/GuiCommands.cpp:114
 msgid "/KICK <nick>, kick a user from a channel."
 msgstr ""
 
-#: src/gtkmm/GuiCommands.cpp:129
+#: src/gtkmm/GuiCommands.cpp:131
 msgid "/OP <nicks>, ops one or more users in the current channel."
 msgstr ""
 
-#: src/gtkmm/GuiCommands.cpp:141
+#: src/gtkmm/GuiCommands.cpp:143
 msgid "/DEOP <nicks>, deops one or more users in the current channel."
 msgstr ""
 
-#: src/gtkmm/GuiCommands.cpp:153
+#: src/gtkmm/GuiCommands.cpp:155
 msgid "/VOICE <nicks>, voices one or more users in the current channel."
 msgstr ""
 
-#: src/gtkmm/GuiCommands.cpp:165
+#: src/gtkmm/GuiCommands.cpp:167
 msgid "/DEVOICE <nicks>, devoices one or more users in the current channel."
 msgstr ""
 
-#: src/gtkmm/GuiCommands.cpp:214
+#: src/gtkmm/GuiCommands.cpp:216
 msgid ""
 "7Available keybindings:\n"
 "    8CTRL-[1-9] - switch tabs from 1-9\n"

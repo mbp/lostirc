@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LostIRC 4.0.0CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-15 15:41+0200\n"
+"POT-Creation-Date: 2005-02-04 18:12+0100\n"
 "PO-Revision-Date: 2004-06-13 15:41+0200\n"
 "Last-Translator: Bruno Dusausoy <bdusauso@beeznest.net>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -42,35 +42,35 @@ msgid "/QUERY <nick>, start a query(tab) with a user"
 msgstr ""
 "/QUERY <nick>, démarre une conversation privée (onglet) avec un utilisateur"
 
-#: src/gtkmm/GuiCommands.cpp:112
+#: src/gtkmm/GuiCommands.cpp:114
 msgid "/KICK <nick>, kick a user from a channel."
 msgstr "/KICK <nick>, kicke un utilisateur du canal."
 
-#: src/gtkmm/GuiCommands.cpp:129
+#: src/gtkmm/GuiCommands.cpp:131
 msgid "/OP <nicks>, ops one or more users in the current channel."
 msgstr ""
 "/OP <nicks>, donne le statut d'opérateur canal à un ou plusieurs "
 "utilisateurs du canal courant."
 
-#: src/gtkmm/GuiCommands.cpp:141
+#: src/gtkmm/GuiCommands.cpp:143
 msgid "/DEOP <nicks>, deops one or more users in the current channel."
 msgstr ""
 "/DEOP <nicks>, enlève le statut d'opérateur du canl à un ou plusieurs "
 "utilisateur du canal courant."
 
-#: src/gtkmm/GuiCommands.cpp:153
+#: src/gtkmm/GuiCommands.cpp:155
 msgid "/VOICE <nicks>, voices one or more users in the current channel."
 msgstr ""
 "/VOICE <nicks>, donne le \"voice\" à un ou plusieurs utilisateurs du canal "
 "courant."
 
-#: src/gtkmm/GuiCommands.cpp:165
+#: src/gtkmm/GuiCommands.cpp:167
 msgid "/DEVOICE <nicks>, devoices one or more users in the current channel."
 msgstr ""
 "/DEVOICE <nicks>, enlève le \"voice\" d'un ou plusieurs utilisateur du canal "
 "courant."
 
-#: src/gtkmm/GuiCommands.cpp:214
+#: src/gtkmm/GuiCommands.cpp:216
 #, fuzzy
 msgid ""
 "7Available keybindings:\n"
