@@ -1,3 +1,5 @@
+dnl Useful autoconf autoconf macros for lostirc
+
 AC_DEFUN([AC_CXX_HAVE_SSTREAM],
 [AC_CACHE_CHECK(whether the compiler has stringstream,
 ac_cv_cxx_have_sstream,
@@ -11,9 +13,10 @@ using namespace std;
  ac_cv_cxx_have_sstream=yes, ac_cv_cxx_have_sstream=no)
  AC_LANG_RESTORE
 ])
-if test "$ac_cv_cxx_have_sstream" = yes; then
-  AC_DEFINE(HAVE_SSTREAM,,[define if the compiler has stringstream])
-fi
+dnl if test "$ac_cv_cxx_have_sstream" = yes; then
+dnl dont define this
+dnl  AC_DEFINE(HAVE_SSTREAM,,[define if the compiler has stringstream])
+dnl fi
 ])
 
 
@@ -27,9 +30,10 @@ ac_cv_cxx_namespaces,
  ac_cv_cxx_namespaces=yes, ac_cv_cxx_namespaces=no)
  AC_LANG_RESTORE
 ])
-if test "$ac_cv_cxx_namespaces" = yes; then
-  AC_DEFINE(HAVE_NAMESPACES,,[define if the compiler implements namespaces])
-fi
+dnl if test "$ac_cv_cxx_namespaces" = yes; then
+dnl dont define this
+dnl  AC_DEFINE(HAVE_NAMESPACES,,[define if the compiler implements namespaces])
+dnl fi
 ])
 
 
