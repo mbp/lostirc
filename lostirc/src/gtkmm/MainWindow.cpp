@@ -369,6 +369,15 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
             hide();
         }
     }
+    if (e->keyval == GDK_Page_Up) {
+        // scroll up text widget
+        notebook.getCurrent()->getText().scrollUpPage();
+
+    } else if (e->keyval == GDK_Page_Down) {
+        // scroll down text widget
+        notebook.getCurrent()->getText().scrollDownPage();
+    }
+
     Gtk::Window::on_key_press_event(e);
     return false;
 }

@@ -37,6 +37,31 @@ TextWidget::TextWidget(Pango::FontDescription font)
     _textview.modify_font(font);
 }
 
+void TextWidget::scrollUpPage()
+{
+    Gtk::Adjustment *vadj = get_vadjustment();
+
+    double value = vadj->get_value() - (vadj->get_page_size() - 1);
+
+    if (value < 0)
+          value = 0;
+
+    vadj->set_value(value);
+}
+
+void TextWidget::scrollDownPage()
+{
+    Gtk::Adjustment *vadj = get_vadjustment();
+
+    double end = vadj->get_upper() - vadj->get_lower() - vadj->get_page_size();
+    double value = vadj->get_value() + (vadj->get_page_size() - 1);
+
+    if (value > end)
+          value = end;
+
+    vadj->set_value(value);
+}
+
 void TextWidget::setStyle() {
     // TODO: Should this go into a ressource file?
     Gdk::Color col1(App->colors.bgcolor);

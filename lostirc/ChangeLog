@@ -1,6 +1,11 @@
 For a summary of changes between releases - see the NEWS file.
 
 2002-12-23  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * TextWidget.cpp: Add code to scroll up/down.
+        * MainWindow.cpp: Catch Page_Up and Page_Down keys.
+
+2002-12-23  Morten Brix Pedersen  <morten@wtf.dk>
 
         * ConfigHandler.cpp: Use raw() on strings saved to files so we ensure
           that we save in UTF-8 and to avoid problems with locales.

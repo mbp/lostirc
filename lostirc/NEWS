@@ -1,4 +1,5 @@
 LostIRC (x.x.x)
+  * You can now use PAGE UP/PAGE DOWN to scroll up/down in the text widget.
   * Tabs are now scrollable instead of making the window larger when tabs
     exceed the size of the window.
   * Some locale problems on Red Hat 8 (and possibly others) has been fixed,

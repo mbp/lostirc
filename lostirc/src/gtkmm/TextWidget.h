@@ -39,6 +39,9 @@ public:
     void clearText();
     void setFont(const Pango::FontDescription& font);
 
+    void scrollUpPage();
+    void scrollDownPage();
+
 private:
     void insertText(const TextProperties& tp, const Glib::ustring& str);
     void setStyle();
