@@ -1,4 +1,6 @@
 LostIRC - (x.x.x)
+  * It is now possible to show/hide the Menubar by using the context menu on
+    the main chat window.
   * Some messages sent by the IRC-server on connect was being stripped so
     the full message wasn't being outputted. Fixed.
   * If a server supplies a network name, show that in the status bar instead

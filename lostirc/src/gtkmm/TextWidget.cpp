@@ -285,7 +285,5 @@ void TextWidget::populateMenu(Gtk::Menu *contextmenu)
 {
     Gtk::Menu::MenuList& menulist = contextmenu->items();
 
-    #warning FIXME
-    // TODO: make me work
-    // menulist.push_back(*dynamic_cast<Gtk::Menu_Helpers::Element*>(AppWin->getUIManager()->get_widget("/MenuBar/ViewMenu/MenuItem")));
+    menulist.push_back(Gtk::Menu_Helpers::MenuElem(("_Menubar"), Gtk::AccelKey("<control>m"), sigc::mem_fun(*AppWin, &MainWindow::hideMenu)));
 }

@@ -1,6 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
 2004-10-14  Morten Brix Pedersen  <morten@wtf.dk>
+	* TextWidget.cpp: Add the hide/show menubar feature again.
+
+2004-10-14  Morten Brix Pedersen  <morten@wtf.dk>
 	* MainNotebook.cpp:
 	  - Fix a bug when auto-connecting to multiple server and text was
 	  only being displayed in the first tab.
