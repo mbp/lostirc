@@ -1,0 +1,21 @@
+README - LostIRC
+--
+
+LostIRC is an IRC client written to be simple and lightweight, it's supposed
+to be a 100% keyboard controlled application. At least these are the goals
+for the first stable version.
+
+This version of LostIRC is an extreme pre version, a lot of things don't
+work as expected, not all IRC features has been implemented yet, and it may
+chrash now and then, so use with caution.
+
+INSTALLATION
+--
+
+You need to have 'libgtkmm-dev' and 'libsigc++-dev' installed.
+
+Then execute these commands:
+  
+   $ ./configure
+   $ make
+   $ src/gtkmm/lostirc
