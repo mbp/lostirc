@@ -65,7 +65,8 @@ void LostIRCApp::start()
     for (i = servers.begin(); i != servers.end(); ++i) {
         ServerConnection *conn = newServer((*i)->hostname, (*i)->port);
         conn->Session.cmds = (*i)->cmds;
-        conn->Session.nick = (*i)->nick;
+        if (!(*i)->nick.empty())
+              conn->Session.nick = (*i)->nick;
     }
 }
 
