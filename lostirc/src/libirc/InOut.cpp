@@ -54,5 +54,4 @@ void InOut::quit()
         }
         delete (*i);
     }
-
 }

@@ -29,46 +29,43 @@
 
 class ServerConnection;
 
-using namespace std;
-
 class Parser
 {
 public:
     Parser(InOut *inout, ServerConnection *conn);
 
-    void parseLine(string &data);
-
-    void Ping(const string& rest);
-    void Privmsg(const string& from, const string& param, const string& rest);
-    void ServMsg(const string& from, const string& param, const string& rest);
-    void Notice(const string& from, const string& param, const string& rest);
-    void Notice(const string& msg);
-    void Topic(const string& param, const string& rest);
-    void Topic(const string& from, const string& param, const string& rest);
-    void TopicTime(const string& param);
-    void Mode(const string& from, const string& param, const string& rest);
-    void CMode(const string& from, const string& param);
-    void Join(const string& nick, const string& chan);
-    void Part(const string& nick, const string& chan);
-    void Quit(const string& nick, const string& msg);
-    void Nick(const string& from, const string& to);
-    void Kick(const string& from, const string& chan, const string& nickandmsg);
-    void Whois(const string& from, const string& param, const string& rest);
-    void Names(const string& chan, const string& names);
-    void CTCP(const string& from, const string& param, const string& rest);
-    void Away(const string& from, const string& param, const string& rest);
-    void Errhandler(const string& from, const string& param, const string& rest);
-    void Wallops(const string& from, const string& rest);
-    void Selfaway(const string& rest);
-    void Banlist(const string& param);
-    void numeric(int n, const string& from, const string& param, const string& rest);
+    void parseLine(std::string &data);
 
 private:
-    string findNick(const string& str);
+    void Ping(const std::string& rest);
+    void Privmsg(const std::string& from, const std::string& param, const std::string& rest);
+    void ServMsg(const std::string& from, const std::string& param, const std::string& rest);
+    void Notice(const std::string& from, const std::string& param, const std::string& rest);
+    void Notice(const std::string& msg);
+    void Topic(const std::string& param, const std::string& rest);
+    void Topic(const std::string& from, const std::string& param, const std::string& rest);
+    void TopicTime(const std::string& param);
+    void Mode(const std::string& from, const std::string& param, const std::string& rest);
+    void CMode(const std::string& from, const std::string& param);
+    void Join(const std::string& nick, const std::string& chan);
+    void Part(const std::string& nick, const std::string& chan);
+    void Quit(const std::string& nick, const std::string& msg);
+    void Nick(const std::string& from, const std::string& to);
+    void Kick(const std::string& from, const std::string& chan, const std::string& nickandmsg);
+    void Whois(const std::string& from, const std::string& param, const std::string& rest);
+    void Names(const std::string& chan, const std::string& names);
+    void CTCP(const std::string& from, const std::string& param, const std::string& rest);
+    void Away(const std::string& from, const std::string& param, const std::string& rest);
+    void Errhandler(const std::string& from, const std::string& param, const std::string& rest);
+    void Wallops(const std::string& from, const std::string& rest);
+    void Selfaway(const std::string& rest);
+    void Banlist(const std::string& param);
+    void numeric(int n, const std::string& from, const std::string& param, const std::string& rest);
+
+    std::string findNick(const std::string& str);
 
     ServerConnection *_conn;
     InOut *_io;
-
-
 };
+
 #endif

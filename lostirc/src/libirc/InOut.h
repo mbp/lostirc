@@ -27,6 +27,7 @@
 class ServerConnection;
 
 using namespace std;
+using namespace SigC;
 
 class InOut
 {
@@ -35,37 +36,38 @@ public:
     InOut();
     struct utsname getsysinfo();
 
-    ServerConnection * newServer(const string& host, int port, const string& nick);
-    ServerConnection * newServer(const string& nick, const string& realname);
+    ServerConnection* newServer(const string& host, int port, const string& nick);
+    ServerConnection* newServer(const string& nick, const string& realname);
     void quit();
 
     // Signals 
-    SigC::Signal2<void, const string&, ServerConnection*> evtUnknownMessage;
-    SigC::Signal2<void, const string&, ServerConnection*> evtGenericError;
-    SigC::Signal2<void, const string&, ServerConnection*> evtSelfaway;
+    Signal2<void, const string&, ServerConnection*> evtUnknownMessage;
+    Signal2<void, const string&, ServerConnection*> evtGenericError;
+    Signal2<void, const string&, ServerConnection*> evtSelfaway;
     
-    SigC::Signal3<void, const string&, const string&, ServerConnection*> evtJoin;
-    SigC::Signal3<void, const string&, const string&, ServerConnection*> evtPart;
-    SigC::Signal3<void, const string&, const string&, ServerConnection*> evtQuit;
-    SigC::Signal3<void, const string&, const string&, ServerConnection*> evtNick;
-    SigC::Signal3<void, const string&, const string&, ServerConnection*> evtWallops;
-    SigC::Signal3<void, const string&, const vector<vector<string> >&, ServerConnection*> evtNames;
-    SigC::Signal4<void, const string&, const string&, const string&, ServerConnection*> evtAway;
-    SigC::Signal4<void, const string&, const string&, const string&, ServerConnection*> evtNotice;
-    SigC::Signal4<void, const string&, const string&, const string&, ServerConnection*> evtNctcp;
-    SigC::Signal4<void, const string&, const string&, const string&, ServerConnection*> evtWhois;
-    SigC::Signal4<void, const string&, const string&, const string&, ServerConnection*> evtTopic;
-    SigC::Signal4<void, const string&, const string&, const string&, ServerConnection*> evtTopicTime;
-    SigC::Signal4<void, const string&, const string&, const string&, ServerConnection*> evtMode;
-    SigC::Signal4<void, const string&, const string&, const vector<vector<string> >&, ServerConnection*> evtCMode;
-    SigC::Signal4<void, const string&, const string&, const string&, ServerConnection*> evtMsg;
-    SigC::Signal4<void, const string&, const string&, const string&, ServerConnection*> evtAction;
-    SigC::Signal4<void, const string&, const string&, const string&, ServerConnection*> evtErrhandler;
-    SigC::Signal4<void, const string&, const string&, const string&, ServerConnection*> evtBanlist;
-    SigC::Signal3<void, const string&, const string&, ServerConnection*> evtCTCP;
-    SigC::Signal4<void, const string&, const string&, const string&, ServerConnection*> evtServMsg;
-    SigC::Signal5<void, int, const string&, const string&, const string&, ServerConnection*> evtServNumeric;
-    SigC::Signal5<void, const string&, const string&, const string&, const string&, ServerConnection*> evtKick;
+    Signal3<void, const string&, const string&, ServerConnection*> evtJoin;
+    Signal3<void, const string&, const string&, ServerConnection*> evtPart;
+    Signal3<void, const string&, const string&, ServerConnection*> evtQuit;
+    Signal3<void, const string&, const string&, ServerConnection*> evtNick;
+    Signal3<void, const string&, const string&, ServerConnection*> evtWallops;
+    Signal3<void, const string&, const vector<vector<string> >&, ServerConnection*> evtNames;
+    Signal3<void, const string&, const string&, ServerConnection*> evtCTCP;
+    Signal4<void, const string&, const string&, const string&, ServerConnection*> evtAway;
+    Signal4<void, const string&, const string&, const string&, ServerConnection*> evtNotice;
+    Signal4<void, const string&, const string&, const string&, ServerConnection*> evtNctcp;
+    Signal4<void, const string&, const string&, const string&, ServerConnection*> evtWhois;
+    Signal4<void, const string&, const string&, const string&, ServerConnection*> evtTopic;
+    Signal4<void, const string&, const string&, const string&, ServerConnection*> evtTopicTime;
+    Signal4<void, const string&, const string&, const string&, ServerConnection*> evtMode;
+    Signal4<void, const string&, const string&, const vector<vector<string> >&, ServerConnection*> evtCUMode;
+    Signal5<void, const string&, const string&, bool, const string&, ServerConnection*> evtCMode;
+    Signal4<void, const string&, const string&, const string&, ServerConnection*> evtMsg;
+    Signal4<void, const string&, const string&, const string&, ServerConnection*> evtAction;
+    Signal4<void, const string&, const string&, const string&, ServerConnection*> evtErrhandler;
+    Signal4<void, const string&, const string&, const string&, ServerConnection*> evtBanlist;
+    Signal4<void, const string&, const string&, const string&, ServerConnection*> evtServMsg;
+    Signal5<void, int, const string&, const string&, const string&, ServerConnection*> evtServNumeric;
+    Signal5<void, const string&, const string&, const string&, const string&, ServerConnection*> evtKick;
 
 private:
     vector<ServerConnection*> _servers;

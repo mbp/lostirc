@@ -60,7 +60,8 @@ private:
     void onTopic(const string& nick, const string& chan, const string& topic , ServerConnection *conn);
     void onTopicTime(const string& nick, const string& chan, const string& time , ServerConnection *conn);
     void onMode(const string& nick, const string& chan, const string& topic, ServerConnection *conn);
-    void onCMode(const string& nick, const string& chan, const vector<vector<string> >& users, ServerConnection *conn);
+    void onCMode(const string& nick, const string& chan, bool, const string& modes, ServerConnection *conn);
+    void onCUMode(const string& nick, const string& chan, const vector<vector<string> >& users, ServerConnection *conn);
     void onAway(const string& from, const string& param, const string& rest , ServerConnection *conn);
     void onSelfaway(const string& rest , ServerConnection *conn);
     void onNctcp(const string& from, const string& to, const string& msg, ServerConnection *conn);

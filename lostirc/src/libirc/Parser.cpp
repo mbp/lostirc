@@ -19,7 +19,11 @@
 #include "ServerConnection.h"
 #include "Utils.h"
 #include "Parser.h"
-#include <algorithm>
+
+using std::vector;
+using std::string;
+using std::stringstream;
+using std::cout;
 
 Parser::Parser(InOut *inout, ServerConnection *conn)
     : _conn(conn), _io(inout)
@@ -254,7 +258,7 @@ void Parser::Mode(const string& from, const string& param, const string& rest)
 
 void Parser::CMode(const string& from, const string& param)
 {
-    // Parse line in this form: '#chan +ovo nick nick2 nick3'
+    // Parse line in the form: '#chan +ovo nick nick2 nick3'
 
     string::size_type pos1 = param.find_first_of(" ");
     string::size_type pos2 = param.find_first_of(" ", pos1 + 1);
@@ -263,41 +267,46 @@ void Parser::CMode(const string& from, const string& param)
     string modes = param.substr(pos1 + 1, (pos2 - pos1) - 1);
     string nicks = param.substr(pos2 + 1);
 
-    vector<string> modesvec, nicksvec;
-    string::const_iterator i;
-    bool plus;
-    for (i = modes.begin(); i != modes.end(); ++i) {
-        if (*i == '+') {
-            plus = true;
-        } else if (*i == '-') {
-            plus = false;
-        } else {
+    vector<string> nicksvec;
+    bool sign = false;
+    if (modes[0] == '+')
+          sign = true;
 
-            if (*i == 'o' && plus)
-                  modesvec.push_back("@");
-            else if (*i == 'v' && plus)
-                  modesvec.push_back("+");
-            else
-                  modesvec.push_back(" ");
-        }
-
-    }
+    modes.erase(modes.begin());
 
     stringstream ss(nicks);
     string buf;
     while (ss >> buf)
           nicksvec.push_back(buf);
 
+    if (nicksvec.size() != modes.size()) {
+          // Received a channel mode, like '#chan +n'
+          _io->evtCMode(findNick(from), chan, sign, modes, _conn);
+          return;
+    }
+
     vector<vector<string> > vecvec;
 
-    for (int n = 0; n < modesvec.size(); ++n) {
+    for (int n = 0; n < modes.size(); ++n) {
         vector<string> vec;
-        vec.push_back(modesvec[n]);
+        if (sign) {
+            switch (modes[n]) {
+                case 'o':
+                    vec.push_back("@");
+                    break;
+                case 'v':
+                    vec.push_back("+");
+                    break;
+            }
+        } else {
+            vec.push_back(" ");
+        }
         vec.push_back(nicksvec[n]);
         vecvec.push_back(vec);
     }
 
-    _io->evtCMode(findNick(from), chan, vecvec, _conn);
+    // Channel user mode
+    _io->evtCUMode(findNick(from), chan, vecvec, _conn);
         
 }
 

@@ -54,6 +54,7 @@ MainWindow::MainWindow()
     _io->evtTopic.connect(slot(this, &MainWindow::onTopic));
     _io->evtTopicTime.connect(slot(this, &MainWindow::onTopicTime));
     _io->evtMode.connect(slot(this, &MainWindow::onMode));
+    _io->evtCUMode.connect(slot(this, &MainWindow::onCUMode));
     _io->evtCMode.connect(slot(this, &MainWindow::onCMode));
     _io->evtAway.connect(slot(this, &MainWindow::onAway));
     _io->evtSelfaway.connect(slot(this, &MainWindow::onSelfaway));
@@ -200,12 +201,14 @@ void MainWindow::onKick(const string& kicker, const string& chan, const string& 
 void MainWindow::onPart(const string& nick, const string& chan, ServerConnection *conn)
 {
     Tab *tab = _nb->findTab(chan, conn);
-    if (nick == conn->Session.nick) {
-        // It's us who's parting
-        tab->getLabel()->set_text("(" + chan + ")");
+    if (tab) {
+        if (nick == conn->Session.nick) {
+            // It's us who's parting
+            tab->getLabel()->set_text("(" + chan + ")");
+        }
+        _nb->insert(tab, "$5*** " + nick + " has parted " + chan + "\n");
+        tab->removeUser(nick);
     }
-    _nb->insert(tab, "$5*** " + nick + " has parted " + chan + "\n");
-    tab->removeUser(nick);
 }
 
 void MainWindow::onQuit(const string& nick, const string& msg, ServerConnection *conn)
@@ -241,13 +244,11 @@ void MainWindow::onNick(const string& from, const string& to, ServerConnection *
 void MainWindow::onNotice(const string& from, const string& to, const string &msg, ServerConnection *conn)
 {
     Tab *tab = _nb->getCurrent(conn);
-    if (tab) {
-        if (to == conn->Session.nick) {
-            // If it's to us only
-            _nb->insert(tab, "$7NOTICE " + from + ": " + msg + "\n");
-        } else {
-            _nb->insert(tab, "$7NOTICE " + from + " (to " + to + " ): " + msg + "\n");
-        }
+    if (to == conn->Session.nick) {
+        // If it's to us only
+        _nb->insert(tab, "$7NOTICE " + from + ": " + msg + "\n");
+    } else {
+        _nb->insert(tab, "$7NOTICE " + from + " (to " + to + " ): " + msg + "\n");
     }
 }
 
@@ -275,14 +276,28 @@ void MainWindow::onMode(const string& nick, const string& chan, const string& re
 
 }
 
-void MainWindow::onCMode(const string& nick, const string& chan, const vector<vector<string> >& users, ServerConnection *conn)
+void MainWindow::onCMode(const string& nick, const string& chan, bool sign, const string& modes, ServerConnection *conn)
+{
+    Tab *tab = _nb->findTab(chan, conn);
+
+    string::const_iterator i;
+    for (i = modes.begin(); i != modes.end(); ++i) {
+        if (sign) {
+            _nb->insert(tab, "$4-- "  + nick + " sets channel mode +" + *i + " on " + chan + "\n");
+        } else {
+            _nb->insert(tab, "$4-- "  + nick + " sets channel mode -" + *i + " on " + chan + "\n");
+        }
+    }
+}
+
+void MainWindow::onCUMode(const string& nick, const string& chan, const vector<vector<string> >& users, ServerConnection *conn)
 {
     Tab *tab = _nb->findTab(chan, conn);
 
     vector<vector<string> >::const_iterator i;
     for (i = users.begin(); i != users.end(); ++i) {
         vector<string> vec = *i;
-        _nb->insert(tab, "$3-- "  + nick + " sets mode " + vec[0] + " to " + vec[1] + "\n");
+        _nb->insert(tab, "$4-- "  + nick + " sets mode " + vec[0] + " to " + vec[1] + "\n");
         tab->removeUser(vec[1]);
         tab->insertUser(*i);
     }
@@ -292,18 +307,14 @@ void MainWindow::onGenericError(const string& error, ServerConnection *conn)
 {
     Tab *tab = _nb->getCurrent(conn);
 
-    if (tab) {
-        _nb->insert(tab, error + "\n");
-    }
+    _nb->insert(tab, error + "\n");
 }
 
 void MainWindow::onUnknownMessage(const string& line, ServerConnection *conn)
 {
     Tab *tab = _nb->getCurrent(conn);
 
-    if (tab) {
-        _nb->insert(tab, "Unknown msg received: " + line + "\n");
-    }
+    _nb->insert(tab, "Unknown msg: " + line + "\n");
 
 }
 
@@ -311,9 +322,7 @@ void MainWindow::onServMsg(const string& from, const string& to, const string& m
 {
     Tab *tab = _nb->getCurrent(conn);
 
-    if (tab) {
-        _nb->insert(tab, "*** : "+ msg + "\n");
-    }
+    _nb->insert(tab, "*** : "+ msg + "\n");
 
 }
 
@@ -330,12 +339,9 @@ void MainWindow::onServNumeric(int n, const string& from, const string& to, cons
 
 void MainWindow::onWhois(const string& from, const string& param, const string& msg, ServerConnection *conn)
 {
-
     Tab *tab = _nb->getCurrent(conn);
 
-    if (tab) {
-        _nb->insert(tab, from + " : " + param + " "  + msg + "\n");
-    }
+    _nb->insert(tab, "$7-- " + param + " "  + msg + "\n");
 }
 
 void MainWindow::onNames(const string& chan, const vector<vector<string> >& users, ServerConnection *conn)
@@ -366,9 +372,7 @@ void MainWindow::onAway(const string& from, const string& nick, const string& ms
 {
     Tab *tab = _nb->getCurrent(conn);
 
-    if (tab) {
-        _nb->insert(tab, "User " + nick + " is away: '" + msg + "' (Using server: " + from + ")\n");
-    }
+    _nb->insert(tab, "User " + nick + " is away: '" + msg + "' (Using server: " + from + ")\n");
 }
 
 void MainWindow::onSelfaway(const string& rest, ServerConnection *conn)
@@ -381,17 +385,13 @@ void MainWindow::onSelfaway(const string& rest, ServerConnection *conn)
         isAway = true;
     }
 
-    if (tab) {
-        _nb->insert(tab, rest + "\n");
-    }
+    _nb->insert(tab, rest + "\n");
 }
 
 void MainWindow::onNctcp(const string& from, const string& to, const string& msg, ServerConnection *conn)
 {
     Tab *tab = _nb->getCurrent(conn);
-    if (tab) {
-        _nb->insert(tab, "$4-" + from + "-: " + msg + "\n");
-    }
+    _nb->insert(tab, "$4-" + from + "-: " + msg + "\n");
 }
 
 void MainWindow::onWallops(const string& from, const string& rest, ServerConnection *conn)
