@@ -254,8 +254,6 @@ void Prefs::cancelFont()
 {
     if (!App->getCfg().getOpt("font").empty())
           fontsel.set_font_name(App->getCfg().getOpt("font"));
-
-    AppWin->getNotebook().setFont(fontsel.get_font_name());
 }
 
 void Prefs::saveEntry()
