@@ -20,19 +20,17 @@
 #define GUICOMMANDS_H
 
 #include <Commands.h>
-#include <Utils.h>
-#include <vector>
 #include "MainWindow.h"
 
 class GuiCommands : public Commands
 {
 public:
-    static bool send(ServerConnection *conn, std::string cmd, const std::string &params);
-    static bool Query(ServerConnection *conn, const std::string& params);
-    static bool Me(ServerConnection *conn, const std::string& params);
-    static bool SetFont(ServerConnection *conn, const std::string& params);
-    static bool NewServer(ServerConnection *conn, const std::string& params);
-    static bool commands(ServerConnection *conn, const std::string& params);
+    static void send(ServerConnection *conn, std::string cmd, const std::string &params);
+    static void Query(ServerConnection *conn, const std::string& params);
+    static void Me(ServerConnection *conn, const std::string& params);
+    static void SetFont(ServerConnection *conn, const std::string& params);
+    static void NewServer(ServerConnection *conn, const std::string& params);
+    static void commands(ServerConnection *conn, const std::string& params);
 
     static MainWindow *mw;
 

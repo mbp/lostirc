@@ -18,6 +18,7 @@
 
 #include "GuiCommands.h"
 #include "Entry.h"
+#include <sstream>
 
 using std::vector;
 using std::string;
@@ -44,8 +45,14 @@ void Entry::onEntry()
             params = msg.substr(pos + 1);
         }
 
-        if(!GuiCommands::send(_tab->getConn(), msg.substr(1, pos - 1), params)) {
-            _tab->parseAndInsert(Commands::error + '\n');
+        try {
+
+            GuiCommands::send(_tab->getConn(), msg.substr(1, pos - 1), params);
+
+        } catch (CommandException &ce) {
+
+            _tab->parseAndInsert(string(ce.what()) + string("\n"));
+
         }
 
     } else {

@@ -18,7 +18,8 @@
 
 #include "GuiCommands.h"
 #include "Tab.h"
-
+#include <Utils.h>
+#include <vector>
 
 using std::string;
 
@@ -31,59 +32,57 @@ struct UserCommands guicmds[] = {
     { 0,        0, 0                        }
 };
 
-bool GuiCommands::send(ServerConnection *conn, string cmd, const string& params)
+void GuiCommands::send(ServerConnection *conn, string cmd, const string& params)
 {
     for (int i = 0; guicmds[i].cmd != 0; ++i) {
         if (guicmds[i].cmd == Util::upper(cmd)) {
             if (!conn->Session.isConnected && guicmds[i].reqConnected) {
-                Commands::error = "Must be connected.";
-                return false;
+                throw CommandException("Must be connected.");
             }
-            return guicmds[i].function(conn, params);
+            guicmds[i].function(conn, params);
+            return;
         }
     }
 
-    return Commands::send(conn, cmd, params);
+    Commands::send(conn, cmd, params);
 }
 
-bool GuiCommands::Query(ServerConnection *conn, const string& params)
+void GuiCommands::Query(ServerConnection *conn, const string& params)
 {
     if (params.length() == 0) {
-        Commands::error = "Missing name, syntax is /QUERY <nick>";
-        return false;
+        throw CommandException("/QUERY <nick>, start a query(tab) with a user");
     } else {
         mw->getNotebook()->addQueryTab(params, conn);
-        return true;
     }
 }
 
-bool GuiCommands::Me(ServerConnection *conn, const string& params)
+void GuiCommands::Me(ServerConnection *conn, const string& params)
 {
     string to = mw->getNotebook()->getCurrent()->getLabel()->get_text();
     string param = to + " " + params;
     return Commands::Me(conn, param);
 }
 
-bool GuiCommands::SetFont(ServerConnection *conn, const string& params)
+void GuiCommands::SetFont(ServerConnection *conn, const string& params)
 {
     mw->getNotebook()->setFont();
-    return true;
 }
 
-bool GuiCommands::NewServer(ServerConnection *conn, const string& params)
+void GuiCommands::NewServer(ServerConnection *conn, const string& params)
 {
     mw->newServer();
-    return true;
 }
 
-bool GuiCommands::commands(ServerConnection *conn, const string& params)
+void GuiCommands::commands(ServerConnection *conn, const string& params)
 {
+    string cmds;
     for (int i = 0; guicmds[i].cmd != 0; ++i) {
-        Commands::error += " \00311[\0030";
-        Commands::error += guicmds[i].cmd;
-        Commands::error += "\00311]";
+        cmds += " \00311[\0030";
+        cmds += guicmds[i].cmd;
+        cmds += "\00311]";
     }
-    return Commands::commands(conn, params);
+    Commands::app->getEvts()->emit(Commands::app->getEvts()->get(SERVMSG) << cmds, conn);
+    Commands::commands(conn, params);
 }
 
 MainWindow* GuiCommands::mw;

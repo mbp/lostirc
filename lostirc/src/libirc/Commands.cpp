@@ -16,10 +16,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <cstdio>
+#include <sstream>
 #include "Commands.h"
 #include "ServerConnection.h"
 #include "Utils.h"
-#include <cstdio>
 
 using std::string;
 using std::stringstream;
@@ -47,49 +48,52 @@ struct UserCommands cmds[] = {
     { "SET",      Commands::Set,        0 },
     { "QUOTE",    Commands::Quote,      1 },
     { "COMMANDS", Commands::commands,   0 },
-    { "EXEC",     Commands::Exec,       0 },
+    //{ "EXEC",     Commands::Exec,       0 },
     { 0,        0,                      0 }
 };
 
 
-bool Commands::send(ServerConnection *conn, string cmd, const string& params) {
+void Commands::send(ServerConnection *conn, string cmd, const string& params) {
 
     for (int i = 0; cmds[i].cmd != 0; ++i) {
         if (cmds[i].cmd == Util::upper(cmd)) {
             if (!conn->Session.isConnected && cmds[i].reqConnected) {
-                error = "Must be connected";
-                return false;
+                throw CommandException("Must be connected.");
             }
-
-            return cmds[i].function(conn, params);
+            cmds[i].function(conn, params);
+            return;
         }
     }
 
     // If we did not call any of the functions, then we assume that the
     // command isn't implemented.
-    error = "Command not implemented: '" + cmd + "'";
-    return false;
+    throw CommandException("No such command: '" + cmd + "'");
 }
 
-bool Commands::Join(ServerConnection *conn, const string& params)
+void Commands::Join(ServerConnection *conn, const string& params)
 {
-    conn->sendJoin(params);
-    return true;
+    if (params.length() == 0) {
+        throw CommandException("/JOIN <channel>, join a channel");
+    } else {
+        conn->sendJoin(params);
+    }
 }
 
-bool Commands::Part(ServerConnection *conn, const string& params)
+void Commands::Part(ServerConnection *conn, const string& params)
 {
-    conn->sendPart(params);
-    return true;
+    if (params.length() == 0) {
+        throw CommandException("/PART <channel>, part a channel");
+    } else {
+        conn->sendPart(params);
+    }
 }
 
-bool Commands::Quit(ServerConnection *conn, const string& params)
+void Commands::Quit(ServerConnection *conn, const string& params)
 {
     conn->sendQuit(params);
-    return true;
 }
 
-bool Commands::Kick(ServerConnection *conn, const string& params)
+void Commands::Kick(ServerConnection *conn, const string& params)
 {
     string chan, nick, msg;
     string::size_type pos1 = params.find_first_of(" ");
@@ -105,19 +109,16 @@ bool Commands::Kick(ServerConnection *conn, const string& params)
     }
 
     if (params.empty() || chan.empty() || nick.empty()) {
-        error = "/KICK <channel> <nick> [msg], kick a user from a channel.";
-        return false;
+        throw CommandException("/KICK <channel> <nick> [msg], kick a user from a channel.");
     } else {
         conn->sendKick(chan, nick, msg);
-        return true;
     }
 }
 
-bool Commands::Server(ServerConnection *conn, const string& params)
+void Commands::Server(ServerConnection *conn, const string& params)
 {
     if (params.empty()) {
-        error = "/SERVER <host/ip> [port] [password], connect to an IRC server";
-        return false;
+        throw CommandException("/SERVER <host/ip> [port] [password], connect to an IRC server");
     } else {
         string host, port, password;
         stringstream ss(params);
@@ -135,45 +136,37 @@ bool Commands::Server(ServerConnection *conn, const string& params)
               conn->Connect(host, p);
         else
               conn->Connect(host);
-
-        return true;
     }
 }
 
-bool Commands::Nick(ServerConnection *conn, const string& params)
+void Commands::Nick(ServerConnection *conn, const string& params)
 {
     if (params.empty()) {
-        error = "/NICK <nick>, change nick.";
-        return false;
+        throw CommandException("/NICK <nick>, change nick.");
     } else {
         conn->sendNick(params);
-        return true;
     }
 }
 
-bool Commands::Whois(ServerConnection *conn, const string& params)
+void Commands::Whois(ServerConnection *conn, const string& params)
 {
     if (params.empty()) {
-        error = "/WHOIS <nick>, whois nick.";
-        return false;
+        throw CommandException("/WHOIS <nick>, whois nick.");
     } else {
         conn->sendWhois(params);
-        return true;
     }
 }
 
-bool Commands::Mode(ServerConnection *conn, const string& params)
+void Commands::Mode(ServerConnection *conn, const string& params)
 {
     if (params.empty()) {
-        error = "/MODE <channel> <modes>, set modes for a channel.";
-        return false;
+        throw CommandException("/MODE <channel> <modes>, set modes for a channel.");
     } else {
         conn->sendMode(params);
-        return true;
     }
 }
 
-bool Commands::Set(ServerConnection *conn, const string& params)
+void Commands::Set(ServerConnection *conn, const string& params)
 {
     string::size_type pos1 = params.find_first_of(" ");
     string key = params.substr(0, pos1);
@@ -181,10 +174,10 @@ bool Commands::Set(ServerConnection *conn, const string& params)
     if (pos1 != string::npos)
           value = params.substr(pos1 + 1);
 
-    return app->getCfg().setParam(key, value);
+    app->getCfg().setParam(key, value);
 }
 
-bool Commands::Ctcp(ServerConnection *conn, const string& params)
+void Commands::Ctcp(ServerConnection *conn, const string& params)
 {
     string::size_type pos1 = params.find_first_of(" ");
     string to = params.substr(0, pos1);
@@ -193,34 +186,29 @@ bool Commands::Ctcp(ServerConnection *conn, const string& params)
           action = params.substr(pos1 + 1);
 
     if (action.empty()) {
-        error = "/CTCP <nick> <message>, sends a CTCP message to a user";
-        return false;
+        throw CommandException("/CTCP <nick> <message>, sends a CTCP message to a user");
     } else {
         action = Util::upper(action);
 
         conn->sendCtcp(to, action);
-        return true;
     }
 }
 
-bool Commands::Away(ServerConnection *conn, const string& params)
+void Commands::Away(ServerConnection *conn, const string& params)
 {
     conn->sendAway(params);
-    return true;
 }
 
-bool Commands::Banlist(ServerConnection *conn, const string& chan)
+void Commands::Banlist(ServerConnection *conn, const string& chan)
 {
     if (chan.empty()) {
-        error = "/BANLIST <channel>, see banlist for channel.";
-        return false;
+        throw CommandException("/BANLIST <channel>, see banlist for channel.");
     } else {
         conn->sendBanlist(chan);
-        return true;
     }
 }
 
-bool Commands::Invite(ServerConnection *conn, const string& params)
+void Commands::Invite(ServerConnection *conn, const string& params)
 {
     string to, chan;
     stringstream ss(params);
@@ -228,15 +216,13 @@ bool Commands::Invite(ServerConnection *conn, const string& params)
     ss >> chan;
 
     if (chan.empty()) {
-        error = "/INVITE <nick> <channel>, invites someone to a channel.";
-        return false;
+        throw CommandException("/INVITE <nick> <channel>, invites someone to a channel.");
     } else {
         conn->sendInvite(to, chan);
-        return true;
     }
 }
 
-bool Commands::Topic(ServerConnection *conn, const string& params)
+void Commands::Topic(ServerConnection *conn, const string& params)
 {
     string::size_type pos1 = params.find_first_of(" ");
     string chan = params.substr(0, pos1);
@@ -245,117 +231,108 @@ bool Commands::Topic(ServerConnection *conn, const string& params)
           topic = params.substr(pos1 + 1);
 
     if (chan.empty()) {
-        error = "/TOPIC <channel> [topic], view or change topic for a channel.";
-        return false;
+        throw CommandException("/TOPIC <channel> [topic], view or change topic for a channel.");
     } else {
         conn->sendTopic(chan, topic);
-        return true;
     }
 }
 
-bool Commands::Msg(ServerConnection *conn, const string& params)
+void Commands::Msg(ServerConnection *conn, const string& params)
+{
+    string::size_type pos1 = params.find_first_of(" ");
+    string to = params.substr(0, pos1);
+    string msg;
+    if (pos1 != string::npos)
+          msg = params.substr(pos1 + 1);
+
+    // FIXME: we need to show the message in the window
+    if (msg.empty()) {
+        throw CommandException("/MSG <nick/channel> <message>, sends a normal message.");
+    } else {
+        conn->sendMsg(to, msg);
+        string sendgui = "Messsage to " + to + ": " + msg;
+        Commands::app->getEvts()->emit(Commands::app->getEvts()->get(SERVMSG) << sendgui, conn);
+    }
+}
+
+void Commands::Notice(ServerConnection *conn, const string& params)
+{
+    string::size_type pos1 = params.find_first_of(" ");
+    string to = params.substr(0, pos1);
+    string msg;
+    if (pos1 != string::npos)
+          msg = params.substr(pos1 + 1);
+
+    if (msg.empty()) {
+        throw CommandException("/NOTICE <nick/channel> <message>, sends a notice.");
+    } else {
+        conn->sendNotice(to, msg);
+        string sendgui = "Notice to " + to + ": " + msg;
+        Commands::app->getEvts()->emit(Commands::app->getEvts()->get(SERVMSG) << sendgui, conn);
+    }
+}
+
+void Commands::Me(ServerConnection *conn, const string& params)
 {
     string::size_type pos1 = params.find_first_of(" ");
     string to = params.substr(0, pos1);
     string msg = params.substr(pos1 + 1);
 
     if (msg.empty()) {
-       error = "/MSG <nick/channel> <message>, sends a normal message.";
-       return false;
+        throw CommandException("/ME <message>, sends the action to the current channel.");
     } else {
-       conn->sendMsg(to, msg);
-       return true;
+        conn->sendMe(to, msg);
+        Commands::app->getEvts()->emit(Commands::app->getEvts()->get(ACTION) << conn->Session.nick << msg, conn);
     }
 }
 
-bool Commands::Notice(ServerConnection *conn, const string& params)
-{
-    string::size_type pos1 = params.find_first_of(" ");
-    string to = params.substr(0, pos1);
-    string msg = params.substr(pos1 + 1);
-
-    if (msg.empty()) {
-       error = "/NOTICE <nick/channel> <message>, sends a notice.";
-       return false;
-    } else {
-       conn->sendNotice(to, msg);
-       error = "-- " + conn->Session.nick + " -> " + to + " : " + msg;
-       return false;
-    }
-}
-
-bool Commands::Me(ServerConnection *conn, const string& params)
-{
-    string::size_type pos1 = params.find_first_of(" ");
-    string to = params.substr(0, pos1);
-    string msg = params.substr(pos1 + 1);
-
-    if (msg.empty()) {
-       error = "/ME <message>, sends the action to the current channel.";
-       return false;
-    } else {
-       conn->sendMe(to, msg);
-       error = "* " + conn->Session.nick + " " + msg;
-       return false;
-    }
-}
-
-bool Commands::Who(ServerConnection *conn, const string& params)
+void Commands::Who(ServerConnection *conn, const string& params)
 {
     if (params.empty()) {
-        error = "/WHO <mask> [o], search for mask on network, if o is supplied, only search for oppers.";
-        return false;
+        throw CommandException("/WHO <mask> [o], search for mask on network, if o is supplied, only search for oppers.");
     } else {
         conn->sendWho(params);
-        return true;
     }
 }
 
-bool Commands::List(ServerConnection *conn, const string& params)
+void Commands::List(ServerConnection *conn, const string& params)
 {
-    if (params.empty()) {
-        error = "/LIST [channels] [server], list channels on a network, if a channel is supplied, only list that channel. If a server is supplied, forward the request to that IRC server.";
-        return false;
-    } else {
-        conn->sendList(params);
-        return true;
-    }
+    //throw CommandException("/LIST [channels] [server], list channels on a network, if a channel is supplied, only list that channel. If a server is supplied, forward the request to that IRC server.");
+    conn->sendList(params);
 }
 
-bool Commands::Quote(ServerConnection *conn, const string& params)
+void Commands::Quote(ServerConnection *conn, const string& params)
 {
     if (params.empty()) {
-        error = "/QUOTE <text>, send raw text to server.";
-        return false;
+        throw CommandException("/QUOTE <text>, send raw text to server.");
     } else {
         conn->sendRaw(params);
-        return true;
     }
 }
 
-bool Commands::Names(ServerConnection *conn, const string& params)
+void Commands::Names(ServerConnection *conn, const string& params)
 {
     if (params.empty()) {
-        error = "/NAMES <channel>, see who's on a channel.";
-        return false;
+        throw CommandException("/NAMES <channel>, see who's on a channel.");
     } else {
         conn->sendNames(params);
-        return true;
     }
 }
 
 
-bool Commands::commands(ServerConnection *conn, const string& params)
+void Commands::commands(ServerConnection *conn, const string& params)
 {
+    string cmdss;
     for (int i = 0; cmds[i].cmd != 0; ++i) {
-        Commands::error += " \00311[\0030";
-        Commands::error += cmds[i].cmd;
-        Commands::error += "\00311]";
+        cmdss += " \00311[\0030";
+        cmdss += cmds[i].cmd;
+        cmdss += "\00311]";
     }
-    return false;
+    Commands::app->getEvts()->emit(Commands::app->getEvts()->get(SERVMSG) << cmdss, conn);
 }
 
-bool Commands::Exec(ServerConnection *conn, const string& params)
+/*
+void Commands::Exec(ServerConnection *conn, const string& params)
 {
     string::size_type pos1 = params.find_first_of(" ");
     string param = params.substr(0, pos1);
@@ -370,7 +347,7 @@ bool Commands::Exec(ServerConnection *conn, const string& params)
 
         std::cout << buf << std::endl;
 
-        return true;
+        //return true;
     } else if (!params.empty()) {
         FILE* f = popen("/bin/sh -c ls", "r");
 
@@ -379,13 +356,12 @@ bool Commands::Exec(ServerConnection *conn, const string& params)
         fread(buf, 1, 4028, f);
 
         string str(buf);
-        Commands::error = str;
-        return false;
+        //Commands::error = str;
+        //return false;
     } else {
-       error = "/EXEC [-o] <command>, execute a command, if -o is used, output to channel.";
-       return false;
+       throw CommandException("/EXEC [-o] <command>, execute a command, if -o is used, output to channel.");
     }
 }
+*/
 
-string Commands::error;
 LostIRCApp* Commands::app;

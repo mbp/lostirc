@@ -20,47 +20,59 @@
 #define COMMANDS_H
 
 #include <string>
-#include <sstream>
+#include <exception>
 #include "LostIRCApp.h"
+#include "Events.h"
 
 class ServerConnection;
 
 struct UserCommands {
     char *cmd;
-    bool (*function)(ServerConnection *, const std::string&);
+    void (*function)(ServerConnection *, const std::string&);
     int reqConnected;
 };
 
 class Commands
 {
 public:
-    static bool send(ServerConnection *conn, std::string cmd, const std::string& params);
+    static void send(ServerConnection *conn, std::string cmd, const std::string& params);
 
-    static bool Join(ServerConnection *conn, const std::string& params);
-    static bool Part(ServerConnection *conn, const std::string& params);
-    static bool Quit(ServerConnection *conn, const std::string& params);
-    static bool Kick(ServerConnection *conn, const std::string& params);
-    static bool Server(ServerConnection *conn, const std::string& params);
-    static bool Nick(ServerConnection *conn, const std::string& params);
-    static bool Whois(ServerConnection *conn, const std::string& params);
-    static bool Mode(ServerConnection *conn, const std::string& params);
-    static bool Ctcp(ServerConnection *conn, const std::string& cmd);
-    static bool Away(ServerConnection *conn, const std::string& params);
-    static bool Names(ServerConnection *conn, const std::string& params);
-    static bool Invite(ServerConnection *conn, const std::string& cmd);
-    static bool Topic(ServerConnection *conn, const std::string& cmd);
-    static bool Banlist(ServerConnection *conn, const std::string& params);
-    static bool Msg(ServerConnection *conn, const std::string& params);
-    static bool Notice(ServerConnection *conn, const std::string& params);
-    static bool Me(ServerConnection *conn, const std::string& params);
-    static bool Who(ServerConnection *conn, const std::string& params);
-    static bool List(ServerConnection *conn, const std::string& params);
-    static bool Set(ServerConnection *conn, const std::string& params);
-    static bool Quote(ServerConnection *conn, const std::string& params);
-    static bool commands(ServerConnection *conn, const std::string& params);
-    static bool Exec(ServerConnection *conn, const std::string& params);
+    static void Join(ServerConnection *conn, const std::string& params);
+    static void Part(ServerConnection *conn, const std::string& params);
+    static void Quit(ServerConnection *conn, const std::string& params);
+    static void Kick(ServerConnection *conn, const std::string& params);
+    static void Server(ServerConnection *conn, const std::string& params);
+    static void Nick(ServerConnection *conn, const std::string& params);
+    static void Whois(ServerConnection *conn, const std::string& params);
+    static void Mode(ServerConnection *conn, const std::string& params);
+    static void Ctcp(ServerConnection *conn, const std::string& cmd);
+    static void Away(ServerConnection *conn, const std::string& params);
+    static void Names(ServerConnection *conn, const std::string& params);
+    static void Invite(ServerConnection *conn, const std::string& cmd);
+    static void Topic(ServerConnection *conn, const std::string& cmd);
+    static void Banlist(ServerConnection *conn, const std::string& params);
+    static void Msg(ServerConnection *conn, const std::string& params);
+    static void Notice(ServerConnection *conn, const std::string& params);
+    static void Me(ServerConnection *conn, const std::string& params);
+    static void Who(ServerConnection *conn, const std::string& params);
+    static void List(ServerConnection *conn, const std::string& params);
+    static void Set(ServerConnection *conn, const std::string& params);
+    static void Quote(ServerConnection *conn, const std::string& params);
+    static void commands(ServerConnection *conn, const std::string& params);
+//    static void Exec(ServerConnection *conn, const std::string& params);
 
-    static std::string error;
     static LostIRCApp *app;
+};
+
+class CommandException : public std::exception
+{
+    const char * error;
+public:
+    CommandException(const char *e) : error(e) { }
+    CommandException(const std::string &e) : error(e.c_str()) { }
+    const char * what() const throw() {
+        return error;
+    }
+
 };
 #endif
