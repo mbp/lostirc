@@ -165,7 +165,7 @@ void Devoice(ServerConnection *conn, const string& params)
 void Exit(ServerConnection *conn, const string& params)
 {
     Commands::Exit(conn, params);
-    Gtk::Main::quit();
+    AppWin->hide();
 }
 
 void commands(ServerConnection *conn, const string& params)

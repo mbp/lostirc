@@ -322,7 +322,8 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
         newServer();
     }
     else if ((e->keyval == GDK_q) && (e->state & GDK_MOD1_MASK)) {
-        Gtk::Main::quit();
+        // hide() here will quit the application
+        hide();
     }
     Gtk::Window::on_key_press_event(e);
     return false;

@@ -20,7 +20,7 @@ RANDOM BUGS:
     as a user
   * check for EAGAIN on send()?
 
-  * remove this from 'configure' at release time:
+  * this has to be removed from 'configure' at release time:
     +extern "C" void exit(int); (:g/extern "C" void exit/d)
 
 GTKMM2 STUFF:
