@@ -1,5 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
+2002-12-29  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * configure.in: Bump version to 0.2.4 and release.
+
 2002-12-24  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Commands.cpp/GuiCommand.cpp: Don't require connection to /EXIT.
