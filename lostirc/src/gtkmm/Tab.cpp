@@ -26,6 +26,8 @@
 Tab::Tab(Gtk::Label *label, ServerConnection *conn)
     : Gtk::VBox(), _label(label), _conn(conn), is_highlighted(false)
 {
+
+    _current_cx = new Gtk::Text::Context; // To hold current context (colors) for Text widget
     // Creating HBox; will contain 2 widgets, a scrollwindow and an entry
     _hbox = manage(new Gtk::HBox()); 
     _scrollwindow = manage(new Gtk::ScrolledWindow());
@@ -100,7 +102,12 @@ void Tab::parseAndInsert(const string& str)
 
     while (string::npos != pos || string::npos != lastPos)
     {   
-        int color = atoi(line.substr(lastPos, 1).c_str());
+        stringstream ss(line.substr(lastPos, 1));
+        int color;
+        ss >> color;
+        if (ss.fail())
+              color = 0;
+
         insertWithColor(color, line.substr(lastPos, pos - lastPos));
         lastPos = line.find_first_not_of("$", pos);
         pos = line.find_first_of("$", lastPos);
@@ -121,13 +128,11 @@ void Tab::insertWithColor(int color, const string& str)
     colors[6] = Gdk_Color("#6bdde5");
     colors[7] = Gdk_Color("#6b8ae5");
 
-    Gtk::Text::Context orig_cx = _text->get_context();
-    Gtk::Text::Context cx;
-    cx.set_foreground(colors[color]);
     if (color == 0) {
-        _text->insert(cx, str);
+        _text->insert(*_current_cx, "$" + str);
     } else {
-        _text->insert(cx, str.substr(1));
+        _current_cx->set_foreground(colors[color]);
+        _text->insert(*_current_cx, str.substr(1));
     }
 }
 

@@ -64,6 +64,7 @@ private:
     Gtk::HBox *_hbox;
     ServerConnection *_conn;
     Gtk::ScrolledWindow *_scrollwindow;
+    Gtk::Text::Context *_current_cx;
 
 };
 
