@@ -602,6 +602,8 @@ void ServerConnection::sendCmds()
 {
     vector<ustring>::iterator i;
     for (i = Session.cmds.begin(); i != Session.cmds.end(); ++i) {
+        if (i->empty())
+              continue;
         if (i->at(0) == '/') {
 
             ustring::size_type pos = i->find_first_of(" ");
