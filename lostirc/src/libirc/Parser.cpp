@@ -17,7 +17,6 @@
  */
 
 #include <sstream>
-#include <cstdio>
 #include "Parser.h"
 #include "Utils.h"
 #include "Channel.h"
@@ -27,7 +26,6 @@
 
 using std::vector;
 using std::string;
-using std::stringstream;
 
 Parser::Parser(LostIRCApp *app, ServerConnection *conn)
     : _conn(conn), _app(app)
@@ -226,7 +224,7 @@ void Parser::Notice(const string& msg)
 void Parser::Kick(const string& from, const string& param, const string& msg)
 {
     string chan, nick;
-    stringstream ss(param);
+    std::istringstream ss(param);
     ss >> chan;
     ss >> nick;
 
@@ -322,7 +320,7 @@ void Parser::CMode(const string& from, const string& param)
 
     // Get arguments
     vector<string> arguments;
-    stringstream ss(args);
+    std::istringstream ss(args);
     string buf;
     while (ss >> buf)
           arguments.push_back(buf);
@@ -420,7 +418,7 @@ void Parser::TopicTime(const string& param)
 void Parser::Away(const string& param, const string& rest)
 {
     string param1, param2;
-    stringstream ss(param);
+    std::istringstream ss(param);
     ss >> param1;
     ss >> param2;
 
@@ -435,7 +433,7 @@ void Parser::Wallops(const string& from, const string& rest)
 void Parser::Banlist(const string& param)
 {
     string dummy, chan, banmask, owner, time;
-    stringstream ss(param);
+    std::istringstream ss(param);
     ss >> dummy;
     ss >> chan;
     ss >> banmask;
@@ -554,18 +552,22 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             break;
 
         case 366: // RPL_ENDOFNAMES
-            break; // Ignored.
+            {
+                Channel *c = _conn->findChannel(getWord(param, 2));
+                if (c)
+                      c->endOfNames = true;
 
+                _evts->emit(_evts->get(SERVMSG) << param + " " + rest, "", _conn);
+            }
+            break; // Ignored.
         case 317: // RPL_WHOISIDLE
             {
                 long idle = Utils::stoi(getWord(param, 3));
-                cout << "idle: " << idle << endl;
-                char *tmpbuf;
-                std::sprintf (tmpbuf, "%02ld:%02ld:%02ld", idle / 3600, (idle / 60) % 60, idle % 60);
-                cout << "tmpbuf: " << tmpbuf << endl;
+                std::ostringstream ss;
+                ss << idle / 3600 << ":" << (idle / 60) % 60 << ":" << idle % 60 << std::endl;
                 long date = std::atol(getWord(param, 4).c_str());
                 string time = std::ctime(&date);
-                _evts->emit(_evts->get(SERVMSG) << string(tmpbuf) + ",  " + time.substr(0, time.size() - 1) + " " + rest, "", _conn);
+                _evts->emit(_evts->get(SERVMSG) << ss.str() + ",  " + time.substr(0, time.size() - 1) + " " + rest, "", _conn);
             }
                 break;
         case 311: // RPL_WHOISUSER
@@ -589,28 +591,30 @@ void Parser::Names(const string& chan, const string& names)
     string::size_type pos = chan.find_last_of("#");
     string channel = chan.substr(pos);
 
-    stringstream ss(names);
-    string buf;
-
     Channel *c = _conn->findChannel(channel);
-    while(ss >> buf)
-    {
-        if (buf[0] == '@') {
-            if (c)
-                  c->addUser(buf.substr(1), IRC::OP);
-        } else if (buf[0] == '+') {
-            if (c)
-                  c->addUser(buf.substr(1), IRC::VOICE);
-        } else {
-            if (c)
-                  c->addUser(buf, IRC::NONE);
-        }
-    }
+    if (!c->endOfNames) {
 
-    if (c)
-          _app->evtNames(*c, _conn);
-    else
-          _evts->emit(_evts->get(NAMES) << channel << names, "", _conn);
+        std::istringstream ss(names);
+        string buf;
+
+        while(ss >> buf)
+        {
+            if (buf[0] == '@') {
+                if (c)
+                      c->addUser(buf.substr(1), IRC::OP);
+            } else if (buf[0] == '+') {
+                if (c)
+                      c->addUser(buf.substr(1), IRC::VOICE);
+            } else {
+                if (c)
+                      c->addUser(buf, IRC::NONE);
+            }
+        }
+
+        _app->evtNames(*c, _conn);
+    } else {
+        _evts->emit(_evts->get(NAMES) << channel << names, "", _conn);
+    }
 }
 
 string Parser::getWord(const string& str, int n)
