@@ -28,6 +28,8 @@ struct UserCommands guicmds[] = {
     { "ME",        GuiCommands::Me,       1 },
     { "PART",      GuiCommands::Part,     1 },
     { "TOPIC",     GuiCommands::Topic,    1 },
+    { "KICK",      GuiCommands::Kick,     1 },
+    { "BANLIST",   GuiCommands::Banlist,  1 },
     { "SETFONT",   GuiCommands::SetFont,  0 },
     { "NEWSERVER", GuiCommands::NewServer, 0 },
     { "COMMANDS",  GuiCommands::commands, 0 },
@@ -85,6 +87,16 @@ void Part(ServerConnection *conn, const string& params)
 void Topic(ServerConnection *conn, const string& params)
 {
     Commands::Topic(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+}
+
+void Kick(ServerConnection *conn, const string& params)
+{
+    Commands::Kick(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+}
+
+void Banlist(ServerConnection *conn, const string& params)
+{
+    Commands::Banlist(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
 }
 
 void commands(ServerConnection *conn, const string& params)

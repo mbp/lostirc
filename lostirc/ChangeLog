@@ -1,8 +1,8 @@
 LostIRC (x.x.x)
   * New welcome-screen.
   * The size of the window is now saved and restored on next startup.
-  * /PART and /TOPIC now uses the current channel name explicitly instead of
-    letting the user type it implicitly.
+  * /PART, /TOPIC, /KICK, /BANLIST now uses the current channel name
+    explicitly instead of letting the user type it implicitly.
   * Half-op support added.
   * FreeBSD compilation fix (thanks, Juan Salaverria)
   * Fix a crash with bouncers sending PRIVMSGs to channels not joined.
