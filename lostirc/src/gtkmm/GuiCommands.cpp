@@ -27,6 +27,7 @@ struct UserCommands guicmds[] = {
     { "QUERY",     GuiCommands::Query,    0 },
     { "ME",        GuiCommands::Me,       1 },
     { "PART",      GuiCommands::Part,     1 },
+    { "TOPIC",     GuiCommands::Topic,    1 },
     { "SETFONT",   GuiCommands::SetFont,  0 },
     { "NEWSERVER", GuiCommands::NewServer, 0 },
     { "COMMANDS",  GuiCommands::commands, 0 },
@@ -79,6 +80,11 @@ void NewServer(ServerConnection *conn, const string& params)
 void Part(ServerConnection *conn, const string& params)
 {
     Commands::Part(conn, AppWin->getNotebook()->getCurrent()->getLabel()->get_text() + " " + params);
+}
+
+void Topic(ServerConnection *conn, const string& params)
+{
+    Commands::Topic(conn, AppWin->getNotebook()->getCurrent()->getLabel()->get_text() + " " + params);
 }
 
 void commands(ServerConnection *conn, const string& params)

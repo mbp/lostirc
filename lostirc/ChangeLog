@@ -1,6 +1,6 @@
 LostIRC (x.x.x)
-  * /PART now uses the current channel name instead of forcing the user to
-    type it manually.
+  * /PART and /TOPIC now uses the current channel name explicitly instead of
+    letting the user type it implicitly.
   * Half-op support added.
 
 LostIRC (0.1.2) - Tue Jun 27th 2002
