@@ -41,11 +41,7 @@ MainWindow::MainWindow()
         set_default_size(600, 400);
     }
     
-    Gtk::VBox *_vbox1 = manage(new Gtk::VBox());
-
-    _vbox1->pack_start(notebook);
-    add(*_vbox1);
-
+    add(notebook);
     show_all();
 
     int num_of_servers = app.start();
