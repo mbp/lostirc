@@ -32,6 +32,10 @@ namespace GuiCommands
     void Topic(ServerConnection *conn, const std::string& params);
     void Kick(ServerConnection *conn, const std::string& params);
     void Banlist(ServerConnection *conn, const std::string& params);
+    void Op(ServerConnection *conn, const std::string& params);
+    void Deop(ServerConnection *conn, const std::string& params);
+    void Voice(ServerConnection *conn, const std::string& params);
+    void Devoice(ServerConnection *conn, const std::string& params);
     void SetFont(ServerConnection *conn, const std::string& params);
     void NewServer(ServerConnection *conn, const std::string& params);
     void commands(ServerConnection *conn, const std::string& params);

@@ -59,6 +59,10 @@ struct UserCommands cmds[] = {
     { "DCC",      Commands::DCC,        1 },
     { "ADMIN",    Commands::Admin,      1 },
     { "WHOWAS",   Commands::Whowas,     1 },
+    { "OP",       Commands::Op,         1 },
+    { "DEOP",     Commands::Deop,       1 },
+    { "VOICE",    Commands::Voice,      1 },
+    { "DEVOICE",  Commands::Devoice,    1 },
     { 0,        0,                      0 }
 };
 
@@ -367,7 +371,7 @@ void Names(ServerConnection *conn, const string& params)
 void Oper(ServerConnection* conn, const string& params)
 {
     if (params.empty()) {
-       throw CommandException("/OPER <login> <password>, oper up." );
+       throw CommandException("/OPER <login> <password>, oper up.");
     } else {
        string login, password;
        istringstream ss(params);
@@ -375,7 +379,7 @@ void Oper(ServerConnection* conn, const string& params)
        ss >> password;
 
        if (login.empty() || password.empty())
-           throw CommandException( "/OPER <login> <password>, oper up." );
+           throw CommandException( "/OPER <login> <password>, oper up.");
 
        conn->sendOper(login, password);
     }
@@ -390,7 +394,7 @@ void Kill(ServerConnection* conn, const string& params)
           reason = params.substr(pos1 + 1);
 
     if (nick.empty()) {
-       throw CommandException("/KILL <user> [reason], kill a user from the network." );
+       throw CommandException("/KILL <user> [reason], kill a user from the network.");
     } else {
 
        conn->sendKill(nick, reason);
@@ -400,7 +404,7 @@ void Kill(ServerConnection* conn, const string& params)
 void Wallops(ServerConnection* conn, const string& params)
 {
     if (params.empty()) {
-       throw CommandException("/WALLOPS <message>, send wallop message." );
+       throw CommandException("/WALLOPS <message>, send wallop message.");
     } else {
 
        conn->sendWallops(params);
@@ -410,7 +414,7 @@ void Wallops(ServerConnection* conn, const string& params)
 void DCC(ServerConnection* conn, const string& params)
 {
     if (params.empty()) {
-       throw CommandException("/DCC <actions>, perform a DCC action." );
+       throw CommandException("/DCC <actions>, perform a DCC action.");
     } else {
        string action, secondparam;
        istringstream ss(params);
@@ -438,6 +442,70 @@ void Admin(ServerConnection* conn, const string& params)
 void Whowas(ServerConnection* conn, const string& params)
 {
     conn->sendWhowas(params);
+}
+
+void Op(ServerConnection* conn, const string& params)
+{
+    if (params.empty()) {
+        throw CommandException("/OP <channel> <nicks>, give operator status to one or more nicks.");
+    } else {
+
+        string chan;
+        istringstream ss(params);
+        ss >> chan;
+
+        std::string modeline = assignModes('+', 'o', ss);
+
+        conn->sendMode(chan + " " + modeline);
+    }
+}
+
+void Deop(ServerConnection* conn, const string& params)
+{
+    if (params.empty()) {
+        throw CommandException("/DEOP <channel> <nicks>, remove operator status from one or more nicks.");
+    } else {
+
+        string chan;
+        istringstream ss(params);
+        ss >> chan;
+
+        std::string modeline = assignModes('-', 'o', ss);
+
+        conn->sendMode(chan + " " + modeline);
+    }
+}
+
+void Voice(ServerConnection* conn, const string& params)
+{
+    if (params.empty()) {
+        throw CommandException("/VOICE <channel> <nicks>, gives voice to one or more nicks.");
+    } else {
+
+        string chan;
+        istringstream ss(params);
+        ss >> chan;
+
+        std::string modeline = assignModes('+', 'v', ss);
+
+        conn->sendMode(chan + " " + modeline);
+    }
+}
+
+void Devoice(ServerConnection* conn, const string& params)
+{
+    if (params.empty()) {
+        throw CommandException("/DEVOICE <channel> <nicks>, removes voice from one or more nicks.");
+    } else {
+
+        string chan;
+        istringstream ss(params);
+        ss >> chan;
+
+        std::string modeline = assignModes('-', 'v', ss);
+
+        conn->sendMode(chan + " " + modeline);
+    }
 }
 
 /*
@@ -501,4 +569,22 @@ bool commandCompletion(const string& word, string& str)
     }
     return false;
 }
+
+std::string assignModes(char sign, char mode, istringstream& ss)
+{
+    string modes;
+    modes += sign;
+
+    string nicks;
+
+    string nick;
+    while (ss >> nick)
+    {
+        modes += mode;
+        nicks += nick + " ";
+    }
+
+    return modes + " " + nicks;
+}
+
 }

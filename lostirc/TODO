@@ -12,7 +12,7 @@ NICE-TO-HAVE:
   * implement /help, /help shortcuts and /help commands
   * ipv6 support
   * note when window has lost focus; then highlight front-tab
-  * /OP, /DEOP, /VOICE, /DEVOICE, /BAN commands.
+  * /BAN command.
 
 RANDOM BUGS:
 ------------

@@ -66,7 +66,13 @@ namespace Commands
     void DCC(ServerConnection* conn, const std::string& params);
     void Admin(ServerConnection* conn, const std::string& params);
     void Whowas(ServerConnection* conn, const std::string& params);
+    void Op(ServerConnection* conn, const std::string& params);
+    void Deop(ServerConnection* conn, const std::string& params);
+    void Voice(ServerConnection* conn, const std::string& params);
+    void Devoice(ServerConnection* conn, const std::string& params);
     bool commandCompletion(const std::string& word, std::string& str);
+
+    std::string assignModes(char sign, char mode, istringstream& ss);
 
 }
 

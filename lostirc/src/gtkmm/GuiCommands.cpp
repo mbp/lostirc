@@ -29,7 +29,12 @@ struct UserCommands guicmds[] = {
     { "PART",      GuiCommands::Part,     1 },
     { "TOPIC",     GuiCommands::Topic,    1 },
     { "KICK",      GuiCommands::Kick,     1 },
+    { "KICK",      GuiCommands::Kick,     1 },
     { "BANLIST",   GuiCommands::Banlist,  1 },
+    { "OP",        GuiCommands::Op,       1 },
+    { "DEOP",      GuiCommands::Deop,     1 },
+    { "VOICE",     GuiCommands::Voice,    1 },
+    { "DEVOICE",   GuiCommands::Devoice,  1 },
     { "SETFONT",   GuiCommands::SetFont,  0 },
     { "NEWSERVER", GuiCommands::NewServer, 0 },
     { "COMMANDS",  GuiCommands::commands, 0 },
@@ -97,6 +102,26 @@ void Kick(ServerConnection *conn, const string& params)
 void Banlist(ServerConnection *conn, const string& params)
 {
     Commands::Banlist(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+}
+
+void Op(ServerConnection *conn, const string& params)
+{
+    Commands::Op(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+}
+
+void Deop(ServerConnection *conn, const string& params)
+{
+    Commands::Deop(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+}
+
+void Voice(ServerConnection *conn, const string& params)
+{
+    Commands::Voice(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
+}
+
+void Devoice(ServerConnection *conn, const string& params)
+{
+    Commands::Devoice(conn, AppWin->getNotebook().getCurrent()->getLabel()->get_text() + " " + params);
 }
 
 void commands(ServerConnection *conn, const string& params)
