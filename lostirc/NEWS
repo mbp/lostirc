@@ -1,4 +1,6 @@
 LostIRC (x.x.x)
+  * Tabs are no longer closed with CTRL-c (which can now be used for
+    copying instead). CTRL-w is the new shortcut ("close window(tab)").
   * When using command-tab-completion, several commands seemed to be there twice.
     (E.g. there were two /ME's), fixed.
   * /COMMANDS outputted some commands twice as well, fixed.

@@ -1,6 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
 2002-11-27  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * MainWindow.cpp: Change CTRL-c to CTRL-w.
+
+2002-11-27  Morten Brix Pedersen  <morten@wtf.dk>
 
         * DCC.cpp: Don't call onReadData when we can send data, only when data
           is incoming.

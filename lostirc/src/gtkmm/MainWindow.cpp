@@ -57,7 +57,7 @@ MainWindow::MainWindow(bool autoconnect)
     if (app.cfgservers.getServers().empty() || !autoconnect) {
         // Construct initial tab
         Tab *tab = newServer();
-        tab->getText() << "\0037\nWelcome to LostIRC "VERSION"!\n\nYou use the client mainly by typing in commands and text in the entry-bar shown below.\n\nYou can connect to a server using:\n    \0038/SERVER <hostname>\n\n\0037Then join a channel:\n    \0038/JOIN <channel-name>\n\n\0037The rest of the commands is available with:\n    \0038/COMMANDS\0037.\n\n\0037Available keybindings:\n    \0038CTRL-[1-9] - switch tabs from 1-9.\n    CTRL-N - create new server tab.\n    CTRL-C - close current tab.\n    CTRL-P - open preferences.\n    Tab - nick-completion and command-completion.\n";
+        tab->getText() << "\0037\nWelcome to LostIRC "VERSION"!\n\nYou use the client mainly by typing in commands and text in the entry-bar shown below.\n\nYou can connect to a server using:\n    \0038/SERVER <hostname>\n\n\0037Then join a channel:\n    \0038/JOIN <channel-name>\n\n\0037The rest of the commands is available with:\n    \0038/COMMANDS\0037.\n\n\0037Available keybindings:\n    \0038CTRL-[1-9] - switch tabs from 1-9.\n    CTRL-N - create new server tab.\n    CTRL-W - close current window(tab).\n    CTRL-P - open preferences.\n    Tab - nick-completion and command-completion.\n";
     } else {
         // Auto-connect to servers.
         app.start();
@@ -312,7 +312,7 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
             notebook.set_current_page(7);
         } else if (e->keyval == GDK_9) {
             notebook.set_current_page(8);
-        } else if (e->keyval == GDK_c) {
+        } else if (e->keyval == GDK_w) {
             Tab *tab = notebook.getCurrent();
             if (tab->isChannel() && tab->getConn()->Session.isConnected && tab->isActive()) {
                 // It's a channel, so we need to part it
