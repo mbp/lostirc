@@ -1,3 +1,7 @@
+LostIRC (x.x.x)
+  * Fix a crash which appeared when connecting to a proxy/bouncer.
+    (thanks, |TEcHNO|)
+
 LostIRC (0.1.1) - Thu Jun 20th 2002
   * A bug where the client consumed 100% CPU has been fixed.
   * Implement /KILL and /WALLOPS. 

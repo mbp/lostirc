@@ -438,6 +438,14 @@ void Parser::CMode(const string& from, const string& param)
 
     Channel *c = _conn->findChannel(chan);
 
+    // Channel not found? Not sane to continue. 
+    // This happened on a proxy/bouncer where no channel was mentioned in
+    // MODE, just this:
+    //   :nick!ident@host.com MODE nick +iw
+    // Note the lack of ':' before +iw.
+    if (!c)
+          return;
+
     // Get arguments
     vector<string> arguments;
     std::istringstream ss(args);
@@ -595,7 +603,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
     {
         case 1:   // RPL_WELCOME
             _conn->Session.servername = from;
-            _conn->Session.hasRegistered = 1;
+            _conn->Session.hasRegistered = true;
             _conn->Session.nick = param;
             _conn->addConnectionTimerCheck();
         case 2:   // RPL_YOURHOST
