@@ -8,7 +8,8 @@ libirc_a_SOURCES = ServerConnection.cpp ServerConnection.h \
                        Socket.cpp Socket.h \
                        Utils.cpp Utils.h \
                        Events.cpp Events.h \
-                       Channel.cpp Channel.h
+                       Channel.cpp Channel.h \
+                       irc_defines.h
 
 libirc_a_LIBS = @SIGC_LIBS@ @GLIB_LIBS@
 INCLUDES = @SIGC_CFLAGS@ @GLIB_CFLAGS@
