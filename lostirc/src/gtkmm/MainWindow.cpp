@@ -222,12 +222,6 @@ void MainWindow::newServer()
     tab->is_on_channel = false;
 }
 
-void MainWindow::quit()
-{
-    _app->quit();
-    Gtk::Main::quit();
-}
-
 gint MainWindow::on_key_press_event(GdkEventKey* e)
 {
     // Default keybindings. Still needs work.
@@ -276,7 +270,7 @@ gint MainWindow::on_key_press_event(GdkEventKey* e)
         newServer();
     }
     if ((e->keyval == GDK_q) && (e->state & GDK_MOD1_MASK)) {
-        quit();
+        Gtk::Main::quit();
     }
     if (e->keyval == GDK_Up || e->keyval == GDK_Tab || e->keyval == GDK_Down) {
         _nb->getCurrent()->getEntry()->on_key_press_event(e);

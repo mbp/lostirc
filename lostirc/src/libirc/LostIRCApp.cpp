@@ -34,7 +34,20 @@ LostIRCApp::LostIRCApp()
     nick = getenv("USER");
     struct passwd *p = getpwnam(nick.c_str());
     realname = p->pw_gecos;
+}
 
+LostIRCApp::~LostIRCApp()
+{
+    delete _evts;
+    vector<ServerConnection*>::iterator i;
+
+    for (i = _servers.begin(); i != _servers.end();) {
+        if ((*i)->Session.isConnected) {
+            (*i)->sendQuit("");
+        }
+        delete (*i);
+        i = _servers.erase(i);
+    }
 }
 
 ServerConnection* LostIRCApp::newServer(const string& host, int port)
@@ -54,16 +67,4 @@ ServerConnection* LostIRCApp::newServer()
 struct utsname LostIRCApp::getsysinfo()
 {
     return uname_info;
-}
-
-void LostIRCApp::quit()
-{
-    vector<ServerConnection*>::const_iterator i;
-
-    for (i = _servers.begin(); i != _servers.end(); ++i) {
-        if ((*i)->Session.isConnected) {
-            (*i)->sendQuit("");
-        }
-        delete (*i);
-    }
 }

@@ -32,7 +32,6 @@ ServerConnection::ServerConnection(LostIRCApp *app, const string& host, int port
 
 ServerConnection::ServerConnection(LostIRCApp *app, const string& nick, const string& realname)
     : _app(app), _socket(new Socket()), _p(new Parser(_app,this))
-
 {
     Session.nick = nick;
     Session.realname = realname;

@@ -39,7 +39,6 @@ public:
     void emitEvent(const std::string& name, std::vector<std::string>& arg, const std::vector<std::string>& to, ServerConnection *conn);
 
 private:
-    std::map<std::string, std::string> _events;
     LostIRCApp *_app;
 };
 #endif

@@ -40,7 +40,7 @@ public:
     MainWindow();
     ~MainWindow();
 
-    gint delete_event_impl(GdkEventAny*) { quit(); }
+    gint delete_event_impl(GdkEventAny*) { Gtk::Main::quit(); return 0; }
 
     gint on_key_press_event(GdkEventKey* e);
     virtual gint on_key_press_event_impl(GdkEventKey* e) { }
@@ -62,8 +62,6 @@ private:
     void onCUMode(const string& nick, const string& chan, const vector<vector<string> >& users, ServerConnection *conn);
     void onHighlight(const string& to, ServerConnection *conn);
     void onAway(bool away, ServerConnection *conn);
-
-    void quit();
 
 };
 #endif

@@ -32,6 +32,11 @@ MainNotebook::MainNotebook(MainWindow *frontend)
     show_all();
 }
 
+MainNotebook::~MainNotebook()
+{
+    // FIXME
+}
+
 TabChannel * MainNotebook::addChannelTab(const string& name, ServerConnection *conn)
 {
     Gtk::Notebook_Helpers::Page *p = findPage("<server>", conn);
@@ -194,7 +199,6 @@ void MainNotebook::setFont()
 
 void MainNotebook::fontSelectionOk()
 {
-    Gtk::Style *style = Gtk::Style::create();
     _font = fontdialog->get_font();
 
     if (_font) {

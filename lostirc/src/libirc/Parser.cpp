@@ -27,14 +27,9 @@ using std::stringstream;
 using std::cout;
 
 Parser::Parser(LostIRCApp *app, ServerConnection *conn)
-    : _conn(conn), _app(app), _evts(new Events(app))
+    : _conn(conn), _app(app)
 {
     _evts = _app->getEvts();
-}
-
-Parser::~Parser()
-{
-    delete _evts;
 }
 
 void Parser::parseLine(string& data)

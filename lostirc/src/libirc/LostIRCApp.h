@@ -37,11 +37,11 @@ class LostIRCApp
 
 public:
     LostIRCApp();
+    ~LostIRCApp();
     struct utsname getsysinfo();
 
     ServerConnection* newServer(const std::string& host, int port);
     ServerConnection* newServer();
-    void quit();
 
     ConfigHandler& getCfg() { return _cfg; }
     Events* getEvts() { return _evts; }

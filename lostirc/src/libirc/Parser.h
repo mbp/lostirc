@@ -35,7 +35,6 @@ class Parser
 {
 public:
     Parser(LostIRCApp *app, ServerConnection *conn);
-    ~Parser();
 
     void parseLine(std::string &data);
 
