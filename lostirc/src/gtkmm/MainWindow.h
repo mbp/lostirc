@@ -23,7 +23,6 @@
 #include <gtkmm/main.h>
 #include <glibmm/main.h>
 #include <gtkmm/window.h>
-#include <gdk/gdkkeysyms.h>
 #include <ServerConnection.h>
 #include <LostIRCApp.h>
 #include <FrontEnd.h>

@@ -25,7 +25,6 @@
 #include <gtkmm/textbuffer.h>
 #include <gtkmm/textmark.h>
 #include <gtkmm/textview.h>
-#include <gtkmm/style.h>
 #include "TextWidget.h"
 
 

@@ -67,7 +67,7 @@ Tab* MainNotebook::getCurrent(ServerConnection *conn)
 Tab * MainNotebook::findTab(const ustring& name, ServerConnection *conn, bool findInActive)
 {
     ustring n = name;
-    Gtk::Notebook_Helpers::PageList::const_iterator i;
+    Gtk::Notebook_Helpers::PageList::iterator i;
             
     for (i = pages().begin(); i != pages().end(); ++i) {
         Tab *tab = static_cast<Tab*>(i->get_child());
@@ -84,7 +84,7 @@ Tab * MainNotebook::findTab(const ustring& name, ServerConnection *conn, bool fi
 
 Tab * MainNotebook::findTab(Tab::Type type, ServerConnection *conn, bool findInActive)
 {
-    Gtk::Notebook_Helpers::PageList::const_iterator i;
+    Gtk::Notebook_Helpers::PageList::iterator i;
             
     for (i = pages().begin(); i != pages().end(); ++i) {
         Tab *tab = static_cast<Tab*>(i->get_child());
@@ -189,7 +189,7 @@ int MainNotebook::countTabs(ServerConnection *conn)
 {
     int num = 0;
 
-    Gtk::Notebook_Helpers::PageList::const_iterator i;
+    Gtk::Notebook_Helpers::PageList::iterator i;
 
     for (i = pages().begin(); i != pages().end(); ++i) {
         Tab *tab = static_cast<Tab*>(i->get_child());
