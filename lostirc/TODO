@@ -35,6 +35,12 @@ RANDOM BUGS:
 
     This can be solved when gtkmm 2.4 gets released, which has WRAP_WORD_CHAR.
 
+  * The window expands very wide when a lot of text is inserted into the
+    statusbar. This doesn't happen when we use the Gtk::StatusBar widget,
+    but unfortunately it doesn't support pango markup.
+
+    The solution is to wait for gtkmm 2.4, which should support it.
+
   * Should we check for EAGAIN on send()? It seems to always succeed anyway.
   * Is there an access key for all text entries in preferences?
 
