@@ -1,5 +1,11 @@
 For a summary of changes between releases - see the NEWS file.
 
+2004-01-22  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * ServerConnection.cpp, Socket.cpp, DCC.cpp:
+          Move all socket related code and calls to the Socket class. This
+          should make it easier for the upcoming Win32 port.
+
 2004-01-21  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Parser.cpp: Fix crash which occured on some MODE-lines.

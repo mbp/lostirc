@@ -16,6 +16,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #include <iostream>
 #include <sstream>
 #include <glibmm/fileutils.h>
@@ -27,6 +30,9 @@ DCC_Send_In::DCC_Send_In(const Glib::ustring& filename, const Glib::ustring& nic
 : _outfile(), _filename(filename), _nick(nick), _address(address),
     _port(port), _size(size), _pos(0), _status(WAITING)
 {
+    _socket.on_connected.connect(SigC::slot(*this, &DCC_Send_In::on_connected));
+    _socket.on_error.connect(SigC::slot(*this, &DCC_Send_In::on_connection_failed));
+    _socket.on_data_pending.connect(SigC::slot(*this, &DCC_Send_In::onReadData));
     _downloaddir = Glib::ustring(App->home) + "/.lostirc/downloads/";
     #ifndef WIN32
     mkdir(_downloaddir.c_str(), 0700);
@@ -40,77 +46,73 @@ DCC_Send_In::DCC_Send_In(const Glib::ustring& filename, const Glib::ustring& nic
           getUseableFilename(1);
 }
 
-void DCC_Send_In::go_ahead()
+void DCC_Send_In::on_connected(Glib::IOCondition cond)
 {
-    _outfile.open(_filename.c_str());
-    fd = socket(AF_INET, SOCK_STREAM, 0);
-
-    // nonblocking
-    int flags = fcntl(fd, F_GETFL, 0);
-    if (flags != -1)
-          fcntl(fd, F_SETFL, flags | O_NONBLOCK);
-
-    sockaddr.sin_family = AF_INET;
-    sockaddr.sin_port = htons(_port);
-    sockaddr.sin_addr.s_addr = htonl(_address);
-    memset(&(sockaddr.sin_zero), '\0', 8);
-
-    FE::emit(FE::get(CLIENTMSG) << _("Receiving from:") << inet_ntoa(sockaddr.sin_addr), FE::CURRENT);
-
-    if (::connect(fd, reinterpret_cast<struct sockaddr *>(&sockaddr), sizeof(struct sockaddr)) < 0 && errno != EINPROGRESS) {
-        FE::emit(FE::get(CLIENTMSG) << _("Couldn't connect:") << Util::convert_to_utf8(strerror(errno)), FE::CURRENT);
-        _status = FAIL;
-        App->getDcc().statusChange(_number_in_queue);
-    }
-
-    Glib::signal_io().connect(
-            SigC::slot(*this, &DCC_Send_In::onReadData),
-            fd,
-            Glib::IO_IN | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL);
-
+    FE::emit(FE::get(CLIENTMSG) << _("DCC connected. Receiving file..."), FE::CURRENT);
     _status = ONGOING;
 }
 
-bool DCC_Send_In::onReadData(Glib::IOCondition cond)
+void DCC_Send_In::on_connection_failed(const char *str)
 {
-    char buf[4096];
-    int retval = recv(fd, buf, sizeof(buf), 0);
+    FE::emit(FE::get(CLIENTMSG) << _("Couldn't connect: ") << Util::convert_to_utf8(str), FE::CURRENT);
+    _status = FAIL;
+    App->getDcc().statusChange(_number_in_queue);
+}
 
-    if (retval == 0) FE::emit(FE::get(CLIENTMSG) << _("DCC connection closed."), FE::CURRENT);
-    else if (retval == -1) {
-        if (!(errno == EAGAIN || errno == EWOULDBLOCK)) {
-            FE::emit(FE::get(CLIENTMSG) << _("Couldn't receive:") << Util::convert_to_utf8(strerror(errno)), FE::CURRENT);
+void DCC_Send_In::go_ahead()
+{
+    _outfile.open(_filename.c_str());
+
+    _socket.connect(_address, _port);
+
+    FE::emit(FE::get(CLIENTMSG) << _("Receiving from:") << _socket.getRemoteIP(), FE::CURRENT);
+}
+
+void DCC_Send_In::onReadData()
+{
+    #ifdef DEBUG
+    App->log << "DCC_Send_In::onReadData(): reading.." << std::endl;
+    #endif
+
+    try {
+        char buf[4096];
+        int received = 0;
+        if (_socket.receive(buf, 4095, received)) {
+            _pos += received;
+
+            if (_outfile.good())
+                  _outfile.write(buf, received);
+
+            int tmp = 0;
+            unsigned long pos = htonl(_pos);
+            _socket.send(reinterpret_cast<char *>(&pos), 4, tmp);
+
+
+            #ifdef DEBUG
+            App->log << "DCC_Send_In::onReadData(): _pos: " << _pos << std::endl;
+            App->log << "DCC_Send_In::onReadData(): _size: " << _size << std::endl;
+            #endif
+
+            if (_pos >= _size) {
+                #ifdef DEBUG
+                App->log << "DCC_Send_In::onReadData(): done receiving!" << std::endl;
+                #endif
+                _outfile.close();
+                FE::emit(FE::get(CLIENTMSG) << _("File received successfully:") << _filename, FE::CURRENT);
+                _status = DONE;
+                App->getDcc().statusChange(_number_in_queue);
+                _socket.disconnect();
+            }
+        }
+
+    } catch (SocketException &e) {
+            FE::emit(FE::get(CLIENTMSG) << _("Couldn't receive: ") << Util::convert_to_utf8(e.what()), FE::CURRENT);
             _status = FAIL;
             App->getDcc().statusChange(_number_in_queue);
-            return false;
-        }
-    } else {
-        _pos += retval;
 
-        if (_outfile.good())
-              _outfile.write(buf, retval);
-
-        unsigned long pos = htonl(_pos);
-        send(fd, reinterpret_cast<char *>(&pos), 4, 0);
-
-        #ifdef DEBUG
-        App->log << "DCC_Send_In::onReadData(): _pos: " << _pos << std::endl;
-        App->log << "DCC_Send_In::onReadData(): _size: " << _size << std::endl;
-        #endif
-
-        if (_pos >= _size) {
-            #ifdef DEBUG
-            App->log << "DCC_Send_In::onReadData(): done receiving!" << std::endl;
-            #endif
-            _outfile.close();
-            FE::emit(FE::get(CLIENTMSG) << _("File received successfully:") << _filename, FE::CURRENT);
-            _status = DONE;
-            App->getDcc().statusChange(_number_in_queue);
-            return false;
-        }
+    } catch (SocketDisconnected &e) {
+        FE::emit(FE::get(CLIENTMSG) << _("DCC connection closed."), FE::CURRENT);
     }
-
-    return true;
 }
 
 void DCC_Send_In::getUseableFilename(int i)
@@ -129,6 +131,9 @@ void DCC_Send_In::getUseableFilename(int i)
 DCC_Send_Out::DCC_Send_Out(const Glib::ustring& filename, const Glib::ustring& nick, ServerConnection *conn)
     : _infile(), _filename(filename), _nick(nick), _pos(0), _status(WAITING)
 {
+    _socket.on_error.connect(SigC::slot(*this, &DCC_Send_Out::on_bind_failed));
+    _socket.on_accepted_connection.connect(SigC::slot(*this, &DCC_Send_Out::onAccept));
+    _socket.on_can_send_data.connect(SigC::slot(*this, &DCC_Send_Out::onSendData));
     Glib::ustring localip;
 
     struct stat st;
@@ -145,41 +150,14 @@ DCC_Send_Out::DCC_Send_Out(const Glib::ustring& filename, const Glib::ustring& n
     App->log << "DCC_Send_Out::DCC_Send_Out(): ip: " << localip << std::endl;
     #endif
 
-    fd = socket(AF_INET, SOCK_STREAM, 0);
-
-    int yes = 1;
-    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
-
-    sockaddr.sin_family = AF_INET;
-    sockaddr.sin_port = htons(App->options.dccport);
-    sockaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    memset(&(sockaddr.sin_zero), '\0', 8);
-
-    if (bind(fd, reinterpret_cast<struct sockaddr *>(&sockaddr), sizeof(struct sockaddr)) == -1) {
-        FE::emit(FE::get(CLIENTMSG) << _("Couldn't bind:") << Util::convert_to_utf8(strerror(errno)), FE::CURRENT);
-        // FIXME: add dcc-done?
-    } else {
-        socklen_t add_len = sizeof(struct sockaddr_in);
-        getsockname(fd, reinterpret_cast<struct sockaddr *>(&sockaddr), &add_len);
-
-        #ifdef DEBUG
-        App->log << "DCC_Send_Out::DCC_Send_Out(): new port: " << ntohs(sockaddr.sin_port) << std::endl;
-        #endif
-
+    if (_socket.bind(App->options.dccport)) {
         std::ostringstream ss;
-        ss << "DCC SEND " << stripPath(_filename) << " " << ntohl(inet_addr(localip.c_str())) << " " << ntohs(sockaddr.sin_port) << " " << _size;
+        ss << "DCC SEND " << stripPath(_filename) << " " << ntohl(inet_addr(localip.c_str())) << " " << ntohs(_socket.getSockAddr().sin_port) << " " << _size;
         conn->sendCtcp(nick, ss.str());
 
         _infile.open(_filename.c_str());
 
-        listen(fd, 1);
-
         FE::emit(FE::get(CLIENTMSG) << _("DCC SEND request sent. Sending from:") << localip, FE::CURRENT);
-
-        Glib::signal_io().connect(
-                SigC::slot(*this, &DCC_Send_Out::onAccept),
-                fd,
-                Glib::IO_IN | Glib::IO_ERR | Glib::IO_OUT | Glib::IO_HUP | Glib::IO_NVAL);
 
         _status = ONGOING;
 
@@ -187,60 +165,57 @@ DCC_Send_Out::DCC_Send_Out(const Glib::ustring& filename, const Glib::ustring& n
 
 }
 
-bool DCC_Send_Out::onAccept(Glib::IOCondition cond)
+void DCC_Send_Out::on_bind_failed(const char *str)
 {
-    socklen_t size = sizeof(struct sockaddr_in);
-    accept_fd = accept(fd, reinterpret_cast<struct sockaddr *>(&remoteaddr), &size);
-
-    FE::emit(FE::get(CLIENTMSG) << _("Connection accepted."), FE::CURRENT);
-
-    Glib::signal_io().connect(
-            SigC::slot(*this, &DCC_Send_Out::onSendData),
-            accept_fd,
-            Glib::IO_OUT | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL);
-
-    close(fd);
-    return false;
+    FE::emit(FE::get(CLIENTMSG) << _("Couldn't bind: ") << Util::convert_to_utf8(str), FE::CURRENT);
+    // FIXME: add dcc-done?
 }
 
-bool DCC_Send_Out::onSendData(Glib::IOCondition cond)
+void DCC_Send_Out::onAccept()
 {
+    FE::emit(FE::get(CLIENTMSG) << _("Connection accepted."), FE::CURRENT);
+}
+
+void DCC_Send_Out::onSendData()
+{
+    #ifdef DEBUG
+    App->log << "DCC_Send_Out::onSendData(): sending..." << std::endl;
+    #endif
     char buf[1024];
     _infile.read(buf, sizeof(buf));
 
     int read_chars = _infile.gcount();
 
-    int retval = send(accept_fd, buf, read_chars, 0);
-    if (retval == -1) {
-        if (!(errno == EAGAIN || errno == EWOULDBLOCK)) {
-            FE::emit(FE::get(CLIENTMSG) << _("Couldn't send:") << Util::convert_to_utf8(strerror(errno)), FE::CURRENT);
+    try {
+        int sent = 0;
+        if (_socket.send(buf, read_chars, sent)) {
+            _pos += read_chars;
+
+            #ifdef DEBUG
+            App->log << "DCC_Send_Out::onSendData(): sent: " << sent << std::endl;
+            App->log << "DCC_Send_Out::onSendData(): _pos: " << _pos << std::endl;
+            App->log << "DCC_Send_Out::onSendData(): _size: " << _size << std::endl;
+            #endif
+
+            if (_pos >= _size) {
+                #ifdef DEBUG
+                App->log << "DCC_Send_Out::onSendData(): done sending!" << std::endl;
+                #endif
+                _infile.close();
+                FE::emit(FE::get(CLIENTMSG) << _("File sent successfully:") << _filename, FE::CURRENT);
+                _status = DONE;
+                App->getDcc().statusChange(_number_in_queue);
+                _socket.disconnect();
+            }
+
+        }
+
+    } catch (SocketException &e) {
+            FE::emit(FE::get(CLIENTMSG) << _("Couldn't send: ") << Util::convert_to_utf8(e.what()), FE::CURRENT);
             _status = FAIL;
             App->getDcc().statusChange(_number_in_queue);
-            return false;
-        }
-    } else {
-        _pos += read_chars;
-
-        #ifdef DEBUG
-        App->log << "DCC_Send_Out::onSendData(): retval: " << retval << std::endl;
-        App->log << "DCC_Send_Out::onSendData(): _pos: " << _pos << std::endl;
-        App->log << "DCC_Send_Out::onSendData(): _size: " << _size << std::endl;
-        #endif
-
-        if (_pos >= _size) {
-            #ifdef DEBUG
-            App->log << "DCC_Send_Out::onSendData(): done sending!" << std::endl;
-            #endif
-            _infile.close();
-            FE::emit(FE::get(CLIENTMSG) << _("File sent successfully:") << _filename, FE::CURRENT);
-            _status = DONE;
-            App->getDcc().statusChange(_number_in_queue);
-            return false;
-        }
 
     }
-
-    return true;
 }
 
 bool DCC_queue::do_dcc(int n)

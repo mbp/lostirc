@@ -19,44 +19,59 @@
 #ifndef SOCKET_H
 #define SOCKET_H
 
-#ifndef WIN32
 #include <netdb.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#else
-#include <winsock.h>
-#endif
 #include <exception>
 #include <sigc++/sigc++.h>
+#include <glibmm/main.h>
 
 class Socket : public SigC::Object
 {
+    int port;
     int fd;
     struct sockaddr_in sockaddr;
     pid_t resolve_pid;
-    struct sockaddr_in localaddr;
     Glib::ustring hostname;
+
+    void resolvehost(const Glib::ustring& host);
+
+    void host_resolved();
+    bool on_host_resolve(Glib::IOCondition cond, int readpipe);
+    bool connected(Glib::IOCondition cond);
+    bool data_pending(Glib::IOCondition);
+    bool accepted_connection(Glib::IOCondition);
+    bool can_send_data(Glib::IOCondition);
+
+    SigC::Connection signal_write;
+    SigC::Connection signal_read;
 
 public:
     Socket();
     ~Socket();
 
-    void resolvehost(const Glib::ustring& host);
-    void connect(int port);
-    #ifndef WIN32
-    bool on_host_resolve(Glib::IOCondition cond, int readpipe);
-    #endif
+    void connect(const Glib::ustring& hostname, int port);
+    void connect(unsigned long address, int port);
+    bool bind(int port);
     void disconnect();
     bool send(const Glib::ustring& data);
+    bool send(const char *buf, int len, int& received);
     bool receive(char *buf, int len, int& received);
     void setNonBlocking();
     void setBlocking();
-    int getfd() { return fd; }
+    int getfd() const { return fd; }
     int close();
     const char * getLocalIP();
+    const char * getRemoteIP();
+    sockaddr_in& getSockAddr() { return sockaddr; };
 
     SigC::Signal0<void> on_host_resolved;
+    SigC::Signal1<void, Glib::IOCondition> on_connected;
+    SigC::Signal0<void> on_data_pending;
+    SigC::Signal0<void> on_can_send_data;
+    SigC::Signal0<void> on_accepted_connection;
+
     SigC::Signal1<void, const char *> on_error;
 };
 

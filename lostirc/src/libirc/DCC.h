@@ -23,18 +23,7 @@
 #include <fstream>
 #include <cerrno>
 #include <cstdio>
-#ifndef WIN32
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/wait.h>
-#include <sys/stat.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#else
-#include <winsock.h>
-#endif
+#include "Socket.h"
 #include <glibmm/main.h>
 #include <sigc++/sigc++.h>
 
@@ -61,8 +50,11 @@ public:
     virtual ~DCC_Send_In() { }
 
     void go_ahead();
-    bool onReadData(Glib::IOCondition cond);
+    void onReadData();
     void getUseableFilename(int i);
+
+    void on_connected(Glib::IOCondition cond);
+    void on_connection_failed(const char *str);
 
     virtual Glib::ustring getFilename() const { return _filename; }
     virtual unsigned long getSize() const { return _size; }
@@ -83,9 +75,7 @@ private:
     unsigned long _pos;
 
     Status _status;
-
-    int fd;
-    struct sockaddr_in sockaddr;
+    Socket _socket;
 };
 
 class DCC_Send_Out : public DCC {
@@ -94,8 +84,10 @@ public:
     virtual ~DCC_Send_Out() { }
 
     void go_ahead() { }
-    bool onAccept(Glib::IOCondition cond);
-    bool onSendData(Glib::IOCondition cond);
+    void onAccept();
+    void onSendData();
+
+    void on_bind_failed(const char *str);
 
     int _number_in_queue;
 
@@ -110,14 +102,11 @@ private:
     Glib::ustring _filename;
     Glib::ustring _nick;
 
-    int fd;
-    int accept_fd;
-    struct sockaddr_in sockaddr;
-    struct sockaddr_in remoteaddr;
     unsigned long _pos;
     unsigned long _size;
 
     Status _status;
+    Socket _socket;
 };
 
 class DCC_queue {
@@ -127,11 +116,6 @@ public:
     DCC_queue() : _count(0) { }
 
     bool do_dcc(int n);
-
-    /*int addDccChat()
-    {
-        _dccs.push_back(d);
-    }*/
 
     int addDccSendIn(const Glib::ustring& filename, const Glib::ustring& nick, unsigned long address, unsigned short port, unsigned long size);
     int addDccSendOut(const Glib::ustring& filename, const Glib::ustring& nick, ServerConnection *conn);

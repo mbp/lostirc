@@ -38,6 +38,7 @@ public:
     void reconnect();
     void on_error(const char *msg);
     void on_host_resolved();
+    void on_connected(Glib::IOCondition);
     void disconnect();
     void addConnectionTimerCheck();
     void addReconnectTimer();
@@ -84,8 +85,7 @@ public:
 
     const char * getLocalIP() { return _socket.getLocalIP(); }
 
-    bool onReadData(Glib::IOCondition);
-    bool onConnect(Glib::IOCondition);
+    void onReadData();
     bool autoReconnect();
     bool connectionCheck();
 
@@ -115,8 +115,6 @@ private:
 
     void doCleanup();
 
-    SigC::Connection signal_watch;
-    SigC::Connection signal_write;
     SigC::Connection signal_connection;
     SigC::Connection signal_autoreconnect;
 

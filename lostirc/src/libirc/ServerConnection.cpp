@@ -57,6 +57,8 @@ ServerConnection::ServerConnection(const ustring& host, const ustring& nick, int
     Session.realname = App->options.realname;
 
     _socket.on_host_resolved.connect(SigC::slot(*this, &ServerConnection::on_host_resolved));
+    _socket.on_connected.connect(SigC::slot(*this, &ServerConnection::on_connected));
+    _socket.on_data_pending.connect(SigC::slot(*this, &ServerConnection::onReadData));
     _socket.on_error.connect(SigC::slot(*this, &ServerConnection::on_error));
 
     App->fe->newTab(this);
@@ -96,12 +98,6 @@ void ServerConnection::doCleanup()
     Session.sentLagCheck = false;
     _bufpos = 0;
 
-    if (signal_write.connected())
-          signal_write.disconnect();
-
-    if (signal_watch.connected())
-          signal_watch.disconnect();
-
     if (signal_connection.connected())
           signal_connection.disconnect();
 
@@ -134,7 +130,7 @@ void ServerConnection::connect()
 
     FE::emit(FE::get(CONNECTING) << Session.host << Session.port, FE::CURRENT, this);
 
-    _socket.resolvehost(Session.host);
+    _socket.connect(Session.host, Session.port);
 }
 
 
@@ -147,60 +143,30 @@ void ServerConnection::on_error(const char *msg)
 void ServerConnection::on_host_resolved()
 {
     FE::emit(FE::get(CLIENTMSG) << _("Resolved host. Connecting.."), FE::CURRENT, this);
-    try {
+}
 
-        _socket.connect(Session.port);
-
-    } catch (SocketException &e) {
-        FE::emit(FE::get(ERRORMSG) << ustring(_("Failed connecting:")) + Util::convert_to_utf8(e.what()), FE::CURRENT, this);
-        disconnect();
-        return;
-    }
-
-    // we got connected
-
+void ServerConnection::on_connected(Glib::IOCondition cond)
+{
     Session.isConnected = true;
     App->fe->connected(this);
 
-    // This is a temporary watch to see when we can write, when we can
-    // write - we are (hopefully) connected
-    signal_write = Glib::signal_io().connect(
-            SigC::slot(*this, &ServerConnection::onConnect),
-            _socket.getfd(),
-            Glib::IO_OUT | Glib::IO_IN | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_PRI | Glib::IO_NVAL);
-}
+    // The only purpose of this function is to register us to the server
+    // when we are able to write
+    FE::emit(FE::get(CLIENTMSG) << _("Connected. Logging in..."), FE::CURRENT, this);
 
-bool ServerConnection::autoReconnect()
-{
-    #ifdef DEBUG
-    App->log << "ServerConnection::autoReconnect(): reconnecting." << std::endl;
-    #endif
-    connect();
-    return false;
-}
+    if (cond & Glib::IO_OUT) {
+        char hostname[256]; // FIXME: should this be located somewhere else?
+        gethostname(hostname, sizeof(hostname) - 1);
 
-bool ServerConnection::connectionCheck()
-{
-    if (Session.sentLagCheck) {
-        // disconnected! last lag check was never replied to
-        #ifdef DEBUG
-        App->log << "ServerConnection::connectionCheck(): disconnected." << std::endl;
-        #endif
-        disconnect();
-        connect();
+        if (!Session.password.empty())
+              sendPass(Session.password);
 
-        return false;
-    } else {
-        #ifdef DEBUG
-        App->log << "ServerConnection::connectionCheck(): still on" << std::endl;
-        #endif
-        sendPing();
-        Session.sentLagCheck = true;
-        return true;
+        sendNick(Session.nick);
+        sendUser(App->options.ircuser, hostname, Session.host, Session.realname);
     }
 }
 
-bool ServerConnection::onReadData(Glib::IOCondition)
+void ServerConnection::onReadData()
 {
     #ifdef DEBUG
     App->log << "Serverconnection::onReadData(): reading.." << std::endl;
@@ -231,44 +197,46 @@ bool ServerConnection::onReadData(Glib::IOCondition)
                 }
             }
         }
-        return true;
 
     } catch (SocketException &e) {
         FE::emit(FE::get(ERRORMSG) << ustring(_("Failed to receive: ")) + Util::convert_to_utf8(e.what()), FE::ALL, this);
         disconnect();
         addReconnectTimer();
-        return false;
     } catch (SocketDisconnected &e) {
         disconnect();
         addReconnectTimer();
-        return false;
     }
 }
 
-bool ServerConnection::onConnect(Glib::IOCondition cond)
+
+bool ServerConnection::autoReconnect()
 {
-    // The only purpose of this function is to register us to the server
-    // when we are able to write
-    FE::emit(FE::get(CLIENTMSG) << _("Connected. Logging in..."), FE::CURRENT, this);
-
-    if (cond & Glib::IO_OUT) {
-        char hostname[256];
-        gethostname(hostname, sizeof(hostname) - 1);
-
-        if (!Session.password.empty())
-              sendPass(Session.password);
-
-        sendNick(Session.nick);
-        sendUser(App->options.ircuser, hostname, Session.host, Session.realname);
-    }
-
-    // Watch for incoming data from now on
-    signal_watch = Glib::signal_io().connect(
-            SigC::slot(*this, &ServerConnection::onReadData),
-            _socket.getfd(),
-            Glib::IO_IN | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL);
-
+    #ifdef DEBUG
+    App->log << "ServerConnection::autoReconnect(): reconnecting." << std::endl;
+    #endif
+    connect();
     return false;
+}
+
+bool ServerConnection::connectionCheck()
+{
+    if (Session.sentLagCheck) {
+        // disconnected! last lag check was never replied to
+        #ifdef DEBUG
+        App->log << "ServerConnection::connectionCheck(): disconnected." << std::endl;
+        #endif
+        disconnect();
+        connect();
+
+        return false;
+    } else {
+        #ifdef DEBUG
+        App->log << "ServerConnection::connectionCheck(): still on" << std::endl;
+        #endif
+        sendPing();
+        Session.sentLagCheck = true;
+        return true;
+    }
 }
 
 void ServerConnection::addConnectionTimerCheck()

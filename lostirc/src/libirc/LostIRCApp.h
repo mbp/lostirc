@@ -24,6 +24,8 @@
 #include <cassert>
 #ifndef WIN32
 #include <sys/utsname.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #endif
 #include <glibmm/miscutils.h>
 #include <glibmm/ustring.h>
