@@ -47,14 +47,20 @@ private:
     Prefs& operator=(const Prefs&);
     ~Prefs();
 
+    void applyGeneral();
+    void applyPreferences();
+    void applyFont();
+    void cancelGeneral();
+    void cancelPreferences();
+    void cancelFont();
+
     void saveEntry();
-    void saveSettings();
     void removeEntry();
     void addEntry();
-    void onSelectRow(bool start_editing);
+    void onSelectRow();
     void onUnSelectRow();
     void clearEntries();
-    void onFontApply();
+    Gtk::VBox* addPage(const Glib::ustring& str);
 
     // General
     Gtk::Entry ircnickentry;
@@ -70,7 +76,6 @@ private:
     // Font selection
     Gtk::FontSelection fontsel;
 
-
     // Auto-join 
     Gtk::Entry nickentry;
     Gtk::Entry passentry;
@@ -82,7 +87,7 @@ private:
     Gtk::Button *removebutton;
     Gtk::Button *addnewbutton;
 
-    Gtk::HBox savehbox;
+    Gtk::HBox hboxserver;
 
     // what our columned-list contains
     struct ModelColumns : public Gtk::TreeModel::ColumnRecord

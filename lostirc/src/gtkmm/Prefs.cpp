@@ -23,7 +23,6 @@
 #include "Prefs.h"
 
 using std::vector;
-using std::string;
 
 Prefs::Prefs()
     : Gtk::VBox(),
@@ -31,16 +30,26 @@ Prefs::Prefs()
     _liststore(Gtk::ListStore::create(_columns)),
     _treeview(_liststore)
 {
+    notebook.set_tab_pos(Gtk::POS_LEFT);
 
-    set_spacing(2);
     pack_start(notebook);
 
-    Gtk::VBox *generalbox = manage(new Gtk::VBox());
-    Gtk::VBox *prefsbox = manage(new Gtk::VBox());
-    Gtk::VBox *fontbox = manage(new Gtk::VBox());
-    Gtk::VBox *performbox = manage(new Gtk::VBox());
+    Gtk::VBox *generalbox = addPage("General Settings");
+    Gtk::VBox *prefsbox = addPage("Preferences");
+    Gtk::VBox *fontbox = addPage("Font selection");
+    Gtk::VBox *performbox = addPage("Autojoin servers");
 
     // General options-tab
+
+    // Apply and Cancel buttons
+    Gtk::HBox *hboxgeneral = manage(new Gtk::HBox());
+    Gtk::Button *buttgeneral1 = manage(new Gtk::Button("Apply settings"));
+    Gtk::Button *buttgeneral2 = manage(new Gtk::Button("Cancel"));
+    buttgeneral1->signal_clicked().connect(slot(*this, &Prefs::applyGeneral));
+    buttgeneral2->signal_clicked().connect(slot(*this, &Prefs::cancelGeneral));
+    hboxgeneral->pack_end(*buttgeneral2, Gtk::SHRINK);
+    hboxgeneral->pack_end(*buttgeneral1, Gtk::SHRINK);
+    generalbox->pack_end(*hboxgeneral, Gtk::FILL);
 
     // IRC nick
     ircnickentry.set_text(App->getCfg().getOpt("nick"));
@@ -63,6 +72,16 @@ Prefs::Prefs()
     notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*generalbox, "General"));
 
     // Preferences-tab
+
+    // Apply and Cancel buttons
+    Gtk::HBox *hboxprefs = manage(new Gtk::HBox());
+    Gtk::Button *buttprefs1 = manage(new Gtk::Button("Apply settings"));
+    Gtk::Button *buttprefs2 = manage(new Gtk::Button("Cancel"));
+    buttprefs1->signal_clicked().connect(slot(*this, &Prefs::applyPreferences));
+    buttprefs2->signal_clicked().connect(slot(*this, &Prefs::cancelPreferences));
+    hboxprefs->pack_end(*buttprefs2, Gtk::SHRINK);
+    hboxprefs->pack_end(*buttprefs1, Gtk::SHRINK);
+    prefsbox->pack_end(*hboxprefs, Gtk::FILL);
 
     // nickcompletion character
     nickcompletionentry.set_max_length(1);
@@ -91,11 +110,20 @@ Prefs::Prefs()
 
     notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*prefsbox, "Preferences"));
 
+    // Font selection
+
+    // Apply and Cancel buttons
+    Gtk::HBox *hboxfont = manage(new Gtk::HBox());
+    Gtk::Button *buttfont1 = manage(new Gtk::Button("Apply font"));
+    Gtk::Button *buttfont2 = manage(new Gtk::Button("Cancel"));
+    buttfont1->signal_clicked().connect(slot(*this, &Prefs::applyFont));
+    buttfont2->signal_clicked().connect(slot(*this, &Prefs::cancelFont));
+    hboxfont->pack_end(*buttfont2, Gtk::SHRINK);
+    hboxfont->pack_end(*buttfont1, Gtk::SHRINK);
+    fontbox->pack_end(*hboxfont, Gtk::FILL);
+
     fontsel.set_preview_text("<" + ircnickentry.get_text() + "> Hello World!");
-    Gtk::Button *fontbutton = manage(new Gtk::Button("Apply font"));
-    fontbutton->signal_clicked().connect(slot(*this, &Prefs::onFontApply));
     fontbox->pack_start(fontsel);
-    fontbox->pack_start(*fontbutton);
     notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*fontbox, "Font selection"));
 
     // Autojoin/perform-tab
@@ -105,7 +133,7 @@ Prefs::Prefs()
 
     _treeview.append_column("", _columns.servername);
     _treeview.set_headers_visible(false);
-    _treeview.signal_select_cursor_row().connect(slot(*this, &Prefs::onSelectRow));
+    _treeview.signal_cursor_changed().connect(slot(*this, &Prefs::onSelectRow));
     _treeview.signal_toggle_cursor_row().connect(slot(*this, &Prefs::onUnSelectRow));
 
     vector<struct autoJoin*> servers = App->getCfg().getServers();
@@ -120,10 +148,6 @@ Prefs::Prefs()
     serverhbox->pack_start(*frame);
     Gtk::VBox *serverinfobox = manage(new Gtk::VBox());
     serverhbox->pack_start(*serverinfobox);
-
-    // hbox for buttons
-    savehbox.set_spacing(5);
-    serverinfobox->pack_start(savehbox, Gtk::SHRINK);
 
     // hostname
     Gtk::Frame *frame1 = manage(new Gtk::Frame("Hostname"));
@@ -151,10 +175,11 @@ Prefs::Prefs()
     frame5->add(cmdtext);
     serverinfobox->pack_start(*frame5, Gtk::SHRINK);
 
-    // save button
+    // buttons
     Gtk::Button *savebutton = manage(new Gtk::Button("Save entry"));
     savebutton->signal_clicked().connect(slot(*this, &Prefs::saveEntry));
-    savehbox.pack_start(*savebutton, Gtk::SHRINK);
+    hboxserver.pack_end(*savebutton, Gtk::SHRINK);
+    serverinfobox->pack_end(hboxserver, Gtk::FILL);
 
     removebutton = new Gtk::Button("Remove entry");
     removebutton->signal_clicked().connect(slot(*this, &Prefs::removeEntry));
@@ -165,15 +190,11 @@ Prefs::Prefs()
     performbox->pack_start(*serverhbox);
     notebook.pages().push_back(Gtk::Notebook_Helpers::TabElem(*performbox, "Autojoin servers"));
 
-    // Ok, Apply and Cancel buttons
+    // Final Close button
     Gtk::Button *closebutt = manage(new Gtk::Button("Close"));
-    Gtk::Button *savebutt = manage(new Gtk::Button("Save settings"));
-
-    savebutt->signal_clicked().connect(slot(*this, &Prefs::saveSettings));
     closebutt->signal_clicked().connect(slot(*this, &Prefs::endPrefs));
 
     Gtk::HBox *bottommenubox = manage(new Gtk::HBox());
-    bottommenubox->pack_end(*savebutt, Gtk::SHRINK);
     bottommenubox->pack_end(*closebutt, Gtk::SHRINK);
 
     pack_start(*bottommenubox, Gtk::FILL);
@@ -192,15 +213,47 @@ void Prefs::endPrefs()
     currentTab->endPrefs();
 }
 
-void Prefs::saveSettings()
+void Prefs::applyPreferences()
 {
     App->getCfg().setOpt("nickcompletion_character", nickcompletionentry.get_text());
     App->getCfg().setOpt("dccip", dccipentry.get_text());
     App->getCfg().setOpt("highlight_words", highlightentry.get_text());
     App->getCfg().setOpt("buffer_size", bufferentry.get_text());
+}
+
+void Prefs::applyGeneral()
+{
     App->getCfg().setOpt("realname", realnameentry.get_text());
     App->getCfg().setOpt("ircuser", ircuserentry.get_text());
     App->getCfg().setOpt("nick", ircnickentry.get_text());
+}
+
+void Prefs::applyFont()
+{
+    App->getCfg().setOpt("font", fontsel.get_font_name());
+    AppWin->getNotebook().setFont(fontsel.get_font_name());
+}
+
+void Prefs::cancelPreferences()
+{
+    nickcompletionentry.set_text(App->getCfg().getOpt("nickcompletion_character"));
+    dccipentry.set_text(App->getCfg().getOpt("dccip"));
+    highlightentry.set_text(App->getCfg().getOpt("highlight_words"));
+    bufferentry.set_text(App->getCfg().getOpt("buffer_size"));
+}
+
+void Prefs::cancelGeneral()
+{
+    std::cout << "cancelGeneral" << std::endl;
+    realnameentry.set_text(App->getCfg().getOpt("realname"));
+    ircuserentry.set_text(App->getCfg().getOpt("ircuser"));
+    ircnickentry.set_text(App->getCfg().getOpt("nick"));
+}
+
+void Prefs::cancelFont()
+{
+    fontsel.set_font_name(App->getCfg().getOpt("font"));
+    AppWin->getNotebook().setFont(fontsel.get_font_name());
 }
 
 void Prefs::saveEntry()
@@ -257,8 +310,9 @@ void Prefs::saveEntry()
     _treeview.get_selection()->select(iter);
 }
 
-void Prefs::onSelectRow(bool start_editing)
+void Prefs::onSelectRow()
 {
+    std::cout << "onSelectRow" << std::endl;
     Glib::RefPtr<Gtk::TreeSelection> selection = _treeview.get_selection();
     Gtk::TreeModel::Row row = *selection->get_selected();
 
@@ -278,15 +332,16 @@ void Prefs::onSelectRow(bool start_editing)
         Gtk::TextIter iter = textbuffer->get_iter_at_offset(0);
         textbuffer->insert(iter, *i + '\n');
     }
-    savehbox.pack_start(*removebutton, Gtk::SHRINK);
-    savehbox.pack_start(*addnewbutton, Gtk::SHRINK);
+    hboxserver.pack_end(*removebutton, Gtk::SHRINK);
+    hboxserver.pack_end(*addnewbutton, Gtk::SHRINK);
     show_all();
 }
 
 void Prefs::onUnSelectRow()
 {
-    savehbox.remove(*removebutton);
-    savehbox.remove(*addnewbutton);
+    std::cout << "onUnSelectRow()" << std::endl;
+    hboxserver.remove(*removebutton);
+    hboxserver.remove(*addnewbutton);
     clearEntries();
     show_all();
 }
@@ -318,10 +373,18 @@ void Prefs::clearEntries()
     cmdtext.get_buffer()->set_text("");
 }
 
-void Prefs::onFontApply()
+Gtk::VBox* Prefs::addPage(const Glib::ustring& str)
 {
-    App->getCfg().setOpt("font", fontsel.get_font_name());
-    AppWin->getNotebook().setFont(fontsel.get_font_name());
+    Gtk::VBox *vbox = manage(new Gtk::VBox());
+
+    // label with frame
+    Gtk::Label *label = manage(new Gtk::Label(str));
+    Gtk::Frame *labelframe = manage(new Gtk::Frame());
+    labelframe->add(*label);
+    labelframe->set_shadow_type(Gtk::SHADOW_ETCHED_IN);
+
+    vbox->pack_start(*labelframe, Gtk::SHRINK);
+    return vbox;
 }
 
 Tab* Prefs::currentTab = 0;
