@@ -88,18 +88,37 @@ gboolean Socket::on_host_resolve(GIOChannel* iochannel, GIOCondition cond, gpoin
 {
     Socket& socket = *(static_cast<Socket*>(data));
 
-    int size_to_be_read = sizeof(int) + sizeof(struct in_addr);
+    guint size_to_be_read = sizeof(int) + sizeof(struct in_addr);
     char *buf = new char[size_to_be_read];
     guint bytes_read = 0;
 
     GIOError result = g_io_channel_read(iochannel, buf, size_to_be_read, &bytes_read);
 
     if (result != G_IO_ERROR_NONE) {
-        socket.on_error("An error occured while reading from pipe");
+        socket.on_error("An error occured while reading from pipe (Internal error 1)");
     } else if (buf[0] == 0) {
         socket.on_error("Unknown host");
     } else if (size_to_be_read != bytes_read) {
-        std::cerr << "on_host_resolve(): size_to_be_read != bytes_read" << std::endl;
+        sleep(1);
+        guint bytes_read2;
+        result = g_io_channel_read(iochannel, &buf[bytes_read], size_to_be_read - bytes_read, &bytes_read2);
+        if (result == G_IO_ERROR_NONE) {
+            bytes_read += bytes_read2;
+            if (bytes_read != size_to_be_read) {
+                socket.on_error("An error occured while reading from pipe (Internal error 2)");
+            } else {
+                // copy the struct we received into the sockaddr member
+                memcpy(static_cast<void*>(&socket.sockaddr.sin_addr),
+                        static_cast<void*>(&buf[sizeof(int)]),
+                        sizeof(struct in_addr));
+
+                socket.on_host_resolved();
+
+            }
+        } else {
+            socket.on_error("An error occured while reading from pipe (Internal error 3)");
+        }
+
     } else {
         // copy the struct we received into the sockaddr member
         memcpy(static_cast<void*>(&socket.sockaddr.sin_addr),
