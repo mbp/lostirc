@@ -54,9 +54,7 @@ GdkColor colors[] = {
 };
 
 Tab::Tab(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
-    : Gtk::VBox(), _label(label), _conn(conn), is_highlighted(false), _font(font),
-    is_on_channel(true)
-
+    : Gtk::VBox(), is_highlighted(false), is_on_channel(true), _label(label), _conn(conn), _font(font)
 {
     // To hold current context (colors) for Text widget
     _current_cx = new Gtk::Text::Context;
@@ -81,6 +79,8 @@ Tab::Tab(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
     pack_start(*_hbox2, 0, 1);
     _hbox2->pack_start(*_entry, 1, 1);
 
+    if (_conn->Session.isAway)
+          setAway();
 }
 
 Tab::~Tab()
