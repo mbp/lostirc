@@ -170,7 +170,7 @@ void MainWindow::onJoin(const string& nick, const string& chan, ServerConnection
         tab->insertUser(nick);
     }
 
-    _nb->insert(tab, "$5*** " + nick + " has joined " + chan + "\n");
+    _nb->insert(tab, "$5-- " + nick + " has joined " + chan + "\n");
 
 }
 
@@ -194,7 +194,7 @@ void MainWindow::onKick(const string& kicker, const string& chan, const string& 
         // It's us who's been kicked
         tab->getLabel()->set_text("(" + chan + ")");
     }
-    _nb->insert(tab, "*** " + nick + " was kicked from " + chan + " by " + kicker + " (" + msg + ")\n");
+    _nb->insert(tab, "-- " + nick + " was kicked from " + chan + " by " + kicker + " (" + msg + ")\n");
     tab->removeUser(nick);
 }
 
@@ -206,7 +206,7 @@ void MainWindow::onPart(const string& nick, const string& chan, ServerConnection
             // It's us who's parting
             tab->getLabel()->set_text("(" + chan + ")");
         }
-        _nb->insert(tab, "$5*** " + nick + " has parted " + chan + "\n");
+        _nb->insert(tab, "$5-- " + nick + " has parted " + chan + "\n");
         tab->removeUser(nick);
     }
 }
@@ -219,7 +219,7 @@ void MainWindow::onQuit(const string& nick, const string& msg, ServerConnection 
     _nb->findTabsContaining(nick, tabs);
 
     for (i = tabs.begin(); i != tabs.end(); ++i) {
-        _nb->insert(*i, "$5*** " + nick + " has quit (" + msg + ")\n");
+        _nb->insert(*i, "$5-- " + nick + " has quit (" + msg + ")\n");
         (*i)->removeUser(nick);
     }
 }
@@ -236,7 +236,7 @@ void MainWindow::onNick(const string& from, const string& to, ServerConnection *
     _nb->findTabsContaining(from, tabs);
 
     for (i = tabs.begin(); i != tabs.end(); ++i) {
-        _nb->insert(*i, "$6*** " + from + " changes nick to " + to + "\n");
+        _nb->insert(*i, "$6-- " + from + " changes nick to " + to + "\n");
         (*i)->renameUser(from, to);
     }
 }
@@ -244,6 +244,7 @@ void MainWindow::onNick(const string& from, const string& to, ServerConnection *
 void MainWindow::onNotice(const string& from, const string& to, const string &msg, ServerConnection *conn)
 {
     Tab *tab = _nb->getCurrent(conn);
+
     if (to == conn->Session.nick) {
         // If it's to us only
         _nb->insert(tab, "$7NOTICE " + from + ": " + msg + "\n");
@@ -256,7 +257,7 @@ void MainWindow::onTopic(const string& nick, const string& chan, const string& t
 {
     Tab *tab = _nb->findTab(chan, conn);
     if (nick.size() > 0) {
-        _nb->insert(tab, "$6*** " + nick + " changes topic to: " + topic + "\n");
+        _nb->insert(tab, "$6-- " + nick + " changes topic to: " + topic + "\n");
     } else {
         _nb->insert(tab, "$6-- Topic for " + chan + " is: '" + topic + "'\n");
     }
@@ -272,7 +273,7 @@ void MainWindow::onTopicTime(const string& chan, const string& nick, const strin
 void MainWindow::onMode(const string& nick, const string& chan, const string& rest, ServerConnection *conn)
 {
     Tab *tab = _nb->findTab(chan, conn);
-    _nb->insert(tab, "$7*** " + nick + " sets mode " + rest + "\n");
+    _nb->insert(tab, "$7-- " + nick + " sets mode " + rest + "\n");
 
 }
 
@@ -322,7 +323,7 @@ void MainWindow::onServMsg(const string& from, const string& to, const string& m
 {
     Tab *tab = _nb->getCurrent(conn);
 
-    _nb->insert(tab, "*** : "+ msg + "\n");
+    _nb->insert(tab, "-- : "+ msg + "\n");
 
 }
 
