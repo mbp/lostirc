@@ -22,9 +22,8 @@ RANDOM BUGS:
     configure script fails on Red Hat/Mandrake:
     +extern "C" void exit(int); (:g/extern "C" void exit/d)
 
-  * Background-colors (e.g. ^C15,5) isn't used/parsed.
-  * Bold: ditto
-  * Underline: ditto
+  * Color-parsing might be slow, since it inserts one character at the time.
+    Need to look into optimizing it.
 
 GTKMM2 STUFF:
 -------------
