@@ -146,12 +146,28 @@ void Tab::insertWithColor(int color, const string& str)
     colors[8] = Gdk_Color("#4aff4a");
     colors[9] = Gdk_Color("#5ea524");
 
+    // Find out whether we need to scroll this widget auto
+    float vscroll = _text->get_vadjustment()->get_value();
+    float page_size = _text->get_vadjustment()->get_page_size();
+    float upper_vscroll = _text->get_vadjustment()->get_upper();
+
+    bool autoscroll = false;
+    if (vscroll + page_size == upper_vscroll)
+          autoscroll = true;
+
+    _text->freeze();
+
     if (color == 0) {
         _text->insert(*_current_cx, "$" + str);
     } else {
         _current_cx->set_foreground(colors[color]);
         _text->insert(*_current_cx, str.substr(1));
     }
+    _text->thaw();
+
+    // Scroll it down, if true
+    if (autoscroll)
+        _text->get_vadjustment()->set_value(_text->get_vadjustment()->get_upper());
 }
 
 TabQuery::TabQuery(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
