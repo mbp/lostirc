@@ -10,4 +10,4 @@ lostirc_SOURCES =  main.cpp \
 lostirc_LDADD = ../libirc/libirc.a
 
 INCLUDES = @GTKMM_CFLAGS@ \
-           -I../libirc
+           -I$(top_srcdir)/src/libirc
