@@ -57,6 +57,5 @@ private:
     Gdk_Font _font;
 
     MainWindow *_fe;
-
 };
 #endif

@@ -57,6 +57,7 @@ public:
     void setStyle();
     void setFont(Gdk_Font *font);
     bool is_highlighted;
+    bool is_on_channel;
 
 private:
     Gtk::Label *_label;
@@ -67,7 +68,6 @@ private:
     Gtk::ScrolledWindow *_scrollwindow;
     Gtk::Text::Context *_current_cx;
     Gdk_Font *_font;
-
 };
 
 class TabQuery : public Tab

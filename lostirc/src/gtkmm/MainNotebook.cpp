@@ -40,6 +40,7 @@ TabChannel * MainNotebook::addChannelTab(const string& name, ServerConnection *c
     if (p) {
         TabChannel* tab = dynamic_cast<TabChannel*>(p->get_child());
         tab->getLabel()->set_text(name);
+        tab->is_on_channel = true;
         show_all();
         return tab;
     } else {

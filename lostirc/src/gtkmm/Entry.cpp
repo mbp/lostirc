@@ -27,7 +27,6 @@ Entry::Entry(Tab* tab)
 {
     key_press_event.connect(slot(this, &Entry::on_key_press_event));
     activate.connect(slot(this, &Entry::onEntry));
-
 }
 
 void Entry::onEntry()
@@ -53,6 +52,10 @@ void Entry::onEntry()
         if (!_tab->getConn()->Session.isConnected && msg.size() > 0) {
             _tab->getText()->insert("Not connected to server.\n");
         } else if (msg.size() > 0) {
+            if(!_tab->is_on_channel) {
+                  _tab->getText()->insert("Not on any channel.\n");
+                  return;
+            }
             printText(msg);
         }
     }
@@ -72,7 +75,7 @@ void Entry::printText(const string& msg)
     string line;
     while (getline(ss, line)) {
         _tab->getConn()->sendMsg(_tab->getLabel()->get_text(), line);
-        _tab->parseAndInsert("<" + _tab->getConn()->Session.nick + "> " + line + "\n");
+        _tab->parseAndInsert("$1<" + _tab->getConn()->Session.nick + "> " + line + "\n");
     }
 
 }

@@ -24,6 +24,7 @@
 #include <sstream>
 #include <algorithm>
 #include "InOut.h"
+#include "Events.h"
 
 // This class takes care of parsing incoming messages from the server
 
@@ -66,6 +67,7 @@ private:
 
     ServerConnection *_conn;
     InOut *_io;
+    Events *_evts;
 };
 
 #endif

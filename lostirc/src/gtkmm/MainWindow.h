@@ -42,39 +42,24 @@ public:
 
 private:
     // Events
+    void onDisplayMessage(const string& msg, const string& to, ServerConnection *conn);
     void onMsg(const string& to, const string& from, const string& msg, ServerConnection *conn);
-    void onCTCP(const string& command, const string& nick, ServerConnection *conn);
-    void onAction(const string& to, const string& from, const string& msg, ServerConnection *conn);
-    void onServMsg(const string& to, const string& from, const string& msg, ServerConnection *conn);
-    void onGenericError(const string& error, ServerConnection *conn);
-    void onUnknownMessage(const string& line, ServerConnection *conn);
     void onServNumeric(int n, const string& to, const string& from, const string& msg, ServerConnection *conn);
     void onJoin(const string& nick, const string& chan, ServerConnection *conn);
     void onPart(const string& nick, const string& chan, ServerConnection *conn);
     void onQuit(const string& nick, const string& chan, ServerConnection *conn);
-    void onWhois(const string& from, const string& to, const string& rest, ServerConnection *conn);
     void onNick(const string& from, const string& to, ServerConnection *conn);
     void onNotice(const string& from, const string& to, const string& msg, ServerConnection *conn);
     void onKick(const string& from, const string& chan, const string& kicker, const string& msg,  ServerConnection *conn);
     void onNames(const string& chan, const vector<vector<string> >& users, ServerConnection *conn);
-    void onTopic(const string& nick, const string& chan, const string& topic , ServerConnection *conn);
-    void onTopicTime(const string& nick, const string& chan, const string& time , ServerConnection *conn);
     void onMode(const string& nick, const string& chan, const string& topic, ServerConnection *conn);
-    void onCMode(const string& nick, const string& chan, bool, const string& modes, ServerConnection *conn);
+    void onCMode(const string& nick, const string& chan, char, const string& modes, ServerConnection *conn);
     void onCUMode(const string& nick, const string& chan, const vector<vector<string> >& users, ServerConnection *conn);
-    void onAway(const string& from, const string& param, const string& rest , ServerConnection *conn);
-    void onSelfaway(const string& rest , ServerConnection *conn);
-    void onNctcp(const string& from, const string& to, const string& msg, ServerConnection *conn);
-    void onWallops(const string& from, const string& rest, ServerConnection *conn);
-    void onErrhandler(const string& from, const string& to, const string& rest, ServerConnection *conn);
-    void onBanlist(const string& chan, const string& banmask, const string& owner, ServerConnection *conn);
 
     void newServer();
     void quit();
-    Gtk::Text::Context setColor(const string& col, Gtk::Text *t);
 
     MainNotebook* _nb;
-    Gtk::VBox* _vbox1;
 
     /* Our 'In and Out' object, the backend to the client, controlling the
      * serverconnections and stuff.. but NOT the GUI. */

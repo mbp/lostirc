@@ -48,7 +48,7 @@ public:
     Signal3<void, const std::string&, const std::string&, ServerConnection*> evtQuit;
     Signal3<void, const std::string&, const std::string&, ServerConnection*> evtNick;
     Signal3<void, const std::string&, const std::string&, ServerConnection*> evtWallops;
-    Signal3<void, const std::string&, const vector<vector<std::string> >&, ServerConnection*> evtNames;
+    Signal3<void, const std::string&, const std::vector<std::vector<std::string> >&, ServerConnection*> evtNames;
     Signal3<void, const std::string&, const std::string&, ServerConnection*> evtCTCP;
     Signal4<void, const std::string&, const std::string&, const std::string&, ServerConnection*> evtAway;
     Signal4<void, const std::string&, const std::string&, const std::string&, ServerConnection*> evtNotice;
@@ -58,7 +58,7 @@ public:
     Signal4<void, const std::string&, const std::string&, const std::string&, ServerConnection*> evtTopicTime;
     Signal4<void, const std::string&, const std::string&, const std::string&, ServerConnection*> evtMode;
     Signal4<void, const std::string&, const std::string&, const vector<vector<std::string> >&, ServerConnection*> evtCUMode;
-    Signal5<void, const std::string&, const std::string&, bool, const std::string&, ServerConnection*> evtCMode;
+    Signal5<void, const std::string&, const std::string&, char, const std::string&, ServerConnection*> evtCMode;
     Signal4<void, const std::string&, const std::string&, const std::string&, ServerConnection*> evtMsg;
     Signal4<void, const std::string&, const std::string&, const std::string&, ServerConnection*> evtAction;
     Signal4<void, const std::string&, const std::string&, const std::string&, ServerConnection*> evtErrhandler;
@@ -66,6 +66,8 @@ public:
     Signal4<void, const std::string&, const std::string&, const std::string&, ServerConnection*> evtServMsg;
     Signal5<void, int, const std::string&, const std::string&, const std::string&, ServerConnection*> evtServNumeric;
     Signal5<void, const std::string&, const std::string&, const std::string&, const std::string&, ServerConnection*> evtKick;
+    Signal3<void, const std::string&, const std::string&, ServerConnection*> evtDisplayMessage;
+    Signal3<void, const std::vector<std::string>&, const std::string&, ServerConnection*> evtDisplayMessageMultiple;
 
 private:
     std::vector<ServerConnection*> _servers;

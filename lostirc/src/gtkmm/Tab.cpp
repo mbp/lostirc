@@ -25,7 +25,9 @@ using std::vector;
 using std::string;
 
 Tab::Tab(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
-    : Gtk::VBox(), _label(label), _conn(conn), is_highlighted(false), _font(font)
+    : Gtk::VBox(), _label(label), _conn(conn), is_highlighted(false), _font(font),
+    is_on_channel(true)
+
 {
     // To hold current context (colors) for Text widget
     _current_cx = new Gtk::Text::Context;
@@ -106,13 +108,8 @@ void Tab::setStyle() {
     _text->set_style(*style);
 }
 
-void Tab::parseAndInsert(const string& str)
+void Tab::parseAndInsert(const string& line)
 {
-    time_t timeval = time(0);
-    char tim[16];
-    strftime(tim, 15, "$1%H:%M:%S ", localtime(&timeval));
-
-    string line(tim + str);
     string::size_type lastPos = line.find_first_not_of("$", 0);
     string::size_type pos = line.find_first_of("$", lastPos);
 

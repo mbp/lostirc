@@ -36,35 +36,21 @@ MainWindow::MainWindow()
     key_press_event.connect(slot(this, &MainWindow::on_key_press_event));
     
     _io = new InOut();
-    _vbox1 = manage(new Gtk::VBox(false, 0));
+    Gtk::VBox *_vbox1 = manage(new Gtk::VBox(false, 0));
 
     // Signals for all server events
+    _io->evtDisplayMessage.connect(slot(this, &MainWindow::onDisplayMessage));
     _io->evtMsg.connect(slot(this, &MainWindow::onMsg));
-    _io->evtCTCP.connect(slot(this, &MainWindow::onCTCP));
-    _io->evtServMsg.connect(slot(this, &MainWindow::onServMsg));
-    _io->evtGenericError.connect(slot(this, &MainWindow::onGenericError));
-    _io->evtUnknownMessage.connect(slot(this, &MainWindow::onUnknownMessage));
     _io->evtServNumeric.connect(slot(this, &MainWindow::onServNumeric));
     _io->evtJoin.connect(slot(this, &MainWindow::onJoin));
-    _io->evtWhois.connect(slot(this, &MainWindow::onWhois));
     _io->evtKick.connect(slot(this, &MainWindow::onKick));
-    _io->evtAction.connect(slot(this, &MainWindow::onAction));
     _io->evtPart.connect(slot(this, &MainWindow::onPart));
     _io->evtQuit.connect(slot(this, &MainWindow::onQuit));
     _io->evtNick.connect(slot(this, &MainWindow::onNick));
-    _io->evtNotice.connect(slot(this, &MainWindow::onNotice));
     _io->evtNames.connect(slot(this, &MainWindow::onNames));
-    _io->evtTopic.connect(slot(this, &MainWindow::onTopic));
-    _io->evtTopicTime.connect(slot(this, &MainWindow::onTopicTime));
     _io->evtMode.connect(slot(this, &MainWindow::onMode));
     _io->evtCUMode.connect(slot(this, &MainWindow::onCUMode));
     _io->evtCMode.connect(slot(this, &MainWindow::onCMode));
-    _io->evtAway.connect(slot(this, &MainWindow::onAway));
-    _io->evtSelfaway.connect(slot(this, &MainWindow::onSelfaway));
-    _io->evtNctcp.connect(slot(this, &MainWindow::onNctcp));
-    _io->evtWallops.connect(slot(this, &MainWindow::onWallops));
-    _io->evtErrhandler.connect(slot(this, &MainWindow::onErrhandler));
-    _io->evtBanlist.connect(slot(this, &MainWindow::onBanlist));
 
     _nb = manage(new MainNotebook(this));
     _vbox1->pack_start(*_nb, 1, 1);
@@ -80,6 +66,7 @@ MainWindow::MainWindow()
     ServerConnection *conn = _io->newServer(nick, realname);
     conn->Session.servername = name;
     TabChannel *tab = _nb->addChannelTab(name, conn);
+    tab->is_on_channel = false;
     //tab->getText()->insert("Welcome to LostIRC!\n\nThis client is mainly keyboard oriented, so don't expect fancy menus and buttons for you to click on.\n\nTo list all available commands type /COMMANDS.\nTo see all available keybindings type /BINDS.\n\nType /SERVER <hostname> to connect to a server.\n");
     set_usize(600, 400);
     show_all();
@@ -104,6 +91,22 @@ Tab - nickcomplete.
 ");
 
 
+}
+
+void MainWindow::onDisplayMessage(const string& msg, const string& to, ServerConnection *conn)
+{
+    Tab *tab;
+
+    if (to.empty())
+          tab = _nb->getCurrent(conn);
+    else
+          tab = _nb->findTab(to, conn);
+
+    if (!tab) {
+        tab = _nb->addQueryTab(to, conn);
+    }
+
+    _nb->insert(tab, msg);
 }
 
 
@@ -134,36 +137,6 @@ void MainWindow::onMsg(const string& to, const string& from, const string& msg, 
 
 }
 
-void MainWindow::onCTCP(const string& command, const string& nick, ServerConnection *conn)
-{
-    Tab *tab = _nb->getCurrent(conn);
-
-    _nb->insert(tab, "$8-- CTCP " + command + " received from '" + nick + "'\n");
-
-}
-
-void MainWindow::onAction(const string& to, const string& from, const string& msg, ServerConnection *conn)
-{
-    string::size_type pos = msg.find(conn->Session.nick);
-
-    string search(from);
-    if (to != conn->Session.nick) {
-        search = to;
-    }
-
-    Tab *tab = _nb->findTab(search, conn);
-
-    if (!tab) {
-        tab = _nb->addQueryTab(from, conn);
-    }
-
-    _nb->insert(tab, "$3* " + from + "$1" + msg + "\n");
-
-    if (pos != string::npos) {
-        _nb->highlight(tab);
-    }
-}
-
 void MainWindow::onJoin(const string& nick, const string& chan, ServerConnection *conn)
 {
     Tab *tab = _nb->findTab(chan, conn);
@@ -172,22 +145,6 @@ void MainWindow::onJoin(const string& nick, const string& chan, ServerConnection
     } else {
         tab->insertUser(nick);
     }
-
-    _nb->insert(tab, "$8-- " + nick + " has joined " + chan + "\n");
-
-}
-
-Gtk::Text::Context MainWindow::setColor(const string& col, Gtk::Text *text)
-{
-    Gtk::Text::Context orig_cx = text->get_context();
-
-    Gdk_Color color(col);
-    Gtk::Text::Context cx;
-    cx.set_foreground(color);
-    text->set_context(cx);
-
-    return orig_cx;
-
 }
 
 void MainWindow::onKick(const string& kicker, const string& chan, const string& nick, const string& msg, ServerConnection *conn)
@@ -209,7 +166,6 @@ void MainWindow::onPart(const string& nick, const string& chan, ServerConnection
             // It's us who's parting
             tab->getLabel()->set_text("(" + chan + ")");
         }
-        _nb->insert(tab, "$5-- " + nick + " has parted " + chan + "\n");
         tab->removeUser(nick);
     }
 }
@@ -244,35 +200,6 @@ void MainWindow::onNick(const string& nick, const string& to, ServerConnection *
     }
 }
 
-void MainWindow::onNotice(const string& from, const string& to, const string &msg, ServerConnection *conn)
-{
-    Tab *tab = _nb->getCurrent(conn);
-
-    if (to == conn->Session.nick) {
-        // If it's to us only
-        _nb->insert(tab, "$7NOTICE " + from + ": " + msg + "\n");
-    } else {
-        _nb->insert(tab, "$7NOTICE " + from + " (to " + to + " ): " + msg + "\n");
-    }
-}
-
-void MainWindow::onTopic(const string& nick, const string& chan, const string& topic, ServerConnection *conn)
-{
-    Tab *tab = _nb->findTab(chan, conn);
-    if (nick.size() > 0) {
-        _nb->insert(tab, "$6-- " + nick + " changes topic to: " + topic + "\n");
-    } else {
-        _nb->insert(tab, "$6-- Topic for " + chan + " is: '" + topic + "'\n");
-    }
-
-}
-
-void MainWindow::onTopicTime(const string& chan, const string& nick, const string& time, ServerConnection *conn)
-{
-    Tab *tab = _nb->findTab(chan, conn);
-    _nb->insert(tab, "$6-- Set by " + nick + " on " + time + "\n");
-}
-
 void MainWindow::onMode(const string& nick, const string& param, const string& mode, ServerConnection *conn)
 {
     Tab *tab = _nb->getCurrent(conn);
@@ -280,17 +207,13 @@ void MainWindow::onMode(const string& nick, const string& param, const string& m
 
 }
 
-void MainWindow::onCMode(const string& nick, const string& chan, bool sign, const string& modes, ServerConnection *conn)
+void MainWindow::onCMode(const string& nick, const string& chan, char sign, const string& modes, ServerConnection *conn)
 {
     Tab *tab = _nb->findTab(chan, conn);
 
     string::const_iterator i;
     for (i = modes.begin(); i != modes.end(); ++i) {
-        if (sign) {
-            _nb->insert(tab, "$4-- "  + nick + " sets channel mode +" + *i + " on " + chan + "\n");
-        } else {
-            _nb->insert(tab, "$4-- "  + nick + " sets channel mode -" + *i + " on " + chan + "\n");
-        }
+        _nb->insert(tab, "$4-- "  + nick + " sets channel mode " + sign + *i + " on " + chan + "\n");
     }
 }
 
@@ -307,29 +230,6 @@ void MainWindow::onCUMode(const string& nick, const string& chan, const vector<v
     }
 }
 
-void MainWindow::onGenericError(const string& error, ServerConnection *conn)
-{
-    Tab *tab = _nb->getCurrent(conn);
-
-    _nb->insert(tab, error + "\n");
-}
-
-void MainWindow::onUnknownMessage(const string& line, ServerConnection *conn)
-{
-    Tab *tab = _nb->getCurrent(conn);
-
-    _nb->insert(tab, "Unknown msg: " + line + "\n");
-
-}
-
-void MainWindow::onServMsg(const string& from, const string& to, const string& msg, ServerConnection *conn)
-{
-    Tab *tab = _nb->getCurrent(conn);
-
-    _nb->insert(tab, "-- : "+ msg + "\n");
-
-}
-
 void MainWindow::onServNumeric(int n, const string& from, const string& to, const string& msg, ServerConnection *conn)
 {
     switch (n)
@@ -339,13 +239,6 @@ void MainWindow::onServNumeric(int n, const string& from, const string& to, cons
             conn->sendNick(conn->Session.nick += "_");
             break;
     }
-}
-
-void MainWindow::onWhois(const string& from, const string& param, const string& msg, ServerConnection *conn)
-{
-    Tab *tab = _nb->getCurrent(conn);
-
-    _nb->insert(tab, "$7-- " + param + " "  + msg + "\n");
 }
 
 void MainWindow::onNames(const string& chan, const vector<vector<string> >& users, ServerConnection *conn)
@@ -369,51 +262,8 @@ void MainWindow::newServer()
     string name = "<server>";
     ServerConnection *conn = _io->newServer(nick, realname);
     conn->Session.servername = name;
-    _nb->addChannelTab(name, conn);
-}
-
-void MainWindow::onAway(const string& from, const string& nick, const string& msg, ServerConnection *conn)
-{
-    Tab *tab = _nb->getCurrent(conn);
-
-    _nb->insert(tab, "User " + nick + " is away: '" + msg + "' (Using server: " + from + ")\n");
-}
-
-void MainWindow::onSelfaway(const string& rest, ServerConnection *conn)
-{
-    Tab *tab = _nb->getCurrent(conn);
-
-    if (isAway) {
-        isAway = false;
-    } else {
-        isAway = true;
-    }
-
-    _nb->insert(tab, rest + "\n");
-}
-
-void MainWindow::onNctcp(const string& from, const string& to, const string& msg, ServerConnection *conn)
-{
-    Tab *tab = _nb->getCurrent(conn);
-    _nb->insert(tab, "$4-" + from + "-: " + msg + "\n");
-}
-
-void MainWindow::onWallops(const string& from, const string& rest, ServerConnection *conn)
-{
-    Tab *tab = _nb->getCurrent(conn);
-    _nb->insert(tab, "WALLOPS -: " + from + " :- " + rest + "\n");
-}
-
-void MainWindow::onErrhandler(const string& from, const string& param2, const string& rest, ServerConnection *conn)
-{
-    Tab *tab = _nb->getCurrent(conn);
-    _nb->insert(tab, "Error: " + param2 + " -:- " + rest + "\n");
-}
-
-void MainWindow::onBanlist(const string& chan, const string& banmask, const string& owner, ServerConnection *conn)
-{       
-    Tab *tab = _nb->findTab(chan, conn);
-    _nb->insert(tab, chan + " banlist: " + banmask + " set by " + owner + "\r\n");
+    Tab *tab = _nb->addChannelTab(name, conn);
+    tab->is_on_channel = false;
 }
 
 void MainWindow::quit()

@@ -26,12 +26,12 @@ using std::stringstream;
 using std::cout;
 
 Parser::Parser(InOut *inout, ServerConnection *conn)
-    : _conn(conn), _io(inout)
+    : _conn(conn), _io(inout), _evts(new Events(inout))
 {
 
 }
 
-void Parser::parseLine(string &data)
+void Parser::parseLine(string& data)
 {
     #ifdef DEBUG
     cout << "<< " + data;
@@ -100,7 +100,7 @@ void Parser::parseLine(string &data)
         else if (command == "WALLOPS")
               Wallops(from, rest);
         else
-              _io->evtUnknownMessage(data, _conn);
+              _evts->emitEvent("wnknown", data, "", _conn);
 
     } else {
         // Parse string in form, eg. 'PING :23523525'
@@ -131,9 +131,9 @@ void Parser::parseLine(string &data)
         else if (command == "NOTICE")
               Notice(param + " :" + rest);
         else if (command == "ERROR")
-              _io->evtGenericError(param + " :" + rest, _conn);
+              _evts->emitEvent("error", param + " " + rest, "", _conn);
         else
-              _io->evtUnknownMessage(data, _conn);
+              _evts->emitEvent("unknown", data, "", _conn);
     }
 
 }
@@ -150,7 +150,15 @@ void Parser::Privmsg(const string& from, const string& param, const string& rest
         CTCP(from, param, rest);
     } else {
         // Normal privmsg 
-        _io->evtMsg(param, findNick(from), rest, _conn);
+        vector<string> args;
+        string nick = param;
+        if (param == _conn->Session.nick)
+              nick = from;
+
+        args.push_back(findNick(from));
+        args.push_back(rest);
+
+        _evts->emitEvent("privmsg", args, findNick(nick), _conn);
     }
 }
 
@@ -161,13 +169,20 @@ void Parser::CTCP(const string& from, const string& param, const string& rest)
 
     if (command == "VERSION") {
         _conn->sendVersion(findNick(from));
-        _io->evtCTCP(command, findNick(from), _conn);
+        vector<string> args;
+        args.push_back(command);
+        args.push_back(findNick(from));
+        _evts->emitEvent("ctcp", args, "", _conn);
     } else if (command == "ACTION") {
 
         string rest_ = rest.substr(pos, (rest.length() - pos) - 1);
-        _io->evtAction(param, findNick(from), rest_, _conn);
+        vector<string> args;
+        args.push_back(findNick(from));
+        args.push_back(rest_);
+
+        _evts->emitEvent("action", args, param, _conn);
     } else {
-        _io->evtUnknownMessage(from + " " + " " + param + " " + rest, _conn);
+        _evts->emitEvent("unknown", from + " " + param + " " + rest, "", _conn);
     }
 
 }
@@ -181,11 +196,16 @@ void Parser::Notice(const string& from, const string& to, const string& rest)
         string::iterator i = remove(tmp.begin(), tmp.end(), '\001');
         string output(tmp.begin(), i);
 
-        _io->evtNctcp(findNick(from), to, output, _conn);
+        _evts->emitEvent("servmsg", output, "", _conn);
     } else {
         // Normal notice
         
-        _io->evtNotice(findNick(from), to, rest, _conn);
+        vector<string> args;
+        args.push_back(findNick(from));
+        args.push_back(to);
+        args.push_back(rest);
+
+        _evts->emitEvent("noticepubl", args, "", _conn);
     }
 }
 
@@ -195,7 +215,11 @@ void Parser::Notice(const string& msg)
     string from = msg.substr(0, pos);
     string rest = msg.substr(pos + 1);
 
-    _io->evtNotice(from, _conn->Session.nick, rest, _conn);
+    vector<string> args;
+    args.push_back(from);
+    args.push_back(rest);
+
+    _evts->emitEvent("noticepriv", args, "", _conn);
 }
 
 void Parser::Kick(const string& from, const string& param, const string& msg)
@@ -210,16 +234,28 @@ void Parser::Kick(const string& from, const string& param, const string& msg)
 
 void Parser::Join(const string& nick, const string& chan)
 {
+    vector<string> args;
+    args.push_back(findNick(nick));
+    args.push_back(chan);
     _io->evtJoin(findNick(nick), chan, _conn);
+    _evts->emitEvent("join", args, chan, _conn);
 }
 
 void Parser::Whois(const string& from, const string& param, const string& rest)
 {
-    _io->evtWhois(from, param, rest, _conn);
+    vector<string> args;
+    args.push_back(param);
+    args.push_back(rest);
+
+    _evts->emitEvent("whois", args, "", _conn);
 }
 
 void Parser::Part(const string& nick, const string& chan)
 {
+    vector<string> args;
+    args.push_back(findNick(nick));
+    args.push_back(chan);
+    _evts->emitEvent("part", args, chan, _conn);
     _io->evtPart(findNick(nick), chan, _conn);
 }
 
@@ -235,7 +271,11 @@ void Parser::Nick(const string& from, const string& to)
 
 void Parser::Topic(const string& from, const string& to, const string& rest)
 {
-    _io->evtTopic(findNick(from), to, rest, _conn);
+    vector<string> args;
+    args.push_back(findNick(from));
+    args.push_back(rest);
+
+    _evts->emitEvent("topicchange", args, to, _conn);
 }
 
 void Parser::Mode(const string& from, const string& param, const string& rest)
@@ -254,50 +294,75 @@ void Parser::Mode(const string& from, const string& param, const string& rest)
 void Parser::CMode(const string& from, const string& param)
 {
     // Parse line in the form: '#chan +ovo nick nick2 nick3'
-
     string::size_type pos1 = param.find_first_of(" ");
     string::size_type pos2 = param.find_first_of(" ", pos1 + 1);
 
     string chan = param.substr(0, pos1);
     string modes = param.substr(pos1 + 1, (pos2 - pos1) - 1);
-    string nicks = param.substr(pos2 + 1);
-
-    vector<string> nicksvec;
-    bool sign = false;
-    if (modes[0] == '+')
-          sign = true;
-
-    modes.erase(modes.begin());
-
-    stringstream ss(nicks);
-    string buf;
-    while (ss >> buf)
-          nicksvec.push_back(buf);
-
-    if (nicksvec.size() != modes.size()) {
-          // Received a channel mode, like '#chan +n'
-          _io->evtCMode(findNick(from), chan, sign, modes, _conn);
-          return;
-    }
+    string args = param.substr(pos2 + 1);
 
     vector<vector<string> > vecvec;
 
-    for (int n = 0; n < modes.size(); ++n) {
-        vector<string> vec;
-        if (sign) {
-            switch (modes[n]) {
-                case 'o':
-                    vec.push_back("@");
-                    break;
-                case 'v':
-                    vec.push_back("+");
-                    break;
-            }
-        } else {
-            vec.push_back(" ");
+    // Get arguments
+    vector<string> arguments;
+    stringstream ss(args);
+    string buf;
+    while (ss >> buf)
+          arguments.push_back(buf);
+
+    vector<string>::iterator arg_i = arguments.begin();
+
+    if (arguments.empty()) {
+          // Received a channel mode, like '#chan +n'
+          _io->evtCMode(findNick(from), chan, modes.at(0), modes, _conn);
+          return;
+    }
+
+    char sign;
+
+    string::iterator i;
+    vector<string> tmp;
+    for (i = modes.begin(); i != modes.end(); ++i) {
+        if (!tmp.empty()) {
+            vecvec.push_back(tmp);
+            tmp.clear();
         }
-        vec.push_back(nicksvec[n]);
-        vecvec.push_back(vec);
+
+        switch (*i) {
+            case '+':
+                sign = '+';
+                break;
+            case '-':
+                sign = '-';
+                break;
+            case 'o':
+                if (arg_i != arguments.begin())
+                      arg_i++;
+
+                if (sign == '+') {
+                    tmp.push_back("@");
+                } else {
+                    tmp.push_back(" ");
+                }
+                tmp.push_back(*arg_i);
+                break;
+            case 'v':
+                if (arg_i != arguments.begin())
+                      arg_i++;
+
+                if (sign == '+') {
+                    tmp.push_back("+");
+                } else {
+                    tmp.push_back(" ");
+                }
+                tmp.push_back(*arg_i);
+                break;
+        }
+
+    }
+    if (!tmp.empty()) {
+        vecvec.push_back(tmp);
+        tmp.clear();
     }
 
     // Channel user mode
@@ -312,7 +377,10 @@ void Parser::Topic(const string& param, const string& rest)
 
     string chan = param.substr(pos1, pos2 - pos1);
 
-    _io->evtTopic("", chan, rest, _conn);
+    vector<string> args;
+    args.push_back(chan);
+    args.push_back(rest);
+    _evts->emitEvent("topicis", args, chan, _conn);
 }
 
 void Parser::TopicTime(const string& param)
@@ -330,13 +398,17 @@ void Parser::TopicTime(const string& param)
     long date = std::atol(time.c_str());
     time = std::ctime(&date);
 
-    _io->evtTopicTime(chan, nick, time.substr(0, time.size() - 1), _conn);
+    vector<string> args;
+    args.push_back(nick);
+    args.push_back(time.substr(0, time.size() - 1));
+
+    _evts->emitEvent("topictime", args, chan, _conn);
 }
 
 
 void Parser::ServMsg(const string& from, const string& param, const string& msg)
 {
-    _io->evtServMsg(from, param, msg, _conn);
+    _evts->emitEvent("servmsg", msg, "", _conn);
 }
 
 void Parser::Away(const string& from, const string& param, const string& rest)
@@ -346,17 +418,26 @@ void Parser::Away(const string& from, const string& param, const string& rest)
     ss >> param1;
     ss >> param2;
 
-    _io->evtAway(from, param2, rest, _conn);
+    vector<string> args;
+    args.push_back(param1);
+    args.push_back(param2);
+
+    _evts->emitEvent("away", args, from, _conn);
 }
 
 void Parser::Selfaway(const string& rest)
 {
-    _io->evtSelfaway(rest, _conn);
+    vector<string> args;
+    args.push_back(rest);
+    _evts->emitEvent("servmsg", args, "", _conn);
 }
 
 void Parser::Wallops(const string& from, const string& rest)
 {
-    _io->evtWallops(findNick(from), rest, _conn);
+    vector<string> args;
+    args.push_back(from);
+    args.push_back(rest);
+    _evts->emitEvent("wallops", args, "", _conn);
 }
 
 void Parser::Banlist(const string& param)
@@ -369,20 +450,22 @@ void Parser::Banlist(const string& param)
     ss >> owner;
     ss >> time;
 
-    _io->evtBanlist(chan, banmask, owner, _conn);
+    vector<string> args;
+    args.push_back(banmask + " " + time);
+    args.push_back(owner);
+
+    _evts->emitEvent("banlist", args, chan, _conn);
 }
      
 void Parser::Errhandler(const string& from, const string& param, const string& rest)
 {
-    string param1, param2;
-    stringstream ss(param);
-    ss >> param1;
-    ss >> param2;
-    _io->evtErrhandler(from, param2, rest, _conn);
+    _evts->emitEvent("error", param + " " + rest, "", _conn);
 }
 
 void Parser::numeric(int n, const string& from, const string& param, const string& rest)
 {
+    vector<string> args;
+    args.push_back(rest);
     switch(n)
     {
     case 1: // RPL_WELCOME
@@ -451,9 +534,9 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         Banlist(param);
         break;
                         
-//    case 368: // RPL_ENDOFBANLIST
-//    //        EndBanlist(param);
-//    //        break;
+    case 368: // RPL_END_OF_BANLIST
+        _evts->emitEvent("servmsg", args, "", _conn);
+        break;
     
     case 372: // RPL_MOTD
         ServMsg(from, param, rest);
@@ -575,6 +658,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         break; // Ignored.
 
     case 311: // RPL_WHOISUSER
+
         Whois(from, param, rest);
         break;
 
@@ -599,8 +683,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
         break;
 
     default:
-        _io->evtUnknownMessage(from + " " + param + " " + rest, _conn);
-
+        _evts->emitEvent("unknown", from + " " + param + " " + rest, "", _conn);
     }
 
 }
