@@ -59,20 +59,14 @@ bool Socket::connect(const string& host, int port)
 
 bool Socket::send(const string& data)
 {
-    int size = data.length();
-    const char *msg;
-
-    msg = data.c_str();
-
-    if (::send(fd, msg, size, 0) > 0) {
+    if (::send(fd, data.c_str(), data.length(), 0) > 0) {
         #ifdef DEBUG
-        std::cout << ">> " << msg << std::endl;
+        std::cout << ">> " << data << std::endl;
         #endif
         return true;
     } else {
         return false;
     }
-
 }
 
 string Socket::receive()
