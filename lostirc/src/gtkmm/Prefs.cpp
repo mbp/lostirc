@@ -16,15 +16,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <sstream>
-#include <gtkmm/stock.h>
-#include <gtkmm/image.h>
-#include <gtkmm/frame.h>
+#include <gtkmm/separator.h>
 #include <Utils.h>
 #include "MainWindow.h"
 #include "Prefs.h"
-
-using std::vector;
 
 static const char *encodings[]=
 {
@@ -43,25 +38,29 @@ static const char *encodings[]=
     NULL
 };
 
-Prefs::Prefs(Gtk::Window& parent)
-    : Gtk::Dialog(_("LostIRC Preferences"), parent),
+Prefs::Prefs()
+    : Gtk::Window(Gtk::WINDOW_TOPLEVEL),
     bufferadj(1.0, 1.0, 20000.0, 50.0, 100.0, 0.0),
     bufferspin(bufferadj),
-    highlightingbutton(_("Limited _highlighting (don't mark tabs red on joins/parts etc.)"), true),
     stripcolorsbutton(_("Strip _color codes from incoming messages"), true),
     stripothersbutton(_("Strip _bold and underline codes from incoming messages"), true),
     loggingbutton(_("_Log conversations to disk"), true),
     _general_table(2, 4),
     _prefs_table(2, 5)
 {
-    add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
+    set_title(_("LostIRC Preferences"));
     notebook.set_tab_pos(Gtk::POS_TOP);
     _general_table.set_row_spacings(6);
     _general_table.set_col_spacings(12);
     _prefs_table.set_row_spacings(6);
     _prefs_table.set_col_spacings(12);
 
-    get_vbox()->pack_start(notebook);
+    set_border_width(5);
+    set_resizable(false);
+    mainvbox.pack_start(notebook);
+    mainvbox.set_spacing(6);
+
+    add(mainvbox);
 
     Gtk::VBox *generalbox = addPage(_("General"));
     Gtk::VBox *prefsbox = addPage(_("Preferences"));
@@ -128,6 +127,22 @@ Prefs::Prefs(Gtk::Window& parent)
 
     row++;
 
+    // Highlighted words
+    highlightentry.set_text(App->options.highlight_words);
+    Gtk::Label *plabel3 = manage(new Gtk::Label(_("Words to highlight on (space seperated):"), Gtk::ALIGN_LEFT));
+    _prefs_table.attach(*plabel3, 0, 1, row, row + 1);
+    _prefs_table.attach(highlightentry, 1, 2, row, row + 1);
+
+    row++;
+
+    // Buffer size for text
+    bufferspin.set_value(App->options.buffer_size());
+    Gtk::Label *plabel4 = manage(new Gtk::Label(_("Maximium number of lines to cache:"), Gtk::ALIGN_LEFT));
+    _prefs_table.attach(*plabel4, 0, 1, row, row + 1);
+    _prefs_table.attach(bufferspin, 1, 2, row, row + 1);
+
+    row++;
+
     // DCC ip
     dccipentry.set_text(App->options.dccip().getString());
     Gtk::Label *plabel1 = manage(new Gtk::Label(_("DCC IP address:"), Gtk::ALIGN_LEFT));
@@ -144,25 +159,7 @@ Prefs::Prefs(Gtk::Window& parent)
 
     row++;
 
-    // Highligted words
-    highlightentry.set_text(App->options.highlight_words);
-    Gtk::Label *plabel3 = manage(new Gtk::Label(_("Words to highlight on (space seperated):"), Gtk::ALIGN_LEFT));
-    _prefs_table.attach(*plabel3, 0, 1, row, row + 1);
-    _prefs_table.attach(highlightentry, 1, 2, row, row + 1);
-
-    row++;
-
-    // Buffer size for text
-    bufferspin.set_value(App->options.buffer_size());
-    Gtk::Label *plabel4 = manage(new Gtk::Label(_("Maxmium number of lines to cache:"), Gtk::ALIGN_LEFT));
-    _prefs_table.attach(*plabel4, 0, 1, row, row + 1);
-    _prefs_table.attach(bufferspin, 1, 2, row, row + 1);
-
     prefsbox->pack_start(_prefs_table, Gtk::PACK_SHRINK);
-
-    // Limited tab highlighting
-    highlightingbutton.set_active(App->options.limited_highlighting);
-    prefsbox->pack_start(highlightingbutton, Gtk::PACK_SHRINK);
 
     // Strip colors
     stripcolorsbutton.set_active(App->options.strip_colors);
@@ -175,6 +172,15 @@ Prefs::Prefs(Gtk::Window& parent)
     // Logging
     loggingbutton.set_active(App->options.logging);
     prefsbox->pack_start(loggingbutton, Gtk::PACK_SHRINK);
+
+    mainvbox.pack_start(*manage(new Gtk::HSeparator()), Gtk::PACK_SHRINK);
+
+    Gtk::HBox *closehbox = manage(new Gtk::HBox());
+    Gtk::Button *closebutton = manage(new Gtk::Button(Gtk::Stock::CLOSE));
+    closebutton->signal_clicked().connect(slot(*this, &Prefs::onClose));
+    closehbox->pack_end(*closebutton, Gtk::PACK_SHRINK);
+    mainvbox.pack_start(*closehbox);
+
 
     show_all();
 }
@@ -195,7 +201,6 @@ void Prefs::saveSettings()
     App->options.highlight_words = highlightentry.get_text();
     App->options.buffer_size = static_cast<int>(bufferspin.get_value());
 
-    App->options.limited_highlighting = highlightingbutton.get_active();
     App->options.strip_colors = stripcolorsbutton.get_active();
     App->options.strip_boldandunderline = stripothersbutton.get_active();
     App->options.logging = loggingbutton.get_active();

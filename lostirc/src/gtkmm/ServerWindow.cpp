@@ -17,9 +17,9 @@
  */
 
 #include <sstream>
+#include <gtkmm/separator.h>
 #include <gtkmm/stock.h>
 #include <gtkmm/image.h>
-#include <gtkmm/frame.h>
 #include <Utils.h>
 #include "MainWindow.h"
 #include "ServerWindow.h"
@@ -29,33 +29,31 @@ using std::vector;
 Gtk::Button* create_imagebutton(const Glib::ustring& str, const Gtk::StockID& stock_id)
 {
     Gtk::Button *button = new Gtk::Button();
-
     Gtk::HBox *hbox = manage(new Gtk::HBox());
-
     hbox->pack_start(*manage(new Gtk::Image(stock_id, Gtk::ICON_SIZE_MENU)));
-    hbox->pack_start(*manage(new Gtk::Label(str)));
+    hbox->pack_start(*manage(new Gtk::Label(str, true)));
     button->add(*hbox);
     return button;
 }
 
 ServerWindow::ServerWindow(Gtk::Window& parent)
     : Gtk::Dialog(_("LostIRC Server Window"), parent),
-    auto_connect_button(_("_Connect automtically"), true),
+    auto_connect_button(_("_Connect automatically"), true),
     _columns(),
     _liststore(Gtk::ListStore::create(_columns)),
     _treeview(_liststore),
     _server_options_table(2, 4)
 {
-    add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
     _server_options_table.set_row_spacings(6);
     _server_options_table.set_col_spacings(12);
+    set_border_width(5);
+    get_vbox()->set_spacing(18);
 
     // Autojoin/perform-tab
 
-    Gtk::HPaned *server_pane = manage(new Gtk::HPaned());
-
-    _treeview.append_column(_("Auto"), _columns.auto_connect);
-    _treeview.append_column(_("Servers"), _columns.servername);
+    _treeview.append_column(_("Hostname"), _columns.servername);
+    _treeview.append_column(_("Port"), _columns.port);
+    _treeview.append_column(_("Auto-connect"), _columns.auto_connect);
     _treeview.get_selection()->signal_changed().connect(slot(*this, &ServerWindow::onChangeRow));
 
     vector<Server*> servers = App->cfgservers.getServers();
@@ -63,13 +61,31 @@ ServerWindow::ServerWindow(Gtk::Window& parent)
 
     for (i = servers.begin(); i != servers.end(); ++i) {
         Gtk::TreeModel::Row row = *_liststore->append();
-        row[_columns.auto_connect] = (*i)->auto_connect;
         row[_columns.servername] = (*i)->hostname;
+        row[_columns.port] = (*i)->port;
+        row[_columns.auto_connect] = (*i)->auto_connect;
         row[_columns.autojoin] = *i;
     }
-    server_pane->pack1(_treeview);
-    Gtk::VBox *serverinfobox = manage(new Gtk::VBox());
-    server_pane->pack2(*serverinfobox);
+
+    // Button box.
+    Gtk::HButtonBox *buttbox = manage(new Gtk::HButtonBox());
+    buttbox->set_spacing(6);
+    Gtk::Button *addbutton = manage(new Gtk::Button(Gtk::Stock::ADD));
+    addbutton->signal_clicked().connect(slot(*this, &ServerWindow::addEntry));
+    Gtk::Button *modifybutton = manage(create_imagebutton(_("_Modify"), Gtk::Stock::PREFERENCES));
+    Gtk::Button *deletebutton = manage(new Gtk::Button(Gtk::Stock::DELETE));
+    Gtk::Button *closebutton = manage(new Gtk::Button(Gtk::Stock::CLOSE));
+
+    buttbox->pack_end(*addbutton, Gtk::PACK_SHRINK);
+    buttbox->pack_end(*modifybutton, Gtk::PACK_SHRINK);
+    buttbox->pack_end(*deletebutton, Gtk::PACK_SHRINK);
+    buttbox->pack_end(*closebutton, Gtk::PACK_SHRINK);
+
+    get_vbox()->pack_end(*buttbox, Gtk::PACK_SHRINK);
+    get_vbox()->pack_end(*manage(new Gtk::HSeparator()), Gtk::PACK_EXPAND_PADDING);
+    get_vbox()->pack_end(_treeview, Gtk::PACK_SHRINK);
+
+    serverinfobox = manage(new Gtk::VBox());
 
     // auto connect
     serverinfobox->pack_start(auto_connect_button, Gtk::PACK_SHRINK);
@@ -100,7 +116,7 @@ ServerWindow::ServerWindow(Gtk::Window& parent)
     row++;
 
     // nick
-    Gtk::Label *label4 = manage(new Gtk::Label(_("Nick:"), Gtk::ALIGN_LEFT));
+    Gtk::Label *label4 = manage(new Gtk::Label(_("Nickname:"), Gtk::ALIGN_LEFT));
     _server_options_table.attach(*label4, 0, 1, row, row + 1);
     _server_options_table.attach(nickentry, 1, 2, row, row + 1);
 
@@ -116,19 +132,11 @@ ServerWindow::ServerWindow(Gtk::Window& parent)
     hboxserver.pack_end(*savebutton, Gtk::PACK_SHRINK);
     serverinfobox->pack_end(hboxserver, Gtk::PACK_SHRINK);
 
-    addnewbutton = manage(create_imagebutton(_("Add entry"), Gtk::Stock::ADD));
-    addnewbutton->signal_clicked().connect(slot(*this, &ServerWindow::addEntry));
-    hboxserver.pack_end(*addnewbutton, Gtk::PACK_SHRINK);
-
-    removebutton = manage(create_imagebutton(_("Remove entry"), Gtk::Stock::REMOVE));
-    removebutton->signal_clicked().connect(slot(*this, &ServerWindow::removeEntry));
-    hboxserver.pack_end(*removebutton, Gtk::PACK_SHRINK);
-
-    get_vbox()->pack_start(*server_pane);
+    get_vbox()->pack_start(*serverinfobox);
 
     show_all();
-    removebutton->hide();
-    addnewbutton->hide();
+
+    serverinfobox->hide();
 }
 
 void ServerWindow::saveEntry()
@@ -194,6 +202,7 @@ void ServerWindow::onChangeRow()
     Gtk::TreeModel::iterator iterrow = selection->get_selected();
 
     if (iterrow) {
+        serverinfobox->show();
         // Row selected
         Gtk::TreeModel::Row row = *iterrow;
 
@@ -216,11 +225,10 @@ void ServerWindow::onChangeRow()
         }
         show_all();
     } else {
+        serverinfobox->hide();
         // No row selected
         clearEntries();
         show_all();
-        removebutton->hide();
-        addnewbutton->hide();
     }
 }
 

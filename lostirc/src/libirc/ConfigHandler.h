@@ -43,7 +43,6 @@ public:
     Value<int> dccport;
     Value<Glib::ustring> highlight_words;
     Value<Glib::ustring> font;
-    Value<bool> limited_highlighting;
     Value<bool> strip_colors;
     Value<bool> strip_boldandunderline;
     Value<bool> logging;

@@ -45,12 +45,11 @@ namespace FE
         std::vector<Glib::ustring> tokens;
 
     public:
-        Tmpl(const Glib::ustring& str, const signed p) : orig(str), priority(p) { }
+        Tmpl(const Glib::ustring& str) : orig(str) { }
 
         Tmpl& operator<<(const Glib::ustring& str) { tokens.push_back(str); return *this; }
         Tmpl& operator<<(int i) { std::stringstream ss; ss << i; tokens.push_back(ss.str()); return *this; }
 
-        const signed priority;
         Glib::ustring result();
     };
 

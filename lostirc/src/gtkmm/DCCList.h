@@ -18,7 +18,6 @@
 
 #ifndef DCCLIST_H
 #define DCCLIST_H
-
 #include <gtkmm/stock.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/liststore.h>
@@ -77,6 +76,8 @@ public:
             : Gtk::Dialog("LostIRC DCC Transfers", parent)
     {
         add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
+        get_vbox()->set_border_width(12);
+        set_border_width(5);
         get_vbox()->pack_start(*DCCList::Instance());
         show_all();
     }

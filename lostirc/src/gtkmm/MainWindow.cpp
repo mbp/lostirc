@@ -348,7 +348,7 @@ void MainWindow::openPrefs()
     if (prefswin.get()) {
           prefswin->present();
     } else {
-        std::auto_ptr<Prefs> dialog(new Prefs(*this));
+        std::auto_ptr<Prefs> dialog(new Prefs());
 
         dialog->show();
 

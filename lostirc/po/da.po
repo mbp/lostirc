@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LostIRC 0.2.5pre\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-06-09 22:58+0200\n"
+"POT-Creation-Date: 2003-06-15 12:46+0200\n"
 "PO-Revision-Date: 2003-01-03 19:25+0100\n"
 "Last-Translator: Michael Kristensen <tazz@wtf.dk>\n"
 "Language-Team: Danish\n"
@@ -243,143 +243,91 @@ msgstr "pct. udført"
 msgid "From/To"
 msgstr "Fra/Til"
 
-#: src/gtkmm/Prefs.cpp:61
-msgid "Limited highlighting (don't mark tabs red on joins/parts etc.)"
+#: src/gtkmm/Prefs.cpp:47
+#, fuzzy
+msgid "LostIRC Preferences"
+msgstr "Indstillinger"
+
+#: src/gtkmm/Prefs.cpp:50
+#, fuzzy
+msgid "Limited _highlighting (don't mark tabs red on joins/parts etc.)"
 msgstr ""
 "Begrænset anmærkning (marker ikke faneblade røde ved personer der kommer ind "
 "i kanalen, eller forlader kanalen.)"
 
-#: src/gtkmm/Prefs.cpp:62
-msgid "Strip color codes from incoming messages"
+#: src/gtkmm/Prefs.cpp:51
+#, fuzzy
+msgid "Strip _color codes from incoming messages"
 msgstr "Fjern farvekoder fra indkommende beskeder"
 
-#: src/gtkmm/Prefs.cpp:63
-msgid "Strip bold and underline codes from incoming messages"
+#: src/gtkmm/Prefs.cpp:52
+#, fuzzy
+msgid "Strip _bold and underline codes from incoming messages"
 msgstr "Fjern fed- og understregskoder fra indkommende beskeder"
 
-#: src/gtkmm/Prefs.cpp:64
-msgid "Log to file"
-msgstr "Log til fil"
+#: src/gtkmm/Prefs.cpp:53
+msgid "_Log conversations to disk"
+msgstr ""
 
-#: src/gtkmm/Prefs.cpp:74
-msgid "General Settings"
-msgstr "Generelle Indstillinger"
-
-#: src/gtkmm/Prefs.cpp:75 src/gtkmm/Prefs.cpp:160
-msgid "Preferences"
-msgstr "Indstillinger"
-
-#: src/gtkmm/Prefs.cpp:76 src/gtkmm/Prefs.cpp:206
-msgid "Font selection"
-msgstr "Skrifttypevalg"
-
-#: src/gtkmm/Prefs.cpp:77 src/gtkmm/Prefs.cpp:213 src/gtkmm/Prefs.cpp:290
-msgid "Servers"
-msgstr "Servere"
-
-#: src/gtkmm/Prefs.cpp:83 src/gtkmm/Prefs.cpp:121
-msgid "Apply settings"
-msgstr "Anvend indstillinger"
-
-#: src/gtkmm/Prefs.cpp:84 src/gtkmm/Prefs.cpp:122 src/gtkmm/Prefs.cpp:195
-msgid "Cancel"
-msgstr "Annuller"
-
-#: src/gtkmm/Prefs.cpp:93
-msgid "Nickname"
-msgstr "Kaldenavn"
-
-#: src/gtkmm/Prefs.cpp:99
-msgid "Real name"
-msgstr "Rigtigt navn"
-
-#: src/gtkmm/Prefs.cpp:105
-msgid "IRC username (ident)"
-msgstr "IRC brugernavn (ident)"
-
-#: src/gtkmm/Prefs.cpp:109
+#: src/gtkmm/Prefs.cpp:66
 msgid "General"
 msgstr "Generelt"
 
-#: src/gtkmm/Prefs.cpp:113
-msgid "Encoding to use on IRC"
-msgstr ""
-
-#: src/gtkmm/Prefs.cpp:132
-msgid "Nick-completion character"
-msgstr "Navnefærdiggørelsesbogstav"
-
-#: src/gtkmm/Prefs.cpp:138
-msgid "DCC IP-Address"
-msgstr "DCC IP-Adresse"
-
-#: src/gtkmm/Prefs.cpp:144
-msgid "DCC Port (0 = random)"
-msgstr "DCC Port (0 = tilfældig)"
-
-#: src/gtkmm/Prefs.cpp:150
-msgid "Words to highlight on (space seperated)"
-msgstr "Ord der skal anmærkes på (mellemrumssepareret)"
-
-#: src/gtkmm/Prefs.cpp:156
-msgid "Maximum number of lines to save"
-msgstr "Maksimum linier, der skal gemmes"
-
-#: src/gtkmm/Prefs.cpp:194
-msgid "Apply font"
-msgstr "Anvend skrifttype"
-
-#: src/gtkmm/Prefs.cpp:202
-msgid "> Hello World!"
-msgstr "> Hej Verden!"
-
-#: src/gtkmm/Prefs.cpp:212
-msgid "Auto"
-msgstr "Auto"
-
-#: src/gtkmm/Prefs.cpp:226
-msgid "Options"
+#: src/gtkmm/Prefs.cpp:67
+msgid "Preferences"
 msgstr "Indstillinger"
 
-#: src/gtkmm/Prefs.cpp:236
-msgid "Connect automatically: "
-msgstr "Forbind automatisk: "
+#: src/gtkmm/Prefs.cpp:74
+#, fuzzy
+msgid "Nickname:"
+msgstr "Kaldenavn"
 
-#: src/gtkmm/Prefs.cpp:243
-msgid "Hostname: "
-msgstr "Værtsnavn: "
+#: src/gtkmm/Prefs.cpp:82
+#, fuzzy
+msgid "Real name:"
+msgstr "Rigtigt navn"
 
-#: src/gtkmm/Prefs.cpp:250
-msgid "Port: "
-msgstr "Port: "
+#: src/gtkmm/Prefs.cpp:90
+#, fuzzy
+msgid "IRC username (ident):"
+msgstr "IRC brugernavn (ident)"
 
-#: src/gtkmm/Prefs.cpp:257
-msgid "Password: "
-msgstr "Adgangskode: "
+#: src/gtkmm/Prefs.cpp:100
+msgid "Encoding to use on IRC:"
+msgstr ""
 
-#: src/gtkmm/Prefs.cpp:264
-msgid "Nick: "
-msgstr "Navn: "
+#: src/gtkmm/Prefs.cpp:111
+msgid "Browse..."
+msgstr ""
 
-#: src/gtkmm/Prefs.cpp:270
-msgid "Commmands to perform on connect: "
-msgstr "Kommandoer, der skal udføres ved forbindelse: "
+#: src/gtkmm/Prefs.cpp:115
+msgid "Main window font:"
+msgstr ""
 
-#: src/gtkmm/Prefs.cpp:275
-msgid "Save this entry"
-msgstr "Gem dette element"
+#: src/gtkmm/Prefs.cpp:125
+#, fuzzy
+msgid "Nick-completion character:"
+msgstr "Navnefærdiggørelsesbogstav"
 
-#: src/gtkmm/Prefs.cpp:280
-msgid "Add entry"
-msgstr "Tilføj element"
+#: src/gtkmm/Prefs.cpp:133
+#, fuzzy
+msgid "DCC IP address:"
+msgstr "DCC IP-Adresse"
 
-#: src/gtkmm/Prefs.cpp:284
-msgid "Remove entry"
-msgstr "Fjern element"
+#: src/gtkmm/Prefs.cpp:141
+#, fuzzy
+msgid "DCC Port (0 = random):"
+msgstr "DCC Port (0 = tilfældig)"
 
-#: src/gtkmm/Prefs.cpp:293
-msgid "Close"
-msgstr "Luk"
+#: src/gtkmm/Prefs.cpp:149
+#, fuzzy
+msgid "Words to highlight on (space seperated):"
+msgstr "Ord der skal anmærkes på (mellemrumssepareret)"
+
+#: src/gtkmm/Prefs.cpp:157
+#, fuzzy
+msgid "Maxmium number of lines to cache:"
+msgstr "Maksimum linier, der skal gemmes"
 
 #: src/gtkmm/NickList.cpp:57
 msgid " user"
@@ -610,6 +558,66 @@ msgstr "Forbundet. Logger ind..."
 #: src/libirc/LostIRCApp.h:53
 msgid "Logging to `"
 msgstr "Logger til `"
+
+#~ msgid "Log to file"
+#~ msgstr "Log til fil"
+
+#~ msgid "General Settings"
+#~ msgstr "Generelle Indstillinger"
+
+#~ msgid "Font selection"
+#~ msgstr "Skrifttypevalg"
+
+#~ msgid "Servers"
+#~ msgstr "Servere"
+
+#~ msgid "Apply settings"
+#~ msgstr "Anvend indstillinger"
+
+#~ msgid "Cancel"
+#~ msgstr "Annuller"
+
+#~ msgid "Apply font"
+#~ msgstr "Anvend skrifttype"
+
+#~ msgid "> Hello World!"
+#~ msgstr "> Hej Verden!"
+
+#~ msgid "Auto"
+#~ msgstr "Auto"
+
+#~ msgid "Options"
+#~ msgstr "Indstillinger"
+
+#~ msgid "Connect automatically: "
+#~ msgstr "Forbind automatisk: "
+
+#~ msgid "Hostname: "
+#~ msgstr "Værtsnavn: "
+
+#~ msgid "Port: "
+#~ msgstr "Port: "
+
+#~ msgid "Password: "
+#~ msgstr "Adgangskode: "
+
+#~ msgid "Nick: "
+#~ msgstr "Navn: "
+
+#~ msgid "Commmands to perform on connect: "
+#~ msgstr "Kommandoer, der skal udføres ved forbindelse: "
+
+#~ msgid "Save this entry"
+#~ msgstr "Gem dette element"
+
+#~ msgid "Add entry"
+#~ msgstr "Tilføj element"
+
+#~ msgid "Remove entry"
+#~ msgstr "Fjern element"
+
+#~ msgid "Close"
+#~ msgstr "Luk"
 
 #~ msgid "Somebody"
 #~ msgstr "Nogen"

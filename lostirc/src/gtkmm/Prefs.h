@@ -26,16 +26,14 @@
 #include <gtkmm/entry.h>
 #include <gtkmm/table.h>
 #include <gtkmm/spinbutton.h>
-#include <gtkmm/liststore.h>
-#include <gtkmm/treeview.h>
-#include <gtkmm/textview.h>
+#include <gtkmm/adjustment.h>
 #include <gtkmm/fontselection.h>
 #include "MainWindow.h"
 
-class Prefs : public Gtk::Dialog
+class Prefs : public Gtk::Window
 {
 public:
-    Prefs(Gtk::Window& parent);
+    Prefs();
     virtual ~Prefs() { }
 
 private:
@@ -46,7 +44,7 @@ private:
     void addEntry();
     void onChangeRow();
     void clearEntries();
-    virtual void on_response(int) { saveSettings(); hide(); }
+    void onClose() { saveSettings(); hide(); }
 
     Gtk::VBox* addPage(const Glib::ustring& str);
 
@@ -64,41 +62,16 @@ private:
     Gtk::Entry highlightentry;
     Gtk::Adjustment bufferadj;
     Gtk::SpinButton bufferspin;
-    Gtk::CheckButton highlightingbutton;
     Gtk::CheckButton stripcolorsbutton;
     Gtk::CheckButton stripothersbutton;
     Gtk::CheckButton loggingbutton;
 
-    // Auto-join 
-    Gtk::Entry nickentry;
-    Gtk::Entry passentry;
-    Gtk::Entry portentry;
-    Gtk::Entry hostentry;
-    Gtk::TextView cmdtext;
-    Gtk::Notebook notebook;
-
-    Gtk::Button *removebutton;
-    Gtk::Button *addnewbutton;
-    Gtk::CheckButton auto_connect_button;
-
-    Gtk::HBox hboxserver;
-
-    // what our columned-list contains
-    struct ModelColumns : public Gtk::TreeModel::ColumnRecord
-    {
-        Gtk::TreeModelColumn<Glib::ustring> servername;
-        Gtk::TreeModelColumn<bool> auto_connect;
-        Gtk::TreeModelColumn<Server*> autojoin;
-
-        ModelColumns() { add(servername); add(auto_connect); add(autojoin); }
-    };
-
-    ModelColumns _columns;
-    Glib::RefPtr<Gtk::ListStore> _liststore;
-    Gtk::TreeView _treeview;
     Gtk::Table _general_table;
     Gtk::Table _prefs_table;
-    Gtk::Table _server_options_table;
+
+    Gtk::Notebook notebook;
+
+    Gtk::VBox mainvbox;
 };
 
 #endif

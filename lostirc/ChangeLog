@@ -1,6 +1,16 @@
 For a summary of changes between releases - see the NEWS file.
 
 2003-06-15  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * ConfigHandler.cpp: Remove limited highlighting optino.
+        * FrontEnd.cpp: Ditto.
+        * Prefs.cpp: Ditto.
+
+        * Prefs.cpp: Make it a Window instead of a Dialog, because we need to
+          have a minimize button in the title to conform to HIG.
+        * ServerWindow.cpp: Rework window layout. Not done yet.
+
+2003-06-15  Morten Brix Pedersen  <morten@wtf.dk>
 
         * ConfigHandler.cpp: Make the default font "Sans 10".
         * ServerWindow.cpp: Move server preferences from Preference Window to

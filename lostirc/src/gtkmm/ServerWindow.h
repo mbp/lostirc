@@ -19,7 +19,6 @@
 #ifndef SERVERWINDOW_H
 #define SERVERWINDOW_H
 
-#include <gtkmm/notebook.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/button.h>
 #include <gtkmm/combo.h>
@@ -29,7 +28,6 @@
 #include <gtkmm/liststore.h>
 #include <gtkmm/treeview.h>
 #include <gtkmm/textview.h>
-#include <gtkmm/fontselection.h>
 #include "MainWindow.h"
 
 class ServerWindow : public Gtk::Dialog
@@ -53,9 +51,8 @@ private:
     Gtk::Entry hostentry;
     Gtk::TextView cmdtext;
     Gtk::Notebook notebook;
+    Gtk::VBox *serverinfobox;
 
-    Gtk::Button *removebutton;
-    Gtk::Button *addnewbutton;
     Gtk::CheckButton auto_connect_button;
 
     Gtk::HBox hboxserver;
@@ -63,11 +60,12 @@ private:
     // what our columned-list contains
     struct ModelColumns : public Gtk::TreeModel::ColumnRecord
     {
-        Gtk::TreeModelColumn<Glib::ustring> servername;
         Gtk::TreeModelColumn<bool> auto_connect;
+        Gtk::TreeModelColumn<Glib::ustring> servername;
+        Gtk::TreeModelColumn<int> port;
         Gtk::TreeModelColumn<Server*> autojoin;
 
-        ModelColumns() { add(servername); add(auto_connect); add(autojoin); }
+        ModelColumns() { add(servername); add(port); add(auto_connect); add(autojoin); }
     };
 
     ModelColumns _columns;
