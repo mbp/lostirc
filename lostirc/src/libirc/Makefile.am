@@ -7,7 +7,6 @@ libirc_a_SOURCES = ServerConnection.cpp ServerConnection.h \
                        Parser.cpp Parser.h \
                        Socket.cpp Socket.h \
                        Utils.cpp Utils.h \
-                       Events.cpp Events.h \
                        Channel.cpp Channel.h \
                        DCC.cpp DCC.h \
                        FrontEnd.cpp FrontEnd.h \

@@ -22,7 +22,6 @@
 #include <unistd.h>
 #include "ServerConnection.h"
 #include "LostIRCApp.h"
-#include "Events.h"
 #include "Commands.h"
 
 using std::string;

@@ -1,5 +1,11 @@
 For a summary of changes between releases - see the NEWS file.
 
+2002-12-14  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Events.cpp/Events.h: Removed.
+        * FrontEnd.cpp/FrontEnd.: Merge sources from Events.cpp/Events.h to
+          here.
+
 2002-12-13  Morten Brix Pedersen  <morten@wtf.dk>
 
         * DCC.cpp/DCC.h: Add extra pure virtual functions to abstract base

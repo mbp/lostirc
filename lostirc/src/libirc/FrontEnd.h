@@ -20,16 +20,41 @@
 #define FRONTEND_H
 
 #include <string>
+#include <sstream>
 #include <vector>
 #include "Channel.h"
-#include "Events.h"
 #include "LostIRCApp.h"
 
 class ServerConnection;
 class ChannelBase;
 
+enum Event {
+    PRIVMSG = 0, PRIVMSG_HIGHLIGHT, ACTION, ACTION_HIGHLIGHT, DCC_RECEIVE,
+    SERVERMSG1, SERVERMSG2, CLIENTMSG, CTCP, CTCP_MULTI, CTCP_REPLY,
+    TOPICCHANGE, TOPICIS, TOPICTIME, NOTICEPRIV, NOTICEPUBL, ERROR, AWAY,
+    BANLIST, UNKNOWN, JOIN, PART, PART2, QUIT, QUIT2, NICK, MODE, CMODE,
+    WALLOPS, KICKED, OPPED, DEOPPED, VOICED, DEVOICED, HALFOPPED,
+    HALFDEOPPED, BANNED, UNBANNED, INVITED, CONNECTING, NAMES, KILLED,
+    WHOIS_USER, WHOIS_CHANNELS, WHOIS_SERVER, WHOIS_GENERIC
+};
+
 namespace FE
 {
+    class Tmpl
+    {
+        std::string orig;
+        std::vector<std::string> tokens;
+
+    public:
+        Tmpl(const std::string& str, const signed p) : orig(str), priority(p) { }
+
+        Tmpl& operator<<(const std::string& str) { tokens.push_back(str); return *this; }
+        Tmpl& operator<<(int i) { std::stringstream ss; ss << i; tokens.push_back(ss.str()); return *this; }
+
+        const signed priority;
+        std::string result();
+    };
+
     enum Destination {
         CURRENT, ALL
     };

@@ -3,7 +3,6 @@ CRITICAL:
   * Implement reading in ServerConnection better (more efficiently)
   * Implement DCC CHAT
   * After being disconnected, queries have a () around them.
-  * URL handling is broken after new color-parsing code.
 
 NICE-TO-HAVE:
 ------------
@@ -16,10 +15,14 @@ NICE-TO-HAVE:
   * Some feature to see where one was last highlighted (it's impossible
     to find highlights after being away for a day from the client)
   * Some way to seperate tabs from each other, so they are server sorted.
+  * Recognise URLs (and make them clickable?)
 
 RANDOM BUGS:
 ------------
-  * Should we check for EAGAIN on send()? It seems to always suceeed anyway.
+  * Scrollbar doesn't scroll down properly when resizing window.
+
+  * Color-parsing might be slow, since it inserts one character at the time.
+    Need to look into optimizing it.
 
   * This has to be removed from 'configure' at release time, or else the
     configure script fails on Red Hat/Mandrake:
@@ -27,19 +30,12 @@ RANDOM BUGS:
 
     (is still still the issue with 8.0/9.0?)
 
-  * Color-parsing might be slow, since it inserts one character at the time.
-    Need to look into optimizing it.
-
-GTKMM2 STUFF:
--------------
-  * scrollbar has weird behaviour when resizing window
-  * URLs clickable
+  * Should we check for EAGAIN on send()? It seems to always suceeed anyway.
 
 DCC:
 ---
   * DCCs should use their own events instead of just CLIENTMSG.
   * DCC objects should timeout when no response has been given
-  * Possibility to define a different outgoing ip-address
   * Show to the user which ip is being sent
 
 DESIGN:

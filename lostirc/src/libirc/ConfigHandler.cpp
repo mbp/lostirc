@@ -25,7 +25,6 @@
 #include <iostream>
 #include "ConfigHandler.h"
 #include "LostIRCApp.h"
-#include "Events.h"
 
 using std::string;
 using std::cout;

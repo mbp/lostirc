@@ -19,10 +19,10 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
+#include <sstream>
 #include <string>
 #include <set>
 #include <exception>
-#include "Events.h"
 
 class ServerConnection;
 
