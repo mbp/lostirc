@@ -46,6 +46,9 @@ public:
     Entry*                      getEntry();
     ServerConnection*           getConn();
 
+    void setAway();
+    void setUnAway();
+
     virtual void insertUser(const std::vector<std::string>& users) = 0;
     virtual void insertUser(const std::string& user) = 0;
     virtual void removeUser(const std::string& nick) = 0;
@@ -68,6 +71,8 @@ private:
     Gtk::ScrolledWindow *_scrollwindow;
     Gtk::Text::Context *_current_cx;
     Gdk_Font *_font;
+    Gtk::Label *_away;
+    Gtk::HBox *_hbox2;
 };
 
 class TabQuery : public Tab
@@ -110,6 +115,7 @@ public:
 
 private:
     Gtk::CList *_clist;
+    Gtk::Label *_users;
 
 };
 

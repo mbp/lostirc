@@ -53,6 +53,7 @@ private:
     void onCMode(const string& nick, const string& chan, char, const string& modes, ServerConnection *conn);
     void onCUMode(const string& nick, const string& chan, const vector<vector<string> >& users, ServerConnection *conn);
     void onHighlight(const string& to, ServerConnection *conn);
+    void onAway(bool away, ServerConnection *conn);
 
     void newServer();
     void quit();

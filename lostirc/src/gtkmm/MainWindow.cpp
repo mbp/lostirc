@@ -30,7 +30,7 @@ MainWindow::MainWindow()
     key_press_event.connect(slot(this, &MainWindow::on_key_press_event));
     
     _app = new LostIRCApp();
-    Gtk::VBox *_vbox1 = manage(new Gtk::VBox(false, 0));
+    Gtk::VBox *_vbox1 = manage(new Gtk::VBox());
 
     // Connect signals for all the backend events
     _app->evtDisplayMessage.connect(slot(this, &MainWindow::onDisplayMessage));
@@ -44,6 +44,7 @@ MainWindow::MainWindow()
     _app->evtMode.connect(slot(this, &MainWindow::onMode));
     _app->evtCUMode.connect(slot(this, &MainWindow::onCUMode));
     _app->evtCMode.connect(slot(this, &MainWindow::onCMode));
+    _app->evtAway.connect(slot(this, &MainWindow::onAway));
 
     _nb = manage(new MainNotebook(this));
     _vbox1->pack_start(*_nb, 1, 1);
@@ -213,6 +214,15 @@ void MainWindow::onHighlight(const string& to, ServerConnection* conn)
           _nb->highlight(tab);
 
 }
+
+void MainWindow::onAway(bool away, ServerConnection* conn)
+{
+    if (away)
+          _nb->getCurrent()->setAway();
+    else
+          _nb->getCurrent()->setUnAway();
+}
+
 
 void MainWindow::newServer()
 {

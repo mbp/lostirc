@@ -52,7 +52,6 @@ bool GuiCommands::Query(ServerConnection *conn, const string& params)
         nb->addQueryTab(params, conn);
         return true;
     }
-
 }
 
 bool GuiCommands::Me(ServerConnection *conn, const string& params)
@@ -60,7 +59,6 @@ bool GuiCommands::Me(ServerConnection *conn, const string& params)
     string to = nb->getCurrent()->getLabel()->get_text();
     string param = to + " " + params;
     return Commands::Me(conn, param);
-
 }
 
 bool GuiCommands::SetFont(ServerConnection *conn, const string& params)

@@ -21,6 +21,7 @@
 #include <Utils.h>
 #include "Tab.h"
 #include <algorithm>
+#include <gtk--/frame.h>
 
 using std::vector;
 using std::string;
@@ -62,7 +63,7 @@ Tab::Tab(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
     _current_cx = new Gtk::Text::Context;
 
     // Creating HBox; will contain 2 widgets, a scrollwindow and an entry
-    _hbox = manage(new Gtk::HBox()); 
+    _hbox = manage(new Gtk::HBox(false, 3)); 
     _scrollwindow = manage(new Gtk::ScrolledWindow());
     _entry = manage(new Entry(this));
 
@@ -72,11 +73,14 @@ Tab::Tab(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
     _scrollwindow->set_policy(GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
     _scrollwindow->add(*_text);
 
+    //_away = manage(new Gtk::Label("You are away"));
     setStyle();
 
     _hbox->pack_start(*_scrollwindow);
     pack_start(*_hbox);
-    pack_start(*_entry, 0, 1);
+    _hbox2 = manage(new Gtk::HBox());
+    pack_start(*_hbox2, 0, 1);
+    _hbox2->pack_start(*_entry, 1, 1);
 
 }
 
@@ -231,13 +235,18 @@ TabChannel::TabChannel(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font
     Gtk::ScrolledWindow *swin = manage(new Gtk::ScrolledWindow());
     swin->set_policy(GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
+    Gtk::VBox *v = manage(new Gtk::VBox());
+    _users = manage(new Gtk::Label("Not on channel"));
     _clist = manage(new Gtk::CList(2));
     _clist->set_column_width(0, 10);
     _clist->set_auto_sort(1);
     _clist->set_sort_type(GTK_SORT_DESCENDING);
     _clist->set_usize(100, 100);
     swin->add(*_clist);
-    getHBox()->pack_start(*swin, 0, 0, 0);
+
+    getHBox()->pack_start(*v, 0, 0, 0);
+    v->pack_start(*_users, 0, 0, 0);
+    v->pack_start(*swin, 1, 1, 0);
 }
 
 void TabChannel::insertUser(const vector<string>& users)
@@ -245,6 +254,10 @@ void TabChannel::insertUser(const vector<string>& users)
     vector<string>::const_iterator i;
 
     _clist->rows().push_back(users);
+    size_t size = _clist->rows().size();
+    stringstream ss;
+    ss << size;
+    _users->set_text(ss.str() + " users");
 }
 
 void TabChannel::insertUser(const string& user)
@@ -253,6 +266,10 @@ void TabChannel::insertUser(const string& user)
     users.push_back(" ");
     users.push_back(user);
     _clist->rows().push_back(users);
+    size_t size = _clist->rows().size();
+    stringstream ss;
+    ss << size;
+    _users->set_text(ss.str() + " users");
 }
 
 void TabChannel::removeUser(const string& nick)
@@ -270,6 +287,10 @@ void TabChannel::removeUser(const string& nick)
         }
         i++;
     }
+    size_t size = _clist->rows().size();
+    stringstream ss;
+    ss << size;
+    _users->set_text(ss.str() + " users");
 }
 
 bool TabChannel::findUser(const string& nick)
@@ -292,6 +313,24 @@ bool TabChannel::findUser(const string& nick)
 Gtk::CList* TabChannel::getCList()
 {
     return _clist;
+}
+
+
+void Tab::setAway()
+{
+    cout << "Tab::setAway()" << endl;
+    _away = manage(new Gtk::Label("You are away"));
+    _hbox2->pack_start(*_away);
+    _hbox2->show_all();
+}
+
+void Tab::setUnAway()
+{
+    cout << "Tab::setUnAway()" << endl;
+    if (_away) {
+        _hbox2->children().remove(*_away);
+        _hbox2->show_all();
+    }
 }
 
 bool TabChannel::nickCompletion(const string& word, string& str)

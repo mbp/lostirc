@@ -63,6 +63,7 @@ public:
 
     // Emitted when a channel needs to be highlighted
     Signal2<void, const std::string&, ServerConnection*> evtHighlight;
+    Signal2<void, bool, ServerConnection*> evtAway;
 
 
 private:
