@@ -382,10 +382,13 @@ void MainWindow::setupMenus()
     Glib::RefPtr<Gtk::ActionGroup> group = Gtk::ActionGroup::create();
 
     group->add(Gtk::Action::create("LostIRCMenu", _("_LostIRC")));
-    group->add(Gtk::Action::create("NewServerTab", _("_New Server Tab")), Gtk::AccelKey("<control>n"), sigc::hide_return(sigc::mem_fun(*this, &MainWindow::newServerTab)));
+    group->add(Gtk::Action::create("NewServerTab", _("_New Server Tab")),
+            Gtk::AccelKey("<control>n"),
+            sigc::hide_return(sigc::mem_fun(*this, &MainWindow::newServerTab)));
     group->add(Gtk::Action::create("ClearWindow", _("Clear Window")),
             sigc::mem_fun(_notebook, &MainNotebook::clearWindow));
     group->add(Gtk::Action::create("ClearAllWindows", _("Clear All Windows")),
+            Gtk::AccelKey("<control>w"),
             sigc::mem_fun(_notebook, &MainNotebook::clearAll));
     group->add(Gtk::Action::create("CloseCurrentTab", _("Close Current Tab")),
             sigc::mem_fun(*this, &MainWindow::closeCurrentTab));

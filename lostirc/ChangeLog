@@ -1,6 +1,11 @@
 For a summary of changes between releases - see the NEWS file.
 
 2004-05-13  Morten Brix Pedersen  <morten@wtf.dk>
+	* TextWidget.cpp: Remove use of some deprecated methods
+	(scroll_to_iter() and scroll_to_mark() changed to scroll_to()).
+	* MainWindow.cpp: Re-add control-w shortcut.
+
+2004-05-13  Morten Brix Pedersen  <morten@wtf.dk>
 	* MainWindow.cpp: Use UIManager and Actions instead of manual
 	creation of menus. This is gtkmm 2.4 only.
 	* configure.ac: Change AM_CONFIG_HEADER to AC_CONFIG_HEADERS

@@ -48,7 +48,7 @@ TextWidget::TextWidget(Pango::FontDescription font)
 
 void TextWidget::onResize(Gtk::Allocation& alloc)
 {
-    _textview.scroll_to_mark(pos, 0.0);
+    _textview.scroll_to(pos, 0.0);
 }
 
 void TextWidget::onScroll()
@@ -74,7 +74,7 @@ void TextWidget::scrollToHighlightMark()
         if (highlight_mark_pos == highlight_marks.rend())
               highlight_mark_pos = highlight_marks.rbegin();
 
-        _textview.scroll_to_mark(*highlight_mark_pos, 0.1);
+        _textview.scroll_to(*highlight_mark_pos, 0.1);
     }
 }
 
@@ -107,14 +107,14 @@ void TextWidget::scrollToBottom()
 {
     Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
     Gtk::TextIter iter = buffer->end();
-    _textview.scroll_to_iter(iter, 0.0);
+    _textview.scroll_to(iter, 0.0);
 }
 
 void TextWidget::scrollToTop()
 {
     Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
     Gtk::TextIter iter = buffer->begin();
-    _textview.scroll_to_iter(iter, 0.0);
+    _textview.scroll_to(iter, 0.0);
 }
 
 void TextWidget::setStyle() {
@@ -194,7 +194,7 @@ TextWidget& TextWidget::operator<<(const ustring& line)
     if (need_to_scroll) {
         Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
         pos = buffer->create_mark(buffer->end());
-        _textview.scroll_to_mark(pos, 0.0);
+        _textview.scroll_to(pos, 0.0);
     }
 
     removeTopBuffer();
