@@ -186,7 +186,11 @@ void Parser::CTCP(const string& from, const string& param, const string& rest)
         args.push_back(findNick(from));
         args.push_back(rest_);
 
-        _evts->emitEvent("action", args, findNick(from), _conn);
+        string nick = param;
+        if (param == _conn->Session.nick)
+              nick = from;
+
+        _evts->emitEvent("action", args, findNick(nick), _conn);
     } else {
         vector<string> args;
         args.push_back(command);

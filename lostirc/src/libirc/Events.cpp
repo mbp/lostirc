@@ -44,12 +44,7 @@ Events::Events(InOut *inout)
 
 void Events::emitEvent(const string& name, vector<string>& args, const string& to, ServerConnection *conn)
 {
-    // Add timestamp
-    time_t timeval = time(0);
-    char tim[16];
-    strftime(tim, 15, "$1%H:%M:%S ", localtime(&timeval));
-    string newmsg(tim);
-
+    string newmsg;
     string msg = _events[name];
 
     int total_args = args.size();

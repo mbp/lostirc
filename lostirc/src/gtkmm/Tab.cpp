@@ -108,8 +108,15 @@ void Tab::setStyle() {
     _text->set_style(*style);
 }
 
-void Tab::parseAndInsert(const string& line)
+void Tab::parseAndInsert(const string& str)
 {
+    // Add timestamp 
+    time_t timeval = time(0);
+    char tim[16];
+    strftime(tim, 15, "$1%H:%M:%S ", localtime(&timeval));
+
+    string line(tim + str);
+
     string::size_type lastPos = line.find_first_not_of("$", 0);
     string::size_type pos = line.find_first_of("$", lastPos);
 
