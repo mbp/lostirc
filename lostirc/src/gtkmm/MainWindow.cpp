@@ -42,8 +42,6 @@ MainWindow::MainWindow()
         set_default_size(600, 400);
     }
     
-    signal_key_press_event().connect(slot(*this, &MainWindow::onKeyPress));
-
     Gtk::VBox *_vbox1 = manage(new Gtk::VBox());
 
     _vbox1->pack_start(notebook);
@@ -256,8 +254,9 @@ Tab* MainWindow::newServer()
     return tab;
 }
 
-bool MainWindow::onKeyPress(GdkEventKey* e)
+bool MainWindow::on_key_press_event(GdkEventKey* e)
 {
+    std::cout << "MainWindow::on_key_press_event()" << std::endl;
     // Default keybindings. Still needs work.
     if ((e->keyval == GDK_0) && (e->state & GDK_MOD1_MASK)) {
         notebook.set_current_page(9);
@@ -314,8 +313,10 @@ bool MainWindow::onKeyPress(GdkEventKey* e)
         Gtk::Main::quit();
     }
     else if (e->keyval == GDK_Up || e->keyval == GDK_Tab || e->keyval == GDK_Down) {
+        std::cout << "here1" << std::endl;
         if (!notebook.getCurrent()->hasPrefs) {
-            notebook.getCurrent()->getEntry().onKeyPress(e);
+            std::cout << "here2" << std::endl;
+            notebook.getCurrent()->getEntry().on_key_press_event(e);
             // FIXME: plain old gtk+, does
             // signal_key_press_event().emission_stop(); work?
             gtk_signal_emit_stop_by_name(GTK_OBJECT(this->gobj()), "key_press_event");
@@ -324,5 +325,6 @@ bool MainWindow::onKeyPress(GdkEventKey* e)
     else if ((e->keyval == GDK_f) && (e->state & GDK_MOD1_MASK)) {
         //notebook.setFont();
     }
-    return true;
+    Gtk::Window::on_key_press_event(e);
+    return false;
 }

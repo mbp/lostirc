@@ -47,7 +47,7 @@ void Entry::onEntry()
         ustring::size_type pos = msg.find_first_of(" ");
 
         ustring params;
-        if (pos != string::npos)
+        if (pos != ustring::npos)
               params = msg.substr(pos + 1);
 
         try {
@@ -76,7 +76,7 @@ void Entry::sendMsg(const ustring& msg)
     } else if (!_tab->isActive()) {
         *_tab << "Not on any channel.\n";
     } else {
-        std::istringstream ss(msg);
+        std::istringstream ss(Glib::locale_from_utf8(msg));
 
         if (ss.peek() == '\n')
               ss.ignore();
@@ -92,6 +92,7 @@ void Entry::sendMsg(const ustring& msg)
 
 bool Entry::onKeyPress(GdkEventKey* e)
 {
+    std::cout << "Entry::on_key_press_event" << std::endl;
     if ((e->keyval == GDK_uparrow) || (e->keyval == GDK_Up)) {
         if (!_entries.empty()) {
             // Use iterator to go to next element

@@ -20,13 +20,10 @@
 #include <sstream>
 #include <cctype>
 #include <cstdlib>
-#include <glibmm/convert.h>
-#include <glibmm/unicode.h>
 #include "Utils.h"
 
 using std::string;
 using std::vector;
-using Glib::ustring;
 
 namespace Util {
 
@@ -39,18 +36,6 @@ string upper(string str)
 string lower(string str)
 {
     std::transform(str.begin(), str.end(), str.begin(), tolower);
-    return str;
-}
-
-ustring upper(ustring str)
-{
-    std::transform(str.begin(), str.end(), str.begin(), Glib::Unicode::toupper);
-    return str;
-}
-
-ustring lower(ustring str)
-{
-    std::transform(str.begin(), str.end(), str.begin(), Glib::Unicode::tolower);
     return str;
 }
 

@@ -38,7 +38,7 @@ public:
     MainWindow();
     virtual ~MainWindow();
 
-    bool onKeyPress(GdkEventKey* e);
+    virtual bool on_key_press_event(GdkEventKey* e);
     
     MainNotebook& getNotebook() { return notebook; }
     LostIRCApp& getApp() { return app; }

@@ -57,7 +57,7 @@ public:
     virtual void removeUser(const std::string& nick) = 0;
     virtual void renameUser(const std::string& from, const std::string& to) = 0;
     virtual bool findUser(const std::string& nick) = 0;
-    virtual bool nickCompletion(const std::string& word, std::string& str) = 0;
+    virtual bool nickCompletion(const Glib::ustring& word, Glib::ustring& str) = 0;
     Tab& operator<<(const char * str);
     Tab& operator<<(const std::string& str);
     Tab& operator<<(const Glib::ustring& str);
@@ -114,7 +114,7 @@ public:
         else
               return false;
     }
-    bool nickCompletion(const std::string& word, std::string& str) {
+    bool nickCompletion(const Glib::ustring& word, Glib::ustring& str) {
         str = getLabel()->get_text(); return true;
     }
 };
@@ -130,7 +130,7 @@ public:
     void removeUser(const std::string& nick);
     void renameUser(const std::string& from, const std::string& to);
     bool findUser(const std::string& nick);
-    bool nickCompletion(const std::string& word, std::string& str);
+    bool nickCompletion(const Glib::ustring& word, Glib::ustring& str);
 
 private:
     void updateUserNumber();
