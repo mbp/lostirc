@@ -250,26 +250,28 @@ gint Entry::on_key_press_event(GdkEventKey* e)
 
     // Nick completion using Tab key
     if ((e->keyval == GDK_Tab)) {
-        string str;
         string line = get_text();
-        string::size_type pos = line.find_last_of(" ");
-        string word;
-        if (pos == string::npos) {
-            pos = 0;
-            word = line.substr(pos);
-        } else {
-            word = line.substr(pos + 1);
-        }
-        if (_tab->nickCompletion(word, str)) {
-            if (pos == 0) {
-                set_text("");
-                append_text(str + ", ");
+        if (line.length() > 0) {
+            string str;
+            string::size_type pos = line.find_last_of(" ");
+            string word;
+            if (pos == string::npos) {
+                pos = 0;
+                word = line.substr(pos);
             } else {
-                set_text(line.substr(0, pos + 1));
-                append_text(str);
+                word = line.substr(pos + 1);
             }
-        } else {
-            _tab->getText()->insert(str);
+            if (_tab->nickCompletion(word, str)) {
+                if (pos == 0) {
+                    set_text("");
+                    append_text(str + ", ");
+                } else {
+                    set_text(line.substr(0, pos + 1));
+                    append_text(str);
+                }
+            } else {
+                _tab->getText()->insert(str);
+            }
         }
     }
 }
