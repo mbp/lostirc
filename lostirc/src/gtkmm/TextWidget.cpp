@@ -35,10 +35,10 @@ TextWidget::TextWidget(Pango::FontDescription font)
     set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
     set_size_request(0, -1);
     add(_textview);
-    initializeColorMap();
     setStyle();
     _textview.modify_font(font);
-    Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
+    Glib::RefPtr<Gtk::TextBuffer> buffer = Gtk::TextBuffer::create(AppWin->_current_tag_table);
+    _textview.set_buffer(buffer);
     pos = buffer->create_mark(buffer->end());
     get_vscrollbar()->signal_size_allocate().connect(sigc::mem_fun(*this, &TextWidget::onResize));
     get_vscrollbar()->signal_value_changed().connect(sigc::mem_fun(*this, &TextWidget::onScroll));
@@ -119,7 +119,7 @@ void TextWidget::scrollToTop()
 
 void TextWidget::setStyle() {
     // TODO: Should this go into a ressource file?
-    Gdk::Color col1(App->colors.bgcolor);
+    Gdk::Color col1(AppWin->background_color);
 
     _textview.modify_base(Gtk::STATE_NORMAL, col1);
 }
@@ -202,25 +202,35 @@ TextWidget& TextWidget::operator<<(const ustring& line)
     return *this;
 }
 
+Glib::ustring crop(Glib::ustring str)
+{
+    if (str.size() > 1 && str[0] == '0')
+          return str.substr(1);
+    else
+          return str;
+}
+
 void TextWidget::insertText(const TextProperties& tp, const ustring& line)
 {
     Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
 
     std::vector< Glib::RefPtr<Gtk::TextTag> > tags;
-    if (Util::convert<unsigned int>(tp.fgnumber) > fgColorMap.size())
-          tags.push_back(fgColorMap[0]);
-    else
-          tags.push_back(fgColorMap[Util::convert<int>(tp.fgnumber)]);
 
-    if (Util::convert<unsigned int>(tp.bgnumber) > bgColorMap.size())
-          tags.push_back(bgColorMap[1]);
-    else
-          tags.push_back(bgColorMap[Util::convert<int>(tp.bgnumber)]);
+    Glib::RefPtr<Gtk::TextTag> fg = buffer->get_tag_table()->lookup(Glib::ustring("f")+crop(tp.fgnumber));
+    if (fg == 0)
+          fg = buffer->get_tag_table()->lookup("f0");
+
+    Glib::RefPtr<Gtk::TextTag> bg = buffer->get_tag_table()->lookup(Glib::ustring("b")+crop(tp.bgnumber));
+    if (bg == 0)
+          bg = buffer->get_tag_table()->lookup("b0");
+
+    tags.push_back(fg);
+    tags.push_back(bg);
 
     if (tp.bold)
-          tags.push_back(boldtag);
+          tags.push_back(buffer->get_tag_table()->lookup("B"));
     if (tp.underline)
-          tags.push_back(underlinetag);
+          tags.push_back(buffer->get_tag_table()->lookup("U"));
 
     buffer->insert_with_tags(buffer->end(), line, tags);
 
@@ -269,80 +279,6 @@ void TextWidget::removeTopBuffer()
     int buffer_size = App->options.buffer_size;
     if (buffer_size && buffer->get_line_count() > buffer_size)
           buffer->erase(buffer->begin(), buffer->get_iter_at_line(buffer->get_line_count() - buffer_size));
-}
-
-Glib::RefPtr<Gtk::TextTag> TextWidget::initializeFG(const Glib::ustring& colorname)
-{
-    Glib::RefPtr<Gtk::TextTag> texttag = Gtk::TextTag::create();
-    texttag->property_foreground() = colorname;
-    _textview.get_buffer()->get_tag_table()->add(texttag);
-    return texttag;
-}
-
-Glib::RefPtr<Gtk::TextTag> TextWidget::initializeBG(const Glib::ustring& colorname)
-{
-    Glib::RefPtr<Gtk::TextTag> texttag = Gtk::TextTag::create();
-    texttag->property_background() = colorname;
-    _textview.get_buffer()->get_tag_table()->add(texttag);
-    return texttag;
-}
-
-void TextWidget::initializeColorMap()
-{
-    int i = 0;
-    fgColorMap[i++] = initializeFG(App->colors.color0);
-    fgColorMap[i++] = initializeFG(App->colors.color1);
-    fgColorMap[i++] = initializeFG(App->colors.color2);
-    fgColorMap[i++] = initializeFG(App->colors.color3);
-    fgColorMap[i++] = initializeFG(App->colors.color4);
-    fgColorMap[i++] = initializeFG(App->colors.color5);
-    fgColorMap[i++] = initializeFG(App->colors.color6);
-    fgColorMap[i++] = initializeFG(App->colors.color7);
-    fgColorMap[i++] = initializeFG(App->colors.color8);
-    fgColorMap[i++] = initializeFG(App->colors.color9);
-    fgColorMap[i++] = initializeFG(App->colors.color10);
-    fgColorMap[i++] = initializeFG(App->colors.color11);
-    fgColorMap[i++] = initializeFG(App->colors.color12);
-    fgColorMap[i++] = initializeFG(App->colors.color13);
-    fgColorMap[i++] = initializeFG(App->colors.color14);
-    fgColorMap[i++] = initializeFG(App->colors.color15);
-    fgColorMap[i++] = initializeFG(App->colors.color16);
-    fgColorMap[i++] = initializeFG(App->colors.color17);
-    fgColorMap[i++] = initializeFG(App->colors.color18);
-    fgColorMap[i++] = initializeFG(App->colors.color19);
-
-    i = 0;
-    bgColorMap[i++] = initializeBG(App->colors.color0);
-    bgColorMap[i++] = initializeBG(App->colors.color1);
-    bgColorMap[i++] = initializeBG(App->colors.color2);
-    bgColorMap[i++] = initializeBG(App->colors.color3);
-    bgColorMap[i++] = initializeBG(App->colors.color4);
-    bgColorMap[i++] = initializeBG(App->colors.color5);
-    bgColorMap[i++] = initializeBG(App->colors.color6);
-    bgColorMap[i++] = initializeBG(App->colors.color7);
-    bgColorMap[i++] = initializeBG(App->colors.color8);
-    bgColorMap[i++] = initializeBG(App->colors.color9);
-    bgColorMap[i++] = initializeBG(App->colors.color10);
-    bgColorMap[i++] = initializeBG(App->colors.color11);
-    bgColorMap[i++] = initializeBG(App->colors.color12);
-    bgColorMap[i++] = initializeBG(App->colors.color13);
-    bgColorMap[i++] = initializeBG(App->colors.color14);
-    bgColorMap[i++] = initializeBG(App->colors.color15);
-    bgColorMap[i++] = initializeBG(App->colors.color16);
-    bgColorMap[i++] = initializeBG(App->colors.color17);
-    bgColorMap[i++] = initializeBG(App->colors.color18);
-    bgColorMap[i++] = initializeBG(App->colors.color19);
-
-    // Create a underlined-tag.
-    underlinetag = Gtk::TextTag::create();
-    underlinetag->property_underline() = Pango::UNDERLINE_SINGLE;
-    underlinetag->property_foreground() = App->colors.color0;
-    _textview.get_buffer()->get_tag_table()->add(underlinetag);
-
-    // Create a bold-tag
-    boldtag = Gtk::TextTag::create();
-    boldtag->property_weight() = Pango::WEIGHT_BOLD;
-    _textview.get_buffer()->get_tag_table()->add(boldtag);
 }
 
 void TextWidget::populateMenu(Gtk::Menu *contextmenu)

@@ -59,15 +59,9 @@ private:
     void removeTopBuffer();
 
     void initializeColorMap();
-    Glib::RefPtr<Gtk::TextTag> initializeFG(const Glib::ustring& colorname);
-    Glib::RefPtr<Gtk::TextTag> initializeBG(const Glib::ustring& colorname);
 
     Gtk::TextView _textview;
 
-    std::map<int, Glib::RefPtr<Gtk::TextTag> > fgColorMap;
-    std::map<int, Glib::RefPtr<Gtk::TextTag> > bgColorMap;
-    Glib::RefPtr<Gtk::TextTag> underlinetag;
-    Glib::RefPtr<Gtk::TextTag> boldtag;
     Glib::RefPtr<Gtk::TextBuffer::Mark> pos;
 
     std::vector<Glib::RefPtr<Gtk::TextBuffer::Mark> > highlight_marks;

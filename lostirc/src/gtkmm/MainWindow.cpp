@@ -53,7 +53,9 @@ MainWindow::MainWindow(bool autoconnect)
     if (x >= 0 && y >= 0)
           move(x, y);
     
+    background_color = _app.colors1.bgcolor;
     setupMenus();
+    initializeTagTable();
     Gtk::VBox *vbox = manage(new Gtk::VBox());
 
     vbox->pack_start(*_uimanager->get_widget("/MenuBar"), Gtk::PACK_SHRINK);
@@ -592,4 +594,85 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
 
     Gtk::Window::on_key_press_event(e);
     return false;
+}
+
+void MainWindow::addToTable(Glib::ustring name, Glib::RefPtr<Gtk::TextTagTable> table, const Glib::ustring& colorname)
+{
+    Glib::RefPtr<Gtk::TextTag> tag_fg = Gtk::TextTag::create(Glib::ustring("f")+name);
+    tag_fg->property_foreground() = colorname;
+    table->add(tag_fg);
+
+    Glib::RefPtr<Gtk::TextTag> tag_bg = Gtk::TextTag::create(Glib::ustring("b")+name);
+    tag_bg->property_background() = colorname;
+    table->add(tag_bg);
+}
+
+void MainWindow::initializeTagTable()
+{
+    _tag_table1 = Gtk::TextTagTable::create();
+    _tag_table2 = Gtk::TextTagTable::create();
+
+    addToTable("0", _tag_table1, App->colors1.color0);
+    addToTable("1", _tag_table1, App->colors1.color1);
+    addToTable("2", _tag_table1, App->colors1.color2);
+    addToTable("3", _tag_table1, App->colors1.color3);
+    addToTable("4", _tag_table1, App->colors1.color4);
+    addToTable("5", _tag_table1, App->colors1.color5);
+    addToTable("6", _tag_table1, App->colors1.color6);
+    addToTable("7", _tag_table1, App->colors1.color7);
+    addToTable("8", _tag_table1, App->colors1.color8);
+    addToTable("9", _tag_table1, App->colors1.color9);
+    addToTable("10", _tag_table1, App->colors1.color10);
+    addToTable("11", _tag_table1, App->colors1.color11);
+    addToTable("12", _tag_table1, App->colors1.color12);
+    addToTable("13", _tag_table1, App->colors1.color13);
+    addToTable("14", _tag_table1, App->colors1.color14);
+    addToTable("15", _tag_table1, App->colors1.color15);
+    addToTable("16", _tag_table1, App->colors1.color16);
+    addToTable("17", _tag_table1, App->colors1.color17);
+    addToTable("18", _tag_table1, App->colors1.color18);
+    addToTable("19", _tag_table1, App->colors1.color19);
+
+    addToTable("0", _tag_table2, App->colors2.color0);
+    addToTable("1", _tag_table2, App->colors2.color1);
+    addToTable("2", _tag_table2, App->colors2.color2);
+    addToTable("3", _tag_table2, App->colors2.color3);
+    addToTable("4", _tag_table2, App->colors2.color4);
+    addToTable("5", _tag_table2, App->colors2.color5);
+    addToTable("6", _tag_table2, App->colors2.color6);
+    addToTable("7", _tag_table2, App->colors2.color7);
+    addToTable("8", _tag_table2, App->colors2.color8);
+    addToTable("9", _tag_table2, App->colors2.color9);
+    addToTable("10", _tag_table2, App->colors2.color10);
+    addToTable("11", _tag_table2, App->colors2.color11);
+    addToTable("12", _tag_table2, App->colors2.color12);
+    addToTable("13", _tag_table2, App->colors2.color13);
+    addToTable("14", _tag_table2, App->colors2.color14);
+    addToTable("15", _tag_table2, App->colors2.color15);
+    addToTable("16", _tag_table2, App->colors2.color16);
+    addToTable("17", _tag_table2, App->colors2.color17);
+    addToTable("18", _tag_table2, App->colors2.color18);
+    addToTable("19", _tag_table2, App->colors2.color19);
+
+    // Create a underlined-tag.
+    Glib::RefPtr<Gtk::TextTag> underlinetag1 = Gtk::TextTag::create("U");
+    underlinetag1->property_underline() = Pango::UNDERLINE_SINGLE;
+    underlinetag1->property_foreground() = App->colors1.color0;
+    _tag_table1->add(underlinetag1);
+
+    Glib::RefPtr<Gtk::TextTag> underlinetag2 = Gtk::TextTag::create("U");
+    underlinetag2->property_underline() = Pango::UNDERLINE_SINGLE;
+    underlinetag2->property_foreground() = App->colors1.color0;
+    _tag_table2->add(underlinetag2);
+
+    // Create a bold-tag
+    Glib::RefPtr<Gtk::TextTag> boldtag1 = Gtk::TextTag::create("B");
+    boldtag1->property_weight() = Pango::WEIGHT_BOLD;
+    _tag_table1->add(boldtag1);
+
+    Glib::RefPtr<Gtk::TextTag> boldtag2 = Gtk::TextTag::create("B");
+    boldtag2->property_weight() = Pango::WEIGHT_BOLD;
+    _tag_table2->add(boldtag2);
+
+    _current_tag_table = _tag_table1;
 }

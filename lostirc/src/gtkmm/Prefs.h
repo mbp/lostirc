@@ -19,10 +19,11 @@
 #ifndef PREFS_H
 #define PREFS_H
 
+#include <gtkmm/comboboxtext.h>
+#include <gtkmm/comboboxentrytext.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/button.h>
-#include <gtkmm/combo.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/table.h>
 #include <gtkmm/spinbutton.h>
@@ -37,6 +38,7 @@ public:
     virtual ~Prefs() { }
 
 private:
+    void changeColors();
     void saveSettings();
     void saveEntry();
     void saveFont();
@@ -50,7 +52,7 @@ private:
 
     // General
     Gtk::Entry ircuserentry;
-    Gtk::Combo encodingcombo;
+    Gtk::ComboBoxText encodingcombo;
     Gtk::FontButton fontbutton;
 
     // Preferences
@@ -69,6 +71,9 @@ private:
     Gtk::Table _general_table;
     Gtk::Table _prefs_table;
     Gtk::Table _dcc_table;
+
+    // Colors
+    Gtk::ComboBoxText colorschemes;
 
     Gtk::Notebook notebook;
 

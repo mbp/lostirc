@@ -1,9 +1,6 @@
-REALLY USEFUL FEATURES: 
------------------------
-  * Implement "colorschemes", so you don't have to use a black background.
-
 NICE-TO-HAVE:
 ------------
+  * A better LostIRC icon.
   * Implement /help for all commands.
   * ipv6 support
   * When window has lost its focus, then highlight the front tab too.

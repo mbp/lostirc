@@ -63,7 +63,7 @@ void MainNotebook::sort()
     Gtk::Notebook_Helpers::PageList::iterator i, j;
 
     int lastIndex = pages().size()-1;
-    for (int i = 1; i <= pages().size(); ++i)
+    for (unsigned int i = 1; i <= pages().size(); ++i)
     {
         for (int j = 0; j < lastIndex; ++j)
         {

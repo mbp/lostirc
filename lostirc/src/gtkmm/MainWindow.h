@@ -60,6 +60,9 @@ class MainWindow : public Gtk::Window, public FrontEnd
     void closeCurrentTab();
     void hideNickList();
 
+    void initializeTagTable();
+    void addToTable(Glib::ustring name, Glib::RefPtr<Gtk::TextTagTable> table, const Glib::ustring& colorname);
+
 public:
     MainWindow(bool autoconnect = 0);
     virtual ~MainWindow();
@@ -72,6 +75,11 @@ public:
 
     StatusBar _statusbar;
 
+    // Some of these should be private eventually.
+    Glib::RefPtr<Gtk::TextTagTable> _tag_table1;
+    Glib::RefPtr<Gtk::TextTagTable> _tag_table2;
+    Glib::RefPtr<Gtk::TextTagTable> _current_tag_table;
+    Glib::ustring background_color;
 
     // Methods implemented for the abstract base class 'FrontEnd' 
     void displayMessage(const Glib::ustring& msg, FE::Destination d, bool shouldHighlight = true);

@@ -16,12 +16,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <gtkmm/optionmenu.h>
 #include <gtkmm/separator.h>
 #include <Utils.h>
 #include "MainWindow.h"
 #include "Prefs.h"
 
+const unsigned int encodings_size = 12;
 static const char *encodings[]=
 {
     "System default",
@@ -69,7 +69,7 @@ Prefs::Prefs()
     Gtk::VBox *generalbox = addPage(_("General"));
     Gtk::VBox *prefsbox = addPage(_("Preferences"));
     Gtk::VBox *dccbox = addPage(_("DCC"));
-    //Gtk::VBox *colourbox = addPage(_("Colours"));
+    Gtk::VBox *colourbox = addPage(_("Colours"));
 
     // General options-tab
     int row = 1;
@@ -85,8 +85,16 @@ Prefs::Prefs()
     generalbox->pack_start(_general_table, Gtk::PACK_SHRINK);
 
     // Encoding
-    encodingcombo.set_popdown_strings(encodings);
-    encodingcombo.get_entry()->set_text(App->options.encoding);
+    unsigned int active = 0;
+    for (unsigned int i = 0; i < encodings_size; i++)
+    {
+        Glib::ustring enc = encodings[i];
+        if (enc.substr(0, enc.find_first_of(' ')) == App->options.encoding)
+              active = i;
+        encodingcombo.append_text(enc);
+    }
+
+    encodingcombo.set_active(active);
     Gtk::Label *glabel3 = manage(new Gtk::Label(_("Encoding to use on IRC:"), Gtk::ALIGN_LEFT));
     _general_table.attach(*glabel3, 0, 1, row, row + 1);
     _general_table.attach(encodingcombo, 1, 2, row, row + 1);
@@ -160,28 +168,16 @@ Prefs::Prefs()
     dccbox->pack_start(_dcc_table, Gtk::PACK_SHRINK);
 
     // Colour-tab
-    Gtk::OptionMenu *optionmenu = new Gtk::OptionMenu();
+    Gtk::Label *colorlabel1 = new Gtk::Label(_("Pick a colorscheme"));
+    Gtk::Label *colorlabel2 = new Gtk::Label(_("Changes to colorschemes only apply to newly created tabs"));
+    colorschemes.append_text(_("White on black"));
+    colorschemes.append_text(_("Black on white"));
+    colorschemes.set_active(0);
+    colorschemes.signal_changed().connect(sigc::mem_fun(*this, &Prefs::changeColors));
 
-    Gtk::Menu *colorschemes = new Gtk::Menu();
-
-    optionmenu->set_menu(*colorschemes);
-
-    {
-        Gtk::Menu::MenuList& menulist = colorschemes->items();
-
-        menulist.push_back( Gtk::Menu_Helpers::MenuElem("White on black",
-                    sigc::mem_fun(*this, &Prefs::saveSettings) ) );
-
-        menulist.push_back( Gtk::Menu_Helpers::MenuElem("Black on white",
-                    sigc::mem_fun(*this, &Prefs::saveSettings) ) );
-
-    }
-
-    colorschemes->set_active(1);
-
-    //colourbox->pack_start(*optionmenu, Gtk::PACK_SHRINK);
-
-
+    colourbox->pack_start(*colorlabel1, Gtk::PACK_SHRINK);
+    colourbox->pack_start(colorschemes, Gtk::PACK_SHRINK);
+    colourbox->pack_start(*colorlabel2, Gtk::PACK_SHRINK);
 
     // Final setup
     Gtk::HBox *closehbox = manage(new Gtk::HBox());
@@ -194,11 +190,23 @@ Prefs::Prefs()
     show_all();
 }
 
+void Prefs::changeColors()
+{
+    if (colorschemes.get_active_row_number() == 0) {
+        AppWin->_current_tag_table = AppWin->_tag_table1;
+        AppWin->background_color = App->colors1.bgcolor;
+    } else {
+        AppWin->_current_tag_table = AppWin->_tag_table2;
+        AppWin->background_color = App->colors2.bgcolor;
+    }
+
+}
+
 void Prefs::saveSettings()
 {
     // General.
     App->options.ircuser = ircuserentry.get_text();
-    Glib::ustring encoding = encodingcombo.get_entry()->get_text();
+    Glib::ustring encoding = encodingcombo.get_active_text();
     App->options.encoding = encoding.substr(0, encoding.find_first_of(' '));
 
     // Preferences.

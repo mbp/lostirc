@@ -127,7 +127,8 @@ public:
 
     Options options;
     Events events;
-    Colors colors;
+    Colors colors1;
+    Colors colors2;
     Servers cfgservers;
 
     #ifndef WIN32

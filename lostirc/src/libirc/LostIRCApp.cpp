@@ -32,7 +32,8 @@ LostIRCApp::LostIRCApp(FrontEnd *f)
 #endif
     init(this), fe(f),
     options("/.lostirc/options.conf"), events("/.lostirc/events.conf"),
-    colors("/.lostirc/colors.conf"), cfgservers("/.lostirc/perform.conf")
+    colors1("/.lostirc/colors.conf"), colors2("/.lostirc/colors2.conf"),
+    cfgservers("/.lostirc/perform.conf")
 {
 #ifndef WIN32
     uname(&uname_info);

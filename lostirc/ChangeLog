@@ -1,5 +1,12 @@
 For a summary of changes between releases - see the NEWS file.
 
+2004-06-24  Morten Brix Pedersen  <morten@wtf.dk>
+        * MainNotebook.cpp: Remove compiler warning.
+        * MainWindow.cpp, TextWidget.cpp: Move TextTable initialization to
+        MainWindow instead of having a new instance for each TextWidget.
+        Should save some memory space.
+        * Prefs.cpp: Add experimental support for color schemes.
+
 2004-06-13  Morten Brix Pedersen  <morten@wtf.dk>
 	* po/fr.po: Added. Thanks to Bruno Dusausoy.
 
