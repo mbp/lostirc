@@ -217,10 +217,19 @@ void MainWindow::onHighlight(const string& to, ServerConnection* conn)
 
 void MainWindow::onAway(bool away, ServerConnection* conn)
 {
-    if (away)
-          _nb->getCurrent()->setAway();
-    else
-          _nb->getCurrent()->setUnAway();
+    vector<Tab*>::iterator i;
+    vector<Tab*> vec;
+
+    _nb->Tabs(conn, vec);
+    if (away) {
+        for (i = vec.begin(); i != vec.end(); ++i) {
+            (*i)->setAway();
+        }
+    } else {
+        for (i = vec.begin(); i != vec.end(); ++i) {
+            (*i)->setUnAway();
+        }
+    }
 }
 
 

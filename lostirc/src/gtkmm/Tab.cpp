@@ -318,15 +318,15 @@ Gtk::CList* TabChannel::getCList()
 
 void Tab::setAway()
 {
-    cout << "Tab::setAway()" << endl;
-    _away = manage(new Gtk::Label("You are away"));
-    _hbox2->pack_start(*_away);
-    _hbox2->show_all();
+    //if (!_away) {
+        _away = manage(new Gtk::Label("You are away"));
+        _hbox2->pack_start(*_away);
+        _hbox2->show_all();
+    //}
 }
 
 void Tab::setUnAway()
 {
-    cout << "Tab::setUnAway()" << endl;
     if (_away) {
         _hbox2->children().remove(*_away);
         _hbox2->show_all();

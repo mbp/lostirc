@@ -172,6 +172,18 @@ void MainNotebook::findTabs(const string& nick, ServerConnection *conn, vector<T
     }
 }
 
+void MainNotebook::Tabs(ServerConnection *conn, vector<Tab*>& vec)
+{
+    Gtk::Notebook_Helpers::PageList::iterator i;
+            
+    for (i = pages().begin(); i != pages().end(); ++i) {
+        Tab *tab = dynamic_cast<Tab*>((*i)->get_child());
+        if (tab->getConn() == conn) {
+            vec.push_back(tab);
+        }
+    }
+}
+
 void MainNotebook::setFont()
 {
     fontdialog = manage(new Gtk::FontSelectionDialog("Font Selection Dialog"));
