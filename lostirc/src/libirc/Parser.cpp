@@ -40,9 +40,14 @@ void Parser::parseLine(string& data)
     data.erase(data.rfind("\r\n"), strlen("\r\n"));
 
     if (data[0] == ':') {
-        // Message in the form:
-        //  message   =  [ ":" prefix SPACE ] command [ params ] crlf
-        //  prefix    =  servername / ( nickname [ [ "!" user ] "@" host ] )
+        /*
+        *  Message in the form:
+        *  message  =  [ ":" prefix SPACE ] command [ params ] crlf
+        *  prefix    =  servername / ( nickname [ [ "!" user ] "@" host ] )
+        *  command   =  1*letter / 3digit
+        *  params    =  *14( SPACE middle ) [ SPACE ":" trailing ]
+        *            =/ 14( SPACE middle ) [ SPACE [ ":" ] trailing ]
+        */
 
         // Find prefix
         string::size_type pos1 = data.find_first_of(" ", 1);
@@ -68,10 +73,10 @@ void Parser::parseLine(string& data)
         }
 
         #ifdef DEBUG
-        cout << "\t[from: '" << from << "']";
-        cout << " [command: '" << command << "']";
-        cout << " [param: '" << param << "']"; 
-        cout << " [rest: '" << rest << "']" << endl;
+        cout << "\t[from '" << from << "']";
+        cout << " [command '" << command << "']";
+        cout << " [param '" << param << "']"; 
+        cout << " [rest '" << rest << "']" << endl;
         #endif
 
         // Redirect to the right parsing function...
@@ -120,9 +125,9 @@ void Parser::parseLine(string& data)
         string rest = data.substr(pos2 + 1);
 
         #ifdef DEBUG
-        cout << "\t[command: '" << command << "']";
-        cout << " [param: '" << param << "']";
-        cout << " [rest: '" << rest << "']" << endl;
+        cout << "\t[command '" << command << "']";
+        cout << " [param '" << param << "']";
+        cout << " [rest '" << rest << "']" << endl;
         #endif
 
         // Redirect to the right parsing function... 
