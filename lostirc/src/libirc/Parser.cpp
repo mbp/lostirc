@@ -511,12 +511,6 @@ void Parser::CMode(const ustring& from, const ustring& param)
     vector<ustring> arguments;
     Util::tokenizeWords(args, arguments);
 
-    if (arguments.empty()) {
-        // There were no further arguments, eg. MODE #channel +n
-        FE::emit(FE::get(CMODE) << findNick(from) << modes << channel, *chan, _conn);
-        return;
-    }
-
     std::vector<User> modesvec;
     bool sign = false; // Used to track whether we get a + or a -
 
@@ -610,14 +604,17 @@ void Parser::CMode(const ustring& from, const ustring& param)
 
                 modebuf[1] = (*i);
                 modebuf[2] = '\0';
+                if (isChannelMode(*i)) {
+                    FE::emit(FE::get(CMODE) << findNick(from) << modebuf << channel, *chan, _conn);
+                } else {
+                    ustring nick;
+                    if (arg_i == arguments.end())
+                          nick = *--arg_i;
+                    else
+                          nick = *arg_i++;
 
-                ustring nick;
-                if (arg_i == arguments.end())
-                      nick = *--arg_i;
-                else
-                      nick = *arg_i++;
-
-                FE::emit(FE::get(MODE) << findNick(from) << modebuf << nick, *chan, _conn);
+                    FE::emit(FE::get(MODE) << findNick(from) << modebuf << nick, *chan, _conn);
+                }
                 }
         }
 
@@ -964,6 +961,13 @@ bool Parser::shouldHighlight(const ustring& str)
           if (str.find(tmp) != ustring::npos)
                 return true;
 
+    return false;
+}
+
+bool Parser::isChannelMode(char m)
+{
+    if (_conn->supports.chanmodes.find_first_of(m) != ustring::npos)
+          return true;
     return false;
 }
 

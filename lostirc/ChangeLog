@@ -1,5 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
+2004-10-14  Morten Brix Pedersen  <morten@wtf.dk>
+	* Parser.cpp: Fix problem where MODE #chan +mv user was causing a
+	segmentation fault.
+	* ServerConnection.cpp: Add a default value for chanmodes.
+
 2004-10-13  Morten Brix Pedersen  <morten@wtf.dk>
 	* ServerConnection.cpp: Fix segmentation fault when an empty string
 	is read.

@@ -109,7 +109,8 @@ public:
     } Session;
 
     struct Supports {
-        Supports() : chantypes("#&"), prefix("(ov)@+") { }
+        Supports() : chantypes("#&"), prefix("(ov)@+"),
+                     chanmodes("b,k,l,imnpstru") { }
         Glib::ustring chantypes;
         Glib::ustring prefix;
         Glib::ustring chanmodes;

@@ -61,6 +61,7 @@ private:
     inline void Ping(const Glib::ustring& rest);
 
     bool shouldHighlight(const Glib::ustring& str);
+    bool isChannelMode(char m);
 };
 
 inline
