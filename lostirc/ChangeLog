@@ -1,3 +1,9 @@
+LostIRC (x.x.x)
+  * In the preferences window, you can now define a different nick
+    completion character than the default (,).
+  * Configuration files has been moved to the ~/.lostirc/ directory.
+  * It is now possible to autojoin a server with a password defined.
+
 LostIRC (0.0.6) - Mon Apr 1st 2002
   * You can now tab-complete commands as well as nicks. /j<tab> becomes /JOIN.
   * ALT+P didn't start preferences when in a query tab, fixed.
