@@ -93,6 +93,7 @@ class LostIRCApp
             }
 
             Glib::ustring configdir = Glib::ustring(App->home) + "/.lostirc/";
+            App->logdir = Glib::ustring(App->home) + "/.lostirc/logs/";
             mkdir(configdir.c_str(), 0700);
         }
     };
@@ -125,6 +126,7 @@ public:
 
     static struct utsname uname_info;
     static char *home;
+    static Glib::ustring logdir;
 
 };
 

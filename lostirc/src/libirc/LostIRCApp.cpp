@@ -116,3 +116,4 @@ ServerConnection* LostIRCApp::newServer()
 
 struct utsname LostIRCApp::uname_info;
 char * LostIRCApp::home;
+Glib::ustring LostIRCApp::logdir;

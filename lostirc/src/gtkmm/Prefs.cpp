@@ -43,6 +43,7 @@ Prefs::Prefs()
     highlightingbutton("Limited highlighting (don't mark tabs red on joins/parts etc.)"),
     stripcolorsbutton("Strip color codes from incoming messages"),
     stripothersbutton("Strip bold and underline codes from incoming messages"),
+    loggingbutton("Log to file"),
     _columns(),
     _liststore(Gtk::ListStore::create(_columns)),
     _treeview(_liststore),
@@ -154,6 +155,13 @@ Prefs::Prefs()
     Gtk::Frame *frame17 = manage(new Gtk::Frame());
     frame17->add(stripothersbutton);
     prefsbox->pack_start(*frame17, Gtk::PACK_SHRINK);
+
+    // Logging
+    loggingbutton.set_active(App->options.logging);
+
+    Gtk::Frame *frame18 = manage(new Gtk::Frame());
+    frame18->add(loggingbutton);
+    prefsbox->pack_start(*frame18, Gtk::PACK_SHRINK);
 
     // Font selection
 
@@ -282,6 +290,7 @@ void Prefs::applyPreferences()
     App->options.limited_highlighting = highlightingbutton.get_active();
     App->options.strip_colors = stripcolorsbutton.get_active();
     App->options.strip_boldandunderline = stripothersbutton.get_active();
+    App->options.logging = loggingbutton.get_active();
 }
 
 void Prefs::applyGeneral()
@@ -308,6 +317,7 @@ void Prefs::cancelPreferences()
     highlightingbutton.set_active(App->options.limited_highlighting);
     stripcolorsbutton.set_active(App->options.strip_colors);
     stripothersbutton.set_active(App->options.strip_boldandunderline);
+    loggingbutton.set_active(App->options.logging);
 }
 
 void Prefs::cancelGeneral()

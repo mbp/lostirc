@@ -46,6 +46,7 @@ public:
     Value<bool> limited_highlighting;
     Value<bool> strip_colors;
     Value<bool> strip_boldandunderline;
+    Value<bool> logging;
 };
 
 // Color definitions used by frontend.
@@ -85,6 +86,7 @@ public:
 
     Value<Glib::ustring> privmsg;
     Value<Glib::ustring> privmsg_highlight;
+    Value<Glib::ustring> privmsg_self;
     Value<Glib::ustring> action;
     Value<Glib::ustring> action_highlight;
     Value<Glib::ustring> dcc_receive;

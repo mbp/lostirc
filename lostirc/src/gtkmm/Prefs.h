@@ -76,6 +76,7 @@ private:
     Gtk::CheckButton highlightingbutton;
     Gtk::CheckButton stripcolorsbutton;
     Gtk::CheckButton stripothersbutton;
+    Gtk::CheckButton loggingbutton;
 
     // Font selection
     Gtk::FontSelection fontsel;

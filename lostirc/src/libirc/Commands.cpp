@@ -331,7 +331,6 @@ void Me(ServerConnection *conn, const ustring& params)
         throw CommandException("/ME <message>, sends the action to the current channel.");
     } else {
         conn->sendMe(to, msg);
-        FE::emit(FE::get(ACTION) << conn->Session.nick << msg, FE::CURRENT, conn);
     }
 }
 

@@ -69,7 +69,7 @@ void Parser::parseLine(ustring& data)
     App->log << "<< " << data << std::endl;
     #endif
     if (App->options.strip_colors)
-          data = stripColors(data);
+          data = stripColors(data, App->options.strip_boldandunderline);
 
     if (data[0] == ':') {
         /*
@@ -923,7 +923,7 @@ ustring getWord(const ustring& str, int n)
 
 // Strip mIRC colors. Spec at: http://www.mirc.co.uk/help/color.txt
 // Only strips color-strings. Not bold and underline.
-ustring stripColors(const ustring& str)
+ustring stripColors(const ustring& str, const bool stripBoldAndUnderline)
 {
     ustring newstr;
     bool color = false;
@@ -932,10 +932,10 @@ ustring stripColors(const ustring& str)
     {
         if (str[i] == '\017') { // RESET
             color = false;
-        } else if (App->options.strip_boldandunderline && str[i] == '\002') {
+        } else if (stripBoldAndUnderline && str[i] == '\002') {
             // BOLD
             // No-op.
-        } else if (App->options.strip_boldandunderline && str[i] == '\037') {
+        } else if (stripBoldAndUnderline && str[i] == '\037') {
             // UNDERLINE
             // No-op.
         } else if (str[i] == '\003') { // COLOR

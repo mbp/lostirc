@@ -17,6 +17,8 @@
  */
 
 #include "FrontEnd.h"
+#include "ServerConnection.h"
+#include "Parser.h"
 
 struct {
     const signed int priority;
@@ -25,6 +27,7 @@ struct {
 } event_map[] = {
     { 2, "privmsg", PRIVMSG },
     { 2, "privmsg_highlight", PRIVMSG_HIGHLIGHT },
+    { 2, "privmsg_self", PRIVMSG_SELF },
     { 2, "action", ACTION },
     { 2, "action_highlight", ACTION_HIGHLIGHT },
     { 2, "dcc_receive", DCC_RECEIVE },
@@ -85,6 +88,9 @@ void emit(Tmpl& t, ChannelBase& chan, ServerConnection *conn)
     } else {
         App->fe->displayMessage(msg, chan, conn);
     }
+
+    if (App->options.logging)
+          logToFile(msg, chan, conn);
 }
 
 void emit(Tmpl& t, const std::vector<ChannelBase*>& to, ServerConnection *conn)
@@ -154,3 +160,19 @@ Glib::ustring Tmpl::result()
 }
 
 }
+
+void logToFile(const Glib::ustring& msg, ChannelBase& chan, ServerConnection *conn)
+{
+    // log message to a channel-specific file.
+
+    mkdir(App->logdir.c_str(), 0700);
+
+    Glib::ustring filename = App->logdir + chan.getName() + "_" + conn->Session.servername + ".log";
+
+    Glib::ustring stripped_msg = stripColors(msg, true);
+    
+    ofstream logfile(filename.c_str(), ios::app);
+    if (logfile.good())
+          logfile << stripped_msg;
+}
+

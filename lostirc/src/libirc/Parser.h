@@ -72,6 +72,6 @@ inline
 Glib::ustring skipFirstWord(const Glib::ustring& str);
 
 Glib::ustring getWord(const Glib::ustring& str, int n);
-Glib::ustring stripColors(const Glib::ustring& str);
+Glib::ustring stripColors(const Glib::ustring& str, const bool stripBoldAndUnderline);
 
 #endif

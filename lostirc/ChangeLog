@@ -1,5 +1,21 @@
 For a summary of changes between releases - see the NEWS file.
 
+2002-12-24  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Patch from Michael Kristensen to add log support, revised quite a
+          bit by me:
+
+        * Entry.cpp: Don't insert the line here, just make sendMsg() do it.
+
+        * ServerConnection.cpp: In sendMsg() and sendMe(), emit an event to
+          frontend.
+
+        * FrontEnd.cpp/ConfigHandler.cpp: Add PRIVMSG_SELF event.
+
+        * FrontEnd.cpp: Add logToFile() function.
+
+        * LostIRCApp.h: Add logdir public member.
+
 2002-12-23  Morten Brix Pedersen  <morten@wtf.dk>
 
         * MainWindow.cpp: After connecting, call setActive() on all queries,

@@ -242,7 +242,8 @@ Options::Options(const char *filename)
     font(this, "font"),
     limited_highlighting(this, "limited_highlighting", false),
     strip_colors(this, "strip_colors", true),
-    strip_boldandunderline(this, "strip_boldandunderline", false)
+    strip_boldandunderline(this, "strip_boldandunderline", false),
+    logging(this, "logging", false)
 
 {
     readConfigFile();
@@ -280,8 +281,9 @@ Colors::Colors(const char *filename)
 
 Events::Events(const char *filename)
     : baseConfig(filename),
-    privmsg(this, "privmsg", "$12<$0%1$12>$00 %2"),
-    privmsg_highlight(this, "privmsg_highlight", "$02<$08%1$2>$00 %2"),
+    privmsg(this, "privmsg", "$12<$00%1$12>$00 %2"),
+    privmsg_highlight(this, "privmsg_highlight", "$02<$08%1$02>$00 %2"),
+    privmsg_self(this, "privmsg_self", "$07<$00%1$07>$00 %2"),
     action(this, "action", "$07* %1$00 %2"),
     action_highlight(this, "action_highlight", "$08* %1$00 %2"),
     dcc_receive(this, "dcc_receive", "$15-- $16DCC SEND from $00%1$16 (%2), use /DCC RECEIVE %3 to accept the file transfer."),

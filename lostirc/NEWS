@@ -1,5 +1,7 @@
 LostIRC (x.x.x)
   * You can now use PAGE UP/PAGE DOWN to scroll up/down in the text widget.
+  * Using preferences, you can now enable logging. (thanks, Michael
+    Kristensen)
   * After being reconnecting to a server, queries had a parentes around
     them. Fixed.
   * Notices sent to channels are now displayed in the channel instead of in
