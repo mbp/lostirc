@@ -32,7 +32,6 @@ class Channel {
 
 public:
     Channel(const std::string& n) { name = n; endOfNames = false; }
-    void setName(const std::string& n) { name = n; }
     std::string getName() { return name; }
     void addUser(const std::string& n, IRC::UserMode i = IRC::NONE);
     void removeUser(const std::string& u);
