@@ -628,7 +628,12 @@ void Parser::CMode(const ustring& from, const ustring& param)
                 modebuf[1] = (*i);
                 modebuf[2] = '\0';
 
-                ustring nick = *arg_i++;
+                ustring nick;
+                if (arg_i == arguments.end())
+                      nick = *--arg_i;
+                else
+                      nick = *arg_i++;
+
                 FE::emit(FE::get(MODE) << findNick(from) << modebuf << nick, *chan, _conn);
                 }
         }

@@ -1,5 +1,6 @@
 LostIRC - (x.x.x)
   * The chosen encoding in preferences wasn't being saved properly. Fixed.
+  * Fix crash which occured with some MODE-lines.
 
 LostIRC - (0.3.1) - Fri Dec, 26th 2003
   * Added a very simplish About-dialog.

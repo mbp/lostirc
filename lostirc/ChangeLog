@@ -1,6 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
 2004-01-21  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Parser.cpp: Fix crash which occured on some MODE-lines.
+
+2004-01-21  Morten Brix Pedersen  <morten@wtf.dk>
         
         * configure.ac: Modify more text for --enable-logdebug option.
 
