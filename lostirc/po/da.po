@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LostIRC 0.2.5pre\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-11-21 03:24+0100\n"
+"POT-Creation-Date: 2003-12-26 00:48+0100\n"
 "PO-Revision-Date: 2003-01-03 19:25+0100\n"
 "Last-Translator: Michael Kristensen <tazz@wtf.dk>\n"
 "Language-Team: Danish\n"
@@ -226,7 +226,7 @@ msgstr ""
 msgid "_Help"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:489
+#: src/gtkmm/MainWindow.cpp:488
 #, fuzzy
 msgid ""
 "LostIRC Quick Introduction\n"
@@ -261,6 +261,10 @@ msgstr ""
 "Og du bør virkelig kigge på listen med tastaturbindinger:\n"
 "    8/KEYBINDINGS\n"
 "\n"
+
+#: src/gtkmm/MainWindow.cpp:502
+msgid "LostIRC "
+msgstr ""
 
 #: src/gtkmm/TextWidget.cpp:359
 msgid "_Show Menubar"

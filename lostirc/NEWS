@@ -1,8 +1,10 @@
-LostIRC
+LostIRC - (0.3.1) - Fri Dec, 26th 2003
   * Added a very simplish About-dialog.
   * The menubar was accidently not shown by default, not it is.
   * The "Introduction" window now closes when clicking "Close" as it should.
   * Some user interface cleanups.
+  * Fixed a problem where some systems would fail compilation because of a
+    missing mkinstalldirs file.
 
 LostIRC (0.3.0) - Fri Nov, 21st 2003
   * The user interface has been totally reworked to conform to the GNOME

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-11-21 03:24+0100\n"
+"POT-Creation-Date: 2003-12-26 00:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -179,7 +179,7 @@ msgstr ""
 msgid "_Help"
 msgstr ""
 
-#: src/gtkmm/MainWindow.cpp:489
+#: src/gtkmm/MainWindow.cpp:488
 msgid ""
 "LostIRC Quick Introduction\n"
 "\n"
@@ -198,6 +198,10 @@ msgid ""
 "\n"
 "And you should really check out the list of key bindings:\n"
 "    /KEYBINDINGS"
+msgstr ""
+
+#: src/gtkmm/MainWindow.cpp:502
+msgid "LostIRC "
 msgstr ""
 
 #: src/gtkmm/TextWidget.cpp:359
