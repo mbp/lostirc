@@ -106,7 +106,7 @@ Gtk::Notebook_Helpers::Page * MainNotebook::findPage(const string& name, ServerC
     string n = name;
     Gtk::Notebook_Helpers::PageList::iterator i;
             
-    for (i = pages().begin(); i != pages().end(); i++) {
+    for (i = pages().begin(); i != pages().end(); ++i) {
         string tab_name = (*i)->get_tab_text();
         if (Utils::tolower(tab_name) == Utils::tolower(n)) {
             Tab *tab = dynamic_cast<Tab*>((*i)->get_child());
@@ -213,7 +213,7 @@ void MainNotebook::findTabsContaining(const string& nick, vector<Tab*>& vec)
 {
     Gtk::Notebook_Helpers::PageList::iterator i;
             
-    for (i = pages().begin(); i != pages().end(); i++) {
+    for (i = pages().begin(); i != pages().end(); ++i) {
         Tab *tab = dynamic_cast<Tab*>((*i)->get_child());
         if (tab->findUser(nick)) {
             vec.push_back(tab);

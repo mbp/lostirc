@@ -36,11 +36,11 @@ bool ConfigHandler::readConfig()
         while (i != vec.end())
         {
             if (*i == "=") {
-                i++;
+                ++i;
                 while (i != vec.end())
                 {
                     _tmpvalue += *i + " ";
-                    i++;
+                    ++i;
                 }
                 if (_tmpvalue.size() > 0) {
                     _tmpvalue = _tmpvalue.substr(0, _tmpvalue.size() - 1);
@@ -51,7 +51,7 @@ bool ConfigHandler::readConfig()
                 _tmpparam = *i;
             }
 
-            i++;
+            ++i;
         }
         
     }

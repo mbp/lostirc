@@ -239,7 +239,7 @@ void MainWindow::onQuit(const string& nick, const string& msg, ServerConnection 
 
     _nb->findTabsContaining(nick, tabs);
 
-    for (i = tabs.begin(); i != tabs.end(); i++) {
+    for (i = tabs.begin(); i != tabs.end(); ++i) {
         _nb->insert(*i, "*** " + nick + " has quit (" + msg + ")\n");
         (*i)->removeUser(nick);
     }
@@ -256,7 +256,7 @@ void MainWindow::onNick(const string& from, const string& to, ServerConnection *
 
     _nb->findTabsContaining(from, tabs);
 
-    for (i = tabs.begin(); i != tabs.end(); i++) {
+    for (i = tabs.begin(); i != tabs.end(); ++i) {
         _nb->insert(*i, "*** " + from + " changes nick to " + to + "\n");
         (*i)->renameUser(from, to);
     }
@@ -376,7 +376,7 @@ void MainWindow::onNames(const string& chan, const vector<vector<string> >& user
     Tab *tab = _nb->findChannelTab(chan, conn);
 
     if (tab) {
-        for (i = users.begin(); i != users.end(); i++) {
+        for (i = users.begin(); i != users.end(); ++i) {
             tab->insertUser(*i);
         }
     } else {

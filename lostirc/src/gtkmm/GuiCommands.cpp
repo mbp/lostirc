@@ -22,13 +22,13 @@
 
 struct UserCommands guicmds[] = {
     { "QUERY",     GuiCommands::Query,  0 },
-    { 0,        0, 0                     }
+    { 0,        0, 0                      }
 };
 
 
 bool GuiCommands::send(ServerConnection *conn, string cmd, const string& params)
 {
-    for (int i = 0; guicmds[i].cmd != 0; i++) {
+    for (int i = 0; guicmds[i].cmd != 0; ++i) {
         if (guicmds[i].cmd == Utils::toupper(cmd)) {
             if (!conn->Session.isConnected && guicmds[i].reqConnected) {
                 Commands::error = "Must be connected.";

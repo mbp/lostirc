@@ -48,7 +48,7 @@ void InOut::quit()
 {
     vector<ServerConnection*>::const_iterator i;
 
-    for (i = _servers.begin(); i != _servers.end(); i++) {
+    for (i = _servers.begin(); i != _servers.end(); ++i) {
         if ((*i)->Session.isConnected) {
             (*i)->sendQuit("");
         }
