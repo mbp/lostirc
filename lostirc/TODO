@@ -2,7 +2,6 @@ NEW STUFF:
 ---------
  - need to save the setting for menu hidden and nicklist hidden.
  - need to make "colors" work (or just #ifdef 0 them until then)
- - need to fix the numerous errors that appear when quitting lostirc
 
 HIG:
 
