@@ -1,6 +1,12 @@
 For a summary of changes between releases - see the NEWS file.
 
-2003-03-16  Morten Brix Pedersen  <michael@wtf.dk>
+2003-03-17  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * acinclude.m4: Remove.
+        * configure.in: Remove check for namespaces and stringstream, lets
+          just assume that the world is up to date now.
+
+2003-03-16  Morten Brix Pedersen  <morten@wtf.dk>
         
         * First shot at Windows port.
         * DCCList.cpp/DCC.h/DCC.cpp: Rename ERROR to FAIL, because it
