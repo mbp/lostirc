@@ -71,7 +71,7 @@ public:
     void setActive() {
         is_on_channel = true;
     }
-    bool isInActive() { return is_on_channel; }
+    bool isActive() { return is_on_channel; }
     void setName(const std::string& str) { _label->set_text(str); }
     bool is_highlighted;
     bool is_on_channel;

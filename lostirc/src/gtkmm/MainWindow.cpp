@@ -30,7 +30,8 @@ MainWindow::MainWindow()
 {
     AppWin = this;
     set_policy(1, 1, 0); // Policy for main window: user resizeable
-    set_usize(400, 200);
+    set_title("LostIRC "VERSION);
+    set_usize(600, 400);
     key_press_event.connect(slot(this, &MainWindow::on_key_press_event));
     
     Gtk::VBox *_vbox1 = manage(new Gtk::VBox());
@@ -39,8 +40,6 @@ MainWindow::MainWindow()
     _vbox1->pack_start(*_nb, 1, 1);
 
     add(*_vbox1);
-    set_title("LostIRC "VERSION);
-    set_usize(600, 400);
 
     _app = new LostIRCApp();
     // Connect signals for all the backend events
@@ -62,11 +61,11 @@ MainWindow::MainWindow()
     int num_of_servers = _app->start();
     if (num_of_servers == 0) {
         // Construct initial tab
-        string name = "<server>";
+        string name = "server";
         ServerConnection *conn = _app->newServer();
         conn->Session.servername = name;
         TabChannel *tab = _nb->addChannelTab(name, conn);
-        tab->is_on_channel = false;
+        tab->setInActive();
         _nb->insert(tab, "\00311Welcome to LostIRC!\n\nThis client is mainly keyboard oriented, so don't expect fancy menus and buttons for you to click on.
 
 \0037Available commands:
@@ -141,7 +140,7 @@ void MainWindow::onJoin(const string& nick, Channel& chan, ServerConnection *con
     if (!tab) {
         tab = _nb->addChannelTab(chan.getName(), conn);
         return;
-    } else if (!tab->isInActive()) {
+    } else if (!tab->isActive()) {
         tab->setActive();
         tab->setName(chan.getName());
     }
@@ -256,7 +255,7 @@ void MainWindow::onDisconnected(ServerConnection* conn)
 
 void MainWindow::onNewTab(ServerConnection *conn)
 {
-    string name = "<server>";
+    string name = "server";
     conn->Session.servername = name;
     Tab *tab = _nb->addChannelTab(name, conn);
     _nb->show_all();
@@ -266,16 +265,16 @@ void MainWindow::onNewTab(ServerConnection *conn)
     if (_nb->get_current_page_num() == -1) {
         _nb->set_page(0);
     }
-    tab->is_on_channel = false;
+    tab->setInActive();
 }
 
 void MainWindow::newServer()
 {
-    string name = "<server>";
+    string name = "server";
     ServerConnection *conn = _app->newServer();
     conn->Session.servername = name;
     Tab *tab = _nb->addChannelTab(name, conn);
-    tab->is_on_channel = false;
+    tab->setInActive();
 }
 
 gint MainWindow::on_key_press_event(GdkEventKey* e)
@@ -313,7 +312,7 @@ gint MainWindow::on_key_press_event(GdkEventKey* e)
     }
     else if ((e->keyval == GDK_c) && (e->state & GDK_MOD1_MASK)) {
         TabChannel *tab = dynamic_cast<TabChannel*>(_nb->getCurrent());
-        if (tab && tab->getConn()->Session.isConnected) {
+        if (tab && tab->getConn()->Session.isConnected && tab->isActive()) {
             // It's a channel, so we need to part it
             tab->getConn()->sendPart(tab->getLabel()->get_text(), "");
         }
