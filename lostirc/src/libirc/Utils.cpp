@@ -19,6 +19,7 @@
 #include <algorithm>
 #include <sstream>
 #include <cctype>
+#include <cstdlib>
 #include "Utils.h"
 
 using std::string;
@@ -60,15 +61,7 @@ string lower(string& str)
 
 int stoi(const string& str)
 {
-    std::stringstream ss;
-
-    int i;
-    if (!(ss << str) || !(ss >> i) ||
-            !(ss >> std::ws).eof())
-          return -1;
-
-    return i;
-
+    return std::atoi(str.c_str());
 }
 
 bool isDigit(const string& str)

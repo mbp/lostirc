@@ -121,9 +121,9 @@ bool ServerConnection::readsocket()
 
         std::string str;
         // our buffer
-        if (!tmp.empty()) {
-            str = tmp;
-            tmp = "";
+        if (!tmpbuf.empty()) {
+            str = tmpbuf;
+            tmpbuf = "";
         }
 
         if (_socket->receive(str)) {
@@ -148,7 +148,7 @@ bool ServerConnection::readsocket()
                 }
             }
             if (start != str.end()) {
-                std::copy(++start, str.end(), back_inserter(tmp));
+                std::copy(++start, str.end(), back_inserter(tmpbuf));
             }
         }
         return true;

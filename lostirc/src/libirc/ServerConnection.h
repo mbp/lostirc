@@ -87,7 +87,7 @@ private:
     bool readsocket();
     Socket *_socket;
     Parser *_p;
-    string tmp;
+    std::string tmpbuf;
 };
 
 #endif
