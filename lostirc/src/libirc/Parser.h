@@ -34,7 +34,7 @@ class Events;
 class Parser
 {
 public:
-    Parser(LostIRCApp *inout, ServerConnection *conn);
+    Parser(LostIRCApp *app, ServerConnection *conn);
 
     void parseLine(std::string &data);
 
@@ -69,7 +69,7 @@ private:
 
     ServerConnection *_conn;
     Events *_evts;
-    LostIRCApp *_io;
+    LostIRCApp *_app;
 };
 
 #endif

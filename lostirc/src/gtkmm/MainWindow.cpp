@@ -31,20 +31,21 @@ MainWindow::MainWindow()
     set_usize(400, 200);
     key_press_event.connect(slot(this, &MainWindow::on_key_press_event));
     
-    _io = new LostIRCApp();
+    _app = new LostIRCApp();
     Gtk::VBox *_vbox1 = manage(new Gtk::VBox(false, 0));
 
-    // Signals for all server events
-    _io->evtDisplayMessage.connect(slot(this, &MainWindow::onDisplayMessage));
-    _io->evtJoin.connect(slot(this, &MainWindow::onJoin));
-    _io->evtKick.connect(slot(this, &MainWindow::onKick));
-    _io->evtPart.connect(slot(this, &MainWindow::onPart));
-    _io->evtQuit.connect(slot(this, &MainWindow::onQuit));
-    _io->evtNick.connect(slot(this, &MainWindow::onNick));
-    _io->evtNames.connect(slot(this, &MainWindow::onNames));
-    _io->evtMode.connect(slot(this, &MainWindow::onMode));
-    _io->evtCUMode.connect(slot(this, &MainWindow::onCUMode));
-    _io->evtCMode.connect(slot(this, &MainWindow::onCMode));
+    // Connect signals for all the backend events
+    _app->evtDisplayMessage.connect(slot(this, &MainWindow::onDisplayMessage));
+    _app->evtHighlight.connect(slot(this, &MainWindow::onHighlight));
+    _app->evtJoin.connect(slot(this, &MainWindow::onJoin));
+    _app->evtKick.connect(slot(this, &MainWindow::onKick));
+    _app->evtPart.connect(slot(this, &MainWindow::onPart));
+    _app->evtQuit.connect(slot(this, &MainWindow::onQuit));
+    _app->evtNick.connect(slot(this, &MainWindow::onNick));
+    _app->evtNames.connect(slot(this, &MainWindow::onNames));
+    _app->evtMode.connect(slot(this, &MainWindow::onMode));
+    _app->evtCUMode.connect(slot(this, &MainWindow::onCUMode));
+    _app->evtCMode.connect(slot(this, &MainWindow::onCMode));
 
     _nb = manage(new MainNotebook(this));
     _vbox1->pack_start(*_nb, 1, 1);
@@ -57,7 +58,7 @@ MainWindow::MainWindow()
     string name = "<server>";
     struct passwd *p = getpwnam(nick.c_str());
     string realname(p->pw_gecos);
-    ServerConnection *conn = _io->newServer(nick, realname);
+    ServerConnection *conn = _app->newServer(nick, realname);
     conn->Session.servername = name;
     TabChannel *tab = _nb->addChannelTab(name, conn);
     tab->is_on_channel = false;
@@ -96,9 +97,9 @@ void MainWindow::onDisplayMessage(const string& msg, const string& to, ServerCon
     else
           tab = _nb->findTab(to, conn);
 
-    if (!tab) {
-        tab = _nb->addQueryTab(to, conn);
-    }
+
+    if (!tab)
+          tab = _nb->addQueryTab(to, conn);
 
     _nb->insert(tab, msg);
 }
@@ -208,6 +209,15 @@ void MainWindow::onNames(const string& chan, const vector<vector<string> >& user
     }
 }
 
+void MainWindow::onHighlight(const string& to, ServerConnection* conn)
+{
+    Tab *tab = _nb->findTab(to, conn);
+
+    if (tab)
+          _nb->highlight(tab);
+
+}
+
 void MainWindow::newServer()
 {
     string nick = getenv("USER");
@@ -216,7 +226,7 @@ void MainWindow::newServer()
     string realname(p->pw_gecos);
 
     string name = "<server>";
-    ServerConnection *conn = _io->newServer(nick, realname);
+    ServerConnection *conn = _app->newServer(nick, realname);
     conn->Session.servername = name;
     Tab *tab = _nb->addChannelTab(name, conn);
     tab->is_on_channel = false;
@@ -224,7 +234,7 @@ void MainWindow::newServer()
 
 void MainWindow::quit()
 {
-    _io->quit();
+    _app->quit();
     Gtk::Main::quit();
 }
 

@@ -44,7 +44,6 @@ public:
     Events* getEvts() { return _evts; }
 
     // Signals 
-    Signal2<void, const std::string&, ServerConnection*> evtGenericError;
     Signal3<void, const std::string&, const std::string&, ServerConnection*> evtJoin;
     Signal3<void, const std::string&, const std::string&, ServerConnection*> evtPart;
     Signal3<void, const std::string&, const std::string&, ServerConnection*> evtQuit;
@@ -54,8 +53,13 @@ public:
     Signal4<void, const std::string&, const std::string&, const vector<vector<std::string> >&, ServerConnection*> evtCUMode;
     Signal5<void, const std::string&, const std::string&, char, const std::string&, ServerConnection*> evtCMode;
     Signal5<void, const std::string&, const std::string&, const std::string&, const std::string&, ServerConnection*> evtKick;
+
+    // Emitted when the frontend needs to diplay a message
     Signal3<void, const std::string&, const std::string&, ServerConnection*> evtDisplayMessage;
     Signal3<void, const std::vector<std::string>&, const std::string&, ServerConnection*> evtDisplayMessageMultiple;
+
+    // Emitted when a channel needs to be highlighted
+    Signal2<void, const std::string&, ServerConnection*> evtHighlight;
 
 
 private:

@@ -31,13 +31,14 @@ class ServerConnection;
 class Events
 {
 public:
-    Events(LostIRCApp *inout);
+    Events(LostIRCApp *app);
 
     void emitEvent(const std::string& name, std::vector<std::string>& args, const std::string& chan, ServerConnection *conn);
     void emitEvent(const std::string& name, const std::string& arg, const std::string& chan, ServerConnection *conn);
 private:
     std::map<std::string, std::string> _events;
 
-    LostIRCApp *_io;
+private:
+    LostIRCApp *_app;
 };
 #endif

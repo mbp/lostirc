@@ -53,6 +53,8 @@ public:
     bool sendInvite(const std::string& to, const std::string& params);
     bool sendBanlist(const std::string& chan);
     bool sendMe(const std::string& to, const std::string& msg);
+    bool sendWho(const std::string& mask);
+    bool sendRaw(const std::string& text);
 
     static gboolean readdata(GIOChannel *, GIOCondition, gpointer);
 
@@ -65,9 +67,8 @@ public:
         std::string servername;
     } Session;
 
-    LostIRCApp *_io;
-
 private:
+    LostIRCApp *_app;
     bool readsocket();
     Socket *_socket;
     Parser *_p;

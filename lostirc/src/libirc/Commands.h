@@ -51,6 +51,8 @@ public:
     static bool Msg(ServerConnection *conn, const std::string& params);
     static bool Notice(ServerConnection *conn, const std::string& params);
     static bool Me(ServerConnection *conn, const std::string& params);
+    static bool Who(ServerConnection *conn, const std::string& params);
+    static bool Quote(ServerConnection *conn, const std::string& params);
 
     static std::string error;
 

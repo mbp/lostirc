@@ -19,8 +19,8 @@
 #include <cctype>
 #include "Events.h"
 
-Events::Events(LostIRCApp *inout)
-    : _io(inout)
+Events::Events(LostIRCApp *app)
+    : _app(app)
 {
 
 }
@@ -28,7 +28,7 @@ Events::Events(LostIRCApp *inout)
 void Events::emitEvent(const string& name, vector<string>& args, const string& to, ServerConnection *conn)
 {
     string newmsg;
-    string msg = _io->getCfg().getParam("evt_" + name);
+    string msg = _app->getCfg().getParam("evt_" + name);
 
     bool parsing_arg;
     string::const_iterator i;
@@ -55,7 +55,7 @@ void Events::emitEvent(const string& name, vector<string>& args, const string& t
 
     newmsg += '\n';
 
-    _io->evtDisplayMessage(newmsg, to, conn);
+    _app->evtDisplayMessage(newmsg, to, conn);
 }
 
 void Events::emitEvent(const string& name, const string& arg, const string& to, ServerConnection *conn)

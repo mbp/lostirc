@@ -18,18 +18,19 @@
 
 #include "ServerConnection.h"
 #include "LostIRCApp.h"
+#include "Events.h"
 
 using std::string;
 
-ServerConnection::ServerConnection(LostIRCApp *inout, const string& host, int port, const string& nick)
-    : _io(inout), _socket(new Socket()), _p(new Parser(_io,this))
+ServerConnection::ServerConnection(LostIRCApp *app, const string& host, int port, const string& nick)
+    : _app(app), _socket(new Socket()), _p(new Parser(_app,this))
 {
     Session.nick = nick;
     Connect(host, port);
 }
 
-ServerConnection::ServerConnection(LostIRCApp *inout, const string& nick, const string& realname)
-    : _io(inout), _socket(new Socket()), _p(new Parser(_io,this))
+ServerConnection::ServerConnection(LostIRCApp *app, const string& nick, const string& realname)
+    : _app(app), _socket(new Socket()), _p(new Parser(_app,this))
 
 {
     Session.nick = nick;
@@ -68,7 +69,7 @@ bool ServerConnection::Connect(const string &host, int port = 6667)
 
     } else {
         Session.isConnected = 0;
-        _io->evtGenericError("Failed connecting: " + _socket->error, this);
+        _app->getEvts()->emitEvent("servmsg", "Failed connecting: " + _socket->error, "", this);
     }
 
 }
@@ -95,7 +96,7 @@ bool ServerConnection::readsocket()
         _p->parseLine(data);
         return true;
     } else {
-        _io->evtGenericError(_socket->error, this);
+        _app->getEvts()->emitEvent("servmsg", _socket->error, "", this);
         Session.isConnected = 0;
         return false;
     }
@@ -135,7 +136,7 @@ bool ServerConnection::sendNick(const string& nick)
 
 bool ServerConnection::sendVersion(const string& to)
 {
-    struct utsname uname = _io->getsysinfo();
+    struct utsname uname = _app->getsysinfo();
     string s(uname.sysname);
     string r(uname.release);
     string m(uname.machine);
@@ -252,6 +253,20 @@ bool ServerConnection::sendBanlist(const string& chan)
 bool ServerConnection::sendMe(const string& to, const string& message)
 {
     string msg("PRIVMSG " + to + " :\001ACTION " + message + "\001\r\n");
+
+    return _socket->send(msg);
+}
+
+bool ServerConnection::sendWho(const string& mask)
+{
+    string msg("WHO " + mask + "\r\n");
+
+    return _socket->send(msg);
+}
+
+bool ServerConnection::sendRaw(const string& text)
+{
+    string msg(text + "\r\n");
 
     return _socket->send(msg);
 }

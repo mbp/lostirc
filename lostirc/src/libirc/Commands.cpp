@@ -21,6 +21,7 @@
 #include "Utils.h"
 
 using std::string;
+using std::stringstream;
 
 struct UserCommands cmds[] = {
     { "SERVER",   Commands::Server,     0 },
@@ -38,6 +39,8 @@ struct UserCommands cmds[] = {
     { "BANLIST",  Commands::Banlist,    1 },
     { "MSG",      Commands::Msg,        1 },
     { "ME",       Commands::Me,         1 },
+    { "WHO",      Commands::Who,        1 },
+    { "QUOTE",    Commands::Quote,      1 },
     { 0,        0,                      0 }
 };
 
@@ -229,12 +232,34 @@ bool Commands::Me(ServerConnection *conn, const string& params)
     string msg = params.substr(pos1 + 1);
 
     if (msg.empty()) {
-       error = "/ME <message>, sends the action to the current channel.)";
+       error = "/ME <message>, sends the action to the current channel.";
        return false;
     } else {
        conn->sendMe(to, msg);
        error = "* " + conn->Session.nick + " " + msg;
        return false;
+    }
+}
+
+bool Commands::Who(ServerConnection *conn, const string& params)
+{
+    if (params.empty()) {
+       error = "/WHO <mask> [o], search for mask on network, if o is supplied, only search for oppers.";
+       return false;
+    } else {
+       conn->sendWho(params);
+       return true;
+    }
+}
+
+bool Commands::Quote(ServerConnection *conn, const string& params)
+{
+    if (params.empty()) {
+       error = "/QUOTE <text>, send raw text to server.";
+       return false;
+    } else {
+       conn->sendRaw(params);
+       return true;
     }
 }
 

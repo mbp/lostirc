@@ -26,10 +26,10 @@ using std::string;
 using std::stringstream;
 using std::cout;
 
-Parser::Parser(LostIRCApp *inout, ServerConnection *conn)
-    : _conn(conn), _io(inout), _evts(new Events(inout))
+Parser::Parser(LostIRCApp *app, ServerConnection *conn)
+    : _conn(conn), _app(app), _evts(new Events(app))
 {
-    _evts = _io->getEvts();
+    _evts = _app->getEvts();
 
 }
 
@@ -165,10 +165,9 @@ void Parser::Privmsg(const string& from, const string& param, const string& rest
         args.push_back(findNick(from));
         args.push_back(rest);
 
-        string::size_type pos = rest.find(_conn->Session.nick);
-
-        if (pos != string::npos) {
+        if (rest.find(_conn->Session.nick) != string::npos) {
             _evts->emitEvent("privmsg_highlight", args, findNick(nick), _conn);
+            _app->evtHighlight(findNick(nick), _conn);
         } else {
             _evts->emitEvent("privmsg", args, findNick(nick), _conn);
         }
@@ -256,7 +255,7 @@ void Parser::Kick(const string& from, const string& param, const string& msg)
     args.push_back(msg);
 
     _evts->emitEvent("kicked", args, chan, _conn);
-    _io->evtKick(findNick(from), chan, nick, msg, _conn);
+    _app->evtKick(findNick(from), chan, nick, msg, _conn);
 }
 
 void Parser::Join(const string& nick, const string& chan)
@@ -265,7 +264,7 @@ void Parser::Join(const string& nick, const string& chan)
     args.push_back(findNick(nick));
     args.push_back(chan);
     args.push_back(findHost(nick));
-    _io->evtJoin(findNick(nick), chan, _conn);
+    _app->evtJoin(findNick(nick), chan, _conn);
     _evts->emitEvent("join", args, chan, _conn);
 }
 
@@ -285,12 +284,12 @@ void Parser::Part(const string& nick, const string& chan)
     args.push_back(chan);
     args.push_back(findHost(nick));
     _evts->emitEvent("part", args, chan, _conn);
-    _io->evtPart(findNick(nick), chan, _conn);
+    _app->evtPart(findNick(nick), chan, _conn);
 }
 
 void Parser::Quit(const string& nick, const string& msg)
 {
-    _io->evtQuit(findNick(nick), msg, _conn);
+    _app->evtQuit(findNick(nick), msg, _conn);
 }
 
 void Parser::Nick(const string& from, const string& to)
@@ -299,7 +298,7 @@ void Parser::Nick(const string& from, const string& to)
     args.push_back(from);
     args.push_back(to);
 
-    _io->evtNick(findNick(from), to, _conn);
+    _app->evtNick(findNick(from), to, _conn);
 }
 
 void Parser::Topic(const string& from, const string& to, const string& rest)
@@ -319,7 +318,7 @@ void Parser::Mode(const string& from, const string& param, const string& rest)
     } else {
         // User mode message
         // We got line in the form: 'user +x'
-        _io->evtMode(findNick(from), param, rest, _conn);
+        _app->evtMode(findNick(from), param, rest, _conn);
     }
         
 }
@@ -347,7 +346,7 @@ void Parser::CMode(const string& from, const string& param)
 
     if (arguments.empty()) {
           // Received a channel mode, like '#chan +n'
-          _io->evtCMode(findNick(from), chan, modes.at(0), modes, _conn);
+          _app->evtCMode(findNick(from), chan, modes.at(0), modes, _conn);
           return;
     }
 
@@ -399,7 +398,7 @@ void Parser::CMode(const string& from, const string& param)
     }
 
     // Channel user mode
-    _io->evtCUMode(findNick(from), chan, vecvec, _conn);
+    _app->evtCUMode(findNick(from), chan, vecvec, _conn);
         
 }
 
@@ -750,7 +749,7 @@ void Parser::Names(const string& chan, const string& names)
         vecvec.push_back(vec);
     }
 
-    _io->evtNames(channel, vecvec, _conn);
+    _app->evtNames(channel, vecvec, _conn);
 }
 
 string Parser::findNick(const string& str)
