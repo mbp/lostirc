@@ -19,7 +19,6 @@
 #include <config.h>
 #include "MainNotebook.h"
 #include "MainWindow.h"
-#include "Tab.h"
 
 using Glib::ustring;
 using std::vector;
@@ -34,72 +33,62 @@ MainNotebook::MainNotebook()
 
 Tab* MainNotebook::addTab(const ustring& name, ServerConnection *conn)
 {
-    int pagenum = findPage(_("(server)"), conn);
+    Tab *tab = findTab(Tab::SERVER, conn);
 
-    if (pagenum != -1) {
-        // If we have a "server"-tab, reuse it
-        Tab* tab = static_cast<Tab*>(get_nth_page(pagenum));
+    if (tab) {
+        // If we have a server-tab, reuse it
         getLabel(tab)->set_text(name);
         tab->setActive();
-        show_all();
-        return tab;
     } else {
-        Tab *tab = manage(new Tab(conn, fontdescription));
+        tab = manage(new Tab(conn, fontdescription));
         pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, name));
-        show_all();
-        return tab;
     }
+    show_all();
+    return tab;
 }
 
 Tab* MainNotebook::addChannelTab(const ustring& name, ServerConnection *conn)
 {
-    // First try to find out whether we have a "server"-tab for this
+    // First try to find out whether we have a server-tab for this
     // ServerConnection.
-    int pagenum = findPage(_("(server)"), conn);
+    Tab *tab = findTab(Tab::SERVER, conn);
 
-    if (pagenum != -1) {
+    if (tab) {
         // If we have a "server"-tab, reuse it as a channel-tab.
-        Tab* tab = static_cast<Tab*>(get_nth_page(pagenum));
         getLabel(tab)->set_text(name);
         tab->setActive();
-        tab->setChannel(true);
-        show_all();
-        return tab;
-    } else if (Tab *tab = findTab(name, conn, true)) {
+        tab->setType(Tab::CHANNEL);
+    } else if (tab = findTab(name, conn, true)) {
         // If we find an *inactive* tab, lets reuse it.
         tab->setActive();
-        tab->setChannel(true);
+        tab->setType(Tab::CHANNEL);
         getLabel(tab)->set_text(name);
-        return tab;
     } else {
         // If not, create a new channel-tab.
-        Tab *tab = manage(new Tab(conn, fontdescription));
-        tab->setChannel(true);
+        tab = manage(new Tab(conn, fontdescription));
+        tab->setType(Tab::CHANNEL);
         pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, name));
-        show_all();
-        return tab;
     }
+    show_all();
+    return tab;
 }
 
 Tab* MainNotebook::addQueryTab(const ustring& name, ServerConnection *conn)
 {
-    int pagenum = findPage(_("(server)"), conn);
+    Tab *tab = findTab(Tab::SERVER, conn);
 
-    if (pagenum != -1) {
-        // If we have a "server"-tab, reuse it
-        Tab* tab = static_cast<Tab*>(get_nth_page(pagenum));
+    if (tab) {
+        // If we have a server-tab, reuse it
         getLabel(tab)->set_text(name);
         tab->setActive();
-        tab->setQuery(true);
-        show_all();
-        return tab;
+        tab->setType(Tab::QUERY);
     } else {
-        Tab *tab = manage(new Tab(conn, fontdescription));
-        tab->setQuery(true);
+        tab = manage(new Tab(conn, fontdescription));
+        tab->setType(Tab::QUERY);
         pages().push_back(Gtk::Notebook_Helpers::TabElem(*tab, name));
-        show_all();
-        return tab;
     }
+    show_all();
+    return tab;
 }
 
 Gtk::Label* MainNotebook::getLabel(Tab *tab)
@@ -123,16 +112,6 @@ Tab* MainNotebook::getCurrent()
 
 Tab * MainNotebook::findTab(const ustring& name, ServerConnection *conn, bool findInActive)
 {
-    int pagenum = findPage(name, conn, findInActive);
-
-    if (pagenum != -1) {
-        return static_cast<Tab*>(get_nth_page(pagenum));
-    }
-    return 0;
-}
-
-int MainNotebook::findPage(const ustring& name, ServerConnection *conn, bool findInActive)
-{
     ustring n = name;
     Gtk::Notebook_Helpers::PageList::iterator i;
             
@@ -141,12 +120,24 @@ int MainNotebook::findPage(const ustring& name, ServerConnection *conn, bool fin
         if (tab->getConn() == conn) {
             ustring tab_name = i->get_tab_label_text();
             if ((Util::lower(tab_name) == Util::lower(n)) || n.empty())
-                  return i->get_page_num();
+                  return static_cast<Tab*>(get_nth_page(i->get_page_num()));
             else if (findInActive && Util::lower(tab_name) == ustring("(" + Util::lower(n) + ")"))
-                  return i->get_page_num();
+                  return static_cast<Tab*>(get_nth_page(i->get_page_num()));
         }
     }
-    return -1;
+    return 0;
+}
+
+Tab * MainNotebook::findTab(Tab::Type type, ServerConnection *conn, bool findInActive)
+{
+    Gtk::Notebook_Helpers::PageList::iterator i;
+            
+    for (i = pages().begin(); i != pages().end(); ++i) {
+        Tab *tab = static_cast<Tab*>(i->get_child());
+        if (tab->getConn() == conn && tab->isType(type))
+              return static_cast<Tab*>(get_nth_page(i->get_page_num()));
+    }
+    return 0;
 }
 
 void MainNotebook::onSwitchPage(GtkNotebookPage *p, unsigned int n)

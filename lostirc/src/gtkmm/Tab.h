@@ -31,7 +31,6 @@
 #include <gtkmm/style.h>
 #include <gtkmm/paned.h>
 #include <irc_defines.h>
-#include "MainWindow.h"
 #include "Entry.h"
 #include "TextWidget.h"
 #include "NickList.h"
@@ -43,6 +42,8 @@ class Tab : public Gtk::VBox
 public:
     Tab(ServerConnection *conn, Pango::FontDescription font);
     ~Tab();
+
+    enum Type { UNDEFINED, CHANNEL, QUERY, SERVER };
 
     Entry&                      getEntry() { return _entry; }
     TextWidget&                 getText() { return _textwidget; }
@@ -63,11 +64,9 @@ public:
     void setInActive();
     void setActive();
 
-    void setQuery(bool value);
-    void setChannel(bool value);
+    void setType(Type type) { _type = type; addOrRemoveNickList(); }
 
-    bool isQuery() { return _isQuery; }
-    bool isChannel() { return _isChannel; }
+    bool isType(Type type) { return type == _type; }
     bool isActive() { return _isActive; }
 
     bool isHighlighted;
@@ -87,8 +86,7 @@ private:
     TextWidget _textwidget;
 
     bool _isActive;
-    bool _isChannel;
-    bool _isQuery;
+    Type _type;
 
     Entry _entry;
 };

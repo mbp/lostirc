@@ -2,6 +2,18 @@ For a summary of changes between releases - see the NEWS file.
 
 2003-01-03  Morten Brix Pedersen  <morten@wtf.dk>
 
+        * Tab.cpp/.h: Add enum Type { } to keep track of Tab type, instead of
+          bool members. Remove setChannel(), setQuery(), isChannel() and
+          isQuery() with setType() and isType().
+        * Tab.h: A tab can now also be of type Tab::SERVER.
+        * MainWindow.cpp/.h: use setType() and isType().
+        * MainNotebook.cpp/.h: use setType() and isType(). Find server tabs by
+          type, instead of searching for the string literal "server".
+        * MainNotebook.cpp/.h: Remove findPage(), because it isn't needed. Add
+          a findTab() to find types instead.
+
+2003-01-03  Morten Brix Pedersen  <morten@wtf.dk>
+
         * ConfigHandler.cpp/.h: Add encoding member, defaults to "System
           default"
         * Utils.cpp: In convert_from_utf8(), when encoding is not set to

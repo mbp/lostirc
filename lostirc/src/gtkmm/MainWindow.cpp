@@ -22,9 +22,9 @@
 #include <gtkmm/messagedialog.h>
 #include <functional>
 #include <cstdlib>
-#include "Tab.h"
 #include "DCCList.h"
 #include "MainWindow.h"
+#include "Tab.h"
 
 using std::vector;
 using Glib::ustring;
@@ -268,7 +268,7 @@ void MainWindow::connected(ServerConnection* conn)
     notebook.findTabs(conn, tabs);
 
     for (i = tabs.begin(); i != tabs.end(); ++i)
-          if ((*i)->isQuery())
+          if ((*i)->isType(Tab::QUERY))
                 (*i)->setActive();
 }
 
@@ -286,6 +286,7 @@ void MainWindow::newTab(ServerConnection *conn)
     ustring name = _("server");
     conn->Session.servername = name;
     Tab *tab = notebook.addTab(name, conn);
+    tab->setType(Tab::SERVER);
     notebook.show_all();
 
     // XXX: this is a hack for a "bug" in the gtkmm code which makes the
@@ -303,6 +304,7 @@ Tab* MainWindow::newServer()
     ServerConnection *conn = app.newServer();
     conn->Session.servername = name;
     Tab *tab = notebook.addTab(name, conn);
+    tab->setType(Tab::SERVER);
     tab->setInActive();
     return tab;
 }
@@ -361,7 +363,7 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
             notebook.set_current_page(8);
         } else if (e->keyval == GDK_w) {
             Tab *tab = notebook.getCurrent();
-            if (tab->isChannel() && tab->getConn()->Session.isConnected && tab->isActive()) {
+            if (tab->isType(Tab::CHANNEL) && tab->getConn()->Session.isConnected && tab->isActive()) {
                 // It's a channel, so we need to part it
                 tab->getConn()->sendPart(notebook.getLabel(tab)->get_text(), "");
             } else {

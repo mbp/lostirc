@@ -24,8 +24,7 @@
 #include <glibmm/ustring.h>
 #include <ServerConnection.h>
 #include <vector>
-
-class Tab;
+#include "Tab.h"
 
 class MainNotebook : public Gtk::Notebook
 {
@@ -39,7 +38,7 @@ public:
     Tab* getCurrent();
     Gtk::Label* getLabel(Tab *tab);
     Tab* findTab(const Glib::ustring& name, ServerConnection *conn, bool findInActive = false);
-    int findPage(const Glib::ustring& name, ServerConnection *conn, bool findInActive = false);
+    Tab* findTab(Tab::Type type, ServerConnection *conn, bool findInActive = false);
 
     void findTabs(const Glib::ustring& nick, ServerConnection *conn, std::vector<Tab*>& vec);
     void findTabs(ServerConnection *conn, std::vector<Tab*>& vec);

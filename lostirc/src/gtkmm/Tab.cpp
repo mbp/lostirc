@@ -35,7 +35,7 @@ using Glib::ustring;
 Tab::Tab(ServerConnection *conn, Pango::FontDescription font)
     : Gtk::VBox(), isHighlighted(false), hasPrefs(false),
     _conn(conn), _nicklist(0), _textwidget(font), _isActive(true),
-    _isChannel(false), _isQuery(false), _entry(this)
+    _type(UNDEFINED), _entry(this)
 {
     _hpaned = new Gtk::HPaned();
 
@@ -87,26 +87,12 @@ void Tab::setActive()
           _nicklist->setActive();
 }
 
-void Tab::setQuery(bool value)
-{
-    _isQuery = value;
-    _isChannel = !value;
-    addOrRemoveNickList();
-}
-
-void Tab::setChannel(bool value)
-{
-    _isChannel = value;
-    _isQuery = !value;
-    addOrRemoveNickList();
-}
-
 void Tab::addOrRemoveNickList()
 {
-    if (isChannel() && !_nicklist) {
+    if (isType(CHANNEL) && !_nicklist) {
         _nicklist = new NickList;
         _hpaned->pack2(*_nicklist, false, true);
-    } else if (isQuery() && _nicklist) {
+    } else if (isType(QUERY) && _nicklist) {
         _hpaned->remove(*_nicklist);
         delete _nicklist;
         _nicklist = 0;
@@ -115,27 +101,27 @@ void Tab::addOrRemoveNickList()
 
 void Tab::insertUser(const Glib::ustring& user, IRC::UserMode m)
 {
-    if (isChannel())
+    if (isType(CHANNEL))
           _nicklist->insertUser(user, m);
 }
 
 void Tab::removeUser(const Glib::ustring& nick)
 {
-    if (isChannel())
+    if (isType(CHANNEL))
           _nicklist->removeUser(nick);
 }
 
 void Tab::renameUser(const Glib::ustring& from, const Glib::ustring& to)
 {
-    if (isChannel())
+    if (isType(CHANNEL))
           _nicklist->renameUser(from, to);
-    else if (isQuery())
+    else if (isType(QUERY))
           AppWin->getNotebook().getLabel(this)->set_text(to);
 }
 
 bool Tab::findUser(const Glib::ustring& nick)
 {
-    if (isChannel())
+    if (isType(CHANNEL))
           return _nicklist->findUser(nick);
     else 
           return (nick == AppWin->getNotebook().getLabel(this)->get_text());
@@ -144,7 +130,7 @@ bool Tab::findUser(const Glib::ustring& nick)
 
 std::vector<Glib::ustring> Tab::getNicks()
 {
-    if (isChannel())
+    if (isType(CHANNEL))
           return _nicklist->getNicks();
     else {
         std::vector<Glib::ustring> vec;
