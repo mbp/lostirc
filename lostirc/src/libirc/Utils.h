@@ -21,6 +21,7 @@
 
 #include <glibmm/ustring.h>
 #include <string> 
+#include <vector>
 
 namespace Util {
 
@@ -31,5 +32,6 @@ namespace Util {
 
     Glib::ustring convert_to_utf8(const std::string& str);
     std::string convert_from_utf8(const Glib::ustring& str_utf8);
+    void tokenizeWords(const Glib::ustring& str, std::vector<Glib::ustring>& vec);
 }
 #endif

@@ -1,5 +1,13 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-01-06  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * Utils.cpp: Because we can't just use streams to tokenize on words,
+          implement tokenizeWords().
+        * Parser.cpp: Use tokenizeWords() instead of "stream tokenizers".
+        * configure.in, po/LINGUAS: Add da translation.
+        * po/da.po: Added.
+
 2003-01-05  Morten Brix Pedersen  <morten@wtf.dk>
         
         * Parser.cpp: Unwanted character set conversion happened when

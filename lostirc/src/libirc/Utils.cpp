@@ -113,5 +113,15 @@ std::string convert_from_utf8(const Glib::ustring& str_utf8)
     return str;
 }
 
+void tokenizeWords(const Glib::ustring& str, std::vector<Glib::ustring>& container)
+{
+
+    ustring::size_type lastPos = str.find_first_not_of(' ', 0);
+    ustring::size_type pos = str.find_first_of(' ', lastPos);
+
+    while (ustring::npos != pos || ustring::npos != lastPos)
+          container.push_back(str.substr(lastPos, pos - lastPos));
+}
+
 }
 

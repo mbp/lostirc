@@ -9,6 +9,7 @@ NICE-TO-HAVE:
   * When window has lost its focus, then highlight the front tab too.
   * /BAN and /EXEC command.
   * Virtual functions for Commands, to be overriden. Much more OO-like.
+  * A LostIRC icon.
 
   * Some way to seperate tabs from each other, so they are server sorted.
   * Recognise URLs (and make them clickable?)
@@ -17,6 +18,9 @@ RANDOM BUGS:
 ------------
   * Color-parsing might be slow, since it inserts one character at the time.
     Need to look into optimizing it.
+
+  * Check whether there are more bugs with implicit character set conversion
+    with operator << and operator >>
 
   * Wrapping of text in the text widget is done character wise, it would
     be nice if it could be done word-wise. But when using WRAP_WORD, a bug
