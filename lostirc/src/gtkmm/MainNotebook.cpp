@@ -66,7 +66,7 @@ Tab* MainNotebook::getCurrent(ServerConnection *conn)
 {
     Tab *tab = dynamic_cast<Tab*>(get_current()->get_child());
     if(tab->getConn() != conn) {
-        tab = findChannelTab("", conn);
+        tab = findTab("", conn);
     }
     return tab;
 }
@@ -77,24 +77,12 @@ Tab* MainNotebook::getCurrent()
     return tab;
 }
 
-TabChannel * MainNotebook::findChannelTab(const string& name, ServerConnection *conn)
+Tab * MainNotebook::findTab(const string& name, ServerConnection *conn)
 {
     Gtk::Notebook_Helpers::Page *p = findPage(name, conn);
 
     if (p) {
-        TabChannel* tab = dynamic_cast<TabChannel*>(p->get_child());
-        return tab;
-    } else {
-        return 0;
-    }
-}
-
-TabQuery * MainNotebook::findQueryTab(const string& name, ServerConnection *conn)
-{
-    Gtk::Notebook_Helpers::Page *p = findPage(name, conn);
-
-    if (p) {
-        TabQuery* tab = dynamic_cast<TabQuery*>(p->get_child());
+        Tab* tab = dynamic_cast<Tab*>(p->get_child());
         return tab;
     } else {
         return 0;
@@ -166,47 +154,8 @@ void MainNotebook::insert(Tab *tab, const string& str)
         style->set_fg(GTK_STATE_NORMAL, color);
         tab->getLabel()->set_style(*style);
     }
-    parseAndInsert(str, tab->getText());
+    tab->parseAndInsert(str);
 
-}
-
-void MainNotebook::parseAndInsert(const string& str, Gtk::Text *text)
-{
-
-    string::size_type lastPos = str.find_first_not_of("$", 0);
-    string::size_type pos = str.find_first_of("$", lastPos);
-
-    while (string::npos != pos || string::npos != lastPos)
-    {   
-        int color = atoi(str.substr(lastPos, 1).c_str());
-        insertWithColor(color, text, str.substr(lastPos, pos - lastPos));
-        lastPos = str.find_first_not_of("$", pos);
-        pos = str.find_first_of("$", lastPos);
-    }
-
-}
-
-void MainNotebook::insertWithColor(int color, Gtk::Text *text, const string& str)
-{   
-    Gdk_Color colors[8];
-
-    colors[0] = Gdk_Color("#C5C2C5");
-    colors[1] = Gdk_Color("#FFFFFF");
-    colors[2] = Gdk_Color("#FFABCF");
-    colors[3] = Gdk_Color("#9AAB4F");
-    colors[4] = Gdk_Color("#f9ef25");
-    colors[5] = Gdk_Color("#ea6b6b");
-    colors[6] = Gdk_Color("#6bdde5");
-    colors[7] = Gdk_Color("#6b8ae5");
-
-    Gtk::Text::Context orig_cx = text->get_context();
-    Gtk::Text::Context cx;
-    cx.set_foreground(colors[color]);
-    if (color == 0) {
-        text->insert(cx, str);
-    } else {
-        text->insert(cx, str.substr(1));
-    }
 }
 
 void MainNotebook::findTabsContaining(const string& nick, vector<Tab*>& vec)
@@ -218,6 +167,5 @@ void MainNotebook::findTabsContaining(const string& nick, vector<Tab*>& vec)
         if (tab->findUser(nick)) {
             vec.push_back(tab);
         }
-
     }
 }

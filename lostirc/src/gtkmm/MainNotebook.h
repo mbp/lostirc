@@ -36,8 +36,7 @@ public:
     TabQuery* addQueryTab(const string& name, ServerConnection *conn);
     Tab* getCurrent(ServerConnection *conn);
     Tab* getCurrent();
-    TabChannel* findChannelTab(const string& name, ServerConnection *conn);
-    TabQuery* findQueryTab(const string& name, ServerConnection *conn);
+    Tab* findTab(const string& name, ServerConnection *conn);
     Gtk::Notebook_Helpers::Page * findPage(const string& name, ServerConnection *conn);
 
     void findTabsContaining(const string& nick, vector<Tab*>& vec);

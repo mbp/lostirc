@@ -107,43 +107,26 @@ void MainWindow::onMsg(const string& to, const string& from, const string& msg, 
 {
     string::size_type pos = msg.find(conn->Session.nick);
 
-    if (to[0] == '#') {
-        // First letter of 'to' is '#', meaning this is to a channel.
+    Tab *tab = _nb->findTab(to, conn);
 
-        TabChannel *tab = _nb->findChannelTab(to, conn);
-
-        if (pos != string::npos) {
-            // Highlight line
-            _nb->insert(tab, "$1<$4" + from + "$1>$2 " + msg + "\n");
-            _nb->highlight(tab);
-        } else {
-            _nb->insert(tab, "$1<" + from + ">$2 " + msg + "\n");
-        }
-
-    } else {
-        // It's probably a msg to the client itself
-
-        TabQuery *tab = _nb->findQueryTab(from, conn);
-
-        if (!tab) {
-            // Create query tab if it doesn't exist already
-            tab = _nb->addQueryTab(from, conn);
-        }
-
-        if (pos != string::npos) {
-            // Highlight line
-            _nb->insert(tab, "$1<$4" + from + "$1>$2 " + msg + "\n");
-            _nb->highlight(tab);
-        } else {
-            _nb->insert(tab, "$1<" + from + ">$2 " + msg + "\n");
-        }
-
+    if (!tab) {
+        // Create query tab if it doesn't exist already, we assume that
+        // a channel tab always exists
+        tab = _nb->addQueryTab(from, conn);
     }
+
+    if (pos != string::npos) {
+        // Highlight line
+        _nb->insert(tab, "$1<$4" + from + "$1>$2 " + msg + "\n");
+        _nb->highlight(tab);
+    } else {
+        _nb->insert(tab, "$1<" + from + ">$2 " + msg + "\n");
+    }
+
 }
 
 void MainWindow::onCTCP(const string& command, const string& nick, ServerConnection *conn)
 {
-
     Tab *tab = _nb->getCurrent(conn);
 
     _nb->insert(tab, "-- CTCP '" + command + "' RECEIVED FROM '" + nick + "'\n");
@@ -154,35 +137,22 @@ void MainWindow::onAction(const string& to, const string& from, const string& ms
 {
     string::size_type pos = msg.find(conn->Session.nick);
 
-    if (to[0] == '#') {
-        // First letter of 'to' is '#', meaning this is to a channel.
+    Tab *tab = _nb->findTab(to, conn);
 
-        TabChannel *tab = _nb->findChannelTab(to, conn);
-        _nb->insert(tab, "$3* " + from + "$1" + msg + "\n");
+    if (!tab) {
+        tab = _nb->addQueryTab(from, conn);
+    }
 
-        if (pos != string::npos) {
-            _nb->highlight(tab);
-        }
-    } else {
-        // It's probably a privmsg to the client itself
+    _nb->insert(tab, "$3* " + from + "$1" + msg + "\n");
 
-        TabQuery *tab = _nb->findQueryTab(from, conn);
-
-        if (!tab) {
-            tab = _nb->addQueryTab(from, conn);
-        }
-        _nb->insert(tab, "$3* " + from + "$1" + msg + "\n");
-
-        if (pos != string::npos) {
-            _nb->highlight(tab);
-        }
-
+    if (pos != string::npos) {
+        _nb->highlight(tab);
     }
 }
 
 void MainWindow::onJoin(const string& nick, const string& chan, ServerConnection *conn)
 {
-    TabChannel *tab = _nb->findChannelTab(chan, conn);
+    Tab *tab = _nb->findTab(chan, conn);
     if (!tab) {
         tab = _nb->addChannelTab(chan, conn);
     } else {
@@ -208,28 +178,24 @@ Gtk::Text::Context MainWindow::setColor(const string& col, Gtk::Text *text)
 
 void MainWindow::onKick(const string& kicker, const string& chan, const string& nick, const string& msg, ServerConnection *conn)
 {
-    TabChannel *tab = _nb->findChannelTab(chan, conn);
-    if (tab) {
-        if (nick == conn->Session.nick) {
-            // It's us who's been kicked
-            tab->getLabel()->set_text("(" + chan + ")");
-        }
-        _nb->insert(tab, "*** " + nick + " was kicked from " + chan + " by " + kicker + " (" + msg + ")\n");
-        tab->removeUser(nick);
+    Tab *tab = _nb->findTab(chan, conn);
+    if (nick == conn->Session.nick) {
+        // It's us who's been kicked
+        tab->getLabel()->set_text("(" + chan + ")");
     }
+    _nb->insert(tab, "*** " + nick + " was kicked from " + chan + " by " + kicker + " (" + msg + ")\n");
+    tab->removeUser(nick);
 }
 
 void MainWindow::onPart(const string& nick, const string& chan, ServerConnection *conn)
 {
-    TabChannel *tab = _nb->findChannelTab(chan, conn);
-    if (tab) {
-        if (nick == conn->Session.nick) {
-            // It's us who's parting
-            tab->getLabel()->set_text("(" + chan + ")");
-        }
-        _nb->insert(tab, "$5*** " + nick + " has parted " + chan + "\n");
-        tab->removeUser(nick);
+    Tab *tab = _nb->findTab(chan, conn);
+    if (nick == conn->Session.nick) {
+        // It's us who's parting
+        tab->getLabel()->set_text("(" + chan + ")");
     }
+    _nb->insert(tab, "$5*** " + nick + " has parted " + chan + "\n");
+    tab->removeUser(nick);
 }
 
 void MainWindow::onQuit(const string& nick, const string& msg, ServerConnection *conn)
@@ -277,32 +243,25 @@ void MainWindow::onNotice(const string& from, const string& to, const string &ms
 
 void MainWindow::onTopic(const string& nick, const string& chan, const string& topic, ServerConnection *conn)
 {
-    TabChannel *tab = _nb->findChannelTab(chan, conn);
-    if (tab) {
-        if (nick.size() > 0) {
-            _nb->insert(tab, "$6*** " + nick + " changes topic to: " + topic + "\n");
-        } else {
-            _nb->insert(tab, "$6-- Topic for " + chan + " is: '" + topic + "'\n");
-        }
+    Tab *tab = _nb->findTab(chan, conn);
+    if (nick.size() > 0) {
+        _nb->insert(tab, "$6*** " + nick + " changes topic to: " + topic + "\n");
+    } else {
+        _nb->insert(tab, "$6-- Topic for " + chan + " is: '" + topic + "'\n");
     }
 
 }
 
 void MainWindow::onTopicTime(const string& chan, const string& nick, const string& time, ServerConnection *conn)
 {
-    TabChannel *tab = _nb->findChannelTab(chan, conn);
-    if (tab) {
-        _nb->insert(tab, "$6--- set by " + nick + " on " + time + "\n");
-    }
-
+    Tab *tab = _nb->findTab(chan, conn);
+    _nb->insert(tab, "$6--- set by " + nick + " on " + time + "\n");
 }
 
 void MainWindow::onMode(const string& nick, const string& chan, const string& rest, ServerConnection *conn)
 {
-    TabChannel *tab = _nb->findChannelTab(chan, conn);
-    if (tab) {
-        _nb->insert(tab, "*** " + nick + " sets mode " + rest + "\n");
-    }
+    Tab *tab = _nb->findTab(chan, conn);
+    _nb->insert(tab, "*** " + nick + " sets mode " + rest + "\n");
 
 }
 
@@ -373,14 +332,10 @@ void MainWindow::onNames(const string& chan, const vector<vector<string> >& user
 {
     vector<vector<string> >::const_iterator i;
 
-    Tab *tab = _nb->findChannelTab(chan, conn);
+    Tab *tab = _nb->findTab(chan, conn);
 
-    if (tab) {
-        for (i = users.begin(); i != users.end(); ++i) {
-            tab->insertUser(*i);
-        }
-    } else {
-        cerr << "Something went wrong in MainWindow::onNames" << endl;
+    for (i = users.begin(); i != users.end(); ++i) {
+        tab->insertUser(*i);
     }
 }
 
@@ -432,25 +387,19 @@ void MainWindow::onNctcp(const string& from, const string& to, const string& msg
 void MainWindow::onWallops(const string& from, const string& rest, ServerConnection *conn)
 {
     Tab *tab = _nb->getCurrent(conn);
-    if (tab) {
-        _nb->insert(tab, "WALLOPS -: " + from + " :- " + rest + "\n");
-    }
+    _nb->insert(tab, "WALLOPS -: " + from + " :- " + rest + "\n");
 }
 
 void MainWindow::onErrhandler(const string& from, const string& param2, const string& rest, ServerConnection *conn)
 {
     Tab *tab = _nb->getCurrent(conn);
-    if (tab) {
-        _nb->insert(tab, "Error: " + param2 + " -:- " + rest + "\n");
-    }
+    _nb->insert(tab, "Error: " + param2 + " -:- " + rest + "\n");
 }
 
 void MainWindow::onBanlist(const string& channel, const string& banmask, const string& owner, ServerConnection *conn)
 {       
-    Tab *tab = _nb->findChannelTab(channel, conn);
-    if (tab) {
-        _nb->insert(tab, channel + " banlist: " + banmask + " set by " + owner + "\r\n");
-    }
+    Tab *tab = _nb->findTab(channel, conn);
+    _nb->insert(tab, channel + " banlist: " + banmask + " set by " + owner + "\r\n");
 }
 
 void MainWindow::quit()

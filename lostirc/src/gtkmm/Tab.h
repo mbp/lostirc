@@ -53,6 +53,8 @@ public:
     virtual void renameUser(const string& from, const string& to) = 0;
     virtual bool findUser(const string& nick) = 0;
     virtual bool nickCompletion(const string& word, string& str) = 0;
+    void parseAndInsert(const string& str);
+    void insertWithColor(int color, const string& str);
     bool is_highlighted;
 
 private:
@@ -70,19 +72,19 @@ class TabQuery : public Tab
 public:
     TabQuery(Gtk::Label *label, ServerConnection *conn);
 
-    virtual Gtk::CList*         getCList() { return 0; }
+    Gtk::CList*         getCList() { return 0; }
 
-    virtual void insertUser(const vector<string>& users) {};
-    virtual void insertUser(const string& user) {};
-    virtual void removeUser(const string& nick) {};
-    virtual void renameUser(const string& from, const string& to) {
+    void insertUser(const vector<string>& users) {};
+    void insertUser(const string& user) {};
+    void removeUser(const string& nick) {};
+    void renameUser(const string& from, const string& to) {
         getLabel()->set_text(to);
     }
-    virtual bool findUser(const string& nick) {
+    bool findUser(const string& nick) {
         if (nick == getLabel()->get_text())
               return true;
     }
-    virtual bool nickCompletion(const string& word, string& str) {
+    bool nickCompletion(const string& word, string& str) {
         str = getLabel()->get_text(); return true;
     }
 };
@@ -92,16 +94,16 @@ class TabChannel : public Tab
 public:
     TabChannel(Gtk::Label *label, ServerConnection *conn);
 
-    virtual Gtk::CList*         getCList();
+    Gtk::CList*         getCList();
 
-    virtual void insertUser(const vector<string>& users);
-    virtual void insertUser(const string& user);
-    virtual void removeUser(const string& nick);
-    virtual void renameUser(const string& from, const string& to) {
+    void insertUser(const vector<string>& users);
+    void insertUser(const string& user);
+    void removeUser(const string& nick);
+    void renameUser(const string& from, const string& to) {
         removeUser(from); insertUser(to);
     }
-    virtual bool findUser(const string& nick);
-    virtual bool nickCompletion(const string& word, string& str);
+    bool findUser(const string& nick);
+    bool nickCompletion(const string& word, string& str);
 
 private:
     Gtk::CList *_clist;

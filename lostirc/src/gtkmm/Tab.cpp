@@ -21,11 +21,11 @@
 #include "GuiCommands.h"
 #include "MainNotebook.h"
 #include "Tab.h"
+#include <ctime>
 
 Tab::Tab(Gtk::Label *label, ServerConnection *conn)
     : Gtk::VBox(), _label(label), _conn(conn), is_highlighted(false)
 {
-
     // Creating HBox; will contain 2 widgets, a scrollwindow and an entry
     _hbox = manage(new Gtk::HBox()); 
     _scrollwindow = manage(new Gtk::ScrolledWindow());
@@ -88,6 +88,48 @@ ServerConnection* Tab::getConn()
     return _conn;
 }
 
+void Tab::parseAndInsert(const string& str)
+{
+    time_t timeval = time(0);
+    char tim[16];
+    strftime(tim, 15, "$1%H:%M:%S ", localtime(&timeval));
+
+    string line(tim + str);
+    string::size_type lastPos = line.find_first_not_of("$", 0);
+    string::size_type pos = line.find_first_of("$", lastPos);
+
+    while (string::npos != pos || string::npos != lastPos)
+    {   
+        int color = atoi(line.substr(lastPos, 1).c_str());
+        insertWithColor(color, line.substr(lastPos, pos - lastPos));
+        lastPos = line.find_first_not_of("$", pos);
+        pos = line.find_first_of("$", lastPos);
+    }
+
+}
+
+void Tab::insertWithColor(int color, const string& str)
+{   
+    Gdk_Color colors[8];
+
+    colors[0] = Gdk_Color("#C5C2C5");
+    colors[1] = Gdk_Color("#FFFFFF");
+    colors[2] = Gdk_Color("#FFABCF");
+    colors[3] = Gdk_Color("#9AAB4F");
+    colors[4] = Gdk_Color("#f9ef25");
+    colors[5] = Gdk_Color("#ea6b6b");
+    colors[6] = Gdk_Color("#6bdde5");
+    colors[7] = Gdk_Color("#6b8ae5");
+
+    Gtk::Text::Context orig_cx = _text->get_context();
+    Gtk::Text::Context cx;
+    cx.set_foreground(colors[color]);
+    if (color == 0) {
+        _text->insert(cx, str);
+    } else {
+        _text->insert(cx, str.substr(1));
+    }
+}
 
 TabQuery::TabQuery(Gtk::Label *label, ServerConnection *conn)
     : Tab(label, conn)
@@ -98,6 +140,7 @@ TabQuery::TabQuery(Gtk::Label *label, ServerConnection *conn)
 TabChannel::TabChannel(Gtk::Label *label, ServerConnection *conn)
     : Tab(label, conn)
 {
+
     Gtk::ScrolledWindow *swin = manage(new Gtk::ScrolledWindow());
     swin->set_policy(GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
@@ -246,7 +289,7 @@ void Entry::printText(const string& msg)
     string line;
     while (getline(ss, line)) {
         _tab->getConn()->sendMsg(_tab->getLabel()->get_text(), line);
-        _tab->getText()->insert("<" + _tab->getConn()->Session.nick + "> " + line + "\n");
+        _tab->parseAndInsert("<" + _tab->getConn()->Session.nick + "> " + line + "\n");
     }
 
 }
