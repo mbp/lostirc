@@ -30,6 +30,7 @@ MainNotebook::MainNotebook(MainWindow *frontend)
     set_tab_pos(GTK_POS_BOTTOM);
     switch_page.connect(slot(this, &MainNotebook::switchPage));
     _font = Gdk_Font("-b&h-lucidatypewriter-medium-r-normal-*-*-120-*-*-m-*-*-*");
+    //_font = Gdk_Font("-*-fixed-medium-r-normal-*-14-*-*-*-c-*-*-*");
     show_all();
 }
 

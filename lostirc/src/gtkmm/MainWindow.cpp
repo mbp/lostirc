@@ -65,8 +65,10 @@ MainWindow::MainWindow()
     //tab->getText()->insert("Welcome to LostIRC!\n\nThis client is mainly keyboard oriented, so don't expect fancy menus and buttons for you to click on.\n\nTo list all available commands type /COMMANDS.\nTo see all available keybindings type /BINDS.\n\nType /SERVER <hostname> to connect to a server.\n");
     set_usize(600, 400);
     show_all();
-    _nb->insert(tab, "Welcome to LostIRC!\n\nThis client is mainly keyboard oriented, so don't expect fancy menus and buttons for you to click on.\n\n$2Available commands:
-$3/SERVER <hostname> - connect to server.
+    _nb->insert(tab, "\00311Welcome to LostIRC!\n\nThis client is mainly keyboard oriented, so don't expect fancy menus and buttons for you to click on.
+
+\00312Available commands:
+\0038/SERVER <hostname> - connect to server.
 /JOIN <channel> - join channel.
 /PART <channel> - part channel.
 /WHOIS <nick> - whois a user.
@@ -75,11 +77,11 @@ $3/SERVER <hostname> - connect to server.
 /AWAY <msg> - go away.
 /QUIT <msg> - quit IRC with <msg>.
 
-$2Available GUI commands:
-$3/QUERY <nick> - start query with <nick>.
+\00312Available GUI commands:
+\0038/QUERY <nick> - start query with <nick>.
 
-$2Available keybindings:
-$3Alt + [1-9] - switch tabs from 1-9.
+\00312Available keybindings:
+\0038Alt + [1-9] - switch tabs from 1-9.
 Alt + n - create new server tab.
 Alt + c - close current tab.
 Tab - nickcomplete.
@@ -146,7 +148,7 @@ void MainWindow::onQuit(const string& nick, const string& msg, ServerConnection 
     _nb->findTabs(nick, conn, tabs);
 
     for (i = tabs.begin(); i != tabs.end(); ++i) {
-        _nb->insert(*i, "$5-- " + nick + " has quit (" + msg + ")\n");
+        _nb->insert(*i, "\0035-- " + nick + " has quit (" + msg + ")\n");
         (*i)->removeUser(nick);
     }
 }
@@ -163,7 +165,7 @@ void MainWindow::onNick(const string& nick, const string& to, ServerConnection *
     _nb->findTabs(nick, conn, tabs);
 
     for (i = tabs.begin(); i != tabs.end(); ++i) {
-        _nb->insert(*i, "$9-- " + nick + " changes nick to " + to + "\n");
+        _nb->insert(*i, "\0039-- " + nick + " changes nick to " + to + "\n");
         (*i)->renameUser(nick, to);
     }
 }
@@ -171,7 +173,7 @@ void MainWindow::onNick(const string& nick, const string& to, ServerConnection *
 void MainWindow::onMode(const string& nick, const string& param, const string& mode, ServerConnection *conn)
 {
     Tab *tab = _nb->getCurrent(conn);
-    _nb->insert(tab, "$7-- " + nick + " sets mode " + mode + " " + param + "\n");
+    _nb->insert(tab, "\0037-- " + nick + " sets mode " + mode + " " + param + "\n");
 
 }
 
@@ -181,7 +183,7 @@ void MainWindow::onCMode(const string& nick, const string& chan, char sign, cons
 
     string::const_iterator i;
     for (i = modes.begin(); i != modes.end(); ++i) {
-        _nb->insert(tab, "$4-- "  + nick + " sets channel mode " + sign + *i + " on " + chan + "\n");
+        _nb->insert(tab, "\0034-- "  + nick + " sets channel mode " + sign + *i + " on " + chan + "\n");
     }
 }
 
@@ -192,7 +194,7 @@ void MainWindow::onCUMode(const string& nick, const string& chan, const vector<v
     vector<vector<string> >::const_iterator i;
     for (i = users.begin(); i != users.end(); ++i) {
         vector<string> vec = *i;
-        _nb->insert(tab, "$4-- "  + nick + " sets mode " + vec[0] + " to " + vec[1] + "\n");
+        _nb->insert(tab, "\0034-- "  + nick + " sets mode " + vec[0] + " to " + vec[1] + "\n");
         tab->removeUser(vec[1]);
         tab->insertUser(*i);
     }
@@ -288,7 +290,7 @@ gint MainWindow::on_key_press_event(GdkEventKey* e)
     if ((e->keyval == GDK_q) && (e->state & GDK_MOD1_MASK)) {
         quit();
     }
-    if (e->keyval == GDK_Up || e->keyval == GDK_Tab) {
+    if (e->keyval == GDK_Up || e->keyval == GDK_Tab || e->keyval == GDK_Down) {
         _nb->getCurrent()->getEntry()->on_key_press_event(e);
         gtk_signal_emit_stop_by_name(GTK_OBJECT(this->gtkobj()), "key_press_event");
     }

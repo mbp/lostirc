@@ -21,7 +21,6 @@
 
 #include <vector>
 #include <string> 
-#include <cctype>
 
 namespace Utils {
 
@@ -31,5 +30,6 @@ namespace Utils {
     string toupper(std::string& str);
     string tolower(std::string& str);
     int stoi(const std::string& str);
+    bool isDigit(const std::string& str);
 }
 #endif

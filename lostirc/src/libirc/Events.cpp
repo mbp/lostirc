@@ -29,6 +29,7 @@ void Events::emitEvent(const string& name, vector<string>& args, const string& t
 {
     string newmsg;
     string msg = _app->getCfg().getParam("evt_" + name);
+    std::replace(msg.begin(), msg.end(), '$', '\003');
 
     bool parsing_arg;
     string::const_iterator i;

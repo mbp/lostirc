@@ -23,7 +23,7 @@ using std::vector;
 using std::string;
 
 Entry::Entry(Tab* tab)
-    : Gtk::Entry(510), _tab(tab), i(_entries.rbegin())
+    : Gtk::Entry(), _tab(tab), i(_entries.rbegin())
 {
     key_press_event.connect(slot(this, &Entry::on_key_press_event));
     activate.connect(slot(this, &Entry::onEntry));
@@ -75,7 +75,7 @@ void Entry::printText(const string& msg)
     string line;
     while (getline(ss, line)) {
         _tab->getConn()->sendMsg(_tab->getLabel()->get_text(), line);
-        _tab->parseAndInsert("$1<" + _tab->getConn()->Session.nick + "> " + line + "\n");
+        _tab->parseAndInsert("\0037<\0030" + _tab->getConn()->Session.nick + "\0037>\0030 " + line + "\n");
     }
 
 }

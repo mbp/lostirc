@@ -62,12 +62,21 @@ int stoi(const string& str)
 {
     std::stringstream ss(str);
     int i;
-    ss >> i;
-    if (ss.fail())
-          return -1;
-    else
+    while (ss >> i);
+    if (ss.eof() && i >= 0)
           return i;
+    else
+          return -1;
 
 }
 
+bool isDigit(const string& str)
+{
+    string::const_iterator i;
+    for (i = str.begin(); i != str.end(); ++i) {
+        if (isdigit(*i) == 0)
+              return false;
+    }
+    return true;
+}
 }

@@ -20,9 +20,38 @@
 #include <ServerConnection.h>
 #include <Utils.h>
 #include "Tab.h"
+#include <algorithm>
 
 using std::vector;
 using std::string;
+
+
+// Color code definitions taken from palette.c in xchat, and modified just a
+// bit
+
+        //{0, 0xcf3c, 0xcf3c, 0xcf3c}, /* 0  white */
+GdkColor colors[] = { 
+        {0, 0xFFFF, 0xFFFF, 0xFFFF}, /* 0  white */
+        {0, 0x0000, 0x0000, 0x0000}, /* 1  black */
+        {0, 0x0000, 0x0000, 0xcccc}, /* 2  blue */
+        {0, 0x0000, 0xcccc, 0x0000}, /* 3  green */
+        {0, 0xdddd, 0x0000, 0x0000}, /* 4  red */
+        {0, 0xaaaa, 0x0000, 0x0000}, /* 5  light red */
+        {0, 0xbbbb, 0x0000, 0xbbbb}, /* 6  purple */
+        {0, 0xffff, 0xaaaa, 0x0000}, /* 7  orange */
+        {0, 0xeeee, 0xdddd, 0x2222}, /* 8  yellow */
+        {0, 0x3333, 0xdede, 0x5555}, /* 9  green */
+        {0, 0x0000, 0xcccc, 0xcccc}, /* 10 aqua */
+        {0, 0x3333, 0xdddd, 0xeeee}, /* 11 light aqua */
+        {0, 0x0000, 0x0000, 0xffff}, /* 12 blue */
+        {0, 0xeeee, 0x2222, 0xeeee}, /* 13 light purple */
+        {0, 0x7777, 0x7777, 0x7777}, /* 14 grey */
+        {0, 0x9999, 0x9999, 0x9999}, /* 15 light grey */
+        {0, 0xbe00, 0xbe00, 0xbe00}, /* 16 marktext Back (white) */
+        {0, 0x0000, 0x0000, 0x0000}, /* 17 marktext Fore (black) */
+        {0, 0xcf3c, 0xcf3c, 0xcf3c}, /* 18 foreground (white) */
+        {0, 0x0000, 0x0000, 0x0000}, /* 19 background (black) */
+};
 
 Tab::Tab(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
     : Gtk::VBox(), _label(label), _conn(conn), is_highlighted(false), _font(font),
@@ -108,35 +137,53 @@ void Tab::setStyle() {
     _text->set_style(*style);
 }
 
+
+bool isDigit(const string& str)
+{
+    stringstream ss(str);
+    int i;
+    ss >> i;
+    if (ss.fail())
+          return false;
+    else
+          return true;
+}
+
 void Tab::parseAndInsert(const string& str)
 {
     // Add timestamp 
     time_t timeval = time(0);
-    char tim[16];
-    strftime(tim, 15, "$1%H:%M:%S ", localtime(&timeval));
+    char tim[11];
+    strftime(tim, 10, "%H:%M:%S ", localtime(&timeval));
 
-    string line(tim + str);
+    insertWithColor(0, string(tim));
+    string line(str);
 
-    string::size_type lastPos = line.find_first_not_of("$", 0);
-    string::size_type pos = line.find_first_of("$", lastPos);
+    string::size_type lastPos = line.find_first_not_of("\003", 0);
+    string::size_type pos = line.find_first_of("\003", lastPos);
 
     while (string::npos != pos || string::npos != lastPos)
     {   
-        stringstream ss(line.substr(lastPos, 1));
-        int color;
-        ss >> color;
-        if (ss.fail())
-              color = 0;
+        // Check for digits
+        if (Utils::isDigit(line.substr(lastPos, 2))) {
+            int color = Utils::stoi(line.substr(lastPos, 2));
+            insertWithColor(color, line.substr(lastPos + 2, (pos - lastPos) - 2));
+        } else if (Utils::isDigit(line.substr(lastPos, 1))) {
+            int color = Utils::stoi(line.substr(lastPos, 1));
+            insertWithColor(color, line.substr(lastPos + 1, (pos - lastPos) - 1));
+        } else {
+            insertWithColor(0, line.substr(lastPos, pos - lastPos));
+        }
 
-        insertWithColor(color, line.substr(lastPos, pos - lastPos));
-        lastPos = line.find_first_not_of("$", pos);
-        pos = line.find_first_of("$", lastPos);
+        lastPos = line.find_first_not_of("\003", pos);
+        pos = line.find_first_of("\003", lastPos);
     }
 
 }
 
 void Tab::insertWithColor(int color, const string& str)
 {   
+/*
     Gdk_Color colors[10];
 
     colors[0] = Gdk_Color("#C5C2C5");
@@ -148,7 +195,7 @@ void Tab::insertWithColor(int color, const string& str)
     colors[6] = Gdk_Color("#6bdde5");
     colors[7] = Gdk_Color("#6b8ae5");
     colors[8] = Gdk_Color("#4aff4a");
-    colors[9] = Gdk_Color("#5ea524");
+    colors[9] = Gdk_Color("#5ea524");*/
 
     // Find out whether we need to scroll this widget auto
     float vscroll = _text->get_vadjustment()->get_value();
@@ -161,12 +208,9 @@ void Tab::insertWithColor(int color, const string& str)
 
     _text->freeze();
 
-    if (color == 0) {
-        _text->insert(*_current_cx, "$" + str);
-    } else {
-        _current_cx->set_foreground(colors[color]);
-        _text->insert(*_current_cx, str.substr(1));
-    }
+    _current_cx->set_foreground(colors[color]);
+    _text->insert(*_current_cx, str);
+
     _text->thaw();
 
     // Scroll it down, if true
