@@ -24,13 +24,14 @@
 #include "irc_defines.h"
 
 class User {
+    unsigned int state;
+
 public:
-    User() : opped(false), voiced(false) { }
+    User() { }
     std::string nick;
-    // a max of 2 usermodes: op and voiced
-    bool opped;
-    bool voiced;
     IRC::UserMode getMode() const;
+    void setMode(IRC::UserMode u);
+    void removeMode(IRC::UserMode u);
 };
 
 class ChannelBase {

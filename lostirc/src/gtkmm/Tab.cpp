@@ -275,6 +275,9 @@ void TabChannel::insertUser(const string& nick, IRC::UserMode m)
         case IRC::VOICE:
             tmp.push_back("+");
             break;
+        case IRC::HALFOP:
+            tmp.push_back("%");
+            break;
         case IRC::NONE:
             tmp.push_back(" ");
     }

@@ -40,25 +40,33 @@ namespace algo
 
 IRC::UserMode User::getMode() const
 {
-    if (opped)
+    if (state & IRC::OP)
           return IRC::OP;
-    else if (voiced)
+    else if (state & IRC::HALFOP)
+          return IRC::HALFOP;
+    else if (state & IRC::VOICE)
           return IRC::VOICE;
     else
           return IRC::NONE;
 }
 
+void User::setMode(IRC::UserMode u)
+{
+    state |= u;
+}
+
+void User::removeMode(IRC::UserMode u)
+{
+    state &= ~u;
+}
 
 void Channel::addUser(const string& n, IRC::UserMode i)
 {
-    User *u = new User();
-    u->nick = n;
-    if (i == IRC::OP)
-          u->opped = true;
-    else if (i == IRC::VOICE)
-          u->voiced = true;
+    User *user = new User;
+    user->nick = n;
+    user->setMode(i);
 
-    _users.push_back(u);
+    _users.push_back(user);
 }
 
 void Channel::removeUser(const string& u)

@@ -57,6 +57,8 @@ struct {
     { "evt_deopped", DEOPPED },
     { "evt_voiced", VOICED },
     { "evt_devoiced", DEVOICED },
+    { "evt_halfopped", HALFOPPED },
+    { "evt_halfdeopped", HALFDEOPPED },
     { "evt_banned", BANNED },
     { "evt_unbanned", UNBANNED },
     { "evt_invited", INVITED },

@@ -7,7 +7,6 @@ CRITICAL:
 
 NICE-TO-HAVE:
 ------------
-  * half-op support
   * limited tab highlighting, don't mark a tab red when
     joining/parting/quitting
   * implement /help, /help shortcuts and /help commands

@@ -486,7 +486,7 @@ void Parser::CMode(const string& from, const string& param)
                 string nick = *arg_i++;
 
                 User *user = c->getUser(nick);
-                sign ? (user->opped = true) : (user->opped = false);
+                user->setMode(u);
 
                 modesvec.push_back(*user);
                 FE::emit(FE::get(e) << findNick(from) << nick, *c, _conn);
@@ -501,7 +501,22 @@ void Parser::CMode(const string& from, const string& param)
                 string nick = *arg_i++;
 
                 User *user = c->getUser(nick);
-                sign ? (user->voiced = true) : (user->voiced = false);
+                user->setMode(u);
+
+                modesvec.push_back(*user);
+                FE::emit(FE::get(e) << findNick(from) << nick, *c, _conn);
+                }
+                break;
+            case 'h':
+                {
+                Event e;
+                IRC::UserMode u;
+                sign ? (u = IRC::HALFOP) : (u = IRC::NONE);
+                sign ? (e = HALFOPPED) : (e = HALFDEOPPED);
+                string nick = *arg_i++;
+
+                User *user = c->getUser(nick);
+                user->setMode(u);
 
                 modesvec.push_back(*user);
                 FE::emit(FE::get(e) << findNick(from) << nick, *c, _conn);
@@ -778,6 +793,8 @@ void Parser::Names(const string& chan, const string& names)
                 c->addUser(buf.substr(1), IRC::OP);
             } else if (buf[0] == '+') {
                 c->addUser(buf.substr(1), IRC::VOICE);
+            } else if (buf[0] == '%') {
+                c->addUser(buf.substr(1), IRC::HALFOP);
             } else {
                 c->addUser(buf, IRC::NONE);
             }

@@ -281,6 +281,8 @@ bool ConfigHandler::setEvtDefaults()
     setEvtDefault("evt_deopped", "$16-- $0%1$16 removes channel operator status from %2");
     setEvtDefault("evt_voiced", "$16-- $0%1$16 gives voice to %2");
     setEvtDefault("evt_devoiced", "$16-- $0%1$16 removes voice from %2");
+    setEvtDefault("evt_halfopped", "$16-- $0%1$16 gives channel half-operator status to %2");
+    setEvtDefault("evt_halfdeopped", "$16-- $0%1$16 removes channel half-operator status from %2");
     setEvtDefault("evt_banned", "$16-- $0%1$16 sets ban on %2");
     setEvtDefault("evt_unbanned", "$16-- $0%1$16 unbans %2");
     setEvtDefault("evt_invited", "$16-- $0%1$16 invites you to join %2");

@@ -4,7 +4,7 @@
 namespace IRC
 {
     enum UserMode {
-        OP, VOICE, NONE
+        OP = 1, HALFOP = 2, VOICE = 4, NONE = 8
     };
 }
 #endif
