@@ -208,6 +208,7 @@ void Parser::Privmsg(const string& from, const string& param, const string& rest
 
         } else {
             c = _conn->findChannel(param);
+            assert(c);
         }
 
         if (shouldHighlight(rest)) {
@@ -242,6 +243,7 @@ void Parser::Ctcp(const string& from, const string& param, const string& rest)
 
         } else {
             c = _conn->findChannel(param);
+            assert(c);
         }
 
         if (shouldHighlight(rest)) {
@@ -336,6 +338,7 @@ void Parser::Kick(const string& from, const string& param, const string& msg)
     ss >> nick;
 
     Channel *c = _conn->findChannel(chan);
+    assert(c);
     c->removeUser(findNick(nick));
     FE::emit(FE::get(KICKED) << nick << chan << findNick(from) << msg, *c, _conn);
     App->fe->kick(findNick(from), *c, nick, msg, _conn);
@@ -353,6 +356,7 @@ void Parser::Join(const string& nick, const string& chan)
         _conn->Session.channels.push_back(c);
     } else { 
         c = _conn->findChannel(chan);
+        assert(c);
         c->addUser(findNick(nick));
     }
 
@@ -364,6 +368,7 @@ void Parser::Join(const string& nick, const string& chan)
 void Parser::Part(const string& nick, const string& chan, const string& rest)
 {
     Channel *c = _conn->findChannel(chan);
+    assert(c);
     c->removeUser(findNick(nick));
 
     FE::emit(FE::get(PART) << findNick(nick) << chan << findHost(nick) << rest, *c, _conn);
@@ -537,6 +542,7 @@ void Parser::CMode(const string& from, const string& param)
 void Parser::Topic(const string& from, const string& chan, const string& rest)
 {
     Channel *c = _conn->findChannel(chan);
+    assert(c);
     FE::emit(FE::get(TOPICCHANGE) << findNick(from) << rest, *c, _conn);
 }
 
@@ -547,6 +553,7 @@ void Parser::Topic(const string& param, const string& rest)
 
     string chan = param.substr(pos1, pos2 - pos1);
     Channel *c = _conn->findChannel(chan);
+    assert(c);
 
     FE::emit(FE::get(TOPICIS) << chan << rest, *c, _conn);
 }
@@ -567,6 +574,7 @@ void Parser::TopicTime(const string& param)
     time = std::ctime(&date);
 
     Channel *c = _conn->findChannel(chan);
+    assert(c);
 
     FE::emit(FE::get(TOPICTIME) << nick << time.substr(0, time.size() - 1), *c, _conn);
 }
@@ -600,6 +608,7 @@ void Parser::Banlist(const string& param)
     time = std::ctime(&date);
 
     Channel *c = _conn->findChannel(chan);
+    assert(c);
 
     FE::emit(FE::get(BANLIST) << banmask << owner, *c, _conn);
 }
