@@ -527,7 +527,7 @@ bool ServerConnection::sendWallops(const string& message)
 
 bool ServerConnection::sendKill(const string& nick, const string& reason)
 {
-    string msg("KILL " + nick + ' ' + reason + "\r\n" );
+    string msg("KILL " + nick + " :" + reason + "\r\n" );
 
     return _socket->send(msg);
 }
