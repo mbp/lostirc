@@ -148,10 +148,8 @@ void Tab::insertWithColor(int color, const ustring& str)
 
     // FIXME: possible performance critical
     int buffer_size = App->options.buffer_size;
-    if (buffer_size && buffer->get_line_count() > buffer_size) {
-        Gtk::TextBuffer::iterator end = buffer->get_iter_at_line(buffer->get_line_count() - buffer_size);
-        buffer->erase(buffer->begin(), end);
-    }
+    if (buffer_size && buffer->get_line_count() > buffer_size)
+          buffer->erase(buffer->begin(), buffer->get_iter_at_line(buffer->get_line_count() - buffer_size));
 }
 
 void Tab::realInsert(int color, const ustring& line)
