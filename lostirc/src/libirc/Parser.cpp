@@ -712,6 +712,13 @@ void Parser::numeric(int n, const ustring& from, const ustring& param, const ust
 {
     switch(n)
     {
+        case 4:   // RPL_MYINFO
+        case 5:   // RPL_MYINFO
+        case 252: // RPL_LUSEROP
+        case 253: // RPL_LUSERUNKNOWN
+        case 254: // RPL_LUSERCHANNELS
+            FE::emit(FE::get(SERVERMSG1) << skipFirstWord(param) << rest, FE::CURRENT, _conn);
+            break;
         case 1:   // RPL_WELCOME
             _conn->Session.servername = from;
             _conn->Session.hasRegistered = true;
@@ -720,12 +727,7 @@ void Parser::numeric(int n, const ustring& from, const ustring& param, const ust
             App->fe->connected(_conn);
         case 2:   // RPL_YOURHOST
         case 3:   // RPL_CREATED
-        case 4:   // RPL_MYINFO
-        case 5:   // RPL_MYINFO
         case 251: // RPL_LUSERCLIENT
-        case 252: // RPL_LUSEROP
-        case 253: // RPL_LUSERUNKNOWN
-        case 254: // RPL_LUSERCHANNELS
         case 255: // RPL_LUSERME
             FE::emit(FE::get(SERVERMSG1) << rest, FE::CURRENT, _conn);
             break;

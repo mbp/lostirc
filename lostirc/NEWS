@@ -1,3 +1,7 @@
+LostIRC - (x.x.x)
+  * Some messages sent by the IRC-server on connect was being stripped so
+    the full message wasn't being outputted. Fixed.
+
 LostIRC - (0.4.2) - Wed Sep, 8th 2004
   * On start up without connecting to any servers automatically, open the
     server window.
@@ -38,7 +42,7 @@ LostIRC - (0.3.2) - Mon Feb, 2nd 2004
   * CTRL-PageUp/PageDown can now be used to browse tabs.
   * Lots of code contributed by Thomas Johansson to make the Windows port a
     step closer.
-  * Channel-autocompletion added (by typing #<tab-key>). (thanks, Thojas
+  * Channel-autocompletion added (by typing #<tab-key>). (thanks, Thomas
     Johansson).
   * The DCC transfer window has been improved.
 
