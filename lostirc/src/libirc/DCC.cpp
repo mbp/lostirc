@@ -32,9 +32,8 @@ DCC_Send_In::DCC_Send_In(const std::string& filename, unsigned long address, uns
     _filename = _downloaddir + _filename;
 
     struct stat st;
-    if (stat(_filename.c_str(), &st) == 0) {
-        getUseableFilename(1);
-    }
+    if (stat(_filename.c_str(), &st) == 0)
+          getUseableFilename(1);
 }
 
 void DCC_Send_In::go_ahead()
@@ -59,51 +58,50 @@ void DCC_Send_In::go_ahead()
         App->getDcc().dccDone(_number_in_queue);
     }
 
-    _watchid = g_io_add_watch(g_io_channel_unix_new(fd),
-            GIOCondition (G_IO_IN | G_IO_OUT | G_IO_ERR | G_IO_HUP | G_IO_NVAL),
-            &DCC_Send_In::onReadData, this);
+    Glib::signal_io().connect(
+            SigC::slot(*this, &DCC_Send_In::onReadData),
+            fd,
+            Glib::IO_IN | Glib::IO_OUT | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL);
 }
 
-gboolean DCC_Send_In::onReadData(GIOChannel* io_channel, GIOCondition cond, gpointer data)
+bool DCC_Send_In::onReadData(Glib::IOCondition cond)
 {
-    DCC_Send_In& dcc = *(static_cast<DCC_Send_In*>(data));
-
     char buf[4096];
-    int retval = recv(dcc.fd, buf, sizeof(buf), 0);
+    int retval = recv(fd, buf, sizeof(buf), 0);
 
     if (retval == 0) FE::emit(FE::get(SERVMSG) << "DCC connection closed.", FE::CURRENT);
     else if (retval == -1) {
         if (!(errno == EAGAIN || errno == EWOULDBLOCK)) {
             FE::emit(FE::get(SERVMSG2) << "Couldn't receive:" << strerror(errno), FE::CURRENT);
-            App->getDcc().dccDone(dcc._number_in_queue);
-            return FALSE;
+            App->getDcc().dccDone(_number_in_queue);
+            return false;
         }
     } else {
-        dcc._pos += retval;
+        _pos += retval;
 
-        if (dcc._outfile.good())
-              dcc._outfile.write(buf, retval);
+        if (_outfile.good())
+              _outfile.write(buf, retval);
 
-        unsigned long pos = htonl(dcc._pos);
-        send(dcc.fd, (char *)&pos, 4, 0);
+        unsigned long pos = htonl(_pos);
+        send(fd, (char *)&pos, 4, 0);
 
         #ifdef DEBUG
-        App->log << "DCC_Send_In::onReadData(): _pos: " << dcc._pos << std::endl;
-        App->log << "DCC_Send_In::onReadData(): _size: " << dcc._size << std::endl;
+        App->log << "DCC_Send_In::onReadData(): _pos: " << _pos << std::endl;
+        App->log << "DCC_Send_In::onReadData(): _size: " << _size << std::endl;
         #endif
 
-        if (dcc._pos >= dcc._size) {
+        if (_pos >= _size) {
             #ifdef DEBUG
             App->log << "DCC_Send_In::onReadData(): done receiving!" << std::endl;
             #endif
-            dcc._outfile.close();
-            FE::emit(FE::get(SERVMSG2) << "File received successfully:" << dcc._filename, FE::CURRENT);
-            App->getDcc().dccDone(dcc._number_in_queue);
-            return FALSE;
+            _outfile.close();
+            FE::emit(FE::get(SERVMSG2) << "File received successfully:" << _filename, FE::CURRENT);
+            App->getDcc().dccDone(_number_in_queue);
+            return false;
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 void DCC_Send_In::getUseableFilename(int i)
@@ -130,12 +128,10 @@ DCC_Send_Out::DCC_Send_Out(const std::string& filename, const std::string& nick,
         // FIXME: add dcc-done?
     } else {
         _size = st.st_size;
-        if (App->options.dccip->empty()) {
-            _localip = conn->getLocalIP();
-        } else {
-            _localip = App->options.dccip;
-        }
-
+        if (App->options.dccip->empty())
+              _localip = conn->getLocalIP();
+        else
+              _localip = App->options.dccip;
 
         #ifdef DEBUG
         App->log << "DCC_Send_Out::DCC_Send_Out(): size: " << st.st_size << std::endl;
@@ -169,69 +165,67 @@ DCC_Send_Out::DCC_Send_Out(const std::string& filename, const std::string& nick,
 
         FE::emit(FE::get(SERVMSG2) << "DCC SEND request sent. Sending from:" << _localip, FE::CURRENT);
 
-        g_io_add_watch(g_io_channel_unix_new(fd),
-                GIOCondition (G_IO_IN | G_IO_OUT | G_IO_ERR | G_IO_HUP | G_IO_NVAL),
-                &DCC_Send_Out::onAccept, this);
+        Glib::signal_io().connect(
+                SigC::slot(*this, &DCC_Send_Out::onAccept),
+                fd,
+                Glib::IO_IN | Glib::IO_ERR | Glib::IO_OUT | Glib::IO_HUP | Glib::IO_NVAL);
 
     }
 
 }
 
-gboolean DCC_Send_Out::onAccept(GIOChannel* io_channel, GIOCondition cond, gpointer data)
+bool DCC_Send_Out::onAccept(Glib::IOCondition cond)
 {
-    DCC_Send_Out& dcc = *(static_cast<DCC_Send_Out*>(data));
-
     socklen_t size = sizeof(struct sockaddr_in);
-    dcc.accept_fd = accept(dcc.fd, reinterpret_cast<struct sockaddr *>(&dcc.remoteaddr), &size);
+    accept_fd = accept(fd, reinterpret_cast<struct sockaddr *>(&remoteaddr), &size);
 
     FE::emit(FE::get(SERVMSG) << "Connection accepted.", FE::CURRENT);
 
-    g_io_add_watch(g_io_channel_unix_new(dcc.accept_fd),
-            GIOCondition (G_IO_OUT | G_IO_ERR | G_IO_HUP | G_IO_NVAL),
-            &DCC_Send_Out::onSendData, &dcc);
+    Glib::signal_io().connect(
+            SigC::slot(*this, &DCC_Send_Out::onSendData),
+            accept_fd,
+            Glib::IO_OUT | Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL);
 
-    close(dcc.fd);
-    return FALSE;
+    close(fd);
+    return false;
 }
 
-gboolean DCC_Send_Out::onSendData(GIOChannel* io_channel, GIOCondition cond, gpointer data)
+bool DCC_Send_Out::onSendData(Glib::IOCondition cond)
 {
-    DCC_Send_Out& dcc = *(static_cast<DCC_Send_Out*>(data));
-
     char buf[1024];
-    dcc._infile.read(buf, sizeof(buf));
+    _infile.read(buf, sizeof(buf));
 
-    int read_chars = dcc._infile.gcount();
+    int read_chars = _infile.gcount();
 
-    int retval = send(dcc.accept_fd, buf, read_chars, 0);
+    int retval = send(accept_fd, buf, read_chars, 0);
     if (retval == -1) {
         if (!(errno == EAGAIN || errno == EWOULDBLOCK)) {
             FE::emit(FE::get(SERVMSG2) << "Couldn't send:" << strerror(errno), FE::CURRENT);
-            App->getDcc().dccDone(dcc._number_in_queue);
-            return FALSE;
+            App->getDcc().dccDone(_number_in_queue);
+            return false;
         }
     } else {
-        dcc._pos += read_chars;
+        _pos += read_chars;
 
         #ifdef DEBUG
         App->log << "DCC_Send_Out::onSendData(): retval: " << retval << std::endl;
-        App->log << "DCC_Send_Out::onSendData(): _pos: " << dcc._pos << std::endl;
-        App->log << "DCC_Send_Out::onSendData(): _size: " << dcc._size << std::endl;
+        App->log << "DCC_Send_Out::onSendData(): _pos: " << _pos << std::endl;
+        App->log << "DCC_Send_Out::onSendData(): _size: " << _size << std::endl;
         #endif
 
-        if (dcc._pos >= dcc._size) {
+        if (_pos >= _size) {
             #ifdef DEBUG
             App->log << "DCC_Send_Out::onSendData(): done sending!" << std::endl;
             #endif
-            dcc._infile.close();
-            FE::emit(FE::get(SERVMSG2) << "File sent successfully:" << dcc._filename, FE::CURRENT);
-            App->getDcc().dccDone(dcc._number_in_queue);
-            return FALSE;
+            _infile.close();
+            FE::emit(FE::get(SERVMSG2) << "File sent successfully:" << _filename, FE::CURRENT);
+            App->getDcc().dccDone(_number_in_queue);
+            return false;
         }
 
     }
 
-    return TRUE;
+    return true;
 }
 
 bool DCC_queue::do_dcc(int n)

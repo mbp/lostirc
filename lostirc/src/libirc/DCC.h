@@ -32,11 +32,12 @@
 #include <sys/stat.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <glib.h>
+#include <glibmm/main.h>
+#include <sigc++/sigc++.h>
 
 class ServerConnection;
 
-class DCC {
+class DCC : public SigC::Object {
 public:
     virtual void go_ahead() = 0;
 };
@@ -47,7 +48,7 @@ public:
     virtual ~DCC_Send_In() { }
 
     void go_ahead();
-    static gboolean onReadData(GIOChannel* io_channel, GIOCondition cond, gpointer data);
+    bool onReadData(Glib::IOCondition cond);
     void getUseableFilename(int i);
 
     int _number_in_queue;
@@ -63,7 +64,6 @@ private:
 
     int fd;
     struct sockaddr_in sockaddr;
-    guint _watchid;
 };
 
 class DCC_Send_Out : public DCC {
@@ -72,8 +72,8 @@ public:
     virtual ~DCC_Send_Out() { }
 
     void go_ahead() { }
-    static gboolean onAccept(GIOChannel* io_channel, GIOCondition cond, gpointer data);
-    static gboolean onSendData(GIOChannel* io_channel, GIOCondition cond, gpointer data);
+    bool onAccept(Glib::IOCondition cond);
+    bool onSendData(Glib::IOCondition cond);
 
     int _number_in_queue;
 
@@ -88,7 +88,6 @@ private:
     struct sockaddr_in remoteaddr;
     unsigned long _pos;
     unsigned long _size;
-    guint _watchid;
 };
 
 class DCC_queue {
