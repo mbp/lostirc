@@ -83,7 +83,7 @@ public:
               return true;
     }
     virtual bool nickCompletion(const string& word, string& str) {
-        return getLabel();
+        str = getLabel()->get_text(); return true;
     }
 };
 
