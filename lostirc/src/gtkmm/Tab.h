@@ -33,6 +33,7 @@
 
 class MainNotebook;
 class ServerConnection;
+class Prefs;
 
 class Tab : public Gtk::VBox
 {
@@ -49,6 +50,8 @@ public:
 
     void setAway();
     void setUnAway();
+    void startPrefs();
+    void endPrefs(Prefs *p);
 
     virtual void insertUser(const std::vector<std::string>& users) = 0;
     virtual void insertUser(const std::string& user, IRC::UserMode m = IRC::NONE) = 0;
@@ -120,6 +123,17 @@ public:
 private:
     void updateUserNumber();
 
+};
+
+class Prefs : public Gtk::VBox
+{
+    Tab *_t;
+
+    void endPrefs();
+    void savePrefs();
+
+public:
+    Prefs(Tab *t);
 };
 
 #endif

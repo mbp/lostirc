@@ -23,6 +23,8 @@
 #include <algorithm>
 #include <sstream>
 #include <gtk--/frame.h>
+#include <gtk--/button.h>
+#include "GuiCommands.h"
 
 using std::vector;
 using std::string;
@@ -61,7 +63,7 @@ Tab::Tab(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
     _current_cx = new Gtk::Text::Context;
 
     // Creating HBox; will contain 2 widgets, a scrollwindow and an entry
-    _hbox = manage(new Gtk::HBox(false, 3)); 
+    _hbox = new Gtk::HBox(false, 3); 
     _scrollwindow = manage(new Gtk::ScrolledWindow());
     _entry = manage(new Entry(this));
 
@@ -76,9 +78,13 @@ Tab::Tab(Gtk::Label *label, ServerConnection *conn, Gdk_Font *font)
 
     _hbox->pack_start(*_scrollwindow);
     pack_start(*_hbox);
-    _hbox2 = manage(new Gtk::HBox());
+    _hbox2 = new Gtk::HBox();
     pack_start(*_hbox2, 0, 1);
     _hbox2->pack_start(*_entry, 1, 1);
+
+    Gtk::Button *_button = manage(new Gtk::Button("Prefs"));
+    _button->clicked.connect(slot(this, &Tab::startPrefs));
+    _hbox2->pack_start(*_button, 0, 0);
 
     if (_conn->Session.isAway)
           setAway();
@@ -388,4 +394,57 @@ bool TabChannel::nickCompletion(const string& word, string& str)
     }
 }
 
+void Tab::startPrefs()
+{
+    remove(*_hbox2);
+    remove(*_hbox);
+    Prefs *p = new Prefs(this);
+    pack_start(*p);
+}
 
+void Tab::endPrefs(Prefs *p)
+{
+    remove(*p);
+    pack_start(*_hbox);
+    pack_start(*_hbox2, 0, 1);
+}
+
+Prefs::Prefs(Tab *t)
+    : Gtk::VBox(), _t(t)
+{
+
+    Gtk::HBox *hbox = manage(new Gtk::HBox);
+    Gtk::HBox *hbox2 = manage(new Gtk::HBox);
+    Gtk::CList *clist = manage(new Gtk::CList(1));
+    vector<struct autoJoin> servers = GuiCommands::mw->getApp()->getCfg().getServers();
+    vector<struct autoJoin>::iterator i;
+
+    for (i = servers.begin(); i != servers.end(); ++i) {
+        vector<string> v; // FIXME: ugly as hell.
+        v.push_back(i->hostname);
+        clist->rows().push_back(v);
+    }
+    hbox->pack_start(*clist);
+    Gtk::VBox *vbox = manage(new Gtk::VBox());
+    hbox->pack_start(*vbox);
+
+    Gtk::Button *_buttonsave = manage(new Gtk::Button("Save prefs"));
+    _buttonsave->clicked.connect(slot(this, &Prefs::savePrefs));
+    Gtk::Button *_buttonclose = manage(new Gtk::Button("Close prefs"));
+    _buttonclose->clicked.connect(slot(this, &Prefs::endPrefs));
+    hbox2->pack_start(*_buttonsave);
+    hbox2->pack_start(*_buttonclose);
+    pack_start(*hbox, 1, 1);
+    pack_start(*hbox2, 0, 0);
+    show_all();
+}
+
+void Prefs::endPrefs()
+{
+    _t->endPrefs(this);
+}
+
+void Prefs::savePrefs()
+{
+    endPrefs();
+}

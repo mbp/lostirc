@@ -274,7 +274,12 @@ gint MainWindow::on_key_press_event(GdkEventKey* e)
             }
         }
         _nb->closeCurrent();
-
+    }
+    if ((e->keyval == GDK_p) && (e->state & GDK_MOD1_MASK)) {
+        TabChannel *tab = dynamic_cast<TabChannel*>(_nb->getCurrent());
+        if (tab) {
+            tab->startPrefs();
+        }
     }
     if ((e->keyval == GDK_n) && (e->state & GDK_MOD1_MASK)) {
         newServer();
