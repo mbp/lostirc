@@ -28,7 +28,6 @@
 using std::vector;
 using std::string;
 using std::stringstream;
-using std::cout;
 
 Parser::Parser(LostIRCApp *app, ServerConnection *conn)
     : _conn(conn), _app(app)
@@ -75,10 +74,10 @@ void Parser::parseLine(string& data)
         }
 
         #ifdef DEBUG
-        cout << "\t[from '" << from << "']";
-        cout << " [command '" << command << "']";
-        cout << " [param '" << param << "']"; 
-        cout << " [rest '" << rest << "']" << std::endl;
+        std::cout << "\t[from '" << from << "']";
+        std::cout << " [command '" << command << "']";
+        std::cout << " [param '" << param << "']"; 
+        std::cout << " [rest '" << rest << "']" << std::endl;
         #endif
 
         // Redirect to the right parsing function...
@@ -129,9 +128,9 @@ void Parser::parseLine(string& data)
         string rest = data.substr(pos2 + 1);
 
         #ifdef DEBUG
-        cout << "\t[command '" << command << "']";
-        cout << " [param '" << param << "']";
-        cout << " [rest '" << rest << "']" << std::endl;
+        std::cout << "\t[command '" << command << "']";
+        std::cout << " [param '" << param << "']";
+        std::cout << " [rest '" << rest << "']" << std::endl;
         #endif
 
         // Redirect to the right parsing function... 
@@ -418,7 +417,7 @@ void Parser::TopicTime(const string& param)
     _evts->emit(_evts->get(TOPICTIME) << nick << time.substr(0, time.size() - 1), chan, _conn);
 }
 
-void Parser::Away(const string& from, const string& param, const string& rest)
+void Parser::Away(const string& param, const string& rest)
 {
     string param1, param2;
     stringstream ss(param);
@@ -470,7 +469,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             break;
 
         case 301: // RPL_AWAY
-            Away(from, param, rest);
+            Away(param, rest);
             break;
 
         case 305: // RPL_UNAWAY
@@ -579,7 +578,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             break;
 
         default:
-            _evts->emit(_evts->get(SERVMSG) << from + " " + param + " " + rest, "", _conn);
+            _evts->emit(_evts->get(SERVMSG) << param + " " + rest, "", _conn);
     }
 
 }

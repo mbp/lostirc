@@ -58,7 +58,7 @@ private:
     void Kick(const std::string& from, const std::string& chan, const std::string& nickandmsg);
     void Names(const std::string& chan, const std::string& names);
     void Ctcp(const std::string& from, const std::string& param, const std::string& rest);
-    void Away(const std::string& from, const std::string& param, const std::string& rest);
+    void Away(const std::string& param, const std::string& rest);
     void Wallops(const std::string& from, const std::string& rest);
     void Banlist(const std::string& param);
     void numeric(int n, const std::string& from, const std::string& param, const std::string& rest);
