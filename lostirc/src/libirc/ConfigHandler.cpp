@@ -240,7 +240,7 @@ bool ConfigHandler::setOpt(const string& key, const string& value)
 
 bool ConfigHandler::setOpt(const string& key, int number)
 {
-    stringstream ss;
+    std::stringstream ss;
     ss << number;
     string value = ss.str();
 
