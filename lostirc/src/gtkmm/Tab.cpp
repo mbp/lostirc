@@ -137,6 +137,8 @@ void Tab::insertWithColor(int color, const string& str)
     colors[5] = Gdk_Color("#ea6b6b");
     colors[6] = Gdk_Color("#6bdde5");
     colors[7] = Gdk_Color("#6b8ae5");
+    colors[8] = Gdk_Color("#4aff4a");
+    colors[9] = Gdk_Color("#5ea524");
 
     if (color == 0) {
         _text->insert(*_current_cx, "$" + str);

@@ -138,7 +138,7 @@ void MainWindow::onCTCP(const string& command, const string& nick, ServerConnect
 {
     Tab *tab = _nb->getCurrent(conn);
 
-    _nb->insert(tab, "-- CTCP '" + command + "' RECEIVED FROM '" + nick + "'\n");
+    _nb->insert(tab, "$8-- CTCP " + command + " received from '" + nick + "'\n");
 
 }
 
@@ -173,7 +173,7 @@ void MainWindow::onJoin(const string& nick, const string& chan, ServerConnection
         tab->insertUser(nick);
     }
 
-    _nb->insert(tab, "$5-- " + nick + " has joined " + chan + "\n");
+    _nb->insert(tab, "$8-- " + nick + " has joined " + chan + "\n");
 
 }
 
@@ -239,7 +239,7 @@ void MainWindow::onNick(const string& nick, const string& to, ServerConnection *
     _nb->findTabs(nick, conn, tabs);
 
     for (i = tabs.begin(); i != tabs.end(); ++i) {
-        _nb->insert(*i, "$6-- " + nick + " changes nick to " + to + "\n");
+        _nb->insert(*i, "$9-- " + nick + " changes nick to " + to + "\n");
         (*i)->renameUser(nick, to);
     }
 }
