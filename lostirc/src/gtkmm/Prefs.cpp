@@ -69,7 +69,7 @@ Prefs::Prefs()
     Gtk::VBox *generalbox = addPage(_("General"));
     Gtk::VBox *prefsbox = addPage(_("Preferences"));
     Gtk::VBox *dccbox = addPage(_("DCC"));
-    Gtk::VBox *colourbox = addPage(_("Colours"));
+    //Gtk::VBox *colourbox = addPage(_("Colours"));
 
     // General options-tab
     int row = 1;
@@ -183,7 +183,7 @@ Prefs::Prefs()
 
     colorschemes->set_active(1);
 
-    colourbox->pack_start(*optionmenu, Gtk::PACK_SHRINK);
+    //colourbox->pack_start(*optionmenu, Gtk::PACK_SHRINK);
 
 
 

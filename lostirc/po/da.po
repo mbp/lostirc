@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LostIRC 0.2.5pre\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-10-29 06:39+0100\n"
+"POT-Creation-Date: 2003-11-21 03:24+0100\n"
 "PO-Revision-Date: 2003-01-03 19:25+0100\n"
 "Last-Translator: Michael Kristensen <tazz@wtf.dk>\n"
 "Language-Team: Danish\n"
@@ -333,11 +333,6 @@ msgstr "Indstillinger"
 msgid "DCC"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:72
-#, fuzzy
-msgid "Colours"
-msgstr "Luk"
-
 #: src/gtkmm/Prefs.cpp:79
 #, fuzzy
 msgid "IRC username (ident):"
@@ -522,11 +517,11 @@ msgstr "En fejl opstod, ved at læse fra rør (Intern fejl 3)"
 msgid "Message not sent because of locale problems"
 msgstr "Besked ikke sendt, pga. locale problemer"
 
-#: src/libirc/Parser.cpp:847
+#: src/libirc/Parser.cpp:850
 msgid "idle: "
 msgstr "ubenyttet: "
 
-#: src/libirc/Parser.cpp:851
+#: src/libirc/Parser.cpp:854
 msgid ", signon time: "
 msgstr ", login tid: "
 
@@ -550,35 +545,35 @@ msgstr "Kunne ikke modtage:"
 msgid "File received successfully:"
 msgstr "Fil modtaget korrekt:"
 
-#: src/libirc/DCC.cpp:160
+#: src/libirc/DCC.cpp:159
 msgid "Couldn't bind:"
 msgstr "Kunne ikke binde:"
 
-#: src/libirc/DCC.cpp:178
+#: src/libirc/DCC.cpp:177
 msgid "DCC SEND request sent. Sending from:"
 msgstr "DCC SEND forespørgsel sendt. Sender fra:"
 
-#: src/libirc/DCC.cpp:196
+#: src/libirc/DCC.cpp:195
 msgid "Connection accepted."
 msgstr "Forbindelse accepteret."
 
-#: src/libirc/DCC.cpp:217
+#: src/libirc/DCC.cpp:216
 msgid "Couldn't send:"
 msgstr "Kunne ikke sende:"
 
-#: src/libirc/DCC.cpp:236
+#: src/libirc/DCC.cpp:235
 msgid "File sent successfully:"
 msgstr "Fil sendt korrekt:"
 
-#: src/libirc/DCC.cpp:260
+#: src/libirc/DCC.cpp:259
 msgid "Incoming file has zero size. Sender:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:279
+#: src/libirc/DCC.cpp:278
 msgid "File not found:"
 msgstr "Fil ikke fundet:"
 
-#: src/libirc/DCC.cpp:282
+#: src/libirc/DCC.cpp:281
 msgid "File has zero size:"
 msgstr ""
 
@@ -606,9 +601,13 @@ msgstr "Kunne ikke modtage: "
 msgid "Connected. Logging in..."
 msgstr "Forbundet. Logger ind..."
 
-#: src/libirc/LostIRCApp.h:53
+#: src/libirc/LostIRCApp.h:54
 msgid "Logging to `"
 msgstr "Logger til `"
+
+#, fuzzy
+#~ msgid "Colours"
+#~ msgstr "Luk"
 
 #~ msgid "7Welcome to LostIRC "
 #~ msgstr "7Velkommen til LostIRC "

@@ -547,6 +547,8 @@ void Parser::CMode(const ustring& from, const ustring& param)
                 break;
             case 'q':
                 {
+                    // This cause crashes, so its outcommented for now.
+                    /*
                     Event e;
                     IRC::UserMode mode = IRC::OWNER;
                     sign ? (e = OWNERED) : (e = DEOWNERED);
@@ -557,6 +559,7 @@ void Parser::CMode(const ustring& from, const ustring& param)
 
                     modesvec.push_back(*user);
                     FE::emit(FE::get(e) << findNick (from) << nick, *chan, _conn);
+                    */
                 }
                 break;
             case 'o':

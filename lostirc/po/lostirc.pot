@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-10-29 06:39+0100\n"
+"POT-Creation-Date: 2003-11-21 03:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -268,10 +268,6 @@ msgstr ""
 msgid "DCC"
 msgstr ""
 
-#: src/gtkmm/Prefs.cpp:72
-msgid "Colours"
-msgstr ""
-
 #: src/gtkmm/Prefs.cpp:79
 msgid "IRC username (ident):"
 msgstr ""
@@ -446,11 +442,11 @@ msgstr ""
 msgid "Message not sent because of locale problems"
 msgstr ""
 
-#: src/libirc/Parser.cpp:847
+#: src/libirc/Parser.cpp:850
 msgid "idle: "
 msgstr ""
 
-#: src/libirc/Parser.cpp:851
+#: src/libirc/Parser.cpp:854
 msgid ", signon time: "
 msgstr ""
 
@@ -474,35 +470,35 @@ msgstr ""
 msgid "File received successfully:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:160
+#: src/libirc/DCC.cpp:159
 msgid "Couldn't bind:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:178
+#: src/libirc/DCC.cpp:177
 msgid "DCC SEND request sent. Sending from:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:196
+#: src/libirc/DCC.cpp:195
 msgid "Connection accepted."
 msgstr ""
 
-#: src/libirc/DCC.cpp:217
+#: src/libirc/DCC.cpp:216
 msgid "Couldn't send:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:236
+#: src/libirc/DCC.cpp:235
 msgid "File sent successfully:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:260
+#: src/libirc/DCC.cpp:259
 msgid "Incoming file has zero size. Sender:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:279
+#: src/libirc/DCC.cpp:278
 msgid "File not found:"
 msgstr ""
 
-#: src/libirc/DCC.cpp:282
+#: src/libirc/DCC.cpp:281
 msgid "File has zero size:"
 msgstr ""
 
@@ -530,6 +526,6 @@ msgstr ""
 msgid "Connected. Logging in..."
 msgstr ""
 
-#: src/libirc/LostIRCApp.h:53
+#: src/libirc/LostIRCApp.h:54
 msgid "Logging to `"
 msgstr ""

@@ -60,7 +60,7 @@ MainWindow::MainWindow(bool autoconnect)
     add(*vbox);
     show_all();
 
-    if (!_app.options.hidemenu)
+    if (_app.options.hidemenu)
           _menubar.hide();
 
     if (!_app.cfgservers.hasAutoConnects() || !autoconnect) {
@@ -452,7 +452,7 @@ void MainWindow::setupMenus()
 void MainWindow::hideMenu()
 {
     _app.options.hidemenu = !_app.options.hidemenu;
-    if (!_app.options.hidemenu)
+    if (_app.options.hidemenu)
           _menubar.hide();
     else
           _menubar.show();
