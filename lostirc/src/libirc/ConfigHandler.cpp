@@ -187,15 +187,21 @@ bool baseConfig::readConfigFile()
 
 bool baseConfig::writeConfigFile()
 {
+    #ifdef DEBUG
+    App->log << "Trying to write configfile: `" << filename << "'" << std::endl;
+    #endif
     std::ofstream out(filename.c_str());
 
     if (!out)
           return false;
 
+    #ifdef DEBUG
+    App->log << "\twriting..." << std::endl;
+    #endif
     map<string, baseConfigValue*>::const_iterator i;
 
     for (i = configvalues.begin(); i != configvalues.end(); ++i) {
-        out << i->first << " = " << i->second << std::endl;
+        out << i->first << " = " << i->second->getString() << std::endl;
     }
     return true;
 
