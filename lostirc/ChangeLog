@@ -1,6 +1,12 @@
 For a summary of changes between releases - see the NEWS file.
 
 2003-08-23  Morten Brix Pedersen  <morten@wtf.dk>
+        
+        * ServerConnection.cpp: Fix the error where "Disconnected." was
+          inserted into to the frontend, even when just connecting to a
+          server.
+         
+2003-08-23  Morten Brix Pedersen  <morten@wtf.dk>
 
         * MainWindow.cpp: Make hiding and showing of menu work properly. The
           same with the Nick List.

@@ -129,7 +129,8 @@ void ServerConnection::connect()
     App->log << "ServerConnection::connect()" << std::endl;
     #endif
 
-    disconnect(); // This will also call doCleanUp() for us.
+    doCleanup();
+    App->fe->disconnected(this);
 
     FE::emit(FE::get(CONNECTING) << Session.host << Session.port, FE::CURRENT, this);
 
