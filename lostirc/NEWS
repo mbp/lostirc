@@ -1,6 +1,9 @@
 LostIRC - (x.x.x)
   * On start up without connecting to any servers automatically, open the
     server window.
+  * The chosen colorscheme is now correctly remembered in the server window.
+  * When using CTRL-PageUp and CTRL-PageDown to browse through tabs,
+    unexpected scrolling will no longer appear.
   * Updated Danish translation.
 
 LostIRC - (0.4.1) - Mon Aug, 2nd 2004

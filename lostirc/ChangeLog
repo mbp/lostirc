@@ -1,6 +1,14 @@
 For a summary of changes between releases - see the NEWS file.
 
 2004-08-28  Morten Brix Pedersen  <morten@wtf.dk>
+	* src/gtkmm/Prefs.cpp: Remember which colorscheme was picked.
+	* src/gtkmm/MainWindow.cpp: Don't scroll when the user is holding
+	the CTRL button.
+
+2004-08-28  Morten Brix Pedersen  <morten@wtf.dk>
+	* src/gtkmm/Prefs.cpp: Remember which colorscheme was picked.
+
+2004-08-28  Morten Brix Pedersen  <morten@wtf.dk>
 	* src/gtkmm/ServerWindow.cpp: When connecting to a server, close the
 	server window.
 	* src/gtkmm/MainWindow.cpp: Open the server window on startup. And

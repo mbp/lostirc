@@ -587,12 +587,13 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
               _notebook.prev_page();
         else if (e->keyval == GDK_Right)
               _notebook.next_page();
-    }
-    if (e->keyval == GDK_Page_Up) {
-        _notebook.getCurrent()->getText().scrollUpPage();
+    } else {
+        if (e->keyval == GDK_Page_Up) {
+            _notebook.getCurrent()->getText().scrollUpPage();
 
-    } else if (e->keyval == GDK_Page_Down) {
-        _notebook.getCurrent()->getText().scrollDownPage();
+        } else if (e->keyval == GDK_Page_Down) {
+            _notebook.getCurrent()->getText().scrollDownPage();
+        }
     }
 
     Gtk::Window::on_key_press_event(e);

@@ -169,10 +169,10 @@ Prefs::Prefs()
 
     // Colour-tab
     Gtk::Label *colorlabel1 = new Gtk::Label(_("Pick a colorscheme"));
-    Gtk::Label *colorlabel2 = new Gtk::Label(_("Changes to colorschemes only apply to newly created tabs"));
+    Gtk::Label *colorlabel2 = new Gtk::Label(_("Changes to colorschemes only apply to newly created tabs"), Gtk::ALIGN_LEFT);
     colorschemes.append_text(_("White on black"));
     colorschemes.append_text(_("Black on white"));
-    colorschemes.set_active(0);
+    colorschemes.set_active(App->options.colorscheme-1);
     colorschemes.signal_changed().connect(sigc::mem_fun(*this, &Prefs::changeColors));
 
     colourbox->pack_start(*colorlabel1, Gtk::PACK_SHRINK);
