@@ -240,7 +240,7 @@ Prefs::Prefs()
 
     // Final Close button
     Gtk::Button *close_button = manage(create_imagebutton("Close", Gtk::Stock::CLOSE));
-    close_button->signal_clicked().connect(slot(*this, &Prefs::endPrefs));
+    close_button->signal_clicked().connect(slot(*this, &Prefs::closePrefs));
 
     Gtk::HBox *bottommenubox = manage(new Gtk::HBox());
     bottommenubox->pack_end(*close_button, Gtk::PACK_SHRINK);
@@ -250,11 +250,6 @@ Prefs::Prefs()
     show_all();
     removebutton->hide();
     addnewbutton->hide();
-}
-
-void Prefs::endPrefs()
-{
-    currentTab->endPrefs();
 }
 
 void Prefs::applyPreferences()

@@ -9,7 +9,8 @@ lostirc_SOURCES =  main.cpp \
                    Entry.cpp Entry.h \
                    StatusBar.cpp StatusBar.h \
                    TextWidget.cpp TextWidget.h \
-                   NickList.cpp NickList.h
+                   NickList.cpp NickList.h \
+                   DCCList.cpp DCCList.h
 
 lostirc_LDADD = ../libirc/libirc.a
 

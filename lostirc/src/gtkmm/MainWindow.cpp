@@ -325,11 +325,15 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
             }
             notebook.closeCurrent();
         } else if (e->keyval == GDK_p) {
-            if (!notebook.getCurrent()->hasPrefs) {
-                notebook.getCurrent()->startPrefs();
-            } else {
-                notebook.getCurrent()->endPrefs();
-            }
+            if (!notebook.getCurrent()->hasPrefs) 
+                  notebook.getCurrent()->startPrefs();
+            else 
+                  notebook.getCurrent()->closePrefs();
+        } else if (e->keyval == GDK_d) {
+            if (!notebook.getCurrent()->hasDCCList)
+                  notebook.getCurrent()->startDCCList();
+            else
+                  notebook.getCurrent()->closeDCCList();
         } else if (e->keyval == GDK_n) {
             newServer();
         } else if (e->keyval == GDK_q) {

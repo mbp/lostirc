@@ -40,7 +40,7 @@ public:
     // is defined here, so when we do endPrefs() we can call the right
     // endPrefs() member function in the Tab class
     static Tab* currentTab;
-    void endPrefs();
+    void closePrefs() { currentTab->closePrefs(); }
 private:
     Prefs();
     Prefs(const Prefs&);

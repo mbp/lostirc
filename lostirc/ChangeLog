@@ -1,5 +1,12 @@
 For a summary of changes between releases - see the NEWS file.
 
+2002-12-11  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * DCCList.cpp/DCCList.h: Initial work for a DCC list.
+        * Tab.cpp/Tab.h: Add DCCList functionality. Rename member from
+          endPrefs() to closePrefs()
+        * Prefs.h/Prefs.cpp: Rename function from endPrefs() to closePrefs().
+          Move declaration of the function inside the class declaration.
 
 2002-12-09  Morten Brix Pedersen  <morten@wtf.dk>
 

@@ -49,7 +49,10 @@ public:
     ServerConnection*           getConn() { return _conn; }
 
     void startPrefs();
-    void endPrefs();
+    void closePrefs();
+
+    void startDCCList();
+    void closeDCCList();
 
     void insertUser(const Glib::ustring& user, IRC::UserMode m = IRC::NONE);
     void removeUser(const Glib::ustring& nick);
@@ -69,6 +72,7 @@ public:
 
     bool isHighlighted;
     bool hasPrefs;
+    bool hasDCCList;
 
 private:
     void addOrRemoveNickList();
