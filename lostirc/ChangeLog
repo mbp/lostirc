@@ -1,5 +1,12 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-10-16  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * MainWindow.cpp: Remove show_all() call to make sure NickList wont
+        get showed again.
+        * MainNotebook.cpp: ditto.
+        * Tab.cpp: Add show_all() to compromise for above removals.
+
 2003-10-02  Morten Brix Pedersen  <morten@wtf.dk>
 
         * MainNotebook.cpp: Add a missing '-' in the title when away.

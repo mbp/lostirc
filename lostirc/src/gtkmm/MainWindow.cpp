@@ -285,7 +285,6 @@ void MainWindow::newTab(ServerConnection *conn)
     conn->Session.servername = name;
     Tab *tab = _notebook.addTab(Tab::SERVER, name, conn);
     tab->setType(Tab::SERVER);
-    _notebook.show_all();
 
     // XXX: this is a hack for a "bug" in the gtkmm code which makes the
     // application crash in the start when no pages exists, even though we

@@ -51,6 +51,7 @@ Tab::Tab(ServerConnection *conn, Pango::FontDescription font, Gtk::Label *label)
     std::vector<Gtk::Widget *> focuses;
     focuses.push_back(&_entry);
     set_focus_chain(focuses);
+    show_all();
 }
 
 Tab::~Tab()
