@@ -110,6 +110,7 @@ void Part(ServerConnection *conn, const string& params)
 void Quit(ServerConnection *conn, const string& params)
 {
     conn->sendQuit(params);
+    conn->disconnect();
 }
 
 void Kick(ServerConnection *conn, const string& params)

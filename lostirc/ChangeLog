@@ -12,6 +12,8 @@ LostIRC (x.x.x)
     go away on all connected servers instead of just one at the time with
     /AWAY.
   * In preferences, you can now define which words to highlight on.
+  * After using /QUIT, the client no longer reconnects to the server
+    automatically.
 
 LostIRC (0.1.0) - Fri May 31st 2002
   * The client now supports DCC SEND.
