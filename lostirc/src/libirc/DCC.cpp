@@ -18,6 +18,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <glibmm/fileutils.h>
 #include "FrontEnd.h"
 #include "ServerConnection.h"
 #include "DCC.h"
@@ -35,8 +36,7 @@ DCC_Send_In::DCC_Send_In(const Glib::ustring& filename, const Glib::ustring& nic
 
     _filename = _downloaddir + _filename;
 
-    struct stat st;
-    if (stat(_filename.c_str(), &st) == 0)
+    if (Glib::file_test(_filename, Glib::FILE_TEST_EXISTS))
           getUseableFilename(1);
 }
 
@@ -115,13 +115,12 @@ bool DCC_Send_In::onReadData(Glib::IOCondition cond)
 
 void DCC_Send_In::getUseableFilename(int i)
 {
-    struct stat st;
     std::stringstream ss;
     Glib::ustring myint;
     ss << i;
     ss >> myint;
     Glib::ustring newfilename = _filename + "." + myint;
-    if (stat(newfilename.c_str(), &st) == 0)
+    if (Glib::file_test(newfilename, Glib::FILE_TEST_EXISTS))
           getUseableFilename(++i);
     else
           _filename = newfilename;

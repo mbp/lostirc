@@ -1,5 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-10-31  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Use Glib::file_test() instead of stat() in some places. This helps
+        on portability.
+
 2003-10-29  Morten Brix Pedersen  <morten@wtf.dk>
 
         * Fix typo in FrontEnd.h.
