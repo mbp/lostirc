@@ -53,6 +53,7 @@ struct {
     { "evt_devoiced", DEVOICED },
     { "evt_banned", BANNED },
     { "evt_unbanned", UNBANNED },
+    { "evt_invited", INVITED },
     { 0, 0 }
 };
 

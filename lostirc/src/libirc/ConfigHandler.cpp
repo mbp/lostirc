@@ -116,6 +116,7 @@ bool ConfigHandler::setDefaults()
     setDefault("evt_devoiced", "$16-- $0%1$16 removes voice from %2");
     setDefault("evt_banned", "$16-- $0%1$16 sets ban on %2");
     setDefault("evt_unbanned", "$16-- $0%1$16 unbans %2");
+    setDefault("evt_invited", "$16-- $0%1$16 invites you to join %2");
 
     return writeConfig();
 }

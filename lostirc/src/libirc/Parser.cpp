@@ -106,6 +106,8 @@ void Parser::parseLine(string& data)
               Nick(from, rest);
         else if (command == "WALLOPS")
               Wallops(from, rest);
+        else if (command == "INVITE")
+              Invite(from, rest);
         else
               _evts->emit(_evts->get(UNKNOWN) << data, "", _conn);
 
@@ -276,10 +278,6 @@ void Parser::Quit(const string& nick, const string& msg)
 
 void Parser::Nick(const string& from, const string& to)
 {
-    vector<string> args;
-    args.push_back(findNick(from));
-    args.push_back(to);
-
     // Check whethers it's us who has changed nick
     if (findNick(from) == _conn->Session.nick) {
         _conn->Session.nick = to;
@@ -294,6 +292,11 @@ void Parser::Nick(const string& from, const string& to)
 
     _evts->emit(_evts->get(NICK) << findNick(from) << to, chans, _conn);
     _app->evtNick(findNick(from), to, _conn);
+}
+
+void Parser::Invite(const string& from, const string& params)
+{
+    _evts->emit(_evts->get(INVITED) << findNick(from) << params, "", _conn);
 }
 
 void Parser::Topic(const string& from, const string& to, const string& rest)

@@ -54,6 +54,7 @@ private:
     void Part(const std::string& nick, const std::string& chan);
     void Quit(const std::string& nick, const std::string& msg);
     void Nick(const std::string& from, const std::string& to);
+    void Invite(const std::string& from, const std::string& to);
     void Kick(const std::string& from, const std::string& chan, const std::string& nickandmsg);
     void Whois(const std::string& from, const std::string& param, const std::string& rest);
     void Names(const std::string& chan, const std::string& names);
