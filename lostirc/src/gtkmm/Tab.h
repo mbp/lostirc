@@ -119,7 +119,7 @@ public:
               return false;
     }
     bool nickCompletion(Glib::ustring& word, Glib::ustring& str) {
-        str = getLabel()->get_text(); return true;
+        word = getLabel()->get_text(); return true;
     }
 };
 
