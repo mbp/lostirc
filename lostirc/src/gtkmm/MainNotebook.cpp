@@ -99,7 +99,7 @@ int MainNotebook::findPage(const string& name, ServerConnection *conn, bool find
         Tab *tab = static_cast<Tab*>(i->get_child());
         if (tab->getConn() == conn) {
             string tab_name = i->get_tab_label_text();
-            if ((Util::lower(tab_name) == Util::lower(n))) {
+            if ((Util::lower(tab_name) == Util::lower(n)) || n.empty()) {
                 return i->get_page_num();
             } else if (findInActive && Util::lower(tab_name) == string("(" + Util::lower(n) + ")")) {
                 return i->get_page_num();
