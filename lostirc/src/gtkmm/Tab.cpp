@@ -222,7 +222,7 @@ void Tab::setAway()
     }
 
     if (!away) {
-        Gtk::Label *a = manage(new Gtk::Label("Away (" + _conn->Session.awaymsg + ")"));
+        Gtk::Label *a = manage(new Gtk::Label("Away (" + Glib::locale_to_utf8(_conn->Session.awaymsg) + ")"));
         _hbox2->pack_start(*a);
         _hbox2->show_all();
     }
