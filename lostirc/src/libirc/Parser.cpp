@@ -480,13 +480,12 @@ void Parser::CMode(const string& from, const string& param)
             case 'o':
                 {
                 Event e;
-                IRC::UserMode u;
-                sign ? (u = IRC::OP) : (u = IRC::NONE);
+                IRC::UserMode mode = IRC::OP;
                 sign ? (e = OPPED) : (e = DEOPPED);
                 string nick = *arg_i++;
 
                 User *user = c->getUser(nick);
-                user->setMode(u);
+                sign ? (user->setMode(mode)) : (user->removeMode(mode));
 
                 modesvec.push_back(*user);
                 FE::emit(FE::get(e) << findNick(from) << nick, *c, _conn);
@@ -495,13 +494,13 @@ void Parser::CMode(const string& from, const string& param)
             case 'v':
                 {
                 Event e;
-                IRC::UserMode u;
-                sign ? (u = IRC::VOICE) : (u = IRC::NONE);
+                IRC::UserMode mode = IRC::VOICE;
                 sign ? (e = VOICED) : (e = DEVOICED);
                 string nick = *arg_i++;
 
                 User *user = c->getUser(nick);
-                user->setMode(u);
+
+                sign ? (user->setMode(mode)) : (user->removeMode(mode));
 
                 modesvec.push_back(*user);
                 FE::emit(FE::get(e) << findNick(from) << nick, *c, _conn);
@@ -510,13 +509,12 @@ void Parser::CMode(const string& from, const string& param)
             case 'h':
                 {
                 Event e;
-                IRC::UserMode u;
-                sign ? (u = IRC::HALFOP) : (u = IRC::NONE);
+                IRC::UserMode mode = IRC::HALFOP;
                 sign ? (e = HALFOPPED) : (e = HALFDEOPPED);
                 string nick = *arg_i++;
 
                 User *user = c->getUser(nick);
-                user->setMode(u);
+                sign ? (user->setMode(mode)) : (user->removeMode(mode));
 
                 modesvec.push_back(*user);
                 FE::emit(FE::get(e) << findNick(from) << nick, *c, _conn);
