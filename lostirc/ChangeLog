@@ -1,6 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
 2002-12-31  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * DCC.cpp: When unable to bind, don't send message to remote user.
+
+2002-12-31  Morten Brix Pedersen  <morten@wtf.dk>
         
         * DCC.cpp: Strip path from filename sent to the user.
 

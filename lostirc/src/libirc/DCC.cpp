@@ -152,29 +152,31 @@ DCC_Send_Out::DCC_Send_Out(const Glib::ustring& filename, const Glib::ustring& n
 
         if (bind(fd, reinterpret_cast<struct sockaddr *>(&sockaddr), sizeof(struct sockaddr)) == -1) {
             FE::emit(FE::get(CLIENTMSG) << "Couldn't bind:" << strerror(errno), FE::CURRENT);
+            // FIXME: add dcc-done?
+        } else {
+            socklen_t add_len = sizeof(struct sockaddr_in);
+            getsockname(fd, (struct sockaddr *) &sockaddr, &add_len);
+
+            #ifdef DEBUG
+            App->log << "DCC_Send_Out::DCC_Send_Out(): new port: " << ntohs(sockaddr.sin_port) << std::endl;
+            #endif
+
+            std::ostringstream ss;
+            ss << "DCC SEND " << stripPath(_filename) << " " << ntohl(inet_addr(_localip.c_str())) << " " << ntohs(sockaddr.sin_port) << " " << _size;
+            conn->sendCtcp(nick, ss.str());
+
+            _infile.open(_filename.c_str());
+
+            listen(fd, 1);
+
+            FE::emit(FE::get(CLIENTMSG) << "DCC SEND request sent. Sending from:" << _localip, FE::CURRENT);
+
+            Glib::signal_io().connect(
+                    SigC::slot(*this, &DCC_Send_Out::onAccept),
+                    fd,
+                    Glib::IO_IN | Glib::IO_ERR | Glib::IO_OUT | Glib::IO_HUP | Glib::IO_NVAL);
+
         }
-        socklen_t add_len = sizeof(struct sockaddr_in);
-        getsockname(fd, (struct sockaddr *) &sockaddr, &add_len);
-
-        #ifdef DEBUG
-        App->log << "DCC_Send_Out::DCC_Send_Out(): new port: " << ntohs(sockaddr.sin_port) << std::endl;
-        #endif
-
-        std::ostringstream ss;
-        ss << "DCC SEND " << stripPath(_filename) << " " << ntohl(inet_addr(_localip.c_str())) << " " << ntohs(sockaddr.sin_port) << " " << _size;
-        conn->sendCtcp(nick, ss.str());
-
-        _infile.open(_filename.c_str());
-
-        listen(fd, 1);
-
-        FE::emit(FE::get(CLIENTMSG) << "DCC SEND request sent. Sending from:" << _localip, FE::CURRENT);
-
-        Glib::signal_io().connect(
-                SigC::slot(*this, &DCC_Send_Out::onAccept),
-                fd,
-                Glib::IO_IN | Glib::IO_ERR | Glib::IO_OUT | Glib::IO_HUP | Glib::IO_NVAL);
-
     }
 
 }
