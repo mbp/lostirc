@@ -1,5 +1,13 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-08-21  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * ServerWindow.cpp: Implement the connectEntry() function, such that
+          you can now click on "Connect" to connect to the selected server.
+        * LostIRCApp.cpp: Implement new method, newServer(Server *s). Used by
+          the above.
+        * MainWindow.cpp: Change capitalization of some words in menu items.
+
 2003-06-29  Morten Brix Pedersen  <morten@wtf.dk>
         
         * NickList.h: Change 'int' to 'unsigned short'. It's a smaller data

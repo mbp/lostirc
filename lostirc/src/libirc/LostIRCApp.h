@@ -110,6 +110,7 @@ public:
 
     void autoConnect();
     ServerConnection* newServer(const Glib::ustring& host, int port);
+    ServerConnection* newServer(Server* s);
     ServerConnection* newServer();
 
     DCC_queue& getDcc() { return _dcc_queue; }

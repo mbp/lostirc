@@ -152,7 +152,14 @@ void ServerWindow::addEntry()
 
 void ServerWindow::connectEntry()
 {
-    std::cerr << "connect" << std::endl;
+    Glib::RefPtr<Gtk::TreeSelection> selection = _treeview.get_selection();
+    Gtk::TreeModel::iterator iterrow = selection->get_selected();
+
+    if (iterrow) {
+        Gtk::TreeModel::Row row = *iterrow;
+        ServerConnection *conn = App->newServer(row[_columns.serverptr]);
+        conn->connect();
+    }
 }
 
 void ServerWindow::modifyEntry()

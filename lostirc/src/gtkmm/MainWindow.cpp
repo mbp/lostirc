@@ -376,7 +376,7 @@ void MainWindow::setupMenus()
         Gtk::Menu::MenuList& menulist = _firstmenu.items();
 
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-                    _("_Hide menubar"),
+                    _("_Hide Menubar"),
                     Gtk::Menu::AccelKey("<control>m"),
                     SigC::slot(*this, &MainWindow::hideMenu)));
 
@@ -388,11 +388,11 @@ void MainWindow::setupMenus()
                     SigC::slot(*this, &MainWindow::newServerTab)));
 
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-                    _("Clear window"),
+                    _("Clear Window"),
                     SigC::slot(*this, &MainWindow::clearWindow)));
 
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(
-                    _("Clear all windows"),
+                    _("Clear All Windows"),
                     SigC::slot(*this, &MainWindow::clearAllWindows)));
 
         menulist.push_back(Gtk::Menu_Helpers::MenuElem(

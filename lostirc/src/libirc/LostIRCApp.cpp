@@ -74,12 +74,7 @@ void LostIRCApp::autoConnect()
 
     for (i = servers.begin(); i != servers.end(); ++i) {
         if ((*i)->auto_connect) {
-            ServerConnection *conn = newServer((*i)->hostname, (*i)->port);
-            conn->Session.cmds = (*i)->cmds;
-            if (!(*i)->password.empty())
-                  conn->Session.password = (*i)->password;
-            if (!(*i)->nick.empty())
-                  conn->Session.nick = (*i)->nick;
+            ServerConnection *conn = newServer(*i);
             conn->connect();
         }
     }
@@ -90,6 +85,23 @@ ServerConnection* LostIRCApp::newServer(const ustring& host, int port)
     ServerConnection *conn = new ServerConnection(host, options.nick, port);
     _servers.push_back(conn);
     return conn;
+}
+
+ServerConnection* LostIRCApp::newServer(Server* server)
+{
+    if (server) {
+        ServerConnection *conn = new ServerConnection(server->hostname, options.nick, server->port);
+        _servers.push_back(conn);
+        conn->Session.cmds = server->cmds;
+
+        if (!server->password.empty())
+              conn->Session.password = server->password;
+
+        if (!server->nick.empty())
+              conn->Session.nick = server->nick;
+        return conn;
+    }
+    return 0;
 }
 
 ServerConnection* LostIRCApp::newServer()
