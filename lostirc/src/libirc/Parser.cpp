@@ -818,7 +818,7 @@ void Parser::numeric(int n, const ustring& from, const ustring& param, const ust
                 ss << _("idle: ");
                 ss << idle / 3600 << ":" << (idle / 60) % 60 << ":" << idle % 60;
                 long date = std::atol(getWord(param, 4).c_str());
-                ustring time = std::ctime(&date);
+                ustring time = std::ctime(reinterpret_cast<const time_t*>(&date));
                 ss << _(", signon time: ") << time.substr(0, time.size() - 1);
                 FE::emit(FE::get(WHOIS_GENERIC) << getWord(param, 2) << ss.str(), FE::CURRENT, _conn);
             }

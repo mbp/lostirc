@@ -1,5 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
+2003-05-30  Morten Brix Pedersen  <morten@wtf.dk>
+
+        * Parser.cpp: Another compilation fix for FreeBSD 5.0.
+
 2003-04-28  Morten Brix Pedersen  <morten@wtf.dk>
 
         * configure.in: Bump version to 0.2.6 and release.
