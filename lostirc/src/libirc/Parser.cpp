@@ -488,7 +488,7 @@ void Parser::numeric(int n, const string& from, const string& param, const strin
             break;
 
         case 254: // RPL_LUSERCHANNELS
-            ServMsg(from, param.substr(param.find_last_of(" ")), rest);
+            ServMsg(from, param, rest);
             break;
 
         case 255: // RPL_LUSERME
