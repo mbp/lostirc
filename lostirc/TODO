@@ -6,6 +6,7 @@ NICE-TO-HAVE:
   * When window has lost its focus, then highlight the front tab too.
   * /BAN and /EXEC command.
   * Recognise URLs (and make them clickable?)
+  * Transparent TextView background.
 
 RANDOM BUGS:
 ------------
@@ -18,6 +19,9 @@ RANDOM BUGS:
     Need to look into optimizing it.
 
   * Should we check for EAGAIN on send()? It seems to always succeed anyway.
+
+  * We might need to use Alt-num for switching tabs instead of Ctrl-num. It
+    seems to be the HIG standard.
 
 DCC:
 ----

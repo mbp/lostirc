@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2002-2004 Morten Brix Pedersen <morten@wtf.dk>
+ * Copyright (C) 2002-2005 Morten Brix Pedersen <morten@wtf.dk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,23 +40,26 @@ TextWidget::TextWidget(Pango::FontDescription font)
     Glib::RefPtr<Gtk::TextBuffer> buffer = Gtk::TextBuffer::create(AppWin->_current_tag_table);
     _textview.set_buffer(buffer);
     pos = buffer->create_mark(buffer->end());
+    scrollToBottom();
     get_vscrollbar()->signal_size_allocate().connect(sigc::mem_fun(*this, &TextWidget::onResize));
     get_vscrollbar()->signal_value_changed().connect(sigc::mem_fun(*this, &TextWidget::onScroll));
 
     _textview.signal_populate_popup().connect(sigc::mem_fun(*this, &TextWidget::populateMenu));
 }
 
-void TextWidget::onResize(Gtk::Allocation& alloc)
-{
-    _textview.scroll_to(pos, 0.0);
-}
-
 void TextWidget::onScroll()
 {
-    _textview.move_mark_onscreen(pos);
     if (get_vscrollbar()->get_value() >= (get_vscrollbar()->get_adjustment()->get_upper() - get_vscrollbar()->get_adjustment()->get_page_size() - 1e-12)) {
-        Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
-        pos = buffer->create_mark(buffer->end());
+        scrollToBottom();
+    }
+}
+
+void TextWidget::onResize(Gtk::Allocation& alloc)
+{
+    if (get_vscrollbar()->get_value() >= (get_vscrollbar()->get_adjustment()->get_upper() - get_vscrollbar()->get_adjustment()->get_page_size() - 1e-12)) {
+        scrollToBottom();
+    } else {
+        _textview.scroll_to(pos, 0.0, 0.5, 1.0);
     }
 }
 
@@ -84,37 +87,30 @@ void TextWidget::scrollUpPage()
 
     double value = vadj->get_value() - (vadj->get_page_size() - 1);
 
-    if (value < 0)
-          value = 0;
-
-    vadj->set_value(value);
+    get_vscrollbar()->set_value(value);
 }
 
 void TextWidget::scrollDownPage()
 {
     Gtk::Adjustment *vadj = get_vadjustment();
 
-    double end = vadj->get_upper() - vadj->get_lower() - vadj->get_page_size();
     double value = vadj->get_value() + (vadj->get_page_size() - 1);
 
-    if (value > end)
-          value = end;
-
-    vadj->set_value(value);
+    get_vscrollbar()->set_value(value);
 }
 
 void TextWidget::scrollToBottom()
 {
     Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
-    Gtk::TextIter iter = buffer->end();
-    _textview.scroll_to(iter, 0.0);
+    buffer->move_mark(pos, buffer->end());
+    _textview.scroll_to(pos, 0.0);
 }
 
 void TextWidget::scrollToTop()
 {
     Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
-    Gtk::TextIter iter = buffer->begin();
-    _textview.scroll_to(iter, 0.0);
+    buffer->move_mark(pos, buffer->begin());
+    _textview.scroll_to(pos, 0.0);
 }
 
 void TextWidget::setStyle() {
@@ -190,14 +186,11 @@ TextWidget& TextWidget::operator<<(const ustring& line)
         }   
     } 
 
-    // scroll if we need to
-    if (need_to_scroll) {
-        Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();
-        pos = buffer->create_mark(buffer->end());
-        _textview.scroll_to(pos, 0.0);
-    }
-
     removeTopBuffer();
+
+    if (need_to_scroll) {
+        scrollToBottom();
+    }
 
     return *this;
 }
@@ -234,8 +227,10 @@ void TextWidget::insertText(const TextProperties& tp, const ustring& line)
 
     buffer->insert_with_tags(buffer->end(), line, tags);
 
+#if 0
     /* below URL handling is broken at the moment, so disabled. It's broken
      * because we only receive one character at the time in this function.
+    */
     ustring::size_type pos1;
 
     pos1 = line.find("http:");
@@ -267,7 +262,7 @@ void TextWidget::insertText(const TextProperties& tp, const ustring& line)
         // Just insert the line, no URLs were found
         buffer->insert_with_tags(buffer->end(), line, tags);
     }
-    */
+#endif
 }
 
 void TextWidget::removeTopBuffer()

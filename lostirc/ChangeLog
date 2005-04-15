@@ -1,5 +1,16 @@
 For a summary of changes between releases - see the NEWS file.
 
+2005-04-15  Morten Brix Pedersen
+	* configure.ac: Bump version to 0.4.5pre.
+	* TextWidget.cpp:
+	  - Don't create new marks all the time when inserting new text.
+	    Just reuse the same mark and move it to new locations.  This might
+	    fix a ressource leak.
+	  - Use Gtk::Range::set_value() instead of the
+	    Gtk::Adjustment::set_value(). With this function we don't have to
+	    check for going out-of-bounds, so less application code.
+	* TODO: Update with some items.
+
 2005-02-04  Morten Brix Pedersen
 	* configure.ac: Bump version and release 0.4.4.
 
