@@ -20,9 +20,6 @@ RANDOM BUGS:
 
   * Should we check for EAGAIN on send()? It seems to always succeed anyway.
 
-  * We might need to use Alt-num for switching tabs instead of Ctrl-num. It
-    seems to be the HIG standard.
-
 DCC:
 ----
   * DCC port ranges.

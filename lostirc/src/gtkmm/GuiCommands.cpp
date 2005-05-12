@@ -63,10 +63,12 @@ void send(ServerConnection *conn, ustring cmd, const ustring& params)
 
 void Query(ServerConnection *conn, const ustring& params)
 {
-    if (params.empty()) {
+    ustring::size_type pos1 = params.find_first_of(" ");
+    ustring nick = params.substr(0, pos1);
+    if (nick.empty()) {
         throw CommandException(_("/QUERY <nick>, start a query(tab) with a user"));
     } else {
-        AppWin->getNotebook().addTab(Tab::QUERY, params, conn);
+        AppWin->getNotebook().addTab(Tab::QUERY, nick, conn);
     }
 }
 
@@ -213,7 +215,7 @@ std::vector<Glib::ustring> getCommands()
 }
 void displayKeybindings(ServerConnection *conn, const ustring& params)
 {
-        AppWin->getNotebook().getCurrent()->getText() << _("\0037Available keybindings:\n    \0038CTRL-[1-9] - switch tabs from 1-9\n    CTRL-N - create new server tab\n    ALT-Left - navigate a tab to the left\n    ALT-Right - navigate a tab to the right\n    CTRL-W - close current window(tab)\n\n    Tab - nick-completion and command-completion\n\n    Page Up/Page Down - Scroll up or down in text box\n    CTRL-End/Home - go to bottom or top of text box\n    CTRL-H - Scroll back to previous highlight (if any)\n\n    CTRL-M - show/hide menubar\n    CTRL-P - open preferences\n    CTRL-S - open server window\n    CTRL-Q - quit LostIRC\n");
+        AppWin->getNotebook().getCurrent()->getText() << _("\0037Available keybindings:\n    \0038ALT-[1-9] - switch tabs from 1-9\n    CTRL-N - create new server tab\n    ALT-Left - navigate a tab to the left\n    ALT-Right - navigate a tab to the right\n    CTRL-W - close current window(tab)\n\n    Tab - nick-completion and command-completion\n\n    Page Up/Page Down - Scroll up or down in text box\n    CTRL-End/Home - go to bottom or top of text box\n    CTRL-H - Scroll back to previous highlight (if any)\n\n    CTRL-M - show/hide menubar\n    CTRL-P - open preferences\n    CTRL-S - open server window\n    CTRL-Q - quit LostIRC\n");
 
 }
 }

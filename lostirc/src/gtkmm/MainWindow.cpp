@@ -519,8 +519,23 @@ void MainWindow::closeCurrentTab()
 
 bool MainWindow::on_key_press_event(GdkEventKey* e)
 {
-    // CTRL key.
-    if (e->state & GDK_CONTROL_MASK) {
+    if (e->state & GDK_MOD1_MASK) {
+        // CTRL key.
+        if (e->keyval == GDK_Page_Up) {
+            _notebook.prev_page();
+
+        } else if (e->keyval == GDK_Page_Down) {
+            _notebook.next_page();
+        } else if (e->keyval == GDK_h) {
+            _notebook.getCurrent()->getText().scrollToHighlightMark();
+        } else if (e->keyval == GDK_End) {
+            _notebook.getCurrent()->getText().scrollToBottom();
+        } else if (e->keyval == GDK_Home) {
+            _notebook.getCurrent()->getText().scrollToTop();
+        }
+
+    } else if (e->state & GDK_MOD1_MASK) {
+        // ALT key.
         if (e->keyval == GDK_0) {
             _notebook.set_current_page(9);
         } else if (e->keyval == GDK_1) {
@@ -541,25 +556,11 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
             _notebook.set_current_page(7);
         } else if (e->keyval == GDK_9) {
             _notebook.set_current_page(8);
-        } else if (e->keyval == GDK_h) {
-            _notebook.getCurrent()->getText().scrollToHighlightMark();
-        } else if (e->keyval == GDK_End) {
-            _notebook.getCurrent()->getText().scrollToBottom();
-        } else if (e->keyval == GDK_Home) {
-            _notebook.getCurrent()->getText().scrollToTop();
-        }
-        if (e->keyval == GDK_Page_Up) {
-            _notebook.prev_page();
-
-        } else if (e->keyval == GDK_Page_Down) {
-            _notebook.next_page();
-        }
-    } else if (e->state & GDK_MOD1_MASK) {
-        // ALT key.
-        if (e->keyval == GDK_Left)
+        } else if (e->keyval == GDK_Left) {
               _notebook.prev_page();
-        else if (e->keyval == GDK_Right)
+        } else if (e->keyval == GDK_Right) {
               _notebook.next_page();
+        }
     } else {
         if (e->keyval == GDK_Page_Up) {
             _notebook.getCurrent()->getText().scrollUpPage();

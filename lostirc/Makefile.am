@@ -6,14 +6,9 @@ EXTRA_DIST = config.rpath  lostirc.desktop \
 dist-hook: lostirc.spec
 	cp lostirc.spec $(distdir)
 
-if GNOME
-Gnomedir = $(datadir)/applications
-Gnome_DATA = lostirc.desktop
-endif
-
-if KDE
-Kdedir = $(prefix)/share/applnk
-Kde_DATA = lostirc.desktop
+if DESKTOPFILE
+Desktopdir = $(datadir)/applications
+Desktop_DATA = lostirc.desktop
 endif
 
 pixmapdir = $(datadir)/pixmaps

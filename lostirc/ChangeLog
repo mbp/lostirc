@@ -1,5 +1,20 @@
 For a summary of changes between releases - see the NEWS file.
 
+2005-05-12  Morten Brix Pedersen
+	* MainWindow.cpp: Change key bindings for switching tabs to use ALT
+	instead of CTRL, since this seems to be standard now in other
+	applications.
+	* GuiCommands.cpp: Change introductory help text.
+	* GuiCommands.cpp: Make sure that a space delimited query doesn't
+	get started with /QUERY.
+
+2005-05-02  Morten Brix Pedersen
+	* configure.ac: Remove --enable-gnome and --enable-kde in favor of
+	--enable-desktopfile since both GNOME and KDE store desktop files in
+	the same directory now.
+	* Makefile.am: Only distribute desktopfile into
+	/usr/share/applications if DESKTOPFILE is set.
+
 2005-04-15  Morten Brix Pedersen
 	* configure.ac: Bump version to 0.4.5pre.
 	* TextWidget.cpp:

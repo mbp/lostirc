@@ -31,34 +31,19 @@ else
         AC_MSG_RESULT(no)
 fi
 
-# Add ./configure --enable-kde
-AC_ARG_ENABLE(kde,
-        [  --disable-kde           don't install KDE .desktop/menu entry],
-        kde=$enable_kde,
-        kde=yes
+# Add ./configure --enable-desktopfile
+AC_ARG_ENABLE(desktopfile,
+        [  --disable-desktopfile   don't install .desktop/menu entry],
+        desktopfile=$enable_desktopfile,
+        desktopfile=yes
 )
-AC_MSG_CHECKING(whether to install KDE .desktop/menu entry)
-if test "x$kde" = xyes; then
+AC_MSG_CHECKING(whether to install .desktop/menu entry)
+if test "x$desktopfile" = xyes; then
         AC_MSG_RESULT(yes)
-        AM_CONDITIONAL(KDE, true)
+        AM_CONDITIONAL(DESKTOPFILE, true)
 else
         AC_MSG_RESULT(no)
-        AM_CONDITIONAL(KDE, false)
-fi
-
-# Add ./configure --enable-gnome
-AC_ARG_ENABLE(gnome,
-        [  --disable-gnome         don't install GNOME .desktop/menu entry],
-        gnome=$enable_gnome,
-        gnome=yes
-)
-AC_MSG_CHECKING(whether to install GNOME .desktop/menu entry)
-if test "x$gnome" = xyes; then
-        AC_MSG_RESULT(yes)
-        AM_CONDITIONAL(GNOME, true)
-else
-        AC_MSG_RESULT(no)
-        AM_CONDITIONAL(GNOME, false)
+        AM_CONDITIONAL(DESKTOPFILE, false)
 fi
 
 dnl Used for enabling the "-no-undefined" flag while generating DLLs
