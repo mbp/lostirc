@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LostIRC 0.4.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-04 18:12+0100\n"
-"PO-Revision-Date: 2004-09-08 19:31+0200\n"
+"POT-Creation-Date: 2005-05-13 13:31+0200\n"
+"PO-Revision-Date: 2005-05-13 11:32+0200\n"
 "Last-Translator: Morten Brix Pedersen <morten@wtf.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -35,41 +35,41 @@ msgstr "<span foreground=\"blue\">Ingen fundne.</span>"
 msgid "Must be connected."
 msgstr "Skal være forbundet."
 
-#: src/gtkmm/GuiCommands.cpp:67
+#: src/gtkmm/GuiCommands.cpp:69
 msgid "/QUERY <nick>, start a query(tab) with a user"
 msgstr "/QUERY <navn>, start en dialog med en bruger"
 
-#: src/gtkmm/GuiCommands.cpp:114
+#: src/gtkmm/GuiCommands.cpp:116
 msgid "/KICK <nick>, kick a user from a channel."
 msgstr "/KICK <navn>, spark en bruger ud fra en kanal."
 
-#: src/gtkmm/GuiCommands.cpp:131
+#: src/gtkmm/GuiCommands.cpp:133
 msgid "/OP <nicks>, ops one or more users in the current channel."
 msgstr ""
 "/OP <navne>, giver operator status til en ellere flere brugere i den "
 "nuværende kanal."
 
-#: src/gtkmm/GuiCommands.cpp:143
+#: src/gtkmm/GuiCommands.cpp:145
 msgid "/DEOP <nicks>, deops one or more users in the current channel."
 msgstr ""
 "/DEOP <navne>, fjerner operator status fra en eller flere bruger i den "
 "nuværende kanal."
 
-#: src/gtkmm/GuiCommands.cpp:155
+#: src/gtkmm/GuiCommands.cpp:157
 msgid "/VOICE <nicks>, voices one or more users in the current channel."
 msgstr ""
 "/VOICE <navne>, giver lyd til en eller flere brugere i den nuværende kanal."
 
-#: src/gtkmm/GuiCommands.cpp:167
+#: src/gtkmm/GuiCommands.cpp:169
 msgid "/DEVOICE <nicks>, devoices one or more users in the current channel."
 msgstr ""
 "/DEVOICE <navne>, fjerner lyd til en eller flere brugere i den nuværende "
 "kanal."
 
-#: src/gtkmm/GuiCommands.cpp:216
+#: src/gtkmm/GuiCommands.cpp:218
 msgid ""
 "7Available keybindings:\n"
-"    8CTRL-[1-9] - switch tabs from 1-9\n"
+"    8ALT-[1-9] - switch tabs from 1-9\n"
 "    CTRL-N - create new server tab\n"
 "    ALT-Left - navigate a tab to the left\n"
 "    ALT-Right - navigate a tab to the right\n"
@@ -87,7 +87,7 @@ msgid ""
 "    CTRL-Q - quit LostIRC\n"
 msgstr ""
 "7Tilgængelig tastaturbindinger:\n"
-"    8CTRL-[1-9] - skift faneblad fra 1-9\n"
+"    8ALT-[1-9] - skift faneblad fra 1-9\n"
 "    CTRL-N - lav et nyt server faneblad\n"
 "    ALT-Venstre - skift til næste faneblad mod venstre\n"
 "    ALT-Højre - skift til næste faneblad mod højre\n"

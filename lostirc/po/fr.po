@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LostIRC 4.0.0CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-04 18:12+0100\n"
+"POT-Creation-Date: 2005-05-13 13:31+0200\n"
 "PO-Revision-Date: 2004-06-13 15:41+0200\n"
 "Last-Translator: Bruno Dusausoy <bdusauso@beeznest.net>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -37,44 +37,43 @@ msgstr "<span foreground=\"blue\">Pas de correspondance.</span>"
 msgid "Must be connected."
 msgstr "Doit être connecté."
 
-#: src/gtkmm/GuiCommands.cpp:67
+#: src/gtkmm/GuiCommands.cpp:69
 msgid "/QUERY <nick>, start a query(tab) with a user"
 msgstr ""
 "/QUERY <nick>, démarre une conversation privée (onglet) avec un utilisateur"
 
-#: src/gtkmm/GuiCommands.cpp:114
+#: src/gtkmm/GuiCommands.cpp:116
 msgid "/KICK <nick>, kick a user from a channel."
 msgstr "/KICK <nick>, kicke un utilisateur du canal."
 
-#: src/gtkmm/GuiCommands.cpp:131
+#: src/gtkmm/GuiCommands.cpp:133
 msgid "/OP <nicks>, ops one or more users in the current channel."
 msgstr ""
 "/OP <nicks>, donne le statut d'opérateur canal à un ou plusieurs "
 "utilisateurs du canal courant."
 
-#: src/gtkmm/GuiCommands.cpp:143
+#: src/gtkmm/GuiCommands.cpp:145
 msgid "/DEOP <nicks>, deops one or more users in the current channel."
 msgstr ""
 "/DEOP <nicks>, enlève le statut d'opérateur du canl à un ou plusieurs "
 "utilisateur du canal courant."
 
-#: src/gtkmm/GuiCommands.cpp:155
+#: src/gtkmm/GuiCommands.cpp:157
 msgid "/VOICE <nicks>, voices one or more users in the current channel."
 msgstr ""
 "/VOICE <nicks>, donne le \"voice\" à un ou plusieurs utilisateurs du canal "
 "courant."
 
-#: src/gtkmm/GuiCommands.cpp:167
+#: src/gtkmm/GuiCommands.cpp:169
 msgid "/DEVOICE <nicks>, devoices one or more users in the current channel."
 msgstr ""
 "/DEVOICE <nicks>, enlève le \"voice\" d'un ou plusieurs utilisateur du canal "
 "courant."
 
-#: src/gtkmm/GuiCommands.cpp:216
-#, fuzzy
+#: src/gtkmm/GuiCommands.cpp:218
 msgid ""
 "7Available keybindings:\n"
-"    8CTRL-[1-9] - switch tabs from 1-9\n"
+"    8ALT-[1-9] - switch tabs from 1-9\n"
 "    CTRL-N - create new server tab\n"
 "    ALT-Left - navigate a tab to the left\n"
 "    ALT-Right - navigate a tab to the right\n"
@@ -92,7 +91,7 @@ msgid ""
 "    CTRL-Q - quit LostIRC\n"
 msgstr ""
 "Raccourcis disponibles:\n"
-"    CTRL-[1-9] - Aller à l'onglet numéro 1-9    CTRL-N - Créer un nouvel "
+"    ALT-[1-9] - Aller à l'onglet numéro 1-9    CTRL-N - Créer un nouvel "
 "onglet de serveur\n"
 "    ALT-Gauche - Aller à l'onglet de gauche\n"
 "    ALT-Droite - Aller à l'onglet de droite\n"
