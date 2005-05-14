@@ -1,4 +1,4 @@
-LostIRC - (x.x.x)
+LostIRC - (0.4.5) - Sat May, 14th 2005
   * Fix a ressource leak, might improve the footprint over time.
   * Changes keybinding for switching tabs (CTRL-[0-9]) to use ALT instead,
     since this seems to be standard in other applications now.

@@ -1,5 +1,9 @@
 For a summary of changes between releases - see the NEWS file.
 
+2005-05-14  Morten Brix Pedersen
+	* configure.ac: Bump version and release 0.4.5.
+	* INSTALL: Correct names of Debian packages.
+
 2005-05-12  Morten Brix Pedersen
 	* MainWindow.cpp: Change key bindings for switching tabs to use ALT
 	instead of CTRL, since this seems to be standard now in other

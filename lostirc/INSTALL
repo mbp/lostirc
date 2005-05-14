@@ -6,10 +6,10 @@ In order to compile LostIRC, you need have at least these packages installed:
  * A C++ compiler, like g++
 
  * gtkmm 2.0 development package (http://gtkmm.org/)
-   Debian package: libgtkmm2.0-dev
+   Debian package: libgtkmm-2.4-dev
 
  * sigc++ 1.2 development package (http://libsigc.sourceforge.net/)
-   Debian package: libsigc++-1.2-dev
+   Debian package: libsigc++-2.0-dev
 
 For CVS versions, you need to create the configure script with autogen.sh.
 To do this, you must have additional packages installed: autoconf, automake,
