@@ -1,5 +1,12 @@
 For a summary of changes between releases - see the NEWS file.
 
+2005-06-03  Morten Brix Pedersen
+	* configure.ac: Bump version to 0.4.6pre.
+		      + Correct build failure when using pkg-config 0.17 or
+		      later.
+	* MainWindow.cpp: Fix some important keybindings not working in
+	0.4.5. Silly typo.
+
 2005-05-14  Morten Brix Pedersen
 	* configure.ac: Bump version and release 0.4.5.
 	* INSTALL: Correct names of Debian packages.

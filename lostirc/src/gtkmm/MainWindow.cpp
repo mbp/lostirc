@@ -519,7 +519,7 @@ void MainWindow::closeCurrentTab()
 
 bool MainWindow::on_key_press_event(GdkEventKey* e)
 {
-    if (e->state & GDK_MOD1_MASK) {
+    if (e->state & GDK_CONTROL_MASK) {
         // CTRL key.
         if (e->keyval == GDK_Page_Up) {
             _notebook.prev_page();
