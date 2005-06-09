@@ -1,4 +1,4 @@
-LostIRC - (x.x.x)
+LostIRC - (0.4.6) - Tue Jun, 7th 2005
   * Fix a critical bug with many important keybindings not working at all.
   * Fix build failure with pkg-config 0.17 or later.
 
