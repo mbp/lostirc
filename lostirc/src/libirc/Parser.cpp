@@ -696,7 +696,7 @@ void Parser::Banlist(const ustring& param)
     ss >> owner;
     ss >> time;
 
-    long date = std::atol(time.c_str());
+    time_t date = static_cast<time_t>(std::atol(time.c_str()));
     time = std::ctime(&date);
 
     Channel *c = _conn->findChannel(chan);

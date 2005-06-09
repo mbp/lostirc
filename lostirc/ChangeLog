@@ -1,6 +1,11 @@
 For a summary of changes between releases - see the NEWS file.
 
 2005-06-07  Morten Brix Pedersen
+	* configure.ac: Bump version to 0.4.7pre.
+	* Parser.cpp: Use static_cast when converting from long to time_t.
+	Needed for FreeBSD.
+
+2005-06-07  Morten Brix Pedersen
 	* configure.ac: Bump version and release 0.4.6.
 
 2005-06-03  Morten Brix Pedersen
