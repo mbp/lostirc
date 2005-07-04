@@ -76,6 +76,7 @@ namespace FE
 class FrontEnd
 {
 public:
+    virtual ~FrontEnd() { }
     virtual void displayMessage(const Glib::ustring& msg, FE::Destination d, ServerConnection *conn = 0, bool shouldHighlight = true) = 0;
     virtual void displayMessage(const Glib::ustring& msg, ChannelBase& to, ServerConnection *conn, bool shouldHighlight = true) = 0;
     virtual void highlight(ChannelBase& chan, ServerConnection *conn) = 0;

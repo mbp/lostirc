@@ -204,24 +204,26 @@ void MainWindow::nick(const ustring& nick, const ustring& to, vector<ChannelBase
 
 void MainWindow::CUMode(const ustring& nick, Channel& chan, const std::vector<User>& users, ServerConnection *conn)
 {
-    Tab *tab = _notebook.findTab(chan.getName(), conn);
+    if (Tab *tab = _notebook.findTab(chan.getName(), conn)) {
 
-    std::vector<User>::const_iterator i;
-    for (i = users.begin(); i != users.end(); ++i) {
-        tab->removeUser(i->nick);
-        tab->insertUser(i->nick, i->getMode());
+        std::vector<User>::const_iterator i;
+        for (i = users.begin(); i != users.end(); ++i) {
+            tab->removeUser(i->nick);
+            tab->insertUser(i->nick, i->getMode());
+        }
     }
 }
 
 void MainWindow::names(Channel& c, ServerConnection *conn)
 {
-    Tab *tab = _notebook.findTab(c.getName(), conn);
+    if (Tab *tab = _notebook.findTab(c.getName(), conn)) {
 
-    std::vector<User*> users = c.getUsers();
-    std::vector<User*>::const_iterator i;
+        std::vector<User*> users = c.getUsers();
+        std::vector<User*>::const_iterator i;
 
-    for (i = users.begin(); i != users.end(); ++i)
-          tab->insertUser((*i)->nick, (*i)->getMode());
+        for (i = users.begin(); i != users.end(); ++i)
+              tab->insertUser((*i)->nick, (*i)->getMode());
+    }
 }
 
 void MainWindow::highlight(ChannelBase& chan, ServerConnection* conn)

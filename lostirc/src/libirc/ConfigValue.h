@@ -26,6 +26,7 @@
 class baseConfigValue
 {
 public:
+    virtual ~baseConfigValue() { }
     virtual Glib::ustring getString() = 0;
     virtual baseConfigValue& operator=(const Glib::ustring&) = 0;
 };

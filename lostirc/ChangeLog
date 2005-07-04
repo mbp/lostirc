@@ -1,5 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
+2005-07-04  Morten Brix Pedersen
+	* MainWindow.cpp: Make sure a tab exists before calling it.. it
+	might have been removed by the GUI.
+	* FrontEnd.cpp, ConfigValue.h: Fix a warning with gcc 4.0.
+
 2005-06-07  Morten Brix Pedersen
 	* configure.ac: Bump version to 0.4.7pre.
 	* Parser.cpp: Use static_cast when converting from long to time_t.
