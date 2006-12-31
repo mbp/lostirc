@@ -120,7 +120,7 @@ void MainWindow::hide()
   Gtk::Main::quit();
 }
 
-void MainWindow::on_delete_event( GdkEventAny* e )
+bool MainWindow::on_delete_event( GdkEventAny* e )
 {
   MainWindow::hide();
   
