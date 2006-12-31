@@ -79,6 +79,14 @@ MainWindow::MainWindow(bool autoconnect)
         _app.autoConnect();
     }
     _notebook.getCurrent()->getEntry().grab_focus();
+
+    _statusicon = Gtk::StatusIcon::create_from_file( LOSTIRC_DATADIR G_DIR_SEPARATOR_S "pixmaps" G_DIR_SEPARATOR_S "lostirc.png" );
+    GtkStatusIcon* underlying_c_instance = _statusicon->gobj();
+    g_signal_connect( G_OBJECT( underlying_c_instance ),
+		      "activate",
+		      G_CALLBACK( MainWindow::on_tray_click ),
+		      (gpointer) this );
+    _statusicon->set_visible( true );
 }
 
 MainWindow::~MainWindow()
@@ -100,6 +108,23 @@ MainWindow::~MainWindow()
     }
 
     AppWin = 0;
+}
+
+void MainWindow::on_tray_click( GtkStatusIcon* icon, gpointer data )
+{
+  ((MainWindow*)data)->property_visible() = !((MainWindow*)data)->property_visible();
+}
+
+void MainWindow::hide()
+{
+  Gtk::Main::quit();
+}
+
+void MainWindow::on_delete_event( GdkEventAny* e )
+{
+  MainWindow::hide();
+  
+  return true;
 }
 
 void MainWindow::displayMessage(const ustring& msg, FE::Destination d, ServerConnection *conn, bool shouldHighlight)

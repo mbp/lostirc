@@ -25,6 +25,8 @@
 #include <glibmm/main.h>
 #include <gtkmm/window.h>
 #include <gtkmm/uimanager.h>
+#include <gtkmm/statusicon.h>
+#include <gtk/gtk.h>
 #include <ServerConnection.h>
 #include <LostIRCApp.h>
 #include <FrontEnd.h>
@@ -48,6 +50,7 @@ class MainWindow : public Gtk::Window, public FrontEnd
     std::auto_ptr<ServerWindow> _serverwin;
     std::auto_ptr<Gtk::Dialog> _helpwin;
     std::auto_ptr<Gtk::Dialog> _aboutwin;
+    Glib::RefPtr<Gtk::StatusIcon> _statusicon;
 
     void openPrefs();
     void openDccWindow();
@@ -72,6 +75,9 @@ public:
     Tab* newServerTab();
     void hideMenu();
     void hideStatusbar();
+    static void on_tray_click( GtkStatusIcon* icon, gpointer data );
+    virtual void hide();
+    virtual bool on_delete_event( GdkEventAny* e );
 
     StatusBar _statusbar;
 

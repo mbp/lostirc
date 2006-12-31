@@ -45,5 +45,6 @@ int main(int argc, char** argv)
 
     MainWindow window(autoconnect);
 
-    app.run(window);
+    app.run();
+    window.show();
 }
