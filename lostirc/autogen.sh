@@ -2,7 +2,7 @@
 
 # build it all
 libtoolize --copy --force && \
-aclocal $ACLOCAL_FLAGS && \
+aclocal $ACLOCAL_FLAGS -I ./m4 && \
 autopoint --force && \
 autoheader && \
 automake --include-deps --add-missing --copy && \
