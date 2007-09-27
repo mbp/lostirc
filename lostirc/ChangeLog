@@ -1,5 +1,10 @@
 For a summary of changes between releases - see the NEWS file.
 
+2007-09-27  Martin Braure de Calignon  <braurede@free.fr>
+	* MainWindow.h, MainWindow.cpp, main.cpp: add a status icon (tray
+	icon) to hide or show main window.
+	* autogen.sh: force aclocal to use m4 dir.
+
 2005-07-04  Morten Brix Pedersen
 	* MainWindow.cpp: Make sure a tab exists before calling it.. it
 	might have been removed by the GUI.
