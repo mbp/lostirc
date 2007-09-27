@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2002-2004 Morten Brix Pedersen <morten@wtf.dk>
+ * Copyright (C) 2007 Martin Braure de Calignon <braurede@free.fr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,15 +27,15 @@
 class baseConfigValue
 {
 public:
-    virtual ~baseConfigValue() { }
     virtual Glib::ustring getString() = 0;
     virtual baseConfigValue& operator=(const Glib::ustring&) = 0;
+    virtual ~baseConfigValue() { }
 };
 
 template<typename T>
 class ConfigValue : public baseConfigValue
 {
-    T value;
+  T value;
 
 public:
     ConfigValue() { }

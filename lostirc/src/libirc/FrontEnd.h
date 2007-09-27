@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2002-2004 Morten Brix Pedersen <morten@wtf.dk>
+ * Copyright (C) 2007 Martin Braure de Calignon <braurede@free.fr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,7 +77,6 @@ namespace FE
 class FrontEnd
 {
 public:
-    virtual ~FrontEnd() { }
     virtual void displayMessage(const Glib::ustring& msg, FE::Destination d, ServerConnection *conn = 0, bool shouldHighlight = true) = 0;
     virtual void displayMessage(const Glib::ustring& msg, ChannelBase& to, ServerConnection *conn, bool shouldHighlight = true) = 0;
     virtual void highlight(ChannelBase& chan, ServerConnection *conn) = 0;
@@ -94,7 +94,7 @@ public:
     virtual void newDCC(DCC *dcc) = 0;
     virtual void dccStatusChanged(DCC *dcc) = 0;
     virtual void localeError(bool tried_custom_encoding) = 0;
-
+    virtual ~FrontEnd() { }
 };
 
 

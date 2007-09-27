@@ -4,6 +4,14 @@ For a summary of changes between releases - see the NEWS file.
 	* MainWindow.h, MainWindow.cpp, main.cpp: add a status icon (tray
 	icon) to hide or show main window.
 	* autogen.sh: force aclocal to use m4 dir.
+	* configure.ac: force using gtkmm > 2.10 for tray icon
+	* add debian patch :
+		- Swedish translation thanks to Daniel Nylander
+		- Remove some compilation warnings
+		- Fixes by Darren Salt:
+			* "double tab problem"
+			* "shortcut interference for delete-next"
+			* Spelling correction
 
 2005-07-04  Morten Brix Pedersen
 	* MainWindow.cpp: Make sure a tab exists before calling it.. it

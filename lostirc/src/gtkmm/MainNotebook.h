@@ -30,6 +30,8 @@ class MainNotebook : public Gtk::Notebook
 public:
     MainNotebook();
 
+    virtual bool on_key_press_event(GdkEventKey* e);
+
     Tab* addTab(Tab::Type type, const Glib::ustring& name, ServerConnection *conn);
     Tab* getCurrent(ServerConnection *conn = 0);
     Tab* findTab(const Glib::ustring& name, ServerConnection *conn, bool findInActive = false);

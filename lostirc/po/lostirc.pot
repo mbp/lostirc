@@ -87,7 +87,7 @@ msgstr ""
 
 #: src/gtkmm/MainWindow.cpp:310
 msgid ""
-"Locale conversion error. An error occured while converting text from UTF-8 "
+"Locale conversion error. An error occurred while converting text from UTF-8 "
 "to your current locale.\n"
 "\n"
 "This is most likely because your locale is set to a value which doesn't "
@@ -105,7 +105,7 @@ msgstr ""
 
 #: src/gtkmm/MainWindow.cpp:318
 msgid ""
-"Encoding conversion error. An error occured while converting text from UTF-8 "
+"Encoding conversion error. An error occurred while converting text from UTF-8 "
 "to the user-defined encoding.\n"
 "\n"
 "This is most likely because the encoding you have chosen doesn't support the "
@@ -536,11 +536,11 @@ msgid "Error writing to pipe: "
 msgstr ""
 
 #: src/libirc/Socket.cpp:327
-msgid "An error occured while reading from pipe (Internal error 2)"
+msgid "An error occurred while reading from pipe (Internal error 2)"
 msgstr ""
 
 #: src/libirc/Socket.cpp:337
-msgid "An error occured while reading from pipe (Internal error 3)"
+msgid "An error occurred while reading from pipe (Internal error 3)"
 msgstr ""
 
 #: src/libirc/Parser.cpp:876

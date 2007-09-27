@@ -1,70 +1,67 @@
-# LostIRC Danish Translation
-#
-# Morten Brix Pedersen <morten@wtf.dk>, 2004.
-#
+# Swedish translation of lostirc.
+# Copyright (C) 2006 Free Software Foundation, Inc.
 # This file is distributed under the same license as the lostirc package.
+# Daniel Nylander <po@danielnylander.se>, 2006.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: LostIRC 0.4.2\n"
+"Project-Id-Version: lostirc\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-05-13 13:31+0200\n"
-"PO-Revision-Date: 2005-05-13 11:32+0200\n"
-"Last-Translator: Morten Brix Pedersen <morten@wtf.dk>\n"
-"Language-Team: Danish <dansk@klid.dk>\n"
+"PO-Revision-Date: 2006-04-07 12:06+0100\n"
+"Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
+"Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: src/gtkmm/Entry.cpp:78
 msgid "Not connected to server. Try `/SERVER <hostname / ip>'.\n"
-msgstr "Ikke forbundet til server. Prøv `/SERVER <værtsnavn / ip>'.\n"
+msgstr "Inte ansluten till en server. Prova \"/SERVER <värdnamn / ip>\".\n"
 
 #: src/gtkmm/Entry.cpp:80
 msgid "No channel joined. Try `/JOIN #channel-name'\n"
-msgstr "Er ikke i nogen kanal. Prøv `/JOIN #kanalnavn'\n"
+msgstr "Ingen aktuell kanal. Prova \"/JOIN #kanalnamn\"\n"
 
-#: src/gtkmm/Entry.cpp:143 src/gtkmm/Entry.cpp:176 src/gtkmm/Entry.cpp:199
+#: src/gtkmm/Entry.cpp:143
+#: src/gtkmm/Entry.cpp:176
+#: src/gtkmm/Entry.cpp:199
 msgid "<span foreground=\"blue\">Matches:</span> "
-msgstr "<span foreground=\"blue\">Fundne:</span> "
+msgstr "<span foreground=\"blue\">Matchar:</span> "
 
-#: src/gtkmm/Entry.cpp:145 src/gtkmm/Entry.cpp:178
+#: src/gtkmm/Entry.cpp:145
+#: src/gtkmm/Entry.cpp:178
 msgid "<span foreground=\"blue\">No matches.</span>"
-msgstr "<span foreground=\"blue\">Ingen fundne.</span>"
+msgstr "<span foreground=\"blue\">Inga träffar.</span>"
 
-#: src/gtkmm/GuiCommands.cpp:54 src/libirc/Commands.cpp:77
+#: src/gtkmm/GuiCommands.cpp:54
+#: src/libirc/Commands.cpp:77
 msgid "Must be connected."
-msgstr "Skal være forbundet."
+msgstr "Måste vara ansluten."
 
 #: src/gtkmm/GuiCommands.cpp:69
 msgid "/QUERY <nick>, start a query(tab) with a user"
-msgstr "/QUERY <navn>, start en dialog med en bruger"
+msgstr "/QUERY <smeknamn>, starta en frågeflik med en användare"
 
 #: src/gtkmm/GuiCommands.cpp:116
 msgid "/KICK <nick>, kick a user from a channel."
-msgstr "/KICK <navn>, spark en bruger ud fra en kanal."
+msgstr "/KICK <smeknamn>, sparka ut en användare från en kanal."
 
 #: src/gtkmm/GuiCommands.cpp:133
 msgid "/OP <nicks>, ops one or more users in the current channel."
-msgstr ""
-"/OP <navne>, giver operator status til en ellere flere brugere i den "
-"nuværende kanal."
+msgstr "/OP <smeknamn>, ger operatörsstatus till en eller flera användare i aktuell kanal."
 
 #: src/gtkmm/GuiCommands.cpp:145
 msgid "/DEOP <nicks>, deops one or more users in the current channel."
-msgstr ""
-"/DEOP <navne>, fjerner operator status fra en eller flere bruger i den "
-"nuværende kanal."
+msgstr "/DEOP <smeknamn>, tar bort operatörsstatus på en eller flera användare i aktuell kanal."
 
 #: src/gtkmm/GuiCommands.cpp:157
 msgid "/VOICE <nicks>, voices one or more users in the current channel."
-msgstr ""
-"/VOICE <navne>, giver lyd til en eller flere brugere i den nuværende kanal."
+msgstr "/VOICE <smeknamn>, ger röststatus till en eller flera användare i aktuell kanal."
 
 #: src/gtkmm/GuiCommands.cpp:169
 msgid "/DEVOICE <nicks>, devoices one or more users in the current channel."
-msgstr ""
-"/DEVOICE <navne>, fjerner lyd til en eller flere brugere i den nuværende "
-"kanal."
+msgstr "/DEVOICE <smeknamn>, tar bort röststatus på en eller flera användare i aktuell kanal."
 
 #: src/gtkmm/GuiCommands.cpp:218
 msgid ""
@@ -86,46 +83,42 @@ msgid ""
 "    CTRL-S - open server window\n"
 "    CTRL-Q - quit LostIRC\n"
 msgstr ""
-"7Tilgængelig tastaturbindinger:\n"
-"    8ALT-[1-9] - skift faneblad fra 1-9\n"
-"    CTRL-N - lav et nyt server faneblad\n"
-"    ALT-Venstre - skift til næste faneblad mod venstre\n"
-"    ALT-Højre - skift til næste faneblad mod højre\n"
-"    CTRL-W - luk nuværende vindue (faneblad)\n"
+"7Tillgängliga tangentbindningar:\n"
+"    8ALT-[1-9] - växlar flikar från 1-9\n"
+"    CTRL-N - skapa ny serverflik\n"
+"    ALT-Left - flytta en flik till vänster\n"
+"    ALT-Right - flytta en flik till höger\n"
+"    CTRL-W - stäng aktuellt fönster(flik)\n"
 "\n"
-"    Tab - navnefærdiggørrelse og kommandofærdiggørelse\n"
+"    Tab - komplettering av smeknamn och kommando\n"
 "\n"
-"    Page Up/Page Down - Kør op eller ned i tekstboksen\n"
-"    CTRL-End/Home - gå til bunden eller toppen af tekstboksen\n"
-"    CTRL-H - Kør op til sidste anmærkning (hvis nogen)\n"
+"    Page Up/Page Down - Rulla upp och ned i textrutan\n"
+"    CTRL-End/Home - gå till botten eller toppen av textrutan\n"
+"    CTRL-H - Rulla tillbaka till föregående framhävning (om någon)\n"
 "\n"
-"    CTRL-M - vis/skjul menulinje\n"
-"    CTRL-P - åben indstillinger\n"
-"    CTRL-S - åben servervindue\n"
-"    CTRL-Q - afslut LostIRC\n"
-"\n"
+"    CTRL-M - visa/dölj menyrad\n"
+"    CTRL-P - öppna inställningar\n"
+"    CTRL-S - öppna serverfönster\n"
+"    CTRL-Q - avsluta LostIRC\n"
 
-#: src/gtkmm/MainWindow.cpp:267 src/gtkmm/MainWindow.cpp:287
+#: src/gtkmm/MainWindow.cpp:267
+#: src/gtkmm/MainWindow.cpp:287
 msgid "server"
 msgstr "server"
 
 #: src/gtkmm/MainWindow.cpp:310
 msgid ""
-"Locale conversion error. An error occurred while converting text from UTF-8 "
-"to your current locale.\n"
+"Locale conversion error. An error occurred while converting text from UTF-8 to your current locale.\n"
 "\n"
-"This is most likely because your locale is set to a value which doesn't "
-"support the character(s) converting to.\n"
+"This is most likely because your locale is set to a value which doesn't support the character(s) converting to.\n"
 "\n"
 "If you believe this is a bug, please report it to the application author."
 msgstr ""
-"Locale konverteringsfejl. En fejl opstod, ved at konvertere tekst fra UTF-8 "
-"til dit nuværende locale.\n"
+"Fel vid lokalkonvertering. Ett fel inträffade vid konvertering av text från UTF-8 till din aktuella lokal.\n"
 "\n"
-"Dette er højt sandsynligt pga. dit locale er sat til en værdi, der ikke "
-"understøtter bogstaverne, der konverteres til.\n"
+"Detta är antagligen på grund av att din lokal är inställd till ett värde som inte har stöd för de tecken som konverteras.\n"
 "\n"
-"Hvis du tror dette er en fejl, raportér det venligst til programmets ejer."
+"Om du tror att detta är ett fel, rapportera det till programmets upphovsman."
 
 #: src/gtkmm/MainWindow.cpp:314
 msgid ""
@@ -135,25 +128,21 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Dit nuværende locale (ser ud til) at være: "
+"Din aktuella lokal (verkar) vara: "
 
 #: src/gtkmm/MainWindow.cpp:318
 msgid ""
-"Encoding conversion error. An error occurred while converting text from UTF-8 "
-"to the user-defined encoding.\n"
+"Encoding conversion error. An error occurred while converting text from UTF-8 to the user-defined encoding.\n"
 "\n"
-"This is most likely because the encoding you have chosen doesn't support the "
-"character(s) converting to.\n"
+"This is most likely because the encoding you have chosen doesn't support the character(s) converting to.\n"
 "\n"
 "If you believe this is a bug, please report it to the application author."
 msgstr ""
-"Locale konverteringsfejl. En fejl opstod, ved at konvertere tekst fra UTF-8 "
-"til dit nuværende locale.\n"
+"Fel vid konvertering av teckenkodning. Ett fel inträffade vid konvertering av text från UTF-8 till den användardefinierade teckenkodningen.\n"
 "\n"
-"Dette er højt sandsynligt pga. dit locale er sat til en værdi, der ikke "
-"understøtter bogstaverne, der konverteres til.\n"
+"Detta är antagligen på grund av att teckenkodningen du har valt inte har stöd för de tecken som det konverteras till.\n"
 "\n"
-"Hvis du tror dette er en fejl, raportér det venligst til programmets ejer."
+"Om du tror att detta är ett fel, rapportera det till programmets upphovsman."
 
 #: src/gtkmm/MainWindow.cpp:320
 msgid ""
@@ -163,7 +152,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Jeg prøvede at konvertere til: "
+"Jag försökte konvertera till: "
 
 #: src/gtkmm/MainWindow.cpp:324
 msgid ""
@@ -173,7 +162,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"(OBS: Du vil kun se denne advarsel en gang per LostIRC session)"
+"(Notera: Du kommer endast att se denna varning en gång per LostIRC-session)"
 
 #: src/gtkmm/MainWindow.cpp:362
 msgid "_LostIRC"
@@ -181,47 +170,47 @@ msgstr "_LostIRC"
 
 #: src/gtkmm/MainWindow.cpp:363
 msgid "_New Server Tab"
-msgstr "_Nyt server-faneblad"
+msgstr "_Ny serverflik"
 
 #: src/gtkmm/MainWindow.cpp:366
 msgid "Clear Window"
-msgstr "Ryd vindue"
+msgstr "Rensa fönster"
 
 #: src/gtkmm/MainWindow.cpp:368
 msgid "Clear All Windows"
-msgstr "Ryd alle vinduer"
+msgstr "Rensa alla fönster"
 
 #: src/gtkmm/MainWindow.cpp:370
 msgid "Close Current Tab"
-msgstr "Luk nuværende faneblad"
+msgstr "Stäng aktuell flik"
 
 #: src/gtkmm/MainWindow.cpp:376
 msgid "_View"
-msgstr "_Vis"
+msgstr "_Visa"
 
 #: src/gtkmm/MainWindow.cpp:377
 msgid "_Menubar"
-msgstr "_Menulinje"
+msgstr "_Menyrad"
 
 #: src/gtkmm/MainWindow.cpp:378
 msgid "Status_bar"
-msgstr "Statuslinje"
+msgstr "Status_rad"
 
 #: src/gtkmm/MainWindow.cpp:379
 msgid "_User List"
-msgstr "_Brugerliste"
+msgstr "_Användarlista"
 
 #: src/gtkmm/MainWindow.cpp:380
 msgid "_Server List"
-msgstr "_Serverliste"
+msgstr "_Serverlista"
 
 #: src/gtkmm/MainWindow.cpp:381
 msgid "_DCC Transfers"
-msgstr "_DCC overførsler"
+msgstr "_DCC-överföringar"
 
 #: src/gtkmm/MainWindow.cpp:384
 msgid "_Help"
-msgstr "_Hjælp"
+msgstr "_Hjälp"
 
 #: src/gtkmm/MainWindow.cpp:385
 msgid "_Introduction"
@@ -236,8 +225,7 @@ msgid ""
 "LostIRC Quick Introduction\n"
 "\n"
 "This help window is a quick guide to get you going with LostIRC.\n"
-"Move this window away from the LostIRC window, and use it as a quick "
-"reference window until you know the general idea.\n"
+"Move this window away from the LostIRC window, and use it as a quick reference window until you know the general idea.\n"
 "\n"
 "You can connect to a server using:\n"
 "    /SERVER <hostname / ip>\n"
@@ -251,22 +239,21 @@ msgid ""
 "And you should really check out the list of key bindings:\n"
 "    /KEYBINDINGS"
 msgstr ""
-"LostIRC hurtig introduktion\n"
+"Snabbintroduktion för LostIRC\n"
 "\n"
-"Dette hjælpe vindue er en hurtig hjælp til at komme i gang med LostIRC.\n"
-"Flyt dette vindue væk fra LostIRC-vinduet, og brug det som en hurtig "
-"reference indtil du har fået fat i idéen.\n"
+"Detta hjälpfönster är en snabbguide för att få dig komma igång med LostIRC.\n"
+"Flytta bort detta fönster från LostIRC-fönstret, och använd det som ett referensfönster tills du känner till det allmänna.\n"
 "\n"
-"Du kan etablere forbindelse til en server ved at bruge:\n"
-"    /SERVER <værtsnavn / ip>\n"
+"Du kan ansluta till en server med:\n"
+"    /SERVER <värdnamn / ip>\n"
 "\n"
-"...og så gå ind i en kanal:\n"
-"    /JOIN <channel-name>\n"
+"...och sedan gå in i en kanal:\n"
+"    /JOIN <kanalnamn>\n"
 "\n"
-"En liste over alle kommandoer er tilgængelig med:\n"
+"En lista på alla kommandon finns tillgänglig med:\n"
 "    /COMMANDS\n"
 "\n"
-"Og du bør virkelig kigge på listen med tastaturbindinger:\n"
+"Och du bör verkligen kontrollera listan på tangentbindningar:\n"
 "    /KEYBINDINGS"
 
 #: src/gtkmm/MainWindow.cpp:488
@@ -275,31 +262,32 @@ msgstr "LostIRC "
 
 #: src/gtkmm/MainNotebook.cpp:133
 msgid " <span foreground=\"red\">(away: "
-msgstr " <span foreground=\"red\">(væk: "
+msgstr " <span foreground=\"red\">(frånvarande: "
 
 #: src/gtkmm/MainNotebook.cpp:144
 msgid " (currently away)"
-msgstr " (væk i øjeblikket)"
+msgstr " (frånvarande)"
 
 #: src/gtkmm/ServerWindow.cpp:41
 msgid "LostIRC Server Window"
-msgstr "LostIRC servervindue"
+msgstr "Serverfönster för LostIRC"
 
-#: src/gtkmm/ServerWindow.cpp:54 src/gtkmm/ServerWindow.cpp:260
+#: src/gtkmm/ServerWindow.cpp:54
+#: src/gtkmm/ServerWindow.cpp:260
 msgid "Nickname:"
-msgstr "Kælenavn:"
+msgstr "Smeknamn:"
 
 #: src/gtkmm/ServerWindow.cpp:62
 msgid "Real name:"
-msgstr "Rigtigt navn:"
+msgstr "Verkligt namn:"
 
 #: src/gtkmm/ServerWindow.cpp:76
 msgid "Auto-connect"
-msgstr "Auto-forbind"
+msgstr "Anslut automatiskt"
 
 #: src/gtkmm/ServerWindow.cpp:77
 msgid "Hostname"
-msgstr "Værtsnavn"
+msgstr "Värdnamn"
 
 #: src/gtkmm/ServerWindow.cpp:78
 msgid "Port"
@@ -307,27 +295,27 @@ msgstr "Port"
 
 #: src/gtkmm/ServerWindow.cpp:84
 msgid "_Connect"
-msgstr "_Forbind"
+msgstr "_Anslut"
 
 #: src/gtkmm/ServerWindow.cpp:88
 msgid "_Modify"
-msgstr "_Redigér"
+msgstr "_Ändra"
 
 #: src/gtkmm/ServerWindow.cpp:103
 msgid "<b>Servers</b>"
-msgstr "<b>Servere</b>"
+msgstr "<b>Servrar</b>"
 
 #: src/gtkmm/ServerWindow.cpp:219
 msgid "LostIRC Server Edit"
-msgstr "LostIRC serverredigering"
+msgstr "Redigering av server"
 
 #: src/gtkmm/ServerWindow.cpp:220
 msgid "_Connect automatically"
-msgstr "_Forbind automatisk"
+msgstr "_Anslut automatiskt"
 
 #: src/gtkmm/ServerWindow.cpp:238
 msgid "Hostname:"
-msgstr "Værtsnavn:"
+msgstr "Värdnamn:"
 
 #: src/gtkmm/ServerWindow.cpp:245
 msgid "Port:"
@@ -335,15 +323,15 @@ msgstr "Port:"
 
 #: src/gtkmm/ServerWindow.cpp:253
 msgid "Password:"
-msgstr "Adgangskode:"
+msgstr "Lösenord:"
 
 #: src/gtkmm/ServerWindow.cpp:267
 msgid "Commands to perform when connected:"
-msgstr "Kommandoer der skal udføres efter forbindelse:"
+msgstr "Kommandon att köra vid anslutning:"
 
 #: src/gtkmm/StatusBar.cpp:39
 msgid "Not connected."
-msgstr "Ikke forbundet."
+msgstr "Inte ansluten."
 
 #: src/gtkmm/DCCList.cpp:34
 msgid "%"
@@ -355,59 +343,59 @@ msgstr "Status"
 
 #: src/gtkmm/DCCList.cpp:36
 msgid "Filename"
-msgstr "Filnavn"
+msgstr "Filnamn"
 
 #: src/gtkmm/DCCList.cpp:37
 msgid "Size"
-msgstr "Størrelse"
+msgstr "Storlek"
 
 #: src/gtkmm/DCCList.cpp:38
 msgid "User"
-msgstr "Bruger"
+msgstr "Användare"
 
 #: src/gtkmm/DCCList.cpp:110
 msgid "Done"
-msgstr "Færdig"
+msgstr "Klar"
 
 #: src/gtkmm/DCCList.cpp:112
 msgid "Transfering"
-msgstr "Overfører"
+msgstr "Överför"
 
 #: src/gtkmm/DCCList.cpp:114
 msgid "Waiting"
-msgstr "Venter"
+msgstr "Väntar"
 
 #: src/gtkmm/DCCList.cpp:116
 msgid "Stopped"
-msgstr "Stoppet"
+msgstr "Stoppad"
 
 #: src/gtkmm/DCCList.cpp:118
 msgid "Error"
-msgstr "Fejl"
+msgstr "Fel"
 
 #: src/gtkmm/Prefs.cpp:46
 msgid "Strip _color codes from incoming messages"
-msgstr "Fjern farve_koder fra indkommende beskeder"
+msgstr "Ta bort _färgkoder från inkommande meddelanden"
 
 #: src/gtkmm/Prefs.cpp:47
 msgid "Strip _bold and underline codes from incoming messages"
-msgstr "Fjern _fed- og understregskoder fra indkommende beskeder"
+msgstr "Ta bort koder för _fet och understuken från inkommande meddelanden"
 
 #: src/gtkmm/Prefs.cpp:48
 msgid "_Log conversations to disk"
-msgstr "_Log samtaler til disk"
+msgstr "_Logga konversationer till disk"
 
 #: src/gtkmm/Prefs.cpp:53
 msgid "LostIRC Preferences"
-msgstr "LostIRC Indstillinger"
+msgstr "Inställningar för LostIRC"
 
 #: src/gtkmm/Prefs.cpp:69
 msgid "General"
-msgstr "Generelt"
+msgstr "Allmänt"
 
 #: src/gtkmm/Prefs.cpp:70
 msgid "Preferences"
-msgstr "Indstillinger"
+msgstr "Inställningar"
 
 #: src/gtkmm/Prefs.cpp:71
 msgid "DCC"
@@ -415,282 +403,280 @@ msgstr "DCC"
 
 #: src/gtkmm/Prefs.cpp:72
 msgid "Colours"
-msgstr "Farver"
+msgstr "Färger"
 
 #: src/gtkmm/Prefs.cpp:79
 msgid "IRC username (ident):"
-msgstr "IRC brugernavn (ident):"
+msgstr "IRC-användarnamn (ident):"
 
 #: src/gtkmm/Prefs.cpp:98
 msgid "Encoding to use on IRC:"
-msgstr "Tegnsæt der skal bruges på IRC:"
+msgstr "Teckenkodning att använda på IRC:"
 
 #: src/gtkmm/Prefs.cpp:108
 msgid "Main window font:"
-msgstr "Skriftstørrelse til hovedvindue:"
+msgstr "Typsnitt för huvudfönster:"
 
 #: src/gtkmm/Prefs.cpp:118
 msgid "Nick-completion character:"
-msgstr "Navnefærdiggørelsesbogstav:"
+msgstr "Tecken för smeknamnskomplettering:"
 
 #: src/gtkmm/Prefs.cpp:126
 msgid "Words to highlight on (space seperated):"
-msgstr "Ord der skal anmærkes på (mellemrumssepareret):"
+msgstr "Ord att framhäva (separerade med blanksteg):"
 
 #: src/gtkmm/Prefs.cpp:134
 msgid "Maximium number of lines to cache:"
-msgstr "Maksimum linier, der skal gemmes:"
+msgstr "Maximalt antal rader att mellanlagra:"
 
 #: src/gtkmm/Prefs.cpp:156
 msgid "DCC IP address:"
-msgstr "DCC IP-adresse:"
+msgstr "DCC IP-adress:"
 
 #: src/gtkmm/Prefs.cpp:164
 msgid "DCC Port (0 = random):"
-msgstr "DCC Port (0 = tilfældig):"
+msgstr "DCC-port (0 = slumpmässig):"
 
 #: src/gtkmm/Prefs.cpp:171
 msgid "Pick a colorscheme"
-msgstr "Vælg et farvetema"
+msgstr "Välj ett färgschema"
 
 #: src/gtkmm/Prefs.cpp:172
 msgid "Changes to colorschemes only apply to newly created tabs"
-msgstr "Ændringer til farvetemaer anvendes først på nye faneblade"
+msgstr "Ändringar i färgscheman gäller endast för nyligen skapade flikar"
 
 #: src/gtkmm/Prefs.cpp:173
 msgid "White on black"
-msgstr "Hvid på sort"
+msgstr "Vit på svart"
 
 #: src/gtkmm/Prefs.cpp:174
 msgid "Black on white"
-msgstr "Sort på hvid"
+msgstr "Svart på vit"
 
 #: src/gtkmm/NickList.cpp:57
 msgid " user"
-msgstr " bruger"
+msgstr " användare"
 
 #: src/gtkmm/NickList.cpp:57
 msgid " users"
-msgstr " brugere"
+msgstr " användare"
 
 #: src/libirc/Commands.cpp:94
 msgid "/JOIN <channel>, join a channel"
-msgstr "/JOIN <kanal>, gå ind i en kanal"
+msgstr "/JOIN <kanal>, gå in i en kanal"
 
 #: src/libirc/Commands.cpp:103
 msgid "/PART <channel> [msg], part a channel - optional with a part message"
-msgstr ""
-"/PART <kanal> [besked], forlad en kanal - en forladelsesbesked er valgfri"
+msgstr "/PART <kanal> [medd], del en kanal - valfritt med ett meddelande"
 
 #: src/libirc/Commands.cpp:137
 msgid "/KICK <channel> <nick> [msg], kick a user from a channel."
-msgstr "/KICK <kanal> <navn> [besked], spark en bruger ud fra en kanal."
+msgstr "/KICK <kanal> <smeknamn> [medd], sparka ut en användare från en kanal."
 
 #: src/libirc/Commands.cpp:146
 msgid "/SERVER <host/ip> [port] [password], connect to an IRC server"
-msgstr "/SERVER <vært/ip> [port] [adgangskode], tilslut en IRCserver"
+msgstr "/SERVER <värd/ip> [port] [lösenord], anslut till en IRC-server"
 
 #: src/libirc/Commands.cpp:186
 msgid "/NICK <nick>, change nick."
-msgstr "/NICK <navn>, skift nick."
+msgstr "/NICK <smeknamn>, byt smeknamn."
 
 #: src/libirc/Commands.cpp:199
 msgid "/WHOIS <nick>, whois nick."
-msgstr "/WHOIS <navn>, lav en \"hvem-er\" på et navn."
+msgstr "/WHOIS <smeknamn>, vem är smeknamn."
 
 #: src/libirc/Commands.cpp:208
 msgid "/MODE <channel> <modes>, set modes for a channel."
-msgstr "/MODE <kanal> <regler>, sæt regler for en kanal."
+msgstr "/MODE <kanal> <lägen>, ställer in lägen för en kanal."
 
 #: src/libirc/Commands.cpp:234
 msgid "/CTCP <nick> <message>, sends a CTCP message to a user"
-msgstr "/CTCP <navn> <besked>, sender en CTCP besked til en bruger"
+msgstr "/CTCP <smeknamn> <meddelande>, skickar ett CTCP-meddelande till en användare"
 
 #: src/libirc/Commands.cpp:261
 msgid "/BANLIST <channel>, see banlist for channel."
-msgstr "/BANLIST <kanal>, se en liste over hvem der er banlyst fra en kanal."
+msgstr "/BANLIST <kanal>, se bannlysningslistan för kanal."
 
 #: src/libirc/Commands.cpp:275
 msgid "/INVITE <nick> <channel>, invites someone to a channel."
-msgstr "/INVITE <navn> <kanal>, inviter nogen til en kanal."
+msgstr "/INVITE <smeknamn> <kanal>, bjuder in någon till en kanal."
 
 #: src/libirc/Commands.cpp:290
 msgid "/TOPIC <channel> [topic], view or change topic for a channel."
-msgstr "/TOPIC <kanal> [topic], hvis eller ændrer topic for en kanal."
+msgstr "/TOPIC <kanal> [ämne], visa eller ändra ämne för en kanal."
 
 #: src/libirc/Commands.cpp:305
 msgid "/MSG <nick/channel> <message>, sends a normal message."
-msgstr "/MSG <navn/kanal> <besked>, sender en normal besked."
+msgstr "/MSG <smeknamn/kanal> <meddelande>, skickar ett normalt meddelande."
 
 #: src/libirc/Commands.cpp:322
 msgid "/NOTICE <nick/channel> <message>, sends a notice."
-msgstr "/NOTICE <navn/kanal> <besked>, sender en notits."
+msgstr "/NOTICE <smeknamn/kanal> <meddelande>, skickar en notis."
 
 #: src/libirc/Commands.cpp:325
 msgid "Notice to "
-msgstr "Notits til "
+msgstr "Notis till "
 
 #: src/libirc/Commands.cpp:337
 msgid "/ME <message>, sends the action to the current channel."
-msgstr "/ME <besked>, sender en handling til den nuværende kanal."
+msgstr "/ME <meddelande>, skickar operationen till aktuell kanal."
 
-# // FIXME: <>
 #: src/libirc/Commands.cpp:346
-msgid ""
-"/WHO <mask> [o], search for mask on network, if o is supplied, only search "
-"for opers."
-msgstr ""
-"/WHO <maske> [o], søg efter en maske på netværket, hvis o er angivet, søges "
-"kun efter opers"
+msgid "/WHO <mask> [o], search for mask on network, if o is supplied, only search for opers."
+msgstr "/WHO <mask> [o], sök efter mask på nätverk, om o anges, sök endast efter operatörer."
 
 #: src/libirc/Commands.cpp:361
 msgid "/QUOTE <text>, send raw text to server."
-msgstr "/QUOTE <tekst>, send rå tekst til serveren."
+msgstr "/QUOTE <text>, skicka rå text till server."
 
 #: src/libirc/Commands.cpp:370
 msgid "/NAMES <channel>, see who's on a channel."
-msgstr "/NAMES <kanal>, se hvem der er på en kanal."
+msgstr "/NAMES <kanal>, se vilka som är på en kanal."
 
-#: src/libirc/Commands.cpp:379 src/libirc/Commands.cpp:387
+#: src/libirc/Commands.cpp:379
+#: src/libirc/Commands.cpp:387
 msgid "/OPER <login> <password>, oper up."
-msgstr "/OPER <brugernavn> <adgangskode>, bliv operator på netværket."
+msgstr "/OPER <användarnamn> <lösenord>, operatör."
 
 #: src/libirc/Commands.cpp:402
 msgid "/KILL <user> [reason], kill a user from the network."
-msgstr "/KILL <bruger> [grund], dræb en bruger fra netværket."
+msgstr "/KILL <användare> [anledning], döda en användare från nätverket."
 
 #: src/libirc/Commands.cpp:412
 msgid "/WALLOPS <message>, send wallop message."
-msgstr "/WALLOPS <besked>, send en wallop besked."
+msgstr "/WALLOPS <meddelande>, skicka wallop-meddelande."
 
 #: src/libirc/Commands.cpp:422
 msgid "/DCC <actions>, perform a DCC action."
-msgstr "/DCC <handlinger>, udfør en DCC-handling."
+msgstr "/DCC <operationer>, genomför en DCC-operation."
 
 #: src/libirc/Commands.cpp:432
 msgid "No DCC with that number"
-msgstr "Ingen DCC med det nummer"
+msgstr "Ingen DCC med det numret"
 
 #: src/libirc/Commands.cpp:438
 msgid "Missing filename"
-msgstr "Manglende filnavn"
+msgstr "Filnamn saknas"
 
 #: src/libirc/Commands.cpp:462
 msgid "/OP <channel> <nicks>, give operator status to one or more nicks."
-msgstr "/OP <kanal> <navne>, giv operator status til en eller flere navne."
+msgstr "/OP <kanal> <smeknamn>, ge operatörsstatus till ett eller flera smeknamn."
 
 #: src/libirc/Commands.cpp:478
 msgid "/DEOP <channel> <nicks>, remove operator status from one or more nicks."
-msgstr "/DEOP <kanal> <navne>, fjern operator status fra en eller flere navne."
+msgstr "/DEOP <kanal> <smeknamn>, ta bort operatörsstatus från ett eller flera smeknamn."
 
 #: src/libirc/Commands.cpp:494
 msgid "/VOICE <channel> <nicks>, gives voice to one or more nicks."
-msgstr "/VOICE <kanal> <navne>, giv lyd til en eller flere navne."
+msgstr "/VOICE <kanal> <smeknamn>, ger röst till ett eller flera smeknamn."
 
 #: src/libirc/Commands.cpp:510
 msgid "/DEVOICE <channel> <nicks>, removes voice from one or more nicks."
-msgstr "/DEVOICE <kanal> <navne>, fjern lyd fra en eller flere navne."
+msgstr "/DEVOICE <kanal> <smeknamn>, tar bort röst från ett eller flera smeknamn."
 
-#: src/libirc/ConfigHandler.cpp:174 src/libirc/ConfigHandler.cpp:184
+#: src/libirc/ConfigHandler.cpp:174
+#: src/libirc/ConfigHandler.cpp:184
 msgid "Not found key, `"
-msgstr "Ingen nøgle fundet, `"
+msgstr "Hittade inte nyckel, \""
 
 #: src/libirc/Socket.cpp:110
 msgid "Message not sent because of locale problems"
-msgstr "Besked ikke sendt, pga. locale problemer"
+msgstr "Meddelandet skickades inte på grund av lokalproblem"
 
-#: src/libirc/Socket.cpp:285 src/libirc/Socket.cpp:292
+#: src/libirc/Socket.cpp:285
+#: src/libirc/Socket.cpp:292
 msgid "Error writing to pipe: "
-msgstr "Fejl ved skrivning til rør: "
+msgstr "Fel vid skrivning till rör: "
 
 #: src/libirc/Socket.cpp:327
 msgid "An error occurred while reading from pipe (Internal error 2)"
-msgstr "En fejl opstod, ved at læse fra rør (Intern fejl 2)"
+msgstr "Ett fel inträffade vid läsning från rör (internfel 2)"
 
 #: src/libirc/Socket.cpp:337
 msgid "An error occurred while reading from pipe (Internal error 3)"
-msgstr "En fejl opstod, ved at læse fra rør (Intern fejl 3)"
+msgstr "Ett fel inträffade vid läsning från rör (internfel 3)"
 
 #: src/libirc/Parser.cpp:876
 msgid "idle: "
-msgstr "ubenyttet: "
+msgstr "inaktiv: "
 
 #: src/libirc/Parser.cpp:880
 msgid ", signon time: "
-msgstr ", login tid: "
+msgstr ", inloggad den: "
 
 #: src/libirc/DCC.cpp:65
 msgid "DCC connected. Receiving file..."
-msgstr "DCC forbundet. Modtager fil..."
+msgstr "DCC ansluten. Tar emot fil..."
 
 #: src/libirc/DCC.cpp:71
 msgid "Couldn't connect: "
-msgstr "Kunne ikke etablere forbindelse: "
+msgstr "Kunde inte ansluta: "
 
 #: src/libirc/DCC.cpp:81
 msgid "Receiving from:"
-msgstr "Modtager fra:"
+msgstr "Tar emot från:"
 
 #: src/libirc/DCC.cpp:121
 msgid "File received successfully:"
-msgstr "Fil modtaget korrekt:"
+msgstr "Filen togs emot:"
 
 #: src/libirc/DCC.cpp:128
 msgid "Couldn't receive: "
-msgstr "Kunne ikke modtage: "
+msgstr "Kunde inte ta emot: "
 
 #: src/libirc/DCC.cpp:132
 msgid "DCC connection closed."
-msgstr "DCC forbindelse lukket."
+msgstr "DCC-anslutning stängd."
 
 #: src/libirc/DCC.cpp:180
 msgid "DCC SEND request sent. Sending from:"
-msgstr "DCC SEND forespørgsel sendt. Sender fra:"
+msgstr "DCC SEND-begäran skickad. Skickar från:"
 
 #: src/libirc/DCC.cpp:194
 msgid "Couldn't bind: "
-msgstr "Kunne ikke binde: "
+msgstr "Kunde inte binda: "
 
 #: src/libirc/DCC.cpp:201
 msgid "Connection accepted."
-msgstr "Forbindelse accepteret."
+msgstr "Anslutning accepterad."
 
 #: src/libirc/DCC.cpp:231
 msgid "File sent successfully:"
-msgstr "Fil sendt korrekt:"
+msgstr "Filen skickades:"
 
 #: src/libirc/DCC.cpp:239
 msgid "Couldn't send: "
-msgstr "Kunne ikke sende: "
+msgstr "Kunde inte skicka: "
 
 #: src/libirc/DCC.cpp:257
 msgid "Incoming file has zero size. Sender:"
-msgstr "Indgående fil er tom. Sender:"
+msgstr "Inkommande fil har noll storlek. Avsändare:"
 
 #: src/libirc/DCC.cpp:273
 msgid "File not found: "
-msgstr "Fil ikke fundet: "
+msgstr "Filen hittades inte: "
 
 #: src/libirc/ServerConnection.cpp:119
 msgid "Disconnected."
-msgstr "Forbindelse afbrudt."
+msgstr "Nedkopplad."
 
 #: src/libirc/ServerConnection.cpp:142
 msgid "Failed connecting: "
-msgstr "Kunne ikke forbinde: "
+msgstr "Misslyckades med att ansluta: "
 
 #: src/libirc/ServerConnection.cpp:148
 msgid "Resolved host. Connecting.."
-msgstr "Værtsnavn slået op. Forbinder.."
+msgstr "Värden slogs upp. Ansluter.."
 
 #: src/libirc/ServerConnection.cpp:159
 msgid "Connected. Logging in..."
-msgstr "Forbundet. Logger ind..."
+msgstr "Ansluten. Loggar in..."
 
 #: src/libirc/ServerConnection.cpp:206
 msgid "Failed to receive: "
-msgstr "Kunne ikke modtage: "
+msgstr "Misslyckades med att ta emot: "
 
 #: src/libirc/LostIRCApp.h:56
 msgid "Logging to `"
-msgstr "Logger til `"
+msgstr "Loggar till \""
+

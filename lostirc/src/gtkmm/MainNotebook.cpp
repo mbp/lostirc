@@ -230,3 +230,8 @@ void MainNotebook::setFont(const Glib::ustring& str)
         tab->getText().setFont(_fontdesc);
     }
 }
+
+bool MainNotebook::on_key_press_event(GdkEventKey* e)
+{
+    return true;
+}

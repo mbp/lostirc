@@ -5,7 +5,7 @@ In order to compile LostIRC, you need have at least these packages installed:
 
  * A C++ compiler, like g++
 
- * gtkmm 2.0 development package (http://gtkmm.org/)
+ * gtkmm 2.0 development package (http://gtkmm.org/) (>2.10)
    Debian package: libgtkmm-2.4-dev
 
  * sigc++ 1.2 development package (http://libsigc.sourceforge.net/)

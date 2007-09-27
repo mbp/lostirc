@@ -9,7 +9,7 @@ URL:            http://lostirc.sourceforge.net/
 BuildRoot:      /var/tmp/%{name}-%{version}-root
 AutoReqProv:    no
 
-Requires:       gtkmm >= 2.0.0
+Requires:       gtkmm >= 2.10.0
 Requires:       libsigc++ >= 1.2.0
 
 BuildRequires:  gtkmm-devel

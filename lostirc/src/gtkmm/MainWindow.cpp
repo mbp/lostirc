@@ -24,6 +24,7 @@
 #include <gtkmm/box.h>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/actiongroup.h>
+#include <gtk/gtkaccelmap.h>
 #include <gdk/gdkkeysyms.h>
 #include <sigc++/retype_return.h>
 #include "DCCList.h"
@@ -55,6 +56,7 @@ MainWindow::MainWindow(bool autoconnect)
           move(x, y);
     
     setupMenus();
+    gtk_accel_map_load ((App->home + "/.lostirc/accel.scm").c_str ());
     initializeTagTable();
     Gtk::VBox *vbox = manage(new Gtk::VBox());
 
@@ -108,6 +110,7 @@ MainWindow::~MainWindow()
         _app.options.window_y = y;
     }
 
+    gtk_accel_map_save ((App->home + "/.lostirc/accel.scm").c_str ());
     AppWin = 0;
 }
 
@@ -335,7 +338,7 @@ void MainWindow::localeError(bool tried_custom_encoding)
 {
     Glib::ustring msg;
     if (!tried_custom_encoding) {
-        msg = _("Locale conversion error. An error occured while converting text from UTF-8 to your current locale.\n\nThis is most likely because your locale is set to a value which doesn't support the character(s) converting to.\n\nIf you believe this is a bug, please report it to the application author.");
+        msg = _("Locale conversion error. An error occurred while converting text from UTF-8 to your current locale.\n\nThis is most likely because your locale is set to a value which doesn't support the character(s) converting to.\n\nIf you believe this is a bug, please report it to the application author.");
 
         char *locale = std::getenv("LANG");
         if (locale != NULL) {
@@ -343,7 +346,7 @@ void MainWindow::localeError(bool tried_custom_encoding)
             msg += locale;
         }
     } else {
-        msg = _("Encoding conversion error. An error occured while converting text from UTF-8 to the user-defined encoding.\n\nThis is most likely because the encoding you have chosen doesn't support the character(s) converting to.\n\nIf you believe this is a bug, please report it to the application author.");
+        msg = _("Encoding conversion error. An error occurred while converting text from UTF-8 to the user-defined encoding.\n\nThis is most likely because the encoding you have chosen doesn't support the character(s) converting to.\n\nIf you believe this is a bug, please report it to the application author.");
 
         msg += _("\n\nI was trying to convert to: ");
         msg += App->options.encoding;

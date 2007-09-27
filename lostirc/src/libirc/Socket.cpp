@@ -324,7 +324,7 @@ bool Socket::on_host_resolve(Glib::IOCondition cond, int readpipe)
         if (new_retval != -1) {
             bytes_read += new_retval;
             if (bytes_read != size_to_be_read) {
-                on_error(_("An error occured while reading from pipe (Internal error 2)"));
+                on_error(_("An error occurred while reading from pipe (Internal error 2)"));
             } else {
                 // copy the struct we received into the sockaddr member
                 memcpy(static_cast<void*>(&sockaddr.sin_addr),
@@ -334,7 +334,7 @@ bool Socket::on_host_resolve(Glib::IOCondition cond, int readpipe)
                 on_host_resolved();
             }
         } else {
-            on_error(_("An error occured while reading from pipe (Internal error 3)"));
+            on_error(_("An error occurred while reading from pipe (Internal error 3)"));
         }
 
     } else {
