@@ -66,7 +66,9 @@ class MainWindow : public Gtk::Window, public FrontEnd
 
     void initializeTagTable();
     void addToTable(Glib::ustring name, Glib::RefPtr<Gtk::TextTagTable> table, const Glib::ustring& colorname);
-
+    void selfHide();
+    static void on_tray_click( GtkStatusIcon* icon, gpointer data );
+    
 public:
     MainWindow(bool autoconnect = 0);
     virtual ~MainWindow();
@@ -76,9 +78,6 @@ public:
     Tab* newServerTab();
     void hideMenu();
     void hideStatusbar();
-    static void on_tray_click( GtkStatusIcon* icon, gpointer data );
-    virtual void hide();
-    virtual bool on_delete_event( GdkEventAny* e );
 
     StatusBar _statusbar;
 

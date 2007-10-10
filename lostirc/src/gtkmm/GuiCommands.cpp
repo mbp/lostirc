@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2002-2004 Morten Brix Pedersen <morten@wtf.dk>
+ * Copyright (C) 2007 Martin Braure de Calignon <braurede@free.fr> 
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -178,7 +179,7 @@ void Devoice(ServerConnection *conn, const ustring& params)
 void Exit(ServerConnection *conn, const ustring& params)
 {
     Commands::Exit(conn, params);
-    AppWin->hide();
+    Gtk::Main::quit();
 }
 
 void displayCommands(ServerConnection *conn, const ustring& params)

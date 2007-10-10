@@ -120,6 +120,11 @@ void TextWidget::setStyle() {
     _textview.modify_base(Gtk::STATE_NORMAL, col1);
 }
 
+void TextWidget::copyClipboard(const Glib::RefPtr<Gtk::Clipboard>& clipboard)
+{
+    this->_textview.get_buffer()->copy_clipboard(clipboard);
+}
+
 void TextWidget::clearText()
 {
     Glib::RefPtr<Gtk::TextBuffer> buffer = _textview.get_buffer();

@@ -1,6 +1,7 @@
 /* 
  * Copyright (C) 2002-2004 Morten Brix Pedersen <morten@wtf.dk>
  * Copyright (C) 2007 Martin Braure de Calignon <braurede@free.fr>
+ * Copyright (C) 2007 Dominik Wagenfuehr <dominik.wagenfuehr@arcor.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,7 +90,9 @@ MainWindow::MainWindow(bool autoconnect)
 		      "activate",
 		      G_CALLBACK( MainWindow::on_tray_click ),
 		      (gpointer) this );
+    gtk_status_icon_set_tooltip(underlying_c_instance, PACKAGE);
     _statusicon->set_visible( true );
+    signal_delete_event().connect(sigc::bind_return(sigc::hide(sigc::mem_fun(*this, &MainWindow::selfHide)), true));
 }
 
 MainWindow::~MainWindow()
@@ -116,19 +119,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_tray_click( GtkStatusIcon* icon, gpointer data )
 {
-  ((MainWindow*)data)->property_visible() = !((MainWindow*)data)->property_visible();
+  ((MainWindow*)data)->selfHide();
 }
 
-void MainWindow::hide()
+void MainWindow::selfHide()
 {
-  Gtk::Main::quit();
-}
-
-bool MainWindow::on_delete_event( GdkEventAny* e )
-{
-  MainWindow::hide();
-  
-  return true;
+  property_visible() = !property_visible();
 }
 
 void MainWindow::displayMessage(const ustring& msg, FE::Destination d, ServerConnection *conn, bool shouldHighlight)
@@ -402,7 +398,7 @@ void MainWindow::setupMenus()
             Gtk::AccelKey("<control>w"),
             sigc::mem_fun(*this, &MainWindow::closeCurrentTab));
     group->add(Gtk::Action::create("Quit", Gtk::Stock::QUIT),
-            sigc::mem_fun(*this, &Gtk::Window::hide));
+            sigc::ptr_fun(&Gtk::Main::quit));
 
     group->add(Gtk::Action::create("ViewMenu", _("_View")));
     group->add(Gtk::Action::create("MenuItem", _("_Menubar")), Gtk::AccelKey("<control>m"), sigc::mem_fun(*this, &MainWindow::hideMenu));
@@ -563,6 +559,8 @@ bool MainWindow::on_key_press_event(GdkEventKey* e)
             _notebook.getCurrent()->getText().scrollToBottom();
         } else if (e->keyval == GDK_Home) {
             _notebook.getCurrent()->getText().scrollToTop();
+        } else if (e->keyval == GDK_c) {
+            _notebook.getCurrent()->getText().copyClipboard(Gtk::Clipboard::get());
         }
 
     } else if (e->state & GDK_MOD1_MASK) {
@@ -692,3 +690,5 @@ void MainWindow::initializeTagTable()
     }
 
 }
+
+

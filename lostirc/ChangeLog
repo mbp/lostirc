@@ -1,5 +1,18 @@
 For a summary of changes between releases - see the NEWS file.
-
+2007-10-10  Martin Braure de Calignon <braurede@free.fr>
+	* MainWindow.h,.cpp GuiCommands.cpp: cleanup status icon related method.
+		- on_tray_click and hidding function are now private as it 
+		should be.
+		- Status icon displays a tooltip.
+		- Clicking on the close button of title bar now hides 
+		application and Quit in the menu really quit it./exit command 
+		also now really quit application
+	* Merge great patches of Dominik Wagenfuehr: thanks a lot, hope you'll 
+	have a cvs access in the near future)
+		- TextWidget.h,.cpp: add a copyClipoad method to copy selected 
+		text in	X clipboard.
+		- de.po, LINGUAS: Add German translation
+	
 2007-09-27  Martin Braure de Calignon  <braurede@free.fr>
 	* MainWindow.h, MainWindow.cpp, main.cpp: add a status icon (tray
 	icon) to hide or show main window.

@@ -1,5 +1,6 @@
 /* 
  * Copyright (C) 2002-2004 Morten Brix Pedersen <morten@wtf.dk>
+ * Copyright (C) 2007 Dominik Wagenfuehr <dominik.wagenfuehr@arcor.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +38,9 @@ public:
     TextWidget& operator<<(const char * str);
     TextWidget& operator<<(const Glib::ustring& str);
 
+
     void clearText();
+    void copyClipboard(const Glib::RefPtr<Gtk::Clipboard>& clipboard);
     void setFont(const Pango::FontDescription& font);
 
     void setHighlightMark();
@@ -92,3 +95,4 @@ private:
 
 
 #endif
+
