@@ -51,7 +51,10 @@ class MainWindow : public Gtk::Window, public FrontEnd
     std::auto_ptr<ServerWindow> _serverwin;
     std::auto_ptr<Gtk::Dialog> _helpwin;
     std::auto_ptr<Gtk::Dialog> _aboutwin;
+
+#ifdef HAVE_STATUS_ICON
     Glib::RefPtr<Gtk::StatusIcon> _statusicon;
+#endif
 
     void openPrefs();
     void openDccWindow();
@@ -66,9 +69,11 @@ class MainWindow : public Gtk::Window, public FrontEnd
 
     void initializeTagTable();
     void addToTable(Glib::ustring name, Glib::RefPtr<Gtk::TextTagTable> table, const Glib::ustring& colorname);
+    #ifdef HAVE_STATUS_ICON
     void selfHide();
     static void on_tray_click( GtkStatusIcon* icon, gpointer data );
-    
+    #endif
+
 public:
     MainWindow(bool autoconnect = 0);
     virtual ~MainWindow();

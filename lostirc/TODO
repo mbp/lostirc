@@ -1,3 +1,9 @@
+CODE IMPROVEMENTS:
+------------------
+  * Need to clean-up status-icon (using gtkmm possibility)
+  * Need to clean-up #ifdef ...
+  * Need to clean-up autogen.sh output
+
 NICE-TO-HAVE:
 ------------
   * A better LostIRC icon.

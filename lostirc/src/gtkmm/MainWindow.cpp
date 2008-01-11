@@ -84,6 +84,7 @@ MainWindow::MainWindow(bool autoconnect)
     }
     _notebook.getCurrent()->getEntry().grab_focus();
 
+    #ifdef HAVE_STATUS_ICON
     _statusicon = Gtk::StatusIcon::create_from_file( LOSTIRC_DATADIR G_DIR_SEPARATOR_S "pixmaps" G_DIR_SEPARATOR_S "lostirc.png" );
     GtkStatusIcon* underlying_c_instance = _statusicon->gobj();
     g_signal_connect( G_OBJECT( underlying_c_instance ),
@@ -93,6 +94,7 @@ MainWindow::MainWindow(bool autoconnect)
     gtk_status_icon_set_tooltip(underlying_c_instance, PACKAGE);
     _statusicon->set_visible( true );
     signal_delete_event().connect(sigc::bind_return(sigc::hide(sigc::mem_fun(*this, &MainWindow::selfHide)), true));
+    #endif
 }
 
 MainWindow::~MainWindow()
@@ -116,7 +118,7 @@ MainWindow::~MainWindow()
     gtk_accel_map_save ((App->home + "/.lostirc/accel.scm").c_str ());
     AppWin = 0;
 }
-
+#ifdef HAVE_STATUS_ICON
 void MainWindow::on_tray_click( GtkStatusIcon* icon, gpointer data )
 {
   ((MainWindow*)data)->selfHide();
@@ -126,6 +128,7 @@ void MainWindow::selfHide()
 {
   property_visible() = !property_visible();
 }
+#endif
 
 void MainWindow::displayMessage(const ustring& msg, FE::Destination d, ServerConnection *conn, bool shouldHighlight)
 {

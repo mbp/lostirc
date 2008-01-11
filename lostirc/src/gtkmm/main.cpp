@@ -46,6 +46,10 @@ int main(int argc, char** argv)
 
     MainWindow window(autoconnect);
 
+    #ifdef HAVE_STATUS_ICON
     app.run();
     window.show();
+    #else
+    app.run(window);
+    #endif
 }
