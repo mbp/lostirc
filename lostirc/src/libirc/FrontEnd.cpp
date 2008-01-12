@@ -111,6 +111,7 @@ Tmpl get(Event e)
         if (event_map[i].value == e)
             return Tmpl(App->events.get(event_map[i].name));
     }
+    return Tmpl("");
 }
 
 Glib::ustring Tmpl::result()

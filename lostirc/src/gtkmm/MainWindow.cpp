@@ -390,14 +390,14 @@ void MainWindow::setupMenus()
     Glib::RefPtr<Gtk::ActionGroup> group = Gtk::ActionGroup::create();
 
     group->add(Gtk::Action::create("LostIRCMenu", _("_LostIRC")));
-    group->add(Gtk::Action::create("NewServerTab", _("_New Server Tab")),
+    group->add(Gtk::Action::create("NewServerTab", Gtk::Stock::NEW, _("_New Server Tab")),
             Gtk::AccelKey("<control>n"),
             sigc::hide_return(sigc::mem_fun(*this, &MainWindow::newServerTab)));
-    group->add(Gtk::Action::create("ClearWindow", _("Clear Window")),
+    group->add(Gtk::Action::create("ClearWindow", Gtk::Stock::CLEAR, _("Clear Window")),
             sigc::mem_fun(_notebook, &MainNotebook::clearWindow));
     group->add(Gtk::Action::create("ClearAllWindows", _("Clear All Windows")),
             sigc::mem_fun(_notebook, &MainNotebook::clearAll));
-    group->add(Gtk::Action::create("CloseCurrentTab", _("Close Current Tab")),
+    group->add(Gtk::Action::create("CloseCurrentTab", Gtk::Stock::CLOSE,  _("Close Current Tab")),
             Gtk::AccelKey("<control>w"),
             sigc::mem_fun(*this, &MainWindow::closeCurrentTab));
     group->add(Gtk::Action::create("Quit", Gtk::Stock::QUIT),
@@ -412,8 +412,8 @@ void MainWindow::setupMenus()
     group->add(Gtk::Action::create("Preferences", Gtk::Stock::PREFERENCES), Gtk::AccelKey("<control>p"), sigc::mem_fun(*this, &MainWindow::openPrefs));
 
     group->add(Gtk::Action::create("HelpMenu", _("_Help")));
-    group->add(Gtk::Action::create("Introduction", _("_Introduction")), sigc::mem_fun(*this, &MainWindow::openHelpIntro));
-    group->add(Gtk::Action::create("About", _("_About")), sigc::mem_fun(*this, &MainWindow::openAboutWindow));
+    group->add(Gtk::Action::create("Introduction", Gtk::Stock::HELP, _("_Introduction")), sigc::mem_fun(*this, &MainWindow::openHelpIntro));
+    group->add(Gtk::Action::create("About", Gtk::Stock::ABOUT, _("_About")), sigc::mem_fun(*this, &MainWindow::openAboutWindow));
 
     _uimanager->insert_action_group(group);
     add_accel_group(_uimanager->get_accel_group());

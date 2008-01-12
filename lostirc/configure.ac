@@ -12,7 +12,7 @@ PKG_CHECK_MODULES(GTKMMDEPS, [gtkmm-2.4 >= 2.10 gdkmm-2.4 atkmm-1.6 pangomm-1.4]
 AC_SUBST(GTKMMDEPS_CFLAGS)
 AC_SUBST(GTKMMDEPS_LIBS)
 
-AM_GNU_GETTEXT_VERSION(0.14.1)
+AM_GNU_GETTEXT_VERSION([0.17])
 AM_GNU_GETTEXT
 
 CXXFLAGS="$CXXFLAGS -Wall"
@@ -60,5 +60,5 @@ esac
 AC_MSG_RESULT([$platform_win32])
 AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = "yes")
 
-AC_CONFIG_FILES([lostirc.spec Makefile src/Makefile src/libirc/Makefile src/gtkmm/Makefile po/Makefile.in intl/Makefile ])
+AC_CONFIG_FILES([lostirc.spec Makefile src/Makefile src/libirc/Makefile src/gtkmm/Makefile po/Makefile.in ])
 AC_OUTPUT
