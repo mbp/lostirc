@@ -1,4 +1,4 @@
-SUBDIRS = po src
+SUBDIRS = po src intl
 
 EXTRA_DIST = config.rpath  lostirc.desktop \
              lostirc.1 lostirc.png m4
