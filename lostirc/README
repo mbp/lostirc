@@ -11,6 +11,11 @@ LostIRC is licensed under the GPL. See included COPYING file.
 
 If it has your interest, there's an IRC channel for LostIRC where you can
 get help/support or just a small chat on irc.freenode.net, #lostirc.
+You can also subscribe to LostIRC mailing lists:
+* lostirc-users <Lostirc-users@lists.sourceforge.net>: for any 
+help/support with LostIRC usage.
+* lostirc-devel <lostirc-devel@lists.sourceforge.net>: for development 
+informations/contribution
 
 INSTALLATION
 ------------
