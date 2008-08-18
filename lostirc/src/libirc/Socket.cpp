@@ -29,6 +29,7 @@
 #include <string>
 #include <cerrno>
 #include <cstdio>
+#include <cstring>
 #include <glibmm/main.h>
 #include <glibmm/convert.h>
 #include "LostIRCApp.h"

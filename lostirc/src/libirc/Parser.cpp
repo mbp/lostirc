@@ -21,6 +21,7 @@
 #include <vector>
 #include <algorithm>
 #include <cassert>
+#include <ctime>
 #include "Parser.h"
 #include "Utils.h"
 #include "Channel.h"
