@@ -2,73 +2,68 @@
 # Copyright (C) 2004 Free Software Foundation, Inc.
 # This file is distributed under the same license as the LostIRC package.
 # <>, 2004.
-# , fuzzy
-# 
-# 
+# Bruno Dusausoy <bdusauso@beeznest.net> 2004
+# Rascagneres Theophile <keupont@no-log.org> 2009
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: LostIRC 4.0.0CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-05-13 13:31+0200\n"
-"PO-Revision-Date: 2004-06-13 15:41+0200\n"
-"Last-Translator: Bruno Dusausoy <bdusauso@beeznest.net>\n"
-"Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
+"PO-Revision-Date: 2009-04-28 23:00+0100\n"
+"Last-Translator: cestpasgagne <cestpasgagne2@gmail.com>\n"
+"Language-Team: http://www.slitaz.org/fr/\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: src/gtkmm/Entry.cpp:78
 msgid "Not connected to server. Try `/SERVER <hostname / ip>'.\n"
-msgstr "Non connecté au server. Essayez `/SERVER <nom_d'hôte / adresse_ip>'.\n"
+msgstr "Pas connecté au serveur. Essayez `/SERVER <nom_de_l'hôte / adresse_ip>'.\n"
 
 #: src/gtkmm/Entry.cpp:80
 msgid "No channel joined. Try `/JOIN #channel-name'\n"
-msgstr "Pas de canal joint. Essayez `/JOIN #nom_du_canal'\n"
+msgstr "Aucun canal joint. Essayez `/JOIN #nom_du_canal'\n"
 
-#: src/gtkmm/Entry.cpp:143 src/gtkmm/Entry.cpp:176 src/gtkmm/Entry.cpp:199
+#: src/gtkmm/Entry.cpp:143
+#: src/gtkmm/Entry.cpp:176
+#: src/gtkmm/Entry.cpp:199
 msgid "<span foreground=\"blue\">Matches:</span> "
-msgstr "<span foreground=\"blue\">Correspond à:</span>"
+msgstr "<span foreground=\"blue\">Correspond à :</span>"
 
-#: src/gtkmm/Entry.cpp:145 src/gtkmm/Entry.cpp:178
+#: src/gtkmm/Entry.cpp:145
+#: src/gtkmm/Entry.cpp:178
 msgid "<span foreground=\"blue\">No matches.</span>"
-msgstr "<span foreground=\"blue\">Pas de correspondance.</span>"
+msgstr "<span foreground=\"blue\">Pas de correspondances.</span>"
 
-#: src/gtkmm/GuiCommands.cpp:54 src/libirc/Commands.cpp:77
+#: src/gtkmm/GuiCommands.cpp:54
+#: src/libirc/Commands.cpp:77
 msgid "Must be connected."
 msgstr "Doit être connecté."
 
 #: src/gtkmm/GuiCommands.cpp:69
 msgid "/QUERY <nick>, start a query(tab) with a user"
-msgstr ""
-"/QUERY <nick>, démarre une conversation privée (onglet) avec un utilisateur"
+msgstr "/QUERY <pseudo>, démarre une conversation privée (onglet) avec un utilisateur"
 
 #: src/gtkmm/GuiCommands.cpp:116
 msgid "/KICK <nick>, kick a user from a channel."
-msgstr "/KICK <nick>, kicke un utilisateur du canal."
+msgstr "/KICK <pseudo>, expulse un utilisateur du canal."
 
 #: src/gtkmm/GuiCommands.cpp:133
 msgid "/OP <nicks>, ops one or more users in the current channel."
-msgstr ""
-"/OP <nicks>, donne le statut d'opérateur canal à un ou plusieurs "
-"utilisateurs du canal courant."
+msgstr "/OP <pseudos>, donne le statut d'opérateur à un ou plusieurs utilisateurs du canal courant."
 
 #: src/gtkmm/GuiCommands.cpp:145
 msgid "/DEOP <nicks>, deops one or more users in the current channel."
-msgstr ""
-"/DEOP <nicks>, enlève le statut d'opérateur du canl à un ou plusieurs "
-"utilisateur du canal courant."
+msgstr "/DEOP <pseudos>, enlève le statut d'opérateur à un ou plusieurs utilisateurs du canal courant."
 
 #: src/gtkmm/GuiCommands.cpp:157
 msgid "/VOICE <nicks>, voices one or more users in the current channel."
-msgstr ""
-"/VOICE <nicks>, donne le \"voice\" à un ou plusieurs utilisateurs du canal "
-"courant."
+msgstr "/VOICE <pseudos>, donne le \"voice\" à un ou plusieurs utilisateurs du canal courant."
 
 #: src/gtkmm/GuiCommands.cpp:169
 msgid "/DEVOICE <nicks>, devoices one or more users in the current channel."
-msgstr ""
-"/DEVOICE <nicks>, enlève le \"voice\" d'un ou plusieurs utilisateur du canal "
-"courant."
+msgstr "/DEVOICE <pseudos>, enlève le \"voice\" à un ou plusieurs utilisateurs du canal courant."
 
 #: src/gtkmm/GuiCommands.cpp:218
 msgid ""
@@ -90,46 +85,42 @@ msgid ""
 "    CTRL-S - open server window\n"
 "    CTRL-Q - quit LostIRC\n"
 msgstr ""
-"Raccourcis disponibles:\n"
-"    ALT-[1-9] - Aller à l'onglet numéro 1-9    CTRL-N - Créer un nouvel "
-"onglet de serveur\n"
+"7Raccourcis clavier disponibles :\n"
+"    8ALT-[1-9] - Aller à l'onglet numéro [1-9]\n"
+"    CTRL-N - Créer un nouvel onglet de serveur\n"
 "    ALT-Gauche - Aller à l'onglet de gauche\n"
 "    ALT-Droite - Aller à l'onglet de droite\n"
 "    CTRL-W - Fermer la fenêtre courante (onglet)\n"
 "\n"
-"    Tab - Complétion du nick et completion des commandes\n"
+"    Tab - Complétion du pseudo et complétion des commandes\n"
 "\n"
-"    Page Up/Page Down - Faire défiler le texte en haut ou en bas\n"
+"    Page Up/Page Down - Faire défiler le texte vers le haut ou vers le bas\n"
 "    CTRL-End/Home - Aller au début ou à la fin du texte\n"
-"    CTRL-H - Défiler jusqu'au précédent mot mis en surbrillance (s'il "
-"existe)\n"
+"    CTRL-H - Défiler jusqu'au précédent mot mis en surbrillance (s'il existe)\n"
 "\n"
+"    CTRL-M - Afficher/cacher la barre de menu\n"
 "    CTRL-P - Ouvrir la fenêtre des préférences\n"
-"    CTRL-Q - Quitter LostIRC\n"
-"\n"
+"    CTRL-S - Ouvrir la fenêtre serveur\n"
+"    CTRL-Q - quitter LostIRC\n"
 
-#: src/gtkmm/MainWindow.cpp:267 src/gtkmm/MainWindow.cpp:287
+#: src/gtkmm/MainWindow.cpp:267
+#: src/gtkmm/MainWindow.cpp:287
 msgid "server"
 msgstr "serveur"
 
 #: src/gtkmm/MainWindow.cpp:310
 msgid ""
-"Locale conversion error. An error occurred while converting text from UTF-8 "
-"to your current locale.\n"
+"Locale conversion error. An error occured while converting text from UTF-8 to your current locale.\n"
 "\n"
-"This is most likely because your locale is set to a value which doesn't "
-"support the character(s) converting to.\n"
+"This is most likely because your locale is set to a value which doesn't support the character(s) converting to.\n"
 "\n"
 "If you believe this is a bug, please report it to the application author."
 msgstr ""
-"Erreur de conversion de locale. Une erreur est survenue lors de la "
-"conversion du texte en UTF-8 vers votre locale.\n"
+"Erreur de conversion de locale. Une erreur est survenue lors de la conversion du texte en UTF-8 vers votre locale.\n"
 "\n"
-"Ceci est sûrement dû au fait que la valeur de votre locale ne permet pas la "
-"conversion du (des) caractère(s).\n"
+"Ceci est sûrement dû au fait que la valeur de votre locale ne permet pas la conversion du (des) caractère(s).\n"
 "\n"
-"Si vous pensez que c'est un bug, veuillez le rapporter à l'auteur de "
-"l'application."
+"Si vous pensez que c'est un bug, veuillez le rapporter à l'auteur de l'application."
 
 #: src/gtkmm/MainWindow.cpp:314
 msgid ""
@@ -139,26 +130,21 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Votre locale courante semble être : "
+"Votre locale actuelle semble être : "
 
 #: src/gtkmm/MainWindow.cpp:318
 msgid ""
-"Encoding conversion error. An error occurred while converting text from UTF-8 "
-"to the user-defined encoding.\n"
+"Encoding conversion error. An error occured while converting text from UTF-8 to the user-defined encoding.\n"
 "\n"
-"This is most likely because the encoding you have chosen doesn't support the "
-"character(s) converting to.\n"
+"This is most likely because the encoding you have chosen doesn't support the character(s) converting to.\n"
 "\n"
 "If you believe this is a bug, please report it to the application author."
 msgstr ""
-"Erreur de conversion d'encodage. Une erreur est survenue pendant la "
-"conversion du texte UTF-8 vers l'encodage spécifié par l'utilisateur.\n"
+"Erreur de conversion d'encodage. Une erreur est survenue pendant la conversion du texte UTF-8 vers l'encodage spécifié par l'utilisateur.\n"
 "\n"
-"Ceci est sûrement dû au fait que l'encodage que vous avez choisi ne supporte "
-"pas la conversion du (des) caractère(s).\n"
+"Ceci est sûrement dû au fait que l'encodage que vous avez choisi ne supporte pas la conversion du (des) caractère(s).\n"
 "\n"
-"Si vous pensez que c'est un bug, veuillez le rapporter à l'auteur du "
-"programme."
+"Si vous pensez que c'est un bug, veuillez le rapporter à l'auteur du programme."
 
 #: src/gtkmm/MainWindow.cpp:320
 msgid ""
@@ -168,7 +154,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"J'essayais de convertir vers: "
+"J'essayais de convertir vers : "
 
 #: src/gtkmm/MainWindow.cpp:324
 msgid ""
@@ -178,16 +164,15 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"(Note: Vous ne verrez cet avertissement qu'une fois par session LostIRC)"
+"(Note : vous ne verrez cet avertissement qu'une fois par session LostIRC)"
 
 #: src/gtkmm/MainWindow.cpp:362
 msgid "_LostIRC"
 msgstr "_LostIRC"
 
 #: src/gtkmm/MainWindow.cpp:363
-#, fuzzy
 msgid "_New Server Tab"
-msgstr "Nouvel Onglet  de Serveur"
+msgstr "_Nouvel onglet  de serveur"
 
 #: src/gtkmm/MainWindow.cpp:366
 msgid "Clear Window"
@@ -195,11 +180,11 @@ msgstr "Effacer la fenêtre"
 
 #: src/gtkmm/MainWindow.cpp:368
 msgid "Clear All Windows"
-msgstr "Effacer Toutes les Fenêtres"
+msgstr "Effacer toutes les fenêtres"
 
 #: src/gtkmm/MainWindow.cpp:370
 msgid "Close Current Tab"
-msgstr "Fermer l'Onglet Courant"
+msgstr "Fermer l'onglet courant"
 
 #: src/gtkmm/MainWindow.cpp:376
 msgid "_View"
@@ -211,16 +196,15 @@ msgstr "Barre de _menu"
 
 #: src/gtkmm/MainWindow.cpp:378
 msgid "Status_bar"
-msgstr "_Barre de Status"
+msgstr "_Barre de statuts"
 
 #: src/gtkmm/MainWindow.cpp:379
-#, fuzzy
 msgid "_User List"
-msgstr "Liste des _Utilisateurs"
+msgstr "_Liste des utilisateurs"
 
 #: src/gtkmm/MainWindow.cpp:380
 msgid "_Server List"
-msgstr "_Liste des Serveurs"
+msgstr "_Liste des serveurs"
 
 #: src/gtkmm/MainWindow.cpp:381
 msgid "_DCC Transfers"
@@ -236,15 +220,14 @@ msgstr "_Introduction"
 
 #: src/gtkmm/MainWindow.cpp:386
 msgid "_About"
-msgstr "_A Propos"
+msgstr "_A propos"
 
 #: src/gtkmm/MainWindow.cpp:474
 msgid ""
 "LostIRC Quick Introduction\n"
 "\n"
 "This help window is a quick guide to get you going with LostIRC.\n"
-"Move this window away from the LostIRC window, and use it as a quick "
-"reference window until you know the general idea.\n"
+"Move this window away from the LostIRC window, and use it as a quick reference window until you know the general idea.\n"
 "\n"
 "You can connect to a server using:\n"
 "    /SERVER <hostname / ip>\n"
@@ -258,24 +241,24 @@ msgid ""
 "And you should really check out the list of key bindings:\n"
 "    /KEYBINDINGS"
 msgstr ""
-"Rapide Introduction à LostIRC\n"
+"Brève introduction à LostIRC\n"
 "\n"
-"Cette fenêtre d'aide est un rapide guide pour vous aider à démarrer avec "
-"LostIRC.\n"
-"Déplacez cette fenêtre en dehors de la fenêtre de LostIRC et utilisez-là "
-"comme une petiteréférence jusqu'à ce que vous voyiez l'idée générale.\n"
+"Cette fenêtre d'aide est un guide rapide pour vous aider à démarrer avec LostIRC.\n"
+"Déplacez-la en dehors de la fenêtre de LostIRC et utilisez-la comme un pense-bête jusqu'à ce que vous compreniez l'idée générale.\n"
 "\n"
-"Vous pouvez vous connecter à un serveur en utilisant:\n"
-"    /SERVER <nom_hôte / adresse_ip>\n"
+"Vous pouvez vous connecter à un serveur en utilisant :\n"
+"    /SERVER <nom_de_l'hôte / adresse_ip>\n"
 "\n"
-"    and ensuite joindre un canal :\n"
-"    /JOIN <nom_canal>\n"
+"    et ensuite joindre un canal :\n"
+"    /JOIN <nom_du_canal>\n"
 "\n"
-"Une liste complète des commandes est disponible grâce à:\n"
+"Une liste complète des commandes est disponible grâce à :\n"
 "    /COMMANDS\n"
 "\n"
-"Nous vous invitons à consulter la liste des raccourcis claviers:\n"
-"    /KEYBINDINGS"
+"Nous vous invitons à consulter la liste des raccourcis claviers :\n"
+"    /KEYBINDINGS\n"
+"\n"
+"Note de traduction : la totalité du texte n'étant pas implémenté dans le fichier d'origine, il subsiste donc du texte en anglais."
 
 #: src/gtkmm/MainWindow.cpp:488
 msgid "LostIRC "
@@ -283,73 +266,72 @@ msgstr "LostIRC "
 
 #: src/gtkmm/MainNotebook.cpp:133
 msgid " <span foreground=\"red\">(away: "
-msgstr "<span foreground=\"red\">(absent "
+msgstr "<span foreground=\"red\">(absent :"
 
 #: src/gtkmm/MainNotebook.cpp:144
 msgid " (currently away)"
 msgstr " (absent pour le moment)"
 
 #: src/gtkmm/ServerWindow.cpp:41
-#, fuzzy
 msgid "LostIRC Server Window"
-msgstr "Effacer la fenêtre"
+msgstr "Fenêtre de serveur LostIRC"
 
-#: src/gtkmm/ServerWindow.cpp:54 src/gtkmm/ServerWindow.cpp:260
+#: src/gtkmm/ServerWindow.cpp:54
+#: src/gtkmm/ServerWindow.cpp:260
 msgid "Nickname:"
-msgstr ""
+msgstr "Pseudonyme :"
 
 #: src/gtkmm/ServerWindow.cpp:62
 msgid "Real name:"
-msgstr ""
+msgstr "Nom réel :"
 
 #: src/gtkmm/ServerWindow.cpp:76
-#, fuzzy
 msgid "Auto-connect"
-msgstr "Non connecté."
+msgstr "Auto-connexion"
 
 #: src/gtkmm/ServerWindow.cpp:77
 msgid "Hostname"
-msgstr ""
+msgstr "Nom de l'hôte"
 
 #: src/gtkmm/ServerWindow.cpp:78
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 #: src/gtkmm/ServerWindow.cpp:84
 msgid "_Connect"
-msgstr ""
+msgstr "Se _connecter"
 
 #: src/gtkmm/ServerWindow.cpp:88
 msgid "_Modify"
-msgstr ""
+msgstr "_Modifier"
 
 #: src/gtkmm/ServerWindow.cpp:103
 msgid "<b>Servers</b>"
-msgstr ""
+msgstr "<b>Serveurs</b>"
 
 #: src/gtkmm/ServerWindow.cpp:219
 msgid "LostIRC Server Edit"
-msgstr ""
+msgstr "Changer de serveur LostIRC"
 
 #: src/gtkmm/ServerWindow.cpp:220
 msgid "_Connect automatically"
-msgstr ""
+msgstr "_Se connecter automatiquement"
 
 #: src/gtkmm/ServerWindow.cpp:238
 msgid "Hostname:"
-msgstr ""
+msgstr "Nom de l'hôte :"
 
 #: src/gtkmm/ServerWindow.cpp:245
 msgid "Port:"
-msgstr ""
+msgstr "Port :"
 
 #: src/gtkmm/ServerWindow.cpp:253
 msgid "Password:"
-msgstr ""
+msgstr "Mot de passe :"
 
 #: src/gtkmm/ServerWindow.cpp:267
 msgid "Commands to perform when connected:"
-msgstr ""
+msgstr "Commandes à exécuter à la connexion :"
 
 #: src/gtkmm/StatusBar.cpp:39
 msgid "Not connected."
@@ -365,7 +347,7 @@ msgstr "Statut"
 
 #: src/gtkmm/DCCList.cpp:36
 msgid "Filename"
-msgstr "Nom de Fichier"
+msgstr "Nom du fichier"
 
 #: src/gtkmm/DCCList.cpp:37
 msgid "Size"
@@ -401,7 +383,7 @@ msgstr "Enlever les codes _couleur des messages entrants"
 
 #: src/gtkmm/Prefs.cpp:47
 msgid "Strip _bold and underline codes from incoming messages"
-msgstr "Enlever les codes des polices _gras et souligné des messages entrants"
+msgstr "Enlever les codes des polices _gras et souligné, des messages entrants"
 
 #: src/gtkmm/Prefs.cpp:48
 msgid "_Log conversations to disk"
@@ -409,7 +391,7 @@ msgstr "_Enregistrer les conversations sur le disque"
 
 #: src/gtkmm/Prefs.cpp:53
 msgid "LostIRC Preferences"
-msgstr "Préférences LostIRC"
+msgstr "Préférences de LostIRC"
 
 #: src/gtkmm/Prefs.cpp:69
 msgid "General"
@@ -425,55 +407,55 @@ msgstr "DCC"
 
 #: src/gtkmm/Prefs.cpp:72
 msgid "Colours"
-msgstr ""
+msgstr "Couleurs"
 
 #: src/gtkmm/Prefs.cpp:79
 msgid "IRC username (ident):"
-msgstr "Nom d'utilisateur IRC (ident):"
+msgstr "Nom d'utilisateur IRC (ident) :"
 
 #: src/gtkmm/Prefs.cpp:98
 msgid "Encoding to use on IRC:"
-msgstr "Encodage à utiliser sur IRC:"
+msgstr "Encodage à utiliser sur IRC :"
 
 #: src/gtkmm/Prefs.cpp:108
 msgid "Main window font:"
-msgstr "Police de la fenêtre principale:"
+msgstr "Police de la fenêtre principale :"
 
 #: src/gtkmm/Prefs.cpp:118
 msgid "Nick-completion character:"
-msgstr "Suffixe de complétion des pseudonymes:"
+msgstr "Suffixe de complétion des pseudonymes :"
 
 #: src/gtkmm/Prefs.cpp:126
 msgid "Words to highlight on (space seperated):"
-msgstr "Mots à mettre en surbrillance (séparés par un espace):"
+msgstr "Mots à mettre en surbrillance (séparés par un espace) :"
 
 #: src/gtkmm/Prefs.cpp:134
 msgid "Maximium number of lines to cache:"
-msgstr "Nombre maximum de lignes de défilement:"
+msgstr "Nombre maximum de lignes de défilement :"
 
 #: src/gtkmm/Prefs.cpp:156
 msgid "DCC IP address:"
-msgstr "Adresse IP DCC:"
+msgstr "Adresse IP DCC :"
 
 #: src/gtkmm/Prefs.cpp:164
 msgid "DCC Port (0 = random):"
-msgstr "Port DCC (0 = aléatoire):"
+msgstr "Port DCC (0 = aléatoire) :"
 
 #: src/gtkmm/Prefs.cpp:171
 msgid "Pick a colorscheme"
-msgstr ""
+msgstr "Choisir un agencement de couleurs"
 
 #: src/gtkmm/Prefs.cpp:172
 msgid "Changes to colorschemes only apply to newly created tabs"
-msgstr ""
+msgstr "Les changements prendront effet seulement à l'ouverture de nouveaux onglets"
 
 #: src/gtkmm/Prefs.cpp:173
 msgid "White on black"
-msgstr ""
+msgstr "Blanc sur noir"
 
 #: src/gtkmm/Prefs.cpp:174
 msgid "Black on white"
-msgstr ""
+msgstr "Noir sur blanc"
 
 #: src/gtkmm/NickList.cpp:57
 msgid " user"
@@ -485,60 +467,55 @@ msgstr " utilisateurs"
 
 #: src/libirc/Commands.cpp:94
 msgid "/JOIN <channel>, join a channel"
-msgstr "/JOIN <nom_canal>, joindre un canal"
+msgstr "/JOIN <nom_du_canal>, joint un canal"
 
 #: src/libirc/Commands.cpp:103
 msgid "/PART <channel> [msg], part a channel - optional with a part message"
-msgstr ""
-"/PART <nom_canal> [msg], quitte un canal - le message de départ est optionnel"
+msgstr "/PART <nom_du_canal> [message], quitte un canal - le message de départ est optionnel"
 
 #: src/libirc/Commands.cpp:137
 msgid "/KICK <channel> <nick> [msg], kick a user from a channel."
-msgstr "/KICK <nom_canal> <nick> [msg], kicke un utilisateur du canal."
+msgstr "/KICK <nom_du_canal> <nick> [message], expulse un utilisateur d'un canal."
 
 #: src/libirc/Commands.cpp:146
 msgid "/SERVER <host/ip> [port] [password], connect to an IRC server"
-msgstr ""
-"/SERVER <nom_hôte/adresse_ip> <mot_de _passe>, se connecter à un serveur IRC"
+msgstr "/SERVER <nom_de_l'hôte/adresse_ip> [port] [mot_de _passe], se connecte à un serveur IRC"
 
 #: src/libirc/Commands.cpp:186
 msgid "/NICK <nick>, change nick."
-msgstr "/NICK <nick>, change de pseudonyme"
+msgstr "/NICK <pseudo>, change de pseudo."
 
 #: src/libirc/Commands.cpp:199
 msgid "/WHOIS <nick>, whois nick."
-msgstr ""
-"/WHOIS <nick>, envoye des informations sur l'utilisateur portant le "
-"pseudonyme correspondant"
+msgstr "/WHOIS <pseudos>, renvoie des informations sur  le pseudo."
 
 #: src/libirc/Commands.cpp:208
 msgid "/MODE <channel> <modes>, set modes for a channel."
-msgstr "/MODE <nom_canal> <modes>, met les modes sur un canal"
+msgstr "/MODE <canal> <modes>, définit les modes pour un canal."
 
 #: src/libirc/Commands.cpp:234
 msgid "/CTCP <nick> <message>, sends a CTCP message to a user"
-msgstr "/CTCP <nick> <message>, envoye un message CTCP à un utilisateur"
+msgstr "/CTCP <pseudo> <message>, envoie un message CTCP à un utilisateur"
 
 #: src/libirc/Commands.cpp:261
 msgid "/BANLIST <channel>, see banlist for channel."
-msgstr ""
-"/BANLIST <nom_canal>, affiche la liste des utilisateurs bannis de ce canal"
+msgstr "/BANLIST <canal>, affiche la liste des utilisateurs bannis de ce canal."
 
 #: src/libirc/Commands.cpp:275
 msgid "/INVITE <nick> <channel>, invites someone to a channel."
-msgstr "/INVITE <nick> <nom_canal>, invite quelqu'un dans un canal."
+msgstr "/INVITE <nick> <canal>, invite quelqu'un dans un canal."
 
 #: src/libirc/Commands.cpp:290
 msgid "/TOPIC <channel> [topic], view or change topic for a channel."
-msgstr "/TOPIC <nom_canal> [topic], affiche ou change le sujet d'un canal."
+msgstr "/TOPIC <canal> [sujet], affiche ou change le sujet d'un canal."
 
 #: src/libirc/Commands.cpp:305
 msgid "/MSG <nick/channel> <message>, sends a normal message."
-msgstr "/MSG <nick/nom_canal> <message>, envoye un message normal."
+msgstr "/MSG <pseudo/canal> <message>, envoie un message normal."
 
 #: src/libirc/Commands.cpp:322
 msgid "/NOTICE <nick/channel> <message>, sends a notice."
-msgstr "/NOTICE <nick/nom_canal> <message>, envoye un avis"
+msgstr "/NOTICE <pseudo/canal> <message>, envoie un avis."
 
 #: src/libirc/Commands.cpp:325
 msgid "Notice to "
@@ -546,104 +523,102 @@ msgstr "Avis à "
 
 #: src/libirc/Commands.cpp:337
 msgid "/ME <message>, sends the action to the current channel."
-msgstr "/ME <message>, envoye une action au canal courant."
+msgstr "/ME <message>, envoie l'action au canal courant."
 
 #: src/libirc/Commands.cpp:346
-msgid ""
-"/WHO <mask> [o], search for mask on network, if o is supplied, only search "
-"for opers."
-msgstr ""
-"/WHO <mask> [o], cherche quelqu'un selon le masque, si o est mis est donné, "
-"recherche seulement parmis les opérateurs."
+msgid "/WHO <mask> [o], search for mask on network, if o is supplied, only search for opers."
+msgstr "/WHO <masque> [o], cherche quelqu'un selon le masque, si o est renseigné, recherche seulement parmi les opérateurs."
 
 #: src/libirc/Commands.cpp:361
 msgid "/QUOTE <text>, send raw text to server."
-msgstr ""
+msgstr "/QUOTE <texte>, envoie du texte brut au serveur."
 
 #: src/libirc/Commands.cpp:370
 msgid "/NAMES <channel>, see who's on a channel."
-msgstr "/NAMES <nom_canal>, affiche la liste des utilisateurs d'un canal."
+msgstr "/NAMES <canal>, affiche la liste des utilisateurs actuellement sur un canal."
 
-#: src/libirc/Commands.cpp:379 src/libirc/Commands.cpp:387
+#: src/libirc/Commands.cpp:379
+#: src/libirc/Commands.cpp:387
 msgid "/OPER <login> <password>, oper up."
-msgstr ""
+msgstr "/OPER <identifiant> <mot_de_passe>, active le statut d'opérateur."
 
 #: src/libirc/Commands.cpp:402
 msgid "/KILL <user> [reason], kill a user from the network."
-msgstr ""
+msgstr "/KILL <utilisateur> [raison], expulse définitivement un utilisateur du réseau."
 
 #: src/libirc/Commands.cpp:412
 msgid "/WALLOPS <message>, send wallop message."
-msgstr ""
+msgstr "/WALLOPS <message>, envoie un message wallop."
 
 #: src/libirc/Commands.cpp:422
 msgid "/DCC <actions>, perform a DCC action."
-msgstr ""
+msgstr "/DCC <actions>, exécute une action DCC."
 
 #: src/libirc/Commands.cpp:432
 msgid "No DCC with that number"
-msgstr ""
+msgstr "Pas de DCC avec ce numéro"
 
 #: src/libirc/Commands.cpp:438
 msgid "Missing filename"
-msgstr ""
+msgstr "Nom de fichier manquant"
 
 #: src/libirc/Commands.cpp:462
 msgid "/OP <channel> <nicks>, give operator status to one or more nicks."
-msgstr ""
+msgstr "/OP <canal> <pseudos>, donne le statut d'opérateur à un ou plusieurs pseudos."
 
 #: src/libirc/Commands.cpp:478
 msgid "/DEOP <channel> <nicks>, remove operator status from one or more nicks."
-msgstr ""
+msgstr "/DEOP <canal> <pseudos>, enleve le statut d'opérateur à un ou plusieurs pseudos."
 
 #: src/libirc/Commands.cpp:494
 msgid "/VOICE <channel> <nicks>, gives voice to one or more nicks."
-msgstr ""
+msgstr "/VOICE <canal> <pseudos>, permet de voicer (+v) un ou plusieurs pseudos."
 
 #: src/libirc/Commands.cpp:510
 msgid "/DEVOICE <channel> <nicks>, removes voice from one or more nicks."
-msgstr ""
+msgstr "/DEVOICE <canal> <pseudos>, supprime voice (v+) d'un ou plusieurs pseudos."
 
-#: src/libirc/ConfigHandler.cpp:174 src/libirc/ConfigHandler.cpp:184
+#: src/libirc/ConfigHandler.cpp:174
+#: src/libirc/ConfigHandler.cpp:184
 msgid "Not found key, `"
-msgstr "Clef non toruvée `"
+msgstr "Pas de clé trouvée `"
 
 #: src/libirc/Socket.cpp:110
 msgid "Message not sent because of locale problems"
-msgstr "Message non envoyé dû à un problème de locale"
+msgstr "Message pas envoyé suite à un problème de locale"
 
-#: src/libirc/Socket.cpp:285 src/libirc/Socket.cpp:292
+#: src/libirc/Socket.cpp:285
+#: src/libirc/Socket.cpp:292
 msgid "Error writing to pipe: "
-msgstr "Erreur d'écriture dans le pipe: "
+msgstr "Erreur d'écriture vers le pipe : "
 
 #: src/libirc/Socket.cpp:327
-msgid "An error occurred while reading from pipe (Internal error 2)"
-msgstr ""
-"Une erreur est survenur lors de la lecture sur le pipe (Erreur interne 2)"
+msgid "An error occured while reading from pipe (Internal error 2)"
+msgstr "Une erreur est survenue lors de la lecture depuis un pipe (Erreur interne 2)"
 
 #: src/libirc/Socket.cpp:337
-msgid "An error occurred while reading from pipe (Internal error 3)"
-msgstr ""
+msgid "An error occured while reading from pipe (Internal error 3)"
+msgstr "Une erreur est survenue lors de la lecture depuis un pipe (Erreur interne 3)"
 
 #: src/libirc/Parser.cpp:876
 msgid "idle: "
-msgstr "inactif: "
+msgstr "inactif : "
 
 #: src/libirc/Parser.cpp:880
 msgid ", signon time: "
-msgstr ""
+msgstr ", heure de connexion :"
 
 #: src/libirc/DCC.cpp:65
 msgid "DCC connected. Receiving file..."
-msgstr "DCC connecté Réception fichier..."
+msgstr "DCC connecté. Réception du fichier..."
 
 #: src/libirc/DCC.cpp:71
 msgid "Couldn't connect: "
-msgstr "Ne peut pas se connecter "
+msgstr "N'a pas pu se connecter "
 
 #: src/libirc/DCC.cpp:81
 msgid "Receiving from:"
-msgstr "Réception de : "
+msgstr "Réception depuis : "
 
 #: src/libirc/DCC.cpp:121
 msgid "File received successfully:"
@@ -651,7 +626,7 @@ msgstr "Fichier reçu avec succès."
 
 #: src/libirc/DCC.cpp:128
 msgid "Couldn't receive: "
-msgstr "N'a pu recevoir: "
+msgstr "N'a pas pu recevoir : "
 
 #: src/libirc/DCC.cpp:132
 msgid "DCC connection closed."
@@ -659,31 +634,31 @@ msgstr "Connexion DCC fermée."
 
 #: src/libirc/DCC.cpp:180
 msgid "DCC SEND request sent. Sending from:"
-msgstr "Requête DCC SEND envoyée. Envoi depuis:"
+msgstr "Requête DCC SEND envoyée. Envoi depuis :"
 
 #: src/libirc/DCC.cpp:194
 msgid "Couldn't bind: "
-msgstr ""
+msgstr "N'a pas pu joindre :"
 
 #: src/libirc/DCC.cpp:201
 msgid "Connection accepted."
-msgstr "Connexion acceptée"
+msgstr "Connexion acceptée."
 
 #: src/libirc/DCC.cpp:231
 msgid "File sent successfully:"
-msgstr "Fichier envoyé avec succès"
+msgstr "Fichier envoyé avec succès :"
 
 #: src/libirc/DCC.cpp:239
 msgid "Couldn't send: "
-msgstr "N'a pu envoyer: "
+msgstr "N'a pas pu envoyer : "
 
 #: src/libirc/DCC.cpp:257
 msgid "Incoming file has zero size. Sender:"
-msgstr "Fichier entrant a une taille nulle. Expéditeur:"
+msgstr "Le fichier entrant a une taille nulle. Expéditeur :"
 
 #: src/libirc/DCC.cpp:273
 msgid "File not found: "
-msgstr "Fichier non trouvé: "
+msgstr "Fichier introuvable : "
 
 #: src/libirc/ServerConnection.cpp:119
 msgid "Disconnected."
@@ -691,29 +666,28 @@ msgstr "Déconnecté."
 
 #: src/libirc/ServerConnection.cpp:142
 msgid "Failed connecting: "
-msgstr "Connexion annulée: "
+msgstr "Échec de connexion : "
 
 #: src/libirc/ServerConnection.cpp:148
 msgid "Resolved host. Connecting.."
-msgstr "Nom d'hôte résolu. Connexion..."
+msgstr "Nom de l'hôte résolu. Connexion..."
 
 #: src/libirc/ServerConnection.cpp:159
 msgid "Connected. Logging in..."
-msgstr "Connecté. Logging in..."
+msgstr "Connecté. Connexion..."
 
 #: src/libirc/ServerConnection.cpp:206
 msgid "Failed to receive: "
-msgstr "Réception échouée: "
+msgstr "Échec de réception : "
 
 #: src/libirc/LostIRCApp.h:56
 msgid "Logging to `"
-msgstr ""
+msgstr "Connexion à `"
 
 #~ msgid "_Hide Menubar"
 #~ msgstr "_Cacher le menu"
-
 #~ msgid "_Show Menubar"
 #~ msgstr "_Afficher le menu"
-
 #~ msgid "Browse..."
 #~ msgstr "Parcourir..."
+
